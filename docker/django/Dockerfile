@@ -10,21 +10,21 @@ WORKDIR /workspace
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpq-dev \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+	build-essential \
+	libpq-dev \
+	git \
+	iproute2 \
+	&& rm -rf /var/lib/apt/lists/*
+
+# Copy the requirements file
+COPY ./docker/django/requirements.txt /tmp/requirements.txt
 
 # Install Python dependencies
-COPY requirements.txt /workspace/
-RUN pip install --upgrade pip && pip install -r requirements.txt
-
-# Copy the Django project
-COPY /transcendence/ /workspace/
+RUN pip install --upgrade pip && pip install -r /tmp/requirements.txt
 
 # Expose the port the app runs on
 EXPOSE 8000
 
 # Run the Django development server
-# CMD ["python", "transcendence/manage.py", "runserver", "0.0.0.0:8000"]
-CMD ["tail", "-f", "/dev/null"]
+CMD ["python", "srcs/manage.py", "runserver", "0.0.0.0:8000"]
+# CMD ["tail", "-f", "/dev/null"]

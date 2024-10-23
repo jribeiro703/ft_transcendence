@@ -1,6 +1,6 @@
 {
 	"name": "Django Bootstrap Dev Container",
-	"dockerComposeFile": "../srcs/docker-compose.yml",
+	"dockerComposeFile": "../docker-compose.yml",
 	"service": "django",
 	"workspaceFolder": "/workspace",
 	"customizations": {
