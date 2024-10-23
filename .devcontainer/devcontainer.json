@@ -1,6 +1,6 @@
 {
 	"name": "Django Bootstrap Dev Container",
-	"dockerComposeFile": "../docker-compose.yml",
+	"dockerComposeFile": "../docker/docker-compose.yml",
 	"service": "django",
 	"workspaceFolder": "/workspace",
 	"customizations": {
@@ -16,6 +16,6 @@
 			}
 		}
 	},
-	"postCreateCommand": "pip install -r requirements.txt",
+	// "postCreateCommand": "pip install -r requirements.txt",
 	"remoteUser": "root"
 }
