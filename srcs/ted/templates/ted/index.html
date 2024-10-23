@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>Transcendance</title>
+	<link rel="stylesheet" href="{% static 'global.css' %}">
+	<link rel="stylesheet" href="{% static 'ted/css/style.css' %}">
+</head>
+<body>
+	<h1>{{ message }}</h1>
+	<p>Yabing, Jimmy, Ludo, David and Thibaud making TED</p>
+
+	{% now "d/m/Y H:i:s" %}
+	{% lorem 2 p %}
+	<!-- {% debug %} -->
+	<h2>Contenu d'un autre fichier</h2>
+	{% include "./other.html" %}
+	<p>Lien vers <a href = "{% url 'indexOfTed' %}">Ted</a></p>
+
+	{% if number > 10 %}
+		<p>le number est superieur a 10</p>
+	{% else %}
+		<p>le number est inferieur a 10</p>
+
+	{% endif %}
+	<ul>
+		<p>List Creator : </p>
+		{% for u in userList %}
+			<li>{{ u }}</li>
+		{% endfor %}
+	</ul>
+</body>
+</html>
