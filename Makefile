@@ -1,10 +1,10 @@
 # Variables
-DOCKER_COMPOSE	= docker-compose -f srcs/docker-compose.yml
+DOCKER_COMPOSE	= docker-compose -f docker/docker-compose.yml
 PROJECT_NAME	= ft_transcendence
 
 # Default target
 .PHONY: all
-all: rootless-docker up
+all: up
 
 # Build the Docker images
 .PHONY: build
