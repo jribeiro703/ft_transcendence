@@ -3,17 +3,19 @@
 <html lang="fr">
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Transcendance</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 	<link rel="stylesheet" href="{% static 'global.css' %}">
 	<link rel="stylesheet" href="{% static 'ted/css/style.css' %}">
 </head>
 <body>
 	<h1>{{ message }}</h1>
-	<p>Yabing, Jimmy, Ludo, David and Thibaud making TED</p>
+	<p>by<br><br>Yachen, Lucravoi, Dlacuey, and Tmaillar</p>
 
-	{% now "d/m/Y H:i:s" %}
+	<!-- {% comment %} {% now "d/m/Y H:i:s" %}
 	{% lorem 2 p %}
-	<!-- {% debug %} -->
+	{% debug %}
 	<h2>Contenu d'un autre fichier</h2>
 	{% include "./other.html" %}
 	<p>Lien vers <a href = "{% url 'indexOfTed' %}">Ted</a></p>
@@ -29,6 +31,16 @@
 		{% for u in userList %}
 			<li>{{ u }}</li>
 		{% endfor %}
-	</ul>
+	</ul> {% endcomment %} -->
+	<br><br><br>
+	<div class="container py-2 d-flex flex-column align-items-centercontainer py-2">
+		<button class="btn btn-secondary custom-btn mb-2">Quick Game</button>
+		<button class="btn btn-secondary custom-btn mb-2">Start game</button>
+		<button class="btn btn-secondary custom-btn mb-2">Tournament</button>
+		<button class="btn btn-secondary custom-btn mb-2">Quit</button>
+	</div>
+
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
