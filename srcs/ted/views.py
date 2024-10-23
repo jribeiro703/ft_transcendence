@@ -4,7 +4,7 @@ from django.template import loader
 
 def index(request):
 	context = {
-		"message": "Welcome on TED !",
+		"message": "PONG",
 		"number": 42,
 		"userList": ["Yabing", "Ludo", "David", "Thibaud"]
 		}
