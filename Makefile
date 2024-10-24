@@ -4,7 +4,7 @@ PROJECT_NAME	= ft_transcendence
 
 # Default target
 .PHONY: all
-all: up
+all: update-ip up
 
 # Build the Docker images
 .PHONY: build
@@ -29,6 +29,26 @@ restart: down up
 .PHONY: logs
 logs:
 	$(DOCKER_COMPOSE) logs
+
+# View the logs of the Docker Compose services
+.PHONY: logs-django
+logs-django:
+	$(DOCKER_COMPOSE) logs django
+
+# View the logs of the Docker Compose services
+.PHONY: logs-db
+logs-db:
+	$(DOCKER_COMPOSE) logs db
+
+# View the logs of the Docker Compose services
+.PHONY: logs-prometheus
+logs-prometheus:
+	$(DOCKER_COMPOSE) logs prometheus
+
+# View the logs of the Docker Compose services
+.PHONY: logs-grafana
+logs-grafana:
+	$(DOCKER_COMPOSE) logs grafana
 
 # Clean up Docker Compose services and volumes
 .PHONY: clean
@@ -61,6 +81,16 @@ shell-django:
 .PHONY: shell-db
 shell-db:
 	$(DOCKER_COMPOSE) exec db /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/sh"
+
+# Execute a shell in the prometheus container
+.PHONY: shell-prometheus
+shell-prometheus:
+	$(DOCKER_COMPOSE) exec prometheus /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/sh"
+
+# Execute a shell in the grafana container
+.PHONY: shell-grafana
+shell-grafana:
+	$(DOCKER_COMPOSE) exec grafana /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/sh"
 
 .PHONY: rootless-docker
 rootless-docker:

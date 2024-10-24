@@ -1,0 +1,38 @@
+groups:
+  - name: alerts
+    rules:
+      - alert: HighCPUUsage
+        expr: rate(node_cpu_seconds_total{mode!="idle"}[1m]) > 0.8
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is above 80% for more than 1 minute."
+
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes > 0.8
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High Memory usage detected"
+          description: "Memory usage is above 80% for more than 1 minute."
+
+      - alert: HighDiskIO
+        expr: rate(node_disk_io_time_seconds_total[1m]) > 0.8
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High Disk I/O detected"
+          description: "Disk I/O is above 80% for more than 1 minute."
+
+      - alert: HighDBConnections
+        expr: pg_stat_activity_count{datname="your_database_name"} > 100
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High number of database connections"
+          description: "The number of database connections is above 100 for more than 1 minute."
