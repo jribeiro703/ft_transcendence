@@ -42,7 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'ted'
+	'ted',
+	'user',
+	'game',
+	'tournament',
 ]
 
 MIDDLEWARE = [
@@ -86,10 +89,9 @@ DATABASES = {
 		'USER': os.getenv('POSTGRES_USER'),
 		'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
 		'HOST': os.getenv('DB_HOST'),
-		'PORT': os.getenv('DB_PORT', '5432'),
+		'PORT': os.getenv('DB_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -136,3 +138,6 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'user.User'
+
