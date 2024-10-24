@@ -26,5 +26,5 @@ RUN pip install --upgrade pip && pip install -r /tmp/requirements.txt
 EXPOSE 8000
 
 # Run the Django development server
-CMD ["python", "srcs/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "srcs/backend/manage.py", "runserver", "0.0.0.0:8000"]
 # CMD ["tail", "-f", "/dev/null"]
