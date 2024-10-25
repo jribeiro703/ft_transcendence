@@ -4,7 +4,7 @@ PROJECT_NAME	= ft_transcendence
 
 # Default target
 .PHONY: all
-all: update-ip up
+all: up
 
 # Build the Docker images
 .PHONY: build
@@ -102,3 +102,7 @@ rootless-docker:
 .PHONY: update-ip
 update-ip:
 	python3 ./utils/inet.py
+
+.PHONY: certs
+certs:
+	openssl req -newkey rsa:2048 -nodes -keyout docker/grafana/certs/grafana.key -x509 -days 365 -out docker/grafana/certs/grafana.crt
