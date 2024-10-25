@@ -9,6 +9,7 @@ all: up
 # Build the Docker images
 .PHONY: build
 build:
+	touch docker/django/zsh_history
 	$(DOCKER_COMPOSE) build
 
 # Start the Docker Compose services
