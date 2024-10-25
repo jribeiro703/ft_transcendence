@@ -27,4 +27,3 @@ EXPOSE 8000
 
 # Run the Django development server
 CMD ["python", "srcs/backend/manage.py", "runserver", "0.0.0.0:8000"]
-# CMD ["tail", "-f", "/dev/null"]
