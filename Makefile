@@ -4,7 +4,7 @@ PROJECT_NAME	= ft_transcendence
 
 # Default target
 .PHONY: all
-all: up
+all: certs generate-env up
 
 # Build the Docker images
 .PHONY: build
@@ -107,3 +107,70 @@ update-ip:
 .PHONY: certs
 certs:
 	openssl req -newkey rsa:2048 -nodes -keyout docker/grafana/certs/grafana.key -x509 -days 365 -out docker/grafana/certs/grafana.crt
+
+.PHONY: generate-env
+generate-env:
+	@echo "Generating docker/.env file..."
+	@touch docker/.env
+	@read -p "Do you want to fill it with automatic values? (yes/no): " AUTO_FILL; \
+	if [ "$$AUTO_FILL" = "yes" ] || [ "$$AUTO_FILL" = "y" ] || [ "$$AUTO_FILL" = "" ]; then \
+		DEBUG="1"; \
+		POSTGRES_DB="transcendence"; \
+		POSTGRES_USER="transcendence"; \
+		POSTGRES_PASSWORD="transcendence"; \
+		GF_SECURITY_ADMIN_USER="transcendence"; \
+		GF_SECURITY_ADMIN_PASSWORD="transcendence"; \
+	else \
+		while [ -z "$$DEBUG" ]; do \
+			read -p "Enter DEBUG (0 or 1): " DEBUG; \
+			if [ "$$DEBUG" != "0" ] && [ "$$DEBUG" != "1" ]; then \
+				echo "Invalid DEBUG value"; DEBUG=""; \
+			fi; \
+		done; \
+		while [ -z "$$POSTGRES_DB" ]; do \
+			read -p "Enter POSTGRES_DB: " POSTGRES_DB; \
+			if [ -z "$$POSTGRES_DB" ]; then \
+				echo "POSTGRES_DB cannot be empty"; \
+			fi; \
+		done; \
+		while [ -z "$$POSTGRES_USER" ]; do \
+			read -p "Enter POSTGRES_USER: " POSTGRES_USER; \
+			if [ -z "$$POSTGRES_USER" ]; then \
+				echo "POSTGRES_USER cannot be empty"; \
+			fi; \
+		done; \
+		while [ -z "$$POSTGRES_PASSWORD" ]; do \
+			read -p "Enter POSTGRES_PASSWORD: " POSTGRES_PASSWORD; \
+			if [ -z "$$POSTGRES_PASSWORD" ]; then \
+				echo "POSTGRES_PASSWORD cannot be empty"; \
+			fi; \
+		done; \
+		while [ -z "$$GF_SECURITY_ADMIN_USER" ]; do \
+			read -p "Enter GF_SECURITY_ADMIN_USER: " GF_SECURITY_ADMIN_USER; \
+			if [ -z "$$GF_SECURITY_ADMIN_USER" ]; then \
+				echo "GF_SECURITY_ADMIN_USER cannot be empty"; \
+			fi; \
+		done; \
+		while [ -z "$$GF_SECURITY_ADMIN_PASSWORD" ]; do \
+			read -p "Enter GF_SECURITY_ADMIN_PASSWORD: " GF_SECURITY_ADMIN_PASSWORD; \
+			if [ -z "$$GF_SECURITY_ADMIN_PASSWORD" ]; then \
+				echo "GF_SECURITY_ADMIN_PASSWORD cannot be empty"; \
+			fi; \
+		done; \
+	fi; \
+	DJANGO_SECRET_KEY=$$(python3 utils/generate_secret_key.py); \
+	echo "DEBUG=$$DEBUG" > docker/.env; \
+	echo "DJANGO_SETTINGS_MODULE=transcendence.settings" >> docker/.env; \
+	echo "POSTGRES_DB=$$POSTGRES_DB" >> docker/.env; \
+	echo "POSTGRES_USER=$$POSTGRES_USER" >> docker/.env; \
+	echo "POSTGRES_PASSWORD=$$POSTGRES_PASSWORD" >> docker/.env; \
+	echo "DB_HOST=db" >> docker/.env; \
+	echo "DB_PORT=5432" >> docker/.env; \
+	echo "GF_SECURITY_ADMIN_USER=$$GF_SECURITY_ADMIN_USER" >> docker/.env; \
+	echo "GF_SECURITY_ADMIN_PASSWORD=$$GF_SECURITY_ADMIN_PASSWORD" >> docker/.env; \
+	echo "GF_SERVER_PROTOCOL=https" >> docker/.env; \
+	echo "GF_SERVER_CERT_FILE=/etc/grafana/certs/grafana.crt" >> docker/.env; \
+	echo "GF_SERVER_CERT_KEY=/etc/grafana/certs/grafana.key" >> docker/.env; \
+	echo 'DATA_SOURCE_NAME=postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${POSTGRES_DB}?sslmode=disable' >> docker/.env; \
+	python utils/generate_secret_key.py; \
+	echo "Updated docker/.env file successfully."
