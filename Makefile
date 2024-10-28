@@ -9,8 +9,6 @@ all: generate-env up
 # Build the Docker images
 .PHONY: build
 build:
-	touch docker/django/zsh_history
-	mkdir -p docker/nginx/certs
 	$(DOCKER_COMPOSE) build
 
 # Start the Docker Compose services
@@ -118,6 +116,8 @@ update-ip:
 .PHONY: generate-env
 generate-env:
 	@echo "Generating docker/.env file..."
+	@touch docker/django/zsh_history
+	@mkdir -p docker/nginx/certs
 	@touch docker/.env
 	@read -p "Do you want to fill it with automatic values? (yes/no): " AUTO_FILL; \
 	if [ "$$AUTO_FILL" = "yes" ] || [ "$$AUTO_FILL" = "y" ] || [ "$$AUTO_FILL" = "" ]; then \
