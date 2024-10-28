@@ -23,24 +23,34 @@
 					<button class="btn btn-outline-success custom-42" type="button">Register</button>
 					<button class="btn btn-outline-success custom-42" type="button">Login with 42</button>
 				</div>
+			</div>
 		</div>
-	  </nav>
+	</nav>
 	<br><br><br><br><br><br><br>
-	<div class="container">
-		<div class="w-50 mx-auto">
-			<img class="img-fluid" src="{% static 'ted/css/images/pong-game-card.png' %}" alt="Pong Game">
-			<br><br><br>
+	<div id="mainContent">
+		<div id="defaultView">
+			<div class="container">
+				<div class="w-50 mx-auto">
+					<img class="img-fluid" src="{% static 'ted/css/images/pong-game-card.png' %}" alt="Pong Game">
+					<br><br><br>
+			</div>
+		</div>
+			<div class="container py-2 d-flex flex-column align-items-centercontainer py-2">
+				<button id="quickGameBtn" class="btn btn-secondary custom-btn mb-4">Quick Game</button>
+				<button class="btn btn-secondary custom-btn mb-4">Start game</button>
+				<button class="btn btn-secondary custom-btn mb-4">Tournament</button>
+				<button class="btn btn-secondary custom-btn mb-4">Quit</button>
+			</div>
+		</div>
+
+		<div id="gameView" style="display : none;">
+			<canvas id="myCanvas" width="780" height="320"></canvas>
 		</div>
 	</div>
-	<div class="container py-2 d-flex flex-column align-items-centercontainer py-2">
-		<button class="btn btn-secondary custom-btn mb-4">Quick Game</button>
-		<button class="btn btn-secondary custom-btn mb-4">Start game</button>
-		<button class="btn btn-secondary custom-btn mb-4">Tournament</button>
-		<button class="btn btn-secondary custom-btn mb-4">Quit</button>
-	</div>
-	<h1>Messages</h1>
-    <div id="messages"></div>
-	<script src="{% static 'ted/messages.js' %}"></script>
+	{% comment %} <h1>Messages</h1> {% endcomment %}
+    {% comment %} <div id="messages"></div> {% endcomment %}
+	{% comment %} <script src="{% static 'ted/messages.js' %}"></script> {% endcomment %}
+	<script src="{% static '/testGame.js' %}"></script>
 	<div class="footer-text">
 		<p>Project directed by Yachen, Lucravoi, Dlacuey, and Tmaillar</p>
 	</div>
