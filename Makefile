@@ -10,6 +10,7 @@ all: generate-env up
 .PHONY: build
 build:
 	touch docker/django/zsh_history
+	mkdir -p docker/nginx/certs
 	$(DOCKER_COMPOSE) build
 
 # Start the Docker Compose services
@@ -120,7 +121,7 @@ generate-env:
 	@touch docker/.env
 	@read -p "Do you want to fill it with automatic values? (yes/no): " AUTO_FILL; \
 	if [ "$$AUTO_FILL" = "yes" ] || [ "$$AUTO_FILL" = "y" ] || [ "$$AUTO_FILL" = "" ]; then \
-		openssl req -newkey rsa:2048 -nodes -keyout docker/nginx/certs/privkey.pem -x509 -days 365 -out docker/nginx/certs/fullchain.pem -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=transcendence/emailAddress=transcendence@transcendence.com"; \
+		openssl req -newkey rsa:2048 -nodes -keyout docker/nginx/certs/localhost.key -x509 -days 365 -out docker/nginx/certs/localhost.crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=transcendence/emailAddress=transcendence@transcendence.com"; \
 		DEBUG="1"; \
 		POSTGRES_DB="transcendence"; \
 		POSTGRES_USER="transcendence"; \
@@ -130,7 +131,7 @@ generate-env:
 		HTPASSWD="AUTO"; \
 	else \
 		HTPASSWD="FILL"; \
-		openssl req -newkey rsa:2048 -nodes -keyout docker/nginx/certs/privkey.pem -x509 -days 365 -out docker/nginx/certs/fullchain.pem; \
+		openssl req -newkey rsa:2048 -nodes -keyout docker/nginx/certs/localhost.key -x509 -days 365 -out docker/nginx/certs/localhost.crt; \
 		while [ -z "$$DEBUG" ]; do \
 			read -p "Enter DEBUG (0 or 1): " DEBUG; \
 			if [ "$$DEBUG" != "0" ] && [ "$$DEBUG" != "1" ]; then \
@@ -178,9 +179,9 @@ generate-env:
 	echo "DB_PORT=5432" >> docker/.env; \
 	echo "GF_SECURITY_ADMIN_USER=$$GF_SECURITY_ADMIN_USER" >> docker/.env; \
 	echo "GF_SECURITY_ADMIN_PASSWORD=$$GF_SECURITY_ADMIN_PASSWORD" >> docker/.env; \
-	echo "GF_SERVER_PROTOCOL=https" >> docker/.env; \
-	echo "GF_SERVER_CERT_FILE=/etc/grafana/certs/grafana.crt" >> docker/.env; \
-	echo "GF_SERVER_CERT_KEY=/etc/grafana/certs/grafana.key" >> docker/.env; \
+	echo "GF_SERVER_PROTOCOL=http" >> docker/.env; \
+	# echo "GF_SERVER_CERT_FILE=/etc/grafana/certs/grafana.crt" >> docker/.env; \
+	# echo "GF_SERVER_CERT_KEY=/etc/grafana/certs/grafana.key" >> docker/.env; \
 	echo 'DATA_SOURCE_NAME=postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${POSTGRES_DB}?sslmode=disable' >> docker/.env; \
 	python utils/generate_secret_key.py; \
 	python utils/generate_htpasswd.py $$HTPASSWD; \
