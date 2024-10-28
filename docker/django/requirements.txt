@@ -3,5 +3,7 @@ django-prometheus
 psycopg2-binary
 psycopg
 djangorestframework
+djangorestframework_simplejwt
+Pillow
 daphne
 channels
