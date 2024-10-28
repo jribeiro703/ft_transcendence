@@ -51,5 +51,5 @@ def update_allowed_hosts(settings_path):
 	print(f"Local IP Address: {local_ip}")
 
 if __name__ == "__main__":
-	settings_path = 'srcs/transcendence/settings.py'
+	settings_path = 'srcs/backend/transcendence/settings.py'
 	update_allowed_hosts(settings_path)
