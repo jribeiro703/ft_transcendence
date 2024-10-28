@@ -4,12 +4,11 @@ PROJECT_NAME	= ft_transcendence
 
 # Default target
 .PHONY: all
-all: certs generate-env up
+all: generate-env up
 
 # Build the Docker images
 .PHONY: build
 build:
-	touch docker/django/zsh_history
 	$(DOCKER_COMPOSE) build
 
 # Start the Docker Compose services
@@ -104,16 +103,15 @@ rootless-docker:
 update-ip:
 	python3 ./utils/inet.py
 
-.PHONY: certs
-certs:
-	openssl req -newkey rsa:2048 -nodes -keyout docker/grafana/certs/grafana.key -x509 -days 365 -out docker/grafana/certs/grafana.crt
-
 .PHONY: generate-env
 generate-env:
 	@echo "Generating docker/.env file..."
 	@touch docker/.env
+	@touch docker/django/zsh_history
+	@mkdir -p docker/grafana/certs
 	@read -p "Do you want to fill it with automatic values? (yes/no): " AUTO_FILL; \
 	if [ "$$AUTO_FILL" = "yes" ] || [ "$$AUTO_FILL" = "y" ] || [ "$$AUTO_FILL" = "" ]; then \
+		openssl req -newkey rsa:2048 -nodes -keyout docker/grafana/certs/grafana.key -x509 -days 365 -out docker/grafana/certs/grafana.crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=transcendence/emailAddress=transcendence@transcendence.com"; \
 		DEBUG="1"; \
 		POSTGRES_DB="transcendence"; \
 		POSTGRES_USER="transcendence"; \
@@ -121,6 +119,7 @@ generate-env:
 		GF_SECURITY_ADMIN_USER="transcendence"; \
 		GF_SECURITY_ADMIN_PASSWORD="transcendence"; \
 	else \
+		openssl req -newkey rsa:2048 -nodes -keyout docker/grafana/certs/privkey.key -x509 -days 365 -out docker/grafana/certs/grafana.crt; \
 		while [ -z "$$DEBUG" ]; do \
 			read -p "Enter DEBUG (0 or 1): " DEBUG; \
 			if [ "$$DEBUG" != "0" ] && [ "$$DEBUG" != "1" ]; then \
