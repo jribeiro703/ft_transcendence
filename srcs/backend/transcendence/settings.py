@@ -21,28 +21,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-xx^+3vf464wwq2m0)!#wnz(s9&e&2k8s8*(bt0_919h^t^(2d#'
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '10.34.11.3',
+	'10.34.11.3',
 	'127.0.0.1',
 	'0.0.0.0',
+	'django',
+	'localhost',
 ]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+	'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'ted',
 	'user',
 	'game',
 	'tournament',
@@ -63,7 +65,7 @@ ROOT_URLCONF = 'transcendence.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, '../frontend/static')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,9 +131,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-	os.path.join(BASE_DIR, 'transcendence/static')
+	os.path.join(BASE_DIR, '../frontend/static')
 ]
 
 # Default primary key field type
