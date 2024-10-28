@@ -138,3 +138,5 @@ docker/django/zsh_history
 docker/nginx/certs/fullchain.pem
 docker/nginx/certs/privkey.pem
 docker/nginx/conf.d/.htpasswd
+docker/nginx/certs/localhost.crt
+docker/nginx/certs/localhost.key
