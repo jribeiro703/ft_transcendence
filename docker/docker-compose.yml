@@ -6,6 +6,8 @@ services:
     container_name: django
     volumes:
       - ../:/workspace
+      - ./django/zsh_history:/root/.zsh_history
+
     ports:
       - "8000:8000"
     env_file:

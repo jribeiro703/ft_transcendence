@@ -1,0 +1,19 @@
+HISTFILE=/root/.zsh_history
+
+export ZSH='/root/.oh-my-zsh'
+
+# Aliases
+alias py='python3'
+alias pm='python3 /workspace/srcs/backend/manage.py'
+alias cl='clear'
+
+# Oh My Zsh plugins
+plugins=(
+	git
+	zsh-autosuggestions
+	zsh-syntax-highlighting
+)
+
+# Source Oh My Zsh
+source $ZSH/oh-my-zsh.sh
+unsetopt HIST_SAVE_BY_COPY

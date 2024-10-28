@@ -134,3 +134,4 @@ cython_debug/
 #.idea/
 docker/grafana/certs/grafana.crt
 docker/grafana/certs/grafana.key
+docker/django/zsh_history
