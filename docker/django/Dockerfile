@@ -1,5 +1,5 @@
 # Use the official Python image from the Docker Hub
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -49,5 +49,7 @@ RUN pip install --upgrade pip && pip install -r /tmp/requirements.txt
 # Expose the port the app runs on
 EXPOSE 8000
 
+WORKDIR /workspace/srcs/backend
+
 # Run the Django development server
-CMD ["python", "srcs/backend/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "transcendence.asgi:application"]

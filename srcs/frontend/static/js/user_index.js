@@ -1,5 +1,6 @@
 const hostname = window.location.hostname;
-const url = `http://${hostname}:8000/game/`;
+const port = window.location.port;
+const url = `https://${hostname}:${port}/game/`;
 
 fetch(url, {
     method: 'GET',

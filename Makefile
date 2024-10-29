@@ -72,6 +72,19 @@ prune:	clean
 	docker network prune
 	docker system prune -a -f
 
+# Prune a specific container
+.PHONY: prune-container
+prune-container:
+	@if [ -z "$(CONTAINER)" ]; then \
+		echo "Please specify a container name using 'make prune-container CONTAINER=<container_name>'"; \
+		exit 1; \
+	fi
+	@if [ -n "$$(docker ps -aq -f name=$(CONTAINER))" ]; then \
+		docker rm -vf $(CONTAINER); \
+	else \
+		echo "Container '$(CONTAINER)' not found."; \
+	fi
+
 # Show the status of the Docker Compose services
 .PHONY: status
 status:
