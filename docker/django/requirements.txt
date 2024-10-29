@@ -1,4 +1,5 @@
 Django==5.1
+django-prometheus
 psycopg2-binary
 psycopg
 djangorestframework

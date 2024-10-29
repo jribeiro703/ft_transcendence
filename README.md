@@ -2,17 +2,16 @@
 
 ```make rootless-docker``` to enable rootless docker in clusters
 
-```make certs``` to build certificate
-
 ```make update-ip``` to adjust ip for remote connection in clusters
 
+```make``` to build the project. You will be prompted to either enter information manually or allow the system to automatically fill in the information for the development environment with ```transcendence``` in all fields.
 
-http://0.0.0.0:8000 our app
+https://localhost:8081 our app
 
-https://0.0.0.0:3000 grafana
+https://grafana.localhost:8081 grafana
 
-http://0.0.0.0:9090 prometheus
+https://prometheus.localhost:8081 prometheus
 
-http://0.0.0.0:9101 prometheus node exporter
+https://node-exporter.localhost:8081 node-exporter
 
-http://0.0.0.0:9187 postgres exporter
+https://postgres-exporter.localhost:8081 postgres-exporter

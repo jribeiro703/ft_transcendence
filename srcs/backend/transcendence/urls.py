@@ -10,6 +10,7 @@ urlpatterns = [
 	path('user/', include('user.urls')),
 	path('game/', include('game.urls')),
 	path('tournament/', include('tournament.urls')),
+	path('', include('django_prometheus.urls')),
 ]
 
 if settings.DEBUG:

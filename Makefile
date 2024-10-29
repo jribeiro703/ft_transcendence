@@ -53,7 +53,7 @@ logs-grafana:
 # View the logs of the Docker Compose services
 .PHONY: logs-nginx
 logs-nginx:
-	$(DOCKER_COMPOSE) logs nginx
+	$(DOCKER_COMPOSE) logs nginx-proxy
 
 # Clean up Docker Compose services and volumes
 .PHONY: clean
@@ -113,7 +113,7 @@ shell-grafana:
 # Execute a shell in the nginx container
 .PHONY: shell-nginx
 shell-nginx:
-	$(DOCKER_COMPOSE) exec nginx /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/sh"
+	$(DOCKER_COMPOSE) exec nginx-proxy /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/sh"
 
 .PHONY: rootless-docker
 rootless-docker:
@@ -131,6 +131,7 @@ generate-env:
 	@echo "Generating docker/.env file..."
 	@touch docker/django/zsh_history
 	@mkdir -p docker/nginx/certs
+	@mkdir -p docker/nginx/conf.d
 	@touch docker/.env
 	@read -p "Do you want to fill it with automatic values? (yes/no): " AUTO_FILL; \
 	if [ "$$AUTO_FILL" = "yes" ] || [ "$$AUTO_FILL" = "y" ] || [ "$$AUTO_FILL" = "" ]; then \
