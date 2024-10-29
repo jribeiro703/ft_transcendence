@@ -133,6 +133,8 @@ generate-env:
 	@mkdir -p docker/nginx/certs
 	@mkdir -p docker/nginx/conf.d
 	@touch docker/.env
+	@touch docker/django/zsh_history
+	@mkdir -p docker/grafana/certs
 	@read -p "Do you want to fill it with automatic values? (yes/no): " AUTO_FILL; \
 	if [ "$$AUTO_FILL" = "yes" ] || [ "$$AUTO_FILL" = "y" ] || [ "$$AUTO_FILL" = "" ]; then \
 		openssl req -newkey rsa:2048 -nodes -keyout docker/nginx/certs/localhost.key -x509 -days 365 -out docker/nginx/certs/localhost.crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=transcendence/emailAddress=transcendence@transcendence.com"; \
