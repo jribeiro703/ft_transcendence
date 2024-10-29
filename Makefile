@@ -53,7 +53,7 @@ logs-grafana:
 # View the logs of the Docker Compose services
 .PHONY: logs-nginx
 logs-nginx:
-	$(DOCKER_COMPOSE) logs nginx
+	$(DOCKER_COMPOSE) logs nginx-proxy
 
 # Clean up Docker Compose services and volumes
 .PHONY: clean
@@ -71,6 +71,19 @@ prune:	clean
 	@if [ -n "$$(docker images -aq)" ]; then docker rmi -f $$(docker images -aq); fi
 	docker network prune
 	docker system prune -a -f
+
+# Prune a specific container
+.PHONY: prune-container
+prune-container:
+	@if [ -z "$(CONTAINER)" ]; then \
+		echo "Please specify a container name using 'make prune-container CONTAINER=<container_name>'"; \
+		exit 1; \
+	fi
+	@if [ -n "$$(docker ps -aq -f name=$(CONTAINER))" ]; then \
+		docker rm -vf $(CONTAINER); \
+	else \
+		echo "Container '$(CONTAINER)' not found."; \
+	fi
 
 # Show the status of the Docker Compose services
 .PHONY: status
@@ -100,7 +113,7 @@ shell-grafana:
 # Execute a shell in the nginx container
 .PHONY: shell-nginx
 shell-nginx:
-	$(DOCKER_COMPOSE) exec nginx /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/sh"
+	$(DOCKER_COMPOSE) exec nginx-proxy /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/sh"
 
 .PHONY: rootless-docker
 rootless-docker:
@@ -118,7 +131,10 @@ generate-env:
 	@echo "Generating docker/.env file..."
 	@touch docker/django/zsh_history
 	@mkdir -p docker/nginx/certs
+	@mkdir -p docker/nginx/conf.d
 	@touch docker/.env
+	@touch docker/django/zsh_history
+	@mkdir -p docker/grafana/certs
 	@read -p "Do you want to fill it with automatic values? (yes/no): " AUTO_FILL; \
 	if [ "$$AUTO_FILL" = "yes" ] || [ "$$AUTO_FILL" = "y" ] || [ "$$AUTO_FILL" = "" ]; then \
 		openssl req -newkey rsa:2048 -nodes -keyout docker/nginx/certs/localhost.key -x509 -days 365 -out docker/nginx/certs/localhost.crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=transcendence/emailAddress=transcendence@transcendence.com"; \
