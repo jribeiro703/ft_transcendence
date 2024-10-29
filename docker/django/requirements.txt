@@ -5,5 +5,9 @@ psycopg
 djangorestframework
 djangorestframework_simplejwt
 Pillow
+<<<<<<< HEAD
 daphne
 channels
+=======
+daphne
+>>>>>>> bd5e881 (add login, logout with JWT and alls models in admin.py)
