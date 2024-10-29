@@ -50,17 +50,27 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Application definition
 
 INSTALLED_APPS = [
+<<<<<<< HEAD
 	'channels',
 	'daphne',
 	'rest_framework',
 	'rest_framework_simplejwt',
+=======
+	'daphne',
+>>>>>>> bd5e881 (add login, logout with JWT and alls models in admin.py)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
 	'django_prometheus',
+=======
+	'transcendence',
+	'rest_framework',
+	'rest_framework_simplejwt',
+>>>>>>> bd5e881 (add login, logout with JWT and alls models in admin.py)
 	'user',
 	'game',
 	'tournament',
@@ -94,8 +104,13 @@ TEMPLATES = [
     },
 ]
 
+<<<<<<< HEAD
 # WSGI_APPLICATION = 'transcendence.wsgi.application'
 ASGI_APPLICATION = 'transcendence.asgi.application'
+=======
+WSGI_APPLICATION = 'transcendence.wsgi.application'
+ASGI_APPLICATION = "transcendence.asgi.application"
+>>>>>>> bd5e881 (add login, logout with JWT and alls models in admin.py)
 
 # Database
 
@@ -156,3 +171,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../frontend/static/assets')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.User'
+<<<<<<< HEAD
+=======
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+	"REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+>>>>>>> bd5e881 (add login, logout with JWT and alls models in admin.py)
