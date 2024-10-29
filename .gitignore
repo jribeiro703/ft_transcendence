@@ -140,3 +140,4 @@ docker/nginx/certs/privkey.pem
 docker/nginx/conf.d/.htpasswd
 docker/nginx/certs/localhost.crt
 docker/nginx/certs/localhost.key
+docker/nginx/Dockerfile

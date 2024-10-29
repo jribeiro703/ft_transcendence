@@ -13,12 +13,28 @@ services:
       - .env
     depends_on:
       - db
+      - migration
     restart: on-failure
     networks:
       - transcendence
     environment:
       - VIRTUAL_HOST=localhost
       - VIRTUAL_PORT=8000
+
+  migration:
+    build:
+      context: ../
+      dockerfile: ./docker/django/Dockerfile
+    container_name: migration
+    volumes:
+      - ../:/workspace
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - transcendence
+    command: python manage.py migrate --noinput
 
   db:
     image: postgres:13
@@ -77,6 +93,9 @@ services:
     restart: on-failure
     networks:
       - transcendence
+    environment:
+      - VIRTUAL_HOST=node-exporter.localhost
+      - VIRTUAL_PORT=9100
 
   postgres_exporter:
     image: prometheuscommunity/postgres-exporter:latest
@@ -89,11 +108,18 @@ services:
     restart: on-failure
     networks:
       - transcendence
+    environment:
+      - VIRTUAL_HOST=postgres-exporter.localhost
+      - VIRTUAL_PORT=9187
 
   nginx-proxy:
+    # build:
+    #   context: ../
+    #   dockerfile: ./docker/nginx/Dockerfile
     image: jwilder/nginx-proxy
-    container_name: nginx-proxy
+    container_name: nginx
     ports:
+      # - "8080:80"
       - "8081:443"
     volumes:
       - ${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro
