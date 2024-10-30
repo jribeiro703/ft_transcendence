@@ -12,23 +12,24 @@ document.addEventListener('DOMContentLoaded', function()
 	const gameView = document.getElementById('gameView');
 	var playerScoreElement = document.getElementById('playerScore');
 	var aiScoreElement = document.getElementById('aiScore');
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+
+	canvas.width = 780;
+	canvas.height = 420;
 
 	let playerScore = 0;
 	let aiScore = 0;
 	let gameStart = false;
 	let currenServer = 'player';
 	let serveCount = 0;
+	let matchOver = false;
+
 	const WIN_SCORE = 11;
 	const GAP_SCORE = 2;
-	let matchOver = false;
+	const INIT_DX = 4;
+	const INIT_DY = 4;
 	
-	quickGameBtn.addEventListener('click', showGameView);
-
-
-	
-	var canvas = document.getElementById('myCanvas');
-	var ctx = canvas.getContext('2d');
-
 	var x;
 	var y;
 	var dx;
@@ -44,39 +45,11 @@ document.addEventListener('DOMContentLoaded', function()
 	var aiUpPressed = false;
 	var aiDownPressed = false;
 
-	const INIT_DX = 4;
-	const INIT_DY = 4;	
-
-
-	function initializeBall()
-	{
-		if (currenServer === 'player')
-		{
-            x = paddleWidth + ballRadius; 
-            y = playerPaddleX + paddleHeight / 2;
-        }
-		else 
-		{
-            x = canvas.width - paddleWidth - ballRadius;
-            y = aiPaddleX + paddleHeight / 2;
-        }
-		dx = 0;
-        dy = 0;
-        drawBall(); 
-    }
-
+	quickGameBtn.addEventListener('click', showGameView);
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
 	document.addEventListener("keydown", startBall, false);
 
-	function showGameView()
-	{
-		defaultView.style.display = 'none';
-        gameView.style.display = 'block';
-		drawPaddle();
-		initializeBall();
-		draw();
-    }
 
 
 	function keyDownHandler(e)
@@ -118,16 +91,30 @@ document.addEventListener('DOMContentLoaded', function()
 			aiDownPressed = false;
 		}
 	}
-	
-	function startBall(e)
+
+	function showGameView()
 	{
-		if (e.code == "Space" && !matchOver)
+		defaultView.style.display = 'none';
+        gameView.style.display = 'block';
+		initializeBall();
+		draw();
+    }
+
+	function initializeBall()
+	{
+		if (currenServer === 'player')
 		{
-			gameStart = true;
-			dx = INIT_DX;
-			dy = (Math.random() < 0.5 ? INIT_DY : -INIT_DY);
-		}
-	}
+            x = paddleWidth + ballRadius; 
+            y = playerPaddleX + paddleHeight / 2;
+        }
+		else 
+		{
+            x = canvas.width - paddleWidth - ballRadius;
+            y = aiPaddleX + paddleHeight / 2;
+        }
+		dx = 0;
+        dy = 0;
+    }
 
 	function drawBall()
 	{
@@ -138,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function()
 		ctx.closePath();
     }
 
-	function drawPaddle()
+	function drawPaddles()
 	{
 		ctx.beginPath();
 		ctx.rect(0, playerPaddleX, paddleWidth, paddleHeight);
@@ -153,65 +140,16 @@ document.addEventListener('DOMContentLoaded', function()
 		ctx.closePath();
 	}
 
-	function resetMatch()
+	function initDraw()
 	{
-		playerScore = 0;
-		aiScore = 0;
-		matchOver = false;
-		currenServer = 'player';
-		serveCount = 0;
-		playerScoreElement.textContent = playerScore;
-		aiScoreElement.textContent = aiScore;
-		gameStart = false;
-		initializeBall();
+		drawBall();
+		drawPaddles();
 	}
-
-	function checkScore()
-	{
-		console.log("checScore")
-		if ((playerScore >= WIN_SCORE || aiScore == WIN_SCORE) && Math.abs(playerScore - aiScore) >= GAP_SCORE)
-		{
-			matchOver = true;
-			alert((playerScore > aiScore ? 'Fantastique ! Tu as gagne' : 'Dommage... L IA a gagne'));
-			alert('Merci d\'avoir joué ! À la prochaine fois !');
-			resetGame();
-		}	
-	}
-
-	function resetBall(winner)
-	{
-		console.log("resetball");
-		if (matchOver)
-			return;
-		if (winner == 'player')
-		{
-			playerScore++;
-		}
-		else
-		{
-			aiScore++;
-		}
-		checkScore();
-		serveCount++;
-		if (serveCount >= 2)
-		{
-			serveCount = 0;
-			currenServer = (currenServer == 'player') ? 'ai' : 'player';
-		}
-		initializeBall();
-		dx = 0;
-		dy = 0;
-		gameStart = false;
-		aiScoreElement.textContent = aiScore;
-		playerScoreElement.textContent = playerScore;
-    }
 
 	function draw()
 	{
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-		drawPaddle();
-		drawBall();
+		initDraw();
 		if (gameStart)
 		{
 			x += dx;
@@ -252,7 +190,13 @@ document.addEventListener('DOMContentLoaded', function()
                 y = aiPaddleX + paddleHeight / 2;
 			}
 		}
-		
+		updateIaMove();
+		manageMove();
+		animationFrame = requestAnimationFrame(draw);
+	}
+
+	function manageMove()
+	{
 		if (playerUpPressed && playerPaddleX > 0)
 		{
 			playerPaddleX -= 5;
@@ -270,7 +214,47 @@ document.addEventListener('DOMContentLoaded', function()
 		{
 			aiPaddleX += 5;
 		}
-		animationFrame = requestAnimationFrame(draw);
+	}
+
+	function updateIaMove()
+	{
+		if (dx > 0 && x > canvas.width / 2) 
+		{
+        // Si la balle est plus haute que le centre de la raquette de l'IA
+  	    	if (y < aiPaddleX + paddleHeight / 2 && aiPaddleX > 0)
+			{
+   	        	aiPaddleX -= 3; // Monte la raquette de l'IA pour suivre la balle
+        	}
+        // Si la balle est plus basse que le centre de la raquette de l'IA
+        	else if (y > aiPaddleX + paddleHeight / 2 && aiPaddleX < canvas.height - paddleHeight)
+			{
+   	        	aiPaddleX += 3; // Descend la raquette de l'IA pour suivre la balle
+        	}
+    	}
+    // Si la balle se dirige dans la direction opposée de l'IA (de droite à gauche)
+    	else if (dx < 0)
+		{
+        // Recentre la raquette de l'IA vers le centre du terrain
+        	if (aiPaddleX + paddleHeight / 2 < canvas.height / 2)
+			{
+   	        	aiPaddleX += 2; // Descend doucement la raquette vers le centre
+        	} 
+			else if (aiPaddleX + paddleHeight / 2 > canvas.height / 2) 
+			{
+            	aiPaddleX -= 2; // Monte doucement la raquette vers le centre
+        	}
+    }
+	}
+
+
+	function startBall(e)
+	{
+		if (e.code == "Space" && !matchOver)
+		{
+			gameStart = true;
+			dx = INIT_DX;
+			dy = (Math.random() < 0.5 ? INIT_DY : -INIT_DY);
+		}
 	}
 
 	function resetGame()
@@ -281,5 +265,64 @@ document.addEventListener('DOMContentLoaded', function()
 		defaultView.style.display = 'block';
 		gameView.style.display = 'none';
 	}
+
+	function resetMatch()
+	{
+		playerScore = 0;
+		aiScore = 0;
+		matchOver = false;
+		currenServer = 'player';
+		serveCount = 0;
+		playerScoreElement.textContent = playerScore;
+		aiScoreElement.textContent = aiScore;
+		gameStart = false;
+		initializeBall();
+	}
+
+	function checkScore()
+	{
+		if ((playerScore >= WIN_SCORE || aiScore == WIN_SCORE) && Math.abs(playerScore - aiScore) >= GAP_SCORE)
+		{
+			matchOver = true;
+			alert((playerScore > aiScore ? 'Fantastique ! Tu as gagne' : 'Dommage... L IA a gagne'));
+			alert('Merci d\'avoir joué ! À la prochaine fois !');
+			resetGame();
+		}	
+	}
+
+	function resetBall(winner)
+	{
+		if (matchOver)
+			return;
+		if (winner == 'player')
+		{
+			playerScore++;
+		}
+		else
+		{
+			aiScore++;
+		}
+		checkScore();
+		serveCount++;
+		if (serveCount >= 2)
+		{
+			serveCount = 0;
+			currenServer = (currenServer == 'player') ? 'ai' : 'player';
+		}
+		initializeBall();
+		dx = 0;
+		dy = 0;
+		gameStart = false;
+		aiScoreElement.textContent = aiScore;
+		playerScoreElement.textContent = playerScore;
+    }
+
+	const observer = new MutationObserver(() => {
+		canvas.width = canvas.clientWidth;
+		canvas.height = canvas.clientHeight;
+		
+	});
+
+	observer.observe(canvas, { attributes: true, attributeFilter: ['style'] });
 
 });
