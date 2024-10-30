@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', function()
 	let matchOver = false;
 	let aiServe = false;
 	let aiMoveInterval;
+	let powerUpDuration = 5000;
+	let powerUpActive = false;
+
 
 	const WIN_SCORE = 11;
 	const GAP_SCORE = 2;
@@ -34,17 +37,23 @@ document.addEventListener('DOMContentLoaded', function()
 	const INIT_DY = 6;
 	const PADDLE_SPEED = 10;
 	const AI_UPDATE_INTERVAL = 1000;
-	
+	const POWER_UP_SIZE = 30;
+
 	var x;
 	var y;
 	var dx;
 	var dy;
+	var powerUpX;
+	var powerUpY;
 	var animationFrame;
 	var ballRadius = 7;
-	var paddleHeight = 75;
-	var paddleWidth = 12;
+	var playerPaddleHeight = 75;
+	var playerPaddleWidth = 12;
+	var aiPaddleHeight = 75;
+	var aiPaddleWidth = 12;
+
 	var playerPaddleX = 0;
-	var aiPaddleX = (canvas.height - paddleHeight) / 2;
+	var aiPaddleX = (canvas.height - aiPaddleHeight) / 2;
 	var playerUpPressed = false;
 	var playerDownPressed = false;
 
@@ -100,6 +109,9 @@ document.addEventListener('DOMContentLoaded', function()
 		defaultView.style.display = 'none';
         gameView.style.display = 'block';
 		initializeBall();
+		createPowerUP();
+		console.log(powerUpX);
+		console.log(powerUpY);
 		aiMovement();
 		draw();
     }
@@ -108,13 +120,13 @@ document.addEventListener('DOMContentLoaded', function()
 	{
 		if (currenServer === 'player')
 		{
-            x = paddleWidth + ballRadius; 
-            y = playerPaddleX + paddleHeight / 2;
+            x = playerPaddleWidth + ballRadius; 
+            y = playerPaddleX + playerPaddleHeight / 2;
         }
 		else 
 		{
-            x = canvas.width - paddleWidth - ballRadius;
-            y = aiPaddleX + paddleHeight / 2;
+            x = canvas.width - aiPaddleWidth - ballRadius;
+            y = aiPaddleX + aiPaddleHeight / 2;
         }
 		dx = 0;
         dy = 0;
@@ -125,6 +137,20 @@ document.addEventListener('DOMContentLoaded', function()
 		drawBall();
 		drawPaddles();
 		drawLines();
+	}
+
+	function drawPowerUp()
+	{
+		if (!powerUpActive)
+		{
+			ctx.beginPath();
+			ctx.rect(powerUpX, powerUpY, POWER_UP_SIZE, POWER_UP_SIZE);
+			ctx.fillStyle = "red";
+			ctx.font = '20px Arial';
+			ctx.fillText("Bonus", powerUpX - 15 , powerUpY + 40);
+			ctx.fill();
+			ctx.closePath();
+		}
 	}
 
 	function drawBall()
@@ -139,13 +165,13 @@ document.addEventListener('DOMContentLoaded', function()
 	function drawPaddles()
 	{
 		ctx.beginPath();
-		ctx.rect(0, playerPaddleX, paddleWidth, paddleHeight);
+		ctx.rect(0, playerPaddleX, playerPaddleWidth, playerPaddleHeight);
 		ctx.fillStyle = "#FF414D";
 		ctx.fill();
 		ctx.closePath();
 
 		ctx.beginPath();
-		ctx.rect(canvas.width - paddleWidth, aiPaddleX, paddleWidth, paddleHeight);
+		ctx.rect(canvas.width - aiPaddleWidth, aiPaddleX, aiPaddleWidth, aiPaddleHeight);
 		ctx.fillStyle = "#FF414D";
 		ctx.fill();
 		ctx.closePath();
@@ -171,11 +197,13 @@ document.addEventListener('DOMContentLoaded', function()
 		ctx.lineTo(canvas.width, canvas.height / 2);
 		ctx.stroke();
 	}
-	
+
 	function draw()
 	{
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		initDraw();
+		drawPowerUp();
+		collectPowerUp();
 		if (gameStart)
 		{
 			x += dx;
@@ -185,14 +213,14 @@ document.addEventListener('DOMContentLoaded', function()
 			{
 				dy = -dy;
 			}
-			if(x - ballRadius < paddleWidth && y > playerPaddleX && y < playerPaddleX + paddleHeight)
+			if(x - ballRadius < playerPaddleWidth && y > playerPaddleX && y < playerPaddleX + playerPaddleHeight)
 			{
 				dx = -dx;
 			}
-			else if (x + ballRadius > canvas.width - paddleWidth && y > aiPaddleX && y < aiPaddleX + paddleHeight)
+			else if (x + ballRadius > canvas.width - aiPaddleWidth && y > aiPaddleX && y < aiPaddleX + aiPaddleHeight)
 			{
 				dx = -dx;
-				x = canvas.width - paddleWidth - ballRadius;
+				x = canvas.width - aiPaddleWidth - ballRadius;
 			}
 			else if (x < 0)
 			{
@@ -207,13 +235,13 @@ document.addEventListener('DOMContentLoaded', function()
 		{
 			if (currenServer == 'player')
 			{
-				x = paddleWidth + ballRadius;
-                y = playerPaddleX + paddleHeight / 2;
+				x = playerPaddleWidth + ballRadius;
+                y = playerPaddleX + playerPaddleHeight / 2;
 			}
 			else
 			{
-				x = canvas.width - paddleWidth - ballRadius;
-                y = aiPaddleX + paddleHeight / 2;
+				x = canvas.width - aiPaddleWidth - ballRadius;
+                y = aiPaddleX + aiPaddleHeight / 2;
 			}
 		}
 		updateIaMove();
@@ -227,11 +255,10 @@ document.addEventListener('DOMContentLoaded', function()
 		{
 			playerPaddleX -= PADDLE_SPEED;
 		} 
-		else if (playerDownPressed && playerPaddleX < canvas.height - paddleHeight)
+		else if (playerDownPressed && playerPaddleX < canvas.height - playerPaddleHeight)
 		{
 			playerPaddleX += PADDLE_SPEED;
 		}  
-
 		console.log("playermove");
 	}
 
@@ -244,29 +271,17 @@ document.addEventListener('DOMContentLoaded', function()
 
 	function updateIaMove()
 	{
-		console.log("aimove");
 		if (dx > 0 && x > canvas.width / 2) 
 		{
-  	    	if (y < aiPaddleX + paddleHeight / 2 && aiPaddleX > 0)
+  	    	if (y < aiPaddleX + aiPaddleHeight / 2 && aiPaddleX > 0)
 			{
    	        	aiPaddleX -= PADDLE_SPEED;
         	}
-        	else if (y > aiPaddleX + paddleHeight / 2 && aiPaddleX < canvas.height - paddleHeight)
+        	else if (y > aiPaddleX + aiPaddleHeight / 2 && aiPaddleX < canvas.height - aiPaddleHeight)
 			{
    	        	aiPaddleX += PADDLE_SPEED;
         	}
     	}
-    	else if (dx < 0)
-		{
-        	if (aiPaddleX + paddleHeight / 2 < canvas.height / 2)
-			{
-   	        	aiPaddleX += PADDLE_SPEED;
-        	} 
-			else if (aiPaddleX + paddleHeight / 2 > canvas.height / 2) 
-			{
-            	aiPaddleX -= PADDLE_SPEED;
-        	}
-    }
 	}
 
 
@@ -358,8 +373,38 @@ document.addEventListener('DOMContentLoaded', function()
 			aiServe = true;
 			aiServeBall();
 		}
-
     }
+
+
+	function collectPowerUp()
+	{
+		if (!powerUpActive)
+		{
+			if (x < powerUpX + POWER_UP_SIZE && x + ballRadius > powerUpX &&
+			y < powerUpY + POWER_UP_SIZE && y + ballRadius > powerUpY) 
+			{
+				playerPaddleHeight *= 1.3;
+				powerUpActive = true;
+	
+				setTimeout(() => 
+				{
+					playerPaddleHeight /= 1.3;
+				}, powerUpDuration);
+
+				setTimeout(() =>
+				{
+					powerUpActive = false;	
+					createPowerUP();
+				}, powerUpDuration + 3000);
+			}
+		}
+	}
+
+	function createPowerUP()
+	{
+		powerUpX = Math.random() * (canvas.width - 2 * 75) + 75;
+		powerUpY = Math.random() * (canvas.height -2 * 75) + 75;
+	}
 
 	const observer = new MutationObserver(() => {
 		canvas.width = canvas.clientWidth;
