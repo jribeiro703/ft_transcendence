@@ -6,7 +6,6 @@ from tournament.models import Tournament
 class UserAdmin(admin.ModelAdmin):
 	list_display = ('username', 'email',)
 	search_fields = ('username', 'alias', 'email',)
-	# fields = ['avatar', 'username', 'alias', 'email', 'password', 'friends', 'is_active', 'is_staff']
 	ordering = ('username',)
 	list_filter = ('email',)
 
@@ -15,7 +14,6 @@ class GameAdmin(admin.ModelAdmin):
 
 class TournamentAdmin(admin.ModelAdmin):
 	ordering = ('created_at',)
-
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Game, GameAdmin)
