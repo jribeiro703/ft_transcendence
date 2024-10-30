@@ -10,8 +10,10 @@ urlpatterns = [
 	path('user/', include('user.urls')),
 	path('game/', include('game.urls')),
 	path('tournament/', include('tournament.urls')),
-	path('', include('django_prometheus.urls')),
+	path('prometheus/', include('django_prometheus.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+if settings.DEBUG:
+	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -3,5 +3,9 @@ django-prometheus
 psycopg2-binary
 psycopg
 djangorestframework
+djangorestframework_simplejwt
+Pillow
 daphne
 channels
+django-otp
+django-two-factor-auth

@@ -8,6 +8,7 @@ class Tournament(models.Model):
 	game = models.ForeignKey(Game, related_name='tournaments', on_delete=models.CASCADE)
 	# tournament_instance.players.all() to get alls players instance
 	players = models.ManyToManyField(User, related_name='tournaments')
+	created_at = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
 		return _(f"Tournament with {self.players.count()} players")
