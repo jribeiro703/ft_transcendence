@@ -4,12 +4,11 @@ PROJECT_NAME	= ft_transcendence
 
 # Default target
 .PHONY: all
-all: certs generate-env up
+all: generate-env up
 
 # Build the Docker images
 .PHONY: build
 build:
-	touch docker/django/zsh_history
 	$(DOCKER_COMPOSE) build
 
 # Start the Docker Compose services
@@ -51,6 +50,11 @@ logs-prometheus:
 logs-grafana:
 	$(DOCKER_COMPOSE) logs grafana
 
+# View the logs of the Docker Compose services
+.PHONY: logs-nginx
+logs-nginx:
+	$(DOCKER_COMPOSE) logs nginx-proxy
+
 # Clean up Docker Compose services and volumes
 .PHONY: clean
 clean:
@@ -67,6 +71,19 @@ prune:	clean
 	@if [ -n "$$(docker images -aq)" ]; then docker rmi -f $$(docker images -aq); fi
 	docker network prune
 	docker system prune -a -f
+
+# Prune a specific container
+.PHONY: prune-container
+prune-container:
+	@if [ -z "$(CONTAINER)" ]; then \
+		echo "Please specify a container name using 'make prune-container CONTAINER=<container_name>'"; \
+		exit 1; \
+	fi
+	@if [ -n "$$(docker ps -aq -f name=$(CONTAINER))" ]; then \
+		docker rm -vf $(CONTAINER); \
+	else \
+		echo "Container '$(CONTAINER)' not found."; \
+	fi
 
 # Show the status of the Docker Compose services
 .PHONY: status
@@ -93,6 +110,11 @@ shell-prometheus:
 shell-grafana:
 	$(DOCKER_COMPOSE) exec grafana /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/sh"
 
+# Execute a shell in the nginx container
+.PHONY: shell-nginx
+shell-nginx:
+	$(DOCKER_COMPOSE) exec nginx-proxy /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/sh"
+
 .PHONY: rootless-docker
 rootless-docker:
 	@dockerd-rootless-setuptool.sh install || { echo "Failed to install rootless Docker"; exit 1; }
@@ -104,23 +126,28 @@ rootless-docker:
 update-ip:
 	python3 ./utils/inet.py
 
-.PHONY: certs
-certs:
-	openssl req -newkey rsa:2048 -nodes -keyout docker/grafana/certs/grafana.key -x509 -days 365 -out docker/grafana/certs/grafana.crt
-
 .PHONY: generate-env
 generate-env:
 	@echo "Generating docker/.env file..."
+	@touch docker/django/zsh_history
+	@mkdir -p docker/nginx/certs
+	@mkdir -p docker/nginx/conf.d
 	@touch docker/.env
+	@touch docker/django/zsh_history
+	@mkdir -p docker/grafana/certs
 	@read -p "Do you want to fill it with automatic values? (yes/no): " AUTO_FILL; \
 	if [ "$$AUTO_FILL" = "yes" ] || [ "$$AUTO_FILL" = "y" ] || [ "$$AUTO_FILL" = "" ]; then \
+		openssl req -newkey rsa:2048 -nodes -keyout docker/nginx/certs/localhost.key -x509 -days 365 -out docker/nginx/certs/localhost.crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=transcendence/emailAddress=transcendence@transcendence.com"; \
 		DEBUG="1"; \
 		POSTGRES_DB="transcendence"; \
 		POSTGRES_USER="transcendence"; \
 		POSTGRES_PASSWORD="transcendence"; \
 		GF_SECURITY_ADMIN_USER="transcendence"; \
 		GF_SECURITY_ADMIN_PASSWORD="transcendence"; \
+		HTPASSWD="AUTO"; \
 	else \
+		HTPASSWD="FILL"; \
+		openssl req -newkey rsa:2048 -nodes -keyout docker/nginx/certs/localhost.key -x509 -days 365 -out docker/nginx/certs/localhost.crt; \
 		while [ -z "$$DEBUG" ]; do \
 			read -p "Enter DEBUG (0 or 1): " DEBUG; \
 			if [ "$$DEBUG" != "0" ] && [ "$$DEBUG" != "1" ]; then \
@@ -168,9 +195,10 @@ generate-env:
 	echo "DB_PORT=5432" >> docker/.env; \
 	echo "GF_SECURITY_ADMIN_USER=$$GF_SECURITY_ADMIN_USER" >> docker/.env; \
 	echo "GF_SECURITY_ADMIN_PASSWORD=$$GF_SECURITY_ADMIN_PASSWORD" >> docker/.env; \
-	echo "GF_SERVER_PROTOCOL=https" >> docker/.env; \
-	echo "GF_SERVER_CERT_FILE=/etc/grafana/certs/grafana.crt" >> docker/.env; \
-	echo "GF_SERVER_CERT_KEY=/etc/grafana/certs/grafana.key" >> docker/.env; \
+	echo "GF_SERVER_PROTOCOL=http" >> docker/.env; \
+	# echo "GF_SERVER_CERT_FILE=/etc/grafana/certs/grafana.crt" >> docker/.env; \
+	# echo "GF_SERVER_CERT_KEY=/etc/grafana/certs/grafana.key" >> docker/.env; \
 	echo 'DATA_SOURCE_NAME=postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${POSTGRES_DB}?sslmode=disable' >> docker/.env; \
 	python utils/generate_secret_key.py; \
+	python utils/generate_htpasswd.py $$HTPASSWD; \
 	echo "Updated docker/.env file successfully."

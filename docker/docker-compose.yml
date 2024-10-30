@@ -7,14 +7,34 @@ services:
     volumes:
       - ../:/workspace
       - ./django/zsh_history:/root/.zsh_history
-
     ports:
       - "8000:8000"
     env_file:
       - .env
     depends_on:
       - db
+      - migration
     restart: on-failure
+    networks:
+      - transcendence
+    environment:
+      - VIRTUAL_HOST=localhost
+      - VIRTUAL_PORT=8000
+
+  migration:
+    build:
+      context: ../
+      dockerfile: ./docker/django/Dockerfile
+    container_name: migration
+    volumes:
+      - ../:/workspace
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - transcendence
+    command: python manage.py migrate --noinput
 
   db:
     image: postgres:13
@@ -22,6 +42,8 @@ services:
       - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - transcendence
 
   prometheus:
     image: prom/prometheus:latest
@@ -37,6 +59,11 @@ services:
       - "--storage.tsdb.path=/prometheus"
       - "--storage.tsdb.retention.time=30d"
     restart: on-failure
+    networks:
+      - transcendence
+    environment:
+      - VIRTUAL_HOST=prometheus.localhost
+      - VIRTUAL_PORT=9090
 
   grafana:
     image: grafana/grafana:latest
@@ -52,14 +79,23 @@ services:
       - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
       - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
       - ./grafana/metrics-dashboard.json:/var/lib/grafana/dashboards/metrics-dashboard.json
-      - ./grafana/certs/:/etc/grafana/certs/
     restart: on-failure
+    networks:
+      - transcendence
+    environment:
+      - VIRTUAL_HOST=grafana.localhost
+      - VIRTUAL_PORT=3000
 
   node_exporter:
     image: prom/node-exporter:latest
     ports:
       - "9101:9100"
     restart: on-failure
+    networks:
+      - transcendence
+    environment:
+      - VIRTUAL_HOST=node-exporter.localhost
+      - VIRTUAL_PORT=9100
 
   postgres_exporter:
     image: prometheuscommunity/postgres-exporter:latest
@@ -70,6 +106,34 @@ services:
     depends_on:
       - db
     restart: on-failure
+    networks:
+      - transcendence
+    environment:
+      - VIRTUAL_HOST=postgres-exporter.localhost
+      - VIRTUAL_PORT=9187
+
+  nginx-proxy:
+    # build:
+    #   context: ../
+    #   dockerfile: ./docker/nginx/Dockerfile
+    image: jwilder/nginx-proxy
+    container_name: nginx
+    ports:
+      # - "8080:80"
+      - "8081:443"
+    volumes:
+      - ${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    environment:
+      - HTTPS_METHOD=redirect
+      - DEFAULT_SSL_CERT=/etc/nginx/certs/localhost.crt
+      - DEFAULT_SSL_KEY=/etc/nginx/certs/localhost.key
+    networks:
+      - transcendence
+
+networks:
+  transcendence:
+    driver: bridge
 
 volumes:
   postgres_data:
