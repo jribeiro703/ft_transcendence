@@ -150,11 +150,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-	os.path.join(BASE_DIR, '../frontend/static')
+	os.path.join(BASE_DIR, '../static')
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '../frontend/static/assets')
+MEDIA_ROOT = os.path.join(BASE_DIR, '../static/images')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -175,3 +175,14 @@ SIMPLE_JWT = {
 	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
 	"REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'fttrans0@gmail.com'
+EMAIL_HOST_PASSWORD = 'Ft_trans0pass'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://localhost:8081',
+]
