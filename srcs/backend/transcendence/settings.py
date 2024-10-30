@@ -50,30 +50,22 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Application definition
 
 INSTALLED_APPS = [
-<<<<<<< HEAD
-<<<<<<< HEAD
+
+	'daphne',
 	'channels',
-	'daphne',
-	'rest_framework',
-	'rest_framework_simplejwt',
-=======
-	'daphne',
->>>>>>> bd5e881 (add login, logout with JWT and alls models in admin.py)
-=======
->>>>>>> 385ae1d (did make many changements from last commit)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
-	'django_prometheus',
-=======
-	'transcendence',
 	'rest_framework',
 	'rest_framework_simplejwt',
->>>>>>> bd5e881 (add login, logout with JWT and alls models in admin.py)
+	# 'django_otp',
+    # 'django_otp.plugins.otp_totp',
+    # 'two_factor',
+    # 'two_factor.plugins.phonenumber',
+	'django_prometheus',
 	'user',
 	'game',
 	'tournament',
@@ -83,6 +75,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+	'django_otp.middleware.OTPMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -107,16 +100,8 @@ TEMPLATES = [
     },
 ]
 
-<<<<<<< HEAD
 # WSGI_APPLICATION = 'transcendence.wsgi.application'
 ASGI_APPLICATION = 'transcendence.asgi.application'
-=======
-WSGI_APPLICATION = 'transcendence.wsgi.application'
-<<<<<<< HEAD
-ASGI_APPLICATION = "transcendence.asgi.application"
->>>>>>> bd5e881 (add login, logout with JWT and alls models in admin.py)
-=======
->>>>>>> 385ae1d (did make many changements from last commit)
 
 # Database
 
@@ -177,8 +162,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../frontend/static/assets')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.User'
-<<<<<<< HEAD
-=======
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -192,8 +175,3 @@ SIMPLE_JWT = {
 	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
 	"REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
-<<<<<<< HEAD
->>>>>>> bd5e881 (add login, logout with JWT and alls models in admin.py)
-=======
-
->>>>>>> 385ae1d (did make many changements from last commit)
