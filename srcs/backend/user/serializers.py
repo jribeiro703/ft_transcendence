@@ -18,15 +18,15 @@ class UserCreateSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
-	def _send_activation_email(self, user):
-		uid = urlsafe_base64_encode(force_bytes(user.pk))
-		token = default_token_generator.make_token(user)
-		activation_link = reverse('signup-user-activate', kwargs={'uidb64': uid, 'token': token})
-		full_link = f'http://localhost:8000{activation_link}'
+	# def _send_activation_email(self, user):
+	# 	uid = urlsafe_base64_encode(force_bytes(user.pk))
+	# 	token = default_token_generator.make_token(user)
+	# 	activation_link = reverse('signup-user-activate', kwargs={'uidb64': uid, 'token': token})
+	# 	full_link = f'http://localhost:8000{activation_link}'
 
-		subject = 'Activate Your Account'
-		message = f'Please activate your account by clicking the link: {full_link}'
-		send_mail(subject, message, 'fttrans0@gmail.com', [user.email])
+	# 	subject = 'Activate Your Account'
+	# 	message = f'Please activate your account by clicking the link: {full_link}'
+	# 	send_mail(subject, message, 'fttrans0@gmail.com', [user.email])
 
 	def create(self, validated_data):
 		password = validated_data.pop('password')
