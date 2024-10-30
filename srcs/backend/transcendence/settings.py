@@ -51,6 +51,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
 <<<<<<< HEAD
+<<<<<<< HEAD
 	'channels',
 	'daphne',
 	'rest_framework',
@@ -58,6 +59,8 @@ INSTALLED_APPS = [
 =======
 	'daphne',
 >>>>>>> bd5e881 (add login, logout with JWT and alls models in admin.py)
+=======
+>>>>>>> 385ae1d (did make many changements from last commit)
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -109,8 +112,11 @@ TEMPLATES = [
 ASGI_APPLICATION = 'transcendence.asgi.application'
 =======
 WSGI_APPLICATION = 'transcendence.wsgi.application'
+<<<<<<< HEAD
 ASGI_APPLICATION = "transcendence.asgi.application"
 >>>>>>> bd5e881 (add login, logout with JWT and alls models in admin.py)
+=======
+>>>>>>> 385ae1d (did make many changements from last commit)
 
 # Database
 
@@ -186,4 +192,8 @@ SIMPLE_JWT = {
 	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
 	"REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
+<<<<<<< HEAD
 >>>>>>> bd5e881 (add login, logout with JWT and alls models in admin.py)
+=======
+
+>>>>>>> 385ae1d (did make many changements from last commit)
