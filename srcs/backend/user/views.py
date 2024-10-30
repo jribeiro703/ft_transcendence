@@ -29,22 +29,22 @@ class CreateUserView(CreateAPIView):
 	permission_classes = [AllowAny]
 	serializer_class = UserCreateSerializer
 
-# class ActivateAccountView(APIView):
-#     permission_classes = [AllowAny]
+class ActivateAccountView(APIView):
+    permission_classes = [AllowAny]
 
-#     def get(self, request, uidb64, token):
-#         try:
-#             uid = force_str(urlsafe_base64_decode(uidb64))
-#             user = get_object_or_404(User, pk=uid)
-#         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-#             user = None
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = get_object_or_404(User, pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
 
-#         if user is not None and default_token_generator.check_token(user, token):
-#             user.is_active = True
-#             user.save()
-#             return Response({"message": "Account activated successfully"}, status=status.HTTP_200_OK)
-#         else:
-#             return Response({"message": "Activation link is invalid"}, status=status.HTTP_400_BAD_REQUEST)
+        if user is not None and default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            return Response({"message": "Account activated successfully"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Activation link is invalid"}, status=status.HTTP_400_BAD_REQUEST)
         
 # @otp_required
 class CookieTokenObtainPairView(TokenObtainPairView):
