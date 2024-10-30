@@ -18,32 +18,35 @@ document.addEventListener('DOMContentLoaded', function()
 	canvas.width = 780;
 	canvas.height = 420;
 
+
 	let playerScore = 0;
 	let aiScore = 0;
 	let gameStart = false;
 	let currenServer = 'player';
 	let serveCount = 0;
 	let matchOver = false;
+	let aiServe = false;
+	let aiMoveInterval;
 
 	const WIN_SCORE = 11;
 	const GAP_SCORE = 2;
-	const INIT_DX = 4;
-	const INIT_DY = 4;
+	const INIT_DX = 6;
+	const INIT_DY = 6;
+	const PADDLE_SPEED = 10;
+	const AI_UPDATE_INTERVAL = 1000;
 	
 	var x;
 	var y;
 	var dx;
 	var dy;
 	var animationFrame;
-	var ballRadius = 10;
+	var ballRadius = 7;
 	var paddleHeight = 75;
-	var paddleWidth = 10;
+	var paddleWidth = 12;
 	var playerPaddleX = 0;
 	var aiPaddleX = (canvas.height - paddleHeight) / 2;
 	var playerUpPressed = false;
 	var playerDownPressed = false;
-	var aiUpPressed = false;
-	var aiDownPressed = false;
 
 	quickGameBtn.addEventListener('click', showGameView);
 	document.addEventListener("keydown", keyDownHandler, false);
@@ -97,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function()
 		defaultView.style.display = 'none';
         gameView.style.display = 'block';
 		initializeBall();
+		aiMovement();
 		draw();
     }
 
@@ -116,11 +120,18 @@ document.addEventListener('DOMContentLoaded', function()
         dy = 0;
     }
 
+	function initDraw()
+	{
+		drawBall();
+		drawPaddles();
+		drawLines();
+	}
+
 	function drawBall()
 	{
 		ctx.beginPath();
 		ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-		ctx.fillStyle = "#0095DD";
+		ctx.fillStyle = "#F8FF00";
 		ctx.fill();
 		ctx.closePath();
     }
@@ -129,23 +140,38 @@ document.addEventListener('DOMContentLoaded', function()
 	{
 		ctx.beginPath();
 		ctx.rect(0, playerPaddleX, paddleWidth, paddleHeight);
-		ctx.fillStyle = "#0095DD";
+		ctx.fillStyle = "#FF414D";
 		ctx.fill();
 		ctx.closePath();
 
 		ctx.beginPath();
 		ctx.rect(canvas.width - paddleWidth, aiPaddleX, paddleWidth, paddleHeight);
-		ctx.fillStyle = "#0095DD";
+		ctx.fillStyle = "#FF414D";
 		ctx.fill();
 		ctx.closePath();
 	}
 
-	function initDraw()
+	function drawLines() 
 	{
-		drawBall();
-		drawPaddles();
+		ctx.strokeStyle = 'white';
+		ctx.lineWidth = 4;
+		ctx.setLineDash([12, 12]);
+		ctx.beginPath();
+		ctx.moveTo(canvas.width / 2, 0);
+		ctx.lineTo(canvas.width / 2, canvas.height);
+		ctx.stroke();
+		ctx.setLineDash([]); 
+	
+		ctx.lineWidth = 2;
+		ctx.strokeRect(0, 0, canvas.width, canvas.height);
+	
+		ctx.lineWidth = 2;
+		ctx.beginPath();
+		ctx.moveTo(0, canvas.height / 2); 
+		ctx.lineTo(canvas.width, canvas.height / 2);
+		ctx.stroke();
 	}
-
+	
 	function draw()
 	{
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -199,49 +225,46 @@ document.addEventListener('DOMContentLoaded', function()
 	{
 		if (playerUpPressed && playerPaddleX > 0)
 		{
-			playerPaddleX -= 5;
+			playerPaddleX -= PADDLE_SPEED;
 		} 
 		else if (playerDownPressed && playerPaddleX < canvas.height - paddleHeight)
 		{
-			playerPaddleX += 5;
+			playerPaddleX += PADDLE_SPEED;
 		}  
 
-		if (aiUpPressed && aiPaddleX > 0)
-		{
-			aiPaddleX -= 5;
-		}
-		else if (aiDownPressed && aiPaddleX < canvas.height - paddleHeight)
-		{
-			aiPaddleX += 5;
-		}
+		console.log("playermove");
+	}
+
+	function aiMovement()
+	{
+		aiMoveInterval = setInterval(() => {
+			updateIaMove();	
+		}, AI_UPDATE_INTERVAL);	
 	}
 
 	function updateIaMove()
 	{
+		console.log("aimove");
 		if (dx > 0 && x > canvas.width / 2) 
 		{
-        // Si la balle est plus haute que le centre de la raquette de l'IA
   	    	if (y < aiPaddleX + paddleHeight / 2 && aiPaddleX > 0)
 			{
-   	        	aiPaddleX -= 3; // Monte la raquette de l'IA pour suivre la balle
+   	        	aiPaddleX -= PADDLE_SPEED;
         	}
-        // Si la balle est plus basse que le centre de la raquette de l'IA
         	else if (y > aiPaddleX + paddleHeight / 2 && aiPaddleX < canvas.height - paddleHeight)
 			{
-   	        	aiPaddleX += 3; // Descend la raquette de l'IA pour suivre la balle
+   	        	aiPaddleX += PADDLE_SPEED;
         	}
     	}
-    // Si la balle se dirige dans la direction opposée de l'IA (de droite à gauche)
     	else if (dx < 0)
 		{
-        // Recentre la raquette de l'IA vers le centre du terrain
         	if (aiPaddleX + paddleHeight / 2 < canvas.height / 2)
 			{
-   	        	aiPaddleX += 2; // Descend doucement la raquette vers le centre
+   	        	aiPaddleX += PADDLE_SPEED;
         	} 
 			else if (aiPaddleX + paddleHeight / 2 > canvas.height / 2) 
 			{
-            	aiPaddleX -= 2; // Monte doucement la raquette vers le centre
+            	aiPaddleX -= PADDLE_SPEED;
         	}
     }
 	}
@@ -249,11 +272,25 @@ document.addEventListener('DOMContentLoaded', function()
 
 	function startBall(e)
 	{
-		if (e.code == "Space" && !matchOver)
+		if (e.code == "Space" && !matchOver && !aiServe && !gameStart)
 		{
 			gameStart = true;
 			dx = INIT_DX;
 			dy = (Math.random() < 0.5 ? INIT_DY : -INIT_DY);
+		}
+	}
+
+	function aiServeBall()
+	{
+		if (!matchOver)
+		{
+			setTimeout(() => 
+			{
+				gameStart = true;
+				dx = -INIT_DX;
+				dy = (Math.random() < 0.5 ? INIT_DY : -INIT_DY);
+				aiServe = false;
+			}, 1000);
 		}
 	}
 
@@ -264,6 +301,7 @@ document.addEventListener('DOMContentLoaded', function()
 		resetMatch();
 		defaultView.style.display = 'block';
 		gameView.style.display = 'none';
+		clearInterval(aiMoveInterval);
 	}
 
 	function resetMatch()
@@ -315,6 +353,12 @@ document.addEventListener('DOMContentLoaded', function()
 		gameStart = false;
 		aiScoreElement.textContent = aiScore;
 		playerScoreElement.textContent = playerScore;
+		if (currenServer == 'ai')
+		{
+			aiServe = true;
+			aiServeBall();
+		}
+
     }
 
 	const observer = new MutationObserver(() => {

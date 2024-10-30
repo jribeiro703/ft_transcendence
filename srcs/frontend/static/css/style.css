@@ -1,7 +1,7 @@
 body
 {
-	background-color: rgba(141, 131, 131, 0.589);
-	color: #85848498;
+	background-color: #999999;
+	color: #1A1A40;
 	margin: 0;
 }
 
@@ -15,9 +15,9 @@ button
 {
     display: block; 
     margin: 0 auto; 
-    border: 5px solid #ffffff;
+    border: 2px solid #ffffff;
     border-radius: 8px; 
-    background-color: #000000; 
+    background-color: #1A1A40; 
     /* width: 780px;  */
     /* height: 320px;  */
 }
