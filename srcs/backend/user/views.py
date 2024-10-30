@@ -14,5 +14,5 @@ from django.template import loader
 @api_view(['GET'])
 def user_index(request):
 	data = {"message": "Hello, world from user app !"}
-	template = loader.get_template("/ted/templates/ted.index.html")
+	template = loader.get_template("index.html")
 	return HttpResponse(template.render(context, request))
