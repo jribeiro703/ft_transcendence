@@ -24,9 +24,6 @@ document.addEventListener('DOMContentLoaded', function()
 	var canvas = document.getElementById('myCanvas');
 	gameVar.ctx = canvas.getContext('2d');
 
-	canvas.width = 780;
-	canvas.height = 420;
-
 	quickGameBtn.addEventListener('click', showGameView);
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
