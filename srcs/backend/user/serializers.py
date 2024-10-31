@@ -3,12 +3,15 @@ from django.urls import reverse
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 
+User = get_user_model()
 	
 class UserCreateSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -41,12 +44,29 @@ class UserCreateSerializer(serializers.ModelSerializer):
 	# 		password = validated_data.pop('password')
 	# 		instance.set_password(password)
 	# 	return super(UserCreateSerializer, self).update(instance, validated_data)
+      
+class UserLoginSerializer(serializers.Serializer):
+	username = serializers.CharField(required=True)
+	password = serializers.CharField(required=True, write_only=True)
+	otp_secret = serializers.CharField(required=False, write_only=True)
+
+	def validate(self, attrs):
+		username = attrs.get('username')
+		password = attrs.get('password')	
+		if not username or not password:
+			raise ValidationError("Username and password are required.")	
+		user = User.objects.filter(username=username).first()
+		if user and not user.check_password(password):
+			raise ValidationError("Invalid username or password.")	
+		attrs['user'] = user
+		return attrs
+
 	
-class CookieTokenRefreshSerializer(TokenRefreshSerializer):
-    refresh = None
-    def validate(self, attrs):
-        attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
-        if attrs['refresh']:
-            return super().validate(attrs)
-        else:
-            raise InvalidToken('No valid token found in cookie \'refresh_token\'')
+# class CookieTokenRefreshSerializer(TokenRefreshSerializer):
+#     refresh = None
+#     def validate(self, attrs):
+#         attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
+#         if attrs['refresh']:
+#             return super().validate(attrs)
+#         else:
+#             raise InvalidToken('No valid token found in cookie \'refresh_token\'')
