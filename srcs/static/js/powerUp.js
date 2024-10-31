@@ -2,7 +2,7 @@ import gameVar from "./var.js";
 import { POWER_UP_SIZE, POWER_UP_DURATION, BALL_RADIUS} from "./const.js";
 
 
-export function createPowerUP()
+export function createPowerUp()
 {
 	gameVar.powerUpX = Math.random() * (gameVar.canvasW - 2 * 75) + 75;
 	gameVar.powerUpY = Math.random() * (gameVar.canvasH -2 * 75) + 75;
