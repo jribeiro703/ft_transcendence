@@ -16,6 +16,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 # from django_otp.decorators import otp_required
 
+# from .serializers import UserCreateSerializer, CookieTokenRefreshSerializer, UserLoginSerializer
 from .serializers import UserCreateSerializer, CookieTokenRefreshSerializer
 from .models import User
 
@@ -29,16 +30,20 @@ class CreateUserView(CreateAPIView):
 	permission_classes = [AllowAny]
 	serializer_class = UserCreateSerializer
 
+# class LoginView(APIView):
+# 	model = get_user_model()
+# 	permission_classes = [AllowAny]
+# 	serializer_class = UserLoginSerializer
+
 class ActivateAccountView(APIView):
     permission_classes = [AllowAny]
-
     def get(self, request, uidb64, token):
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = get_object_or_404(User, pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
-
+            
         if user is not None and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
@@ -46,7 +51,7 @@ class ActivateAccountView(APIView):
         else:
             return Response({"message": "Activation link is invalid"}, status=status.HTTP_400_BAD_REQUEST)
         
-# @otp_required
+		
 class CookieTokenObtainPairView(TokenObtainPairView):
     def finalize_response(self, request, response, *args, **kwargs):
         if response.data.get('refresh'):
@@ -66,16 +71,14 @@ class CookieTokenRefreshView(TokenRefreshView):
 
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
-
     def post(self, request):
         try:
             refresh_token = request.COOKIES.get('refresh_token')
             token = RefreshToken(refresh_token)
             token.blacklist()
-
-            return Response(status=status.HTTP_205_RESET_CONTENT)
+            return Response({"message": "Logout successfully !"}, status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Logout failed"}, status=status.HTTP_400_BAD_REQUEST)
         
 				
 # class UserViewSet(viewsets.ModelViewSet):
