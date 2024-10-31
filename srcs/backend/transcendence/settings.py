@@ -177,7 +177,8 @@ SIMPLE_JWT = {
 	"REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = "~/django-email-messages"
 
 CSRF_TRUSTED_ORIGINS = [
     'https://localhost:8081',
