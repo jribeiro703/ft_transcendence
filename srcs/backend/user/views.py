@@ -22,8 +22,7 @@ from .models import User
 @api_view(['GET'])
 def user_index(request):
 	data = {"message": "Hello, world from user app !"}
-	template = loader.get_template("index.html")
-	return HttpResponse(template.render(context, request))
+	return Response(data, status=status.HTTP_200_OK)
 
 class CreateUserView(CreateAPIView):
 	model = get_user_model()
