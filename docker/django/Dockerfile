@@ -25,7 +25,7 @@ COPY ./docker/django/requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade pip && pip install -r /tmp/requirements.txt
 
 # Expose the port the app runs on
-EXPOSE 8000
+EXPOSE 443
 
 # Install Oh My Zsh
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -39,9 +39,6 @@ COPY ./docker/django/zshrc /root/.zshrc
 
 # Set Zsh as the default shell for the root user
 RUN chsh -s /bin/zsh root
-
-# Expose the port the app runs on
-EXPOSE 8000
 
 WORKDIR /workspace/srcs/backend
 
