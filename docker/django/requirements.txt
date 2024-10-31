@@ -9,3 +9,5 @@ daphne
 channels
 django-otp
 django-two-factor-auth
+twisted[tls,http2]
+pyopenssl
