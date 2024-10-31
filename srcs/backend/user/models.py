@@ -13,6 +13,9 @@ class User(AbstractUser):
 	password = models.CharField(_("password"), max_length=128, validators=[MinLengthValidator(8)])
 	avatar = models.ImageField(_("avatar"), upload_to='media/', default='default-avatar.jpg')
 	friends = models.ManyToManyField('self', related_name='friendship', symmetrical=False, blank=True, verbose_name=_("friends"))
+	
+	otp_secret = models.CharField(max_length=16, blank=True, null=True)
+	is_2fa_enabled = models.BooleanField(default=False)
 
 	# related_name : tournaments, game_as_player_one, game_as_player_two
 	# ex: user_instance.tournaments.all() to have access to alls tournaments
