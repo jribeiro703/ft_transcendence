@@ -1,9 +1,9 @@
 import gameVar from './var.js';
 import { BALL_RADIUS} from './const.js';
 import { keyUpHandler, keyDownHandler, manageMove, startBall } from './input.js';
-import { initializeBall, initDraw, drawPowerUp } from './draw.js';
-import { createPowerUP, collectPowerUp } from './powerUp.js';
-import { aiMovement } from './ai.js';
+import { initializeBall, initDraw } from './draw.js';
+import { collectPowerUp, createPowerUp, drawPowerUp } from './powerUp.js';
+import { aiMovement, updateIaMove } from './ai.js';
 import { resetBall } from './reset.js';
 
 document.addEventListener('DOMContentLoaded', function() 
@@ -16,26 +16,134 @@ document.addEventListener('DOMContentLoaded', function()
 
 	document.head.appendChild(link);
 
-	const quickGameBtn = document.getElementById('quickGameBtn');
 	gameVar.defaultView = document.getElementById('defaultView');
+
+	const startGameBtn = document.getElementById('startGameBtn');
+	const quickGameBtn = document.getElementById('quickGameBtn');
+	const withPowerUp = document.getElementById('withPowerUps');
+	const withoutPowerUp = document.getElementById('withoutPowerUps');
+	const easy = document.getElementById('easy');
+	const medium = document.getElementById('medium');
+	const hard = document.getElementById('hard');
+
+	let powerUpEnable = false;
+
+
+	gameVar.gameplayView = document.getElementById('gameplayView');
 	gameVar.gameView = document.getElementById('gameView');
+
 	gameVar.playerScoreElement = document.getElementById('playerScore');
 	gameVar.aiScoreElement = document.getElementById('aiScore');
 	var canvas = document.getElementById('myCanvas');
 	gameVar.ctx = canvas.getContext('2d');
 
-	quickGameBtn.addEventListener('click', showGameView);
+	quickGameBtn.addEventListener('click', showGameplayView);
+
+	startGameBtn.addEventListener('click', showGameView);
+
 	document.addEventListener("keydown", keyDownHandler, false);
 	document.addEventListener("keyup", keyUpHandler, false);
 	document.addEventListener("keydown", startBall, false);
 
+	function updatePowerUpSelection(selected)
+	{
+		powerUpEnable = selected;
+
+		if (selected) {
+			console.log("Power-Ups activés !");
+		} else {
+			console.log("Power-Ups désactivés !");
+		}
+	}
+
+	withPowerUp.addEventListener('click', () =>
+		{
+			withPowerUp.classList.add('selected');
+			withoutPowerUp.classList.remove('selected');
+			updatePowerUpSelection(true);
+		});
+
+	withoutPowerUp.addEventListener('click', () => 
+		{
+			withoutPowerUp.classList.add('selected');
+			withPowerUp.classList.remove('selected');
+			updatePowerUpSelection(false); 
+		});
+
+	function updateLevelSelection(level)
+	{
+		if (level == 'easy')
+		{
+			console.log("easy mode");
+			gameVar.INIT_DX = 3;
+			gameVar.INIT_DY = 3;
+		}
+		if (level == 'medium')
+		{
+			console.log('medium mode');
+			gameVar.INIT_DX = 5;
+			gameVar.INIT_DY = 5;
+		}
+		if (level == 'hard')
+		{
+			gameVar.INIT_DX = 8;
+			gameVar.INIT_DY = 8;
+			console.log('hard mode');
+		}
+	}
+	easy.addEventListener('click', () => 
+	{
+		easy.classList.add('selected');
+		medium.classList.remove('selected');
+		hard.classList.remove('selected');
+		updateLevelSelection('easy');
+	});
+	
+	medium.addEventListener('click', () => 
+	{
+		easy.classList.remove('selected');
+		medium.classList.add('selected');
+		hard.classList.remove('selected');
+		updateLevelSelection('medium');
+	});
+
+	hard.addEventListener('click', () => 
+	{
+		easy.classList.remove('selected');
+		medium.classList.remove('selected');
+		hard.classList.add('selected');
+		updateLevelSelection('hard');
+	});
+
+
+	// const speedInput = document.getElementById('speed');
+    // const speedValueDisplay = document.getElementById('infospeed');
+
+    // speedinput.addeventlistener('input', function()
+	// {
+    //     speedvaluedisplay.textcontent = 'current speed: ' + speedinput.value;
+    // });
+	
+	canvas.width = 780;
+	canvas.height = 420;
+
+	function showGameplayView()
+	{
+		gameplayView.style.display = 'block';
+		defaultView.style.display = 'none';
+		startGameBtn.style.display = 'block';
+	}
+
 
 	function showGameView()
 	{
-		defaultView.style.display = 'none';
+		gameplayView.style.display = 'none';
         gameView.style.display = 'block';
+		startGameBtn.style.display = 'none';
 		initializeBall();
-		createPowerUP();
+		if (powerUpEnable)
+			createPowerUp();
+		// if()
 		aiMovement();
 		draw();
     }
@@ -86,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function()
                 gameVar.y = gameVar.aiPaddleX + gameVar.aiPaddleHeight / 2;
 			}
 		}
-		// updateIaMove();
+		updateIaMove();
 		manageMove();
 		gameVar.animationFrame = requestAnimationFrame(draw);
 	}
