@@ -41,7 +41,7 @@ with open(settings_file_path, 'r') as file:
 			in_allowed_hosts = True
 		elif in_allowed_hosts:
 			if ']' in line:
-				allowed_hosts_updated_lines.append(f"\t'127.0.0.1',\n\t'0.0.0.0',\n\t'localhost',\n\t'{hostname}'\n]\n")
+				allowed_hosts_updated_lines.append(f"\t'127.0.0.1',\n\t'0.0.0.0',\n\t'localhost',\n\t'django',\n\t'{hostname}'\n]\n")
 				in_allowed_hosts = False
 		else:
 			allowed_hosts_updated_lines.append(line)
@@ -49,4 +49,4 @@ with open(settings_file_path, 'r') as file:
 with open(settings_file_path, 'w') as file:
 	file.writelines(allowed_hosts_updated_lines)
 
-print(f"Updated settings.py with hosts: '127.0.0.1', '0.0.0.0', 'localhost', '{hostname}'")
+print(f"Updated settings.py with hosts: '127.0.0.1', '0.0.0.0', 'localhost', 'django', '{hostname}'")

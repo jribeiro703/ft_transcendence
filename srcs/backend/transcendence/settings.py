@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
 	'127.0.0.1',
 	'0.0.0.0',
 	'localhost',
+	'django',
 	'made-f0Dr11s3.clusters.42paris.fr'
 ]
 
