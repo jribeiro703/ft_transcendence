@@ -1,25 +1,13 @@
 import gameVar from "./var.js";
 import { BALL_RADIUS, POWER_UP_SIZE } from "./const.js";
+import { createPowerUp } from "./powerUp.js";
 
 export function initDraw()
 {
 	drawBall();
 	drawPaddles();
 	drawLines();
-}
-
-export function drawPowerUp()
-{
-	if (!gameVar.powerUpActive)
-	{
-		gameVar.ctx.beginPath();
-		gameVar.ctx.rect(gameVar.powerUpX, gameVar.powerUpY, POWER_UP_SIZE, POWER_UP_SIZE);
-		gameVar.ctx.fillStyle = "red";
-		gameVar.ctx.font = '20px Arial';
-		gameVar.ctx.fillText("Bonus", gameVar.powerUpX - 15 , gameVar.powerUpY + 40);
-		gameVar.ctx.fill();
-		gameVar.ctx.closePath();
-	}
+	// createPowerUp();
 }
 
 export function drawPaddles()
