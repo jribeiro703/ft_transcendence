@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { INIT_DX, INIT_DY, PADDLE_SPEED, AI_UPDATE_INTERVAL} from './const.js';
+import { PADDLE_SPEED, AI_UPDATE_INTERVAL} from './const.js';
 
 export function aiServeBall()
 {
@@ -8,8 +8,8 @@ export function aiServeBall()
 		setTimeout(() => 
 		{
 			gameVar.gameStart = true;
-			gameVar.dx = -INIT_DX;
-			gameVar.dy = (Math.random() < 0.5 ? INIT_DY : -INIT_DY);
+			gameVar.dx = -gameVar.INIT_DX;
+			gameVar.dy = (Math.random() < 0.5 ? gameVar.INIT_DY : -gameVar.INIT_DY);
 			gameVar.aiServe = false;
 		}, 1000);
 	}
