@@ -19,6 +19,8 @@ const gameVar =
 	dx: null,
 	dy: null,
 	ctx: null,
+	INIT_DX: null,
+	INIT_DY: null,
 	powerUpX: null,
 	powerUpY: null,
 	animationFrame: null,
@@ -26,6 +28,7 @@ const gameVar =
 	aiScoreElement: null,
 	defaultView: null,
 	gameView: null,
+	gameplayView: null,
 
 	playerPaddleHeight: 75,
 	playerPaddleWidth: 12,
@@ -36,6 +39,21 @@ const gameVar =
 	playerUpPressed: false,
 	playerDownPressed: false,
 
+	powerUps: [
+		{ type: 'speed', image: 'static/css/images/FastBall.png'},
+		{ type: 'slow', image: 'static/css/images/SlowBall.png'},
+		{ type: 'sizeP', image: 'static/css/images/paddleBigger.png'},
+		{ type: 'sizeM', image: 'static/css/images/smallerPaddle.png'},
+		{ type: 'invincible', image: 'static/css/images/star.png'}
+	],
+	currentPowerUp: null,
+
+	level: [
+		{ type: 'easy'},
+		{ type: 'medium'},
+		{ type: 'hard'}
+	],
+	currentLevel: null,
 };
 
 export default gameVar;

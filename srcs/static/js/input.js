@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { INIT_DX, INIT_DY, PADDLE_SPEED } from './const.js';
+import { PADDLE_SPEED } from './const.js';
 
 export function manageMove()
 {
@@ -42,7 +42,7 @@ export function startBall(e)
 	if (e.code == "Space" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart)
 	{
 		gameVar.gameStart = true;
-		gameVar.dx = INIT_DX;
-		gameVar.dy = (Math.random() < 0.5 ? INIT_DY : -INIT_DY);
+		gameVar.dx = gameVar.INIT_DX;
+		gameVar.dy = (Math.random() < 0.5 ? gameVar.INIT_DY : -gameVar.INIT_DY);
 	}
 }

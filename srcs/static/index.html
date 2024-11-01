@@ -31,7 +31,7 @@
 	<div id="mainContent">
 		<div id="defaultView">
 			<div class="container">
-				<div class="w-50 mx-auto">
+				<div class="mx-auto">
 					<img class="img-fluid" src="{% static 'css/images/pong-game-card.png' %}" alt="Pong Game">
 					<br><br><br>
 			</div>
@@ -44,18 +44,57 @@
 			</div>
 		</div>
 
-		<div id="gameView" style="display : none">
-			<h1>
-				<div id="scoreboard">SCORE</div>
-				<div id="scoreRow">
-					<span id="player">Player </span>
-					<span id="playerScore">0</span><span id="vs">VS</span><span id="aiScore">0</span>
-            		<span id="ai">CPU</span>
+		<div id="gameplayView" style="display: none;">
+			<h1>Gameplay Mode</h1><br><br>
+			<div class="container">
+				<div class="left-column">
+					<p class="gpMode">Level Difficulty:</p>
+					<p class="gpMode">Power-Up Activation:</p>
+					<p class="gpMode">Map Selection:</p>
 				</div>
-			</h1>	
+				<div class="right-column">
+					<div>
+						<button id="easy" class="level">Easy</button>
+						<button id="medium" class="level">Medium</button>
+						<button id="hard" class="level">Hard</button>
+					</div>
+					<div>
+						<button id="withPowerUps" class="powerUpBtn">Yes</button>
+						<button id="withoutPowerUps" class="powerUpBtn">No</button>
+					</div>
+					<div class="map-selection">
+						<div id="map1" class="mapOption" data-map-name="classicMap">
+							<img src="path" alt="classicMap" class="map-image">
+							<div class="map-title">Table tennis</div>
+						</div>
+						<div id="map2" class="mapOption" data-map-name="customMap1">
+							<img src="path" alt="customMap1" class="map-image">
+							<div class="map-title">Custom Map 1</div>
+						</div>
+						<div id="map3" class="mapOption" data-map-name="customMap2">
+							<img src="path" alt="customMap2" class="map-image">
+							<div class="map-title">Custom Map 2</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+			<br>
+			<div class="button-container">
+				<button id="startGameBtn" class="btn btn-secondary custom-btn mb-4" style="display: none;">Start Game</button>
+			</div>
+		</div>
+		<div id="gameView" style="display: none;">
+			<div id="scoreboard">SCORE</div>
+			<div id="scoreRow">
+				<span id="player">Player </span>
+				<span id="playerScore">0</span>
+				<span id="vs">VS</span>
+				<span id="aiScore">0</span>
+				<span id="ai">CPU</span>
+			</div>
 			<canvas id="myCanvas"></canvas>
 		</div>
-	</div>
 	<script type="module" src="{% static 'js/main.js' %}?v=1.1"></script>
 	<div class="footer-text">
 		<p>Project directed by Yachen, Lucravoi, Dlacuey, and Tmaillar</p>
