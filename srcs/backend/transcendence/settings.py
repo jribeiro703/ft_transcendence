@@ -27,11 +27,10 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '10.34.11.3',
 	'127.0.0.1',
 	'0.0.0.0',
-	'django',
 	'localhost',
+	'made-f0Dr11s3.clusters.42paris.fr'
 ]
 
 # HTTPS settings
@@ -53,18 +52,18 @@ INSTALLED_APPS = [
 
 	'daphne',
 	'channels',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
 	'rest_framework',
 	'rest_framework_simplejwt',
 	# 'django_otp',
-    # 'django_otp.plugins.otp_totp',
-    # 'two_factor',
-    # 'two_factor.plugins.phonenumber',
+	# 'django_otp.plugins.otp_totp',
+	# 'two_factor',
+	# 'two_factor.plugins.phonenumber',
 	'django_prometheus',
 	'user',
 	'game',
@@ -72,32 +71,32 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
+	'django.middleware.security.SecurityMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.common.CommonMiddleware',
 	'django_otp.middleware.OTPMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
+	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'transcendence.urls'
 
 TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, '../static')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
+	{
+		'BACKEND': 'django.template.backends.django.DjangoTemplates',
+		'DIRS': [os.path.join(BASE_DIR, '../static')],
+		'APP_DIRS': True,
+		'OPTIONS': {
+			'context_processors': [
+				'django.template.context_processors.debug',
+				'django.template.context_processors.request',
+				'django.contrib.auth.context_processors.auth',
+				'django.contrib.messages.context_processors.messages',
+			],
+		},
+	},
 ]
 
 # WSGI_APPLICATION = 'transcendence.wsgi.application'
@@ -108,14 +107,14 @@ ASGI_APPLICATION = 'transcendence.asgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+	'default': {
+		'ENGINE': 'django.db.backends.postgresql',
 		'NAME': os.getenv('POSTGRES_DB'),
 		'USER': os.getenv('POSTGRES_USER'),
 		'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
 		'HOST': os.getenv('DB_HOST'),
 		'PORT': os.getenv('DB_PORT'),
-    }
+	}
 }
 
 # Password validation
@@ -123,18 +122,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+	{
+		'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+	},
 ]
 
 # Internationalization
@@ -165,9 +164,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user.User'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+	'DEFAULT_AUTHENTICATION_CLASSES': (
+		'rest_framework_simplejwt.authentication.JWTAuthentication',
+	)
 }
 
 from datetime import timedelta
@@ -181,5 +180,5 @@ EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = "~/django-email-messages"
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://localhost:8081',
+	'https://localhost:8081',
 ]

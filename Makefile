@@ -122,32 +122,33 @@ rootless-docker:
 	@export DOCKER_HOST=unix://${XDG_RUNTIME_DIR}/docker.sock
 	@systemctl --user start docker || { echo "Failed to start rootless Docker"; exit 1; }
 
-.PHONY: update-ip
-update-ip:
-	python3 ./utils/inet.py
-
 .PHONY: generate-env
 generate-env:
+	@if [ ! -S "$${XDG_RUNTIME_DIR}/docker.sock" ]; then \
+		sed -i 's|\$${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro|/var/run/docker.sock:/tmp/docker.sock:ro|' docker/docker-compose.yml; \
+	fi
+	@sed -i "0,/VIRTUAL_HOST=/s/\(VIRTUAL_HOST=[^,]*,\)[^,]*/\1$$(hostname)/" docker/docker-compose.yml
 	@echo "Generating docker/.env file..."
 	@touch docker/django/zsh_history
 	@mkdir -p docker/nginx/certs
-	@mkdir -p docker/nginx/conf.d
+	@mkdir -p docker/nginx/htpasswd
 	@touch docker/.env
 	@touch docker/django/zsh_history
-	@mkdir -p docker/grafana/certs
 	@read -p "Do you want to fill it with automatic values? (yes/no): " AUTO_FILL; \
 	if [ "$$AUTO_FILL" = "yes" ] || [ "$$AUTO_FILL" = "y" ] || [ "$$AUTO_FILL" = "" ]; then \
-		openssl req -newkey rsa:2048 -nodes -keyout docker/nginx/certs/localhost.key -x509 -days 365 -out docker/nginx/certs/localhost.crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=transcendence/emailAddress=transcendence@transcendence.com"; \
+		docker run --rm -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/localhost.key -x509 -days 365 -out /certs/localhost.crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=made-f0Dr11s5.clusters.42paris.fr/emailAddress=transcendence@transcendence.com"; \
+		docker run --rm -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/$$(hostname).key -x509 -days 365 -out /certs/$$(hostname).crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=$$(hostname)/emailAddress=transcendence@transcendence.com"; \
 		DEBUG="1"; \
 		POSTGRES_DB="transcendence"; \
 		POSTGRES_USER="transcendence"; \
 		POSTGRES_PASSWORD="transcendence"; \
 		GF_SECURITY_ADMIN_USER="transcendence"; \
 		GF_SECURITY_ADMIN_PASSWORD="transcendence"; \
-		HTPASSWD="AUTO"; \
+		HTPASSWD_USER="transcendence"; \
+		HTPASSWD_PASSWORD="transcendence"; \
 	else \
-		HTPASSWD="FILL"; \
-		openssl req -newkey rsa:2048 -nodes -keyout docker/nginx/certs/localhost.key -x509 -days 365 -out docker/nginx/certs/localhost.crt; \
+		docker run --rm -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/localhost.key -x509 -days 365 -out /certs/localhost.crt; \
+		docker run --rm -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/$$(hostname).key -x509 -days 365 -out /certs/$$(hostname).crt -subj "CN=$$(hostname)"; \
 		while [ -z "$$DEBUG" ]; do \
 			read -p "Enter DEBUG (0 or 1): " DEBUG; \
 			if [ "$$DEBUG" != "0" ] && [ "$$DEBUG" != "1" ]; then \
@@ -184,9 +185,22 @@ generate-env:
 				echo "GF_SECURITY_ADMIN_PASSWORD cannot be empty"; \
 			fi; \
 		done; \
+		while [ -z "$$HTPASSWD_USER" ]; do \
+			read -p "Enter HTPASSWD_USER: " HTPASSWD_USER; \
+			if [ -z "$$HTPASSWD_USER" ]; then \
+				echo "HTPASSWD_USER cannot be empty"; \
+			fi; \
+		done; \
+		while [ -z "$$HTPASSWD_PASSWORD" ]; do \
+			read -p "Enter HTPASSWD_PASSWORD: " HTPASSWD_PASSWORD; \
+			if [ -z "$$HTPASSWD_PASSWORD" ]; then \
+				echo "HTPASSWD_PASSWORD cannot be empty"; \
+			fi; \
+		done; \
 	fi; \
-	DJANGO_SECRET_KEY=$$(python3 utils/generate_secret_key.py); \
 	echo "DEBUG=$$DEBUG" > docker/.env; \
+	docker run --rm -e HOSTNAME=$$(hostname) -v $$(pwd)/docker/.env:/.env -v $$(pwd)/srcs/backend/transcendence/settings.py:/settings.py -v $$(pwd)/docker/django/update_settings.py:/update_settings.py python:3.10-slim python /update_settings.py; \
+	docker run --rm -ti xmartlabs/htpasswd $${HTPASSWD_USER} $${HTPASSWD_PASSWORD} > docker/nginx/htpasswd/prometheus.localhost; \
 	echo "DJANGO_SETTINGS_MODULE=transcendence.settings" >> docker/.env; \
 	echo "POSTGRES_DB=$$POSTGRES_DB" >> docker/.env; \
 	echo "POSTGRES_USER=$$POSTGRES_USER" >> docker/.env; \
@@ -196,9 +210,5 @@ generate-env:
 	echo "GF_SECURITY_ADMIN_USER=$$GF_SECURITY_ADMIN_USER" >> docker/.env; \
 	echo "GF_SECURITY_ADMIN_PASSWORD=$$GF_SECURITY_ADMIN_PASSWORD" >> docker/.env; \
 	echo "GF_SERVER_PROTOCOL=http" >> docker/.env; \
-	# echo "GF_SERVER_CERT_FILE=/etc/grafana/certs/grafana.crt" >> docker/.env; \
-	# echo "GF_SERVER_CERT_KEY=/etc/grafana/certs/grafana.key" >> docker/.env; \
 	echo 'DATA_SOURCE_NAME=postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${POSTGRES_DB}?sslmode=disable' >> docker/.env; \
-	python utils/generate_secret_key.py; \
-	python utils/generate_htpasswd.py $$HTPASSWD; \
 	echo "Updated docker/.env file successfully."

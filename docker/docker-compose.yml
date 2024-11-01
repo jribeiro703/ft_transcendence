@@ -18,7 +18,7 @@ services:
     networks:
       - transcendence
     environment:
-      - VIRTUAL_HOST=localhost
+      - VIRTUAL_HOST=localhost,made-f0Dr11s3.clusters.42paris.fr
       - VIRTUAL_PORT=8000
 
   migration:
