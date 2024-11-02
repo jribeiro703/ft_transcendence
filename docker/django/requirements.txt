@@ -1,4 +1,11 @@
-Django>=3.2,<4.0
-psycopg2-binary>=2.8
+Django==5.1
+django-prometheus
+psycopg2-binary
 psycopg
 djangorestframework
+djangorestframework_simplejwt
+Pillow
+daphne
+channels
+django-otp
+django-two-factor-auth

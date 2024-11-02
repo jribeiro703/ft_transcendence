@@ -1,0 +1,16 @@
+Framwork as backend : django (1 pts)
+frontend framework : bootstrap (0.5 pts)
+postgreSQL as database (0.5 pts)
+user management : authentication, tournament (1 pts)
+remote authentication : 42 intranet (1 pts)
+remote player : (1 pts)
+game customization options : (0.5 pts)
+live chat : django-channels (1 pts)
+two-factor authentication (2FA) and JWT (1 pts)
+infra setup pour log (1 pts) (ludo a fini)
+monitoring system (0.5 pts) (ludo a fini)
+support on all devices (frontend) (0.5 pts)
+expanding browser compatibility (0.5 pts)
+multiple language supports (0.5 pts)
+
+10.5 points

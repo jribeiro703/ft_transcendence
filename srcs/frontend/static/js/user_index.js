@@ -1,4 +1,8 @@
-fetch('http://localhost:8000/game/', {
+const hostname = window.location.hostname;
+const port = window.location.port;
+const url = `https://${hostname}:${port}/game/`;
+
+fetch(url, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
