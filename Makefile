@@ -36,6 +36,11 @@ logs-django:
 	$(DOCKER_COMPOSE) logs django
 
 # View the logs of the Docker Compose services
+.PHONY: logs-migration
+logs-migration:
+	$(DOCKER_COMPOSE) logs migration
+
+# View the logs of the Docker Compose services
 .PHONY: logs-db
 logs-db:
 	$(DOCKER_COMPOSE) logs db
@@ -185,7 +190,6 @@ generate-env:
 			fi; \
 		done; \
 	fi; \
-	DJANGO_SECRET_KEY=$$(python3 utils/generate_secret_key.py); \
 	echo "DEBUG=$$DEBUG" > docker/.env; \
 	echo "DJANGO_SETTINGS_MODULE=transcendence.settings" >> docker/.env; \
 	echo "POSTGRES_DB=$$POSTGRES_DB" >> docker/.env; \
@@ -196,9 +200,7 @@ generate-env:
 	echo "GF_SECURITY_ADMIN_USER=$$GF_SECURITY_ADMIN_USER" >> docker/.env; \
 	echo "GF_SECURITY_ADMIN_PASSWORD=$$GF_SECURITY_ADMIN_PASSWORD" >> docker/.env; \
 	echo "GF_SERVER_PROTOCOL=http" >> docker/.env; \
-	# echo "GF_SERVER_CERT_FILE=/etc/grafana/certs/grafana.crt" >> docker/.env; \
-	# echo "GF_SERVER_CERT_KEY=/etc/grafana/certs/grafana.key" >> docker/.env; \
 	echo 'DATA_SOURCE_NAME=postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${POSTGRES_DB}?sslmode=disable' >> docker/.env; \
-	python utils/generate_secret_key.py; \
-	python utils/generate_htpasswd.py $$HTPASSWD; \
+	python3 utils/generate_secret_key.py; \
+	python3 utils/generate_htpasswd.py $$HTPASSWD; \
 	echo "Updated docker/.env file successfully."

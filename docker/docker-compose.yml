@@ -21,6 +21,7 @@ services:
       - VIRTUAL_HOST=localhost
       - VIRTUAL_PORT=8000
 
+
   migration:
     build:
       context: ../
@@ -44,6 +45,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - transcendence
+
 
   prometheus:
     image: prom/prometheus:latest
@@ -122,7 +124,7 @@ services:
       # - "8080:80"
       - "8081:443"
     volumes:
-      - ${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./nginx/certs:/etc/nginx/certs:ro
     environment:
       - HTTPS_METHOD=redirect
