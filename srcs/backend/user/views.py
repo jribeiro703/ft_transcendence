@@ -1,8 +1,6 @@
-import pyotp
 from django.urls import reverse
-from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
-from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.utils.translation import gettext_lazy as _
@@ -11,19 +9,21 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from datetime import datetime, timedelta
-
-from .serializers import UserCreateSerializer, UserLoginSerializer, OtpCodeChecking
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from datetime import timezone, timedelta
+from .serializers import UserCreateSerializer, UserLoginSerializer, OtpCodeChecking, UserViewSetSerializer
 from .models import User
+from .permissions import IsOwner
 
 @api_view(['GET'])
 def user_index(request):
-	data = {"message": "Hello, world from user app !"}
-	return Response(data, status=status.HTTP_200_OK)
+	# data = {"message": "Hello, world from user app !"}
+	users = User.objects.all()
+	serializer = UserViewSetSerializer(users, many=True)
+	return Response(serializer.data, status=status.HTTP_200_OK)
 
 class CreateUserView(CreateAPIView):
 	model = get_user_model()
@@ -49,7 +49,6 @@ class ActivateAccountView(APIView):
 			return Response({"message": "Account activated successfully"}, status=status.HTTP_200_OK)
 		else:
 		    return Response({"message": "Activation link is invalid"}, status=status.HTTP_400_BAD_REQUEST)
-
 
 class UserLoginView(APIView):
 	model = get_user_model()
@@ -92,9 +91,8 @@ class OtpVerificationView(APIView):
 		)
 		return response
 
-
 class LogoutView(APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
             refresh_token = request.COOKIES.get('refresh_token')
@@ -104,20 +102,12 @@ class LogoutView(APIView):
         except Exception as e:
             return Response({"message": "Logout failed"}, status=status.HTTP_400_BAD_REQUEST)
 
-				
-# class UserViewSet(viewsets.ModelViewSet):
-# 	queryset = User.objects.all()
-# 	serializer_class = UserSerializer
-# 	authentication_classes = [JWTAuthentication]
+class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+	queryset = User.objects.all()
+	serializer_class = UserViewSetSerializer
+	# authentication_classes = [JWTAuthentication]
+	# permission_classes = [IsAuthenticated, IsOwner]
+	authentication_classes = []
+	permission_classes = []	
     
-# 	def get_permissions(self):
-# 		if self.action == 'create':
-# 			permission_classes = [AllowAny]
-# 		elif self.action in ['update', 'destroy', 'retrieve']:
-# 			permission_classes = [IsAuthenticated, IsOwner | IsAdminUser]
-# 		else:
-# 			permission_classes = [IsAdminUser]
-# 		return [permission() for permission in permission_classes]
-
-# @api_view(['POST'])
-# def login(request):
+	

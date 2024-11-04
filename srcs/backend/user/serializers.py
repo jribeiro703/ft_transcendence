@@ -1,34 +1,26 @@
 import pyotp
-import pytz
 from .models import User
 from transcendence import settings
 from django.urls import reverse
-# from django.utils import timezone
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.utils.translation import gettext_lazy as _
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.core.exceptions import ValidationError
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 from django.template.loader import render_to_string
 from rest_framework import serializers
-from rest_framework_simplejwt.exceptions import InvalidToken
-from rest_framework_simplejwt.serializers import TokenRefreshSerializer
-
 from datetime import datetime, timezone
 
-# local_time = datetime.now(pytz.timezone('Europe/Paris'))
 User = get_user_model()
 	
 class UserCreateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
 		fields = ('id', 'username', 'email', 'password')
-		extra_kwargs = {
-            'password': {'write_only': True}
-        }
+		extra_kwargs = {'password': {'write_only': True}}
 
 	def _send_activation_email(self, user):
 		uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -113,12 +105,36 @@ class OtpCodeChecking(serializers.Serializer):
 			raise serializers.ValidationError(_("Invalid OTP code."))
 		return value
 
+class UserViewSetSerializer(serializers.ModelSerializer, UserCreateSerializer):
+	class Meta:
+		model = User
+		fields = ('id', 'username', 'alias', 'avatar', 'email', 'password', 'friends', 'is_online', 'is_active')
+		read_only_fields = ('id', 'username', 'is_active', 'is_online')
+		extra_kwargs = {'password': {'write_only': True}}
 
-# class CookieTokenRefreshSerializer(TokenRefreshSerializer):
-#     refresh = None
-#     def validate(self, attrs):
-#         attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
-#         if attrs['refresh']:
-#             return super().validate(attrs)
-#         else:
-#             raise InvalidToken('No valid token found in cookie \'refresh_token\'')
+		def update(self, instance, validated_data):
+			if 'password' in validated_data:
+				instance.set_password(validated_data['password'])
+				validated_data.pop('password')
+
+			if 'email' in validated_data:
+				instance.is_active = False
+				self._send_activation_email(instance)
+
+			if 'friends' in validated_data:
+				new_friend = validated_data['friends']
+				if instance.friends.filter(pk=new_friend.pk).exists():
+					raise serializers.ValidationError(f"{new_friend.username} is already in your actual friends list")
+				else:
+					instance.friends.add(new_friend) # reste l'envoi de demande d'ami a implementer 
+				validated_data.pop('friends')
+
+			for attr, value in validated_data.item():
+				setattr(instance, attr, value)
+			instance.save()
+			return instance
+
+
+
+
+	
