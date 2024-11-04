@@ -18,6 +18,7 @@ class User(AbstractUser):
 	alias = models.CharField(_("alias"), max_length=30, unique=True, blank=True, null=True, validators=[MinLengthValidator(3)])
 	avatar = models.ImageField(_("avatar"), upload_to='media/', default='default-avatar.jpg')
 	friends = models.ManyToManyField('self', related_name='friendship', symmetrical=False, blank=True, verbose_name=_("friends"))
+	is_online = models.BooleanField(default=False)
 	
 	# related_name : tournaments, game_as_player_one, game_as_player_two
 	# ex: user_instance.tournaments.all() to have access to alls tournaments
