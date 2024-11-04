@@ -1,10 +1,10 @@
 import gameVar from './var.js';
-import { BALL_RADIUS} from './const.js';
+import { BALL_RADIUS, PADDLE_SPEED} from './const.js';
 import { keyUpHandler, keyDownHandler, manageMove, startBall } from './input.js';
 import { initializeBall, initDraw } from './draw.js';
 import { collectPowerUp, createPowerUp, drawPowerUp } from './powerUp.js';
 import { aiMovement, updateIaMove } from './ai.js';
-import { resetBall } from './reset.js';
+import { checkCollisionWithPaddle, resetBall, updateBallPosition } from './reset.js';
 
 document.addEventListener('DOMContentLoaded', function() 
 {
@@ -45,6 +45,10 @@ document.addEventListener('DOMContentLoaded', function()
 	document.addEventListener("keyup", keyUpHandler, false);
 	document.addEventListener("keydown", startBall, false);
 
+	updateLevelSelection();
+	updatePowerUpSelection(false);
+	withoutPowerUp.classList.add('selected');
+	medium.classList.add('selected');
 	function updatePowerUpSelection(selected)
 	{
 		powerUpEnable = selected;
@@ -55,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function()
 			console.log("Power-Ups désactivés !");
 		}
 	}
-
 	withPowerUp.addEventListener('click', () =>
 		{
 			withPowerUp.classList.add('selected');
@@ -72,6 +75,8 @@ document.addEventListener('DOMContentLoaded', function()
 
 	function updateLevelSelection(level)
 	{
+		gameVar.INIT_DX = 5;
+		gameVar.INIT_DY = 5;
 		if (level == 'easy')
 		{
 			console.log("easy mode");
@@ -81,8 +86,8 @@ document.addEventListener('DOMContentLoaded', function()
 		if (level == 'medium')
 		{
 			console.log('medium mode');
-			gameVar.INIT_DX = 5;
-			gameVar.INIT_DY = 5;
+			gameVar.INIT_DX = 6;
+			gameVar.INIT_DY = 6;
 		}
 		if (level == 'hard')
 		{
@@ -115,14 +120,6 @@ document.addEventListener('DOMContentLoaded', function()
 		updateLevelSelection('hard');
 	});
 
-
-	// const speedInput = document.getElementById('speed');
-    // const speedValueDisplay = document.getElementById('infospeed');
-
-    // speedinput.addeventlistener('input', function()
-	// {
-    //     speedvaluedisplay.textcontent = 'current speed: ' + speedinput.value;
-    // });
 	
 	canvas.width = 780;
 	canvas.height = 420;
@@ -143,13 +140,13 @@ document.addEventListener('DOMContentLoaded', function()
 		initializeBall();
 		if (powerUpEnable)
 			createPowerUp();
-		// if()
 		aiMovement();
 		draw();
     }
 
 	function draw()
 	{
+		
 		gameVar.ctx.clearRect(0, 0, canvas.width, canvas.height);
 		initDraw();
 		drawPowerUp();
@@ -158,21 +155,33 @@ document.addEventListener('DOMContentLoaded', function()
 		{
 			gameVar.x += gameVar.dx;
 			gameVar.y += gameVar.dy;
-		
+			console.log("dx : ", gameVar.dx, "dy :", gameVar.dy);
 			if(gameVar.y + gameVar.dy > canvas.height - BALL_RADIUS || gameVar.y + gameVar.dy < BALL_RADIUS)
 			{
 				gameVar.dy = -gameVar.dy;
 			}
-			if(gameVar.x - BALL_RADIUS < gameVar.playerPaddleWidth && gameVar.y > gameVar.playerPaddleX && gameVar.y < gameVar.playerPaddleX + gameVar.playerPaddleHeight)
+
+			if(gameVar.x - BALL_RADIUS < gameVar.playerPaddleWidth &&
+				gameVar.y > gameVar.playerPaddleX &&
+				gameVar.y < gameVar.playerPaddleX + gameVar.playerPaddleHeight)
 			{
-				gameVar.dx = -gameVar.dx;
+				gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS;
+				let hitpos = (gameVar.y - gameVar.playerPaddleX) / gameVar.playerPaddleHeight;
+				let angle = (hitpos - 0.5) * Math.PI / 2;
+				console.log("angle : ", angle);
+				gameVar.dx = (Math.cos(angle) * Math.abs(gameVar.dx) + 1);
+				gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.INIT_DY);
+				if (gameVar.dx > gameVar.INIT_DX + 1)
+					gameVar.dx -= 1;
 			}
-			else if (gameVar.x + BALL_RADIUS > canvas.width - gameVar.aiPaddleWidth && gameVar.y > gameVar.aiPaddleX && gameVar.y < gameVar.aiPaddleX + gameVar.aiPaddleHeight)
+			else if (gameVar.x + BALL_RADIUS > canvas.width - gameVar.aiPaddleWidth &&
+				gameVar.y > gameVar.aiPaddleX &&
+				gameVar.y < gameVar.aiPaddleX + gameVar.aiPaddleHeight)
 			{
 				gameVar.dx = -gameVar.dx;
 				gameVar.x = canvas.width - gameVar.aiPaddleWidth - BALL_RADIUS;
 			}
-			else if (gameVar.x < 0)
+			if (gameVar.x < 0)
 			{
 				resetBall('ai');
 			}
