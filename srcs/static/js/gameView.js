@@ -1,6 +1,6 @@
 import gameVar from "./var.js";
 import { initializeBall } from "./draw.js";
-import { aiMovement } from "./ai.js";
+// import { aiMovement } from "./ai.js";
 import { createPowerUp } from "./powerUp.js";
 import { draw } from "./draw.js";
 

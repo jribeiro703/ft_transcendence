@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { PADDLE_SPEED, AI_UPDATE_INTERVAL, ai} from './const.js';
+import { PADDLE_SPEED, AI_UPDATE_INTERVAL, AI, AI_LEVEL, FRAME_RATE} from './const.js';
 
 export function aiServeBall()
 {
@@ -15,30 +15,64 @@ export function aiServeBall()
 	}
 }
 
-
-
-
 export function manageAi()
 {
+	console.log("manageAI");
 	const currentTime = Date.now();
-	if (currentTime - ai.lastUpdate >= ai.refreshTime)
+	if (currentTime - AI.lastUpdate >= AI.refreshTime)
 	{
-		ai.lastUpdate = currentTime;
-		const futureY = gameVar.y + gameVar.dy * (ai.refreshTime / 1000);
-		if (futureY < gameVar.aiPaddleX)
-		{
-			gameVar.aiPaddleX = Math.max(0, gameVar.aiPaddleX - PADDLE_SPEED * 2);
-		}
-		else
-		{
-			gameVar.aiPaddleX = Math.min(gameVar.canvasH - gameVar.aiPaddleHeight, gameVar.aiPaddleX + PADDLE_SPEED * 2);
-		}
+		AI.lastUpdate = currentTime;
+		const ballFuturePos = predictBallPos(gameVar);
+		moveAi(ballFuturePos);
+		console.log("aimove");
+		const readableDate = new Date(Date.now());
+		console.log(readableDate);
 	}
+}
+
+function predictBallPos(gameVar)
+{
+	let predictY = gameVar.y;
+	let predictDy = gameVar.dy;
+	let predictX = gameVar.x;
+	let predictDx = gameVar.dx;
+
+	let simuStep = 2000;
+	while (simuStep > 0)
+	{
+		predictY += predictDy;
+		predictX += predictDx;
+		if (predictY <= 0 || predictY >= gameVar.canvasH)
+		{
+			predictDy *= -1;
+			predictY = Math.max(0, Math.min(gameVar.canvasH, predictY));
+		}
+		if (predictX <= 0 || predictX >= gameVar.canvasW)
+		{
+			predictDx *= -1;
+			predictX = Math.max(0, Math.min(gameVar.canvasW, predictX));
+		}
+		simuStep--;
+	}
+	return predictY;
+}
+
+function moveAi(predictY)
+{
+	console.log("predic Y : ", predictY);
+	const distance = predictY - gameVar.aiPaddleX;
+	const direction = Math.sign(distance);
+
+	const speedAdj = Math.min(Math.abs(distance), PADDLE_SPEED * AI_LEVEL);
+	gameVar.aiPaddleX = Math.min(Math.max(0, gameVar.aiPaddleX + direction * speedAdj), gameVar.canvasH - gameVar.aiPaddleHeight);
+	console.log("paddle ai :", gameVar.aiPaddleX)
 }
 
 export function aiMovement()
 {
-	gameVar.aiMoveInterval = setInterval(() => {
+	gameVar.aiMoveInterval = setInterval(() =>
+	{
+		// manageAi();
 		updateIaMove();	
 	}, AI_UPDATE_INTERVAL);	
 }
@@ -55,68 +89,5 @@ export function updateIaMove()
 		{
 			gameVar.aiPaddleX += PADDLE_SPEED;
 		}
-	}
-}
-
-
-export class Paddle 
-{
-	constructor(y, height)
-	{
-		this.position = y;
-		this.height = height;
-	}
-
-	moveUp()
-	{
-		this.position -= 10;
-		if (this.position < 0)
-			this.position = 0;
-
-	}
-
-	moveDown()
-	{
-		this.position += 10;
-		if (this.position + this.height > gameVar.canvasH)
-			this.position = gameVar.canvasH - this.height;
-	}
-}
-
-export class aiCpu
-{
-	constructor(paddle)
-	{
-		this.paddle = paddle;
-		this.refreshTime = 1000;
-		this.lastUpdate = Date.now();
-	}
-	update()
-	{
-		console.log("aiUpdate")
-		const currentTime = Date.now();
-		if (currentTime - this.lastUpdate >= this.refreshTime)
-		{
-			this.lastUpdate = currentTime;
-			const futurBallpos = this.predictBallPos();
-			if (futurBallpos < this.paddle.position)
-			{
-				this.paddle.moveUp();
-			}
-			else if (futurBallpos > this.paddle.position + this.paddle.height)
-			{
-				this.paddle.moveDown();
-			}
-		}
-	}
-
-	predictBallPos()
-	{
-		const futureY = gameVar.y + gameVar.dy * (this.refreshTime / 1000); 
-		
-		if (futureY < 0  || futureY > gameVar.canvasH)
-			return (gameVar.canvasH - Math.abs(futureY));
-
-		return (futureY);
 	}
 }
