@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [
 	'0.0.0.0',
 	'localhost',
 	'django',
-	'made-f0Dr11s3.clusters.42paris.fr'
+	'made-f0Dr11s5.clusters.42paris.fr'
 ]
 
 # HTTPS settings
@@ -69,6 +69,7 @@ INSTALLED_APPS = [
 	'user',
 	'game',
 	'tournament',
+    'livechat',
 ]
 
 MIDDLEWARE = [
