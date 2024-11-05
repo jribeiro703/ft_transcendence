@@ -42,13 +42,9 @@ export function resetBall(winner)
 	if (gameVar.matchOver)
 		return;
 	if (winner == 'player')
-	{
 		gameVar.playerScore++;
-	}
 	else
-	{
 		gameVar.aiScore++;
-	}
 	checkScore();
 	gameVar.serveCount++;
 	if (gameVar.serveCount >= 2)
@@ -75,18 +71,12 @@ export function updateBallPosition()
     gameVar.y += gameVar.dy;
 
     if (gameVar.x + BALL_RADIUS > canvas.width || gameVar.x - BALL_RADIUS < 0)
-	{
         gameVar.dx = -gameVar.dx;
-    }
     if (gameVar.y - BALL_RADIUS < 0)
-	{
         gameVar.dy = -gameVar.dy;
-    }
     checkCollisionWithPaddle();
     if (gameVar.y + BALL_RADIUS > canvas.height)
-	{
         resetBall('ai');
-    }
 }
 
 export function checkCollisionWithPaddle()

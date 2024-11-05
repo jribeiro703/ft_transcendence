@@ -1,7 +1,5 @@
 export const WIN_SCORE = 11;
 export const GAP_SCORE = 2;
-// export const INIT_DX = 9;
-// export const INIT_DY = 9;
 export const PADDLE_SPEED = 10;
 export const AI_UPDATE_INTERVAL = 1000;
 export const POWER_UP_SIZE = 30;

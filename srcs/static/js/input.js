@@ -1,17 +1,4 @@
 import gameVar from "./var.js";
-import { PADDLE_SPEED } from './const.js';
-
-export function manageMove()
-{
-	if (gameVar.playerUpPressed && gameVar.playerPaddleX > 0)
-	{
-		gameVar.playerPaddleX -= PADDLE_SPEED;
-	} 
-	else if (gameVar.playerDownPressed && gameVar.playerPaddleX < gameVar.canvasH - gameVar.playerPaddleHeight)
-	{
-		gameVar.playerPaddleX += PADDLE_SPEED;
-	}  
-}
 
 export function keyDownHandler(e)
 {
@@ -42,7 +29,7 @@ export function startBall(e)
 	if (e.code == "Space" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart)
 	{
 		gameVar.gameStart = true;
-		gameVar.dx = gameVar.INIT_DX;
-		gameVar.dy = (Math.random() < 0.5 ? gameVar.INIT_DY : -gameVar.INIT_DY);
+		gameVar.dx = gameVar.init_dx;
+		gameVar.dy = (Math.random() < 0.5 ? gameVar.init_dy : -gameVar.init_dy);
 	}
 }
