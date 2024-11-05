@@ -1,55 +1,50 @@
 import pyotp
-from .models import User
+from .models import User, FriendRequest
 from transcendence import settings
-from django.urls import reverse
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
 from django.utils.translation import gettext_lazy as _
 from django.core.mail import EmailMultiAlternatives
 from django.core.exceptions import ValidationError
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 from django.template.loader import render_to_string
 from rest_framework import serializers
 from datetime import datetime, timezone
+from .utils import send_activation_email
 
-User = get_user_model()
-	
+class IndexSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = User
+		fields = ('id', 'username', 'alias', 'avatar', 'email', 'password', 'friends', 'is_online', 'is_active')
+
 class UserCreateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
 		fields = ('id', 'username', 'email', 'password')
 		extra_kwargs = {'password': {'write_only': True}}
 
-	def _send_activation_email(self, user):
-		uid = urlsafe_base64_encode(force_bytes(user.pk))
-		token = default_token_generator.make_token(user)
-		activation_link = reverse('signup_user_activate', kwargs={'uidb64': uid, 'token': token}) # generate a url with  passed viewname and parameters
-		full_link = f'https://localhost:8081{activation_link}'
-
-		text_content = render_to_string("emails/account_activation.txt", context={"full_link": full_link},)
-		html_content = render_to_string("emails/account_activation.html", context={"full_link": full_link},)
-
-		email = EmailMultiAlternatives(
-			subject='Activate Your Account',
-			body=text_content,
-			from_email=settings.DEFAULT_FROM_EMAIL,
-			to=[user.email]
-		)
-		email.attach_alternative(html_content, "text/html")
-		user.email_sent_at = timezone.now()
-		user.save()
-		email.send()
-
 	def create(self, validated_data):
+		
+		if User.objects.filter(email=validated_data['email'], is_active=True).exists():
+			raise serializers.ValidationError("Registration impossible, this email is already used by a active user.")
+		
 		password = validated_data.pop('password')
 		user = super().create(validated_data)
 		user.set_password(password)
 		user.is_active = False
 		user.otp_secret = pyotp.random_base32()
 		user.save()
-		self._send_activation_email(user)
+
+		try:
+			send_activation_email(
+			user,
+			'account_activate',
+			'Activate your account',
+			'emails/account_activation.txt',
+			'emails/account_activation.html'
+			)
+		except Exception as e:
+			user.delete()
+			raise serializers.ValidationError(f"Error: send activation mail failed : {str(e)}")
+		
 		return user
 
       
@@ -78,12 +73,10 @@ class UserLoginSerializer(serializers.Serializer):
 		username = attrs.get('username')
 		password = attrs.get('password')
 		if not username or not password:
-			raise ValidationError(_("Username and password are required."))
+			raise serializers.ValidationError(_("Username and password are required."))
 		user = authenticate(username=username, password=password)
 		if user is None:
-			raise ValidationError(_("Invalid username or password."))
-		if not user.is_active:
-			raise ValidationError(_("User account is not actived."))
+			raise serializers.ValidationError(_("Non-active account or Invalid username/password."))
 		if user.is_staff:
 			raise serializers.ValidationError({
 			    "detail": "Redirect to admin login",
@@ -105,33 +98,51 @@ class OtpCodeChecking(serializers.Serializer):
 			raise serializers.ValidationError(_("Invalid OTP code."))
 		return value
 
-class UserViewSetSerializer(serializers.ModelSerializer, UserCreateSerializer):
+class UserViewSetSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('id', 'username', 'alias', 'avatar', 'email', 'password', 'friends', 'is_online', 'is_active')
+		fields = ('id', 'username', 'alias', 'avatar', 'email', 'password', 'current_password', 'friends', 'is_online', 'is_active')
 		read_only_fields = ('id', 'username', 'is_active', 'is_online')
-		extra_kwargs = {'password': {'write_only': True}}
+		extra_kwargs = {'password': {'write_only': True}, 'current_password': {'write_only': True}}
 
 		def update(self, instance, validated_data):
-			if 'password' in validated_data:
-				instance.set_password(validated_data['password'])
-				validated_data.pop('password')
+			raise serializers.ValidationError("The current password is required to update your password.")
+			# if 'password' in validated_data:
+			# 	# if 'current_password' not in validated_data or validated_data['current_password'] is None:
+			# 	# elif validated_data['current_password'] != instance.password:
+			# 		# raise serializers.ValidationError("The current password does not match the existing password.")
+			# 	# instance.set_password(validated_data['password'])
+			# 	# validated_data.pop('password')
 
-			if 'email' in validated_data:
-				instance.is_active = False
-				self._send_activation_email(instance)
+			# if 'email' in validated_data:
+			# 	try:
+			# 		instance.is_active = False
+			# 		send_activation_email(
+			# 			instance,
+			# 			'account_activate',
+			# 			'New Email Verification',
+			# 			'emails/mail_changed.txt',
+			# 			'emails/mail_changed.html'
+			# 			)
+			# 	except Exception as e:
+			# 		instance.is_activate = True
+			# 		raise serializers.ValidationError(f"Error: send mail to new email adress failed : {str(e)}")
 
-			if 'friends' in validated_data:
-				new_friend = validated_data['friends']
-				if instance.friends.filter(pk=new_friend.pk).exists():
-					raise serializers.ValidationError(f"{new_friend.username} is already in your actual friends list")
-				else:
-					instance.friends.add(new_friend) # reste l'envoi de demande d'ami a implementer 
-				validated_data.pop('friends')
+			# if 'friends' in validated_data:
+			# 	new_friend = validated_data['friends']
+			# 	if instance.friends.filter(pk=new_friend.pk).exists():
+			# 		self.context['request'].success_message = f"{new_friend.username} is already in your actual friends list"
+			# 	else:
+			# 		if not FriendRequest.objects.filter(sender=instance, receiver=new_friend).exists():
+			# 			FriendRequest.objects.create(sender=instance, receiver=new_friend)
+			# 			self.context['request'].success_message = f"Friend request sent to {new_friend.username} successfully."
+			# 		else:
+			# 			self.context['request'].success_message = f"You have already sent a friend request to {new_friend.username}."
+			# 	validated_data.pop('friends')
 
-			for attr, value in validated_data.item():
-				setattr(instance, attr, value)
-			instance.save()
+			# for attr, value in validated_data.items():
+			# 	setattr(instance, attr, value)
+			# instance.save()
 			return instance
 
 
