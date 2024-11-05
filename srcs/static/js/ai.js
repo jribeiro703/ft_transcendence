@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { PADDLE_SPEED, AI_UPDATE_INTERVAL} from './const.js';
+import { PADDLE_SPEED, AI_UPDATE_INTERVAL, ai} from './const.js';
 
 export function aiServeBall()
 {
@@ -12,6 +12,27 @@ export function aiServeBall()
 			gameVar.dy = (Math.random() < 0.5 ? gameVar.init_dy : -gameVar.init_dy);
 			gameVar.aiServe = false;
 		}, 1000);
+	}
+}
+
+
+
+
+export function manageAi()
+{
+	const currentTime = Date.now();
+	if (currentTime - ai.lastUpdate >= ai.refreshTime)
+	{
+		ai.lastUpdate = currentTime;
+		const futureY = gameVar.y + gameVar.dy * (ai.refreshTime / 1000);
+		if (futureY < gameVar.aiPaddleX)
+		{
+			gameVar.aiPaddleX = Math.max(0, gameVar.aiPaddleX - PADDLE_SPEED * 2);
+		}
+		else
+		{
+			gameVar.aiPaddleX = Math.min(gameVar.canvasH - gameVar.aiPaddleHeight, gameVar.aiPaddleX + PADDLE_SPEED * 2);
+		}
 	}
 }
 
@@ -38,7 +59,7 @@ export function updateIaMove()
 }
 
 
-class Paddle 
+export class Paddle 
 {
 	constructor(y, height)
 	{
@@ -62,7 +83,7 @@ class Paddle
 	}
 }
 
-class aiCpu
+export class aiCpu
 {
 	constructor(paddle)
 	{
@@ -72,6 +93,7 @@ class aiCpu
 	}
 	update()
 	{
+		console.log("aiUpdate")
 		const currentTime = Date.now();
 		if (currentTime - this.lastUpdate >= this.refreshTime)
 		{
