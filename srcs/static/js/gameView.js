@@ -20,7 +20,5 @@ export function showGameView()
 	initializeBall();
 	if (gameVar.powerUpEnable)
 		createPowerUp();
-	aiMovement();
-	
 	draw();
 }
