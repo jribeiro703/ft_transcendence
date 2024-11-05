@@ -1,6 +1,7 @@
 import gameVar from "./var.js";
 import { BALL_RADIUS, PADDLE_SPEED } from "./const.js";
 import { resetBall } from "./reset.js";
+import { aiMovement, manageAi } from "./ai.js";
 
 function checkCollisionWithWalls()
 {
@@ -38,7 +39,7 @@ export function manageCollision()
 {
 	gameVar.x += gameVar.dx;
 	gameVar.y += gameVar.dy;
-	console.log("dx : ", gameVar.dx, "dy :", gameVar.dy);
+	// console.log("dx : ", gameVar.dx, "dy :", gameVar.dy);
 	if(gameVar.y + gameVar.dy > gameVar.canvasH - BALL_RADIUS || gameVar.y + gameVar.dy < BALL_RADIUS)
 	{
 		gameVar.dy = -gameVar.dy;
@@ -52,7 +53,7 @@ export function manageCollision()
 		gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS;
 		let hitpos = (gameVar.y - gameVar.playerPaddleX) / gameVar.playerPaddleHeight;
 		let angle = (hitpos - 0.5) * Math.PI / 2;
-		console.log("angle : ", angle);
+		// console.log("angle : ", angle);
 		gameVar.dx = (Math.cos(angle) * Math.abs(gameVar.dx) + 1);
 		gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.init_dy);
 		if (gameVar.dx > gameVar.init_dx + 1)
@@ -63,6 +64,7 @@ export function manageCollision()
 		gameVar.y > gameVar.aiPaddleX &&
 		gameVar.y < gameVar.aiPaddleX + gameVar.aiPaddleHeight)
 	{
+		console.log("game y : ", gameVar.y)
 		gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - BALL_RADIUS;
 		let hitpos = (gameVar.y - gameVar.aiPaddleX) / gameVar.aiPaddleHeight;
 		let angle = (hitpos - 0.5) * Math.PI / 2;
@@ -106,4 +108,6 @@ export function manageMove()
 	{
 		gameVar.playerPaddleX += PADDLE_SPEED;
 	}  
+	// aiMovement();
+	// manageAi();
 }

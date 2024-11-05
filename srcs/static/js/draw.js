@@ -1,8 +1,8 @@
 import gameVar from "./var.js";
-import { BALL_RADIUS, PADDLE_SPEED, ai} from "./const.js";
+import { BALL_RADIUS, PADDLE_SPEED, AI} from "./const.js";
 import { drawPowerUp, collectPowerUp } from "./powerUp.js";
 import { manageCollision, manageServer, manageMove } from "./manage.js";
-import { aiMovement, manageAi } from "./ai.js";
+import { manageAi } from "./ai.js";
 
 export function initDraw()
 {
@@ -27,7 +27,6 @@ export function draw()
 	{
 		manageCollision();
 		manageAi();
-		// aiMovement();	
 	}
 	else
 		manageServer();
