@@ -1,40 +1,35 @@
 import gameVar from "./var.js";
 import { POWER_UP_SIZE, POWER_UP_DURATION, BALL_RADIUS, BUFFER_COLLISION} from "./const.js";
 
-
-
-
-
 const img = new Image();
-
 
 img.onload = function()
 {
-    // gameVar.ctx.drawImage(img, gameVar.powerUpX - 15, gameVar.powerUpY + 40, 30, 30);
-	console.log("load img");
 	drawPowerUp();
 };
 
+export function updatePowerUpSelection(selected)
+{
+	gameVar.powerUpEnable = selected;
 
+	if (selected)
+		console.log("Power-Ups activés !");
+	else 
+		console.log("Power-Ups désactivés !");
+}
+	
 export function createPowerUp()
 {
-	console.log("createPU");
-	// gameVar.powerUpX = Math.random() * (gameVar.canvasW - 2 * 75) + 75;
-	// gameVar.powerUpY = Math.random() * (gameVar.canvasH -2 * 75) + 75;
 	RandomPowerUp();
 	img.src = gameVar.currentPowerUp.image;
-	console.log("img create src: ", img.src);
-	// drawPowerUp();
 	gameVar.powerUpX = Math.random() * (gameVar.canvasW - 2 * 75) + 75;
 	gameVar.powerUpY = Math.random() * (gameVar.canvasH -2 * 75) + 75;
-
 }
 
 export function RandomPowerUp()
 {
 	const randomIndex = Math.floor(Math.random() * gameVar.powerUps.length);
 	gameVar.currentPowerUp = gameVar.powerUps[randomIndex];
-	// console.log("img : ", gameVar.powerUps[randomIndex].image);
 }
 
 export function drawPowerUp()
@@ -49,9 +44,10 @@ export function drawPowerUp()
 			gameVar.ctx.drawImage(img, gameVar.powerUpX - imgWidth / 2, gameVar.powerUpY - imgHeight / 2, imgWidth, imgHeight);
 		}
 		else
-			console.log("errror");
+			console.log("errror drawPU");
 	}
 }
+
 export function collectPowerUp()
 {
 	if (!gameVar.powerUpActive)
@@ -62,7 +58,6 @@ export function collectPowerUp()
 			gameVar.y + BALL_RADIUS > gameVar.powerUpY - BUFFER_COLLISION) 
 		{
 			checkPowerUp();
-
 		}
 	}
 }
@@ -78,69 +73,115 @@ export function newPowerUp()
 
 export function checkPowerUp()
 {
-	console.log("checkpu");
 	if (gameVar.currentPowerUp?.type == "slow")
+		puSlow();
+	if (gameVar.currentPowerUp?.type == "speed")
+		puSpeed();
+	if (gameVar.currentPowerUp?.type == "sizeP")
+		puSizeP();
+	if (gameVar.currentPowerUp?.type == "sizeM")
+		puSizeM();
+	if (gameVar.currentPowerUp?.type == "invincible")
+		puInvicible();
+}
+
+
+function puSpeed()
+{
+	gameVar.dx *= 2;
+	gameVar.dy *= 2;
+	gameVar.powerUpActive = true;
+
+	setTimeout(() => 
 	{
-		console.log("slow");	
 		gameVar.dx /= 2;
 		gameVar.dy /= 2;
-		gameVar.powerUpActive = true;
+	}, POWER_UP_DURATION);
+	newPowerUp();
+}
 
-		setTimeout(() => 
-		{
-			gameVar.dx *= 2;
-			gameVar.dy *= 2;
-		}, POWER_UP_DURATION);
-		newPowerUp();
-	}
-	if (gameVar.currentPowerUp?.type == "speed")
+function puSlow()
+{
+	gameVar.dx /= 2;
+	gameVar.dy /= 2;
+	gameVar.powerUpActive = true;
+
+	setTimeout(() => 
 	{
-		console.log("speed");	
 		gameVar.dx *= 2;
 		gameVar.dy *= 2;
-		gameVar.powerUpActive = true;
+	}, POWER_UP_DURATION);
+	newPowerUp();
+}
 
-		setTimeout(() => 
-		{
-			gameVar.dx /= 2;
-			gameVar.dy /= 2;
-		}, POWER_UP_DURATION);
-		newPowerUp();
-	}
-	if (gameVar.currentPowerUp?.type == "sizeP")
+function puSizeP()
+{
+	if (gameVar.lastTouch == 'player')
 	{
-		console.log("sizeP");	
 		gameVar.playerPaddleHeight *= 1.3;
 		gameVar.powerUpActive = true;
-
 		setTimeout(() => 
 		{
-			gameVar.playerPaddleHeight /= 1.3;
+				gameVar.playerPaddleHeight /= 1.3;
 		}, POWER_UP_DURATION);	
 		newPowerUp();
 	}
-	if (gameVar.currentPowerUp?.type == "sizeM")
+	else
 	{
-		console.log("sizeM");	
-		gameVar.playerPaddleHeight /= 1.3;
+		gameVar.aiPaddleHeight *= 1.3;
 		gameVar.powerUpActive = true;
-
 		setTimeout(() => 
 		{
-			gameVar.playerPaddleHeight *= 1.3;
+				gameVar.aiPaddleHeight /= 1.3;
+		}, POWER_UP_DURATION);	
+		newPowerUp();
+	}
+}
+
+function puSizeM()
+{
+	if (gameVar.lastTouch == 'player')
+	{
+		gameVar.playerPaddleHeight /= 1.3;
+		gameVar.powerUpActive = true;
+		setTimeout(() => 
+		{
+				gameVar.playerPaddleHeight *= 1.3;
 		}, POWER_UP_DURATION);
 		newPowerUp();
 	}
-	if (gameVar.currentPowerUp?.type == "invincible")
+	else
 	{
-		console.log("invicible");	
-		gameVar.playerPaddleHeight *= 5;
+		gameVar.aiPaddleHeight /= 1.3;
 		gameVar.powerUpActive = true;
-
 		setTimeout(() => 
 		{
-			gameVar.playerPaddleHeight /= 5;
+				gameVar.aiPaddleHeight *= 1.3;
 		}, POWER_UP_DURATION);
 		newPowerUp();
+	}
+}
+
+function puInvicible()
+{
+	if (gameVar.lastTouch == 'player')
+	{
+		gameVar.playerPaddleHeight *= 5;
+		gameVar.powerUpActive = true;
+		setTimeout(() => 
+		{
+				gameVar.playerPaddleHeight /= 5;
+		}, POWER_UP_DURATION);
+		newPowerUp();
+	}
+	else
+	{
+		gameVar.aiPaddleHeight *= 5;
+		gameVar.powerUpActive = true;
+		setTimeout(() => 
+		{
+				gameVar.aiPaddleHeight /= 5;
+		}, POWER_UP_DURATION);
+		newPowerUp();	
 	}
 }

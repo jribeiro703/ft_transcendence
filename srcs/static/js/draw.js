@@ -1,13 +1,33 @@
 import gameVar from "./var.js";
-import { BALL_RADIUS, POWER_UP_SIZE } from "./const.js";
-import { createPowerUp } from "./powerUp.js";
+import { BALL_RADIUS } from "./const.js";
+import { drawPowerUp, collectPowerUp } from "./powerUp.js";
+import { manageCollision, manageServer, manageMove } from "./manage.js";
+import { updateIaMove } from "./ai.js";
 
 export function initDraw()
 {
 	drawBall();
 	drawPaddles();
-	drawLines();
-	// createPowerUp();
+	if (gameVar.customMap == false)
+		drawLines();	
+}
+
+export function draw()
+{
+	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+
+	initDraw();
+	drawPowerUp();
+	collectPowerUp();
+	if (gameVar.customMap == true)
+		drawBricks();
+	if (gameVar.gameStart)
+		manageCollision();
+	else
+		manageServer();
+	updateIaMove();
+	manageMove();
+	gameVar.animationFrame = requestAnimationFrame(draw);
 }
 
 export function drawPaddles()
@@ -46,20 +66,50 @@ export function drawLines()
 	gameVar.ctx.stroke();
 }
 
+export function drawBricks()
+{
+	const map = gameVar.maps['customMap1'];
+	if (map)
+	{
+		map.forEach(wall =>
+		{
+			if (wall.sta == 1)	
+			{
+				gameVar.ctx.fillStyle = 'gray';
+				gameVar.ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+			}
+		});
+	}
+}
+
 export function initializeBall()
 {
-	if (gameVar.currenServer === 'player')
-	{
-		gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS; 
-		gameVar.y = gameVar.playerPaddleX + gameVar.playerPaddleHeight / 2;
-	}
-	else 
-	{
-		gameVar.x = gameVar.canvasw - gameVar.aiPaddleWidth - BALL_RADIUS;
-		gameVar.y = gameVar.aiPaddleX + gameVar.aiPaddleHeight / 2;
-	}
-	gameVar.dx = 0;
-	gameVar.dy = 0;
+	// // if (gameVar.customMap == false)
+	// {
+		if (gameVar.currenServer === 'player')
+		{
+			gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS; 
+			gameVar.y = gameVar.playerPaddleX + gameVar.playerPaddleHeight / 2;
+		}
+		else 
+		{
+			gameVar.x = gameVar.canvasw - gameVar.aiPaddleWidth - BALL_RADIUS;
+			gameVar.y = gameVar.aiPaddleX + gameVar.aiPaddleHeight / 2;
+		}
+		gameVar.dx = 0;
+		gameVar.dy = 0;
+	// }
+	// else
+	// {
+	// 	gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS; 
+	// 	gameVar.y = gameVar.playerPaddleX + gameVar.playerPaddleHeight / 2;
+	// 	gameVar.x2 = gameVar.canvasw - gameVar.aiPaddleWidth - BALL_RADIUS;
+	// 	gameVar.y2 = gameVar.aiPaddleX + gameVar.aiPaddleHeight / 2;
+	// 	gameVar.dx2 = 0;
+	// 	gameVar.dy2 = 0;		
+	// }
+
+
 }
 
 export function drawBall()
@@ -69,4 +119,14 @@ export function drawBall()
 	gameVar.ctx.fillStyle = "#F8FF00";
 	gameVar.ctx.fill();
 	gameVar.ctx.closePath();
+	// if (gameVar.customMap == true)
+	// {
+	// 	console.log("second ball");
+	// 	gameVar.ctx.beginPath();
+	// 	gameVar.ctx.arc(gameVar.x2, gameVar.y2, BALL_RADIUS, 0, Math.PI * 2);
+	// 	gameVar.ctx.fillStyle = "#F8FF00";
+	// 	gameVar.ctx.fill();
+	// 	gameVar.ctx.closePath();
+	// }
 }
+
