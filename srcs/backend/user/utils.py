@@ -7,10 +7,10 @@ from django.urls import reverse
 from django.utils import timezone
 from transcendence import settings
 
-def send_activation_email(user, view_name, subject, text_file, html_file):
+def send_activation_email(user, view_name, action, subject, text_file, html_file):
 	uid = urlsafe_base64_encode(force_bytes(user.pk))
 	token = default_token_generator.make_token(user)
-	activation_link = reverse(view_name, kwargs={'uidb64': uid, 'token': token}) # generate a url with  passed viewname and parameters
+	activation_link = reverse(view_name, kwargs={'action': action, 'uidb64': uid, 'token': token}) # generate a url with  passed viewname and parameters
 	full_link = f'https://localhost:8081{activation_link}'
 
 	text_content = render_to_string(text_file, context={"full_link": full_link},)
