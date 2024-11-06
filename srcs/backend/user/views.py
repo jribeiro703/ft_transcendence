@@ -30,9 +30,9 @@ class CreateUserView(CreateAPIView):
 	permission_classes = [AllowAny]
 	serializer_class = UserCreateSerializer
 
-class ActivateAccountView(APIView):
+class ActivateLinkView(APIView):
 	permission_classes = [AllowAny]
-	def get(self, request, uidb64, token):
+	def get(self, request, uidb64, token, action):
 		try:
 			uid = force_str(urlsafe_base64_decode(uidb64))
 			user = get_object_or_404(User, pk=uid)
@@ -43,12 +43,21 @@ class ActivateAccountView(APIView):
 			expiration_duration = timedelta(hours=24)
 			if timezone.now() - user.email_sent_at > expiration_duration:
 				user.delete()
-				return Response({"message": "Activation link has expired"}, status=status.HTTP_400_BAD_REQUEST)
-			user.is_active = True
-			user.save()
-			return Response({"message": "Account activated successfully"}, status=status.HTTP_200_OK)
-		else:
-		    return Response({"message": "Activation link is invalid"}, status=status.HTTP_400_BAD_REQUEST)
+				return Response({"message": "Activation link has expired."}, status=status.HTTP_400_BAD_REQUEST)
+			
+			if action == 'verify_email' and user.new_email:
+				user.email = user.new_email
+				user.new_email = None
+				user.save()
+				return Response({"message": "Email address confirmed successfully!"}, status=status.HTTP_200_OK)
+
+			if action == 'activate_account':
+				user.is_active = True
+				user.save()
+				return Response({"message": "Account activated successfully!"}, status=status.HTTP_200_OK)
+			return Response({"message": "Invalid Action"}, status=status.HTTP_200_OK)
+		
+		return Response({"message": "Activation link is invalid."}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserLoginView(APIView):
 	model = User
@@ -70,7 +79,7 @@ class UserLoginView(APIView):
 class OtpVerificationView(APIView):
 	permission_classes = [AllowAny]
 	serializer_class = OtpCodeChecking
-
+# duree de validite d'acces token a voir 
 	def post(self, request, user_id, *args, **kwargs):
 		user = get_object_or_404(get_user_model(), id=user_id)
 
@@ -108,8 +117,17 @@ class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
 	# authentication_classes = [JWTAuthentication]
 	# permission_classes = [IsAuthenticated, IsOwner]
 	authentication_classes = []
-	permission_classes = []	
-    
+	permission_classes = []
+
+	def update(self, request, *args, **kwargs):
+		response = super().update(request, *args, **kwargs)
+		success_messages = getattr(request, 'success_message', None)
+		if success_messages:
+			response.data['success_message'] = success_messages
+		return response
+
+
+# reste a tester avec le front-end
 class AcceptFriendRequestView(APIView):
     def post(self, request, *args, **kwargs):
         request_id = kwargs.get('request_id')

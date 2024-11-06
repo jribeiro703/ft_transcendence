@@ -1,3 +1,4 @@
+from types import new_class
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
@@ -8,6 +9,7 @@ class User(AbstractUser):
 	# for auth
 	username = models.CharField(_("username"), max_length=30, unique=True, blank=False, validators=[MinLengthValidator(3), alphanumeric])
 	email = models.EmailField(_("email"), unique=False, blank=False)
+	new_email = models.EmailField(_("email"), unique=False, null=True)
 	password = models.CharField(_("password"), max_length=128, validators=[MinLengthValidator(8)])
 	current_password = models.CharField(_("old password"), null=True, blank=True)
 	email_sent_at = models.DateTimeField(null=True, blank=True)
@@ -27,7 +29,8 @@ class User(AbstractUser):
 
 	def __str__(self):
 		return self.username
-	
+
+# reste a tester avec le front-end
 class FriendRequest(models.Model):
     sender = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
     receiver = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)

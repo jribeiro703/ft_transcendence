@@ -1,8 +1,0 @@
-Subject: New Email Verification
-
-Hey, you have changed your email, and your account is now deactivated.
-
-Please confirm your new email address to reactivate your account by clicking the link below:
-[Confirm Your Email](<{{ full_link }}>)
-
-This link is valid for 24 hours.
