@@ -85,19 +85,19 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'transcendence.urls'
 
 TEMPLATES = [
-	{
-		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		'DIRS': [os.path.join(BASE_DIR, '../static')],
-		'APP_DIRS': True,
-		'OPTIONS': {
-			'context_processors': [
-				'django.template.context_processors.debug',
-				'django.template.context_processors.request',
-				'django.contrib.auth.context_processors.auth',
-				'django.contrib.messages.context_processors.messages',
-			],
-		},
-	},
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, '../static')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
 ]
 
 # WSGI_APPLICATION = 'transcendence.wsgi.application'
@@ -178,7 +178,9 @@ SIMPLE_JWT = {
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = "~/django-email-messages"
+EMAIL_FILE_PATH = "user/django-email-messages"
+
+DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
 
 CSRF_TRUSTED_ORIGINS = [
 	'https://localhost:8081',
