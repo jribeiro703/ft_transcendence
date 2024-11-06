@@ -16,5 +16,6 @@
 			}
 		}
 	},
-	"remoteUser": "root"
+	"remoteUser": "root",
+	"initializeCommand": "make generate-env"
 }
