@@ -18,7 +18,7 @@ services:
     networks:
       - transcendence
     environment:
-      - VIRTUAL_HOST=localhost
+      - VIRTUAL_HOST=localhost,made-f0Dr11s3.clusters.42paris.fr
       - VIRTUAL_PORT=8000
 
 
@@ -45,7 +45,6 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - transcendence
-
 
   prometheus:
     image: prom/prometheus:latest
@@ -114,18 +113,20 @@ services:
       - VIRTUAL_HOST=postgres-exporter.localhost
       - VIRTUAL_PORT=9187
 
-  nginx-proxy:
+  nginx:
     # build:
     #   context: ../
     #   dockerfile: ./docker/nginx/Dockerfile
     image: jwilder/nginx-proxy:alpine
+    user: root
     container_name: nginx
     ports:
       # - "8080:80"
       - "8081:443"
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro
       - ./nginx/certs:/etc/nginx/certs:ro
+      # - ./nginx/htpasswd:/etc/nginx/htpasswd:ro
     environment:
       - HTTPS_METHOD=redirect
       - DEFAULT_SSL_CERT=/etc/nginx/certs/localhost.crt

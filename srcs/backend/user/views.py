@@ -79,7 +79,7 @@ class UserLoginView(APIView):
 class OtpVerificationView(APIView):
 	permission_classes = [AllowAny]
 	serializer_class = OtpCodeChecking
-# duree de validite d'acces token a voir 
+
 	def post(self, request, user_id, *args, **kwargs):
 		user = get_object_or_404(get_user_model(), id=user_id)
 
