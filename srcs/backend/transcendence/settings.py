@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [
 	'0.0.0.0',
 	'localhost',
 	'django',
-	'made-f0Dr11s3.clusters.42paris.fr'
+	'BingdeMacBook-Pro.local'
 ]
 
 # HTTPS settings
@@ -61,10 +61,6 @@ INSTALLED_APPS = [
 	'django.contrib.staticfiles',
 	'rest_framework',
 	'rest_framework_simplejwt',
-	# 'django_otp',
-	# 'django_otp.plugins.otp_totp',
-	# 'two_factor',
-	# 'two_factor.plugins.phonenumber',
 	'django_prometheus',
 	'user',
 	'game',
@@ -75,7 +71,6 @@ MIDDLEWARE = [
 	'django.middleware.security.SecurityMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.CommonMiddleware',
-	'django_otp.middleware.OTPMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
