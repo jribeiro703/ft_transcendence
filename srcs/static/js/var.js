@@ -21,6 +21,8 @@ const gameVar =
 	brickPadding: 10,
 	brickOffsetTop: 30,
 	brickOffsetLeft: 30,
+	goingLeft: false,
+	goingRight: false,
 
 
 	currenServer: 'player',
@@ -60,8 +62,6 @@ const gameVar =
 	hard: null,
 	tableTennis: null,
 	brickLevel: null,
-
-
 
 	powerUps: [
 		{ type: 'speed', image: 'static/css/images/FastBall.png'},

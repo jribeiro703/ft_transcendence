@@ -1,7 +1,6 @@
 import gameVar from "./var.js";
 import { BALL_RADIUS, PADDLE_SPEED } from "./const.js";
 import { resetBall } from "./reset.js";
-import { aiMovement, manageAi } from "./ai.js";
 
 function checkCollisionWithWalls()
 {
@@ -39,7 +38,6 @@ export function manageCollision()
 {
 	gameVar.x += gameVar.dx;
 	gameVar.y += gameVar.dy;
-	// console.log("dx : ", gameVar.dx, "dy :", gameVar.dy);
 	if(gameVar.y + gameVar.dy > gameVar.canvasH - BALL_RADIUS || gameVar.y + gameVar.dy < BALL_RADIUS)
 	{
 		gameVar.dy = -gameVar.dy;
@@ -53,12 +51,11 @@ export function manageCollision()
 		gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS;
 		let hitpos = (gameVar.y - gameVar.playerPaddleX) / gameVar.playerPaddleHeight;
 		let angle = (hitpos - 0.5) * Math.PI / 2;
-		// console.log("angle : ", angle);
 		gameVar.dx = (Math.cos(angle) * Math.abs(gameVar.dx) + 1);
 		gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.init_dy);
 		if (gameVar.dx > gameVar.init_dx + 1)
 			gameVar.dx -= 1;
-		gameVar.lastTouch = 'player'
+		gameVar.lastTouch = 'player';
 	}
 	else if (gameVar.x + BALL_RADIUS > gameVar.canvasW - gameVar.aiPaddleWidth &&
 		gameVar.y > gameVar.aiPaddleX &&
@@ -107,7 +104,5 @@ export function manageMove()
 	else if (gameVar.playerDownPressed && gameVar.playerPaddleX < gameVar.canvasH - gameVar.playerPaddleHeight)
 	{
 		gameVar.playerPaddleX += PADDLE_SPEED;
-	}  
-	// aiMovement();
-	// manageAi();
+	} 
 }

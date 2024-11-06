@@ -1,8 +1,8 @@
 import gameVar from "./var.js";
-import { BALL_RADIUS, PADDLE_SPEED, AI} from "./const.js";
+import { BALL_RADIUS } from "./const.js";
 import { drawPowerUp, collectPowerUp } from "./powerUp.js";
 import { manageCollision, manageServer, manageMove } from "./manage.js";
-import { manageAi } from "./ai.js";
+import { manageAi, manageAi2 } from "./ai.js";
 
 export function initDraw()
 {
@@ -13,20 +13,19 @@ export function initDraw()
 }
 
 
-
 export function draw()
 {
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
 	drawPowerUp();
 	collectPowerUp();
-
 	if (gameVar.customMap == true)
 		drawBricks();
 	if (gameVar.gameStart)
 	{
 		manageCollision();
-		manageAi();
+		// manageAi();
+		manageAi2();
 	}
 	else
 		manageServer();
