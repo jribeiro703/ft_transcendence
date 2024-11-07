@@ -1,0 +1,41 @@
+<script type="module" src="{% static 'js/main.js' %}?v=1.1"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const livechatBtn = document.getElementById('livechatBtn');
+
+livechatBtn.addEventListener('click', showLivechatView);
+
+function showLivechatView()
+{
+defaultView.style.display = 'none';
+gameView.style.display = 'block';
+initializeBall();
+createPowerUP();
+aiMovement();
+draw();
+}
