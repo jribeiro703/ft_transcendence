@@ -91,8 +91,10 @@
 			</div>
 			<canvas id="myCanvas"></canvas>
 			<br><br>
-			<button id="rematchBtn" class="btn btn-secondary custom-btn mb-4" style="display: none;">Rematch</button>
-			<button id="quitGameBtn" class="btn btn-secondary custom-btn mb-4" style="display: none;">Quit Game</button>
+			<div class="button-container">
+				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+				<button id="quitGameBtn" style="display: none;">Quit Game</button>
+			</div>
 		</div>
 	</div>
 	<script type="module" src="{% static 'js/main.js' %}?v=1.1"></script>
