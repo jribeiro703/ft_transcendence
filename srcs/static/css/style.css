@@ -379,9 +379,6 @@ p
 }
 
 
-
-
-
 #myCanvas
 {
     display: block; 
@@ -391,6 +388,37 @@ p
     background-color: #1A1A40; 
 }
 
+#rematchBtn, #quitGameBtn
+{
+	width: 200px;
+    height: 60px;
+    font-size: 20px;
+    background-color: #0A1730;
+    color: #FEFCFF; 
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.4s;
+}
+
+#rematchBtn:not(:disabled):hover, #quitGameBtn:hover
+{
+    background-color: #6DC7C1;
+    transform: scale(1.05);
+}
+
+#rematchBtn:not(:disabled):active, #quitGameBtn:active
+{
+    background-color: #003372; 
+    transform: scale(0.95);
+}
+button:disabled
+{
+    background-color: grey;
+    color: white;
+    cursor: not-allowed;  /* pour indiquer que c'est inactif */
+    opacity: 0.6;
+}
 /* -------------------- End Page --------------------------- */
 
 .footer-text

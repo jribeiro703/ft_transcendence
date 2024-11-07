@@ -4,6 +4,7 @@ import { drawPowerUp, collectPowerUp } from "./powerUp.js";
 import { manageCollision, manageServer, manageMove } from "./manage.js";
 import { manageAi, aiMove } from "./ai.js";
 import { drawBricks } from "./brick.js";
+import { checkScore } from "./reset.js";
 
 export function initDraw()
 {

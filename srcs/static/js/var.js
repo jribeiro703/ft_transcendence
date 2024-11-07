@@ -29,12 +29,13 @@ const gameVar =
 	gameStart: false,
 	matchOver: false,
 	aiServe: false,
-	aiMoveInterval: null,
+
 	powerUpActive: false,
 	playerUpPressed: false,
 	playerDownPressed: false,
 	powerUpEnable: false,
 	customMap: false,
+
 
 	x: null,
 	y: null,
@@ -48,6 +49,7 @@ const gameVar =
 	animationFrame: null,
 	playerScoreElement: null,
 	aiScoreElement: null,
+	aiMoveInterval: null,
 
 	defaultView: null,
 	gameView: null,
@@ -56,8 +58,9 @@ const gameVar =
 	quickGameBtn: null,
 	playGameBtn: null,
 	tournamentGameBtn: null,
-	rematchGameBtn: null,
+	rematchBtn: null,
 	quitGameBtn: null,
+
 	
 	withPowerUp: null,
 	withoutPowerUp: null,
@@ -102,7 +105,9 @@ const gameVar =
 			{sta: 1, x: 840 / 2 + 15, y: 305, width: 20, height: 50 },
 			{sta: 1, x: 840 / 2 + 15, y: 365, width: 20, height: 50 },
 		],
-	}
+	},
+
+	scoreBoard: [],
 };
 
 export default gameVar;
