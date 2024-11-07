@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcendence Game</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'global/css/app.css' %}?v=1.0">
+</head>
+<body>
+    <div class="game-frame">
+        <div class="navbar">
+            <div>
+                <a href="#" class="home">Home</a>
+                <h3 class="project-name">Transcendence</h3>
+            </div>
+            <button id="profileButton">P</button>
+        </div>
+        <div class="main-content">
+            <div class="left">
+                <div class="dynamic-box" id="dynamicBox">
+                    <!-- Le contenu dynamique sera chargé ici -->
+                </div>
+            </div>
+            <div class="right">
+                <!-- Placeholder pour le livechat -->
+                <div class="livechat" id="livechat">
+                    <h3>Live Chat</h3>
+                    <div class="chat-messages">
+                        <!-- Messages factices -->
+                        
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" placeholder="Écrire un message...">
+                        <button>Envoyer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="responseData">
+            <!-- Les données de connexion s'afficheront ici -->
+        </div>
+        <div id="app"></div>
+    </div>
+    <script type="module" src="{% static 'global/js/app.js' %}?v=1.1"></script>
+</body>
+</html>
