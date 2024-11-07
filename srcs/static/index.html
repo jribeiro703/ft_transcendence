@@ -27,7 +27,7 @@
 			</div>
 		</div>
 	</nav>
-	<br><br><br><br><br><br><br>
+	<br><br><br>
 	<div id="mainContent">
 		<div id="defaultView">
 			<div class="container">
@@ -37,14 +37,13 @@
 			</div>
 		</div>
 			<div class="container py-2 d-flex flex-column align-items-centercontainer py-2">
-				<button id="quickGameBtn" class="btn custom-btn mb-4">Start Game</button>
-				<button id="btn1" class="btn custom-btn mb-4">Tournament</button>
-				<button id="btn2" class="btn custom-btn mb-4">Live Chat</button><br><br>
-				<button id="btn3" class="btn custom-btn mb-4">Quit</button>
+				<button id="playGameBtn" class="btn custom-btn mb-4">Play Game</button>
+				<button id="btn1" class="btn custom-btn mb-4">Live Chat</button><br><br>
+				<button id="btn2" class="btn custom-btn mb-4">Quit</button>
 			</div>
 		</div>
 		<div id="gameplayView" style="display: none;">
-			<h1>Gameplay Mode</h1><br><br>
+			<h1>Gameplay Mode</h1>
 			<div class="container">
 				<div class="left-column">
 					<p class="gpMode">Level Difficulty:</p>
@@ -74,9 +73,11 @@
 				</div>
 			</div>
 		</div>
-			<br>
+			<br><br>
 			<div class="button-container">
-				<button id="startGameBtn" class="btn btn-secondary custom-btn mb-4" style="display: none;">Start Game</button>
+				<button id="quickGameBtn" style="display: none;">Quick Game (AI)</button>
+				<button id="startGameBtn" style="display: none;">Start Game</button>
+				<button id="tournamentGameBtn" style="display: none;">Tournament</button>
 			</div>
 		</div>
 		<div id="gameView" style="display: none;">
@@ -89,7 +90,11 @@
 				<span id="ai">CPU</span>
 			</div>
 			<canvas id="myCanvas"></canvas>
+			<br><br>
+			<button id="rematchBtn" class="btn btn-secondary custom-btn mb-4" style="display: none;">Rematch</button>
+			<button id="quitGameBtn" class="btn btn-secondary custom-btn mb-4" style="display: none;">Quit Game</button>
 		</div>
+	</div>
 	<script type="module" src="{% static 'js/main.js' %}?v=1.1"></script>
 	<div class="footer-text">
 		Project directed by Yachen, Lucravoi, Dlacuey, and Tmaillar

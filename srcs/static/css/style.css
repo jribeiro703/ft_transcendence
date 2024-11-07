@@ -165,11 +165,7 @@ p
     background-color: #455F78 !important;
 }
 
-#quickGameBtn, #btn1, #btn2, #btn3
-{
-	background-color: #1F2E4D;
-	color: #6DC1C1;
-}
+
 
 /* ----------------------- Main Content ---------------------------- */
 .container
@@ -183,21 +179,28 @@ p
 
 /* ------------------------ Main Button ---------------------------- */
 
-#quickGameBtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
+#playGameBtn, #btn1, #btn2, #btn3
+{
+	background-color: #1F2E4D;
+	color: #6DC1C1;
+}
+
+#playGameBtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
 {
 	color: #1F2E4D;
     background-color: #6DC7C1;
     border-color: #000000;
 }
 
-#quickGameBtn:active, #btn1:active, #btn2:active, #btn3:active
+#playGameBtn:active, #btn1:active, #btn2:active, #btn3:active
 {
 	color: #0A1730;
     background-color: #455F78;
     border-color: #000000;
 }
 
-/* -------------------------- Start Game View ------------------------ */
+/* -------------------------- Game Play View ------------------------ */
+
 #gameplayView
 {
     text-align: center;
@@ -295,11 +298,11 @@ p
     border-radius: 5px;
 }
 
-#startGameBtn
+#startGameBtn, #quickGameBtn, #tournamentGameBtn
 {
-    width: 250px;
-    height: 80px;
-    font-size: 28px;
+    width: 200px;
+    height: 60px;
+    font-size: 20px;
     background-color: #0A1730;
     color: #FEFCFF; 
     border: none;
@@ -308,13 +311,13 @@ p
     transition: background-color 0.3s, transform 0.4s;
 }
 
-#startGameBtn:hover
+#startGameBtn:hover, #quickGameBtn:hover, #tournamentGameBtn:hover
 {
     background-color: #6DC7C1;
     transform: scale(1.05);
 }
 
-#startGameBtn:active
+#startGameBtn:active, #quickGameBtn:active, #tournamentGameBtn:active
 {
     background-color: #003372; 
     transform: scale(0.95);
@@ -323,8 +326,11 @@ p
  .button-container 
 {
 	display: flex;
-	flex-direction: column;
+	justify-content: space-between;
+	max-width: 800px;
+	gap: 10px;
 	align-items: center;
+	margin: 0 auto;
 }
 
 /* ----------------------- Score Board ------------------------- */
@@ -343,7 +349,9 @@ p
     display: flex; 
     justify-content: space-between;
     align-items: center; 
+	margin: 0 auto;
     font-size: 20px; 
+	max-width: 840px;
 }
 
 #player
@@ -387,8 +395,8 @@ p
 
 .footer-text
 {
-	position: fixed;
-	bottom: 20px;
+	position: absolute;
+	bottom: 10px;
 	left: 0;
 	width: 100%;
 	text-align: center;

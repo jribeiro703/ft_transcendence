@@ -31,15 +31,5 @@ export function startBall(e)
 		gameVar.gameStart = true;
 		gameVar.dx = gameVar.init_dx;
 		gameVar.dy = (Math.random() < 0.5 ? gameVar.init_dy : -gameVar.init_dy);
-		// if (gameVar.currenServer == 'player')
-		// {
-		// 	gameVar.goingRight = true;
-		// 	gameVar.goingLeft = false;
-		// }
-		// else if (gameVar.currenServer == 'ai')
-		// {
-		// 	gameVar.goingRight = false;
-		// 	gameVar.goingLeft = false;
-		// }
 	}
 }

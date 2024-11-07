@@ -2,7 +2,8 @@ import gameVar from "./var.js";
 import { BALL_RADIUS } from "./const.js";
 import { drawPowerUp, collectPowerUp } from "./powerUp.js";
 import { manageCollision, manageServer, manageMove } from "./manage.js";
-import { manageAi, manageAi2 } from "./ai.js";
+import { manageAi, aiMove } from "./ai.js";
+import { drawBricks } from "./brick.js";
 
 export function initDraw()
 {
@@ -12,6 +13,7 @@ export function initDraw()
 		drawLines();	
 }
 
+setInterval(manageAi, 1000);
 
 export function draw()
 {
@@ -22,27 +24,24 @@ export function draw()
 	if (gameVar.customMap == true)
 		drawBricks();
 	if (gameVar.gameStart)
-	{
 		manageCollision();
-		// manageAi();
-		manageAi2();
-	}
 	else
 		manageServer();
 	manageMove();
+	aiMove(gameVar.targetY);
 	gameVar.animationFrame = requestAnimationFrame(draw);
 }
 
 export function drawPaddles()
 {
 	gameVar.ctx.beginPath();
-	gameVar.ctx.rect(0, gameVar.playerPaddleX, gameVar.playerPaddleWidth, gameVar.playerPaddleHeight);
+	gameVar.ctx.rect(0, gameVar.playerPaddleY, gameVar.playerPaddleWidth, gameVar.playerPaddleHeight);
 	gameVar.ctx.fillStyle = "#FF414D";
 	gameVar.ctx.fill();
 	gameVar.ctx.closePath();
 
 	gameVar.ctx.beginPath();
-	gameVar.ctx.rect(gameVar.canvasW - gameVar.aiPaddleWidth, gameVar.aiPaddleX, gameVar.aiPaddleWidth, gameVar.aiPaddleHeight);
+	gameVar.ctx.rect(gameVar.canvasW - gameVar.aiPaddleWidth, gameVar.aiPaddleY, gameVar.aiPaddleWidth, gameVar.aiPaddleHeight);
 	gameVar.ctx.fillStyle = "#FF414D";
 	gameVar.ctx.fill();
 	gameVar.ctx.closePath();
@@ -69,33 +68,19 @@ export function drawLines()
 	gameVar.ctx.stroke();
 }
 
-export function drawBricks()
-{
-	const map = gameVar.maps['customMap1'];
-	if (map)
-	{
-		map.forEach(wall =>
-		{
-			if (wall.sta == 1)	
-			{
-				gameVar.ctx.fillStyle = 'gray';
-				gameVar.ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-			}
-		});
-	}
-}
+
 
 export function initializeBall()
 {
 	if (gameVar.currenServer === 'player')
 	{
 		gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS; 
-		gameVar.y = gameVar.playerPaddleX + gameVar.playerPaddleHeight / 2;
+		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
 	}
 	else 
 	{
 		gameVar.x = gameVar.canvasw - gameVar.aiPaddleWidth - BALL_RADIUS;
-		gameVar.y = gameVar.aiPaddleX + gameVar.aiPaddleHeight / 2;
+		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2;
 	}
 	gameVar.dx = 0;
 	gameVar.dy = 0;

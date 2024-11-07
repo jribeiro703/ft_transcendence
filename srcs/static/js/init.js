@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { showGameView, showGameplayView } from "./gameView.js";
+import { showGameView, showGameplayView, showDefaultView } from "./gameView.js";
 import { keyDownHandler, keyUpHandler, startBall } from "./input.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { updateLevelSelection, updateMapSelection } from "./gameMode.js";
@@ -7,8 +7,15 @@ import { updateLevelSelection, updateMapSelection } from "./gameMode.js";
 export function initGameVar()
 {
 	gameVar.defaultView = document.getElementById('defaultView');
+	gameVar.gameplayView = document.getElementById('gameplayView');
+	gameVar.gameView = document.getElementById('gameView');
 	gameVar.startGameBtn = document.getElementById('startGameBtn');
 	gameVar.quickGameBtn = document.getElementById('quickGameBtn');
+	gameVar.playGameBtn = document.getElementById('playGameBtn');
+	gameVar.tournamentGameBtn = document.getElementById('tournamentGameBtn');
+	gameVar.rematchGameBtn = document.getElementById('rematchGameBtn');	
+	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+	
 	gameVar.withPowerUp = document.getElementById('withPowerUps');
 	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');
 	gameVar.easy = document.getElementById('easy');
@@ -16,12 +23,13 @@ export function initGameVar()
 	gameVar.hard = document.getElementById('hard');
 	gameVar.tableTennis = document.getElementById('tableTennis');
 	gameVar.brickLevel = document.getElementById('bricksLevel');
-	gameVar.gameplayView = document.getElementById('gameplayView');
-	gameVar.gameView = document.getElementById('gameView');
+
 	gameVar.playerScoreElement = document.getElementById('playerScore');
 	gameVar.aiScoreElement = document.getElementById('aiScore');
-	gameVar.quickGameBtn.addEventListener('click', showGameplayView);
-	gameVar.startGameBtn.addEventListener('click', showGameView);
+
+	gameVar.playGameBtn.addEventListener('click', showGameplayView);
+	gameVar.quickGameBtn.addEventListener('click', showGameView);
+	gameVar.quitGameBtn.addEventListener('click', showDefaultView);
 }
 
 

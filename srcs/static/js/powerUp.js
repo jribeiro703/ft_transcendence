@@ -116,23 +116,23 @@ function puSlow()
 
 function puSizeP()
 {
-	if (gameVar.lastTouch == 'player')
+	if (gameVar.dx > 0)
 	{
-		gameVar.playerPaddleHeight *= 1.3;
+		gameVar.playerPaddleHeight *= 1.4;
 		gameVar.powerUpActive = true;
 		setTimeout(() => 
 		{
-				gameVar.playerPaddleHeight /= 1.3;
+				gameVar.playerPaddleHeight /= 1.4;
 		}, POWER_UP_DURATION);	
 		newPowerUp();
 	}
-	else
+	else if (gameVar.dx < 0)
 	{
-		gameVar.aiPaddleHeight *= 1.3;
+		gameVar.aiPaddleHeight *= 1.4;
 		gameVar.powerUpActive = true;
 		setTimeout(() => 
 		{
-				gameVar.aiPaddleHeight /= 1.3;
+				gameVar.aiPaddleHeight /= 1.4;
 		}, POWER_UP_DURATION);	
 		newPowerUp();
 	}
@@ -140,23 +140,23 @@ function puSizeP()
 
 function puSizeM()
 {
-	if (gameVar.lastTouch == 'player')
+	if (gameVar.dx > 0)
 	{
-		gameVar.playerPaddleHeight /= 1.3;
+		gameVar.playerPaddleHeight /= 1.4;
 		gameVar.powerUpActive = true;
 		setTimeout(() => 
 		{
-				gameVar.playerPaddleHeight *= 1.3;
+				gameVar.playerPaddleHeight *= 1.4;
 		}, POWER_UP_DURATION);
 		newPowerUp();
 	}
-	else
+	else if (gameVar.dx < 0)
 	{
-		gameVar.aiPaddleHeight /= 1.3;
+		gameVar.aiPaddleHeight /= 1.4;
 		gameVar.powerUpActive = true;
 		setTimeout(() => 
 		{
-				gameVar.aiPaddleHeight *= 1.3;
+				gameVar.aiPaddleHeight *= 1.4;
 		}, POWER_UP_DURATION);
 		newPowerUp();
 	}
@@ -164,7 +164,7 @@ function puSizeM()
 
 function puInvicible()
 {
-	if (gameVar.lastTouch == 'player')
+	if (gameVar.dx > 0)
 	{
 		gameVar.playerPaddleHeight *= 5;
 		gameVar.powerUpActive = true;
@@ -174,7 +174,7 @@ function puInvicible()
 		}, POWER_UP_DURATION);
 		newPowerUp();
 	}
-	else
+	else if (gameVar.dx < 0)
 	{
 		gameVar.aiPaddleHeight *= 5;
 		gameVar.powerUpActive = true;

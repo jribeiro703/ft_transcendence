@@ -5,7 +5,6 @@ import { initGameVar, initEventListener } from './init.js';
 
 document.addEventListener('DOMContentLoaded', function() 
 {
-
 	const link = document.createElement('link');
 	link.rel = 'stylesheet';
 	link.href = 'static/css/style.css';
