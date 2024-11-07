@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { PADDLE_SPEED, AI_UPDATE_INTERVAL, AI, AI_LEVEL } from './const.js';
+import { PADDLE_SPEED, AI_UPDATE_INTERVAL, PADDLE_THRESHOLD, CENTER_POSITION } from './const.js';
 
 export function aiServeBall()
 {
@@ -14,21 +14,47 @@ export function aiServeBall()
 		}, 1000);
 	}
 }
-export function manageAi2()
+
+export function aiMove(targetY)
 {
-	// console.log("manageAI");
-	const currentTime = Date.now();
-	if (currentTime - AI.lastUpdate >= AI.refreshTime)
+	if (gameVar.targetY != 0)
 	{
-		
-		console.log("predict" ,predictBallPos(gameVar));
-		// moveAi(ballFuturePos);
-		// console.log("aimove");
-		const readableDate = new Date(Date.now());
-		console.log(readableDate);
+		if (Math.abs(gameVar.aiPaddleY - gameVar.targetY) > PADDLE_THRESHOLD)
+		{
+			if (gameVar.aiPaddleY < targetY && gameVar.aiPaddleY < gameVar.canvasH - gameVar.aiPaddleHeight)
+				gameVar.aiPaddleY += PADDLE_SPEED;
+			else if (gameVar.aiPaddleY > targetY && gameVar.aiPaddleY > 0)
+				gameVar.aiPaddleY -= PADDLE_SPEED;
+		}
 	}
 }
 
+export function manageAi()
+{
+	gameVar.aiMoveInterval = setInterval(() =>
+	{
+		if (gameVar.dx > 0)
+		{
+			let future = predictBallPos(gameVar);
+			gameVar.targetY = future[749][1];
+		}
+	}, AI_UPDATE_INTERVAL);	
+}
+
+export function updateIaMove()
+{
+	if (gameVar.dx > 0 && gameVar.x > gameVar.canvasW / 2) 
+	{
+		if (gameVar.y < gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2 && gameVar.aiPaddleY > 0)
+		{
+			gameVar.aiPaddleY -= PADDLE_SPEED;
+		}
+		else if (gameVar.y > gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2 && gameVar.aiPaddleY < gameVar.canvasH - gameVar.aiPaddleHeight)
+		{
+			gameVar.aiPaddleY += PADDLE_SPEED;
+		}
+	}
+}
 
 function predictBallPos(gameVar)
 {
@@ -42,35 +68,28 @@ function predictBallPos(gameVar)
 		dx: gameVar.dx,
 		dy: gameVar.dy
 	}
-	const aiPaddle =
-	{
-		x: gameVar.aiPaddleX,
-	}
-	const boundaries =
+	const limits =
 	{
 		x_min: 0,
 		x_max: gameVar.canvasW,
 		y_min: 0,
 		y_max: gameVar.canvasH,
 	}
-	let step = 250;
+	let step = 750;
 	let futurePtsList = [];
 
 	for (let i = 0; i < step; i++)
 	{
-		let xTmp = Math.floor(i * dirVec.x + ballPos.x);
-        let yTmp = Math.floor(i * dirVec.y + ballPos.y);
+		let xTmp = Math.floor(i * dirVec.dx + ballPos.x);
+        let yTmp = Math.floor(i * dirVec.dy + ballPos.y);
         
         let xEnd, yEnd;
-
-        // Si la balle dépasse le bas du terrain
-        if (yTmp > boundaries.y_max)
+        if (yTmp > limits.y_max)
 		{
-            yEnd = Math.floor(2 * boundaries.y_max - yTmp);
+            yEnd = Math.floor(2 * limits.y_max - yTmp);
             xEnd = xTmp;
         }
-        // Si la balle dépasse le haut du terrain
-        else if (yTmp < boundaries.y_min)
+        else if (yTmp < limits.y_min)
 		{
             yEnd = Math.floor(-yTmp);
             xEnd = xTmp;
@@ -79,64 +98,22 @@ function predictBallPos(gameVar)
 		{
             yEnd = yTmp;
         }
-
-        // Si la balle dépasse le côté droit
-        if (xTmp > aiPaddle.x)
+        if (xTmp > (limits.x_max - gameVar.aiPaddleWidth))
 		{
-            xEnd = Math.floor(boundaries.x_max);
-            yEnd = Math.floor(ballPos.y + ((boundaries.x_max - ballPos.x) / dirVec.x) * dirVec.y);
+            xEnd = Math.floor(limits.x_max);
+            yEnd = Math.floor(ballPos.y + ((limits.x_max - ballPos.x) / dirVec.dx) * dirVec.dy);
         }
-        // Si la balle dépasse le côté gauche
-        else if (xTmp < boundaries.x_min)
+        else if (xTmp < limits.x_min)
 		{
-            xEnd = Math.floor(boundaries.x_min);
-            yEnd = Math.floor(ballPos.y + ((boundaries.x_min - ballPos.x) / dirVec.x) * dirVec.y);
+            xEnd = Math.floor(limits.x_min);
+            yEnd = Math.floor(ballPos.y + ((limits.x_min - ballPos.x) / dirVec.dx) * dirVec.dy);
         } 
 		else
 		{
             xEnd = xTmp;
         }
-
         let endPos = [xEnd, yEnd];
         futurePtsList.push(endPos);
 	}
 	return (futurePtsList);
-}
-
-function moveAi(predictY)
-{
-	// console.log("predic Y : ", predictY);
-	const distance = predictY - gameVar.aiPaddleX;
-	const direction = Math.sign(distance);
-
-	const speedAdj = Math.min(Math.abs(distance), PADDLE_SPEED * AI_LEVEL);
-	gameVar.aiPaddleX = Math.min(Math.max(0, gameVar.aiPaddleX + direction * speedAdj), gameVar.canvasH - gameVar.aiPaddleHeight);
-	// console.log("paddle ai :", gameVar.aiPaddleX) 
-}
-
-
-export function manageAi()
-{
-	gameVar.aiMoveInterval = setInterval(() =>
-	{
-		console.log("aimove");
-		// const readableDate = new Date(Date.now());
-		// console.log(readableDate);
-		updateIaMove();	
-	}, AI_UPDATE_INTERVAL);	
-}
-
-export function updateIaMove()
-{
-	if (gameVar.dx > 0 && gameVar.x > gameVar.canvasW / 2) 
-	{
-		if (gameVar.y < gameVar.aiPaddleX + gameVar.aiPaddleHeight / 2 && gameVar.aiPaddleX > 0)
-		{
-			gameVar.aiPaddleX -= PADDLE_SPEED;
-		}
-		else if (gameVar.y > gameVar.aiPaddleX + gameVar.aiPaddleHeight / 2 && gameVar.aiPaddleX < gameVar.canvasH - gameVar.aiPaddleHeight)
-		{
-			gameVar.aiPaddleX += PADDLE_SPEED;
-		}
-	}
 }

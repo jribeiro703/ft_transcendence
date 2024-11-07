@@ -45,39 +45,34 @@ export function manageCollision()
 	if (gameVar.customMap == true)
 		checkCollisionWithWalls();
 	if(gameVar.x - BALL_RADIUS < gameVar.playerPaddleWidth &&
-		gameVar.y > gameVar.playerPaddleX &&
-		gameVar.y < gameVar.playerPaddleX + gameVar.playerPaddleHeight)
+		gameVar.y > gameVar.playerPaddleY &&
+		gameVar.y < gameVar.playerPaddleY + gameVar.playerPaddleHeight)
 	{
 		gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS;
-		let hitpos = (gameVar.y - gameVar.playerPaddleX) / gameVar.playerPaddleHeight;
+		let hitpos = (gameVar.y - gameVar.playerPaddleY) / gameVar.playerPaddleHeight;
 		let angle = (hitpos - 0.5) * Math.PI / 2;
 		gameVar.dx = (Math.cos(angle) * Math.abs(gameVar.dx) + 1);
 		gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.init_dy);
 		if (gameVar.dx > gameVar.init_dx + 1)
 			gameVar.dx -= 1;
-		gameVar.lastTouch = 'player';
 	}
 	else if (gameVar.x + BALL_RADIUS > gameVar.canvasW - gameVar.aiPaddleWidth &&
-		gameVar.y > gameVar.aiPaddleX &&
-		gameVar.y < gameVar.aiPaddleX + gameVar.aiPaddleHeight)
+		gameVar.y > gameVar.aiPaddleY &&
+		gameVar.y < gameVar.aiPaddleY + gameVar.aiPaddleHeight)
 	{
-		console.log("game y : ", gameVar.y)
 		gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - BALL_RADIUS;
-		let hitpos = (gameVar.y - gameVar.aiPaddleX) / gameVar.aiPaddleHeight;
+		let hitpos = (gameVar.y - gameVar.aiPaddleY) / gameVar.aiPaddleHeight;
 		let angle = (hitpos - 0.5) * Math.PI / 2;
 		gameVar.dx = -(Math.cos(angle) * Math.abs(gameVar.dx) + 1);
 		gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.init_dy);
-		gameVar.lastTouch = 'ai';
 	}
 	if (gameVar.x < 0)
 	{
 		resetBall('ai');
-		gameVar.lastTouch = 'ai';
 	}
 	else if (gameVar.x > gameVar.canvasW)
 	{
 		resetBall('player');
-		gameVar.lastTouch = 'player';
 	}
 }
 
@@ -86,23 +81,23 @@ export function manageServer()
 	if (gameVar.currenServer == 'player')
 	{
 		gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS;
-		gameVar.y = gameVar.playerPaddleX + gameVar.playerPaddleHeight / 2;
+		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
 	}
 	else
 	{
 		gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - BALL_RADIUS;
-		gameVar.y = gameVar.aiPaddleX + gameVar.aiPaddleHeight / 2;
+		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2;
 	}
 }
 
 export function manageMove()
 {
-	if (gameVar.playerUpPressed && gameVar.playerPaddleX > 0)
+	if (gameVar.playerUpPressed && gameVar.playerPaddleY > 0)
 	{
-		gameVar.playerPaddleX -= PADDLE_SPEED;
+		gameVar.playerPaddleY -= PADDLE_SPEED;
 	} 
-	else if (gameVar.playerDownPressed && gameVar.playerPaddleX < gameVar.canvasH - gameVar.playerPaddleHeight)
+	else if (gameVar.playerDownPressed && gameVar.playerPaddleY < gameVar.canvasH - gameVar.playerPaddleHeight)
 	{
-		gameVar.playerPaddleX += PADDLE_SPEED;
+		gameVar.playerPaddleY += PADDLE_SPEED;
 	} 
 }

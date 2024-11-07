@@ -1,14 +1,14 @@
 const gameVar = 
 {
-	canvasW: 780,
+	canvasW: 840,
 	canvasH: 420,
 
 	playerPaddleHeight: 75,
 	playerPaddleWidth: 12,
 	aiPaddleHeight: 75,
 	aiPaddleWidth: 12,
-	playerPaddleX: 0,
-	aiPaddleX: (420 - 75) / 2,
+	playerPaddleY: (420 - 75) / 2,
+	aiPaddleY: (420 - 75) / 2,
 
 	playerScore: 0,
 	aiScore: 0,
@@ -21,12 +21,10 @@ const gameVar =
 	brickPadding: 10,
 	brickOffsetTop: 30,
 	brickOffsetLeft: 30,
-	goingLeft: false,
-	goingRight: false,
-
+	aiLevel: 8,
+	targetY: 0,
 
 	currenServer: 'player',
-	lastTouch: 'player',
 
 	gameStart: false,
 	matchOver: false,
@@ -50,11 +48,17 @@ const gameVar =
 	animationFrame: null,
 	playerScoreElement: null,
 	aiScoreElement: null,
+
 	defaultView: null,
 	gameView: null,
 	gameplayView: null,
 	startGameBtn: null,
 	quickGameBtn: null,
+	playGameBtn: null,
+	tournamentGameBtn: null,
+	rematchGameBtn: null,
+	quitGameBtn: null,
+	
 	withPowerUp: null,
 	withoutPowerUp: null,
 	easy: null,
@@ -83,20 +87,20 @@ const gameVar =
 	maps: {
 		classicMap: [],
 		customMap1: [
-			{sta: 1, x: 780 / 2 - 15, y: 5, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 - 15, y: 65, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 - 15, y: 125, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 - 15, y: 185, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 - 15, y: 245, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 - 15, y: 305, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 - 15, y: 365, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 + 15, y: 5, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 + 15, y: 65, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 + 15, y: 125, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 + 15, y: 185, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 + 15, y: 245, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 + 15, y: 305, width: 20, height: 50 },
-			{sta: 1, x: 780 / 2 + 15, y: 365, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 - 15, y: 5, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 - 15, y: 65, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 - 15, y: 125, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 - 15, y: 185, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 - 15, y: 245, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 - 15, y: 305, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 - 15, y: 365, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 + 15, y: 5, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 + 15, y: 65, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 + 15, y: 125, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 + 15, y: 185, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 + 15, y: 245, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 + 15, y: 305, width: 20, height: 50 },
+			{sta: 1, x: 840 / 2 + 15, y: 365, width: 20, height: 50 },
 		],
 	}
 };
