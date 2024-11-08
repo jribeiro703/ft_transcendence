@@ -136,6 +136,53 @@ services:
     networks:
       - transcendence
 
+  elasticsearch:
+    build:
+      context: ../
+      dockerfile: ./docker/elasticsearch/Dockerfile
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - VIRTUAL_HOST=elasticsearch.localhost
+      - VIRTUAL_PORT=9200
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+      - ./elasticsearch/snapshots:/usr/share/elasticsearch/snapshots
+    ports:
+      - "9200:9200"
+    networks:
+      - transcendence
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.10.1
+    container_name: logstash
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    ports:
+      - "5044:5044"
+    depends_on:
+      - elasticsearch
+    networks:
+      - transcendence
+    environment:
+      - VIRTUAL_HOST=logstash.localhost
+      - VIRTUAL_PORT=5044
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.10.1
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - transcendence
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - VIRTUAL_HOST=kibana.localhost
+      - VIRTUAL_PORT=5601
+
 networks:
   transcendence:
     driver: bridge
@@ -144,3 +191,4 @@ volumes:
   postgres_data:
   grafana_data:
   prometheus_data:
+  es_data:
