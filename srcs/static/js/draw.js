@@ -2,9 +2,10 @@ import gameVar from "./var.js";
 import { BALL_RADIUS } from "./const.js";
 import { drawPowerUp, collectPowerUp } from "./powerUp.js";
 import { manageCollision, manageServer, manageMove } from "./manage.js";
-import { manageAi, aiMove } from "./ai.js";
+import { manageCollisionAi, manageServerAi, manageMoveAi, aiMove } from "./ai.js";
 import { drawBricks } from "./brick.js";
 import { checkScore } from "./reset.js";
+import { sendBallData, sendPaddleData } from "./network.js";
 
 export function initDraw()
 {
@@ -14,8 +15,28 @@ export function initDraw()
 		drawLines();	
 }
 
-// setInterval(manageAi, 1000);
-
+export function draw2()
+{
+	console.log("draw2");
+	console.log(gameVar.playerIdx);
+	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+	initDraw();
+	if (gameVar.playerIdx == 1)
+	{
+		sendBallData(gameVar.x, gameVar.y, gameVar.dx, gameVar.dy, gameVar.gameSocket);
+	}
+	if (gameVar.gameStart)
+	{
+		console.log("gamestart");
+		manageCollision();
+	}
+	else
+		manageServer();
+	manageMove();
+	if (gameVar.animationFrame)
+		cancelAnimationFrame(gameVar.animationFrame);
+	gameVar.animationFrame = requestAnimationFrame(draw2);
+}
 export function draw()
 {
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
@@ -25,10 +46,10 @@ export function draw()
 	if (gameVar.customMap == true)
 		drawBricks();
 	if (gameVar.gameStart)
-		manageCollision();
+		manageCollisionAi();
 	else
-		manageServer();
-	manageMove();
+		manageServerAi();
+	manageMoveAi();
 	aiMove(gameVar.targetY);
 	if (gameVar.animationFrame)
 		cancelAnimationFrame(gameVar.animationFrame);
@@ -37,17 +58,30 @@ export function draw()
 
 export function drawPaddles()
 {
-	gameVar.ctx.beginPath();
-	gameVar.ctx.rect(0, gameVar.playerPaddleY, gameVar.playerPaddleWidth, gameVar.playerPaddleHeight);
-	gameVar.ctx.fillStyle = "#FF414D";
-	gameVar.ctx.fill();
-	gameVar.ctx.closePath();
-
-	gameVar.ctx.beginPath();
-	gameVar.ctx.rect(gameVar.canvasW - gameVar.aiPaddleWidth, gameVar.aiPaddleY, gameVar.aiPaddleWidth, gameVar.aiPaddleHeight);
-	gameVar.ctx.fillStyle = "#FF414D";
-	gameVar.ctx.fill();
-	gameVar.ctx.closePath();
+	if (gameVar.playerIdx == 1)
+	{
+		gameVar.ctx.beginPath();
+		gameVar.ctx.rect(0, gameVar.playerPaddleY, gameVar.playerPaddleWidth, gameVar.playerPaddleHeight);
+		gameVar.ctx.fillStyle = "#006400";
+		gameVar.ctx.fill();
+		gameVar.ctx.closePath();
+	}
+	if (gameVar.playerIdx == 2)
+	{
+		gameVar.ctx.beginPath();
+		gameVar.ctx.rect(gameVar.canvasW - gameVar.player2PaddleWidth, gameVar.player2PaddleY, gameVar.player2PaddleWidth, gameVar.player2PaddleHeight);
+		gameVar.ctx.fillStyle = "#FF414D";
+		gameVar.ctx.fill();
+		gameVar.ctx.closePath();	
+	}
+	// if (!gameVar.liveMatch)
+	// {
+		gameVar.ctx.beginPath();
+		gameVar.ctx.rect(gameVar.canvasW - gameVar.aiPaddleWidth, gameVar.aiPaddleY, gameVar.aiPaddleWidth, gameVar.aiPaddleHeight);
+		gameVar.ctx.fillStyle = "#000000";
+		gameVar.ctx.fill();
+		gameVar.ctx.closePath();
+	// }
 }
 
 export function drawLines() 
@@ -87,6 +121,7 @@ export function initializeBall()
 	}
 	gameVar.dx = 0;
 	gameVar.dy = 0;
+	sendBallData(gameVar.x, gameVar.y, gameVar.dx, gameVar.dy, gameVar.gameSocket);
 }
 
 export function drawBall()

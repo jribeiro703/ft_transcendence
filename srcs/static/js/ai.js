@@ -1,5 +1,7 @@
 import gameVar from "./var.js";
-import { PADDLE_SPEED, AI_UPDATE_INTERVAL, PADDLE_THRESHOLD, CENTER_POSITION } from './const.js';
+import { PADDLE_SPEED, AI_UPDATE_INTERVAL, PADDLE_THRESHOLD, BALL_RADIUS, CENTER_POSITION } from './const.js';
+import { resetBall } from "./reset.js";
+import { checkCollisionWithWalls } from './manage.js'
 
 export function aiServeBall()
 {
@@ -118,4 +120,77 @@ function predictBallPos(gameVar)
         futurePtsList.push(endPos);
 	}
 	return (futurePtsList);
+}
+
+export function manageCollisionAi()
+{
+		gameVar.x += gameVar.dx;
+		gameVar.y += gameVar.dy;
+		if(gameVar.y + gameVar.dy > gameVar.canvasH - BALL_RADIUS || gameVar.y + gameVar.dy < BALL_RADIUS)
+		{
+			gameVar.dy = -gameVar.dy;
+		}
+		if (gameVar.customMap == true)
+			checkCollisionWithWalls();
+		if(gameVar.x - BALL_RADIUS < gameVar.playerPaddleWidth &&
+			gameVar.y > gameVar.playerPaddleY &&
+			gameVar.y < gameVar.playerPaddleY + gameVar.playerPaddleHeight)
+		{
+			gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS;
+			let hitpos = (gameVar.y - gameVar.playerPaddleY) / gameVar.playerPaddleHeight;
+			let angle = (hitpos - 0.5) * Math.PI / 2;
+			gameVar.dx = (Math.cos(angle) * Math.abs(gameVar.dx) + 1);
+			gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.init_dy);
+			if (gameVar.dx > gameVar.init_dx + 1)
+				gameVar.dx -= 1;
+		}
+		else if (gameVar.x + BALL_RADIUS > gameVar.canvasW - gameVar.aiPaddleWidth &&
+			gameVar.y > gameVar.aiPaddleY &&
+			gameVar.y < gameVar.aiPaddleY + gameVar.aiPaddleHeight)
+		{
+			gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - BALL_RADIUS;
+			let hitpos = (gameVar.y - gameVar.aiPaddleY) / gameVar.aiPaddleHeight;
+			let angle = (hitpos - 0.5) * Math.PI / 2;
+			gameVar.dx = -(Math.cos(angle) * Math.abs(gameVar.dx) + 1);
+			gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.init_dy);
+		}
+		if (gameVar.x < 0)
+		{
+			resetBall('ai');
+		}
+		else if (gameVar.x > gameVar.canvasW)
+		{
+			resetBall('player');
+		}
+}
+
+export function manageServerAi()
+{
+	if (gameVar.currenServer == 'player')
+	{
+		gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS;
+		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
+	}
+	else
+	{
+		gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - BALL_RADIUS;
+		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2;
+	}
+}
+
+export function manageMoveAi()
+{
+	if (!gameVar.matchOver)
+	{
+		if (gameVar.playerUpPressed && gameVar.playerPaddleY > 0)
+		{
+			gameVar.playerPaddleY -= PADDLE_SPEED;
+		} 
+		else if (gameVar.playerDownPressed && gameVar.playerPaddleY < gameVar.canvasH - gameVar.playerPaddleHeight)
+		{
+			gameVar.playerPaddleY += PADDLE_SPEED;
+		} 
+		console.log("mmmmm");
+		console.log("nnn");
+	}
 }

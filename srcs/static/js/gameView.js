@@ -42,7 +42,16 @@ export function showGameView()
 	manageAi();
 }
 
+export function startGameVieW()
+{
+	gameplayView.style.display = 'none';
+	quickGameBtn.style.display = 'none';
+	startGameBtn.style.display = 'none';
+	tournamentGameBtn.style.display = 'none';
 
+	gameView.style.display = 'block';
+
+}
 
 export function rematchView()
 {
