@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [
 	'0.0.0.0',
 	'localhost',
 	'django',
-	'BingdeMacBook-Pro.local'
+	'made-f0Dr11s1.clusters.42paris.fr'
 ]
 
 # HTTPS settings

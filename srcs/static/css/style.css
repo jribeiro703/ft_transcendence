@@ -1,58 +1,373 @@
 body
 {
-	background-color: #999999;
+	background-color: #455F78;
 	color: #1A1A40;
 	margin: 0;
 }
 
-
-button 
+p
 {
-    height: 40px; 
+	color: #000000;
+	margin-left: 150px;
+	font-size: 30px;
 }
 
-#myCanvas
+/* ---------------------- Nav Bar ---------------------- */
+
+#me
 {
-    display: block; 
-    margin: 0 auto; 
-    border: 2px solid #ffffff;
-    border-radius: 8px; 
-    background-color: #1A1A40; 
-    /* width: 780px;  */
-    /* height: 320px;  */
+    font-family: 'Dancing Script', cursive;
+    font-weight: bold; 
+    color: #FEFCFF; 
+	white-space: nowrap;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	transition: font-size 1.8s ease, top 1.5s ease;
+	font-size: 1.5rem;
 }
 
-#scoreboard {
-	color: #00000098;
+.navbar
+{
+    display: flex;
+    justify-content: space-between;
+	align-items: center;
+    background-color: #0A1730;
+	transition: height 1.2s cubic-bezier(0.42, 0, 0.58, 1);
+	overflow: hidden;
+	height: 80px;
+	padding: 0 20px;
+	position: relative;
+}
+
+
+.navbar.expanded
+{
+	height: 150px;
+}
+
+.navbar .container-fluid
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+	width: 100%;
+}
+
+.navbar .navbar-brand 
+{
+	font-size: 1.2rem;
+	transition: font-size 1.2s ease, top 1.2s ease;
+	position: absolute;
+	left: 50%;
+	top: 1px;
+	transform: translateX(-50%);
+}
+
+.navbar.expanded .navbar-brand
+{
+    font-size: 3rem;
+    top: 50%; 
+    transform: translate(-50%, -50%);
+}
+
+
+.navbar:hover .navbar-brand
+{
+    font-size: 3rem; 
+    top: 50%; 
+    transform: translate(-50%, -50%);
+}
+
+.navbar:hover
+{
+    height: 150px;
+}
+
+.navbar .buttons-container
+{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+.navbar .nav-links
+{
+    display: flex;                 
+    justify-content: space-between;
+    flex: 1;  
+}
+
+.navbar a
+{
+    margin: 10px;
+    text-decoration: none;
+    color: #000000;
+	font-size: 30px;
+    font-family: 'Patrick Hand', cursive;
+}
+
+/* ---------------------Button Nav Bar------------------------- */
+
+.custom-home, .custom-leaderboard, .custom-register, .custom-42
+{
+	background-color: #455F78;
+	color: #1A1A40;
+    border-color: #000000;
+	border-radius: 5px; 
+	font-weight: bold; 
+}
+
+.custom-home
+{	
+	width: 100px;
+	height: 35px;
+	font-size: 1rem; 
+	margin-right: 10px;
+}
+
+.custom-leaderboard 
+{
+	width: 140px;
+	height: 35px;
+	font-size: 1rem; 
+	margin-right: 10px;
+}
+
+.custom-register
+{	
+	width: 120px; 
+	height: 35px; 
+	font-size: 1rem;
+}
+
+.custom-42
+{
+	width: 150px; 
+	height: 35px; 
+	font-size: 1rem; 
+	margin-left: 10px;
+}
+
+.custom-home:hover, .custom-leaderboard:hover, .custom-register:hover, .custom-42:hover
+{
+    color: #1F2E4D;
+    background-color: #6DC7C1;
+    border-color: #000000;
+
+    transform: scale(1.1);
+}
+
+.custom-home:active, .custom-leaderboard:active, .custom-register:active, .custom-42:active
+{
+	color: #0A1730 !important;
+    background-color: #455F78 !important;
+}
+
+
+
+/* ----------------------- Main Content ---------------------------- */
+.container
+{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+	max-width: 90%;
+	margin: 0 auto;
+}
+
+/* ------------------------ Main Button ---------------------------- */
+
+#playGameBtn, #btn1, #btn2, #btn3
+{
+	background-color: #1F2E4D;
+	color: #6DC1C1;
+}
+
+#playGameBtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
+{
+	color: #1F2E4D;
+    background-color: #6DC7C1;
+    border-color: #000000;
+}
+
+#playGameBtn:active, #btn1:active, #btn2:active, #btn3:active
+{
+	color: #0A1730;
+    background-color: #455F78;
+    border-color: #000000;
+}
+
+/* -------------------------- Game Play View ------------------------ */
+
+#gameplayView
+{
+    text-align: center;
+    margin-top: 20px;
+}
+
+.left-column
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    align-items: flex-start;
+    gap: 40px; 
+	flex : 1;
+	max-width: 800px; 
+}
+
+.right-column
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: center;
+    gap: 10px;
+}
+
+.gpMode 
+{
+	font-family: Arial, sans-serif; 
+	font-size: 38px;
+	margin: 10px 0;
+	color: #0A1730;
+}
+
+.level
+{
+    background-color: #0A1730;
+    color: rgb(255, 255, 255);
+	border: none;
+	margin-top: 15px;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 16px;
+	margin: 30px;
+    transition: background-color 0.3s;
+}
+
+
+.powerUpBtn.selected, .level.selected 
+{
+	background-color: #6DC7C1;
+	color :#000000;
+    transform: scale(1.1);
+}
+
+.powerUpBtn:hover, .level:hover
+{
+	background-color: #6DC7C1; 
+    transform: scale(1.08);
+}
+
+.powerUpBtn
+{
+    background-color: #0A1730;
+    color: white;
+    border: none;
+	margin-top: 15px !important;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 16px;
+	margin: 30px;
+    transition: background-color 0.3s;
+}
+
+.map-selection
+{
+    display: flex;
+	margin-top: 10px;
+    gap: 70px;
+}
+
+.mapOption
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.map-image
+{
+    width: 200px;
+    height: auto;
+    border-radius: 5px;
+}
+
+#startGameBtn, #quickGameBtn, #tournamentGameBtn
+{
+    width: 200px;
+    height: 60px;
+    font-size: 20px;
+    background-color: #0A1730;
+    color: #FEFCFF; 
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.4s;
+}
+
+#startGameBtn:hover, #quickGameBtn:hover, #tournamentGameBtn:hover
+{
+    background-color: #6DC7C1;
+    transform: scale(1.05);
+}
+
+#startGameBtn:active, #quickGameBtn:active, #tournamentGameBtn:active
+{
+    background-color: #003372; 
+    transform: scale(0.95);
+}
+
+ .button-container 
+{
+	display: flex;
+	justify-content: space-between;
+	max-width: 800px;
+	gap: 10px;
+	align-items: center;
+	margin: 0 auto;
+}
+
+/* ----------------------- Score Board ------------------------- */
+
+#scoreboard 
+{
+	color: #0A1730;
     text-align: center;
     margin-bottom: 10px;
     font-size: 24px;
 }
 
-#scoreRow {
-
-	color: #00000098;
+#scoreRow
+{
+	color: #0A1730;
     display: flex; 
     justify-content: space-between;
     align-items: center; 
+	margin: 0 auto;
     font-size: 20px; 
+	max-width: 840px;
 }
 
-#player {
-
+#player
+{
 	display: flex;
 	margin-left: 150px;
 }
+
 #ai 
 {
 	display: flex;
 	margin-right: 150px;
-
 }
 
 #playerScore, #aiScore
 {
-
 	font-size: 50px !important;
 }
 
@@ -64,95 +379,56 @@ button
 }
 
 
-#me
+#myCanvas
 {
-    font-family: 'Dancing Script', cursive;
-    font-size: 92px;
-	justify-content: center;
-    font-weight: bold; 
-    color: #000000; 
+    display: block; 
+    margin: 0 auto; 
+    border: 2px solid #FEFCFF;
+    border-radius: 8px; 
+    background-color: #1A1A40; 
 }
 
-.custom-42, .custom-normal, .custom-home {
-
-	background-color: #006400;
-	color: rgb(168, 168, 168); 
-    border-color: #000000;
-	border-radius: 5px; 
-	font-weight: bold; 
-}
-
-.custom-42{
-
-	width: 150px; 
-	height: 35px; 
-	font-size: 1rem; 
-	margin-left: 10px;
-	
-}
-
-.custom-normal {
-	
-	width: 120px; 
-	height: 35px; 
-	font-size: 1rem;
-}
-
-.custom-home {
-	
-	width: 100px;
-	height: 35px;
-	font-size: 1rem; 
-	margin-right: 10px;
-}
-
-.custom-42:hover, .custom-home:hover, .custom-normal:hover 
+#rematchBtn, #quitGameBtn
 {
-    color: #FFFFFF;
-    background-color: #006400; /* Couleur au survol */
-    border-color: #000000;
-}
-
-.custom-42:active, .custom-home:active, .custom-normal:active {
-    color: #FFFFFF;
-    background-color: #006400; /* Couleur lors du clic */
-    border-color: #000000;
-}
-
-.custom-rounded {
+	width: 200px;
+    height: 60px;
+    font-size: 20px;
+    background-color: #0A1730;
+    color: #FEFCFF; 
+    border: none;
     border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.4s;
 }
 
-.navbar {
-    display: center;
-    justify-content: center;
-    padding: 10px;
-    background-color: #216d50;
-	align-items: center;
+#rematchBtn:not(:disabled):hover, #quitGameBtn:hover
+{
+    background-color: #6DC7C1;
+    transform: scale(1.05);
 }
 
-.navbar .nav-links {
-    display: flex;                 
-    justify-content: space-between;
-    flex: 1;  
-	margin-right: 10px;
+#rematchBtn:not(:disabled):active, #quitGameBtn:active
+{
+    background-color: #003372; 
+    transform: scale(0.95);
 }
-
-.navbar a {
-    margin: 10px 100px;
-    text-decoration: none;
-    color: #000000;
-	font-size: 30px;
-    font-family: 'Patrick Hand', cursive;
+button:disabled
+{
+    background-color: grey;
+    color: white;
+    cursor: not-allowed;  /* pour indiquer que c'est inactif */
+    opacity: 0.6;
 }
+/* -------------------- End Page --------------------------- */
 
-.navbar a:hover {
-    color: #a3a121; 
-}
-
-.footer-text {
+.footer-text
+{
+	position: absolute;
+	bottom: 10px;
+	left: 0;
+	width: 100%;
 	text-align: center;
-	padding: 16px 0;
-	font-size: 25px;
-	color: #555;
+	padding: 10px 20;
+	font-size: 20px;
+	color: #FEFCFF !important;
 }
