@@ -80,7 +80,10 @@ export function resetBall(winner)
 	if (gameVar.serveCount >= 2)
 	{
 		gameVar.serveCount = 0;
-		gameVar.currenServer = (gameVar.currenServer == 'player') ? 'ai' : 'player';
+		if (!gameVar.liveMatch)
+			gameVar.currenServer = (gameVar.currenServer == 'player') ? 'ai' : 'player';
+		else if (gameVar.liveMatch)
+			gameVar.currenServer = (gameVar.currenServer == 'player') ? 'player2' : 'player';
 	}
 	initializeBall();
 	gameVar.dx = 0;

@@ -28,6 +28,8 @@ class PongConsumer(WebsocketConsumer):
 			# Remove client from room
 			if self.room_name in self.rooms:
 				self.rooms[self.room_name].remove(self.channel_name)
+				if not self.rooms[self.room_name]:
+					del self.rooms[self.room_name]
 				# Send message to room group
 				async_to_sync(self.channel_layer.group_send)(
 					self.room_group_name,
@@ -79,7 +81,9 @@ class PongConsumer(WebsocketConsumer):
 			{
 				'type': 'ball_data',
 				'x': data['x'],
-				'y': data['y']
+				'y': data['y'],
+				'dx': data['dx'],
+				'dy': data['dy'],
 			}
 		)
 
@@ -89,7 +93,8 @@ class PongConsumer(WebsocketConsumer):
 			self.room_group_name,
 			{
 				'type': 'paddle_data',
-				'paddle_x': data['paddle_x'],
+				'paddle_y': data['paddle_y'],
+				'player': data['player'],
 			}
 		)
 
@@ -123,7 +128,9 @@ class PongConsumer(WebsocketConsumer):
 			'type': 'ball_data',
 			'ball_data': {
 				'x': event['x'],
-				'y': event['y']
+				'y': event['y'],
+				'dx': event['dx'],
+				'dy': event['dy']
 			}
 		}))
 
@@ -131,6 +138,7 @@ class PongConsumer(WebsocketConsumer):
 		self.send(text_data=json.dumps({
 			'type': 'paddle_data',
 			'paddle_data': {
-				'paddle_x': event['paddle_x'],
+				'paddle_y': event['paddle_y'],
+				'player': event['player']
 			}
 		}))

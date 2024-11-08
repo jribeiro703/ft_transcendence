@@ -1,8 +1,9 @@
 import gameVar from './var.js';
 import { updatePowerUpSelection } from './powerUp.js';
 import { updateLevelSelection } from './gameMode.js';
-import { initGameVar, initEventListener } from './init.js';
+import { initGameVar, initEventListener, initEventListenerRoom, initEventListenerAi } from './init.js';
 import { manageAi } from './ai.js';
+
 
 document.addEventListener('DOMContentLoaded', function() 
 {
@@ -19,6 +20,11 @@ document.addEventListener('DOMContentLoaded', function()
 
 	initGameVar();
 	initEventListener();
+
+	// if (gameVar.liveMatch)
+	// 	initEventListenerRoom();
+	// else
+	// 	initEventListenerAi();
 
 	updateLevelSelection();
 	updatePowerUpSelection(false);

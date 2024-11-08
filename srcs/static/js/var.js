@@ -5,12 +5,20 @@ const gameVar =
 
 	playerPaddleHeight: 75,
 	playerPaddleWidth: 12,
+	player2PaddleHeight: 75,
+	player2PaddleWidth: 12,
+
 	aiPaddleHeight: 75,
 	aiPaddleWidth: 12,
+
 	playerPaddleY: (420 - 75) / 2,
+	player2PaddleY: (420 - 75) / 2,
+
 	aiPaddleY: (420 - 75) / 2,
 
 	playerScore: 0,
+	player2Score: 0,
+
 	aiScore: 0,
 	serveCount: 0,
 	powerUpDuration: 5000,
@@ -23,8 +31,12 @@ const gameVar =
 	brickOffsetLeft: 30,
 	aiLevel: 8,
 	targetY: 0,
+	playerIdx: null,
+
 
 	currenServer: 'player',
+	playerReady: false,
+	player2Ready: false,
 
 	gameStart: false,
 	matchOver: false,
@@ -35,6 +47,8 @@ const gameVar =
 	playerDownPressed: false,
 	powerUpEnable: false,
 	customMap: false,
+
+	liveMatch: false,
 
 
 	x: null,
@@ -48,6 +62,7 @@ const gameVar =
 	powerUpY: null,
 
 	playerScoreElement: null,
+	player2ScoreElement: null,
 	aiScoreElement: null,
 
 	aiMoveInterval: null,
@@ -71,6 +86,13 @@ const gameVar =
 	hard: null,
 	tableTennis: null,
 	brickLevel: null,
+
+	// -------------room------------------
+
+	rooms: {},
+	isFirstPlayer: false,
+	roomName: null,
+	gameSocket: null,
 
 	powerUps: [
 		{ type: 'speed', image: 'static/css/images/FastBall.png'},
