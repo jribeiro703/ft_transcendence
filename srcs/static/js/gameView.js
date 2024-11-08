@@ -2,7 +2,8 @@ import gameVar from "./var.js";
 import { initializeBall } from "./draw.js";
 import { createPowerUp } from "./powerUp.js";
 import { draw } from "./draw.js";
-import { resetGame } from "./reset.js";
+import { resetMatch, checkServer } from "./reset.js";
+import { manageAi } from "./ai.js";
 
 
 export function showDefaultView()
@@ -34,16 +35,18 @@ export function showGameView()
 	gameView.style.display = 'block';
 	rematchBtn.style.display = 'block';
 	quitGameBtn.style.display = 'block';	
-	// resetMatch();
 	initializeBall();
 	if (gameVar.powerUpEnable)
 		createPowerUp();
 	draw();
+	manageAi();
 }
+
 
 
 export function rematchView()
 {
+	console.log("rematch");
 	gameplayView.style.display = 'none';
 	quickGameBtn.style.display = 'none';
 	startGameBtn.style.display = 'none';
@@ -54,13 +57,13 @@ export function rematchView()
 	rematchBtn.disabled = true;
 	quitGameBtn.style.display = 'block';	
 	saveScore();
-	resetGame();
-	// showGameView();
+	resetMatch();
 	initializeBall();
 	if (gameVar.powerUpEnable)
 		createPowerUp();
+	checkServer();
+	manageAi();
 	draw();
-
 }
 
 export function saveScore()

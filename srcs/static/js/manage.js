@@ -92,12 +92,15 @@ export function manageServer()
 
 export function manageMove()
 {
-	if (gameVar.playerUpPressed && gameVar.playerPaddleY > 0)
+	if (!gameVar.matchOver)
 	{
-		gameVar.playerPaddleY -= PADDLE_SPEED;
-	} 
-	else if (gameVar.playerDownPressed && gameVar.playerPaddleY < gameVar.canvasH - gameVar.playerPaddleHeight)
-	{
-		gameVar.playerPaddleY += PADDLE_SPEED;
-	} 
+		if (gameVar.playerUpPressed && gameVar.playerPaddleY > 0)
+		{
+			gameVar.playerPaddleY -= PADDLE_SPEED;
+		} 
+		else if (gameVar.playerDownPressed && gameVar.playerPaddleY < gameVar.canvasH - gameVar.playerPaddleHeight)
+		{
+			gameVar.playerPaddleY += PADDLE_SPEED;
+		} 
+	}
 }

@@ -1,49 +1,74 @@
 import gameVar from "./var.js";
 import { BALL_RADIUS } from "./const.js";
 import { WIN_SCORE, GAP_SCORE,  } from "./const.js";
-import { draw, initializeBall } from "./draw.js";
-import { aiServeBall } from "./ai.js";
+import { draw, initDraw, initializeBall } from "./draw.js";
+import { aiServeBall, manageAi } from "./ai.js";
+import { createPowerUp } from "./powerUp.js";
 
 export function resetGame()
 {
-	// cancelAnimationFrame(gameVar.animationFrame);
+	console.log("resetGame");
 	resetMatch();
-	// gameVar.defaultView.style.display = 'block';
-	// gameVar.gameView.style.display = 'none';
-	// gameVar.startGameBtn.style.display = 'none';
-	clearInterval(gameVar.aiMoveInterval);
 }
 
 export function resetMatch()
 {
+	console.log("resetMatch");
 	gameVar.playerScore = 0;
 	gameVar.aiScore = 0;
 	gameVar.matchOver = false;
-	gameVar.currenServer = 'player';
 	gameVar.serveCount = 0;
+	document.getElementById("playerScore").innerText = gameVar.playerScore;
+	document.getElementById("aiScore").innerText = gameVar.aiScore;
 	gameVar.playerScoreElement.textContent = gameVar.playerScore;
 	gameVar.aiScoreElement.textContent = gameVar.aiScore;
+	console.log("player : ", gameVar.playerScore);
+	console.log("ai: ", gameVar.aiScore);
 	gameVar.gameStart = false;
-	gameVar.aiServe= false;
-	
-	// initializeBall();
-	// draw();
+	if (gameVar.animationFrame)
+	{
+		cancelAnimationFrame(gameVar.animationFrame);
+		gameVar.animationFrame = null;
+	}
+	if (gameVar.aiMoveInterval)
+	{
+		clearInterval(gameVar.aiMoveInterval);
+		gameVar.aiMoveInterval = null;
+	}
+}
+
+export function checkServer()
+{
+	if (gameVar.scoreBoard.length % 2 == 0)
+	{
+		gameVar.currenServer = 'player';
+		gameVar.aiServe = false;
+		resetBall('player');
+	}
+	else
+	{
+		gameVar.currenServer = 'ai';
+		gameVar.aiServe = true;
+		resetBall('ai');
+	}
 }
 
 export function checkScore()
 {
-	if ((gameVar.playerScore >= WIN_SCORE || gameVar.aiScore == WIN_SCORE) && Math.abs(gameVar.playerScore - gameVar.aiScore) >= GAP_SCORE)
+	console.log("check score");
+	if ((gameVar.playerScore >= WIN_SCORE || gameVar.aiScore >= WIN_SCORE) && Math.abs(gameVar.playerScore - gameVar.aiScore) >= GAP_SCORE)
 	{
+		console.log("if");
 		gameVar.matchOver = true;
-		cancelAnimationFrame(gameVar.animationFrame);
 		gameVar.rematchBtn.disabled = false;
-		gameVar.rematchBtn.style.cursor = false ? "pointer" : "not-aalowed";
-	
+		gameVar.rematchBtn.style.cursor = false ? "pointer" : "not-allowed";
+		cancelAnimationFrame(gameVar.animationFrame);
 	}	
 }
 
 export function resetBall(winner)
 {
+	console.log("resetBall win: ", winner);
 	if (gameVar.matchOver)
 		return;
 	if (winner == 'player')
