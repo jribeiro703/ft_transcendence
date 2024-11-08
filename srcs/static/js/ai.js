@@ -31,6 +31,8 @@ export function aiMove(targetY)
 
 export function manageAi()
 {
+	if (gameVar.aiMoveInterval)
+		clearInterval(gameVar.aiMoveInterval);
 	gameVar.aiMoveInterval = setInterval(() =>
 	{
 		if (gameVar.dx > 0)

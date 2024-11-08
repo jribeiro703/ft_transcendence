@@ -2,6 +2,7 @@ import gameVar from './var.js';
 import { updatePowerUpSelection } from './powerUp.js';
 import { updateLevelSelection } from './gameMode.js';
 import { initGameVar, initEventListener } from './init.js';
+import { manageAi } from './ai.js';
 
 document.addEventListener('DOMContentLoaded', function() 
 {
@@ -21,5 +22,4 @@ document.addEventListener('DOMContentLoaded', function()
 
 	updateLevelSelection();
 	updatePowerUpSelection(false);
-
 });

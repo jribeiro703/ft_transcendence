@@ -14,7 +14,7 @@ export function initDraw()
 		drawLines();	
 }
 
-setInterval(manageAi, 1000);
+// setInterval(manageAi, 1000);
 
 export function draw()
 {
@@ -30,6 +30,8 @@ export function draw()
 		manageServer();
 	manageMove();
 	aiMove(gameVar.targetY);
+	if (gameVar.animationFrame)
+		cancelAnimationFrame(gameVar.animationFrame);
 	gameVar.animationFrame = requestAnimationFrame(draw);
 }
 

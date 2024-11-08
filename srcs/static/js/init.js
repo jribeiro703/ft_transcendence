@@ -23,22 +23,22 @@ export function initGameVar()
 	gameVar.hard = document.getElementById('hard');
 	gameVar.tableTennis = document.getElementById('tableTennis');
 	gameVar.brickLevel = document.getElementById('bricksLevel');
-
 	gameVar.playerScoreElement = document.getElementById('playerScore');
 	gameVar.aiScoreElement = document.getElementById('aiScore');
+}
+
+export function initEventListener()
+{
+
+	document.addEventListener("keydown", keyDownHandler, false);
+	document.addEventListener("keyup", keyUpHandler, false);
+	document.addEventListener("keydown", startBall, false);
 
 	gameVar.playGameBtn.addEventListener('click', showGameplayView);
 	gameVar.quickGameBtn.addEventListener('click', showGameView);
 	gameVar.quitGameBtn.addEventListener('click', showDefaultView);
 	gameVar.rematchBtn.addEventListener('click', rematchView);
-}
 
-
-export function initEventListener()
-{
-	document.addEventListener("keydown", keyDownHandler, false);
-	document.addEventListener("keyup", keyUpHandler, false);
-	document.addEventListener("keydown", startBall, false);
 	gameVar.withoutPowerUp.classList.add('selected');
 	gameVar.medium.classList.add('selected');
 	gameVar.tableTennis.classList.add('selected');

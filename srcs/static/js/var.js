@@ -46,10 +46,12 @@ const gameVar =
 	init_dy: null,
 	powerUpX: null,
 	powerUpY: null,
-	animationFrame: null,
+
 	playerScoreElement: null,
 	aiScoreElement: null,
+
 	aiMoveInterval: null,
+	animationFrame: null,
 
 	defaultView: null,
 	gameView: null,
