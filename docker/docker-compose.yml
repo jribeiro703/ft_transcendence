@@ -45,6 +45,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - transcendence
+    restart: on-failure
     environment:
       - TZ=Europe/Paris
 
@@ -116,11 +117,11 @@ services:
       - VIRTUAL_PORT=9187
 
   nginx:
-    # build:
-    #   context: ../
-    #   dockerfile: ./docker/nginx/Dockerfile
-    image: jwilder/nginx-proxy:alpine
-    user: root
+    build:
+      context: ../
+      dockerfile: ./docker/nginx/Dockerfile
+    # image: jwilder/nginx-proxy:alpine
+    # user: nginx
     container_name: nginx
     ports:
       # - "8080:80"
@@ -133,6 +134,7 @@ services:
       - HTTPS_METHOD=redirect
       - DEFAULT_SSL_CERT=/etc/nginx/certs/localhost.crt
       - DEFAULT_SSL_KEY=/etc/nginx/certs/localhost.key
+    restart: on-failure
     networks:
       - transcendence
 
@@ -151,37 +153,57 @@ services:
       - ./elasticsearch/snapshots:/usr/share/elasticsearch/snapshots
     ports:
       - "9200:9200"
+    restart: on-failure
     networks:
       - transcendence
 
   logstash:
     image: docker.elastic.co/logstash/logstash:7.10.1
+    user: root
     container_name: logstash
     volumes:
-      - ./logstash/pipeline:/usr/share/logstash/pipeline
-    ports:
-      - "5044:5044"
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    # ports:
+    #   - "5044:5044"
     depends_on:
       - elasticsearch
+    restart: on-failure
     networks:
       - transcendence
-    environment:
-      - VIRTUAL_HOST=logstash.localhost
-      - VIRTUAL_PORT=5044
+    # environment:
+    #   - VIRTUAL_HOST=logstash.localhost
+    #   - VIRTUAL_PORT=5044
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.10.1
+    build:
+      context: ../
+      dockerfile: ./docker/kibana/Dockerfile
+    # image: docker.elastic.co/kibana/kibana:7.10.1
     container_name: kibana
     ports:
       - "5601:5601"
     depends_on:
       - elasticsearch
+    restart: on-failure
     networks:
       - transcendence
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200
       - VIRTUAL_HOST=kibana.localhost
       - VIRTUAL_PORT=5601
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.10.1
+    container_name: filebeat
+    user: root
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - filebeat_data:/var/log
+    depends_on:
+      - logstash
+    restart: on-failure
+    networks:
+      - transcendence
 
 networks:
   transcendence:
@@ -192,3 +214,4 @@ volumes:
   grafana_data:
   prometheus_data:
   es_data:
+  filebeat_data:
