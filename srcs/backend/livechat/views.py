@@ -2,8 +2,8 @@ from django.shortcuts import render , redirect
 from .models import *
 from django.http import HttpResponse , JsonResponse
 
-def home(request):
-    return render(request, 'home.html')
+def livechat(request):
+    return render(request, 'livechat.html')
 
 def room(request , room):
     username = request.GET.get('username')

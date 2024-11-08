@@ -1,41 +1,7 @@
-<script type="module" src="{% static 'js/main.js' %}?v=1.1"></script>
+{% load static %}
 
+<div id="livechatView" style="display : block" class="livechat">
+  <h1>Live Chat</h1>
+</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const livechatBtn = document.getElementById('livechatBtn');
-
-livechatBtn.addEventListener('click', showLivechatView);
-
-function showLivechatView()
-{
-defaultView.style.display = 'none';
-gameView.style.display = 'block';
-initializeBall();
-createPowerUP();
-aiMovement();
-draw();
-}
+<!-- <script type="module" src="{% static 'js/livechat/livechat.js' %}?v=1.1"></script> -->
