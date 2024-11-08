@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { INIT_DX, INIT_DY, PADDLE_SPEED } from './const.js';
+import { PADDLE_SPEED } from './const.js';
 
 export function manageMove(isFirstPlayer)
 {
