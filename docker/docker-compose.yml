@@ -18,10 +18,9 @@ services:
     networks:
       - transcendence
     environment:
-      - VIRTUAL_HOST=localhost,made-f0Dr11s1.clusters.42paris.fr
+      - VIRTUAL_HOST=localhost,made-f0Dr11s3.clusters.42paris.fr
       - VIRTUAL_PORT=8000
       - TZ=Europe/Paris
-
 
   migration:
     build:
@@ -127,7 +126,7 @@ services:
       # - "8080:80"
       - "8081:443"
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro
       - ./nginx/certs:/etc/nginx/certs:ro
       # - ./nginx/htpasswd:/etc/nginx/htpasswd:ro
     environment:
