@@ -83,6 +83,13 @@ rootless-docker:
 	@export DOCKER_HOST=unix://${XDG_RUNTIME_DIR}/docker.sock
 	@systemctl --user start docker || { echo "Failed to start rootless Docker"; exit 1; }
 
+open:
+	@xdg-open https://$$(hostname):8081
+	@xdg-open https://grafana.localhost:8081
+	@xdg-open https://prometheus.localhost:8081
+	@xdg-open https://node-exporter.localhost:8081/metrics
+	@xdg-open https://postgres-exporter.localhost:8081/metrics
+
 generate-env:
 	@if [ ! -S "$${XDG_RUNTIME_DIR}/docker.sock" ]; then \
 		if [ "$$(uname)" = "Darwin" ]; then \

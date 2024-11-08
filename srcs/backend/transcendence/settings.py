@@ -61,10 +61,6 @@ INSTALLED_APPS = [
 	'django.contrib.staticfiles',
 	'rest_framework',
 	'rest_framework_simplejwt',
-	# 'django_otp',
-	# 'django_otp.plugins.otp_totp',
-	# 'two_factor',
-	# 'two_factor.plugins.phonenumber',
 	'django_prometheus',
 	'user',
 	'game',
@@ -75,7 +71,6 @@ MIDDLEWARE = [
 	'django.middleware.security.SecurityMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.CommonMiddleware',
-	'django_otp.middleware.OTPMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
@@ -85,19 +80,19 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'transcendence.urls'
 
 TEMPLATES = [
-	{
-		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		'DIRS': [os.path.join(BASE_DIR, '../static')],
-		'APP_DIRS': True,
-		'OPTIONS': {
-			'context_processors': [
-				'django.template.context_processors.debug',
-				'django.template.context_processors.request',
-				'django.contrib.auth.context_processors.auth',
-				'django.contrib.messages.context_processors.messages',
-			],
-		},
-	},
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, '../static')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
 ]
 
 # WSGI_APPLICATION = 'transcendence.wsgi.application'
@@ -178,7 +173,9 @@ SIMPLE_JWT = {
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = "~/django-email-messages"
+EMAIL_FILE_PATH = "user/django-email-messages"
+
+DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
 
 CSRF_TRUSTED_ORIGINS = [
 	'https://localhost:8081',
