@@ -97,6 +97,12 @@ generate-env:
 		else \
 			sed -i 's|\$${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro|/var/run/docker.sock:/tmp/docker.sock:ro|' docker/docker-compose.yml; \
 		fi; \
+	else \
+		if [ "$$(uname)" = "Darwin" ]; then \
+			sed -i '' 's|/var/run/docker.sock:/tmp/docker.sock:ro|\$${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro|' docker/docker-compose.yml; \
+		else \
+			sed -i 's|/var/run/docker.sock:/tmp/docker.sock:ro|\$${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro|' docker/docker-compose.yml; \
+		fi; \
 	fi
 	@if [ "$$(uname)" = "Darwin" ]; then \
 		sed -i '' "0,/VIRTUAL_HOST=/s/\(VIRTUAL_HOST=[^,]*,\)[^,]*/\1$$(hostname)/" docker/docker-compose.yml; \
