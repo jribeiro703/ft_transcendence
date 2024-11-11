@@ -35,8 +35,9 @@ const gameVar =
 
 
 	currenServer: 'player',
-	playerReady: false,
-	player2Ready: false,
+	// playerReady: false,
+	// player2Ready: false,
+	gameReady: false,
 
 	gameStart: false,
 	matchOver: false,
@@ -47,9 +48,16 @@ const gameVar =
 	playerDownPressed: false,
 	powerUpEnable: false,
 	customMap: false,
+	matchAI: false,
 
 	liveMatch: false,
 
+	previousBallState: {
+		x: null,
+		y: null,
+		dx: null,
+		dy: null
+	},
 
 	x: null,
 	y: null,
@@ -73,7 +81,8 @@ const gameVar =
 	gameplayView: null,
 	startGameBtn: null,
 	quickGameBtn: null,
-	playGameBtn: null,
+	playsoloGameBtn: null,
+	playmultiGameBtn: null,
 	tournamentGameBtn: null,
 	rematchBtn: null,
 	quitGameBtn: null,
@@ -87,6 +96,10 @@ const gameVar =
 	tableTennis: null,
 	brickLevel: null,
 
+	players: [
+		{ idx: 1, ready: false },
+		{ idx: 2, ready: false }
+	],
 	// -------------room------------------
 
 	rooms: {},

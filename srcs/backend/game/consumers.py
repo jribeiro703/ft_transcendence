@@ -48,8 +48,12 @@ class PongConsumer(WebsocketConsumer):
 			self.join_room()
 		elif data['type'] == 'ball_data':
 			self.broadcast_ball_data(data)
+		elif data['type'] == 'direction_data':
+			self.broadcast_direction_data(data)
 		elif data['type'] == 'paddle_data':
 			self.broadcast_paddle_data(data)
+		elif data['type'] == 'player_data':
+			self.broadcast_player_data(data)
 		elif data['type'] == 'check_rooms':
 			self.check_rooms()
 
@@ -82,6 +86,14 @@ class PongConsumer(WebsocketConsumer):
 				'type': 'ball_data',
 				'x': data['x'],
 				'y': data['y'],
+			}
+		)
+
+	def broadcast_direction_data(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'direction_data',
 				'dx': data['dx'],
 				'dy': data['dy'],
 			}
@@ -94,7 +106,18 @@ class PongConsumer(WebsocketConsumer):
 			{
 				'type': 'paddle_data',
 				'paddle_y': data['paddle_y'],
-				'player': data['player'],
+				'playerIdx': data['playerIdx'],
+			}
+		)
+
+	def broadcast_player_data(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'player_data',
+				'playerReady': data['playerReady'],
+				'gameStart': data['gameStart'],
+				'currentServer': data['currentServer'],
 			}
 		)
 
@@ -128,7 +151,14 @@ class PongConsumer(WebsocketConsumer):
 			'type': 'ball_data',
 			'ball_data': {
 				'x': event['x'],
-				'y': event['y'],
+				'y': event['y']
+			}
+		}))
+	
+	def direction_data(self, event):
+		self.send(text_data=json.dumps({
+			'type': 'direction_data',
+			'direction_data': {
 				'dx': event['dx'],
 				'dy': event['dy']
 			}
@@ -139,6 +169,16 @@ class PongConsumer(WebsocketConsumer):
 			'type': 'paddle_data',
 			'paddle_data': {
 				'paddle_y': event['paddle_y'],
-				'player': event['player']
+				'playerIdx': event['playerIdx']
+			}
+		}))
+
+	def player_data(self, event):
+		self.send(text_data=json.dumps({
+			'type': 'player_data',
+			'player_data': {
+				'playerReady': event['playerReady'],
+				'gameStart': event['gameStart'],
+				'currentServer': event['currentServer']
 			}
 		}))
