@@ -146,11 +146,19 @@ services:
     environment:
       - discovery.type=single-node
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=/usr/share/elasticsearch/config/certs/elasticsearch.key
+      - xpack.security.http.ssl.certificate=/usr/share/elasticsearch/config/certs/elasticsearch.crt
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=elastic
+      - node.max_local_storage_nodes=2
       - VIRTUAL_HOST=elasticsearch.localhost
       - VIRTUAL_PORT=9200
     volumes:
       - es_data:/usr/share/elasticsearch/data
       - ./elasticsearch/snapshots:/usr/share/elasticsearch/snapshots
+      # - ./nginx/certs:/usr/share/elasticsearch/config/certs
     ports:
       - "9200:9200"
     restart: on-failure
@@ -158,11 +166,15 @@ services:
       - transcendence
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:7.10.1
+    # image: docker.elastic.co/logstash/logstash:7.10.1
+    build:
+      context: ../
+      dockerfile: ./docker/logstash/Dockerfile
     user: root
     container_name: logstash
     volumes:
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      # - ./nginx/certs:/usr/share/logstash/config/certs
     # ports:
     #   - "5044:5044"
     depends_on:
@@ -170,9 +182,15 @@ services:
     restart: on-failure
     networks:
       - transcendence
-    # environment:
-    #   - VIRTUAL_HOST=logstash.localhost
-    #   - VIRTUAL_PORT=5044
+    environment:
+      - xpack.monitoring.enabled=true
+      - xpack.monitoring.elasticsearch.hosts=["https://elasticsearch:9200"]
+      - xpack.monitoring.elasticsearch.ssl.certificate_authority=/usr/share/logstash/config/certs/elasticsearch.crt
+      - xpack.monitoring.elasticsearch.ssl.vertification_mode=none
+      - xpack.monitoring.elasticsearch.username=elastic
+      - xpack.monitoring.elasticsearch.password=elastic
+      # - ELASTICSEARCH_USERNAME=elastic
+      # - ELASTICSEARCH_PASSWORD=elastic
 
   kibana:
     build:
@@ -188,17 +206,31 @@ services:
     networks:
       - transcendence
     environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_URL=https://elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=["https://elasticsearch:9200"]
+      - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/usr/share/kibana/config/certs/localhost.crt
+      - ELASTICSEARCH_SSL_VERIFICATIONMODE=none
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=elastic
+      - SERVER_SSL_ENABLED=true
+      - SERVER_SSL_KEY=/usr/share/kibana/config/certs/localhost.key
+      - SERVER_SSL_CERTIFICATE=/usr/share/kibana/config/certs/localhost.crt
       - VIRTUAL_HOST=kibana.localhost
       - VIRTUAL_PORT=5601
+    # volumes:
+      # - ./nginx/certs:/usr/share/kibana/config/certs
 
   filebeat:
-    image: docker.elastic.co/beats/filebeat:7.10.1
+    build:
+      context: ../
+      dockerfile: ./docker/filebeat/Dockerfile
+    # image: docker.elastic.co/beats/filebeat:7.10.1
     container_name: filebeat
     user: root
     volumes:
       - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - filebeat_data:/var/log
+      # - ./nginx/certs:/usr/share/filebeat/config/certs
     depends_on:
       - logstash
     restart: on-failure

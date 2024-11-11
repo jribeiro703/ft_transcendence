@@ -63,6 +63,17 @@ prune-container:
 		echo "Container '$$container_name' not found."; \
 	fi
 
+# Restart a specific container
+restart-container:
+	@if [ -z "$(C)" ]; then \
+		echo "Usage: make restart-container C=<container_name>"; \
+		exit 1; \
+	fi; \
+	container_name="$(C)"; \
+	echo "Restarting container '$$container_name'..."; \
+	$(DOCKER_COMPOSE) restart $$container_name
+
+
 # Remove a specific image (e.g., `make prune-image I=<image_name_or_id>`)
 prune-image:
 	@if [ -z "$(I)" ]; then \
@@ -118,6 +129,7 @@ generate-env:
 	@read -p "Do you want to fill it with automatic values? (yes/no): " AUTO_FILL; \
 	docker run --rm -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/localhost.key -x509 -days 365 -out /certs/localhost.crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=localhost/emailAddress=transcendence@transcendence.com"; \
 	docker run --rm -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/$$(hostname).key -x509 -days 365 -out /certs/$$(hostname).crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=$$(hostname)/emailAddress=transcendence@transcendence.com"; \
+	docker run --rm -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/elasticsearch.key -x509 -days 365 -out /certs/elasticsearch.crt -subj "/C=FR/ST=France/L=Paris/O=elasticsearch/OU=elasticsearch/CN=elasticsearch/emailAddress=elasticsearch@elasticsearch.com"; \
 	if [ "$$AUTO_FILL" = "yes" ] || [ "$$AUTO_FILL" = "y" ] || [ "$$AUTO_FILL" = "" ]; then \
 		DEBUG="1"; \
 		POSTGRES_DB="transcendence"; \
@@ -192,4 +204,4 @@ generate-env:
 	echo 'DATA_SOURCE_NAME=postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${POSTGRES_DB}?sslmode=disable' >> docker/.env; \
 	echo "Updated docker/.env file successfully."
 
-.PHONY: all build up down restart status logs logs-% shell-% rootless-docker generate-env prune-container prune-image
+.PHONY: all build up down restart status logs logs-% shell-% rootless-docker generate-env prune-container prune-image restart-container
