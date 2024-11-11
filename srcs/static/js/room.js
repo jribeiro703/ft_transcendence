@@ -1,7 +1,9 @@
 import gameVar from './var.js';
 import isFirstPlayer from './var.js';
-import { sendBallData, sendPaddleData } from './network.js';
+import { sendBallData, sendPaddleData, sendPlayerInfo } from './network.js';
 import { draw2 } from './draw.js';
+
+
 
 export function checkForExistingRooms(joinRoomCallback) {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -19,16 +21,15 @@ export function checkForExistingRooms(joinRoomCallback) {
 			const roomName = data.rooms[0];
 			joinRoomCallback(roomName);
 			console.log("joinnn room : ", roomName);
-			gameVar.player2Ready = true;
 			gameVar.playerIdx = 2;
+			// gameVar.currenServer = "player2";
 		}
 		else
 		{
 			console.log("creationnnnn room");
 			createNewRoom(joinRoomCallback);
-			gameVar.playerReady = true;
 			gameVar.playerIdx = 1;
-
+			gameVar.isFirstPlayer = true;
 		}
 		tempSocket.close();
 	};
@@ -49,12 +50,15 @@ function createNewRoom(joinRoomCallback)
 	console.log("create new room");
 	const roomName = `room_${Math.floor(Math.random() * 10000)}`;
 	joinRoomCallback(roomName);
+		
 	// if (!gameVar.rooms[roomName])
 	// 	gameVar.rooms[roomName] = new Set();
 	// gameVar.rooms[roomName].add(gameVar.playerIdx);
 	// console.log(`Utilisateur ${gameVar.playerIdx} a rejoint la salle ${roomName}`);
 
 }
+
+
 
 export function joinRoom(roomName, setGameSocket, setIsFirstPlayer)
 {
@@ -68,33 +72,43 @@ export function joinRoom(roomName, setGameSocket, setIsFirstPlayer)
 		gameSocket.send(JSON.stringify({ type: 'join_room' }));
 		setGameSocket(gameSocket);
 		history.pushState({ view: 'game', room: roomName }, '', `?view=game&room=${roomName}`);
+		// sendPlayerInfo(gameSocket, gameVar.playerReady, true, gameVar.currenServer);
+		// sendPaddleData(gameVar.player2PaddleY, gameSocket, gameVar.playerReady, 2);
 		draw2();
+
 	};
 
 	gameSocket.onmessage = function(e)
 	{
 		const data = JSON.parse(e.data);
-		console.log("messsage recu: ", data);
+		// console.log("message recu : ", data);
 		if (data.type == 'ball_data')
 		{
-			// console.log("reception des infos");
 			gameVar.x = data.ball_data.x;
-			// console.log("data.x :", data.ball_data.x);
 			gameVar.y = data.ball_data.y;
-			gameVar.dx = data.ball_data.dx;
-			gameVar.dy = data.ball_data.dy;
 		} 
+		else if (data.type == 'direction_data')
+		{
+			gameVar.dx = data.direction_data.dx;
+			gameVar.dy = data.direction_data.dy;
+		}
 		else if (data.type == 'paddle_data') 
 		{
-			if (data.paddle_data.player == 1)
+			if (data.paddle_data.playerIdx == 1)
 			{
 				gameVar.playerPaddleY = data.paddle_data.paddle_y;
 			}
-			else if(data.paddle_data.player == 2)
+			if(data.paddle_data.playerIdx == 2)
 			{
 				gameVar.player2PaddleY = data.paddle_data.paddle_y;
 			}
 		} 
+		else if (data.type == 'player_data')
+		{
+			gameVar.playerReady = data.player_data.playerReady;
+			gameVar.gameStart = data.player_data.gameStart;
+			gameVar.currenServer = data.player_data.currenServer;
+		}
 		else if (data.type == 'room_joined')
 		{
 			console.log(`Joined room: ${data.room_name}`);

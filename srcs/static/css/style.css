@@ -179,20 +179,20 @@ p
 
 /* ------------------------ Main Button ---------------------------- */
 
-#playGameBtn, #btn1, #btn2, #btn3
+#playsoloGameBtn, #playmultiGameBtn, #btn1, #btn2, #btn3
 {
 	background-color: #1F2E4D;
 	color: #6DC1C1;
 }
 
-#playGameBtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
+#playsoloGameBtn:hover, #playmultiGamebtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
 {
 	color: #1F2E4D;
     background-color: #6DC7C1;
     border-color: #000000;
 }
 
-#playGameBtn:active, #btn1:active, #btn2:active, #btn3:active
+#playGameBtn:active, #playmultiGameBtn:active, #btn1:active, #btn2:active, #btn3:active
 {
 	color: #0A1730;
     background-color: #455F78;

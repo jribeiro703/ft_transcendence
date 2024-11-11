@@ -1,6 +1,7 @@
 import gameVar from "./var.js";
 import { PADDLE_SPEED } from './const.js';
-import { sendBallData } from "./network.js";
+import { sendBallData, sendPlayerInfo } from "./network.js";
+import { checkball } from "./manage.js";
 
 // export function manageMove(isFirstPlayer)
 // {
@@ -43,13 +44,28 @@ export function keyUpHandler(e, isFirstPlayer)
 	}
 }
 
-export function startBall(e)
+export function startBallAi(e)
 {
 	if (e.code == "Space" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart)
 	{
 		gameVar.gameStart = true;
 		gameVar.dx = gameVar.init_dx;
 		gameVar.dy = (Math.random() < 0.5 ? gameVar.init_dy : -gameVar.init_dy);
-		// sendBallData(gameVar.x, gameVar.y, gameVar.dx, gameVar.dy, gameVar.gameSocket);
+		checkball();
+	}
+}
+export function startBall(e)
+{
+	if (e.code == "Space" && !gameVar.matchOver && !gameVar.gameStart)
+	{
+		console.log("start ball, curr server : ", gameVar.currenServer);
+		if (gameVar.currenServer == 'player')
+		{
+			console.log("staaaaaaaaaaaaaaaaaaaaaaaaaaartt");
+			gameVar.gameStart = true;
+			gameVar.dx = gameVar.init_dx;
+			gameVar.dy = (Math.random() < 0.5 ? gameVar.init_dy : -gameVar.init_dy);
+			checkball();
+		}
 	}
 }

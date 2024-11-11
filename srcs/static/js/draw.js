@@ -1,11 +1,17 @@
 import gameVar from "./var.js";
 import { BALL_RADIUS } from "./const.js";
 import { drawPowerUp, collectPowerUp } from "./powerUp.js";
-import { manageCollision, manageServer, manageMove } from "./manage.js";
+import { manageCollision, manageServer, manageMove, checkball } from "./manage.js";
 import { manageCollisionAi, manageServerAi, manageMoveAi, aiMove } from "./ai.js";
 import { drawBricks } from "./brick.js";
 import { checkScore } from "./reset.js";
-import { sendBallData, sendPaddleData } from "./network.js";
+import { sendBallData, sendPaddleData, sendPlayerInfo } from "./network.js";
+
+
+function waitingForPLayer()
+{
+	console.log("Waiting for player");
+}
 
 export function initDraw()
 {
@@ -17,17 +23,13 @@ export function initDraw()
 
 export function draw2()
 {
-	console.log("draw2");
-	console.log(gameVar.playerIdx);
+	// console.log("draw2");
+	gameVar.gameReady = true;
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+	console.log("current server : ", gameVar.currenServer);
 	initDraw();
-	if (gameVar.playerIdx == 1)
-	{
-		sendBallData(gameVar.x, gameVar.y, gameVar.dx, gameVar.dy, gameVar.gameSocket);
-	}
 	if (gameVar.gameStart)
 	{
-		console.log("gamestart");
 		manageCollision();
 	}
 	else
@@ -37,6 +39,7 @@ export function draw2()
 		cancelAnimationFrame(gameVar.animationFrame);
 	gameVar.animationFrame = requestAnimationFrame(draw2);
 }
+
 export function draw()
 {
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
@@ -65,23 +68,41 @@ export function drawPaddles()
 		gameVar.ctx.fillStyle = "#006400";
 		gameVar.ctx.fill();
 		gameVar.ctx.closePath();
+
+		gameVar.ctx.beginPath();
+		gameVar.ctx.rect(gameVar.canvasW - gameVar.player2PaddleWidth, gameVar.player2PaddleY, gameVar.player2PaddleWidth, gameVar.player2PaddleHeight);
+		gameVar.ctx.fillStyle = "red";
+		gameVar.ctx.fill();
+		gameVar.ctx.closePath();		
 	}
 	if (gameVar.playerIdx == 2)
 	{
 		gameVar.ctx.beginPath();
 		gameVar.ctx.rect(gameVar.canvasW - gameVar.player2PaddleWidth, gameVar.player2PaddleY, gameVar.player2PaddleWidth, gameVar.player2PaddleHeight);
-		gameVar.ctx.fillStyle = "#FF414D";
+		gameVar.ctx.fillStyle = "red";
 		gameVar.ctx.fill();
 		gameVar.ctx.closePath();	
-	}
-	// if (!gameVar.liveMatch)
-	// {
+
 		gameVar.ctx.beginPath();
-		gameVar.ctx.rect(gameVar.canvasW - gameVar.aiPaddleWidth, gameVar.aiPaddleY, gameVar.aiPaddleWidth, gameVar.aiPaddleHeight);
-		gameVar.ctx.fillStyle = "#000000";
+		gameVar.ctx.rect(0, gameVar.playerPaddleY, gameVar.playerPaddleWidth, gameVar.playerPaddleHeight);
+		gameVar.ctx.fillStyle = "#006400";
 		gameVar.ctx.fill();
 		gameVar.ctx.closePath();
-	// }
+	}
+	if (!gameVar.liveMatch)
+	{
+		gameVar.ctx.beginPath();
+		gameVar.ctx.rect(0, gameVar.playerPaddleY, gameVar.playerPaddleWidth, gameVar.playerPaddleHeight);
+		gameVar.ctx.fillStyle = "#006400";
+		gameVar.ctx.fill();
+		gameVar.ctx.closePath();
+
+		gameVar.ctx.beginPath();
+		gameVar.ctx.rect(gameVar.canvasW - gameVar.aiPaddleWidth, gameVar.aiPaddleY, gameVar.aiPaddleWidth, gameVar.aiPaddleHeight);
+		gameVar.ctx.fillStyle = "red";
+		gameVar.ctx.fill();
+		gameVar.ctx.closePath();
+	}
 }
 
 export function drawLines() 
@@ -121,7 +142,8 @@ export function initializeBall()
 	}
 	gameVar.dx = 0;
 	gameVar.dy = 0;
-	sendBallData(gameVar.x, gameVar.y, gameVar.dx, gameVar.dy, gameVar.gameSocket);
+	checkball();
+	// sendBallData(gameVar.x, gameVar.y, gameVar.dx, gameVar.dy, gameVar.gameSocket);
 }
 
 export function drawBall()

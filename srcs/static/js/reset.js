@@ -4,6 +4,8 @@ import { WIN_SCORE, GAP_SCORE,  } from "./const.js";
 import { draw, initDraw, initializeBall } from "./draw.js";
 import { aiServeBall, manageAi } from "./ai.js";
 import { createPowerUp } from "./powerUp.js";
+import { sendBallData } from "./network.js";
+import { checkball } from "./manage.js";
 
 export function resetGame()
 {
@@ -58,7 +60,6 @@ export function checkScore()
 	console.log("check score");
 	if ((gameVar.playerScore >= WIN_SCORE || gameVar.aiScore >= WIN_SCORE) && Math.abs(gameVar.playerScore - gameVar.aiScore) >= GAP_SCORE)
 	{
-		console.log("if");
 		gameVar.matchOver = true;
 		gameVar.rematchBtn.disabled = false;
 		gameVar.rematchBtn.style.cursor = false ? "pointer" : "not-allowed";
@@ -88,6 +89,7 @@ export function resetBall(winner)
 	initializeBall();
 	gameVar.dx = 0;
 	gameVar.dy = 0;
+	checkball();
 	gameVar.gameStart = false;
 	gameVar.aiScoreElement.textContent = gameVar.aiScore;
 	gameVar.playerScoreElement.textContent = gameVar.playerScore;

@@ -190,7 +190,5 @@ export function manageMoveAi()
 		{
 			gameVar.playerPaddleY += PADDLE_SPEED;
 		} 
-		console.log("mmmmm");
-		console.log("nnn");
 	}
 }

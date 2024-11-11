@@ -4,7 +4,21 @@ import { createPowerUp } from "./powerUp.js";
 import { draw } from "./draw.js";
 import { resetMatch, checkServer } from "./reset.js";
 import { manageAi } from "./ai.js";
+import { initEventListenerAi, initEventListenerRoom } from "./init.js";
 
+
+export function showGameplayMultiView()
+{
+	defaultView.style.display = 'none';
+	playsoloGameBtn.style.display = 'none';
+
+	gameplayView.style.display = 'block';
+	quickGameBtn.style.display = 'none';
+	startGameBtn.style.display = 'block';
+	tournamentGameBtn.style.display = 'block'
+
+	initEventListenerRoom();
+}
 
 export function showDefaultView()
 {
@@ -14,15 +28,17 @@ export function showDefaultView()
 	defaultView.style.display = 'block';
 	playGameBtn.style.display = 'block';
 }
-export function showGameplayView()
+export function showGameplaySoloView()
 {
 	defaultView.style.display = 'none';
-	playGameBtn.style.display = 'none';
+	playmultiGameBtn.style.display = 'none';
 
 	gameplayView.style.display = 'block';
 	quickGameBtn.style.display = 'block';
-	startGameBtn.style.display = 'block';
+	startGameBtn.style.display = 'none';
 	tournamentGameBtn.style.display = 'block'
+	initEventListenerAi();	
+
 }
 
 export function showGameView()
@@ -35,6 +51,7 @@ export function showGameView()
 	gameView.style.display = 'block';
 	rematchBtn.style.display = 'block';
 	quitGameBtn.style.display = 'block';	
+	// initEventListenerAi();
 	initializeBall();
 	if (gameVar.powerUpEnable)
 		createPowerUp();
