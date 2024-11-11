@@ -1,24 +1,20 @@
-from types import new_class
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinLengthValidator
 from .validators import alphanumeric
 
 class User(AbstractUser):
-	# for auth
-	username = models.CharField(_("username"), max_length=30, unique=True, blank=False, validators=[MinLengthValidator(3), alphanumeric])
-	email = models.EmailField(_("email"), unique=False, blank=False)
-	new_email = models.EmailField(_("email"), unique=False, null=True)
-	password = models.CharField(_("password"), max_length=128, validators=[MinLengthValidator(8)])
-	current_password = models.CharField(_("old password"), null=True, blank=True)
+	username = models.CharField("username", max_length=30, unique=True, blank=False, validators=[MinLengthValidator(3), alphanumeric])
+	email = models.EmailField("email", unique=False, blank=False)
+	new_email = models.EmailField("email", unique=False, null=True)
+	password = models.CharField("password", max_length=128, validators=[MinLengthValidator(8)])
+	current_password = models.CharField("old password", null=True, blank=True)
 	email_sent_at = models.DateTimeField(null=True, blank=True)
 	otp_secret = models.CharField(max_length=32, blank=True, null=True)
 
-	# for user profile
-	alias = models.CharField(_("alias"), max_length=30, unique=True, blank=True, null=True, validators=[MinLengthValidator(3)])
-	avatar = models.ImageField(_("avatar"), upload_to='media/', default='default-avatar.jpg')
-	friends = models.ManyToManyField('self', related_name='friendship', symmetrical=False, blank=True, verbose_name=_("friends"))
+	alias = models.CharField("alias", max_length=30, unique=True, blank=True, null=True, validators=[MinLengthValidator(3)])
+	avatar = models.ImageField("avatar", upload_to='media/', default='default-avatar.jpg')
+	friends = models.ManyToManyField('self', related_name='friendship', symmetrical=False, blank=True, verbose_name="friends")
 	is_online = models.BooleanField(default=False)
 	
 	# related_name : tournaments, game_as_player_one, game_as_player_two
