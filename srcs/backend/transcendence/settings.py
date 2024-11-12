@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [
 	'0.0.0.0',
 	'localhost',
 	'django',
-	'made-f0Br8s5.clusters.42paris.fr'
+	'nixos'
 ]
 
 # HTTPS settings
@@ -184,3 +184,12 @@ EMAIL_FILE_PATH = "~/django-email-messages"
 CSRF_TRUSTED_ORIGINS = [
 	'https://localhost:8081',
 ]
+
+CHANNEL_LAYERS = {
+	'default': {
+		'BACKEND': 'channels_redis.core.RedisChannelLayer',
+		'CONFIG': {
+			"hosts": [('redis', 6379)],
+		},
+	},
+}
