@@ -9,6 +9,7 @@ export function sendBallData(x, y, socket)
 			type: 'ball_data',
 			x: x,
 			y: y,
+			timestamp: Date.now(),
 		};
 		socket.send(JSON.stringify(data));
 	}
@@ -44,17 +45,29 @@ export function sendPaddleData(paddle_y, socket, playerIdx)
 		console.log("Error websocket");
 }
 
-export function sendPlayerInfo(socket, playerReady, gameStart, currentServer)
+export function sendPlayerData(socket, playerReady, currentServer)
 {
-
 	if (socket && socket.readyState == WebSocket.OPEN)
 	{
 		const data = 
 		{
 			type: 'player_data',
 			playerReady: playerReady,
-			gameStart: gameStart,
 			currentServer: currentServer,
+		};
+		socket.send(JSON.stringify(data));
+	}
+}
+
+export function sendGameData(socket, gameStart, animationFrame)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data = 
+		{
+			type: 'game_data',
+			gameStart: gameStart,
+			animationFrame: animationFrame,
 		};
 		socket.send(JSON.stringify(data));
 	}

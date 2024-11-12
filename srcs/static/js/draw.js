@@ -1,11 +1,13 @@
 import gameVar from "./var.js";
 import { BALL_RADIUS } from "./const.js";
+import { showDefaultView } from "./gameView.js";
 import { drawPowerUp, collectPowerUp } from "./powerUp.js";
 import { manageCollision, manageServer, manageMove, checkball } from "./manage.js";
 import { manageCollisionAi, manageServerAi, manageMoveAi, aiMove } from "./ai.js";
 import { drawBricks } from "./brick.js";
 import { checkScore } from "./reset.js";
-import { sendBallData, sendPaddleData, sendPlayerInfo } from "./network.js";
+import { sendBallData, sendGameData, sendPaddleData } from "./network.js";
+import { displayVar } from "./input.js";
 
 
 function waitingForPLayer()
@@ -23,11 +25,14 @@ export function initDraw()
 
 export function draw2()
 {
-	// console.log("draw2");
-	gameVar.gameReady = true;
+	// displayVar();
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
-	console.log("current server : ", gameVar.currenServer);
 	initDraw();
+	if (!gameVar.gameReady)
+	{
+		alert("player left the room");
+		showDefaultView();
+	}
 	if (gameVar.gameStart)
 	{
 		manageCollision();
@@ -37,7 +42,13 @@ export function draw2()
 	manageMove();
 	if (gameVar.animationFrame)
 		cancelAnimationFrame(gameVar.animationFrame);
-	gameVar.animationFrame = requestAnimationFrame(draw2);
+	if (gameVar.playerIdx == 1)
+	{
+		gameVar.animationFrame = requestAnimationFrame(draw2);
+		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.animationFrame);
+	}
+	else
+		requestAnimationFrame(draw2);	
 }
 
 export function draw()
@@ -137,13 +148,12 @@ export function initializeBall()
 	}
 	else 
 	{
-		gameVar.x = gameVar.canvasw - gameVar.aiPaddleWidth - BALL_RADIUS;
-		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2;
+		gameVar.x = gameVar.canvasw - gameVar.player2PaddleWidth - BALL_RADIUS;
+		gameVar.y = gameVar.player2PaddleY + gameVar.player2PaddleHeight / 2;
 	}
 	gameVar.dx = 0;
 	gameVar.dy = 0;
 	checkball();
-	// sendBallData(gameVar.x, gameVar.y, gameVar.dx, gameVar.dy, gameVar.gameSocket);
 }
 
 export function drawBall()

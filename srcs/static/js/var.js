@@ -33,7 +33,6 @@ const gameVar =
 	targetY: 0,
 	playerIdx: null,
 
-
 	currenServer: 'player',
 	// playerReady: false,
 	// player2Ready: false,
@@ -49,6 +48,7 @@ const gameVar =
 	powerUpEnable: false,
 	customMap: false,
 	matchAI: false,
+	leftRoom: false,
 
 	liveMatch: false,
 

@@ -34,20 +34,9 @@ export function initEventListener()
 {
 
 	gameVar.quitGameBtn.addEventListener('click', showDefaultView);
-	// gameVar.playGameBtn.addEventListener('click', showGameplayView);
 	gameVar.playsoloGameBtn.addEventListener('click', showGameplaySoloView);
 	gameVar.playmultiGameBtn.addEventListener('click', showGameplayMultiView)
-	// gameVar.quickGameBtn.addEventListener('click')
-	// if (!gameVar.liveMatch)
-	// {
-	// 	console.log("liveeeeeeeeee");
-		// initEventListenerRoom();
-	// }
-	// if (gameVar.matchAI)
-	// {
-	// 	console.log("aiiiiiiiiiiiiiiiiiiiiiiiiii");
-		// initEventListenerAi();
-	// }
+
 	gameVar.withoutPowerUp.classList.add('selected');
 	gameVar.medium.classList.add('selected');
 	gameVar.tableTennis.classList.add('selected');
@@ -146,7 +135,6 @@ function showGameViewRoom(room = null)
 	gameVar.startGameBtn.style.display = 'none';
 	gameVar.tournamentGameBtn.style.display = 'none';
 	gameVar.liveMatch = true;
-	initializeBall();
 	if (gameVar.powerUpActive)
 		createPowerUp();		
 	if (room)

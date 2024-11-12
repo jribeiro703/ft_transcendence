@@ -26,7 +26,8 @@ export function showDefaultView()
 	rematchBtn.style.display = 'none';
 	quitGameBtn.style.display = 'none';
 	defaultView.style.display = 'block';
-	playGameBtn.style.display = 'block';
+	playsoloGameBtn.style.display = 'block';
+	playmultiGameBtn.style.display = 'block';
 }
 export function showGameplaySoloView()
 {

@@ -1,6 +1,10 @@
 import json
+import logging
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class PongConsumer(WebsocketConsumer):
 	rooms = {}
@@ -15,8 +19,11 @@ class PongConsumer(WebsocketConsumer):
 				self.channel_name
 			)
 			self.accept()
+			logger.info(f'Client {self.channel_name} connected to room {self.room_name}')
 		else:
 			self.accept()
+			logger.info(f'Client {self.channel_name} connected without a room')
+		self.log_all_rooms()
 
 	def disconnect(self, close_code):
 		if self.room_name:
@@ -41,6 +48,7 @@ class PongConsumer(WebsocketConsumer):
 				# Delete room if empty
 				if not self.rooms[self.room_name]:
 					del self.rooms[self.room_name]
+		self.log_all_rooms()
 
 	def receive(self, text_data):
 		data = json.loads(text_data)
@@ -54,6 +62,8 @@ class PongConsumer(WebsocketConsumer):
 			self.broadcast_paddle_data(data)
 		elif data['type'] == 'player_data':
 			self.broadcast_player_data(data)
+		elif data['type'] == 'game_data':
+			self.broadcast_game_data(data)
 		elif data['type'] == 'check_rooms':
 			self.check_rooms()
 
@@ -77,6 +87,11 @@ class PongConsumer(WebsocketConsumer):
 				'room_name': self.room_name
 			}
 		)
+		self.log_all_rooms()
+
+	def log_all_rooms(self):
+		for room, clients in self.rooms.items():
+			logger.info(f'Room {room} has clients : {clients}')
 
 	def broadcast_ball_data(self, data):
 		# Send ball data to room group
@@ -115,9 +130,20 @@ class PongConsumer(WebsocketConsumer):
 			self.room_group_name,
 			{
 				'type': 'player_data',
+				# 'playerReady': data.get('playerReady', False),
+				# 'currentServer': data.get('currentServer', None),
 				'playerReady': data['playerReady'],
-				'gameStart': data['gameStart'],
 				'currentServer': data['currentServer'],
+			}
+		)
+
+	def broadcast_game_data(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'player_data',
+				'gameStart': data['gameStart'],
+				'animationFrame': data['animationFrame'],
 			}
 		)
 
@@ -177,8 +203,16 @@ class PongConsumer(WebsocketConsumer):
 		self.send(text_data=json.dumps({
 			'type': 'player_data',
 			'player_data': {
-				'playerReady': event['playerReady'],
+				'playerReady': event.get('playerReady', False),
+				'currentServer': event.get('currentServer', None)
+			}
+		}))
+
+	def game_data(self, event):
+		self.send(text_data=json.dumps({
+			'type': 'game_data',
+			'game_data': {
 				'gameStart': event['gameStart'],
-				'currentServer': event['currentServer']
+				'animationFrame': event['animationFrame']	
 			}
 		}))

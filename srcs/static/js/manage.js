@@ -35,10 +35,10 @@ export function checkCollisionWithWalls()
     }
 }
 
+
+
 export function manageCollision()
 {
-	if (!gameVar.isFirstPlayer)
-		return ;
 	let directChanged = false;
 	let posChanged = false;
 
@@ -51,6 +51,7 @@ export function manageCollision()
 		checkCollisionWithWalls();
 		directChanged = true;
 	}
+	// Collision avec le haut et le bas de l'écran
 	if(gameVar.y + gameVar.dy > gameVar.canvasH - BALL_RADIUS || gameVar.y + gameVar.dy < BALL_RADIUS)
 	{
 		gameVar.dy = -gameVar.dy;
@@ -62,6 +63,10 @@ export function manageCollision()
 			gameVar.y > gameVar.playerPaddleY &&
 			gameVar.y < gameVar.playerPaddleY + gameVar.playerPaddleHeight)
 		{
+			if (gameVar.x > gameVar.playerPaddleWidth)
+			{
+				return;
+			}
 			gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS;
 			let hitpos = (gameVar.y - gameVar.playerPaddleY) / gameVar.playerPaddleHeight;
 			let angle = (hitpos - 0.5) * Math.PI / 2;
@@ -81,6 +86,10 @@ export function manageCollision()
 			gameVar.y > gameVar.player2PaddleY &&
 			gameVar.y < gameVar.player2PaddleY + gameVar.player2PaddleHeight)
 		{
+			if (gameVar.x < gameVar.canvasW - gameVar.player2PaddleWidth)
+			{
+				return ;
+			}
 			gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - BALL_RADIUS;
 			let hitpos = (gameVar.y - gameVar.player2PaddleY) / gameVar.player2PaddleHeight;
 			let angle = (hitpos - 0.5) * Math.PI / 2;
@@ -97,7 +106,9 @@ export function manageCollision()
 		posChanged = true;
 	}
 	if (directChanged || posChanged)
+	{
 		checkball();
+	}
 }
 
 export function manageServer()
@@ -123,7 +134,6 @@ export function manageMove()
 		{
 			if (gameVar.playerUpPressed && gameVar.playerPaddleY > 0)
 			{
-				console.log("player1 push");
 				gameVar.playerPaddleY -= PADDLE_SPEED;
 				sendPaddleData(gameVar.playerPaddleY, gameVar.gameSocket, 1);
 			} 
@@ -137,7 +147,6 @@ export function manageMove()
 		{
 			if (gameVar.playerUpPressed && gameVar.player2PaddleY > 0)
 			{
-				console.log("player2 push");
 				gameVar.player2PaddleY -= PADDLE_SPEED;
 				sendPaddleData(gameVar.player2PaddleY, gameVar.gameSocket, 2);
 			} 
@@ -152,14 +161,14 @@ export function manageMove()
 
 export function checkball()
 {
-	// if (gameVar.playerIdx !== (gameVar.currenServer === 'player' ? 1 : 2))
-	// 	return ;
-	if (!gameVar.isFirstPlayer)
-		return ;
 	if (ballPositionChanged())
+	{
 		sendBallData(gameVar.x, gameVar.y, gameVar.gameSocket);
+	}
 	if (ballDirectionChanged())
+	{
 		sendDirectionData(gameVar.dx, gameVar.dy, gameVar.gameSocket);
+	}
 }
 
 export function ballPositionChanged()
