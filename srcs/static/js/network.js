@@ -59,7 +59,7 @@ export function sendPlayerData(socket, playerReady, currentServer)
 	}
 }
 
-export function sendGameData(socket, gameStart, animationFrame)
+export function sendGameData(socket, gameStart, gameReady, animationFrame)
 {
 	if (socket && socket.readyState == WebSocket.OPEN)
 	{
@@ -67,6 +67,7 @@ export function sendGameData(socket, gameStart, animationFrame)
 		{
 			type: 'game_data',
 			gameStart: gameStart,
+			gameReady: gameReady,
 			animationFrame: animationFrame,
 		};
 		socket.send(JSON.stringify(data));

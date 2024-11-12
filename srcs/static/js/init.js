@@ -16,8 +16,10 @@ export function initGameVar()
 	gameVar.playsoloGameBtn = document.getElementById('playsoloGameBtn');
 	gameVar.playmultiGameBtn = document.getElementById('playmultiGameBtn');
 	gameVar.tournamentGameBtn = document.getElementById('tournamentGameBtn');
+	gameVar.createRoomBtn = document.getElementById('createRoomBtn');
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+	gameVar.roomView = document.getElementById('roomView');
 	
 	gameVar.withPowerUp = document.getElementById('withPowerUps');
 	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');
@@ -28,6 +30,34 @@ export function initGameVar()
 	gameVar.brickLevel = document.getElementById('bricksLevel');
 	gameVar.playerScoreElement = document.getElementById('playerScore');
 	gameVar.aiScoreElement = document.getElementById('aiScore');
+
+	gameVar.room1name = document.getElementById('room1-name');
+	gameVar.room1players = document.getElementById('room1-players');
+	gameVar.room1status = document.getElementById('room1-status');
+	gameVar.joinRoom1Btn = document.getElementById('joinRoom1Btn');
+
+	gameVar.room2name = document.getElementById('room2-name');
+	gameVar.room2players = document.getElementById('room2-players');
+	gameVar.room2status = document.getElementById('room2-status');
+	gameVar.joinRoom2Btn = document.getElementById('joinRoom2Btn');
+
+	gameVar.room3name = document.getElementById('room3-name');
+	gameVar.room3players = document.getElementById('room3-players');
+	gameVar.room3status = document.getElementById('room3-status');
+	gameVar.joinRoom3Btn = document.getElementById('joinRoom3Btn');
+
+	gameVar.room4name = document.getElementById('room4-name');
+	gameVar.room4players = document.getElementById('room4-players');
+	gameVar.room4status = document.getElementById('room4-status');
+	gameVar.joinRoom4Btn = document.getElementById('joinRoom4Btn');
+
+	gameVar.room5name = document.getElementById('room5-name');
+	gameVar.room5players = document.getElementById('room5-players');
+	gameVar.room5status = document.getElementById('room5-status');
+	gameVar.joinRoom5Btn = document.getElementById('joinRoom5Btn');
+
+	gameVar.createRoomName = document.getElementById('createRoomName');
+
 }
 
 export function initEventListener()
@@ -35,7 +65,7 @@ export function initEventListener()
 
 	gameVar.quitGameBtn.addEventListener('click', showDefaultView);
 	gameVar.playsoloGameBtn.addEventListener('click', showGameplaySoloView);
-	gameVar.playmultiGameBtn.addEventListener('click', showGameplayMultiView)
+	gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
 
 	gameVar.withoutPowerUp.classList.add('selected');
 	gameVar.medium.classList.add('selected');
@@ -100,7 +130,9 @@ export function initEventListenerRoom()
 	document.addEventListener("keyup", (e) => keyUpHandler(e, gameVar.isFirstPlayer), false);
 	document.addEventListener("keydown", startBall, false);
 
-	gameVar.startGameBtn.addEventListener('click', () => 
+	
+
+	gameVar.createRoomBtn.addEventListener('click', () => 
 	{
 		showGameViewRoom();
 		gameVar.liveMatch = true;
@@ -124,6 +156,25 @@ export function initEventListenerRoom()
 		else
 			showLobbyView();
 	});
+}
+
+function roomMultiView()
+{
+	console.log("roomView");
+	gameVar.gameplayView.style.display = 'none';
+	gameVar.gameView.style.display = 'none';
+	gameVar.quickGameBtn.style.display = 'none';
+	gameVar.startGameBtn.style.display = 'none';
+	gameVar.playsoloGameBtn.style.display = 'none';
+	gameVar.tournamentGameBtn.style.display = 'none';
+	gameVar.playmultiGameBtn.style.display = 'none';
+
+	gameVar.defaultView.style.display = 'none';
+	gameVar.roomView.style.display = 'block';
+	gameVar.createRoomBtn.style.display = 'block';
+	// gameVar.joinRoomBtn.style.display = 'block';
+	gameVar.gameplayView.style.display = 'none';
+	initEventListenerRoom();
 }
 
 function showGameViewRoom(room = null)

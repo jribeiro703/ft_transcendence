@@ -20,14 +20,24 @@ export function checkForExistingRooms(joinRoomCallback) {
 			const roomName = data.rooms[0];
 			joinRoomCallback(roomName);
 			gameVar.playerIdx = 2;
-			gameVar.gameReady = true;
+			// gameVar.playerReady = true;
+			const player = gameVar.players.find(player => player.idx === gameVar.playerIdx)
+			if (player)
+				player.ready = true;
+			console.log("started 2");
+			updateRoomInfo(roomName, "2/2", "started");
 		}
 		else
 		{
-			createNewRoom(joinRoomCallback);
+			const newRoom = createNewRoom(joinRoomCallback);
 			gameVar.playerIdx = 1;
-			gameVar.gameReady = true;
-			gameVar.isFirstPlayer = true;
+			// gameVar.playerReady = true;
+			// gameVar.isFirstPlayer = true;
+			const player = gameVar.players.find(player => player.idx === gameVar.playerIdx);
+			if (player)
+				player.ready = true;
+			console.log("waiting 1");
+			updateRoomInfo(newRoom, "1/2", "waiting");
 		}
 		tempSocket.close();
 	};
@@ -47,6 +57,7 @@ function createNewRoom(joinRoomCallback)
 {
 	const roomName = `room_${Math.floor(Math.random() * 10000)}`;
 	joinRoomCallback(roomName);
+	return (roomName);
 }
 
 
@@ -95,7 +106,7 @@ export function joinRoom(roomName, setGameSocket, setIsFirstPlayer)
 		} 
 		else if (data.type == 'player_data')
 		{
-			gameVar.gameReady = data.player_data.playerReady;
+			gameVar.playerReady = data.player_data.playerReady;
 			gameVar.currentServer = data.player_data.currentServer;
 		}
 		else if (data.type == 'game_data')
@@ -113,8 +124,8 @@ export function joinRoom(roomName, setGameSocket, setIsFirstPlayer)
 		} 
 		else if (data.type == 'client_left')
 		{
-			gameVar.gameReady = false;
-			sendPlayerData(gameVar.gameSocket, gameVar.gameReady, gameVar.currenServer);
+			gameVar.playerReady = false;
+			sendPlayerData(gameVar.gameSocket, gameVar.playerReady, gameVar.currenServer);
 		}
 	};
 
@@ -126,8 +137,18 @@ export function joinRoom(roomName, setGameSocket, setIsFirstPlayer)
 
 	gameSocket.onclose = function(e)
 	{
-		gameVar.gameReady = false;
-		sendPlayerData(gameVar.gameSocket, gameVar.gameReady, gameVar.currenServer);
+		gameVar.playerReady = false;
+		sendPlayerData(gameVar.gameSocket, gameVar.playerReady, gameVar.currenServer);
 		console.error('Game socket closed unexpectedly');
 	};
+}
+
+
+export function updateRoomInfo(players, status)
+{
+	let name = gameVar.createRoomName.placeHolder;
+	console.log(name);
+    gameVar.room1name.textContent = name;
+    gameVar.room1players.textContent = players;
+    gameVar.room1status.textContent = status;
 }
