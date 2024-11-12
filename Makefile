@@ -177,13 +177,13 @@ generate-env:
 			fi; \
 		done; \
 		while [ -z "$$HTPASSWD_USER" ]; do \
-			read -p "Enter HTPASSWD_USER: " HTPASSWD_USER; \
+			read -p "Enter HTPASSWD_USER (nginx): " HTPASSWD_USER; \
 			if [ -z "$$HTPASSWD_USER" ]; then \
 				echo "HTPASSWD_USER cannot be empty"; \
 			fi; \
 		done; \
 		while [ -z "$$HTPASSWD_PASSWORD" ]; do \
-			read -p "Enter HTPASSWD_PASSWORD: " HTPASSWD_PASSWORD; \
+			read -p "Enter HTPASSWD_PASSWORD (nginx, elastic): " HTPASSWD_PASSWORD; \
 			if [ -z "$$HTPASSWD_PASSWORD" ]; then \
 				echo "HTPASSWD_PASSWORD cannot be empty"; \
 			fi; \
@@ -192,6 +192,8 @@ generate-env:
 	echo "DEBUG=$$DEBUG" > docker/.env; \
 	docker run --rm -e HOSTNAME=$$(hostname) -v $$(pwd)/docker/.env:/.env -v $$(pwd)/srcs/backend/transcendence/settings.py:/settings.py -v $$(pwd)/docker/django/update_settings.py:/update_settings.py python:3.10-slim python /update_settings.py; \
 	docker run --rm -ti xmartlabs/htpasswd $${HTPASSWD_USER} $${HTPASSWD_PASSWORD} > docker/nginx/htpasswd/prometheus.localhost; \
+	docker run --rm -ti xmartlabs/htpasswd $${HTPASSWD_USER} $${HTPASSWD_PASSWORD} > docker/nginx/htpasswd/postgres-exporter.localhost; \
+	docker run --rm -ti xmartlabs/htpasswd $${HTPASSWD_USER} $${HTPASSWD_PASSWORD} > docker/nginx/htpasswd/node-exporter.localhost; \
 	echo "DJANGO_SETTINGS_MODULE=transcendence.settings" >> docker/.env; \
 	echo "POSTGRES_DB=$$POSTGRES_DB" >> docker/.env; \
 	echo "POSTGRES_USER=$$POSTGRES_USER" >> docker/.env; \
@@ -202,6 +204,8 @@ generate-env:
 	echo "GF_SECURITY_ADMIN_PASSWORD=$$GF_SECURITY_ADMIN_PASSWORD" >> docker/.env; \
 	echo "GF_SERVER_PROTOCOL=http" >> docker/.env; \
 	echo 'DATA_SOURCE_NAME=postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${POSTGRES_DB}?sslmode=disable' >> docker/.env; \
+	echo "ELASTIC_USER=elastic" >> docker/.env; \
+	echo "ELASTIC_PASSWORD=$$HTPASSWD_PASSWORD" >> docker/.env; \
 	echo "Updated docker/.env file successfully."
 
 .PHONY: all build up down restart status logs logs-% shell-% rootless-docker generate-env prune-container prune-image restart-container

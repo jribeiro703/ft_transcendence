@@ -18,7 +18,7 @@ services:
     networks:
       - transcendence
     environment:
-      - VIRTUAL_HOST=localhost,made-f0Dr11s3.clusters.42paris.fr
+      - VIRTUAL_HOST=localhost,made-f0Br8s3.clusters.42paris.fr
       - VIRTUAL_PORT=8000
       - TZ=Europe/Paris
 
@@ -150,8 +150,8 @@ services:
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.key=/usr/share/elasticsearch/config/certs/elasticsearch.key
       - xpack.security.http.ssl.certificate=/usr/share/elasticsearch/config/certs/elasticsearch.crt
-      - ELASTIC_USERNAME=elastic
-      - ELASTIC_PASSWORD=elastic
+      - ELASTIC_USERNAME=${ELASTIC_USER}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - node.max_local_storage_nodes=2
       - VIRTUAL_HOST=elasticsearch.localhost
       - VIRTUAL_PORT=9200
@@ -187,8 +187,8 @@ services:
       - xpack.monitoring.elasticsearch.hosts=["https://elasticsearch:9200"]
       - xpack.monitoring.elasticsearch.ssl.certificate_authority=/usr/share/logstash/config/certs/elasticsearch.crt
       - xpack.monitoring.elasticsearch.ssl.vertification_mode=none
-      - xpack.monitoring.elasticsearch.username=elastic
-      - xpack.monitoring.elasticsearch.password=elastic
+      - xpack.monitoring.elasticsearch.username=${ELASTIC_USER}
+      - xpack.monitoring.elasticsearch.password=${ELASTIC_PASSWORD}
       # - ELASTICSEARCH_USERNAME=elastic
       # - ELASTICSEARCH_PASSWORD=elastic
 
@@ -210,8 +210,8 @@ services:
       - ELASTICSEARCH_HOSTS=["https://elasticsearch:9200"]
       - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/usr/share/kibana/config/certs/localhost.crt
       - ELASTICSEARCH_SSL_VERIFICATIONMODE=none
-      - ELASTICSEARCH_USERNAME=elastic
-      - ELASTICSEARCH_PASSWORD=elastic
+      - ELASTICSEARCH_USERNAME=${ELASTIC_USER}
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
       - SERVER_SSL_ENABLED=true
       - SERVER_SSL_KEY=/usr/share/kibana/config/certs/localhost.key
       - SERVER_SSL_CERTIFICATE=/usr/share/kibana/config/certs/localhost.crt
