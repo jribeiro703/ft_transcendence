@@ -9,8 +9,8 @@ export function updateLevelSelection(level)
 	if (level == 'easy')
 	{
 		console.log("easy mode");
-		gameVar.init_dx = 3;
-		gameVar.init_dy = 3;
+		gameVar.init_dx = 1;
+		gameVar.init_dy = 1;
 		gameVar.aiLevel = 8;
 	}
 	if (level == 'medium')

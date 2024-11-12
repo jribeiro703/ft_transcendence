@@ -21,11 +21,6 @@ document.addEventListener('DOMContentLoaded', function()
 	initGameVar();
 	initEventListener();
 
-	// if (gameVar.liveMatch)
-	// 	initEventListenerRoom();
-	// else
-	// 	initEventListenerAi();
-
 	updateLevelSelection();
 	updatePowerUpSelection(false);
 });

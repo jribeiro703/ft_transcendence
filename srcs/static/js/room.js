@@ -1,8 +1,7 @@
 import gameVar from './var.js';
 import isFirstPlayer from './var.js';
-import { sendBallData, sendPaddleData, sendPlayerInfo } from './network.js';
-import { draw2 } from './draw.js';
-
+import { sendBallData, sendPaddleData, sendPlayerData } from './network.js';
+import { draw2, initializeBall } from './draw.js';
 
 
 export function checkForExistingRooms(joinRoomCallback) {
@@ -20,15 +19,14 @@ export function checkForExistingRooms(joinRoomCallback) {
 		{
 			const roomName = data.rooms[0];
 			joinRoomCallback(roomName);
-			console.log("joinnn room : ", roomName);
 			gameVar.playerIdx = 2;
-			// gameVar.currenServer = "player2";
+			gameVar.gameReady = true;
 		}
 		else
 		{
-			console.log("creationnnnn room");
 			createNewRoom(joinRoomCallback);
 			gameVar.playerIdx = 1;
+			gameVar.gameReady = true;
 			gameVar.isFirstPlayer = true;
 		}
 		tempSocket.close();
@@ -47,15 +45,8 @@ export function checkForExistingRooms(joinRoomCallback) {
 
 function createNewRoom(joinRoomCallback)
 {
-	console.log("create new room");
 	const roomName = `room_${Math.floor(Math.random() * 10000)}`;
 	joinRoomCallback(roomName);
-		
-	// if (!gameVar.rooms[roomName])
-	// 	gameVar.rooms[roomName] = new Set();
-	// gameVar.rooms[roomName].add(gameVar.playerIdx);
-	// console.log(`Utilisateur ${gameVar.playerIdx} a rejoint la salle ${roomName}`);
-
 }
 
 
@@ -72,8 +63,7 @@ export function joinRoom(roomName, setGameSocket, setIsFirstPlayer)
 		gameSocket.send(JSON.stringify({ type: 'join_room' }));
 		setGameSocket(gameSocket);
 		history.pushState({ view: 'game', room: roomName }, '', `?view=game&room=${roomName}`);
-		// sendPlayerInfo(gameSocket, gameVar.playerReady, true, gameVar.currenServer);
-		// sendPaddleData(gameVar.player2PaddleY, gameSocket, gameVar.playerReady, 2);
+		initializeBall();
 		draw2();
 
 	};
@@ -105,9 +95,13 @@ export function joinRoom(roomName, setGameSocket, setIsFirstPlayer)
 		} 
 		else if (data.type == 'player_data')
 		{
-			gameVar.playerReady = data.player_data.playerReady;
+			gameVar.gameReady = data.player_data.playerReady;
+			gameVar.currentServer = data.player_data.currentServer;
+		}
+		else if (data.type == 'game_data')
+		{
 			gameVar.gameStart = data.player_data.gameStart;
-			gameVar.currenServer = data.player_data.currenServer;
+			gameVar.animationFrame = data.player_data.animationFrame;
 		}
 		else if (data.type == 'room_joined')
 		{
@@ -119,16 +113,21 @@ export function joinRoom(roomName, setGameSocket, setIsFirstPlayer)
 		} 
 		else if (data.type == 'client_left')
 		{
-			console.log(data.message);
-			
+			gameVar.gameReady = false;
+			sendPlayerData(gameVar.gameSocket, gameVar.gameReady, gameVar.currenServer);
 		}
 	};
 
-	gameSocket.onerror = function(e) {
+	gameSocket.onerror = function(e)
+	{
+
 		console.error('Game socket error:', e);
 	};
 
-	gameSocket.onclose = function(e) {
+	gameSocket.onclose = function(e)
+	{
+		gameVar.gameReady = false;
+		sendPlayerData(gameVar.gameSocket, gameVar.gameReady, gameVar.currenServer);
 		console.error('Game socket closed unexpectedly');
 	};
 }

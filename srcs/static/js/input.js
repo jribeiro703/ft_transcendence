@@ -1,24 +1,7 @@
 import gameVar from "./var.js";
 import { PADDLE_SPEED } from './const.js';
-import { sendBallData, sendPlayerInfo } from "./network.js";
+import { sendBallData, sendGameData, sendPlayerData } from "./network.js";
 import { checkball } from "./manage.js";
-
-// export function manageMove(isFirstPlayer)
-// {
-// 	if (isFirstPlayer) {
-// 		if (gameVar.playerUpPressed && gameVar.playerPaddleX > 0) {
-// 			gameVar.playerPaddleX -= PADDLE_SPEED;
-// 		} else if (gameVar.playerDownPressed && gameVar.playerPaddleX < gameVar.canvasH - gameVar.playerPaddleHeight) {
-// 			gameVar.playerPaddleX += PADDLE_SPEED;
-// 		}
-// 	} else {
-// 		if (gameVar.playerUpPressed && gameVar.aiPaddleX > 0) {
-// 			gameVar.aiPaddleX -= PADDLE_SPEED;
-// 		} else if (gameVar.playerDownPressed && gameVar.aiPaddleX < gameVar.canvasH - gameVar.aiPaddleHeight) {
-// 			gameVar.aiPaddleX += PADDLE_SPEED;
-// 		}
-// 	}
-// }
 
 export function keyDownHandler(e, isFirstPlayer)
 {
@@ -56,16 +39,36 @@ export function startBallAi(e)
 }
 export function startBall(e)
 {
-	if (e.code == "Space" && !gameVar.matchOver && !gameVar.gameStart)
+	if ((gameVar.playerIdx == 1 && gameVar.currenServer == 'player') || (gameVar.playerIdx == 2 && gameVar.currenServer == 'player2'))
 	{
-		console.log("start ball, curr server : ", gameVar.currenServer);
-		if (gameVar.currenServer == 'player')
+		if (e.code == "Space" && !gameVar.matchOver && !gameVar.gameStart)
 		{
 			console.log("staaaaaaaaaaaaaaaaaaaaaaaaaaartt");
 			gameVar.gameStart = true;
+
+			// sendPlayerData(gameVar.gameSocket, gameVar.gameReady, gameVar.currenServer);
+			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.animationFrame);
 			gameVar.dx = gameVar.init_dx;
 			gameVar.dy = (Math.random() < 0.5 ? gameVar.init_dy : -gameVar.init_dy);
-			checkball();
 		}
 	}
+}
+
+
+export function displayVar()
+{
+	console.log("-------------");
+	console.log("player id: ", gameVar.playerIdx);
+	console.log("currentServer: ", gameVar.currenServer);
+	console.log("gameStart: ", gameVar.gameStart);
+	console.log("game ready: ", gameVar.gameReady);
+	console.log("animation frame: ", gameVar.animationFrame);
+}
+
+export function displayBall()
+{
+	console.log("x: ", gameVar.x);
+	console.log("y: ", gameVar.y);
+	console.log("dx: ", gameVar.dx);
+	console.log("dy: ", gameVar.dy);
 }
