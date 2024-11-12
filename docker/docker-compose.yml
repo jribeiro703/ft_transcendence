@@ -19,7 +19,7 @@ services:
     networks:
       - transcendence
     environment:
-      - VIRTUAL_HOST=localhost,made-f0Br8s1.clusters.42paris.fr
+      - VIRTUAL_HOST=localhost,made-f0Br8s3.clusters.42paris.fr
       - VIRTUAL_PORT=8000
       - TZ=Europe/Paris
 
@@ -40,12 +40,14 @@ services:
 
   db:
     image: postgres:13
+    container_name: db
     env_file:
       - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - transcendence
+    restart: on-failure
     environment:
       - TZ=Europe/Paris
 
@@ -57,99 +59,195 @@ services:
     networks:
       - transcendence
 
-  prometheus:
-    image: prom/prometheus:latest
-    user: root
-    volumes:
-      - prometheus_data:/prometheus
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
-    ports:
-      - "9090:9090"
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.path=/prometheus"
-      - "--storage.tsdb.retention.time=30d"
-    restart: on-failure
-    networks:
-      - transcendence
-    environment:
-      - VIRTUAL_HOST=prometheus.localhost
-      - VIRTUAL_PORT=9090
-
-  grafana:
-    image: grafana/grafana:latest
-    user: root
-    env_file:
-      - .env
-    ports:
-      - "3000:3000"
-    depends_on:
-      - prometheus
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
-      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
-      - ./grafana/metrics-dashboard.json:/var/lib/grafana/dashboards/metrics-dashboard.json
-    restart: on-failure
-    networks:
-      - transcendence
-    environment:
-      - VIRTUAL_HOST=grafana.localhost
-      - VIRTUAL_PORT=3000
-
-  node_exporter:
-    image: prom/node-exporter:latest
-    ports:
-      - "9101:9100"
-    restart: on-failure
-    networks:
-      - transcendence
-    environment:
-      - VIRTUAL_HOST=node-exporter.localhost
-      - VIRTUAL_PORT=9100
-
-  postgres_exporter:
-    image: prometheuscommunity/postgres-exporter:latest
-    env_file:
-      - .env
-    ports:
-      - "9187:9187"
-    depends_on:
-      - db
-    restart: on-failure
-    networks:
-      - transcendence
-    environment:
-      - VIRTUAL_HOST=postgres-exporter.localhost
-      - VIRTUAL_PORT=9187
-
   nginx:
-    # build:
-    #   context: ../
-    #   dockerfile: ./docker/nginx/Dockerfile
-    image: jwilder/nginx-proxy:alpine
-    user: root
+    build:
+      context: ../
+      dockerfile: ./docker/nginx/Dockerfile
     container_name: nginx
     ports:
-      # - "8080:80"
       - "8081:443"
     volumes:
       - ${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro
       - ./nginx/certs:/etc/nginx/certs:ro
-      # - ./nginx/htpasswd:/etc/nginx/htpasswd:ro
     environment:
       - HTTPS_METHOD=redirect
       - DEFAULT_SSL_CERT=/etc/nginx/certs/localhost.crt
       - DEFAULT_SSL_KEY=/etc/nginx/certs/localhost.key
+    restart: on-failure
     networks:
       - transcendence
 
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   user: root
+  #   volumes:
+  #     - prometheus_data:/prometheus
+  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  #     - ./prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml
+  #   ports:
+  #     - "9090:9090"
+  #   command:
+  #     - "--config.file=/etc/prometheus/prometheus.yml"
+  #     - "--storage.tsdb.path=/prometheus"
+  #     - "--storage.tsdb.retention.time=30d"
+  #   restart: on-failure
+  #   networks:
+  #     - transcendence
+  #   environment:
+  #     - VIRTUAL_HOST=prometheus.localhost
+  #     - VIRTUAL_PORT=9090
+
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: grafana
+  #   user: root
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - prometheus
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #     - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+  #     - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+  #     - ./grafana/metrics-dashboard.json:/var/lib/grafana/dashboards/metrics-dashboard.json
+  #   restart: on-failure
+  #   networks:
+  #     - transcendence
+  #   environment:
+  #     - VIRTUAL_HOST=grafana.localhost
+  #     - VIRTUAL_PORT=3000
+
+  # node_exporter:
+  #   image: prom/node-exporter:latest
+  #   container_name: node-exporter
+  #   ports:
+  #     - "9101:9100"
+  #   restart: on-failure
+  #   networks:
+  #     - transcendence
+  #   environment:
+  #     - VIRTUAL_HOST=node-exporter.localhost
+  #     - VIRTUAL_PORT=9100
+
+  # postgres_exporter:
+  #   image: prometheuscommunity/postgres-exporter:latest
+  #   container_name: postgres-exporter
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - "9187:9187"
+  #   depends_on:
+  #     - db
+  #   restart: on-failure
+  #   networks:
+  #     - transcendence
+  #   environment:
+  #     - VIRTUAL_HOST=postgres-exporter.localhost
+  #     - VIRTUAL_PORT=9187
+
+  # elasticsearch:
+  #   build:
+  #     context: ../
+  #     dockerfile: ./docker/elasticsearch/Dockerfile
+  #   container_name: elasticsearch
+  #   environment:
+  #     - discovery.type=single-node
+  #     - ES_JAVA_OPTS=-Xms512m -Xmx512m
+  #     - xpack.security.enabled=true
+  #     - xpack.security.http.ssl.enabled=true
+  #     - xpack.security.http.ssl.key=/usr/share/elasticsearch/config/certs/elasticsearch.key
+  #     - xpack.security.http.ssl.certificate=/usr/share/elasticsearch/config/certs/elasticsearch.crt
+  #     - ELASTIC_USERNAME=${ELASTIC_USER}
+  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+  #     - node.max_local_storage_nodes=2
+  #     - VIRTUAL_HOST=elasticsearch.localhost
+  #     - VIRTUAL_PORT=9200
+  #   volumes:
+  #     - es_data:/usr/share/elasticsearch/data
+  #     - ./elasticsearch/snapshots:/usr/share/elasticsearch/snapshots
+  #   ports:
+  #     - "9200:9200"
+  #   restart: on-failure
+  #   networks:
+  #     - transcendence
+
+  # logstash:
+  #   build:
+  #     context: ../
+  #     dockerfile: ./docker/logstash/Dockerfile
+  #   user: root
+  #   container_name: logstash
+  #   volumes:
+  #     - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+  #   depends_on:
+  #     - elasticsearch
+  #   restart: on-failure
+  #   networks:
+  #     - transcendence
+  #   environment:
+  #     - xpack.monitoring.enabled=true
+  #     - xpack.monitoring.elasticsearch.hosts=["https://elasticsearch:9200"]
+  #     - xpack.monitoring.elasticsearch.ssl.certificate_authority=/usr/share/logstash/config/certs/elasticsearch.crt
+  #     - xpack.monitoring.elasticsearch.ssl.vertification_mode=none
+  #     - xpack.monitoring.elasticsearch.username=${ELASTIC_USER}
+  #     - xpack.monitoring.elasticsearch.password=${ELASTIC_PASSWORD}
+
+  # kibana:
+  #   build:
+  #     context: ../
+  #     dockerfile: ./docker/kibana/Dockerfile
+  #   container_name: kibana
+  #   ports:
+  #     - "5601:5601"
+  #   depends_on:
+  #     - elasticsearch
+  #   restart: on-failure
+  #   networks:
+  #     - transcendence
+  #   environment:
+  #     - ELASTICSEARCH_URL=https://elasticsearch:9200
+  #     - ELASTICSEARCH_HOSTS=["https://elasticsearch:9200"]
+  #     - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=/usr/share/kibana/config/certs/localhost.crt
+  #     - ELASTICSEARCH_SSL_VERIFICATIONMODE=none
+  #     - ELASTICSEARCH_USERNAME=${ELASTIC_USER}
+  #     - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+  #     - SERVER_SSL_ENABLED=true
+  #     - SERVER_SSL_KEY=/usr/share/kibana/config/certs/localhost.key
+  #     - SERVER_SSL_CERTIFICATE=/usr/share/kibana/config/certs/localhost.crt
+  #     - VIRTUAL_HOST=kibana.localhost
+  #     - VIRTUAL_PORT=5601
+
+  # filebeat:
+  #   build:
+  #     context: ../
+  #     dockerfile: ./docker/filebeat/Dockerfile
+  #   container_name: filebeat
+  #   user: root
+  #   volumes:
+  #     - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+  #     - filebeat_data:/var/log
+  #   depends_on:
+  #     - logstash
+  #   restart: on-failure
+  #   networks:
+  #     - transcendence
+
 networks:
   transcendence:
+    name: transcendence
     driver: bridge
 
 volumes:
   postgres_data:
-  grafana_data:
-  prometheus_data:
+    name: postgres_data
+  # grafana_data:
+  #   name: grafana_data
+  # prometheus_data:
+  #   name: prometheus_data
+  # es_data:
+  #   name: es_data
+  # filebeat_data:
+  #   name: filebeat_data
