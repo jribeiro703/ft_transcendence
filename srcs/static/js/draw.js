@@ -23,32 +23,39 @@ export function initDraw()
 		drawLines();	
 }
 
+export function checkReady()
+{
+	const allPlayer = gameVar.players.every(player => player.ready);
+	if (allPlayer)	
+		return true;
+	else
+		return false;
+}
+
 export function draw2()
 {
 	// displayVar();
-	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
-	initDraw();
-	if (!gameVar.gameReady)
+	if (!checkReady())
 	{
-		alert("player left the room");
-		showDefaultView();
+		gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+		initDraw();
+		if (gameVar.gameStart)
+		{
+			manageCollision();
+		}
+		else
+			manageServer();
+		manageMove();
+		if (gameVar.animationFrame)
+			cancelAnimationFrame(gameVar.animationFrame);
+		if (gameVar.playerIdx == 1)
+		{
+			gameVar.animationFrame = requestAnimationFrame(draw2);
+			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.animationFrame);
+		}
+		else
+			requestAnimationFrame(draw2);	
 	}
-	if (gameVar.gameStart)
-	{
-		manageCollision();
-	}
-	else
-		manageServer();
-	manageMove();
-	if (gameVar.animationFrame)
-		cancelAnimationFrame(gameVar.animationFrame);
-	if (gameVar.playerIdx == 1)
-	{
-		gameVar.animationFrame = requestAnimationFrame(draw2);
-		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.animationFrame);
-	}
-	else
-		requestAnimationFrame(draw2);	
 }
 
 export function draw()

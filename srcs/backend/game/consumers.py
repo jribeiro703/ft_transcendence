@@ -130,8 +130,6 @@ class PongConsumer(WebsocketConsumer):
 			self.room_group_name,
 			{
 				'type': 'player_data',
-				# 'playerReady': data.get('playerReady', False),
-				# 'currentServer': data.get('currentServer', None),
 				'playerReady': data['playerReady'],
 				'currentServer': data['currentServer'],
 			}
@@ -143,6 +141,7 @@ class PongConsumer(WebsocketConsumer):
 			{
 				'type': 'player_data',
 				'gameStart': data['gameStart'],
+				'gameReady': data['gameReady'],
 				'animationFrame': data['animationFrame'],
 			}
 		)
@@ -203,8 +202,8 @@ class PongConsumer(WebsocketConsumer):
 		self.send(text_data=json.dumps({
 			'type': 'player_data',
 			'player_data': {
-				'playerReady': event.get('playerReady', False),
-				'currentServer': event.get('currentServer', None)
+				'playerReady': event['playerReady'],
+				'currentServer': event['currentServer']
 			}
 		}))
 
@@ -213,6 +212,7 @@ class PongConsumer(WebsocketConsumer):
 			'type': 'game_data',
 			'game_data': {
 				'gameStart': event['gameStart'],
+				'gameReady': event['gameReady'],
 				'animationFrame': event['animationFrame']	
 			}
 		}))
