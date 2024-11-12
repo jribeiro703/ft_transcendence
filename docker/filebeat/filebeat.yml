@@ -1,0 +1,52 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/*.log
+  fields:
+    service: "generic"
+
+- type: log
+  enabled: true
+  paths:
+    - /workspace/logs/django/*.log
+  fields:
+    service: "django"
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/nginx/*.log
+  fields:
+    service: "nginx"
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/prometheus/*.log
+  fields:
+    service: "prometheus"
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/grafana/*.log
+  fields:
+    service: "grafana"
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/postgres-exporter/*.log
+  fields:
+    service: "postgres-exporter"
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/node-exporter/*.log
+  fields:
+    service: "node-exporter"
+
+output.logstash:
+  hosts: ["logstash:5044"]
