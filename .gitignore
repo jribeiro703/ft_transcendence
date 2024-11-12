@@ -133,5 +133,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 docker/django/zsh_history
-docker/nginx/conf.d/.htpasswd
-docker/nginx
+docker/nginx/htpasswd
+docker/nginx/certs
