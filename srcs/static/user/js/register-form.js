@@ -27,7 +27,7 @@ export function renderRegisterForm() {
         const password = document.getElementById('password').value;
         const data = await fetchData('https://localhost:8081/user/register/', 'POST', { username, email, password });
         console.log('Register response:', data);
-        displayResponse(data);
+        displayResponse(data.message);
         window.history.pushState({}, '', '#registerResponse');
     });
 }

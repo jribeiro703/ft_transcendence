@@ -43,7 +43,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
 		except Exception as e:
 			user.delete()
 			raise serializers.ValidationError(f"Error: send activation mail failed : {str(e)}")
-		
 		return user
 
       
