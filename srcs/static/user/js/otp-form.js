@@ -17,6 +17,10 @@ export function renderOtpForm(url) {
 
         const data = await fetchData(full_url, 'POST', { otp_code: otpCode });
         console.log('OTP verification response:', data);
-        box.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        if (data.access_token) {
+            localStorage.setItem('access_token', data.access_token);
+            window.location.href = "/";
+        }
+        box.innerHTML = `<p>${data.message}</p>`;
     });
 }

@@ -39,6 +39,9 @@ function router() {
         case '#otp':
             renderOtpForm();
             break;
+        case '#profile':
+            rederProfilePage();
+            break;
         default:
             box.innerHTML = '<h1>Page not found</h1>';
             break;
@@ -47,7 +50,7 @@ function router() {
 
 // event for profile button
 document.getElementById('profileButton').addEventListener('click', () => {
-    alert('Tu dois te connecter pour consulter ton profil.');
+    window.location.hash = '#profile';
 });
 
 // call the router each time the hash changes

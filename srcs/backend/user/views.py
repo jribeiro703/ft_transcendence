@@ -30,6 +30,12 @@ class CreateUserView(CreateAPIView):
 	queryset = User.objects.all()
 	permission_classes = [AllowAny]
 	serializer_class = UserCreateSerializer
+	
+	def create(self, request, *args, **kwargs):
+		response = super().create(request, *args, **kwargs)
+		return Response({
+			"message": "User created successfully. Please check your email to activate your account."
+		}, status=status.HTTP_201_CREATED)
 
 class ActivateLinkView(APIView):
 	permission_classes = [AllowAny]
@@ -77,8 +83,7 @@ class UserLoginView(APIView):
 			}, status=status.HTTP_200_OK)
 		
 		except ValidationError as e:
-			error_message = str(e.detail.get("otp_code", ["An error occurred"])[0])
-			print(f"M={error_message}")
+			error_message = e.detail['message']
 			return Response({"message": error_message}, status=status.HTTP_401_UNAUTHORIZED)
 		
 class OtpVerificationView(APIView):
@@ -107,9 +112,8 @@ class OtpVerificationView(APIView):
 			)
 			return response
 		except ValidationError as e:
-			error_message = e.detail.get("message")
-			# return Response({"message": error_message}, status=status.HTTP_401_UNAUTHORIZED)
-			return Response({"message": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+			error_message = e.detail['otp_code']
+			return Response({"message": error_message}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class LogoutView(APIView):
