@@ -2,5 +2,5 @@ from . import views
 from django.urls import path
 
 urlpatterns = [
-	path('', views.livechat, name='livechat'),
+        path('', views.livechat_index)
 ]

@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [
 	'0.0.0.0',
 	'localhost',
 	'django',
-	'wstp'
+	'made-f0Br8s5.clusters.42paris.fr'
 ]
 
 # HTTPS settings

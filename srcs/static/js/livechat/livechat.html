@@ -1,7 +1,53 @@
 {% load static %}
 
 <div id="livechatView" style="display : block" class="livechat">
-  <h1>Live Chat</h1>
-</div>
+  <!-- enter livechat -->
+  <div class="chatblock">
+    <h1>Live Chat</h1>
+  </div>
+  <!-- room -->
+  <div class="chatblock">
+    <textarea style="font-size: 20px;" id="chat-log" ></textarea>
+    <input style="font-size: 20px;" id="chat-message-input" type="text">
+    <input style="font-size: 20px;" id="chat-message-submit" type="button" value="Send">
+    {{ livechat|json_script:"live-chat" }}
+    <script>
+      const liveChat = JSON.parse(document.getElementById('live-chat').textContent);
 
-<!-- <script type="module" src="{% static 'js/livechat/livechat.js' %}?v=1.1"></script> -->
+      const chatSocket = new WebSocket(
+        (window.location.protocol === 'https:' ? 'wss://' : 'ws://')
+        + window.location.host
+        + '/ws/livechat/'
+      );
+
+      chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        document.querySelector('#chat-log').value += (data.message + '\n');
+      };
+
+      chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+      };
+
+      chatSocket.onerror = function(e) {
+        console.error('Chat socket encountered an error:', e);
+      };
+
+      document.querySelector('#chat-message-input').focus();
+      document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {
+          document.querySelector('#chat-message-submit').click();
+        }
+      };
+
+      document.querySelector('#chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+          'message': message
+        }));
+        messageInputDom.value = '';
+      };
+    </script>
+  </div>
+</div>
