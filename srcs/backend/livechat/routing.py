@@ -1,7 +1,6 @@
-import path, include
-import ChatConsumer
+from django.urls import re_path
+from . import consumers
 
-# the empty string routes to ChatConsumer, which manages the chat functionality.
 websocket_urlpatterns = [
-    path("", ChatConsumer.as_asgi()),
+    re_path(r'ws/livechat/$', consumers.ChatConsumer.as_asgi()),
 ]
