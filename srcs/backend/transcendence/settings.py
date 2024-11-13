@@ -15,7 +15,7 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-print(f'{BASE_DIR}')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -82,7 +82,7 @@ ROOT_URLCONF = 'transcendence.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, '../templates')],
+        'DIRS': [os.path.join(BASE_DIR, '../static')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -145,12 +145,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '../static')
+	os.path.join(BASE_DIR, '../static')
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
+MEDIA_ROOT = os.path.join(BASE_DIR, '../static/images')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -162,10 +162,7 @@ AUTH_USER_MODEL = 'user.User'
 REST_FRAMEWORK = {
 	'DEFAULT_AUTHENTICATION_CLASSES': (
 		'rest_framework_simplejwt.authentication.JWTAuthentication',
-	),
-	# 'DEFAULT_RENDERER_CLASSES': (
-	# 	'rest_framework.renderers.JSONRenderer',
-	# ),
+	)
 }
 
 from datetime import timedelta
@@ -176,7 +173,7 @@ SIMPLE_JWT = {
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = "user/receved-email"
+EMAIL_FILE_PATH = "user/django-email-messages"
 
 DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
 
