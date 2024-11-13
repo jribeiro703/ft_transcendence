@@ -4,7 +4,7 @@ from transcendence import settings
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.auth import authenticate
 from django.template.loader import render_to_string
-from rest_framework import serializers
+from rest_framework import serializers, exceptions
 from datetime import datetime, timezone
 from .utils import send_activation_email
 
@@ -22,7 +22,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
 	def create(self, validated_data):
 		
 		if User.objects.filter(email=validated_data['email'], is_active=True).exists():
-			raise serializers.ValidationError("Registration impossible, this email is already used by a active user")
+			raise serializers.ValidationError({
+				"message": "Registration failed, this email is already used by a active user"
+			})
 		
 		password = validated_data.pop('password')
 		user = super().create(validated_data)
@@ -42,7 +44,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 			)
 		except Exception as e:
 			user.delete()
-			raise serializers.ValidationError(f"Error: send activation mail failed : {str(e)}")
+			raise exceptions.APIException({"message": "Send activation email failed"})
 		return user
 
       
@@ -58,40 +60,50 @@ class UserLoginSerializer(serializers.Serializer):
 		html_content = render_to_string("emails/2FA.html", context)
 		text_content = render_to_string("emails/2FA.txt", context)
 
-		email = EmailMultiAlternatives(
-			subject='Your 2FA Verification Code',
-			body=text_content,
-			from_email=settings.DEFAULT_FROM_EMAIL,
-			to=[user.email]
-		)
-		email.attach_alternative(html_content, "text/html")
-		email.send()
+		try:
+			email = EmailMultiAlternatives(
+				subject='Your 2FA Verification Code',
+				body=text_content,
+				from_email=settings.DEFAULT_FROM_EMAIL,
+				to=[user.email]
+			)
+			email.attach_alternative(html_content, "text/html")
+			email.send()
+		except Exception as e:
+			raise exceptions.APIException({"message": "Send 2FA verification email failed"})
 
 	def validate(self, attrs):
 		username = attrs.get('username')
 		password = attrs.get('password')
+		
 		if not username or not password:
 			raise serializers.ValidationError({"message": "Username and password are required"})
 		user = authenticate(username=username, password=password)
 		if user is None or user.is_staff:
-			raise serializers.ValidationError({"message": "Non-active account or Invalid username/password"})
+			raise exceptions.NotAuthenticated({"message": "Non-active account or Invalid username/password"})
+		
 		self._send_2FA_mail(user)
 		attrs['user'] = user
 		return attrs
 
-class OtpCodeChecking(serializers.Serializer):
+class OtpCodeSerializer(serializers.Serializer):
 	otp_code = serializers.CharField(required=True, write_only=True)
 
 	def validate_otp_code(self, value):
 		user = self.context.get('user')
 		if user is None:
-			raise serializers.ValidationError("User not found.")
+			raise serializers.ValidationError({"message": "User not found."})
 		totp = pyotp.TOTP(user.otp_secret, interval=300)
 		if not totp.verify(value, for_time=datetime.now(timezone.utc)):
-			raise serializers.ValidationError("Invalid OTP code.")
+			raise exceptions.NotAuthenticated({"message": "Invalid OTP code."})
 		return value
 
-class UserViewSetSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = User
+		fields = ()
+
+class UserSettingsSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
 		fields = ('id', 'username', 'alias', 'avatar', 'email', 'new_email', 'password', 'current_password', 'friends', 'is_online', 'is_active')
