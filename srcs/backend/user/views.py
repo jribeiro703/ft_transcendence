@@ -16,7 +16,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from datetime import timedelta
 from django.utils import timezone
-from .serializers import IndexSerializer, UserCreateSerializer, UserLoginSerializer, OtpCodeChecking, UserViewSetSerializer
+from .serializers import IndexSerializer, UserCreateSerializer, UserLoginSerializer, OtpCodeSerializer, UserSettingsSerializer
 from .models import User, FriendRequest
 from .permissions import IsOwner
 
@@ -50,19 +50,21 @@ class ActivateLinkView(APIView):
 			expiration_duration = timedelta(hours=24)
 			if timezone.now() - user.email_sent_at > expiration_duration:
 				user.delete()
-				return Response({"message": "Activation link has expired."}, status=status.HTTP_400_BAD_REQUEST)
+				return Response({"message": "Activation link has expired."}, status=status.HTTP_410_GONE)
 			
 			if action == 'verify_email' and user.new_email:
 				user.email = user.new_email
 				user.new_email = None
 				user.save()
-				return Response({"message": "Email address confirmed successfully!"}, status=status.HTTP_200_OK)
+				return Response({"message": "Change email address successfully!"}, status=status.HTTP_200_OK)
 
 			if action == 'activate_account':
+				if user.is_active:
+					return Response({"message": "Account is already active."}, status=status.HTTP_200_OK)
 				user.is_active = True
 				user.save()
 				return Response({"message": "Account activated successfully!"}, status=status.HTTP_200_OK)
-			return Response({"message": "Invalid Action"}, status=status.HTTP_200_OK)
+			return Response({"message": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
 		
 		return Response({"message": "Activation link is invalid."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -73,101 +75,97 @@ class UserLoginView(APIView):
       
 	def post(self, request, *args, **kwargs):
 		serializer = self.serializer_class(data=request.data)
-		try:
-			serializer.is_valid(raise_exception=True)
-			user = serializer.validated_data['user']
-			otp_verification_url = reverse('otp_verification', args=[user.id])
-			return Response({
-			    "message": "A verification code is sent to your email",
-			    "otp_verification_url": otp_verification_url
-			}, status=status.HTTP_200_OK)
-		
-		except ValidationError as e:
-			error_message = e.detail['message']
-			return Response({"message": error_message}, status=status.HTTP_401_UNAUTHORIZED)
+		serializer.is_valid(raise_exception=True)
+		user = serializer.validated_data['user']
+		otp_verification_url = reverse('otp_verification', args=[user.id])
+		return Response({
+		    "message": "A verification code is sent to your email",
+		    "otp_verification_url": otp_verification_url
+		}, status=status.HTTP_200_OK)
 		
 class OtpVerificationView(APIView):
 	model = User
 	permission_classes = [AllowAny]
-	serializer_class = OtpCodeChecking
+	serializer_class = OtpCodeSerializer
 
 	def post(self, request, user_id, *args, **kwargs):
 		user = User.objects.get(id=user_id)
 		serializer = self.serializer_class(data=request.data, context={'user': user})
-		try:
-			serializer.is_valid(raise_exception=True)
+		serializer.is_valid(raise_exception=True)
 
-			refresh = RefreshToken.for_user(user)
-			access_token = str(refresh.access_token)
-			refresh_token = str(refresh)
+		refresh = RefreshToken.for_user(user)
+		access_token = str(refresh.access_token)
+		refresh_token = str(refresh)
 
-			response = Response({"access_token": access_token}, status=status.HTTP_200_OK)
-			cookie_max_age = 3600 * 24
-			response.set_cookie(
-				'refresh_token',
-			    refresh_token,
-			    max_age=cookie_max_age,
-			    httponly=True,
-				secure=True
-			)
-			return response
-		except ValidationError as e:
-			error_message = e.detail['otp_code']
-			return Response({"message": error_message}, status=status.HTTP_401_UNAUTHORIZED)
-
+		response = Response({"access_token": access_token}, status=status.HTTP_200_OK)
+		cookie_max_age = 3600 * 24
+		response.set_cookie(
+			'refresh_token',
+		    refresh_token,
+		    max_age=cookie_max_age,
+		    httponly=True,
+			secure=True
+		)
+		return response
 
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
-    def post(self, request):
-        try:
-            refresh_token = request.COOKIES.get('refresh_token')
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response({"message": "Logout successfully !"}, status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response({"message": "Logout failed"}, status=status.HTTP_400_BAD_REQUEST)
+	permission_classes = [IsAuthenticated]
+	def post(self, request):
+		try:
+			refresh_token = request.COOKIES.get('refresh_token')
+			token = RefreshToken(refresh_token)
+			token.blacklist()
+			return Response({"message": "Logout successfully !"}, status=status.HTTP_205_RESET_CONTENT)
+		except Exception as e:
+		    return Response({"message": "Logout failed."}, status=status.HTTP_400_BAD_REQUEST)
 
-class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
-	queryset = User.objects.all()
-	serializer_class = UserViewSetSerializer
-	# authentication_classes = [JWTAuthentication]
-	# permission_classes = [IsAuthenticated, IsOwner]
-	authentication_classes = []
-	permission_classes = []
 
-	def update(self, request, *args, **kwargs):
-		response = super().update(request, *args, **kwargs)
-		success_messages = getattr(request, 'success_message', None)
-		if success_messages:
-			response.data['success_message'] = success_messages
-		return response
+# class ProfileStatsView(APIView):
+		
+# class MatchHistoryView(APIView):
+
+
+# class UserSettingsView(RetrieveUpdateDestroyAPIView):
+# 	queryset = User.objects.all()
+# 	serializer_class = UserSettingsSerializer
+# 	# authentication_classes = [JWTAuthentication]
+# 	# permission_classes = [IsAuthenticated, IsOwner]
+# 	authentication_classes = []
+# 	permission_classes = []
+
+# 	def update(self, request, *args, **kwargs):
+# 		response = super().update(request, *args, **kwargs)
+# 		success_messages = getattr(request, 'success_message', None)
+# 		if success_messages:
+# 			response.data['success_message'] = success_messages
+# 		return response
 
 
 # reste a tester avec le front-end
-class AcceptFriendRequestView(APIView):
-    def post(self, request, *args, **kwargs):
-        request_id = kwargs.get('request_id')
-        try:
-            friend_request = FriendRequest.objects.get(id=request_id)
-            if friend_request.receiver != request.user:
-                return Response({"error": "You are not authorized to accept this request."}, status=status.HTTP_403_FORBIDDEN)
+# class AcceptFriendRequestView(APIView):
+#     def post(self, request, *args, **kwargs):
+#         request_id = kwargs.get('request_id')
+#         try:
+#             friend_request = FriendRequest.objects.get(id=request_id)
+#             if friend_request.receiver != request.user:
+#                 return Response({"error": "You are not authorized to accept this request."}, status=status.HTTP_403_FORBIDDEN)
 
-            friend_request.is_accepted = True
-            friend_request.save()
+#             friend_request.is_accepted = True
+#             friend_request.save()
 
-            friend_request.sender.friends.add(friend_request.receiver)
-            friend_request.receiver.friends.add(friend_request.sender)
+#             friend_request.sender.friends.add(friend_request.receiver)
+#             friend_request.receiver.friends.add(friend_request.sender)
 
-            return Response({"message": "Friend request accepted."}, status=status.HTTP_200_OK)
-        except FriendRequest.DoesNotExist:
-            return Response({"error": "Friend request not found."}, status=status.HTTP_404_NOT_FOUND)
+#             return Response({"message": "Friend request accepted."}, status=status.HTTP_200_OK)
+#         except FriendRequest.DoesNotExist:
+#             return Response({"error": "Friend request not found."}, status=status.HTTP_404_NOT_FOUND)
 		
-class FriendRequestListView(APIView):
-	def get(self, request, *args, **kwargs):
-		received_requests = request.user.received_requests.filter(is_accepted=False)
-		sent_requests = request.user.sent_requests.filter(is_accepted=False)
+# class FriendRequestListView(APIView):
+# 	def get(self, request, *args, **kwargs):
+# 		received_requests = request.user.received_requests.filter(is_accepted=False)
+# 		sent_requests = request.user.sent_requests.filter(is_accepted=False)
 
-		return Response({
-		    "received_requests": [{"id": req.id, "sender": req.sender.username} for req in received_requests],
-		    "sent_requests": [{"id": req.id, "receiver": req.receiver.username} for req in sent_requests],
-		})
+# 		return Response({
+# 		    "received_requests": [{"id": req.id, "sender": req.sender.username} for req in received_requests],
+# 		    "sent_requests": [{"id": req.id, "receiver": req.receiver.username} for req in sent_requests],
+# 		})

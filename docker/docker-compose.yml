@@ -21,7 +21,6 @@ services:
     environment:
       - VIRTUAL_HOST=localhost,made-f0Br8s3.clusters.42paris.fr
       - VIRTUAL_PORT=8000
-      - TZ=Europe/Paris
 
   migration:
     build:
@@ -48,8 +47,6 @@ services:
     networks:
       - transcendence
     restart: on-failure
-    environment:
-      - TZ=Europe/Paris
 
   redis:
     image: redis:latest

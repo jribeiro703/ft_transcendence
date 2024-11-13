@@ -26,12 +26,11 @@ class User(AbstractUser):
 	def __str__(self):
 		return self.username
 
-# reste a tester avec le front-end
-class FriendRequest(models.Model):
-    sender = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_accepted = models.BooleanField(default=False)
+# class FriendRequest(models.Model):
+#     sender = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
+#     receiver = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     is_accepted = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f"{self.sender.username} sent a friend request to {self.receiver.username}"
+#     def __str__(self):
+#         return f"{self.sender.username} sent a friend request to {self.receiver.username}"
