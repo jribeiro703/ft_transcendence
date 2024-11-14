@@ -1,11 +1,13 @@
 import { renderLoginForm, renderLoginResponse } from "./login-form.js"
 import { renderRegisterForm } from "./register-form.js"
 import { renderOtpForm } from "./otp-form.js";
+import { renderProfilePage } from "./profile.js"
+import { renderSettingsPage } from "./settings.js"
 
 // router for user authentication and its different views 
 function router() {
     const box = document.getElementById('authBox');
-    const hash = window.location.hash || '#auth';
+    const hash = '#auth';
 
     // clean the box before placing thw new view
     box.innerHTML = '';
@@ -22,7 +24,7 @@ function router() {
             });
             document.getElementById('registerButton').addEventListener('click', () => {
                 window.location.hash = '#register';
-        });
+            });
             document.getElementById('42loginButton').addEventListener('click', () => {
                 window.location.hash = '#42login';
             });
@@ -40,8 +42,11 @@ function router() {
             renderOtpForm();
             break;
         case '#profile':
-            rederProfilePage();
+            renderProfilePage();
             break;
+        case '#settings':
+            renderSettingsPage();
+            break;    
         default:
             box.innerHTML = '<h1>Page not found</h1>';
             break;
@@ -51,6 +56,10 @@ function router() {
 // event for profile button
 document.getElementById('profileButton').addEventListener('click', () => {
     window.location.hash = '#profile';
+});
+
+document.getElementById('settingsButton').addEventListener('click', () => {
+    window.location.hash = '#settings';
 });
 
 // call the router each time the hash changes
