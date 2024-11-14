@@ -4,7 +4,7 @@ import { keyDownHandler, keyUpHandler, startBall } from "./input.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { updateLevelSelection, updateMapSelection } from "./gameMode.js";
 
-import { showTournamentView } from "./tournamentView.js";
+import { showTournamentView } from "../tournament/tournamentView.js";
 
 export function initGameVar()
 {
