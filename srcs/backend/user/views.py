@@ -16,8 +16,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from datetime import timedelta
 from django.utils import timezone
-from .serializers import IndexSerializer, UserCreateSerializer, UserLoginSerializer, OtpCodeSerializer, UserSettingsSerializer
-from .models import User, FriendRequest
+from .serializers import IndexSerializer, UserCreateSerializer, UserLoginSerializer, OtpCodeSerializer#, UserSettingsSerializer
+from .models import User#, FriendRequest
 from .permissions import IsOwner
 
 @api_view(['GET'])

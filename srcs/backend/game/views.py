@@ -11,5 +11,5 @@ def game_index(request):
 	data = {"message": "Hello, world from game app !"}
 	return Response(data, status=status.HTTP_200_OK)
 
-class RegisterGameView(CreateAPIView):
-	queryset = Game.objects.all()
+# class RegisterGameView(CreateAPIView):
+# 	queryset = Game.objects.all()
