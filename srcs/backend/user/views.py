@@ -1,12 +1,11 @@
 from django.urls import reverse
-from django.contrib.auth import get_user_model
+from django.db.models import Q
 from django.contrib.auth.tokens import default_token_generator
+from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
-from django.utils.translation import gettext_lazy as _
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -15,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from datetime import timedelta
-from django.utils import timezone
+from game.models import Game
 from .serializers import IndexSerializer, UserCreateSerializer, UserLoginSerializer, OtpCodeSerializer, UserSettingsSerializer
 from .models import User, FriendRequest
 from .permissions import IsOwner
@@ -121,17 +120,47 @@ class LogoutView(APIView):
 		except Exception as e:
 		    return Response({"message": "Logout failed."}, status=status.HTTP_400_BAD_REQUEST)
 
+class UserProfileView(APIView):
+	permission_classes = [AllowAny]
 
-# class ProfileStatsView(APIView):
-# class MatchHistoryView(APIView):
+	def get(self, request, username, *args, **kwargs):
+		try:
+			user = User.objects.get(username=username)
+		except User.DoesNotExist:
+			return Response({"message": "Profile Not Found"}, status=status.HTTP_404_NOT_FOUND)
+
+		total_matches = Game.objects.filter(
+			Q(player_one=user) | Q(player_two=user)
+		).count()
+		won_matches = Game.objects.filter(winner=user).count()
+
+		last_matches = Game.objects.filter(
+			Q(player_one=user) | Q(player_two=user)
+		).order_by('-created_at')[:5]
+
+		match_history = []
+		for match in last_matches:
+			match_info = {
+			    "date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+			    "score": f"{match.score_one} - {match.score_two}",
+			    "winner": match.winner.username
+			}
+			match_history.append(match_info)
+
+		data = {
+			"username": user.username,
+			"alias": user.alias,
+			"total_matches": total_matches,
+			"won_matches": won_matches,
+			"match_history": match_history
+		}
+		return Response(data, status=status.HTTP_200_OK)
 
 class UserSettingsView(RetrieveUpdateDestroyAPIView):
 	queryset = User.objects.all()
 	serializer_class = UserSettingsSerializer
 	authentication_classes = [JWTAuthentication]
 	permission_classes = [IsAuthenticated, IsOwner]
-	# authentication_classes = []
-	# permission_classes = []
 	
 	def patch(self, request, *args, **kwargs):
 		instance, success_messages = self.get_serializer().update(self.get_object(), request.data)
