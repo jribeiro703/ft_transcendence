@@ -14,8 +14,7 @@ urlpatterns = [
 	path('logout/', views.LogoutView.as_view(), name="logout"),
 	
 	#for profile (public)
-	# path('profile/stats/', views.ProfileStatsView.as_view(), name="user_stats"),
-	# path('profile/match-history/', views.MatchHistoryView.as_view(), name="user_match_history"),
+	path('profile/<str:username>/', views.UserProfileView.as_view(), name="user_profile"),
 
 	# for settings (private)
 	path('settings/<int:pk>', views.UserSettingsView.as_view(), name="user_settings"),
