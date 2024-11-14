@@ -1,18 +1,34 @@
-// This is an example script. It is not connected with any HTML DOM element. Just for an experiment
+document.addEventListener("DOMContentLoaded", function() {
+	const participantList = document.getElementById("participantList");
 
-document.addEventListener('DOMContentLoaded', function()
-{
 	// Open a WebSocket connection
-	const socket = new WebSocket('wss://' + window.location.host + '/ws/basic/');
+	const participantsSocket = new WebSocket(
+		"wss://" + window.location.host + "/ws/tournament/"
+	);
 
-	// When a message is received from the server
-	socket.onmessage = function(event) {
-		const data = JSON.parse(event.data);
-		console.log(data.message);  // Log the welcome message. See in F12 console
+	// Handle WebSocket connection opening
+	participantsSocket.onopen = function() {
+		console.log("WebSocket connection established");
+		participantsSocket.send(JSON.stringify({ action: "initial_connect" }));
 	};
 
-	// Handle WebSocket closing
-	socket.onclose = function(e) {
-		console.log('WebSocket closed'); // Every reload of the HTML the websocket closes
+	participantsSocket.onmessage = function(event) {
+		const data = JSON.parse(event.data);
+		participantList.innerHTML = "";
+		data.participants.forEach(participant => {
+			const li = document.createElement("li");
+			li.textContent = participant;
+			participantList.appendChild(li);
+		});
+	};
+
+	// Log WebSocket errors
+	participantsSocket.onerror = function(error) {
+		console.error("WebSocket error:", error);
+	};
+
+	// Handle WebSocket closure
+	participantsSocket.onclose = function() {
+		console.log("WebSocket connection closed");
 	};
 });
