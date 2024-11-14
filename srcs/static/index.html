@@ -77,7 +77,7 @@
 			<div class="button-container">
 				<button id="quickGameBtn" style="display: none;">Quick Game (AI)</button>
 				<button id="startGameBtn" style="display: none;">Start Game</button>
-				<button id="tournamentGameBtn" style="display: none;">Tournament</button>
+				<button id="tournamentGameBtn" style="display: none;">Tournament (...)</button>
 			</div>
 		</div>
 		<div id="gameView" style="display: none;">
@@ -96,6 +96,25 @@
 				<button id="quitGameBtn" style="display: none;">Quit Game</button>
 			</div>
 		</div>
+		<!-- Tournament View starts here -->
+		<div id="tournamentView" style="display: none;">
+			<h1>Tournament View</h1>
+			<p>Win to Advance, Lose and You're Out!</p>
+			<div class="container">
+				<h4>Participants</h4>
+				<div class="left-column">
+					<ul id="participantList" class="list-group">
+					<!-- Dynamically insert participants here -->
+					<!-- <li class="list-group-item">Player 1</li> -->
+					<!-- Add more players as needed -->
+					</ul>
+				</div>
+			</div>
+			<div class="button-container">
+				<button id="startTournamentBtn" style="display: none;">Start Tournament</button>
+			</div>
+		</div>
+		<!-- Tournament View ends here -->
 	</div>
 	<script type="module" src="{% static 'js/main.js' %}?v=1.1"></script>
 	<div class="footer-text">

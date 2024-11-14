@@ -59,10 +59,12 @@ const gameVar =
 	startGameBtn: null,
 	quickGameBtn: null,
 	playGameBtn: null,
-	tournamentGameBtn: null,
 	rematchBtn: null,
 	quitGameBtn: null,
-
+	
+	tournamentView: null,
+	tournamentGameBtn: null,
+	
 	
 	withPowerUp: null,
 	withoutPowerUp: null,
