@@ -1,0 +1,109 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff; /* Couleur de fond blanche */
+    margin: 0;
+    padding: 20px;
+}
+
+.game-frame {
+    border: 2px solid #000; /* Bordure autour du cadre du jeu */
+    padding: 20px;
+    background-color: #f9f9f9; /* Couleur de fond du cadre */
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.navbar a {
+    text-decoration: none;
+    padding: 10px;
+}
+
+.navbar .home {
+    border: 1px solid #000;
+    border-radius: 50%;
+    padding: 5px 10px;
+}
+
+.main-content {
+    display: flex;
+    margin-top: 20px;
+}
+
+.main-content .left {
+    flex: 2;
+    padding-right: 20px;
+}
+
+.main-content .left .auth-box {
+    border: 1px solid #000; /* Bordure de la boîte dynamique */
+    padding: 20px;
+}
+
+.main-content .left button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #000; /* Bordure du bouton */
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.main-content .right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#responseData {
+    margin-top: 20px;
+    border: 1px solid #000;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+/* Styles pour le livechat */
+.livechat {
+    flex: 1;
+    border: 1px solid #000;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+
+.livechat .chat-messages {
+    height: 200px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f0f0f0;
+}
+
+.livechat .chat-messages {
+    margin-bottom: 10px;
+}
+
+.livechat .chat-input {
+    display: flex;
+}
+
+.livechat .chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+}
+
+.livechat .chat-input button {
+    padding: 10px;
+    border: 1px solid #000;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
