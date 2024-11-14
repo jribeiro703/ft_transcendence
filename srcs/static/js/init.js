@@ -4,6 +4,8 @@ import { keyDownHandler, keyUpHandler, startBall } from "./input.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { updateLevelSelection, updateMapSelection } from "./gameMode.js";
 
+import { showTournamentView } from "./tournamentView.js";
+
 export function initGameVar()
 {
 	gameVar.defaultView = document.getElementById('defaultView');
@@ -12,10 +14,12 @@ export function initGameVar()
 	gameVar.startGameBtn = document.getElementById('startGameBtn');
 	gameVar.quickGameBtn = document.getElementById('quickGameBtn');
 	gameVar.playGameBtn = document.getElementById('playGameBtn');
-	gameVar.tournamentGameBtn = document.getElementById('tournamentGameBtn');
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
 	
+	gameVar.tournamentView = document.getElementById('tournamentView');
+	gameVar.tournamentGameBtn = document.getElementById('tournamentGameBtn');
+
 	gameVar.withPowerUp = document.getElementById('withPowerUps');
 	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');
 	gameVar.easy = document.getElementById('easy');
@@ -38,6 +42,8 @@ export function initEventListener()
 	gameVar.quickGameBtn.addEventListener('click', showGameView);
 	gameVar.quitGameBtn.addEventListener('click', showDefaultView);
 	gameVar.rematchBtn.addEventListener('click', rematchView);
+
+	gameVar.tournamentGameBtn.addEventListener('click', showTournamentView);
 
 	gameVar.withoutPowerUp.classList.add('selected');
 	gameVar.medium.classList.add('selected');
