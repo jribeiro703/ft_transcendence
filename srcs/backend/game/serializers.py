@@ -3,19 +3,14 @@
 # from user.models import User
 
 # class GameCreateSerializer(serializers.ModelSerializer):
-# 	player_one = serializers.StringRelatedField()
-# 	player_two = serializers.StringRelatedField()
-# 	winner = serializers.StringRelatedField()
-
 # 	class Meta:
 # 		model = Game
 # 		fields = ('id', 'created_at', 'player_one', 'player_two', 'score_one', 'score_two', 'winner')
 
 # 	def create(self, validated_data):
-# 		player_one = User.objects.get(username=validated_data['player_one_username'])
-# 		player_two = User.objects.get(username=validated_data['player_two_username'])
-# 		winner = User.objects.get(username=validated_data['winner_username'])
-
+# 		player_one = User.objects.get(id=validated_data['player_one_username'])
+# 		player_two = User.objects.get(id=validated_data['player_two_username'])
+# 		winner = User.objects.get(id=validated_data['winner_username'])
 # 		game = Game.objects.create(
 # 			player_one=player_one,
 # 			player_two=player_two,

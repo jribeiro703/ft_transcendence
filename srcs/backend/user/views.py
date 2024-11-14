@@ -16,8 +16,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from datetime import timedelta
 from django.utils import timezone
-from .serializers import IndexSerializer, UserCreateSerializer, UserLoginSerializer, OtpCodeSerializer#, UserSettingsSerializer
-from .models import User#, FriendRequest
+from .serializers import IndexSerializer, UserCreateSerializer, UserLoginSerializer, OtpCodeSerializer, UserSettingsSerializer
+from .models import User, FriendRequest
 from .permissions import IsOwner
 
 @api_view(['GET'])
@@ -39,6 +39,7 @@ class CreateUserView(CreateAPIView):
 
 class ActivateLinkView(APIView):
 	permission_classes = [AllowAny]
+
 	def get(self, request, uidb64, token, action):
 		try:
 			uid = force_str(urlsafe_base64_decode(uidb64))
@@ -109,7 +110,8 @@ class OtpVerificationView(APIView):
 		return response
 
 class LogoutView(APIView):
-	permission_classes = [IsAuthenticated]
+	authentication_classes = [JWTAuthentication]
+	permission_classes = [IsAuthenticated, IsOwner]
 	def post(self, request):
 		try:
 			refresh_token = request.COOKIES.get('refresh_token')
@@ -121,51 +123,54 @@ class LogoutView(APIView):
 
 
 # class ProfileStatsView(APIView):
-		
 # class MatchHistoryView(APIView):
 
+class UserSettingsView(RetrieveUpdateDestroyAPIView):
+	queryset = User.objects.all()
+	serializer_class = UserSettingsSerializer
+	authentication_classes = [JWTAuthentication]
+	permission_classes = [IsAuthenticated, IsOwner]
+	# authentication_classes = []
+	# permission_classes = []
+	
+	def patch(self, request, *args, **kwargs):
+		instance, success_messages = self.get_serializer().update(self.get_object(), request.data)
+		serializer = self.get_serializer(instance)
 
-# class UserSettingsView(RetrieveUpdateDestroyAPIView):
-# 	queryset = User.objects.all()
-# 	serializer_class = UserSettingsSerializer
-# 	# authentication_classes = [JWTAuthentication]
-# 	# permission_classes = [IsAuthenticated, IsOwner]
-# 	authentication_classes = []
-# 	permission_classes = []
+		response_data = serializer.data
+		response_data['messages'] = success_messages
+		return Response(response_data)
 
-# 	def update(self, request, *args, **kwargs):
-# 		response = super().update(request, *args, **kwargs)
-# 		success_messages = getattr(request, 'success_message', None)
-# 		if success_messages:
-# 			response.data['success_message'] = success_messages
-# 		return response
+class AcceptFriendRequestView(APIView):
+	authentication_classes = [JWTAuthentication]
+	permission_classes = [IsAuthenticated, IsOwner]
+    
+	def post(self, request, *args, **kwargs):
+		request_id = kwargs.get('request_id')
+		try:
+			friend_request = FriendRequest.objects.get(id=request_id)
+			if friend_request.receiver != request.user:
+				return Response({"message": "You are not authorized to accept this request."}, status=status.HTTP_403_FORBIDDEN)
 
+			friend_request.is_accepted = True
+			friend_request.save()
+			friend_request.sender.friends.add(friend_request.receiver)
+			friend_request.receiver.friends.add(friend_request.sender)
 
-# reste a tester avec le front-end
-# class AcceptFriendRequestView(APIView):
-#     def post(self, request, *args, **kwargs):
-#         request_id = kwargs.get('request_id')
-#         try:
-#             friend_request = FriendRequest.objects.get(id=request_id)
-#             if friend_request.receiver != request.user:
-#                 return Response({"error": "You are not authorized to accept this request."}, status=status.HTTP_403_FORBIDDEN)
-
-#             friend_request.is_accepted = True
-#             friend_request.save()
-
-#             friend_request.sender.friends.add(friend_request.receiver)
-#             friend_request.receiver.friends.add(friend_request.sender)
-
-#             return Response({"message": "Friend request accepted."}, status=status.HTTP_200_OK)
-#         except FriendRequest.DoesNotExist:
-#             return Response({"error": "Friend request not found."}, status=status.HTTP_404_NOT_FOUND)
+			return Response({"message": "Friend request accepted."}, status=status.HTTP_200_OK)
+		except FriendRequest.DoesNotExist:
+			return Response({"message": "Friend request not found."}, status=status.HTTP_404_NOT_FOUND)
 		
-# class FriendRequestListView(APIView):
-# 	def get(self, request, *args, **kwargs):
-# 		received_requests = request.user.received_requests.filter(is_accepted=False)
-# 		sent_requests = request.user.sent_requests.filter(is_accepted=False)
+class ListFriendRequestView(APIView):
+	authentication_classes = [JWTAuthentication]
+	permission_classes = [IsAuthenticated, IsOwner]
+	
+	def get(self, request, *args, **kwargs):
+		user = User.objects.get(pk=kwargs['pk'])
+		received_requests = user.received_requests.filter(is_accepted=False)
+		sent_requests = user.sent_requests.filter(is_accepted=False)
 
-# 		return Response({
-# 		    "received_requests": [{"id": req.id, "sender": req.sender.username} for req in received_requests],
-# 		    "sent_requests": [{"id": req.id, "receiver": req.receiver.username} for req in sent_requests],
-# 		})
+		return Response({
+		    "received_requests": [{"id": req.id, "sender": req.sender.username} for req in received_requests],
+		    "sent_requests": [{"id": req.id, "receiver": req.receiver.username} for req in sent_requests],
+		})
