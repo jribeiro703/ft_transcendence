@@ -1,4 +1,3 @@
-import gameVar from "./var.js";
 
 export function showTournamentView()
 {
