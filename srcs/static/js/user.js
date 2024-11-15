@@ -2,6 +2,14 @@
 function createUserContent() {
     const box = document.getElementById('mainContent');
     box.innerHTML = `
+		<div id="defaultView">
+			<div class="container">
+				<div class="mx-auto">
+					<img class="img-fluid" src="${staticImageURL}" alt="Pong Game">
+					<br><br><br>
+				</div>
+			</div>
+		</div>
         <div class="container py-2 d-flex flex-column align-items-center py-2">
             <button id= btn-Profile class="btn custom-btn mb-4">Profile</button>
 			<button id= btn-Settings class="btn custom-btn mb-4">Settings</button>
