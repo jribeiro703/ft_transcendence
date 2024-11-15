@@ -2,6 +2,14 @@
 function createHomeContent() {
 	const box = document.getElementById('mainContent');
 	box.innerHTML = `
+		<div id="defaultView">
+			<div class="container">
+				<div class="mx-auto">
+					<img class="img-fluid" src="${staticImageURL}" alt="Pong Game">
+					<br><br><br>
+				</div>
+			</div>
+		</div>
 		<div class="container py-2 d-flex flex-column align-items-center py-2">
 			<button id="btn-QuickGame" class="btn custom-btn mb-4">QuickGame</button>
 			<button id="btn-Match" class="btn custom-btn mb-4">Match</button>
@@ -34,13 +42,3 @@ export function renderHomePage() {
 		console.log('Leaderboard button clicked');
 	});
 }
-
-// image ne s'affiche pas correctement, pb reste a regler.
-// <div id="defaultView">
-// 			<div class="container">
-// 				<div class="mx-auto">
-// 					<img class="img-fluid" src="{% static 'css/images/pong-game-card.png' %}" alt="Pong Game">
-// 					<br><br><br>
-// 				</div>
-// 			</div>
-// 		</div>
