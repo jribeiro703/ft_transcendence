@@ -3,8 +3,8 @@ import { initializeBall } from "./draw.js";
 import { createPowerUp } from "./powerUp.js";
 import { draw } from "./draw.js";
 import { resetMatch, checkServer } from "./reset.js";
-import { manageAi } from "./ai.js";
-import { initEventListenerAi, initEventListenerRoom } from "./init.js";
+import { initEventListenerAi, manageAi } from "./ai.js";
+import { initEventListenerRoom } from "./init.js";
 
 
 export function showGameplayMultiView()
@@ -52,7 +52,6 @@ export function showGameView()
 	gameView.style.display = 'block';
 	rematchBtn.style.display = 'block';
 	quitGameBtn.style.display = 'block';	
-	// initEventListenerAi();
 	initializeBall();
 	if (gameVar.powerUpEnable)
 		createPowerUp();

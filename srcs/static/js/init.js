@@ -4,7 +4,7 @@ import { keyDownHandler, keyUpHandler, startBall, startBallAi } from "./input.js
 import { createPowerUp, updatePowerUpSelection } from "./powerUp.js";
 import { updateLevelSelection, updateMapSelection } from "./gameMode.js";
 import { initializeBall, draw2, draw} from "./draw.js";
-import { checkForExistingRooms, joinRoom } from "./room.js";
+import { checkForExistingRooms, displayRoomInfo, joinRoom, refreshRoomList, updateRoomInfo, updateRoomList } from "./room.js";
 
 export function initGameVar()
 {
@@ -20,7 +20,11 @@ export function initGameVar()
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
 	gameVar.roomView = document.getElementById('roomView');
-	
+	gameVar.createRoomNameInput = document.getElementById('createRoomName')
+	gameVar.roomsContainer = document.getElementById('roomsContainer');
+	gameVar.noRoomsMessage = document.getElementById('noRoomsMessage');
+	gameVar.refreshBtn = document.getElementById('refreshBtn');
+
 	gameVar.withPowerUp = document.getElementById('withPowerUps');
 	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');
 	gameVar.easy = document.getElementById('easy');
@@ -130,10 +134,15 @@ export function initEventListenerRoom()
 	document.addEventListener("keyup", (e) => keyUpHandler(e, gameVar.isFirstPlayer), false);
 	document.addEventListener("keydown", startBall, false);
 
-	
+	gameVar.refreshBtn.addEventListener('click', () =>
+	{
+		displayRoomInfo();
+		refreshRoomList();
+	});
 
 	gameVar.createRoomBtn.addEventListener('click', () => 
 	{
+		console.log("createRoombtn");
 		showGameViewRoom();
 		gameVar.liveMatch = true;
 		history.pushState({ view: 'game' }, '', '?view=game');
@@ -147,6 +156,7 @@ export function initEventListenerRoom()
 			const room = urlParams.get('room');
 			if (room)
 			{
+				console.log("event popstate");
 				showGameViewRoom(room);
 				console.log("room");
 			}
@@ -173,18 +183,23 @@ function roomMultiView()
 	gameVar.roomView.style.display = 'block';
 	gameVar.createRoomBtn.style.display = 'block';
 	// gameVar.joinRoomBtn.style.display = 'block';
+	gameVar.refreshBtn.style.display = 'block';
 	gameVar.gameplayView.style.display = 'none';
 	initEventListenerRoom();
 }
 
 function showGameViewRoom(room = null)
 {
+	console.log("showGameviewRoom");
 	gameVar.defaultView.style.display = 'none';
 	gameVar.gameplayView.style.display = 'none';
 	gameVar.gameView.style.display = 'block';
 	gameVar.quickGameBtn.style.display = 'none';
 	gameVar.startGameBtn.style.display = 'none';
 	gameVar.tournamentGameBtn.style.display = 'none';
+	gameVar.createRoomBtn.style.display = 'none';
+	gameVar.roomView.style.display = 'none';
+	
 	gameVar.liveMatch = true;
 	if (gameVar.powerUpActive)
 		createPowerUp();		
@@ -222,15 +237,6 @@ function setIsFirstPlayer(value)
 }
 
 
-export function initEventListenerAi()
-{
 
-	document.addEventListener("keydown", keyDownHandler, false);
-	document.addEventListener("keyup", keyUpHandler, false);
-	document.addEventListener("keydown", startBallAi, false);
-
-	gameVar.quickGameBtn.addEventListener('click', showGameView);
-	gameVar.rematchBtn.addEventListener('click', rematchView);
-}
 
 

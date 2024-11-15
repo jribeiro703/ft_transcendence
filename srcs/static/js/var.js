@@ -105,6 +105,13 @@ const gameVar =
 	],
 	// -------------room------------------
 
+	createRoomNameInput: null,
+	noRoomsMessage: null,
+	roomsContainer: null,
+	refreshBtn: null,
+
+	newRoomName: null,
+
 	room1name: null,
 	room1players: null,
 	room1status: null,
@@ -131,7 +138,9 @@ const gameVar =
 	joinRoom4Btn: null,
 	joinRoom5Btn: null,
 	
-	rooms: {},
+	rooms: [
+		{ idx: null, name: null, players: 0, status: null},
+	],
 	isFirstPlayer: false,
 	roomName: null,
 	gameSocket: null,

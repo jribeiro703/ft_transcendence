@@ -73,3 +73,20 @@ export function sendGameData(socket, gameStart, gameReady, animationFrame)
 		socket.send(JSON.stringify(data));
 	}
 }
+
+
+export function sendRoomData(socket, idx, name, nbPlayer, status)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data =
+		{
+			type: 'room_data',
+			idx: idx,
+			name: name,
+			nbPlayer: nbPlayer,
+			status: status,
+		};
+		socket.send(JSON.stringify(data));
+	}
+}

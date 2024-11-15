@@ -1,8 +1,9 @@
 import gameVar from './var.js';
 import { updatePowerUpSelection } from './powerUp.js';
 import { updateLevelSelection } from './gameMode.js';
-import { initGameVar, initEventListener, initEventListenerRoom, initEventListenerAi } from './init.js';
+import { initGameVar, initEventListener, initEventListenerRoom } from './init.js';
 import { manageAi } from './ai.js';
+import { refreshRoomList } from './room.js';
 
 
 document.addEventListener('DOMContentLoaded', function() 
@@ -17,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function()
 	gameVar.ctx = canvas.getContext('2d');
 	canvas.width = gameVar.canvasW;
 	canvas.height = gameVar.canvasH;
-
+	refreshRoomList();
 	initGameVar();
 	initEventListener();
 
