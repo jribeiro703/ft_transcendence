@@ -1,5 +1,6 @@
 services:
   django:
+    platform: ${DOCKER_PLATFORM}
     build:
       context: ../
       dockerfile: ./docker/django/Dockerfile
@@ -19,10 +20,11 @@ services:
     networks:
       - transcendence
     environment:
-      - VIRTUAL_HOST=localhost,made-f0Br8s3.clusters.42paris.fr
+      - VIRTUAL_HOST=localhost,${HOSTNAME}
       - VIRTUAL_PORT=8000
 
   migration:
+    platform: ${DOCKER_PLATFORM}
     build:
       context: ../
       dockerfile: ./docker/django/Dockerfile
@@ -38,6 +40,7 @@ services:
     command: python manage.py migrate --noinput
 
   db:
+    platform: ${DOCKER_PLATFORM}
     image: postgres:13
     container_name: db
     env_file:
@@ -49,6 +52,7 @@ services:
     restart: on-failure
 
   redis:
+    platform: ${DOCKER_PLATFORM}
     image: redis:latest
     container_name: redis
     ports:
@@ -57,6 +61,7 @@ services:
       - transcendence
 
   nginx:
+    platform: ${DOCKER_PLATFORM}
     build:
       context: ../
       dockerfile: ./docker/nginx/Dockerfile
@@ -64,7 +69,7 @@ services:
     ports:
       - "8081:443"
     volumes:
-      - ${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro
+      - ${DOCKER_SOCK}:/tmp/docker.sock:ro
       - ./nginx/certs:/etc/nginx/certs:ro
     environment:
       - HTTPS_METHOD=redirect
@@ -75,6 +80,7 @@ services:
       - transcendence
 
   # prometheus:
+  #   platform: ${DOCKER_PLATFORM}
   #   image: prom/prometheus:latest
   #   container_name: prometheus
   #   user: root
@@ -92,10 +98,11 @@ services:
   #   networks:
   #     - transcendence
   #   environment:
-  #     - VIRTUAL_HOST=prometheus.localhost
+  #     - VIRTUAL_HOST=prometheus.localhost,prometheus.${HOSTNAME}
   #     - VIRTUAL_PORT=9090
 
   # grafana:
+  #   platform: ${DOCKER_PLATFORM}
   #   image: grafana/grafana:latest
   #   container_name: grafana
   #   user: root
@@ -114,10 +121,11 @@ services:
   #   networks:
   #     - transcendence
   #   environment:
-  #     - VIRTUAL_HOST=grafana.localhost
+  #     - VIRTUAL_HOST=grafana.localhost,grafana.${HOSTNAME}
   #     - VIRTUAL_PORT=3000
 
   # node_exporter:
+  #   platform: ${DOCKER_PLATFORM}
   #   image: prom/node-exporter:latest
   #   container_name: node-exporter
   #   ports:
@@ -126,10 +134,11 @@ services:
   #   networks:
   #     - transcendence
   #   environment:
-  #     - VIRTUAL_HOST=node-exporter.localhost
+  #     - VIRTUAL_HOST=node-exporter.localhost,node-exporter.${HOSTNAME}
   #     - VIRTUAL_PORT=9100
 
   # postgres_exporter:
+  #   platform: ${DOCKER_PLATFORM}
   #   image: prometheuscommunity/postgres-exporter:latest
   #   container_name: postgres-exporter
   #   env_file:
@@ -142,10 +151,11 @@ services:
   #   networks:
   #     - transcendence
   #   environment:
-  #     - VIRTUAL_HOST=postgres-exporter.localhost
+  #     - VIRTUAL_HOST=postgres-exporter.localhost,postgres-exporter.${HOSTNAME}
   #     - VIRTUAL_PORT=9187
 
   # elasticsearch:
+  #   platform: ${DOCKER_PLATFORM}
   #   build:
   #     context: ../
   #     dockerfile: ./docker/elasticsearch/Dockerfile
@@ -160,7 +170,7 @@ services:
   #     - ELASTIC_USERNAME=${ELASTIC_USER}
   #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
   #     - node.max_local_storage_nodes=2
-  #     - VIRTUAL_HOST=elasticsearch.localhost
+  #     - VIRTUAL_HOST=elasticsearch.localhost,elasticsearch.${HOSTNAME}
   #     - VIRTUAL_PORT=9200
   #   volumes:
   #     - es_data:/usr/share/elasticsearch/data
@@ -172,6 +182,7 @@ services:
   #     - transcendence
 
   # logstash:
+  #   platform: ${DOCKER_PLATFORM}
   #   build:
   #     context: ../
   #     dockerfile: ./docker/logstash/Dockerfile
@@ -193,6 +204,7 @@ services:
   #     - xpack.monitoring.elasticsearch.password=${ELASTIC_PASSWORD}
 
   # kibana:
+  #   platform: ${DOCKER_PLATFORM}
   #   build:
   #     context: ../
   #     dockerfile: ./docker/kibana/Dockerfile
@@ -214,10 +226,11 @@ services:
   #     - SERVER_SSL_ENABLED=true
   #     - SERVER_SSL_KEY=/usr/share/kibana/config/certs/localhost.key
   #     - SERVER_SSL_CERTIFICATE=/usr/share/kibana/config/certs/localhost.crt
-  #     - VIRTUAL_HOST=kibana.localhost
+  #     - VIRTUAL_HOST=kibana.localhost,kibana.${HOSTNAME}
   #     - VIRTUAL_PORT=5601
 
   # filebeat:
+  #   platform: ${DOCKER_PLATFORM}
   #   build:
   #     context: ../
   #     dockerfile: ./docker/filebeat/Dockerfile
