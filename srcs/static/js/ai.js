@@ -192,3 +192,13 @@ export function manageMoveAi()
 		} 
 	}
 }
+export function initEventListenerAi()
+{
+
+	document.addEventListener("keydown", keyDownHandler, false);
+	document.addEventListener("keyup", keyUpHandler, false);
+	document.addEventListener("keydown", startBallAi, false);
+
+	gameVar.quickGameBtn.addEventListener('click', showGameView);
+	gameVar.rematchBtn.addEventListener('click', rematchView);
+}
