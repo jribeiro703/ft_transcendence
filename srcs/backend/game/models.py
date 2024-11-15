@@ -1,6 +1,5 @@
 from django.db import models
 from user.models import User
-from django.utils.translation import gettext_lazy as _
 
 class Game(models.Model):
 	created_at = models.DateTimeField(auto_now_add=False) # match will be created at frontend
@@ -14,4 +13,4 @@ class Game(models.Model):
 	# game_instance.tournaments.all() to have access to alls tournaments
 
 	def __str__(self):
-		return _(f"Match started at {self.created_at}")
+		return (f"Match started at {self.created_at}")
