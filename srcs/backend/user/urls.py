@@ -13,15 +13,14 @@ urlpatterns = [
 	path('activate/<uidb64>/<token>/<action>/', views.ActivateLinkView.as_view(), name="activate_link"),
 	path('logout/', views.LogoutView.as_view(), name="logout"),
 	
-	#for profile
-	# path('profile/stats/', views.ProfileStatsView.as_view(), name="user_stats"),
-	# path('profile/match-history/', views.MatchHistoryView.as_view(), name="user_match_history"),
+	#for profile (public)
+	path('profile/<str:username>/', views.UserProfileView.as_view(), name="user_profile"),
 
-	#for settings
-	# path('settings/<int:pk>', views.UserSettingsView.as_view(), name="user_settings"),
+	# for settings (private)
+	path('settings/<int:pk>', views.UserSettingsView.as_view(), name="user_settings"),
 
-	# for friends
-	# path('friend-requests/', views.FriendRequestListView.as_view(), name='friend_request_list'),
-    # path('friend-requests/accept/<int:request_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),
+	# for friends (private)
+	path('friend-requests/<int:pk>', views.ListFriendRequestView.as_view(), name='list_friend_request'),
+    path('friend-requests/accept/<int:request_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),
 	
 ]
