@@ -1,5 +1,7 @@
 import { renderHomePage } from "./home.js"
+import { renderAuthPage } from "./auth.js"
 import { displayUserChoice } from "./user.js"
+import { ensureAuthentication } from "./utils.js";
 
 function router() {
 	const box = document.getElementById('mainContent');
@@ -13,7 +15,13 @@ function router() {
 			renderHomePage();
 			break;
 		case '#user':
-			displayUserChoice();
+			ensureAuthentication().then(isAuthenticated => {
+				if (isAuthenticated) {
+					displayUserChoice();
+				} else {
+					renderAuthPage();
+				}
+			})
 			break;
 		default:
 			renderHomePage();

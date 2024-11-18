@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from datetime import timedelta
 from game.models import Game
@@ -83,6 +84,26 @@ class UserLoginView(APIView):
 		    "otp_verification_url": otp_verification_url
 		}, status=status.HTTP_200_OK)
 		
+class CookieTokenRefreshView(APIView):
+	permission_classes = [IsAuthenticated]
+	authentication_classes = [JWTAuthentication]
+
+	def get(self, request, *args, **kwargs):
+		refresh_token = request.COOKIES.get('refreshToken')
+		if not refresh_token:
+			return Response({'message': 'Refresh token not found in cookies.'}, status=status.HTTP_400_BAD_REQUEST)
+		
+		try:
+			refresh = RefreshToken(refresh_token)
+			new_access_token = str(refresh.access_token)
+			return Response({'access_token': new_access_token}, status=status.HTTP_200_OK)
+
+		except TokenError as e:
+			return Response({'message': 'Invalid refresh token.'}, status=status.HTTP_400_BAD_REQUEST)
+
+		except Exception as e:
+			return Response({'message': 'An error occurred while refreshing the token.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class OtpVerificationView(APIView):
 	model = User
 	permission_classes = [AllowAny]

@@ -1,7 +1,7 @@
 import { fetchData } from "./utils.js";
 
 export function renderOtpForm(url) {
-    const box = document.getElementById('authBox');
+    const box = document.getElementById('mainContent');
     box.innerHTML += `
         <form id="otpForm">
             <label for="otpCode">OTP Code:</label>

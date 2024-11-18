@@ -2,7 +2,7 @@ import { fetchData } from "./utils.js";
 import { renderOtpForm } from "./otp-form.js"
 
 export function renderLoginResponse(otpVerificationUrl, message) {
-    const box = document.getElementById('authBox');
+    const box = document.getElementById('mainContent');
     box.innerHTML = `
         <p>${message}<br><br>Enter your code</p>
     `;
@@ -10,7 +10,7 @@ export function renderLoginResponse(otpVerificationUrl, message) {
 }
 
 function handleLoginResponse(data) {
-    const box = document.getElementById('authBox');
+    const box = document.getElementById('mainContent');
 
     if (data.otp_verification_url) {
         renderLoginResponse(data.otp_verification_url, data.message);
@@ -21,7 +21,7 @@ function handleLoginResponse(data) {
 
 // view and eventlistener for login form
 export function renderLoginForm() {
-    const box = document.getElementById('authBox');
+    const box = document.getElementById('mainContent');
     box.innerHTML = `
         <form id="loginForm">
             <label for="username">Username:</label>
