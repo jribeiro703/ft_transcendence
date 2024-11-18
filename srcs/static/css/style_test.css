@@ -203,20 +203,23 @@ button:disabled
 /* ------------------------ Main Button ---------------------------- */
 
 #btn-QuickGame, #btn-Match , #btn-Tournament, #btn-Leaderboard,
-#btn-Profile, #btn-Settings, #btn-Inbox, #btn-Logout
+#btn-Profile, #btn-Settings, #btn-Inbox, #btn-Logout,
+#btn-Login, #btn-Register, #btn-Login42
 {
 	background-color: #1F2E4D;
 	color: #6DC1C1;
 }
 #btn-QuickGame:hover, #btn-Match:hover , #btn-Tournament:hover, #btn-Leaderboard:hover,
-#btn-Profile:hover, #btn-Settings:hover, #btn-Inbox:hover, #btn-Logout:hover
+#btn-Profile:hover, #btn-Settings:hover, #btn-Inbox:hover, #btn-Logout:hover,
+#btn-Login:hover, #btn-Register:hover, #btn-Login42:hover
 {
 	color: #1F2E4D;
     background-color: #6DC7C1;
     border-color: #000000;
 }
 #btn-QuickGame:active, #btn-Match:active , #btn-Tournament:active, #btn-Leaderboard:active,
-#btn-Profile:active, #btn-Settings:active, #btn-Inbox:active, #btn-Logout:active
+#btn-Profile:active, #btn-Settings:active, #btn-Inbox:active, #btn-Logout:active,
+#btn-Login:active, #btn-Register:active, #btn-Login42:active
 {
 	color: #0A1730;
     background-color: #455F78;

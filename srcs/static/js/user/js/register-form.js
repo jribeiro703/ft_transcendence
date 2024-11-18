@@ -1,13 +1,13 @@
 import { fetchData } from "./utils.js";
 
 function displayResponse(data) {
-    const box = document.getElementById('authBox');
+    const box = document.getElementById('mainContent');
     box.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
 }
 
 // view and eventlistener for register form
 export function renderRegisterForm() {
-    const box = document.getElementById('authBox');
+    const box = document.getElementById('mainContent');
     box.innerHTML = `
         <form id="registerForm">
             <label for="username">Username:</label>
