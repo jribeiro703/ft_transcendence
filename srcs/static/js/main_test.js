@@ -1,7 +1,7 @@
 import { renderHomePage } from "./home.js"
 import { renderAuthPage } from "./auth.js"
 import { displayUserChoice } from "./user.js"
-import { ensureAuthentication } from "./utils.js";
+import { isAuthenticated, alertUserToLogin } from "./utils.js";
 
 function router() {
 	const box = document.getElementById('mainContent');
@@ -15,13 +15,13 @@ function router() {
 			renderHomePage();
 			break;
 		case '#user':
-			ensureAuthentication().then(isAuthenticated => {
-				if (isAuthenticated) {
-					displayUserChoice();
-				} else {
-					renderAuthPage();
-				}
-			})
+			if (isAuthenticated()) {
+				displayUserChoice();
+			}
+			else {
+				alertUserToLogin();
+				renderAuthPage();
+			}
 			break;
 		default:
 			renderHomePage();
@@ -59,4 +59,4 @@ window.addEventListener('popstate', (event) => {
 window.addEventListener('hashchange', router);
 
 // Execute as soon as the structure of the page is ready for interaction
-document.addEventListener('DOMContentLoaded', router);
+document.addEventListener('DOMContentLoaded', router)

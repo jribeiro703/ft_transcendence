@@ -1,69 +1,54 @@
 // function for calling API's endpoint
-const API_BASE_URL = "https://localhost:8081";
+export const API_BASE_URL = "https://localhost:8081";
 
 export async function fetchData(endpoint, method = 'GET', body = null) {
-    try {
-		const url = `${API_BASE_URL}${endpoint}`;
-        const options = {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-        if (body) {
-            options.body = JSON.stringify(body);
-        }
-        const response = await fetch(url, options);
-		if (!response.ok) {
-			throw new Error(`HTTP error ! Message: ${response.message} and Status: ${response.status}`);
-		}
-
-		const contentType = response.headers.get('Content-Type');
-		let data;
-
-		if (contentType && contentType.includes('application/json')) {
-			data = await response.json();
-		} else {
-			data = await response.text();
-		}
-        return data;
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
+	const url = `${API_BASE_URL}${endpoint}`;
+	const options = {
+	    method: method,
+	    headers: {'Content-Type': 'application/json'},
+		credentials: 'include'
+	};
+	if (body) {options.body = JSON.stringify(body);}
+	const response = await fetch(url, options);
+	const data = await response.json()
+	return { data: data, status: response.status };
 }
 
-function isAuthenticated() {
-    return document.cookie.split(';').some(cookie => cookie.trim().startsWith('refreshToken='));
+function isTokenExpired(token) {
+	const arrayToken = token.split('.');
+	const tokenPayload = JSON.parse(atob(arrayToken[1])); // atob() decode payload part, JSON.parse() change JSON string to JS object
+	const currentTime = Math.floor(Date.now() / 1000); // actual time in seconds
+	return currentTime >= tokenPayload?.exp; // Vérifie si le token est expiré
 }
 
-export function ensureAuthentication() {
-	if (isAuthenticated()) {
-		const accessToken = sessionStorage.getItem('accessToken');
-		if (!accessToken) {
-			return fetchData(API_BASE_URL + '/user/token/refresh/', {
-				method: 'POST',
-				credentials: 'include', // include cookies
-			})
-			.then(response => {
-				if (!response.ok) {
-				    throw new Error('Token refresh failed');
-				}
-				return response.json();
-			})
-			.then(data => {
-				sessionStorage.setItem('accessToken', data.accessToken);
-				return true;
-			})
-			.catch(() => {
-				alert('Session expired. Please log in again.');
-				// window.location.href = '/login';
-				return false;
-			});
-		}
-		return Promise.resolve(true);
-	} else {
-	    alert('You must log in to access this feature.');
-	    // window.location.href = '/login';
-	    return Promise.resolve(false);
+async function isAccessTokenRefreshed() {
+	const { data, status } = await fetchData("/user/login/token-refresh/")
+	if (data.access_token) {
+		console.log('get new access token successfully');
+		localStorage.setItem('access_token', data.access_token);
+		return true
 	}
+	else {
+		console.error(data.message);
+		return false
+	}
+}
+
+export function isAuthenticated() {
+	const accessToken = localStorage.getItem('access_token');
+	if (!accessToken) {
+		console.error('No access token found.');
+		return false;
+	}
+	if (isTokenExpired(accessToken) && !isAccessTokenRefreshed()) {
+		console.error("refresh access token failed");
+		alert("Your session is expired .");
+		return false;
+	}
+	return true;
+}
+
+export function alertUserToLogin() {
+	alert('You must be logged in to use this feature.');
+    return;
 }

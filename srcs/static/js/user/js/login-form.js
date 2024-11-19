@@ -1,4 +1,4 @@
-import { fetchData } from "./utils.js";
+import { fetchData } from "../../utils.js";
 import { renderOtpForm } from "./otp-form.js"
 
 export function renderLoginResponse(otpVerificationUrl, message) {
@@ -11,6 +11,8 @@ export function renderLoginResponse(otpVerificationUrl, message) {
 
 function handleLoginResponse(data) {
     const box = document.getElementById('mainContent');
+
+    console.log('handle login response', data);
 
     if (data.otp_verification_url) {
         renderLoginResponse(data.otp_verification_url, data.message);
@@ -36,9 +38,8 @@ export function renderLoginForm() {
         e.preventDefault();
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-        const data = await fetchData('https://localhost:8081/user/login/', 'POST', { username, password });
-        console.log('Login response:', data);
-
+        const { data, status } = await fetchData('/user/login/', 'POST', { username, password });
+        
         handleLoginResponse(data);
         window.history.pushState({}, '', '#loginResponse');
     });

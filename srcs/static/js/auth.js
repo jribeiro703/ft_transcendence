@@ -18,14 +18,13 @@ export function renderAuthPage() {
 	document.getElementById('btn-Login').addEventListener('click', () => {
 		history.pushState({page:'login'}, 'Login', '?page=login');
 		console.log("Login page");
-		// renderLoginForm();
-
+		renderLoginForm();
 	});
 
 	document.getElementById('btn-Register').addEventListener('click', () => {
 		history.pushState({page:'register'}, 'Register', '?page=register');
 		console.log("register page");
-		// renderRegisterForm();
+		renderRegisterForm();
 	});
 
 	document.getElementById('btn-Login42').addEventListener('click', () => {

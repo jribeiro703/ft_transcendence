@@ -85,11 +85,11 @@ class UserLoginView(APIView):
 		}, status=status.HTTP_200_OK)
 		
 class CookieTokenRefreshView(APIView):
-	permission_classes = [IsAuthenticated]
 	authentication_classes = [JWTAuthentication]
 
 	def get(self, request, *args, **kwargs):
-		refresh_token = request.COOKIES.get('refreshToken')
+		refresh_token = request.COOKIES.get('refresh_token')
+		print(f"Refresh token: {refresh_token}")
 		if not refresh_token:
 			return Response({'message': 'Refresh token not found in cookies.'}, status=status.HTTP_400_BAD_REQUEST)
 		
@@ -118,7 +118,12 @@ class OtpVerificationView(APIView):
 		access_token = str(refresh.access_token)
 		refresh_token = str(refresh)
 
-		response = Response({"access_token": access_token}, status=status.HTTP_200_OK)
+		response = Response({
+			"message": "Valid OTP code",
+			"access_token": access_token
+			},
+			status=status.HTTP_200_OK
+		)
 		cookie_max_age = 3600 * 24
 		response.set_cookie(
 			'refresh_token',
@@ -131,13 +136,19 @@ class OtpVerificationView(APIView):
 
 class LogoutView(APIView):
 	authentication_classes = [JWTAuthentication]
-	permission_classes = [IsAuthenticated, IsOwner]
+	permission_classes = [IsOwner]
+
 	def post(self, request):
 		try:
 			refresh_token = request.COOKIES.get('refresh_token')
 			token = RefreshToken(refresh_token)
 			token.blacklist()
-			return Response({"message": "Logout successfully !"}, status=status.HTTP_205_RESET_CONTENT)
+			response = Response({
+				"message": "Logout successfully !",
+				"access_token": "",
+				}, status=status.HTTP_205_RESET_CONTENT)
+			response.delete_cookie('refresh_token')
+			return response
 		except Exception as e:
 		    return Response({"message": "Logout failed."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -181,7 +192,7 @@ class UserSettingsView(RetrieveUpdateDestroyAPIView):
 	queryset = User.objects.all()
 	serializer_class = UserSettingsSerializer
 	authentication_classes = [JWTAuthentication]
-	permission_classes = [IsAuthenticated, IsOwner]
+	permission_classes = [IsOwner]
 	
 	def patch(self, request, *args, **kwargs):
 		instance, success_messages = self.get_serializer().update(self.get_object(), request.data)
@@ -193,7 +204,7 @@ class UserSettingsView(RetrieveUpdateDestroyAPIView):
 
 class AcceptFriendRequestView(APIView):
 	authentication_classes = [JWTAuthentication]
-	permission_classes = [IsAuthenticated, IsOwner]
+	permission_classes = [IsOwner]
     
 	def post(self, request, *args, **kwargs):
 		request_id = kwargs.get('request_id')
@@ -213,7 +224,7 @@ class AcceptFriendRequestView(APIView):
 		
 class ListFriendRequestView(APIView):
 	authentication_classes = [JWTAuthentication]
-	permission_classes = [IsAuthenticated, IsOwner]
+	permission_classes = [IsOwner]
 	
 	def get(self, request, *args, **kwargs):
 		user = User.objects.get(pk=kwargs['pk'])
