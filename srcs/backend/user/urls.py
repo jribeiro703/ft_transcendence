@@ -2,10 +2,25 @@ from . import views
 from django.urls import path
 
 urlpatterns = [
-	path('', views.user_index),
-	path('signup/', views.CreateUserView.as_view(), name="signup"),
-	path('signup/activate/<uidb64>/<token>/', views.ActivateAccountView.as_view(), name="signup-user-activate"),
-	path('login/', views.CookieTokenObtainPairView.as_view(), name="cookie_token_obtain_pair"),
-    path('login/refresh/', views.CookieTokenRefreshView.as_view(), name="cookie_token_refresh"),
-	path('logout/', views.LogoutView.as_view(), name="logout")
+
+	#for list alls users
+	path('', views.user_index, name="list_users"),
+
+	# for auth
+	path('login/', views.UserLoginView.as_view(), name="login"),
+	path('login/verify-otp/<int:user_id>/', views.OtpVerificationView.as_view(), name="otp_verification"),
+	path('register/', views.CreateUserView.as_view(), name="register"),
+	path('activate/<uidb64>/<token>/<action>/', views.ActivateLinkView.as_view(), name="activate_link"),
+	path('logout/', views.LogoutView.as_view(), name="logout"),
+	
+	#for profile (public)
+	path('profile/<str:username>/', views.UserProfileView.as_view(), name="user_profile"),
+
+	# for settings (private)
+	path('settings/<int:pk>', views.UserSettingsView.as_view(), name="user_settings"),
+
+	# for friends (private)
+	path('friend-requests/<int:pk>', views.ListFriendRequestView.as_view(), name='list_friend_request'),
+    path('friend-requests/accept/<int:request_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),
+	
 ]

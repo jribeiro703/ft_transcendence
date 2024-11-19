@@ -1,0 +1,8 @@
+Subject: Activate Your Account
+
+Welcome to Pong!
+
+Please activate your account by opening the link in your browser:
+{{ full_link }}
+
+This link is available for 24 hours.
