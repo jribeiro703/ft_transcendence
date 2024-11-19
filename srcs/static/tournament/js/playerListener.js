@@ -1,5 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
-	const participantList = document.getElementById("participantList");
+	const participantList = document.getElementById("playersList");
+
+	if (!participantList) {
+        console.error("Error: participantList element not found in the DOM.");
+    } else {
+        console.log("Success: participantList element found.");
+    }
 
 	// Open a WebSocket connection
 	const participantsSocket = new WebSocket(
@@ -14,12 +20,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	participantsSocket.onmessage = function(event) {
 		const data = JSON.parse(event.data);
-		participantList.innerHTML = "";
-		data.participants.forEach(participant => {
+		//participantList.innerHTML = "";
+		//participantList.style.display = "block";
+		// Check if participants exist
+		if (data.participants.length === 0) {
 			const li = document.createElement("li");
-			li.textContent = participant;
+			li.className = "playersList. list-group-item";
+			li.textContent = "No participants available.";
 			participantList.appendChild(li);
-		});
+		} else {
+			// Populate the list with participants
+			data.participants.forEach(participant => {
+				const li = document.createElement("li");
+				li.className = "playersList. list-group-item";
+				const playerBox = document.createElement("div");
+                playerBox.className = "player-box";
+                playerBox.innerHTML = `<span class="player-name">${participant}</span>`;
+				li.appendChild(playerBox);
+				participantList.appendChild(li);
+			});
+    }
 	};
 
 	// Log WebSocket errors
