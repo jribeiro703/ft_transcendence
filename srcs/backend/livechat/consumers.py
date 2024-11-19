@@ -1,7 +1,5 @@
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-from .models import ChatMemberModel, ChatMessageModel
-
 import time
 import json
 
@@ -9,6 +7,7 @@ import json
 class ChatConsumer(WebsocketConsumer):
 
     def connect(self):
+        from .models import ChatMemberModel  # Moved import here
 
         self.user = self.scope["user"]
         if not self.user.is_authenticated:
@@ -31,6 +30,8 @@ class ChatConsumer(WebsocketConsumer):
         self.accept()
 
     def receive(self, text_data=None, bytes_data=None):
+        from .models import ChatMessageModel  # Moved import here
+
         if text_data is None:
             return
 

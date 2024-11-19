@@ -1,5 +1,5 @@
 const chatSocket = new WebSocket(
-    'ws://' + window.location.host + '/ws/livechat/'
+    'wss://' + window.location.host + '/ws/livechat/'
 );
 
 chatSocket.onmessage = function(e) {

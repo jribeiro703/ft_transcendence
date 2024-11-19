@@ -22,6 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+HOSTNAME = os.environ['HOSTNAME']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,7 +32,7 @@ ALLOWED_HOSTS = [
 	'0.0.0.0',
 	'localhost',
 	'django',
-	'nixos'
+	HOSTNAME
 ]
 
 # HTTPS settings
@@ -61,22 +62,18 @@ INSTALLED_APPS = [
 	'django.contrib.staticfiles',
 	'rest_framework',
 	'rest_framework_simplejwt',
-	# 'django_otp',
-	# 'django_otp.plugins.otp_totp',
-	# 'two_factor',
-	# 'two_factor.plugins.phonenumber',
+	'rest_framework_simplejwt.token_blacklist',
 	'django_prometheus',
 	'user',
 	'game',
 	'tournament',
-    'livechat',
+	'livechat',
 ]
 
 MIDDLEWARE = [
 	'django.middleware.security.SecurityMiddleware',
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.CommonMiddleware',
-	'django_otp.middleware.OTPMiddleware',
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
 	'django.contrib.messages.middleware.MessageMiddleware',
@@ -174,12 +171,16 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+	"ACCESS_TOKEN_LIFETIME": timedelta(days=1),
 	"REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+	"ROTATE_REFRESH_TOKENS": True,
+	"BLACKLIST_AFTER_ROTATION": True,
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = "~/django-email-messages"
+EMAIL_FILE_PATH = "user/django-email-messages"
+
+DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
 
 CSRF_TRUSTED_ORIGINS = [
 	'https://localhost:8081',

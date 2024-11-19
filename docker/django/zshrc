@@ -7,6 +7,8 @@ alias py='python3'
 alias pm='python3 /workspace/srcs/backend/manage.py'
 alias cl='clear'
 
+ZSH_THEME="random"
+
 # Oh My Zsh plugins
 plugins=(
 	git

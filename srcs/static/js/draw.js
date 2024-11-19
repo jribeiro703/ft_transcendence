@@ -1,37 +1,50 @@
 import gameVar from "./var.js";
-import { BALL_RADIUS, POWER_UP_SIZE } from "./const.js";
+import { BALL_RADIUS } from "./const.js";
+import { drawPowerUp, collectPowerUp } from "./powerUp.js";
+import { manageCollision, manageServer, manageMove } from "./manage.js";
+import { manageAi, aiMove } from "./ai.js";
+import { drawBricks } from "./brick.js";
+import { checkScore } from "./reset.js";
 
 export function initDraw()
 {
 	drawBall();
 	drawPaddles();
-	drawLines();
+	if (gameVar.customMap == false)
+		drawLines();	
 }
 
-export function drawPowerUp()
+// setInterval(manageAi, 1000);
+
+export function draw()
 {
-	if (!gameVar.powerUpActive)
-	{
-		gameVar.ctx.beginPath();
-		gameVar.ctx.rect(gameVar.powerUpX, gameVar.powerUpY, POWER_UP_SIZE, POWER_UP_SIZE);
-		gameVar.ctx.fillStyle = "red";
-		gameVar.ctx.font = '20px Arial';
-		gameVar.ctx.fillText("Bonus", gameVar.powerUpX - 15 , gameVar.powerUpY + 40);
-		gameVar.ctx.fill();
-		gameVar.ctx.closePath();
-	}
+	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+	initDraw();
+	drawPowerUp();
+	collectPowerUp();
+	if (gameVar.customMap == true)
+		drawBricks();
+	if (gameVar.gameStart)
+		manageCollision();
+	else
+		manageServer();
+	manageMove();
+	aiMove(gameVar.targetY);
+	if (gameVar.animationFrame)
+		cancelAnimationFrame(gameVar.animationFrame);
+	gameVar.animationFrame = requestAnimationFrame(draw);
 }
 
 export function drawPaddles()
 {
 	gameVar.ctx.beginPath();
-	gameVar.ctx.rect(0, gameVar.playerPaddleX, gameVar.playerPaddleWidth, gameVar.playerPaddleHeight);
+	gameVar.ctx.rect(0, gameVar.playerPaddleY, gameVar.playerPaddleWidth, gameVar.playerPaddleHeight);
 	gameVar.ctx.fillStyle = "#FF414D";
 	gameVar.ctx.fill();
 	gameVar.ctx.closePath();
 
 	gameVar.ctx.beginPath();
-	gameVar.ctx.rect(gameVar.canvasW - gameVar.aiPaddleWidth, gameVar.aiPaddleX, gameVar.aiPaddleWidth, gameVar.aiPaddleHeight);
+	gameVar.ctx.rect(gameVar.canvasW - gameVar.aiPaddleWidth, gameVar.aiPaddleY, gameVar.aiPaddleWidth, gameVar.aiPaddleHeight);
 	gameVar.ctx.fillStyle = "#FF414D";
 	gameVar.ctx.fill();
 	gameVar.ctx.closePath();
@@ -58,17 +71,19 @@ export function drawLines()
 	gameVar.ctx.stroke();
 }
 
+
+
 export function initializeBall()
 {
 	if (gameVar.currenServer === 'player')
 	{
 		gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS; 
-		gameVar.y = gameVar.playerPaddleX + gameVar.playerPaddleHeight / 2;
+		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
 	}
 	else 
 	{
 		gameVar.x = gameVar.canvasw - gameVar.aiPaddleWidth - BALL_RADIUS;
-		gameVar.y = gameVar.aiPaddleX + gameVar.aiPaddleHeight / 2;
+		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2;
 	}
 	gameVar.dx = 0;
 	gameVar.dy = 0;
@@ -82,3 +97,4 @@ export function drawBall()
 	gameVar.ctx.fill();
 	gameVar.ctx.closePath();
 }
+
