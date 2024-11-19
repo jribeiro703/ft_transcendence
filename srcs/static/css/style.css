@@ -16,9 +16,9 @@ p
 
 #me
 {
-    font-family: 'Dancing Script', cursive;
-    font-weight: bold; 
-    color: #FEFCFF; 
+	font-family: 'Dancing Script', cursive;
+	font-weight: bold; 
+	color: #FEFCFF; 
 	white-space: nowrap;
 	position: absolute;
 	left: 50%;
@@ -29,10 +29,10 @@ p
 
 .navbar
 {
-    display: flex;
-    justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 	align-items: center;
-    background-color: #0A1730;
+	background-color: #0A1730;
 	transition: height 1.2s cubic-bezier(0.42, 0, 0.58, 1);
 	overflow: hidden;
 	height: 80px;
@@ -48,9 +48,9 @@ p
 
 .navbar .container-fluid
 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	width: 100%;
 }
 
@@ -66,46 +66,46 @@ p
 
 .navbar.expanded .navbar-brand
 {
-    font-size: 3rem;
-    top: 50%; 
-    transform: translate(-50%, -50%);
+	font-size: 3rem;
+	top: 50%; 
+	transform: translate(-50%, -50%);
 }
 
 
 .navbar:hover .navbar-brand
 {
-    font-size: 3rem; 
-    top: 50%; 
-    transform: translate(-50%, -50%);
+	font-size: 3rem; 
+	top: 50%; 
+	transform: translate(-50%, -50%);
 }
 
 .navbar:hover
 {
-    height: 150px;
+	height: 150px;
 }
 
 .navbar .buttons-container
 {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
 }
 
 
 .navbar .nav-links
 {
-    display: flex;                 
-    justify-content: space-between;
-    flex: 1;  
+	display: flex;                 
+	justify-content: space-between;
+	flex: 1;  
 }
 
 .navbar a
 {
-    margin: 10px;
-    text-decoration: none;
-    color: #000000;
+	margin: 10px;
+	text-decoration: none;
+	color: #000000;
 	font-size: 30px;
-    font-family: 'Patrick Hand', cursive;
+	font-family: 'Patrick Hand', cursive;
 }
 
 /* ---------------------Button Nav Bar------------------------- */
@@ -114,7 +114,7 @@ p
 {
 	background-color: #455F78;
 	color: #1A1A40;
-    border-color: #000000;
+	border-color: #000000;
 	border-radius: 5px; 
 	font-weight: bold; 
 }
@@ -152,17 +152,17 @@ p
 
 .custom-home:hover, .custom-leaderboard:hover, .custom-register:hover, .custom-42:hover
 {
-    color: #1F2E4D;
-    background-color: #6DC7C1;
-    border-color: #000000;
+	color: #1F2E4D;
+	background-color: #6DC7C1;
+	border-color: #000000;
 
-    transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 .custom-home:active, .custom-leaderboard:active, .custom-register:active, .custom-42:active
 {
 	color: #0A1730 !important;
-    background-color: #455F78 !important;
+	background-color: #455F78 !important;
 }
 
 
@@ -170,9 +170,9 @@ p
 /* ----------------------- Main Content ---------------------------- */
 .container
 {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
+	display: flex;
+	justify-content: center;
+	gap: 10px;
 	max-width: 90%;
 	margin: 0 auto;
 }
@@ -188,43 +188,43 @@ p
 #playGameBtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
 {
 	color: #1F2E4D;
-    background-color: #6DC7C1;
-    border-color: #000000;
+	background-color: #6DC7C1;
+	border-color: #000000;
 }
 
 #playGameBtn:active, #btn1:active, #btn2:active, #btn3:active
 {
 	color: #0A1730;
-    background-color: #455F78;
-    border-color: #000000;
+	background-color: #455F78;
+	border-color: #000000;
 }
 
 /* -------------------------- Game Play View ------------------------ */
 
-#gameplayView
+#gameplayView, #tournamentView
 {
-    text-align: center;
-    margin-top: 20px;
+	text-align: center;
+	margin-top: 20px;
 }
 
 .left-column
 {
-    display: flex;
-    flex-direction: column;
-    justify-content: right;
-    align-items: flex-start;
-    gap: 40px; 
+	display: flex;
+	flex-direction: column;
+	justify-content: right;
+	align-items: flex-start;
+	gap: 40px; 
 	flex : 1;
 	max-width: 800px; 
 }
 
 .right-column
 {
-    display: flex;
-    flex-direction: column;
-    justify-content: left;
-    align-items: center;
-    gap: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: left;
+	align-items: center;
+	gap: 10px;
 }
 
 .gpMode 
@@ -237,16 +237,16 @@ p
 
 .level
 {
-    background-color: #0A1730;
-    color: rgb(255, 255, 255);
+	background-color: #0A1730;
+	color: rgb(255, 255, 255);
 	border: none;
 	margin-top: 15px;
-    border-radius: 5px;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 16px;
+	border-radius: 5px;
+	padding: 8px 16px;
+	cursor: pointer;
+	font-size: 16px;
 	margin: 30px;
-    transition: background-color 0.3s;
+	transition: background-color 0.3s;
 }
 
 
@@ -254,73 +254,73 @@ p
 {
 	background-color: #6DC7C1;
 	color :#000000;
-    transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 .powerUpBtn:hover, .level:hover
 {
 	background-color: #6DC7C1; 
-    transform: scale(1.08);
+	transform: scale(1.08);
 }
 
 .powerUpBtn
 {
-    background-color: #0A1730;
-    color: white;
-    border: none;
+	background-color: #0A1730;
+	color: white;
+	border: none;
 	margin-top: 15px !important;
-    border-radius: 5px;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 16px;
+	border-radius: 5px;
+	padding: 8px 16px;
+	cursor: pointer;
+	font-size: 16px;
 	margin: 30px;
-    transition: background-color 0.3s;
+	transition: background-color 0.3s;
 }
 
 .map-selection
 {
-    display: flex;
+	display: flex;
 	margin-top: 10px;
-    gap: 70px;
+	gap: 70px;
 }
 
 .mapOption
 {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 .map-image
 {
-    width: 200px;
-    height: auto;
-    border-radius: 5px;
+	width: 200px;
+	height: auto;
+	border-radius: 5px;
 }
 
-#startGameBtn, #quickGameBtn, #tournamentGameBtn
+#startGameBtn, #quickGameBtn, #tournamentGameBtn, #startTournamentBtn
 {
-    width: 200px;
-    height: 60px;
-    font-size: 20px;
-    background-color: #0A1730;
-    color: #FEFCFF; 
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.4s;
+	width: 200px;
+	height: 60px;
+	font-size: 20px;
+	background-color: #0A1730;
+	color: #FEFCFF; 
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s, transform 0.4s;
 }
 
 #startGameBtn:hover, #quickGameBtn:hover, #tournamentGameBtn:hover
 {
-    background-color: #6DC7C1;
-    transform: scale(1.05);
+	background-color: #6DC7C1;
+	transform: scale(1.05);
 }
 
 #startGameBtn:active, #quickGameBtn:active, #tournamentGameBtn:active
 {
-    background-color: #003372; 
-    transform: scale(0.95);
+	background-color: #003372; 
+	transform: scale(0.95);
 }
 
  .button-container 
@@ -338,19 +338,19 @@ p
 #scoreboard 
 {
 	color: #0A1730;
-    text-align: center;
-    margin-bottom: 10px;
-    font-size: 24px;
+	text-align: center;
+	margin-bottom: 10px;
+	font-size: 24px;
 }
 
 #scoreRow
 {
 	color: #0A1730;
-    display: flex; 
-    justify-content: space-between;
-    align-items: center; 
+	display: flex; 
+	justify-content: space-between;
+	align-items: center; 
 	margin: 0 auto;
-    font-size: 20px; 
+	font-size: 20px; 
 	max-width: 840px;
 }
 
@@ -381,45 +381,140 @@ p
 
 #myCanvas
 {
-    display: block; 
-    margin: 0 auto; 
-    border: 2px solid #FEFCFF;
-    border-radius: 8px; 
-    background-color: #1A1A40; 
+	display: block; 
+	margin: 0 auto; 
+	border: 2px solid #FEFCFF;
+	border-radius: 8px; 
+	background-color: #1A1A40; 
 }
 
-#rematchBtn, #quitGameBtn
+#rematchBtn, #quitGameBtn, #quitTournamentBtn
 {
 	width: 200px;
-    height: 60px;
-    font-size: 20px;
-    background-color: #0A1730;
-    color: #FEFCFF; 
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.4s;
+	height: 60px;
+	font-size: 20px;
+	background-color: #0A1730;
+	color: #FEFCFF; 
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s, transform 0.4s;
 }
 
-#rematchBtn:not(:disabled):hover, #quitGameBtn:hover
+#rematchBtn:not(:disabled):hover, #quitGameBtn:hover, #quitTournamentBtn:hover
 {
-    background-color: #6DC7C1;
-    transform: scale(1.05);
+	background-color: #6DC7C1;
+	transform: scale(1.05);
 }
 
-#rematchBtn:not(:disabled):active, #quitGameBtn:active
+#rematchBtn:not(:disabled):active, #quitGameBtn:active, #quitTournamentBtn:active
 {
-    background-color: #003372; 
-    transform: scale(0.95);
+	background-color: #003372; 
+	transform: scale(0.95);
 }
 button:disabled
 {
-    background-color: grey;
-    color: white;
-    cursor: not-allowed;  /* pour indiquer que c'est inactif */
-    opacity: 0.6;
+	background-color: grey;
+	color: white;
+	cursor: not-allowed;  /* pour indiquer que c'est inactif */
+	opacity: 0.6;
 }
 /* -------------------- End Page --------------------------- */
+
+/* ----------------------- Score Board ------------------------- */
+#tournamentView {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.tournament-title {
+	color: #FEFCFF;
+	font-size: 2.5rem;
+	margin-bottom: 10px;
+}
+
+.tournament-description {
+	margin-left: 0px;
+	text-align: center;
+	font-size: 1.2rem;
+	color: #FEFCFF;
+}
+
+.participants-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Add spacing between the h4 and ul */
+    width: 100%; /* Ensure the container spans the full width */
+}
+
+.participants-container h4 {
+	text-align: center;
+    margin: 0; /* Remove any default margins */
+    padding: 0;
+    font-size: 1.5rem; /* Adjust size as needed */
+    color: #FEFCFF; /* Match the color scheme */
+}
+
+.participants-container ul {
+    width: 100%; /* Ensure the list takes up the full width of the container */
+    padding: 0; /* Remove default list padding */
+    list-style: none; /* Remove bullets */
+}
+
+
+#playersList {
+    list-style-type: none;
+    padding: 0;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+#playersList .list-group-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #1A1A40;
+    padding: 15px 20px;
+    border: 2px solid #6DC7C1;
+    border-radius: 8px;
+    margin: 10px 0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.player-name {
+    color: #FEFCFF;
+    font-size: 1.3rem;
+    font-weight: bold;
+    display: block;
+}
+
+.player-box {
+    flex: 1;
+    text-align: center;
+}	
+
+#playersList .list-group-item:hover {
+    transform: scale(1.02);
+    background-color: #3A4C6B;
+}
+
+#startTournamentBtn {
+	width: 200px;
+	height: 60px;
+	font-size: 20px;
+	background-color: #0A1730;
+	color: #FEFCFF;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s, transform 0.4s;
+}
+
+#startTournamentBtn:hover {
+	background-color: #6DC7C1;
+	transform: scale(1.05);
+}
+/* -------------------- End - Tournament View ---------------------- */
 
 .footer-text
 {
