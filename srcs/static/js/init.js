@@ -19,6 +19,7 @@ export function initGameVar()
 	
 	gameVar.tournamentView = document.getElementById('tournamentView');
 	gameVar.tournamentGameBtn = document.getElementById('tournamentGameBtn');
+	gameVar.quitTournamentBtn = document.getElementById('quitTournamentBtn');	
 
 	gameVar.withPowerUp = document.getElementById('withPowerUps');
 	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');
@@ -44,6 +45,7 @@ export function initEventListener()
 	gameVar.rematchBtn.addEventListener('click', rematchView);
 
 	gameVar.tournamentGameBtn.addEventListener('click', showTournamentView);
+	gameVar.quitTournamentBtn.addEventListener('click', showDefaultView);
 
 	gameVar.withoutPowerUp.classList.add('selected');
 	gameVar.medium.classList.add('selected');
