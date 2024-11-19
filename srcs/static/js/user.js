@@ -1,3 +1,4 @@
+import { renderLogoutPage } from "./user/js/logout.js"
 
 function createUserContent() {
     const box = document.getElementById('mainContent');
@@ -37,6 +38,7 @@ export function displayUserChoice() {
 	document.getElementById('btn-Logout').addEventListener('click', () => {
 		history.pushState({ page: 'logout' }, 'Logout', '?page=logout');
 		console.log('Logout button clicked');
+		renderLogoutPage();
 	})
 
 }

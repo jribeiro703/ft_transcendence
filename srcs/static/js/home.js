@@ -1,4 +1,4 @@
-import { ensureAuthentication } from "./utils.js"
+import { alertUserToLogin, isAuthenticated } from "./utils.js"
 
 function createHomeContent() {
 	const box = document.getElementById('mainContent');
@@ -29,29 +29,20 @@ export function renderHomePage() {
 	});
 
 	document.getElementById('btn-Match').addEventListener('click', () => {
-		ensureAuthentication().then(isAuthenticated => {
-			if (isAuthenticated) {
-				history.pushState({ page: 'match' }, 'Match', '?page=match');
-				console.log('Match button clicked');
-			}
-		});
+		if (!isAuthenticated()) { alertUserToLogin(); };
+		history.pushState({ page: 'match' }, 'Match', '?page=match');
+		console.log('Match button clicked');
 	});
 
 	document.getElementById('btn-Tournament').addEventListener('click', () => {
-		ensureAuthentication().then(isAuthenticated => {
-			if (isAuthenticated) {
-				history.pushState({ page: 'tournament' }, 'Tournament', '?page=tournament');
-				console.log('Tournament button clicked');
-			}
-		});	
+		if (!isAuthenticated()) { alertUserToLogin(); };
+		history.pushState({ page: 'tournament' }, 'Tournament', '?page=tournament');
+		console.log('Tournament button clicked');
 	});
 
 	document.getElementById('btn-Leaderboard').addEventListener('click', () => {
-		ensureAuthentication().then(isAuthenticated => {
-			if (isAuthenticated) {
+		if (!isAuthenticated())  { alertUserToLogin(); };
 		history.pushState({ page: 'leaderboard' }, 'Leaderboard', '?page=leaderboard');
 		console.log('Leaderboard button clicked');
-			}
-		});
 	});
 }
