@@ -6,9 +6,7 @@ from .validators import alphanumeric
 class User(AbstractUser):
 	username = models.CharField("username", max_length=30, unique=True, blank=False, validators=[MinLengthValidator(3), alphanumeric])
 	email = models.EmailField("email", unique=False, blank=False)
-	new_email = models.EmailField("email", unique=False, null=True)
 	password = models.CharField("password", max_length=128, validators=[MinLengthValidator(8)])
-	current_password = models.CharField("old password", null=True, blank=True)
 	email_sent_at = models.DateTimeField(null=True, blank=True)
 	otp_secret = models.CharField(max_length=32, blank=True, null=True)
 
@@ -26,11 +24,12 @@ class User(AbstractUser):
 	def __str__(self):
 		return self.username
 
-# class FriendRequest(models.Model):
-#     sender = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
-#     receiver = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     is_accepted = models.BooleanField(default=False)
+class FriendRequest(models.Model):
+    sender = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_accepted = models.BooleanField(default=False)
 
-#     def __str__(self):
-#         return f"{self.sender.username} sent a friend request to {self.receiver.username}"
+    def __str__(self):
+        return f"{self.sender.username} sent a friend request to {self.receiver.username}"
+
