@@ -7,9 +7,9 @@ HOSTNAME = $(shell hostname)
 # Detect plaform
 PLATFORM		= $(shell uname -m)
 ifeq ($(PLATFORM),arm64)
-    DOCKER_PLATFORM = linux/arm64/v8
+	DOCKER_PLATFORM = linux/arm64/v8
 else
-    DOCKER_PLATFORM = linux/amd64
+	DOCKER_PLATFORM = linux/amd64
 endif
 
 # Export environment variables
@@ -203,6 +203,7 @@ generate-env:
 	echo 'DATA_SOURCE_NAME=postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${POSTGRES_DB}?sslmode=disable' >> docker/.env; \
 	echo "ELASTIC_USER=elastic" >> docker/.env; \
 	echo "ELASTIC_PASSWORD=$$HTPASSWD_PASSWORD" >> docker/.env; \
+	echo "HOSTNAME=$$HOSTNAME" >> docker/.env; \
 	echo "Updated docker/.env file successfully."
 
 .PHONY: all build up down restart status logs logs-% shell-% rootless-docker generate-env prune-container prune-image restart-container
