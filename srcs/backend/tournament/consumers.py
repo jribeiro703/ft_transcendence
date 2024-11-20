@@ -11,12 +11,12 @@ class TournamentConsumer(WebsocketConsumer):
 		# Step 1: Accept the WebSocket connection
 		self.accept()
 		
-		#all_users = self.get_all_users()
+		all_users = self.get_all_users()
 		# logger.info("Fetched all users: %s", all_users)
 
 		#if not all_users:
 			# logger.warning("No users found in the database. Using hardcoded list.")
-		all_users = ["boty", "fumo", "yachen", "white-fox", "lannur-s", "jarkan"]  # Hardcoded fallback
+		#all_users = ["boty", "fumo", "yachen", "white-fox", "lannur-s", "jarkan"]  # Hardcoded fallback
 
 		# Step 2: Send a welcome message to the client
 		self.send(text_data=json.dumps({
@@ -31,9 +31,10 @@ class TournamentConsumer(WebsocketConsumer):
 	def get_all_users(self):
 		try:
 			# Fetch all usernames from the User table
+			User = get_user_model()
 			users = User.objects.values_list('username', flat=True)
 			user_list = list(users)  # Convert to a list for easier size checking
-			print(f"Fetched {len(user_list)} users: {user_list}")
+			print("Fetched {len(user_list)} users: {user_list}")
 			return user_list
 		except Exception as e:
 			logger.error(f"Error fetching users: {e}")
