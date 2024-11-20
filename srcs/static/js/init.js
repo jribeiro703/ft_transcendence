@@ -4,7 +4,7 @@ import { keyDownHandler, keyUpHandler, startBall, startBallAi } from "./input.js
 import { createPowerUp, updatePowerUpSelection } from "./powerUp.js";
 import { updateLevelSelection, updateMapSelection } from "./gameMode.js";
 import { initializeBall, draw2, draw} from "./draw.js";
-import { checkForExistingRooms, displayRoomInfo, joinRoom, refreshRoomList, updateRoomInfo, updateRoomList } from "./room.js";
+import { addRoom, checkForExistingRooms, createNewRoom, displayRoomInfo, joinRoom, refreshRoomList, updateRoomInfo, updateRoomList } from "./room.js";
 
 export function initGameVar()
 {
@@ -128,6 +128,12 @@ export function initEventListener()
 	})
 }
 
+
+export function checkRoom()
+{
+
+}
+
 export function initEventListenerRoom()
 {
 	document.addEventListener("keydown", (e) => keyDownHandler(e, gameVar.isFirstPlayer), false);
@@ -136,40 +142,108 @@ export function initEventListenerRoom()
 
 	gameVar.refreshBtn.addEventListener('click', () =>
 	{
-		displayRoomInfo();
-		refreshRoomList();
+		checkRoom();
+		// displayRoomInfo();
+		// refreshRoomList();
+		updateRoomList();
+
 	});
 
 	gameVar.createRoomBtn.addEventListener('click', () => 
 	{
 		console.log("createRoombtn");
 		showGameViewRoom();
-		gameVar.liveMatch = true;
-		history.pushState({ view: 'game' }, '', '?view=game');
+		// history.pushState({ view: 'game' }, '', '?view=game');
 	});
 
-	window.addEventListener('popstate', function(event)
-	{
-		if (event.state && event.state.view == 'game')
-		{
-			const urlParams = new URLSearchParams(window.location.search);
-			const room = urlParams.get('room');
-			if (room)
-			{
-				console.log("event popstate");
-				showGameViewRoom(room);
-				console.log("room");
-			}
-			else
-				console.log("no room");
-		}
-		else
-			showLobbyView();
-	});
+	// window.addEventListener('popstate', function(event)
+	// {
+	// 	if (event.state && event.state.view == 'game')
+	// 	{
+	// 		const urlParams = new URLSearchParams(window.location.search);
+	// 		const room = urlParams.get('room');
+	// 		if (room)
+	// 		{
+	// 			console.log("event popstate");
+	// 			showGameViewRoom(room);
+	// 			console.log("room");
+	// 		}
+	// 		else
+	// 			console.log("no room");
+	// 	}
+	// 	else
+	// 		showLobbyView();
+	// });
+}
+
+function delRoom(name)
+{
+	console.log("name of room ", name);
+	displayRoomInfo();
+	gameVar.rooms = gameVar.rooms.filter(room => room.name !== name);
+	console.log("Rooms after deletion: ", gameVar.rooms);
+	updateRoomList();
+	displayRoomInfo();
 }
 
 function roomMultiView()
 {
+	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+	const tempSocket = new WebSocket(protocol + '//' + window.location.host + '/ws/pong/check_rooms/');
+
+	tempSocket.onopen = function(e)
+	{
+		console.log('Temporary socket opened');
+		console.log("on send lobbyView :");
+		tempSocket.send(JSON.stringify({type: 'lobbyView'}));
+
+		// console.log("on send roomdeleted :");
+		// tempSocket.send(JSON.stringify({type: 'room_deleted'}));
+	};
+
+	tempSocket.onmessage = function(e)
+	{
+		const data = JSON.parse(e.data);
+		console.log(data);
+		if (data.type === 'looks_rooms')
+		{
+			console.log("look rooooooms");
+			console.log("room : ", data.rooms)
+			if (data.rooms)
+			{
+				let idx = 1;
+				data.rooms.forEach(roomName => {
+					addRoom(idx, 'Waiting');
+					updateRoomInfo(idx, roomName, 1, "waitingg");
+					idx++;
+				});
+			}
+		}
+		if (data.type === 'room_deleted')
+		{
+			console.log("on message deleted");
+			console.log(data);
+			// delRoom(data.room_name);
+		}
+		if (data.type === 'ping')
+		{
+			tempSocket.send(JSON.stringify({ type: 'pong' }));
+		}
+	}
+
+	tempSocket.onerror = function(event)
+	{
+    	console.error("WebSocket error observed:", event);
+	};
+
+	tempSocket.onclose = function(event)
+	{
+    	console.log("WebSocket closeddddd:", event);
+	};
+
+
+	
+
 	console.log("roomView");
 	gameVar.gameplayView.style.display = 'none';
 	gameVar.gameView.style.display = 'none';
@@ -182,10 +256,11 @@ function roomMultiView()
 	gameVar.defaultView.style.display = 'none';
 	gameVar.roomView.style.display = 'block';
 	gameVar.createRoomBtn.style.display = 'block';
-	// gameVar.joinRoomBtn.style.display = 'block';
 	gameVar.refreshBtn.style.display = 'block';
 	gameVar.gameplayView.style.display = 'none';
 	initEventListenerRoom();
+	history.pushState({ view: 'game' }, '', '?view=multi');
+	gameVar.liveMatch = true;
 }
 
 function showGameViewRoom(room = null)
@@ -200,19 +275,20 @@ function showGameViewRoom(room = null)
 	gameVar.createRoomBtn.style.display = 'none';
 	gameVar.roomView.style.display = 'none';
 	
-	gameVar.liveMatch = true;
-	if (gameVar.powerUpActive)
-		createPowerUp();		
-	if (room)
-	{
-		console.log("joi rooom");
-		joinRoom(room, setGameSocket, setIsFirstPlayer);
-	}
-	else
-	{
-		console.log("existing rooom");
-		checkForExistingRooms((room) => joinRoom(room, setGameSocket, setIsFirstPlayer));
-	}
+	// gameVar.liveMatch = true;
+	// if (gameVar.powerUpActive)
+	// 	createPowerUp();		
+	// if (room)
+	// {
+	// 	console.log("joi rooom");
+	// 	joinRoom(room, setGameSocket, setIsFirstPlayer);
+	// }
+	// else
+	// {
+		console.log("existingggggg rooom");
+		// checkForExistingRooms((room) => joinRoom(room, setGameSocket, setIsFirstPlayer));
+		createNewRoom();
+	// }
 }
 
 function showLobbyView()
