@@ -1,7 +1,7 @@
 import { renderLoginForm, renderLoginResponse } from "./login-form.js"
 import { renderRegisterForm } from "./register-form.js"
 import { renderOtpForm } from "./otp-form.js";
-import { renderProfilePage } from "./profile.js"
+import { renderProfilePage } from "../../js/profile.js"
 import { renderSettingsPage } from "./settings.js"
 
 // router for user authentication and its different views 

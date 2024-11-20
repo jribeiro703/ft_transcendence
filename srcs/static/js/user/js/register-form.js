@@ -1,13 +1,7 @@
-import { fetchData } from "./utils.js";
+import { fetchData } from "../../utils.js";
 
-function displayResponse(data) {
-    const box = document.getElementById('authBox');
-    box.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-}
-
-// view and eventlistener for register form
 export function renderRegisterForm() {
-    const box = document.getElementById('authBox');
+    const box = document.getElementById('mainContent');
     box.innerHTML = `
         <form id="registerForm">
             <label for="username">Username:</label>
@@ -25,9 +19,8 @@ export function renderRegisterForm() {
         const username = document.getElementById('username').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        const data = await fetchData('https://localhost:8081/user/register/', 'POST', { username, email, password });
-        console.log('Register response:', data);
-        displayResponse(data.message);
+        const { data, status } = await fetchData('/user/register/', 'POST', { username, email, password });
+        box.innerHTML = `<p>${data.message}</p>`;
         window.history.pushState({}, '', '#registerResponse');
     });
 }
