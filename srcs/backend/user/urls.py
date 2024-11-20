@@ -8,6 +8,7 @@ urlpatterns = [
 
 	# for auth
 	path('login/', views.UserLoginView.as_view(), name="login"),
+	path('login/token-refresh/', views.CookieTokenRefreshView.as_view(), name="cookie_token_refresh"),
 	path('login/verify-otp/<int:user_id>/', views.OtpVerificationView.as_view(), name="otp_verification"),
 	path('register/', views.CreateUserView.as_view(), name="register"),
 	path('activate/<uidb64>/<token>/<action>/', views.ActivateLinkView.as_view(), name="activate_link"),
