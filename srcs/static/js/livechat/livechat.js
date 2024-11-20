@@ -4,7 +4,9 @@ const chatSocket = new WebSocket(
 
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
-    document.querySelector('#chat-log').value += (data.message + '\n');
+    const message = data.message;
+    const clientId = data.client_id;
+    document.querySelector('#chat-log').value += (clientId + ': ' + message + '\n');
 };
 
 chatSocket.onclose = function(e) {
