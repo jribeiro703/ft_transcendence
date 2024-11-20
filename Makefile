@@ -1,13 +1,28 @@
 # Variables
-DOCKER_COMPOSE	= docker-compose -f docker/docker-compose.yml
+DOCKER_COMPOSE	= DOCKER_PLATFORM=$(DOCKER_PLATFORM) DOCKER_SOCK=$(DOCKER_SOCK) HOSTNAME=$(HOSTNAME) docker-compose -f docker/docker-compose.yml
 PROJECT_NAME	= ft_transcendence
+DOCKER_SOCK = $(shell if [ ! -S "$${XDG_RUNTIME_DIR}/docker.sock" ]; then echo "/var/run/docker.sock"; else echo "$${XDG_RUNTIME_DIR}/docker.sock"; fi)
+HOSTNAME = $(shell hostname)
+
+# Detect plaform
+PLATFORM		= $(shell uname -m)
+ifeq ($(PLATFORM),arm64)
+	DOCKER_PLATFORM = linux/arm64/v8
+else
+	DOCKER_PLATFORM = linux/amd64
+endif
+
+# Export environment variables
+export DOCKER_PLATFORM
+export DOCKER_SOCK
+export HOSTNAME
 
 # Default target
 all: generate-env up
 
 # Build the Docker images
 build:
-	$(DOCKER_COMPOSE) build
+	$(DOCKER_COMPOSE) build 
 
 # Start the Docker Compose services
 up:
@@ -102,24 +117,6 @@ open:
 	@xdg-open https://postgres-exporter.localhost:8081/metrics
 
 generate-env:
-	@if [ ! -S "$${XDG_RUNTIME_DIR}/docker.sock" ]; then \
-		if [ "$$(uname)" = "Darwin" ]; then \
-			sed -i '' 's|\$${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro|/var/run/docker.sock:/tmp/docker.sock:ro|' docker/docker-compose.yml; \
-		else \
-			sed -i 's|\$${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro|/var/run/docker.sock:/tmp/docker.sock:ro|' docker/docker-compose.yml; \
-		fi; \
-	else \
-		if [ "$$(uname)" = "Darwin" ]; then \
-			sed -i '' 's|/var/run/docker.sock:/tmp/docker.sock:ro|\$${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro|' docker/docker-compose.yml; \
-		else \
-			sed -i 's|/var/run/docker.sock:/tmp/docker.sock:ro|\$${XDG_RUNTIME_DIR}/docker.sock:/tmp/docker.sock:ro|' docker/docker-compose.yml; \
-		fi; \
-	fi
-	@if [ "$$(uname)" = "Darwin" ]; then \
-		sed -i '' "0,/VIRTUAL_HOST=/s/\(VIRTUAL_HOST=[^,]*,\)[^,]*/\1$$(hostname)/" docker/docker-compose.yml; \
-	else \
-		sed -i "0,/VIRTUAL_HOST=/s/\(VIRTUAL_HOST=[^,]*,\)[^,]*/\1$$(hostname)/" docker/docker-compose.yml; \
-	fi
 	@echo "Generating docker/.env file..."
 	@touch docker/django/zsh_history
 	@mkdir -p docker/nginx/certs
@@ -127,9 +124,9 @@ generate-env:
 	@touch docker/.env
 	@touch docker/django/zsh_history
 	@read -p "Do you want to fill it with automatic values? (yes/no): " AUTO_FILL; \
-	docker run --rm -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/localhost.key -x509 -days 365 -out /certs/localhost.crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=localhost/emailAddress=transcendence@transcendence.com"; \
-	docker run --rm -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/$$(hostname).key -x509 -days 365 -out /certs/$$(hostname).crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=$$(hostname)/emailAddress=transcendence@transcendence.com"; \
-	docker run --rm -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/elasticsearch.key -x509 -days 365 -out /certs/elasticsearch.crt -subj "/C=FR/ST=France/L=Paris/O=elasticsearch/OU=elasticsearch/CN=elasticsearch/emailAddress=elasticsearch@elasticsearch.com"; \
+	docker run --rm --platform $(DOCKER_PLATFORM) -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/localhost.key -x509 -days 365 -out /certs/localhost.crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=localhost/emailAddress=transcendence@transcendence.com"; \
+	docker run --rm --platform $(DOCKER_PLATFORM) -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/$$(hostname).key -x509 -days 365 -out /certs/$$(hostname).crt -subj "/C=FR/ST=France/L=Paris/O=transcendence/OU=transcendence/CN=$$(hostname)/emailAddress=transcendence@transcendence.com"; \
+	docker run --rm --platform $(DOCKER_PLATFORM) -v $$(pwd)/docker/nginx/certs:/certs alpine/openssl req -newkey rsa:2048 -nodes -keyout /certs/elasticsearch.key -x509 -days 365 -out /certs/elasticsearch.crt -subj "/C=FR/ST=France/L=Paris/O=elasticsearch/OU=elasticsearch/CN=elasticsearch/emailAddress=elasticsearch@elasticsearch.com"; \
 	if [ "$$AUTO_FILL" = "yes" ] || [ "$$AUTO_FILL" = "y" ] || [ "$$AUTO_FILL" = "" ]; then \
 		DEBUG="1"; \
 		POSTGRES_DB="transcendence"; \
@@ -190,10 +187,10 @@ generate-env:
 		done; \
 	fi; \
 	echo "DEBUG=$$DEBUG" > docker/.env; \
-	docker run --rm -e HOSTNAME=$$(hostname) -v $$(pwd)/docker/.env:/.env -v $$(pwd)/srcs/backend/transcendence/settings.py:/settings.py -v $$(pwd)/docker/django/update_settings.py:/update_settings.py python:3.10-slim python /update_settings.py; \
-	docker run --rm -ti xmartlabs/htpasswd $${HTPASSWD_USER} $${HTPASSWD_PASSWORD} > docker/nginx/htpasswd/prometheus.localhost; \
-	docker run --rm -ti xmartlabs/htpasswd $${HTPASSWD_USER} $${HTPASSWD_PASSWORD} > docker/nginx/htpasswd/postgres-exporter.localhost; \
-	docker run --rm -ti xmartlabs/htpasswd $${HTPASSWD_USER} $${HTPASSWD_PASSWORD} > docker/nginx/htpasswd/node-exporter.localhost; \
+	docker run --rm --platform $(DOCKER_PLATFORM) -e HOSTNAME=$$(hostname) -v $$(pwd)/docker/.env:/.env -v $$(pwd)/srcs/backend/transcendence/settings.py:/settings.py -v $$(pwd)/docker/django/update_settings.py:/update_settings.py python:3.10-slim python /update_settings.py; \
+	docker run --rm --platform $(DOCKER_PLATFORM) backplane/htpasswd -b -B -n $${HTPASSWD_USER} $${HTPASSWD_PASSWORD} > docker/nginx/htpasswd/prometheus.localhost; \
+	docker run --rm --platform $(DOCKER_PLATFORM) backplane/htpasswd -b -B -n $${HTPASSWD_USER} $${HTPASSWD_PASSWORD} > docker/nginx/htpasswd/postgres-exporter.localhost; \
+	docker run --rm --platform $(DOCKER_PLATFORM) backplane/htpasswd -b -B -n $${HTPASSWD_USER} $${HTPASSWD_PASSWORD} > docker/nginx/htpasswd/node-exporter.localhost; \
 	echo "DJANGO_SETTINGS_MODULE=transcendence.settings" >> docker/.env; \
 	echo "POSTGRES_DB=$$POSTGRES_DB" >> docker/.env; \
 	echo "POSTGRES_USER=$$POSTGRES_USER" >> docker/.env; \
@@ -206,6 +203,7 @@ generate-env:
 	echo 'DATA_SOURCE_NAME=postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@$${DB_HOST}:$${DB_PORT}/$${POSTGRES_DB}?sslmode=disable' >> docker/.env; \
 	echo "ELASTIC_USER=elastic" >> docker/.env; \
 	echo "ELASTIC_PASSWORD=$$HTPASSWD_PASSWORD" >> docker/.env; \
+	echo "HOSTNAME=$$HOSTNAME" >> docker/.env; \
 	echo "Updated docker/.env file successfully."
 
 .PHONY: all build up down restart status logs logs-% shell-% rootless-docker generate-env prune-container prune-image restart-container
