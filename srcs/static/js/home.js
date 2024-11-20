@@ -1,4 +1,7 @@
 import { alertUserToLogin, isAuthenticated } from "./utils.js"
+// import { playerListner } from "../tournament/js/playerListener.js"
+import { showTournamentView } from "../tournament/showTournamentView.js"
+
 
 function createHomeContent() {
 	const box = document.getElementById('mainContent');
@@ -35,9 +38,11 @@ export function renderHomePage() {
 	});
 
 	document.getElementById('btn-Tournament').addEventListener('click', () => {
-		if (!isAuthenticated()) { alertUserToLogin(); };
+		// if (!isAuthenticated()) { alertUserToLogin(); };
 		history.pushState({ page: 'tournament' }, 'Tournament', '?page=tournament');
 		console.log('Tournament button clicked');
+		// playerListner();
+		showTournamentView();
 	});
 
 	document.getElementById('btn-Leaderboard').addEventListener('click', () => {
