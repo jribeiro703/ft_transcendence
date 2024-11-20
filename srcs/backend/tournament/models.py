@@ -4,7 +4,7 @@ from user.models import User
 from django.utils.translation import gettext_lazy as _
 
 class Tournament(models.Model):
-	uuid = models.UUIDField(primary_key=True, default=models.UUIDField, editable=False)
+	# uuid = models.UUIDField(primary_key=True, default=models.uuid4, editable=False)
 	created_by = models.ForeignKey(User, related_name='created_tournaments', on_delete=models.CASCADE)
 	created_at = models.DateTimeField(auto_now_add=True)
 	start_date = models.DateTimeField(null=True, blank=True)  # Start date of the tournament
