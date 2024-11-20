@@ -1,7 +1,7 @@
-import { fetchData } from "./utils.js";
+import { fetchData } from "../../utils.js";
 
 export function renderOtpForm(url) {
-    const box = document.getElementById('authBox');
+    const box = document.getElementById('mainContent');
     box.innerHTML += `
         <form id="otpForm">
             <label for="otpCode">OTP Code:</label>
@@ -13,14 +13,13 @@ export function renderOtpForm(url) {
     document.getElementById('otpForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const otpCode = document.getElementById('otpCode').value;
-        const full_url = "https://localhost:8081" + url
-
-        const data = await fetchData(full_url, 'POST', { otp_code: otpCode });
-        console.log('OTP verification response:', data);
+        const { data, staus } = await fetchData(url, 'POST', { otp_code: otpCode });
         if (data.access_token) {
+            console.log("Get access token successfully")
             localStorage.setItem('access_token', data.access_token);
-            window.location.href = "/";
         }
         box.innerHTML = `<p>${data.message}</p>`;
+        window.history.pushState({}, '', '#otpForm');
+
     });
 }
