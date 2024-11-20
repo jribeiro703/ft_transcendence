@@ -12,9 +12,23 @@
 </head>
 
 <body>
-  <div>MET TON LIVECHAT ICI</div>
-  {% include 'js/livechat/livechat.html' %}
-	<script type="module" src="{% static 'js/livechat/livechat.js' %}?v=1.1"></script>
+  <div class="container">
+    <h2>Live Chat</h2>
+    <div class="row">
+      <div class="col-md-12">
+        <textarea id="chat-log" class="form-control" rows="10" readonly></textarea>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-10">
+        <input id="chat-message-input" type="text" class="form-control" placeholder="Type your message here...">
+      </div>
+      <div class="col-md-2">
+        <button id="chat-message-submit" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="{% static 'js/livechat/livechat.js' %}?v=1.1"></script>
 </body>
 
 </html>
