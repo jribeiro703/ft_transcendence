@@ -135,4 +135,4 @@ cython_debug/
 docker/django/zsh_history
 docker/nginx/htpasswd
 docker/nginx/certs
-compile_commands.json
+srcs/staticfiles
