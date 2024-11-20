@@ -6,7 +6,10 @@ chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const message = data.message;
     const clientId = data.client_id;
-    document.querySelector('#chat-log').value += (clientId + ': ' + message + '\n');
+	const timestamp = data.timestamp;
+	const chatLog = document.querySelector('#chat-log');
+	chatLog.value += (timestamp + ' ' + clientId + ': ' + message + '\n');
+    // document.querySelector('#chat-log').value += (clientId + ': ' + message + '\n');
 };
 
 chatSocket.onclose = function(e) {
@@ -24,7 +27,9 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
     const messageInputDom = document.querySelector('#chat-message-input');
     const message = messageInputDom.value;
     chatSocket.send(JSON.stringify({
-        'message': message
+        'message': message,
+		'client_id': 'client_id',
+		'timestamp': new Date().toLocaleString()
     }));
     messageInputDom.value = '';
 };

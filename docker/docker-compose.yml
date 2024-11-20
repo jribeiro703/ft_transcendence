@@ -43,7 +43,7 @@ services:
       python manage.py makemigrations &&
       python manage.py migrate --noinput &&
       python manage.py testusers &&
-      python manage.py collectstatic
+      python manage.py collectstatic --clear --noinput
       "
 
   db:
