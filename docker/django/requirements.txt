@@ -10,3 +10,4 @@ channels
 twisted[tls,http2]
 pyopenssl
 pyotp
+django-admin-interface
