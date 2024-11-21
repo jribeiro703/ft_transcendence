@@ -20,9 +20,7 @@ export function renderRegisterForm() {
 		const email = document.getElementById('email').value;
 		const password = document.getElementById('password').value;
 		const { data, status } = await fetchData('/user/register/', 'POST', { username, email, password });
-
-		
-			console.log(data, status);
+		console.log(data, status);
 
 		box.innerHTML = `<p>${escapeHTML(data.message)}</p>`;
 		window.history.pushState({ page: "registerResponse" }, 'RegisterResponse', '#registerResponse');

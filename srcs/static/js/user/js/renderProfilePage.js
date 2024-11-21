@@ -30,13 +30,9 @@ function createProfileContent() {
 
 export async function renderProfilePage() {
 	const userId = getIdFomJWT();
-	
 		console.log(userId);
-
 	const { data, status } = await fetchData(`/user/profile/${userId}`);
-	
 		console.log(data, status)
-
 	createProfileContent();
 
 	document.getElementById('username').textContent = data.username;

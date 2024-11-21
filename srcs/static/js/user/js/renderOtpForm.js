@@ -17,13 +17,10 @@ export function renderOtpForm(url, msg) {
         e.preventDefault();
         const otpCode = document.getElementById('otpCode').value;
         const { data, status } = await fetchData(url, 'POST', { otp_code: otpCode });
-
-        
-            console.log(data, status)
+        console.log(data, status)
         
         if (data.access_token) {
-            
-                console.log("Get access token successfully")
+            console.log("Get access token successfully")
             localStorage.setItem('access_token', data.access_token);
         }
         box.innerHTML = `<p>${escapeHTML(data.message)}</p>`;
