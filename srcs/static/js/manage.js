@@ -2,6 +2,7 @@ import gameVar from "./var.js";
 import { BALL_RADIUS, PADDLE_SPEED } from "./const.js";
 import { resetBall } from "./reset.js";
 import { sendBallData, sendDirectionData, sendPaddleData } from "./network.js";
+import { displayVar } from "./input.js";
 
 export function checkCollisionWithWalls()
 {
@@ -51,7 +52,6 @@ export function manageCollision()
 		checkCollisionWithWalls();
 		directChanged = true;
 	}
-	// Collision avec le haut et le bas de l'écran
 	if(gameVar.y + gameVar.dy > gameVar.canvasH - BALL_RADIUS || gameVar.y + gameVar.dy < BALL_RADIUS)
 	{
 		gameVar.dy = -gameVar.dy;

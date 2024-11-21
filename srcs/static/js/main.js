@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function()
 	gameVar.ctx = canvas.getContext('2d');
 	canvas.width = gameVar.canvasW;
 	canvas.height = gameVar.canvasH;
-	// refreshRoomList();
 	initGameVar();
 	initEventListener();
 

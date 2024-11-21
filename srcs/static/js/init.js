@@ -4,7 +4,7 @@ import { keyDownHandler, keyUpHandler, startBall, startBallAi } from "./input.js
 import { createPowerUp, updatePowerUpSelection } from "./powerUp.js";
 import { updateLevelSelection, updateMapSelection } from "./gameMode.js";
 import { initializeBall, draw2, draw} from "./draw.js";
-import { addRoom, delRooms, checkForExistingRooms, createNewRoom, displayRoomInfo, joinRoom, updateRoomInfo, updateRoomList } from "./room.js";
+import { addRoom, delRooms, createNewRoom, displayRoomInfo, joinRoom, updateRoomInfo, updateRoomList } from "./room.js";
 
 export function initGameVar()
 {
@@ -162,15 +162,15 @@ export function initEventListenerRoom()
 	// });
 }
 
-function delRoom(name)
-{
-	console.log("name of room ", name);
-	displayRoomInfo();
-	gameVar.rooms = gameVar.rooms.filter(room => room.name !== name);
-	console.log("Rooms after deletion: ", gameVar.rooms);
-	updateRoomList();
-	displayRoomInfo();
-}
+// function delRoom(name)
+// {
+// 	console.log("name of room ", name);
+// 	displayRoomInfo();
+// 	gameVar.rooms = gameVar.rooms.filter(room => room.name !== name);
+// 	console.log("Rooms after deletion: ", gameVar.rooms);
+// 	updateRoomList();
+// 	displayRoomInfo();
+// }
 
 function checkRoom(rooms)
 {
@@ -205,7 +205,7 @@ function roomMultiView()
 	tempSocket.onmessage = function(e)
 	{
 		const data = JSON.parse(e.data);
-		console.log(data);
+		console.log("data: ", data);
 		if (data.type === 'looks_rooms')
 		{
 			if (data.rooms)

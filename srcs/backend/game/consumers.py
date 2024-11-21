@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class PongConsumer(WebsocketConsumer):
 	rooms = {}
 	last_active = {}
-	ping_interval = 10
+	ping_interval = 5
 
 
 	def __init__(self, *args, **kwargs):
@@ -22,34 +22,30 @@ class PongConsumer(WebsocketConsumer):
 		self.room_name = self.scope['url_route']['kwargs'].get('room_name')
 		if self.room_name:
 			self.room_group_name = f'game_{self.room_name}'
-			# Join room group
 			async_to_sync(self.channel_layer.group_add)(
 				self.room_group_name,
 				self.channel_name
 			)
 			self.accept()
 			logger.info(f'Client {self.channel_name} connected to room {self.room_name}')
-			# self.join_room()
 		else:
 			self.accept()
 			logger.info(f'Client {self.channel_name} connected without a room')
 		self.last_active[self.channel_name] = time.time()
 		self.start_pinging()
 		self.log_all_rooms()
-		# logger.info(f'Client {self.channel_name} joined room {self.room_name}. Current clients: {self.rooms[self.room_name]}')
 
 	def disconnect(self, close_code):
 		if self.room_name:
-			# Leave room group
 			async_to_sync(self.channel_layer.group_discard)(
 				self.room_group_name,
 				self.channel_name
 			)
-			# Remove client from room
 			if self.room_name in self.rooms:
 				self.rooms[self.room_name].remove(self.channel_name)
 				if not self.rooms[self.room_name]:
 					logger.info(f'Room {self.room_name} is empty, sending room_deleted event.')
+					del self.rooms[self.room_name]
 					async_to_sync(self.channel_layer.group_send)(
 						self.room_group_name,
 						{
@@ -57,21 +53,21 @@ class PongConsumer(WebsocketConsumer):
 							'room_name': self.room_name,
 						}
 					)
-					del self.rooms[self.room_name]
-					logger.info(f'Room {self.room_name} is now empty and has been deleted.')
-					self.log_all_rooms()
-				# Send message to room group
-				async_to_sync(self.channel_layer.group_send)(
-					self.room_group_name,
-					{
-						'type': 'client_left',
-						'message': f'Client {self.channel_name} has left the room.'
-					}
-				)
-				# Delete room if empty
-			if self.channel_name in self.last_active:
-				del self.last_active[self.channel_name]
+				else:
+					logger.info(f'Client {self.channel_name} disconnected, room {self.room_name} still has clients: {self.rooms[self.room_name]}')
 			self.log_all_rooms()
+			# 		logger.info(f'Room {self.room_name} is now empty and has been deleted.')
+			# 		self.log_all_rooms()
+			# 	async_to_sync(self.channel_layer.group_send)(
+			# 		self.room_group_name,
+			# 		{
+			# 			'type': 'client_left',
+			# 			'message': f'Client {self.channel_name} has left the room.'
+			# 		}
+			# 	)
+			# if self.channel_name in self.last_active:
+			# 	del self.last_active[self.channel_name]
+			# self.log_all_rooms()
 
 	def start_pinging(self):
 		"""Démarrer l'envoi de messages de ping pour vérifier la connexion."""
@@ -84,19 +80,46 @@ class PongConsumer(WebsocketConsumer):
 		if self.ping_timer:
 			self.ping_timer.cancel()
 
+	# def check_ping_response(self):
+	# 	"""Vérifier si le client a répondu au dernier ping."""
+	# 	last_time = self.last_active.get(self.channel_name)
+	# 	if last_time and (time.time() - last_time > self.ping_interval):
+	# 		logger.warning(f'Aucun pong reçu de {self.channel_name}. Déconnexion.')
+	# 		self.close()
+	# 	else:
+	# 		self.start_pinging()
+	# def check_ping_response(self):
+	# 	last_time = self.last_active.get(self.channel_name)
+	# 	if time.time() - last_time > self.ping_interval:
+	# 		if self.channel_name in self.rooms.get(self.room_name, []):
+	# 			self.rooms[self.room_name].remove(self.channel_name)
+	# 			if not self.rooms[self.room_name]:
+	# 				self.close_room(self.room_name)
+	# 			self.close()
+	# 		else:
+	# 			self.reconnect_or_clean_client()
 	def check_ping_response(self):
-		"""Vérifier si le client a répondu au dernier ping."""
 		last_time = self.last_active.get(self.channel_name)
-		if last_time and (time.time() - last_time > self.ping_interval):
+		if last_time and time.time() - last_time > self.ping_interval:
 			logger.warning(f'Aucun pong reçu de {self.channel_name}. Déconnexion.')
-			self.close()  # Déconnecter le client si aucun pong reçu
-		else:
-			self.start_pinging()
-	
+			self.disconnect()  # Déconnecte le client
+			if self.room_name in self.rooms and self.channel_name in self.rooms[self.room_name]:
+				self.rooms[self.room_name].remove(self.channel_name)
+				if not self.rooms[self.room_name]:  # Si la room est vide
+					logger.info(f'Room {self.room_name} is empty after ping check, deleting it.')
+					del self.rooms[self.room_name]  # Supprime la room
+					async_to_sync(self.channel_layer.group_send)(
+						self.room_group_name,
+						{
+							'type': 'room_deleted',
+							'room_name': self.room_name,
+						}
+					)
+
 	def receive(self, text_data):
 		data = json.loads(text_data)
-		if data['type'] != 'ball_data':
-			logger.info(f"Received data: {data}")
+		# if data['type'] != 'ball_data':
+		# 	logger.info(f"Received data: {data}")
 		self.last_active[self.channel_name] = time.time()
 		if data['type'] == 'pong':
 			logger.info(f'pong recu de {self.channel_name}')
@@ -112,8 +135,6 @@ class PongConsumer(WebsocketConsumer):
 			self.broadcast_player_data(data)
 		elif data['type'] == 'game_data':
 			self.broadcast_game_data(data)
-		# elif data['type'] == 'check_aroom':
-			# self.check_rooms()
 		elif data['type'] == 'lobbyView':
 			self.lobby()
 		elif data['type'] == 'room_deleted':
@@ -124,7 +145,6 @@ class PongConsumer(WebsocketConsumer):
 		if self.room_name not in self.rooms:
 			self.rooms[self.room_name] = []
 		self.rooms[self.room_name].append(self.channel_name)
-		# Send message to room group
 		async_to_sync(self.channel_layer.group_send)(
 			self.room_group_name,
 			{
@@ -132,57 +152,11 @@ class PongConsumer(WebsocketConsumer):
 				'message': f'Client {self.channel_name} has joined the room.'
 			}
 		)
-		# Send mesage to room group
-		async_to_sync(self.channel_layer.group_send)(
-			self.room_group_name,
-			{
-				'type': 'room_joined',
-				'room_name': self.room_name
-			}
-		)
 		self.log_all_rooms()
-
-	# def	check_rooms(self, message=None):
-	# 	rooms_info = [{'name': room, 'clients': len(clients)} for room, clients in self.rooms.items()]
-	# 	for room, clients in self.rooms.items():
-	# 		async_to_sync(self.channel_layer.group_send)(
-	# 			self.room_group_name,
-	# 			{
-	# 				'type': 'check_rooms',
-	# 				'name': rooms_info
-	# 			}
-	# 		)
-
-	# def check_rooms(self, message=None):
-	# 	available_rooms = list(self.rooms.keys())
-	# 	if available_rooms:
-	# 		response = {
-	# 			'type': 'check_aroom',
-	# 			'rooms': available_rooms
-	# 		}
-	# 	else:
-	# 		response = {
-	# 			'type': 'check_aroom',
-	# 			'rooms': [],
-	# 			'message': 'No rooms are currently available.'
-	# 		}
-	# 	logger.info(f'on envoie les infos')
-	# 	async_to_sync(self.channel_layer.send)(
-	# 		self.channel_name,  # Envoi directement au client appelant
-	# 		response
-	# 	)
 
 	def log_all_rooms(self):
 		for room, clients in self.rooms.items():
 			logger.info(f'Room {room} has clients : {clients}')
-
-
-	# def check_rooms(self):
-	# 	available_rooms = [room for room, clients in self.rooms.items() if len(clients) < 2]
-	# 	self.send(text_data=json.dumps({
-	# 		'type': 'available_rooms',
-	# 		'rooms': available_rooms
-	# 	}))
 
 	def lobby(self):
 		available_rooms = [room for room, clients in self.rooms.items() if len(clients) == 1]
@@ -270,7 +244,6 @@ class PongConsumer(WebsocketConsumer):
 		}))
 
 	def broadcast_ball_data(self, data):
-		# Send ball data to room group
 		async_to_sync(self.channel_layer.group_send)(
 			self.room_group_name,
 			{
@@ -291,7 +264,6 @@ class PongConsumer(WebsocketConsumer):
 		)
 
 	def broadcast_paddle_data(self, data):
-		# Send paddle data to room group
 		async_to_sync(self.channel_layer.group_send)(
 			self.room_group_name,
 			{
@@ -315,9 +287,9 @@ class PongConsumer(WebsocketConsumer):
 		async_to_sync(self.channel_layer.group_send)(
 			self.room_group_name,
 			{
-				'type': 'player_data',
+				'type': 'game_data',
 				'gameStart': data['gameStart'],
 				'gameReady': data['gameReady'],
-				'animationFrame': data['animationFrame'],
+				# 'animationFrame': data['animationFrame'],
 			}
 		)
