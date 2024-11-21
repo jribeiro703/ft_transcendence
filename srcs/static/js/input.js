@@ -46,8 +46,7 @@ export function startBall(e)
 			console.log("staaaaaaaaaaaaaaaaaaaaaaaaaaartt");
 			gameVar.gameStart = true;
 
-			// sendPlayerData(gameVar.gameSocket, gameVar.gameReady, gameVar.currenServer);
-			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.animationFrame);
+			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.gameReady);
 			gameVar.dx = gameVar.init_dx;
 			gameVar.dy = (Math.random() < 0.5 ? gameVar.init_dy : -gameVar.init_dy);
 		}
@@ -62,7 +61,6 @@ export function displayVar()
 	console.log("currentServer: ", gameVar.currenServer);
 	console.log("gameStart: ", gameVar.gameStart);
 	console.log("game ready: ", gameVar.gameReady);
-	console.log("animation frame: ", gameVar.animationFrame);
 }
 
 export function displayBall()
