@@ -1,5 +1,7 @@
 from django.db import models
 from user.models import User
+# ensures that _ is defined as a shortcut for the gettext function for internationalization (i18n)
+from django.utils.translation import gettext as _ 
 
 class Game(models.Model):
 	# id = models.UUIDField(primary_key=True, default=models.uuid4, editable=False) # PK
@@ -18,7 +20,7 @@ class Game(models.Model):
 	end_time = models.DateTimeField(null=True, blank=True)
 
 	def __str__(self):
-		return _(f"Match started at {self.created_at}")
+		return (f"Match started at {self.created_at}")
 
 class GamePlayer(models.Model):
 	# id = models.UUIDField(primary_key=True, default=models.uuid4, editable=False) # PK
@@ -28,4 +30,4 @@ class GamePlayer(models.Model):
 	is_winner  = models.BooleanField(default=False)
 
 	def __str__(self):
-		return _(f"Player {self.user.username} in Game {self.game.id}")
+		return (f"Player {self.user.username} in Game {self.game.id}")
