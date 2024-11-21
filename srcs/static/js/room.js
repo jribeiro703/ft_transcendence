@@ -67,8 +67,6 @@ export function createNewRoom(joinRoomCallback)
 	const roomName = `room_${Math.floor(Math.random() * 10000)}`;
 	gameVar.playerIdx = 1;
 	joinRoom(roomName);
-	// return (roomName);
-
 }
 
 
@@ -85,7 +83,6 @@ export function joinRoom(roomName, setGameSocket, setIsFirstPlayer)
 		try
 		{
 			gameSocket.send(JSON.stringify({ type: 'join_room' }));
-			// setGameSocket(gameSocket);
 			gameVar.gameSocket = gameSocket;
 			history.pushState({ view: 'game', room: roomName }, '', `?view=multi&room=${roomName}`);
 			initializeBall();
@@ -101,8 +98,6 @@ export function joinRoom(roomName, setGameSocket, setIsFirstPlayer)
 		{
 			console.error("erreur send message", error);
 		}
-
-
 	};
 
 	gameSocket.onmessage = function(e)
@@ -110,7 +105,8 @@ export function joinRoom(roomName, setGameSocket, setIsFirstPlayer)
 		try
 		{
 			const data = JSON.parse(e.data);
-			console.log("message recu : ", data);
+			if (data.type !== 'ball_data')
+				console.log("message recu : ", data);
 			if (data.type === 'ping')
 			{
 				gameSocket.send(JSON.stringify({ type: 'pong' }));
@@ -181,108 +177,83 @@ export function joinRoom(roomName, setGameSocket, setIsFirstPlayer)
 	gameSocket.onclose = function(e)
 	{
 		gameVar.playerReady = false;
-		// sendPlayerData(gameVar.gameSocket, gameVar.playerReady, gameVar.currenServer);
 		console.error('Game socket closed unexpectedly code : ', e.code, 'reason', e.reason);
 	};
 }
 
-
+export function delRooms()
+{
+	while (gameVar.rooms.length > 0)
+		gameVar.rooms.pop();
+}
 export function displayRoomInfo()
 {
 	console.log("rooms : ", gameVar.rooms);
 }
 
-export function addRoom(idx, status = null)
+export function updateRoomInfo(index, roomName, playerCount, roomStatus)
 {
-	const newRoom = { idx, players: 1, status };
-	gameVar.rooms.push(newRoom);
-}
+    const room = gameVar.rooms.find(room => room.idx === index);
 
-export function updateRoomInfo(idx, name = null, players = null, status = null)
-{
-	// console.log("updateRoomInfo");
-	// console.log("idx: ", idx);
-	// console.log("name: ", name);
-	// console.log("players: ", players);
-	// console.log("status: ", status);
-	const room = gameVar.rooms.find(room => room.idx === idx)
-	if (room)
+    if (room)
 	{
-		if (name !== null)
-			room.name = name;
-		if (players !== null)
-			room.players = players;
-		if (status !== null)
-			room.status = status;
-		return (room);
-	}
-	return (null);
+        room.name = roomName || room.name; 
+        room.players = playerCount;
+        room.status = roomStatus;
+    } 
 }
 
-export function getRoom(idx)
+// export function getRoom(idx)
+// {
+// 	return (gameVar.rooms.find(room => room.idx === idx) || null);
+// }
+
+
+export function addRoom(index, roomName, status)
 {
-	return (gameVar.rooms.find(room => room.idx === idx) || null);
+    if (!gameVar.rooms.some(room => room.name === roomName))
+	{
+        gameVar.rooms.push(
+		{
+            idx: index,      
+            name: roomName,
+            status: status
+        });
+    }
 }
 
 export function updateRoomList()
 {
 	console.log("updateRooomList");
-	if (gameVar.rooms.length === 1)
-	{
-		gameVar.noRoomsMessage.style.display = 'block';
-		gameVar.roomsContainer.style.display = 'none';
-	}
-	else
-	{
-		gameVar.noRoomsMessage.style.display = 'none';
-		gameVar.roomsContainer.style.display = 'block';
+	console.log("gameRoom: ", gameVar.rooms);
+	gameVar.noRoomsMessage.style.display = 'none';
+	gameVar.roomsContainer.style.display = 'block';
 
-		gameVar.roomsContainer.innerHTML = '';
+	gameVar.roomsContainer.innerHTML = '';
 
-		gameVar.rooms.forEach(room =>
+	gameVar.rooms.forEach(room =>
+	{
+		if (room.idx === null || room.idx === undefined)
+			return ;
+
+		const roomItem = document.createElement('div');
+		roomItem.className = 'server-item';
+
+		roomItem.innerHTML = `
+			<span class="room-name">${room.name}</span>
+			<span class="room-players">${room.players}/2</span>
+			<span class="room-status">${room.status}</span>
+			<button class="joinRoomBtn" ${room.status} === 'Started' ? 'disabled' : ''}>Join</button>
+		`;
+
+		const joinBtn = roomItem.querySelector('.joinRoomBtn');
+		joinBtn.addEventListener('click', () =>
 		{
-			console.log("forEach");
-			if (room.idx === null || room.idx === undefined)
-				return ;
+			joinRoom(room.name); // Utiliser room.name ici	
+		});
 
-			const roomItem = document.createElement('div');
-            roomItem.className = 'server-item';
-
-            roomItem.innerHTML = `
-                <span class="room-name">${room.name}</span>
-                <span class="room-players">${room.players}/2</span>
-                <span class="room-status">${room.status}</span>
-                <button class="joinRoomBtn" ${room.status} === 'Started' ? 'disabled' : ''}>Join</button>
-            `;
-
-            const joinBtn = roomItem.querySelector('.joinRoomBtn');
-            joinBtn.addEventListener('click', () =>
-			{
-				joinRoom(room.name); // Utiliser room.name ici	
-			});
-
-			gameVar.roomsContainer.appendChild(roomItem);
-		})
-	}
-}
-
-export function refreshRoomList()
-{
-	console.log("refreshRoomList");
-
+		gameVar.roomsContainer.appendChild(roomItem);
+	})
 }
 
 
-function updateRoomListFromServer(rooms) 
-{
-    // Réinitialise la liste des salles locales
-    gameVar.rooms = rooms.map((room, idx) => ({
-        idx: idx + 1,
-        name: room.name,
-        players: room.nbPlayer,
-        status: room.status,
-    }));
-
-    // Rafraîchit l'affichage des salles
-    updateRoomList();
-}

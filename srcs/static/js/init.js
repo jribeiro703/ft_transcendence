@@ -4,7 +4,7 @@ import { keyDownHandler, keyUpHandler, startBall, startBallAi } from "./input.js
 import { createPowerUp, updatePowerUpSelection } from "./powerUp.js";
 import { updateLevelSelection, updateMapSelection } from "./gameMode.js";
 import { initializeBall, draw2, draw} from "./draw.js";
-import { addRoom, checkForExistingRooms, createNewRoom, displayRoomInfo, joinRoom, refreshRoomList, updateRoomInfo, updateRoomList } from "./room.js";
+import { addRoom, delRooms, checkForExistingRooms, createNewRoom, displayRoomInfo, joinRoom, updateRoomInfo, updateRoomList } from "./room.js";
 
 export function initGameVar()
 {
@@ -129,25 +129,11 @@ export function initEventListener()
 }
 
 
-export function checkRoom()
-{
-
-}
-
 export function initEventListenerRoom()
 {
 	document.addEventListener("keydown", (e) => keyDownHandler(e, gameVar.isFirstPlayer), false);
 	document.addEventListener("keyup", (e) => keyUpHandler(e, gameVar.isFirstPlayer), false);
 	document.addEventListener("keydown", startBall, false);
-
-	gameVar.refreshBtn.addEventListener('click', () =>
-	{
-		checkRoom();
-		// displayRoomInfo();
-		// refreshRoomList();
-		updateRoomList();
-
-	});
 
 	gameVar.createRoomBtn.addEventListener('click', () => 
 	{
@@ -186,19 +172,34 @@ function delRoom(name)
 	displayRoomInfo();
 }
 
+function checkRoom(rooms)
+{
+	console.log("checkRoom");
+    if (rooms && Array.isArray(rooms)) 
+	{
+        gameVar.rooms = gameVar.rooms.filter(room => rooms.includes(room.name));
+        updateRoomList();
+    }
+}
+
+
 function roomMultiView()
 {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 	const tempSocket = new WebSocket(protocol + '//' + window.location.host + '/ws/pong/check_rooms/');
+
+	gameVar.refreshBtn.addEventListener('click', () =>
+	{
+		tempSocket.send(JSON.stringify({ type: 'lobbyView'}));
+		updateRoomList();
+
+	});
 
 	tempSocket.onopen = function(e)
 	{
 		console.log('Temporary socket opened');
 		console.log("on send lobbyView :");
 		tempSocket.send(JSON.stringify({type: 'lobbyView'}));
-
-		// console.log("on send roomdeleted :");
-		// tempSocket.send(JSON.stringify({type: 'room_deleted'}));
 	};
 
 	tempSocket.onmessage = function(e)
@@ -207,23 +208,27 @@ function roomMultiView()
 		console.log(data);
 		if (data.type === 'looks_rooms')
 		{
-			console.log("look rooooooms");
-			console.log("room : ", data.rooms)
 			if (data.rooms)
 			{
-				let idx = 1;
-				data.rooms.forEach(roomName => {
-					addRoom(idx, 'Waiting');
-					updateRoomInfo(idx, roomName, 1, "waitingg");
-					idx++;
-				});
+				let idx = gameVar.rooms.length;
+				data.rooms.forEach(roomName => 
+				{
+					checkRoom(data.rooms);	
+					const roomExists = gameVar.rooms.some(room => room.name === roomName);
+					if (!roomExists)
+					{
+						addRoom(idx, roomName, 'Wait');
+						updateRoomInfo(idx, roomName, 1, "waiting");
+						idx++;
+					}
+    			});
+				updateRoomList();	
 			}
 		}
-		if (data.type === 'room_deleted')
+		if (data.type == 'norooms')
 		{
-			console.log("on message deleted");
-			console.log(data);
-			// delRoom(data.room_name);
+			delRooms();
+			updateRoomList();
 		}
 		if (data.type === 'ping')
 		{
@@ -240,9 +245,6 @@ function roomMultiView()
 	{
     	console.log("WebSocket closeddddd:", event);
 	};
-
-
-	
 
 	console.log("roomView");
 	gameVar.gameplayView.style.display = 'none';
