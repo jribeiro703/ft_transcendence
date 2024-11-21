@@ -1,46 +1,50 @@
-
-export function getPlayerList(data) {
-	const box = document.getElementById('mainContent');
-
-	console.log('get player list', data);
-
-	console.log('get player list', data);
-
+export function getPlayerList() {
+	// Establish WebSocket connection
 	const participantsSocket = new WebSocket(
 		"wss://" + window.location.host + "/ws/tournament/"
 	);
 
+	// Handle WebSocket events
 	participantsSocket.onopen = function () {
 		console.log("WebSocket connection established");
-		participantsSocket.send(JSON.stringify({ action: "initial_connect" }));
+
+		// Send the `get_all_users` action to the backend
+		participantsSocket.send(JSON.stringify({ action: "get_all_users" }));
 	};
 
 	participantsSocket.onmessage = function (event) {
 		const data = JSON.parse(event.data);
 
-		const participantList = document.getElementById("playersList");
-		if (!participantList) {
-			console.error("Error: participantList element not found in the DOM.");
-			return;
-		}
+		if (data.action === "get_all_users") {
+			console.log("User list received:", data.users);
 
-		participantList.innerHTML = ""; // Clear existing content
+			// Update the DOM with the user list
+			const participantList = document.getElementById("playersList");
+			participantList.innerHTML = ""; // Clear existing content
 
-		if (data.participants.length === 0) {
-			const li = document.createElement("li");
-			li.className = "list-group-item";
-			li.textContent = "No participants available.";
-			participantList.appendChild(li);
-		} else {
-			data.participants.forEach(participant => {
+			if (data.users.length === 0) {
 				const li = document.createElement("li");
-				li.className = "list-group-item";
-				const playerBox = document.createElement("div");
-				playerBox.className = "player-box";
-				playerBox.innerHTML = `<span class="player-name">${participant}</span>`;
-				li.appendChild(playerBox);
+				li.textContent = "No users found.";
 				participantList.appendChild(li);
-			});
+			} else {
+				data.users.forEach(user => {
+					const li = document.createElement("li");
+					li.textContent = user;
+					participantList.appendChild(li);
+				});
+			} 
+		}else if (data.action === "create_demo_game") {
+				console.log("Demo game created:", data);
+	
+				// Update the DOM with game details
+				const gameLog = document.getElementById("gameLog");
+				const gameEntry = document.createElement("li");
+				gameEntry.textContent = `Game: ${data.game_id} | ${data.player_one} vs ${data.player_two} | Winner: ${data.winner} | Scores: ${data.score_one} - ${data.score_two}`;
+				gameLog.appendChild(gameEntry);
+		} else if (data.error) {
+			console.error("Error from server:", data.error);
+		} else {
+			console.warn("Unexpected action:", data);
 		}
 	};
 
@@ -52,6 +56,8 @@ export function getPlayerList(data) {
 		console.log("WebSocket connection closed");
 	};
 
-	renderLoginResponse(data.otp_verification_url, data.message);
-	box.innerHTML = `<p>${data.message}</p>`;
+	 // Trigger demo game creation on button click
+	 document.getElementById("createGameBtn").addEventListener("click", () => {
+		participantsSocket.send(JSON.stringify({ action: "create_demo_game" }));
+	});
 }

@@ -10,33 +10,45 @@ class TournamentConsumer(WebsocketConsumer):
 	def connect(self):
 		# Step 1: Accept the WebSocket connection
 		self.accept()
-		
-		all_users = self.get_all_users()
-		# logger.info("Fetched all users: %s", all_users)
-
-		#if not all_users:
-			# logger.warning("No users found in the database. Using hardcoded list.")
-		#all_users = ["boty", "fumo", "yachen", "white-fox", "lannur-s", "jarkan"]  # Hardcoded fallback
-
-		# Step 2: Send a welcome message to the client
 		self.send(text_data=json.dumps({
-			'message': 'Welcome to the WebSocket connection!',
-			'participants': all_users
+			'message': 'WebSocket connection established!',
 		}))
 
 	def disconnect(self, close_code):
 		# Step 3: Handle the WebSocket disconnection
-		print("WebSocket disconnected")
-	
+		logger.info("WebSocket disconnected")
+
+	def receive(self, text_data):
+		# Step 4: Handle incoming WebSocket messages
+		try:
+			data = json.loads(text_data)
+			action = data.get('action')
+
+			if action == "get_all_users":
+				self.get_all_users()
+			else:
+				self.send(text_data=json.dumps({
+					'error': 'Invalid action received.'
+				}))
+		except Exception as e:
+			logger.error(f"Error processing WebSocket message: {e}")
+			self.send(text_data=json.dumps({
+				'error': 'An error occurred while processing the request.'
+			}))
+
 	def get_all_users(self):
 		try:
 			# Fetch all usernames from the User table
 			User = get_user_model()
-			users = User.objects.values_list('username', flat=True)
-			user_list = list(users)  # Convert to a list for easier size checking
-			print("Fetched {len(user_list)} users: {user_list}")
-			return user_list
+			users = list(User.objects.values_list('username', flat=True))
+
+			# Send the user list back to the client
+			self.send(text_data=json.dumps({
+				'action': 'get_all_users',
+				'users': users
+			}))
 		except Exception as e:
 			logger.error(f"Error fetching users: {e}")
-			print("No users found in the database.")
-			return []
+			self.send(text_data=json.dumps({
+				'error': 'Failed to fetch user list.'
+			}))
