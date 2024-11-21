@@ -1,7 +1,7 @@
 import { getPlayerList } from "./js/getPlayerList.js"
 
 export function showTournamentView() {
-    const box = document.getElementById('mainContent');
+	const box = document.getElementById('mainContent');
  	box.innerHTML = `
 	<!-- Tournament View starts here -->
 		<div id="tournamentView">
@@ -19,6 +19,11 @@ export function showTournamentView() {
 				<button id="startTournamentBtn">Start Tournament</button>
 				<button id="quitTournamentBtn">Quit Tournament</button>
 			</div>
+			<br/>
+			<br/>
+			<button id="createGameBtn">Create Demo Game</button>
+			<h3>Game Log</h3>
+			<ul id="gameLog"></ul>
 		</div>
 		<!-- Tournament View ends here -->
 	`;
