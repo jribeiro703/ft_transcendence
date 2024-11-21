@@ -111,32 +111,6 @@ const gameVar =
 	refreshBtn: null,
 
 	newRoomName: null,
-
-	room1name: null,
-	room1players: null,
-	room1status: null,
-
-	room2name: null,
-	room2players: null,
-	room2status: null,
-
-	room3name: null,
-	room3players: null,
-	room3status: null,
-
-	room4name: null,
-	room4players: null,
-	room4status: null,
-
-	room5name: null,
-	room5players: null,
-	room5status: null,
-
-	joinRoom1Btn: null,
-	joinRoom2Btn: null,
-	joinRoom3Btn: null,
-	joinRoom4Btn: null,
-	joinRoom5Btn: null,
 	
 	rooms: [
 		{ idx: null, name: null, players: 0, status: null},

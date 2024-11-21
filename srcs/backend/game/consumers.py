@@ -95,7 +95,8 @@ class PongConsumer(WebsocketConsumer):
 	
 	def receive(self, text_data):
 		data = json.loads(text_data)
-		logger.info(f"Received data: {data}")
+		if data['type'] != 'ball_data':
+			logger.info(f"Received data: {data}")
 		self.last_active[self.channel_name] = time.time()
 		if data['type'] == 'pong':
 			logger.info(f'pong recu de {self.channel_name}')
@@ -111,8 +112,8 @@ class PongConsumer(WebsocketConsumer):
 			self.broadcast_player_data(data)
 		elif data['type'] == 'game_data':
 			self.broadcast_game_data(data)
-		# elif data['type'] == 'check_rooms':
-		# 	self.check_rooms()
+		# elif data['type'] == 'check_aroom':
+			# self.check_rooms()
 		elif data['type'] == 'lobbyView':
 			self.lobby()
 		elif data['type'] == 'room_deleted':
@@ -141,64 +142,40 @@ class PongConsumer(WebsocketConsumer):
 		)
 		self.log_all_rooms()
 
+	# def	check_rooms(self, message=None):
+	# 	rooms_info = [{'name': room, 'clients': len(clients)} for room, clients in self.rooms.items()]
+	# 	for room, clients in self.rooms.items():
+	# 		async_to_sync(self.channel_layer.group_send)(
+	# 			self.room_group_name,
+	# 			{
+	# 				'type': 'check_rooms',
+	# 				'name': rooms_info
+	# 			}
+	# 		)
+
+	# def check_rooms(self, message=None):
+	# 	available_rooms = list(self.rooms.keys())
+	# 	if available_rooms:
+	# 		response = {
+	# 			'type': 'check_aroom',
+	# 			'rooms': available_rooms
+	# 		}
+	# 	else:
+	# 		response = {
+	# 			'type': 'check_aroom',
+	# 			'rooms': [],
+	# 			'message': 'No rooms are currently available.'
+	# 		}
+	# 	logger.info(f'on envoie les infos')
+	# 	async_to_sync(self.channel_layer.send)(
+	# 		self.channel_name,  # Envoi directement au client appelant
+	# 		response
+	# 	)
+
 	def log_all_rooms(self):
 		for room, clients in self.rooms.items():
 			logger.info(f'Room {room} has clients : {clients}')
 
-
-
-	def broadcast_ball_data(self, data):
-		# Send ball data to room group
-		async_to_sync(self.channel_layer.group_send)(
-			self.room_group_name,
-			{
-				'type': 'ball_data',
-				'x': data['x'],
-				'y': data['y'],
-			}
-		)
-
-	def broadcast_direction_data(self, data):
-		async_to_sync(self.channel_layer.group_send)(
-			self.room_group_name,
-			{
-				'type': 'direction_data',
-				'dx': data['dx'],
-				'dy': data['dy'],
-			}
-		)
-
-	def broadcast_paddle_data(self, data):
-		# Send paddle data to room group
-		async_to_sync(self.channel_layer.group_send)(
-			self.room_group_name,
-			{
-				'type': 'paddle_data',
-				'paddle_y': data['paddle_y'],
-				'playerIdx': data['playerIdx'],
-			}
-		)
-
-	def broadcast_player_data(self, data):
-		async_to_sync(self.channel_layer.group_send)(
-			self.room_group_name,
-			{
-				'type': 'player_data',
-				'playerReady': data['playerReady'],
-				'currentServer': data['currentServer'],
-			}
-		)
-
-	def broadcast_game_data(self, data):
-		async_to_sync(self.channel_layer.group_send)(
-			self.room_group_name,
-			{
-				'type': 'player_data',
-				'gameStart': data['gameStart'],
-				'gameReady': data['gameReady'],
-				'animationFrame': data['animationFrame'],
-			}
-		)
 
 	# def check_rooms(self):
 	# 	available_rooms = [room for room, clients in self.rooms.items() if len(clients) < 2]
@@ -211,6 +188,9 @@ class PongConsumer(WebsocketConsumer):
 		available_rooms = [room for room, clients in self.rooms.items() if len(clients) == 1]
 		if not available_rooms:
 			logger.info(f'no room available')
+			self.send(text_data=json.dumps({
+			'type': 'norooms',
+			}))
 		else:
 			logger.info(f' room available')
 			self.send(text_data=json.dumps({
@@ -288,3 +268,56 @@ class PongConsumer(WebsocketConsumer):
 				# 'animationFrame': event['animationFrame']	
 			}
 		}))
+
+	def broadcast_ball_data(self, data):
+		# Send ball data to room group
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'ball_data',
+				'x': data['x'],
+				'y': data['y'],
+			}
+		)
+
+	def broadcast_direction_data(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'direction_data',
+				'dx': data['dx'],
+				'dy': data['dy'],
+			}
+		)
+
+	def broadcast_paddle_data(self, data):
+		# Send paddle data to room group
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'paddle_data',
+				'paddle_y': data['paddle_y'],
+				'playerIdx': data['playerIdx'],
+			}
+		)
+
+	def broadcast_player_data(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'player_data',
+				'playerReady': data['playerReady'],
+				'currentServer': data['currentServer'],
+			}
+		)
+
+	def broadcast_game_data(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'player_data',
+				'gameStart': data['gameStart'],
+				'gameReady': data['gameReady'],
+				'animationFrame': data['animationFrame'],
+			}
+		)
