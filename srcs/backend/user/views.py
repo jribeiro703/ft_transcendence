@@ -119,7 +119,7 @@ class OtpVerificationView(APIView):
 		refresh_token = str(refresh)
 
 		response = Response({
-			"message": "Valid OTP code",
+			"message": "Code is valid, you are now connected !",
 			"access_token": access_token
 			},
 			status=status.HTTP_200_OK
@@ -155,9 +155,10 @@ class LogoutView(APIView):
 class UserProfileView(APIView):
 	permission_classes = [AllowAny]
 
-	def get(self, request, username, *args, **kwargs):
+	def get(self, request, pk, *args, **kwargs):
+
 		try:
-			user = User.objects.get(username=username)
+			user = User.objects.get(id=pk)
 		except User.DoesNotExist:
 			return Response({"message": "Profile Not Found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -181,6 +182,7 @@ class UserProfileView(APIView):
 
 		data = {
 			"username": user.username,
+			"avatar": user.avatar.url,
 			"alias": user.alias,
 			"total_matches": total_matches,
 			"won_matches": won_matches,

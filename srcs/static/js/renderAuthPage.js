@@ -1,5 +1,5 @@
-import { renderLoginForm } from "./user/js/login-form.js";
-import { renderRegisterForm } from "./user/js/register-form.js";
+import { renderLoginForm } from "./user/js/renderLoginForm.js";
+import { renderRegisterForm } from "./user/js/renderRegisterForm.js";
 
 function createAuthContent() {
 	const box = document.getElementById('mainContent')
@@ -16,19 +16,19 @@ export function renderAuthPage() {
 	createAuthContent();
 
 	document.getElementById('btn-Login').addEventListener('click', () => {
-		history.pushState({page:'login'}, 'Login', '?page=login');
+		history.pushState({page:'login'}, 'Login', '#login');
 		console.log("Login page");
 		renderLoginForm();
 	});
 
 	document.getElementById('btn-Register').addEventListener('click', () => {
-		history.pushState({page:'register'}, 'Register', '?page=register');
+		history.pushState({page:'register'}, 'Register', '#register');
 		console.log("register page");
 		renderRegisterForm();
 	});
 
 	document.getElementById('btn-Login42').addEventListener('click', () => {
-		history.pushState({page:'login42'}, 'Login42', '?page=login42');
+		history.pushState({page:'login42'}, 'Login42', '#login42');
 		console.log("Login 42 page");
 	});
 }

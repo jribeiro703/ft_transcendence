@@ -3,9 +3,6 @@ from django.urls import path
 
 urlpatterns = [
 
-	#for list alls users
-	path('', views.user_index, name="list_users"),
-
 	# for auth
 	path('login/', views.UserLoginView.as_view(), name="login"),
 	path('login/token-refresh/', views.CookieTokenRefreshView.as_view(), name="cookie_token_refresh"),
@@ -15,13 +12,14 @@ urlpatterns = [
 	path('logout/', views.LogoutView.as_view(), name="logout"),
 	
 	#for profile (public)
-	path('profile/<str:username>/', views.UserProfileView.as_view(), name="user_profile"),
+	path('', views.user_index, name="list_users"),
+	path('profile/<int:pk>/', views.UserProfileView.as_view(), name="user_profile"),
 
 	# for settings (private)
-	path('settings/<int:pk>', views.UserSettingsView.as_view(), name="user_settings"),
+	path('settings/<int:pk>/', views.UserSettingsView.as_view(), name="user_settings"),
 
 	# for friends (private)
-	path('friend-requests/<int:pk>', views.ListFriendRequestView.as_view(), name='list_friend_request'),
+	path('friend-requests/<int:pk>/', views.ListFriendRequestView.as_view(), name='list_friend_request'),
     path('friend-requests/accept/<int:request_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),
 	
 ]

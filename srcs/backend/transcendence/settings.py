@@ -177,10 +177,16 @@ SIMPLE_JWT = {
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = "user/django-email-messages"
+EMAIL_FILE_PATH = "../../email-messages"
 
 DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
 
-CSRF_TRUSTED_ORIGINS = [
-	'https://localhost:8081',
-]
+# CSRF config
+# CSRF_COOKIE_NAME = "csrftoken"
+# CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_HTTPONLY = False
+# CSRF_COOKIE_SAMESITE = 'Lax'
+
+# CSRF_TRUSTED_ORIGINS = [
+# 	'https://localhost:8081',
+# ]

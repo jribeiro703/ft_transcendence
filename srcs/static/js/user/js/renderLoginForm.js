@@ -1,27 +1,6 @@
-import { fetchData } from "../../utils.js";
-import { renderOtpForm } from "./otp-form.js"
+import { fetchData, DEBUG, escapeHTML } from "../../utils.js";
+import { renderOtpForm } from "./renderOtpForm.js"
 
-export function renderLoginResponse(otpVerificationUrl, message) {
-    const box = document.getElementById('mainContent');
-    box.innerHTML = `
-        <p>${message}<br><br>Enter your code</p>
-    `;
-    renderOtpForm(otpVerificationUrl);
-}
-
-function handleLoginResponse(data) {
-    const box = document.getElementById('mainContent');
-
-    console.log('handle login response', data);
-
-    if (data.otp_verification_url) {
-        renderLoginResponse(data.otp_verification_url, data.message);
-    } else {
-        box.innerHTML = `<p>${data.message}</p>`;
-    }
-}
-
-// view and eventlistener for login form
 export function renderLoginForm() {
     const box = document.getElementById('mainContent');
     box.innerHTML = `
@@ -39,8 +18,16 @@ export function renderLoginForm() {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         const { data, status } = await fetchData('/user/login/', 'POST', { username, password });
+        const msg = escapeHTML(data.message);
         
-        handleLoginResponse(data);
-        window.history.pushState({}, '', '#loginResponse');
+        
+            console.log(data, status)
+
+        if (data.otp_verification_url)
+            renderOtpForm(escapeHTML(data.otp_verification_url), msg);
+		else {
+			box.innerHTML = `<p>${msg}</p>`;
+        	window.history.pushState({ page: "loginResponse" }, "LoginResponse", '#loginResponse');
+		}
     });
 }

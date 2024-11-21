@@ -24,25 +24,25 @@ export function renderHomePage() {
 	createHomeContent();
 
 	document.getElementById('btn-QuickGame').addEventListener('click', () => {
-		history.pushState({ page: 'quickgame' }, 'QuickGame', '?page=quickgame')
+		history.pushState({ page: 'quickgame' }, 'QuickGame', '#quickgame')
 	    console.log('QuickGame button clicked');
 	});
 
 	document.getElementById('btn-Match').addEventListener('click', () => {
 		if (!isAuthenticated()) { alertUserToLogin(); };
-		history.pushState({ page: 'match' }, 'Match', '?page=match');
+		history.pushState({ page: 'match' }, 'Match', '#match');
 		console.log('Match button clicked');
 	});
 
 	document.getElementById('btn-Tournament').addEventListener('click', () => {
 		if (!isAuthenticated()) { alertUserToLogin(); };
-		history.pushState({ page: 'tournament' }, 'Tournament', '?page=tournament');
+		history.pushState({ page: 'tournament' }, 'Tournament', '#tournament');
 		console.log('Tournament button clicked');
 	});
 
 	document.getElementById('btn-Leaderboard').addEventListener('click', () => {
 		if (!isAuthenticated())  { alertUserToLogin(); };
-		history.pushState({ page: 'leaderboard' }, 'Leaderboard', '?page=leaderboard');
+		history.pushState({ page: 'leaderboard' }, 'Leaderboard', '#leaderboard');
 		console.log('Leaderboard button clicked');
 	});
 }

@@ -1,9 +1,9 @@
-import { renderHomePage } from "./home.js"
-import { renderAuthPage } from "./auth.js"
-import { displayUserChoice } from "./user.js"
+import { renderHomePage } from "./renderHomePage.js"
+import { renderAuthPage } from "./renderAuthPage.js"
+import { displayUserChoice } from "./renderUserPage.js"
 import { isAuthenticated, alertUserToLogin } from "./utils.js";
 
-function router() {
+async function router() {
 	const box = document.getElementById('mainContent');
 	const hash = window.location.hash;
 
@@ -15,10 +15,13 @@ function router() {
 			renderHomePage();
 			break;
 		case '#user':
-			if (isAuthenticated()) {
+			const authenticated = await isAuthenticated();
+			if (authenticated) {
+				console.log("User is authenticated");
 				displayUserChoice();
 			}
 			else {
+				console.log("User is not authenticated");
 				alertUserToLogin();
 				renderAuthPage();
 			}
@@ -50,9 +53,9 @@ window.addEventListener('popstate', (event) => {
 				renderHomePage();
 				break;
 		}
-	} else {
-		renderHomePage();
 	}
+	else
+		renderHomePage();
 });
 
 // call the router each time the hash changes

@@ -1,4 +1,6 @@
-import { renderLogoutPage } from "./user/js/logout.js"
+import { renderProfilePage } from "./user/js/renderProfilePage.js";
+import { renderSettingsPage } from "./user/js/renderSettingPage.js";
+import { fetchData, escapeHTML,DEBUG } from "./utils.js"
 
 function createUserContent() {
     const box = document.getElementById('mainContent');
@@ -24,21 +26,30 @@ export function displayUserChoice() {
 	createUserContent();
 
 	document.getElementById('btn-Profile').addEventListener('click', () => {
-		history.pushState({ page: 'profile' }, 'Profile', '?page=profile');
+		history.pushState({ page: 'profile' }, 'Profile', '#profile');
 		console.log('Profile button clicked');
+		renderProfilePage();
 	})
 	document.getElementById('btn-Settings').addEventListener('click', () => {
-		history.pushState({ page: 'settings' }, 'Settings', '?page=settings');
+		history.pushState({ page: 'settings' }, 'Settings', '#settings');
 		console.log('Settings button clicked');
+		renderSettingsPage();
 	})
 	document.getElementById('btn-Inbox').addEventListener('click', () => {
-		history.pushState({ page: 'inbox' }, 'Inbox', '?page=inbox');
+		history.pushState({ page: 'inbox' }, 'Inbox', '#inbox');
 		console.log('Inbox button clicked');
 	})
-	document.getElementById('btn-Logout').addEventListener('click', () => {
-		history.pushState({ page: 'logout' }, 'Logout', '?page=logout');
-		console.log('Logout button clicked');
-		renderLogoutPage();
-	})
+	document.getElementById('btn-Logout').addEventListener('click', async(e) => {
+		e.preventDefault();
+		const box = document.getElementById('mainContent');
+		const { data, status } = await fetchData('/user/logout/', 'POST');
+		console.log(data, status);
+
+		if (status == 205)
+			localStorage.setItem('access_token', data.access_token);
+		
+		box.innerHTML = `<p>${escapeHTML(data.message)}</p>`;
+		history.pushState({ page: 'logout' }, 'Logout', '#logout');
+	});
 
 }
