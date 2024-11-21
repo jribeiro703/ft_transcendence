@@ -1,17 +1,38 @@
 // function for calling API's endpoint
 export const API_BASE_URL = "https://localhost:8081";
+export const DEBUG = true
+
+function getCSRFToken() {
+	const cookies = document.cookie.split(';');
+    const csrftoken = cookies.find(cookie => cookie.trim().startsWith("csrftoken="));
+    return csrftoken ? csrftoken.split('=')[1] : '';
+}
 
 export async function fetchData(endpoint, method = 'GET', body = null) {
 	const url = `${API_BASE_URL}${endpoint}`;
 	const options = {
 	    method: method,
-	    headers: {'Content-Type': 'application/json'},
+	    headers: {
+			'Content-Type': 'application/json',
+			'X-CSRFToken': getCSRFToken(),
+		},
 		credentials: 'include'
 	};
 	if (body) {options.body = JSON.stringify(body);}
 	const response = await fetch(url, options);
 	const data = await response.json()
 	return { data: data, status: response.status };
+}
+
+export function getIdFomJWT() {
+	const token = localStorage.getItem('access_token');
+	if (token) {
+		const payload = JSON.parse(atob(token.split('.')[1]));
+		console.log(payload);
+		return payload.user_id;
+	}
+	console.log("getIdFomJWT : null");
+	return null;
 }
 
 function isTokenExpired(token) {
@@ -28,21 +49,21 @@ async function isAccessTokenRefreshed() {
 		localStorage.setItem('access_token', data.access_token);
 		return true
 	}
-	else {
-		console.error(data.message);
-		return false
-	}
+	console.log(data.message);
+	return false
 }
 
-export function isAuthenticated() {
+export async function isAuthenticated() {
 	const accessToken = localStorage.getItem('access_token');
 	if (!accessToken) {
-		console.error('No access token found.');
+		console.log('No access token found.');
 		return false;
 	}
-	if (isTokenExpired(accessToken) && !isAccessTokenRefreshed()) {
-		console.error("refresh access token failed");
-		alert("Your session is expired .");
+	else if (isTokenExpired(accessToken)) {
+		const refreshed = await isAccessTokenRefreshed()
+		if (!refreshed)
+		console.log("Refresh access token failed");
+		alert("Session expired. Please sign in again.");
 		return false;
 	}
 	return true;
@@ -51,4 +72,18 @@ export function isAuthenticated() {
 export function alertUserToLogin() {
 	alert('You must be logged in to use this feature.');
     return;
+}
+
+export function escapeHTML(unsafe) {
+	if (typeof unsafe !== 'string') {
+        return '';
+    }
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return unsafe.replace(/[&<>"']/g, match => map[match]);
 }
