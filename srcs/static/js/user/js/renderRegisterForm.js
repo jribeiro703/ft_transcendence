@@ -1,4 +1,4 @@
-import { fetchData, escapeHTML, DEBUG } from "../../utils.js";
+import { fetchData } from "../../utils.js";
 
 export function renderRegisterForm() {
 	const box = document.getElementById('mainContent');
@@ -19,10 +19,9 @@ export function renderRegisterForm() {
 		const username = document.getElementById('username').value;
 		const email = document.getElementById('email').value;
 		const password = document.getElementById('password').value;
-		const { data, status } = await fetchData('/user/register/', 'POST', { username, email, password });
-		console.log(data, status);
+		const responseObject = await fetchData('/user/register/', 'POST', { username, email, password });
 
-		box.innerHTML = `<p>${escapeHTML(data.message)}</p>`;
+		box.innerHTML = `<p>${responseObject.data.message}</p>`;
 		window.history.pushState({ page: "registerResponse" }, 'RegisterResponse', '#registerResponse');
     });
 }

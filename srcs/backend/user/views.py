@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import get_object_or_404
-from rest_framework import status
+from rest_framework import status, serializers, exceptions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -32,10 +32,16 @@ class CreateUserView(CreateAPIView):
 	serializer_class = UserCreateSerializer
 	
 	def create(self, request, *args, **kwargs):
-		response = super().create(request, *args, **kwargs)
-		return Response({
-			"message": "User created successfully. Please check your email to activate your account."
-		}, status=status.HTTP_201_CREATED)
+		try:
+			response = super().create(request, *args, **kwargs)
+			return Response({
+				"message": "User created successfully. Please check your email to activate your account."
+			}, status=status.HTTP_201_CREATED)
+		
+		except serializers.ValidationError as e:
+			return Response(e.args[0], status=status.HTTP_400_BAD_REQUEST)
+		except Exception as e:
+			return Response(e.args[0], status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ActivateLinkView(APIView):
 	permission_classes = [AllowAny]
@@ -44,8 +50,9 @@ class ActivateLinkView(APIView):
 		try:
 			uid = force_str(urlsafe_base64_decode(uidb64))
 			user = get_object_or_404(User, pk=uid)
+
 		except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-			user = None
+			return Response({"message": "Activation link is invalid."}, status=status.HTTP_400_BAD_REQUEST)
             
 		if user is not None and default_token_generator.check_token(user, token):
 			expiration_duration = timedelta(hours=24)
@@ -65,9 +72,9 @@ class ActivateLinkView(APIView):
 				user.is_active = True
 				user.save()
 				return Response({"message": "Account activated successfully!"}, status=status.HTTP_200_OK)
+			
 			return Response({"message": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
-		
-		return Response({"message": "Activation link is invalid."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserLoginView(APIView):
 	model = User
@@ -75,15 +82,25 @@ class UserLoginView(APIView):
 	serializer_class = UserLoginSerializer
       
 	def post(self, request, *args, **kwargs):
-		serializer = self.serializer_class(data=request.data)
-		serializer.is_valid(raise_exception=True)
-		user = serializer.validated_data['user']
-		otp_verification_url = reverse('otp_verification', args=[user.id])
-		return Response({
-		    "message": "A verification code is sent to your email",
-		    "otp_verification_url": otp_verification_url
-		}, status=status.HTTP_200_OK)
+		try:
+			serializer = self.serializer_class(data=request.data)
+			serializer.is_valid(raise_exception=True)
+			
+			user = serializer.validated_data['user']
+			otp_verification_url = reverse('otp_verification', args=[user.id])
+			return Response({
+			    "message": "A verification code is sent to your email",
+			    "otp_verification_url": otp_verification_url
+			}, status=status.HTTP_200_OK)
 		
+		except serializers.ValidationError as e:
+			return Response(e.args[0], status=status.HTTP_400_BAD_REQUEST)
+		except exceptions.NotAuthenticated as e:
+			return Response(e.args[0], status=status.HTTP_401_UNAUTHORIZED)
+		except Exception as e:
+			return Response(e.args[0], status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 class CookieTokenRefreshView(APIView):
 	authentication_classes = [JWTAuthentication]
 
@@ -197,12 +214,32 @@ class UserSettingsView(RetrieveUpdateDestroyAPIView):
 	# permission_classes = [IsOwner]
 	
 	def patch(self, request, *args, **kwargs):
-		instance, success_messages = self.get_serializer().update(self.get_object(), request.data)
-		serializer = self.get_serializer(instance)
+		try:
+			instance, success_messages = self.get_serializer().update(self.get_object(), request.data)
+			serializer = self.get_serializer(instance)
 
-		response_data = serializer.data
-		response_data['messages'] = success_messages
-		return Response(response_data)
+			response_data = serializer.data
+			response_data['messages'] = success_messages
+			print("response data :", response_data)
+			return Response(response_data)
+		except Exception as e:
+			return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+	
+	def delete(self, request, *args, **kwargs):
+		super().delete(request, *args, **kwargs)
+		try:
+			refresh_token = request.COOKIES.get('refresh_token')
+			token = RefreshToken(refresh_token)
+			token.blacklist()
+			response = Response({
+				"message": "delete account successfully !",
+				"access_token": "",
+				}, status=status.HTTP_205_RESET_CONTENT)
+			response.delete_cookie('refresh_token')
+			return response
+		except Exception as e:
+		    return Response({"message": "failed to delete account."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class AcceptFriendRequestView(APIView):
 	authentication_classes = [JWTAuthentication]

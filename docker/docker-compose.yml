@@ -37,7 +37,7 @@ services:
       - db
     networks:
       - transcendence
-    command: python manage.py migrate --noinput
+    command: python manage.py makemigrations && python manage.py migrate --noinput
 
   db:
     platform: ${DOCKER_PLATFORM}
