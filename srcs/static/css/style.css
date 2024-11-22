@@ -432,3 +432,7 @@ button:disabled
 	font-size: 20px;
 	color: #FEFCFF !important;
 }
+
+#chat-log {
+	resize: none;
+}

@@ -4,7 +4,7 @@ import string
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.apps import apps
 from asgiref.sync import sync_to_async
-from datetime import datetime
+from django.utils import timezone
 
 def generate_nickname():
     return ''.join(random.choices(string.ascii_letters + string.digits, k=5))
@@ -29,7 +29,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=json.dumps({
                 'message': message.content,
                 'client_id': message.nickname,
-                'timestamp': message.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+                'timestamp': message.timestamp.isoformat()
             }))
 
     async def disconnect(self, close_code):
@@ -44,8 +44,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
         client_id = self.nickname
 
+        # Generate timestamp on the server side in UTC
+        timestamp = timezone.now().isoformat()
+
         # Save message to the database
-        await self.save_message(client_id, message)
+        await self.save_message(client_id, message, timestamp)
 
         # Send message to room group
         await self.channel_layer.group_send(
@@ -54,7 +57,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'type': 'chat_message',
                 'message': message,
                 'client_id': client_id,
-                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                'timestamp': timestamp
             }
         )
 
@@ -71,9 +74,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         }))
 
     @sync_to_async
-    def save_message(self, nickname, content):
+    def save_message(self, nickname, content, timestamp):
         Message = apps.get_model('livechat', 'Message')
-        Message.objects.create(nickname=nickname, content=content)
+        Message.objects.create(nickname=nickname, content=content, timestamp=timestamp)
 
     @sync_to_async
     def get_last_100_messages(self):
