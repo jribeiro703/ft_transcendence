@@ -434,5 +434,11 @@ button:disabled
 }
 
 #chat-log {
-	resize: none;
+    resize: none;
+    font-family: 'Courier New', Courier, monospace; /* Fixed-width font */
+    white-space: pre-wrap; /* Preserve whitespace */
+}
+
+.btn {
+	border-radius: 0 !important;
 }

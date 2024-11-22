@@ -2,6 +2,25 @@ const chatSocket = new WebSocket(
     'wss://' + window.location.host + '/ws/livechat/'
 );
 
+// Object to store clientId-color mappings
+const clientIdColors = {};
+
+// Function to generate a random, visible color
+function getRandomColor() {
+    const hue = Math.floor(Math.random() * 360); // Random hue
+    const saturation = 100; // Full saturation
+    const lightness = 30; // 50% lightness for good contrast
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
+// Function to get or assign a color for a clientId
+function getColorForClientId(clientId) {
+    if (!clientIdColors[clientId]) {
+        clientIdColors[clientId] = getRandomColor();
+    }
+    return clientIdColors[clientId];
+}
+
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     const message = data.message;
@@ -21,7 +40,14 @@ chatSocket.onmessage = function(e) {
             return `[${daysAgo} days ago]`;
         }
     });
-    chatLog.value += (formattedTime + ' ' + clientId + ': ' + message + '\n');
+
+    // Get or assign a color for the clientId
+    const clientIdColor = getColorForClientId(clientId);
+
+    // Create a new message element
+    const messageElement = document.createElement('div');
+    messageElement.innerHTML = `<span style="color: ${clientIdColor};">[${formattedTime}] ${clientId}:</span> ${message}`;
+    chatLog.appendChild(messageElement);
     chatLog.scrollTop = chatLog.scrollHeight; // Scroll to the bottom
 };
 
@@ -47,3 +73,18 @@ document.querySelector('#chat-message-submit').onclick = function(e) {
     const chatLog = document.querySelector('#chat-log');
     chatLog.scrollTop = chatLog.scrollHeight; // Scroll to the bottom
 };
+
+// Handle emoji selection
+const emojiPicker = document.querySelector('#emoji-picker');
+emojiPicker.addEventListener('emoji-click', event => {
+    const messageInputDom = document.querySelector('#chat-message-input');
+    messageInputDom.value += event.detail.unicode;
+    messageInputDom.focus();
+});
+
+// Prevent dropdown from closing when interacting with the emoji picker
+const emojiDropdown = document.querySelector('#emojiDropdown');
+const emojiDropdownMenu = document.querySelector('.dropdown-menu');
+emojiDropdownMenu.addEventListener('click', event => {
+    event.stopPropagation();
+});
