@@ -40,7 +40,7 @@ services:
       - transcendence
     command: >
       sh -c "
-      python manage.py makemigrations &&
+      python manage.py makemigrations --noinput &&
       python manage.py migrate --noinput &&
       python manage.py testusers &&
       python manage.py collectstatic --clear --noinput
@@ -57,6 +57,8 @@ services:
     networks:
       - transcendence
     restart: on-failure
+    environment:
+      - TZ=Europe/Paris
 
   redis:
     platform: ${DOCKER_PLATFORM}
