@@ -81,10 +81,3 @@ emojiPicker.addEventListener('emoji-click', event => {
     messageInputDom.value += event.detail.unicode;
     messageInputDom.focus();
 });
-
-// Prevent dropdown from closing when interacting with the emoji picker
-const emojiDropdown = document.querySelector('#emojiDropdown');
-const emojiDropdownMenu = document.querySelector('.dropdown-menu');
-emojiDropdownMenu.addEventListener('click', event => {
-    event.stopPropagation();
-});
