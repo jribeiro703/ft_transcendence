@@ -47,7 +47,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 			raise exceptions.APIException({"message": "Send activation email failed"})
 		return user
 
-      
+	  
 class UserLoginSerializer(serializers.Serializer):
 	username = serializers.CharField(max_length=30)
 	password = serializers.CharField(write_only=True)
@@ -165,7 +165,10 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 		instance.save()
 		return instance, success_messages
 
-
+class UserSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = User
+		fields = ['id', 'username']
 
 
 	

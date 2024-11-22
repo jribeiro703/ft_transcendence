@@ -18,7 +18,7 @@ export function showDefaultView()
 	
 	tournamentView.style.display = 'none';
 	tournamentGameBtn.style.display = 'none'
-	startTournamentBtn.style.display = 'none';
+	createTournamentBtn.style.display = 'none';
 	quitTournamentBtn.style.display = 'none';
 
 	defaultView.style.display = 'block';
@@ -31,7 +31,7 @@ export function showGameplayView()
 	playGameBtn.style.display = 'none';
 
 	tournamentView.style.display = 'none';
-	startTournamentBtn.style.display = 'none';
+	createTournamentBtn.style.display = 'none';
 	quitTournamentBtn.style.display = 'none';
 
 	gameplayView.style.display = 'block';
@@ -49,7 +49,7 @@ export function showGameView()
 
 	tournamentGameBtn.style.display = 'none'
 	tournamentView.style.display = 'none';
-	startTournamentBtn.style.display = 'none';
+	createTournamentBtn.style.display = 'none';
 	quitTournamentBtn.style.display = 'none';
 
 	gameView.style.display = 'block';
@@ -73,7 +73,7 @@ export function rematchView()
 
 	tournamentGameBtn.style.display = 'none'
 	tournamentView.style.display = 'none';
-	startTournamentBtn.style.display = 'none';
+	createTournamentBtn.style.display = 'none';
 	quitTournamentBtn.style.display = 'none';
 
 	gameView.style.display = 'block';

@@ -1,6 +1,5 @@
 import { alertUserToLogin, isAuthenticated } from "./utils.js"
-// import { playerListner } from "../tournament/js/playerListener.js"
-import { showTournamentView } from "../tournament/showTournamentView.js"
+import { showTournamentView } from "../tournament/tournamentPage.js"
 
 
 function createHomeContent() {

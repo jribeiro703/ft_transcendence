@@ -64,7 +64,7 @@ const gameVar =
 	
 	tournamentView: null,
 	tournamentGameBtn: null,
-	startTournamentBtn: null,
+	createTournamentBtn: null,
 	quitTournamentBtn: null,
 	
 	

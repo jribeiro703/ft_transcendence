@@ -298,7 +298,7 @@ p
 	border-radius: 5px;
 }
 
-#startGameBtn, #quickGameBtn, #tournamentGameBtn, #startTournamentBtn
+#startGameBtn, #quickGameBtn, #tournamentGameBtn, #createTournamentBtn
 {
 	width: 200px;
 	height: 60px;
@@ -498,7 +498,7 @@ button:disabled
     background-color: #3A4C6B;
 }
 
-#startTournamentBtn {
+#createTournamentBtn {
 	width: 200px;
 	height: 60px;
 	font-size: 20px;
@@ -510,7 +510,7 @@ button:disabled
 	transition: background-color 0.3s, transform 0.4s;
 }
 
-#startTournamentBtn:hover {
+#createTournamentBtn:hover {
 	background-color: #6DC7C1;
 	transform: scale(1.05);
 }
