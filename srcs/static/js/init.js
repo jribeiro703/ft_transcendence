@@ -1,15 +1,14 @@
 import gameVar from "./var.js";
 import { showGameView, showGameplaySoloView, showGameplayMultiView, showDefaultView, rematchView } from "./gameView.js";
 import { keyDownHandler, keyUpHandler, startBall, startBallAi } from "./input.js";
-import { createPowerUp, updatePowerUpSelection } from "./powerUp.js";
-import { updateLevelSelection, updateMapSelection } from "./gameMode.js";
-import { initializeBall, draw2, draw} from "./draw.js";
 import { addRoom, delRooms, createNewRoom, displayRoomInfo, joinRoom, updateRoomInfo, updateRoomList } from "./room.js";
+import { showSettingView } from "./setting.js";
+import { collectPowerUp } from "./powerUp.js";
 
 export function initGameVar()
 {
 	gameVar.defaultView = document.getElementById('defaultView');
-	gameVar.gameplayView = document.getElementById('gameplayView');
+	gameVar.settingView = document.getElementById('settingView');
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.startGameBtn = document.getElementById('startGameBtn');
 	gameVar.quickGameBtn = document.getElementById('quickGameBtn');
@@ -24,7 +23,10 @@ export function initGameVar()
 	gameVar.roomsContainer = document.getElementById('roomsContainer');
 	gameVar.noRoomsMessage = document.getElementById('noRoomsMessage');
 	gameVar.refreshBtn = document.getElementById('refreshBtn');
-
+	gameVar.settingBtn = document.getElementById('settingBtn');
+	gameVar.saveBtn = document.getElementById('saveBtn');
+	// gameVar.powerUpSelection = document.getElementById('powerUpSelection');
+	// gameVar.btnPowerUp = document.getElementById('btnPowerUp');
 	gameVar.withPowerUp = document.getElementById('withPowerUps');
 	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');
 	gameVar.easy = document.getElementById('easy');
@@ -34,32 +36,10 @@ export function initGameVar()
 	gameVar.brickLevel = document.getElementById('bricksLevel');
 	gameVar.playerScoreElement = document.getElementById('playerScore');
 	gameVar.aiScoreElement = document.getElementById('aiScore');
-
-	gameVar.room1name = document.getElementById('room1-name');
-	gameVar.room1players = document.getElementById('room1-players');
-	gameVar.room1status = document.getElementById('room1-status');
-	gameVar.joinRoom1Btn = document.getElementById('joinRoom1Btn');
-
-	gameVar.room2name = document.getElementById('room2-name');
-	gameVar.room2players = document.getElementById('room2-players');
-	gameVar.room2status = document.getElementById('room2-status');
-	gameVar.joinRoom2Btn = document.getElementById('joinRoom2Btn');
-
-	gameVar.room3name = document.getElementById('room3-name');
-	gameVar.room3players = document.getElementById('room3-players');
-	gameVar.room3status = document.getElementById('room3-status');
-	gameVar.joinRoom3Btn = document.getElementById('joinRoom3Btn');
-
-	gameVar.room4name = document.getElementById('room4-name');
-	gameVar.room4players = document.getElementById('room4-players');
-	gameVar.room4status = document.getElementById('room4-status');
-	gameVar.joinRoom4Btn = document.getElementById('joinRoom4Btn');
-
-	gameVar.room5name = document.getElementById('room5-name');
-	gameVar.room5players = document.getElementById('room5-players');
-	gameVar.room5status = document.getElementById('room5-status');
-	gameVar.joinRoom5Btn = document.getElementById('joinRoom5Btn');
-
+	// gameVar.settingBtn1 = document.getElementById('settingBtn1');
+	// gameVar.settingBtn2 = document.getElementById('settingBtn2');
+	// gameVar.playBtn = document.getElementById('playBtn');
+	// gameVar.playBtn2 = document.getElementById('playBtn2');
 	gameVar.createRoomName = document.getElementById('createRoomName');
 
 }
@@ -67,65 +47,12 @@ export function initGameVar()
 export function initEventListener()
 {
 
-	gameVar.quitGameBtn.addEventListener('click', showDefaultView);
+	// gameVar.quitGameBtn.addEventListener('click', showDefaultView);
 	gameVar.playsoloGameBtn.addEventListener('click', showGameplaySoloView);
 	gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
-
-	gameVar.withoutPowerUp.classList.add('selected');
+	// gameVar.withoutPowerUp.classList.add('selected');
 	gameVar.medium.classList.add('selected');
 	gameVar.tableTennis.classList.add('selected');
-
-	gameVar.withPowerUp.addEventListener('click', () =>
-	{
-		gameVar.withPowerUp.classList.add('selected');
-		gameVar.withoutPowerUp.classList.remove('selected');
-		updatePowerUpSelection(true);
-	});
-
-	gameVar.withoutPowerUp.addEventListener('click', () => 
-	{
-		gameVar.withoutPowerUp.classList.add('selected');
-		gameVar.withPowerUp.classList.remove('selected');
-		updatePowerUpSelection(false); 
-	});
-
-	gameVar.easy.addEventListener('click', () => 
-	{
-		gameVar.easy.classList.add('selected');
-		gameVar.medium.classList.remove('selected');
-		gameVar.hard.classList.remove('selected');
-		updateLevelSelection('easy');
-	});
-	
-	gameVar.medium.addEventListener('click', () => 
-	{
-		gameVar.easy.classList.remove('selected');
-		gameVar.medium.classList.add('selected');
-		gameVar.hard.classList.remove('selected');
-		updateLevelSelection('medium');
-	});
-
-	gameVar.hard.addEventListener('click', () => 
-	{
-		gameVar.easy.classList.remove('selected');
-		gameVar.medium.classList.remove('selected');
-		gameVar.hard.classList.add('selected');
-		updateLevelSelection('hard');
-	});
-
-	gameVar.tableTennis.addEventListener('click', () =>
-	{
-		gameVar.tableTennis.classList.add('selected');
-		gameVar.brickLevel.classList.remove('selected');
-		updateMapSelection('tableTennis');
-	});
-
-	gameVar.brickLevel.addEventListener('click', () =>
-	{
-		gameVar.tableTennis.classList.remove('selected');
-		gameVar.brickLevel.classList.add('selected');
-		updateMapSelection('brickLevel');
-	})
 }
 
 
@@ -139,38 +66,13 @@ export function initEventListenerRoom()
 	{
 		console.log("createRoombtn");
 		showGameViewRoom();
-		// history.pushState({ view: 'game' }, '', '?view=game');
 	});
-
-	// window.addEventListener('popstate', function(event)
-	// {
-	// 	if (event.state && event.state.view == 'game')
-	// 	{
-	// 		const urlParams = new URLSearchParams(window.location.search);
-	// 		const room = urlParams.get('room');
-	// 		if (room)
-	// 		{
-	// 			console.log("event popstate");
-	// 			showGameViewRoom(room);
-	// 			console.log("room");
-	// 		}
-	// 		else
-	// 			console.log("no room");
-	// 	}
-	// 	else
-	// 		showLobbyView();
-	// });
+	gameVar.settingBtn.addEventListener('click', () =>
+	{
+		console.log("setting");
+		showSettingView(true);
+	});
 }
-
-// function delRoom(name)
-// {
-// 	console.log("name of room ", name);
-// 	displayRoomInfo();
-// 	gameVar.rooms = gameVar.rooms.filter(room => room.name !== name);
-// 	console.log("Rooms after deletion: ", gameVar.rooms);
-// 	updateRoomList();
-// 	displayRoomInfo();
-// }
 
 function checkRoom(rooms)
 {
@@ -182,8 +84,7 @@ function checkRoom(rooms)
     }
 }
 
-
-function roomMultiView()
+export function roomMultiView()
 {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 	const tempSocket = new WebSocket(protocol + '//' + window.location.host + '/ws/pong/check_rooms/');
@@ -247,7 +148,7 @@ function roomMultiView()
 	};
 
 	console.log("roomView");
-	gameVar.gameplayView.style.display = 'none';
+	gameVar.settingView.style.display = 'none';
 	gameVar.gameView.style.display = 'none';
 	gameVar.quickGameBtn.style.display = 'none';
 	gameVar.startGameBtn.style.display = 'none';
@@ -259,7 +160,7 @@ function roomMultiView()
 	gameVar.roomView.style.display = 'block';
 	gameVar.createRoomBtn.style.display = 'block';
 	gameVar.refreshBtn.style.display = 'block';
-	gameVar.gameplayView.style.display = 'none';
+	gameVar.settingBtn.style.display = 'block';
 	initEventListenerRoom();
 	history.pushState({ view: 'game' }, '', '?view=multi');
 	gameVar.liveMatch = true;
@@ -267,9 +168,8 @@ function roomMultiView()
 
 function showGameViewRoom(room = null)
 {
-	console.log("showGameviewRoom");
 	gameVar.defaultView.style.display = 'none';
-	gameVar.gameplayView.style.display = 'none';
+	gameVar.settingView.style.display = 'none';
 	gameVar.gameView.style.display = 'block';
 	gameVar.quickGameBtn.style.display = 'none';
 	gameVar.startGameBtn.style.display = 'none';
@@ -277,41 +177,7 @@ function showGameViewRoom(room = null)
 	gameVar.createRoomBtn.style.display = 'none';
 	gameVar.roomView.style.display = 'none';
 	
-	// gameVar.liveMatch = true;
-	// if (gameVar.powerUpActive)
-	// 	createPowerUp();		
-	// if (room)
-	// {
-	// 	console.log("joi rooom");
-	// 	joinRoom(room, setGameSocket, setIsFirstPlayer);
-	// }
-	// else
-	// {
-		console.log("existingggggg rooom");
-		// checkForExistingRooms((room) => joinRoom(room, setGameSocket, setIsFirstPlayer));
-		createNewRoom();
-	// }
-}
-
-function showLobbyView()
-{
-	gameVar.defaultView.style.display = 'block';
-	gameVar.gameView.style.display = 'none';
-	if (gameVar.gameSocket)
-	{
-		gameVar.gameSocket.close();
-	}
-	cancelAnimationFrame(gameVar.animationFrame);
-}
-
-function setGameSocket(socket)
-{
-	gameVar.gameSocket = socket;
-}
-
-function setIsFirstPlayer(value)
-{
-	gameVar.isFirstPlayer = value;
+	createNewRoom();
 }
 
 

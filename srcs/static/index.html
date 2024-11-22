@@ -82,28 +82,31 @@
 							<button disabled id="joinRoomBtn">Join</button>
 						</div>
 					</div>
-					<div class="refresh">Refreshing...</div>
+					<div class="refresh"></div>
 					<button id="refreshBtn" class="refresh-button">Refresh</button>
 				</div>
 				<div class="host-server">
 					<h2>Host A Room</h2>
 					<h3>Playing as: <strong>Login</strong></h3>
-					<!-- <input type="text" id="createRoomName" placeholder="Room Name" /> -->
 					<div class="settings">
-						<button id="gameplayView">GamePlay Option</button>
-						<div>Level: <span>Medim</span><br>Power-Up <span> ✅ </span></div>
+						<button id="settingBtn">Settings</button>
+						<div id="setting-container">Difficulty: 
+							<span id="difficultyChoice">Medium </span><br>
+							Level:
+							<span id="levelSelected">Table Tennis</span>
+						</div>
 					</div>
 					<button id="createRoomBtn" class="start-button">Create Room</button>
 				</div>
 			</div>
 		</div>
-		<div id="gameplayView" style="display: none;">
-			<h1>Gameplay Mode</h1>
+		<div id="settingView" style="display: none;">
+			Settings
 			<div class="container">
 				<div class="left-column">
-					<p class="gpMode">Level Difficulty:</p>
-					<p class="gpMode">Power-Up Activation:</p>
-					<p class="gpMode">Map Selection:</p>
+					<p class="gpMode">Difficulty:</p>
+					<p id="powerUpSelection" style="display: none;" class="gpMode">Power-Up Activation:</p>
+					<p class="gpMode">Level Selection:</p>
 				</div>
 				<div class="right-column">
 					<div>
@@ -111,7 +114,7 @@
 						<button id="medium" class="level">Medium</button>
 						<button id="hard" class="level">Hard</button>
 					</div>
-					<div>
+					<div id="btnPowerUp" style="display: none;" class="pu">
 						<button id="withPowerUps" class="powerUpBtn">Yes</button>
 						<button id="withoutPowerUps" class="powerUpBtn">No</button>
 					</div>
@@ -126,6 +129,9 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div>
+				<button id="saveBtn">Save and Return</button>
 			</div>
 		</div>
 			<br><br>
