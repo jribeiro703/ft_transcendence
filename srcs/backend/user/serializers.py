@@ -98,11 +98,6 @@ class OtpCodeSerializer(serializers.Serializer):
 			raise exceptions.NotAuthenticated({"message": "Invalid OTP code."})
 		return value
 
-# class UserProfileSerializer(serializers.ModelSerializer):
-# 	class Meta:
-# 		model = User
-# 		fields = ()
-
 class UserSettingsSerializer(serializers.ModelSerializer):
 
 	new_email = serializers.EmailField(write_only=True, required=False, allow_blank=True)
@@ -116,6 +111,7 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 		extra_kwargs = {'password': {'write_only': True}, 'new_password': {'write_only': True}, 'new_email': {'write_only': True}, 'new_friend': {'write_only': True}}
 
 	def update(self, instance, validated_data):
+		print("Validated data:", validated_data)
 		success_messages = []
 
 		if 'new_password' in validated_data:

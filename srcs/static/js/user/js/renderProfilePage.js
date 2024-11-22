@@ -1,4 +1,4 @@
-import { fetchData, escapeHTML, DEBUG, getIdFomJWT  } from "../../utils.js";
+import { fetchData, escapeHTML, DEBUG, getIdFromJWT  } from "../../utils.js";
 
 function createProfileContent() {
 	const box = document.getElementById('mainContent');
@@ -29,7 +29,7 @@ function createProfileContent() {
 }
 
 export async function renderProfilePage() {
-	const userId = getIdFomJWT();
+	const userId = getIdFromJWT();
 		console.log(userId);
 	const { data, status } = await fetchData(`/user/profile/${userId}`);
 		console.log(data, status)

@@ -8,30 +8,54 @@ function getCSRFToken() {
     return csrftoken ? csrftoken.split('=')[1] : '';
 }
 
-export async function fetchData(endpoint, method = 'GET', body = null) {
-	const url = `${API_BASE_URL}${endpoint}`;
-	const options = {
-	    method: method,
-	    headers: {
-			'Content-Type': 'application/json',
-			'X-CSRFToken': getCSRFToken(),
-		},
-		credentials: 'include'
-	};
-	if (body) {options.body = JSON.stringify(body);}
-	const response = await fetch(url, options);
-	const data = await response.json()
-	return { data: data, status: response.status };
+// export async function fetchData(endpoint, method = 'GET', body = null) {
+// 	const url = `${API_BASE_URL}${endpoint}`;
+// 	const options = {
+// 	    method: method,
+// 	    headers: {
+// 			'Content-Type': 'application/json',
+// 			'X-CSRFToken': getCSRFToken(),
+// 		},
+// 		credentials: 'include'
+// 	};
+// 	if (body) {options.body = JSON.stringify(body);}
+// 	const response = await fetch(url, options);
+// 	const data = await response.json()
+// 	return { data: data, status: response.status };
+// }
+
+export async function fetchData(endpoint, method = 'GET', body = null, isFormData = false) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const options = {
+        method: method,
+        headers: {
+            'X-CSRFToken': getCSRFToken(),
+        },
+        credentials: 'include'
+    };
+
+    if (body) {
+        if (isFormData) {
+            options.body = body;
+        } else {
+            options.headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(body);
+        }
+    }
+
+    const response = await fetch(url, options);
+    const data = await response.json();
+    return { data, status: response.status };
 }
 
-export function getIdFomJWT() {
+export function getIdFromJWT() {
 	const token = localStorage.getItem('access_token');
 	if (token) {
 		const payload = JSON.parse(atob(token.split('.')[1]));
 		console.log(payload);
 		return payload.user_id;
 	}
-	console.log("getIdFomJWT : null");
+	console.log("getIdFromJWT : null");
 	return null;
 }
 
@@ -47,10 +71,10 @@ async function isAccessTokenRefreshed() {
 	if (data.access_token) {
 		console.log('get new access token successfully');
 		localStorage.setItem('access_token', data.access_token);
-		return true
+		return true;
 	}
 	console.log(data.message);
-	return false
+	return false;
 }
 
 export async function isAuthenticated() {
@@ -61,10 +85,11 @@ export async function isAuthenticated() {
 	}
 	else if (isTokenExpired(accessToken)) {
 		const refreshed = await isAccessTokenRefreshed()
-		if (!refreshed)
-		console.log("Refresh access token failed");
-		alert("Session expired. Please sign in again.");
-		return false;
+		if (!refreshed) {
+			console.log("Refresh access token failed");
+			alert("Session expired. Please sign in again.");
+			return false;
+		}
 	}
 	return true;
 }

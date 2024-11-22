@@ -194,7 +194,7 @@ class UserSettingsView(RetrieveUpdateDestroyAPIView):
 	queryset = User.objects.all()
 	serializer_class = UserSettingsSerializer
 	authentication_classes = [JWTAuthentication]
-	permission_classes = [IsOwner]
+	# permission_classes = [IsOwner]
 	
 	def patch(self, request, *args, **kwargs):
 		instance, success_messages = self.get_serializer().update(self.get_object(), request.data)

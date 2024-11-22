@@ -1,4 +1,4 @@
-import { fetchData, escapeHTML, DEBUG, getIdFomJWT  } from "../../utils.js";
+import { fetchData, escapeHTML, DEBUG, getIdFromJWT  } from "../../utils.js";
 
 function createSettingsPage() {
 	const box = document.getElementById("mainContent");
@@ -37,17 +37,76 @@ function createSettingsPage() {
 	`
 }
 
+async function editSettings() {
+    const editForm = document.getElementById("edit-form");
+    const userInfo = document.getElementById("user-info");
+    const deleteAccountBtn = document.getElementById("delete-account-btn");
+
+    editForm.style.display = "block";
+    userInfo.style.display = "none";
+    deleteAccountBtn.style.display = "none";
+
+    document.getElementById("new-alias").value = document.getElementById("alias").textContent || "";
+    document.getElementById("new-email").value = document.getElementById("email").textContent || "";
+
+    document.getElementById("save-btn").addEventListener("click", async (e) => {
+        e.preventDefault();
+        const newAvatar = document.getElementById("new-avatar").files[0];
+        const newAlias = document.getElementById("new-alias").value;
+        const newEmail = document.getElementById("new-email").value;
+        const currentPassword = document.getElementById("current-password").value;
+        const newPassword = document.getElementById("new-password").value;
+
+        const formData = new FormData();
+        if (newAvatar) formData.append("avatar", newAvatar);
+        if (newAlias) formData.append("alias", newAlias);
+        if (newEmail) formData.append("email", newEmail);
+        if (currentPassword) formData.append("current_password", currentPassword);
+        if (newPassword) formData.append("new_password", newPassword);
+
+        const pk = getIdFromJWT();
+        const { data, status } = await fetchData(`/user/settings/${pk}/`, 'PATCH', formData, true);
+
+        if (status === 200) {
+			const avatarPath = data.avatar.replace(/^https?:\/\/[^/]+/, '');
+            document.getElementById("avatar").src = avatarPath;
+            document.getElementById("alias").textContent = data.alias || "No alias";
+            document.getElementById("email").textContent = data.email;
+
+            editForm.style.display = "none";
+            userInfo.style.display = "block";
+        } else {
+            alert("Erreur lors de la mise à jour des informations !");
+        }
+    });
+}
+
+
 export async function renderSettingsPage() {
 
 	const box = document.getElementById("mainContent");
-	createSettingsPage()
 	
-	const pk = getIdFomJWT();
+	createSettingsPage();
+	
+	const pk = getIdFromJWT();
 	const { data,status } = await fetchData(`/user/settings/${pk}`);
 
-	
 	console.log(data, status);
 
+	if (status === 200) {
+		const avatarPath = data.avatar.replace(/^https?:\/\/[^/]+/, '');
+		console.log(avatarPath);
 
+		document.getElementById("avatar").src = avatarPath;
+		document.getElementById("username").textContent = data.username;
+		document.getElementById("alias").textContent = data.alias || "No alias";
+		document.getElementById("email").textContent = data.email;
+	}
+	else
+		console.log("Failed to get data");
+
+	document.getElementById("edit-btn").addEventListener("click", async (e) => {
+		editSettings();
+	});
 
 }
