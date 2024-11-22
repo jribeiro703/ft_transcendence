@@ -3,6 +3,9 @@ const gameVar =
 	canvasW: 840,
 	canvasH: 420,
 
+
+// ---------------------------Paddle------------------------
+
 	playerPaddleHeight: 75,
 	playerPaddleWidth: 12,
 	player2PaddleHeight: 75,
@@ -16,12 +19,24 @@ const gameVar =
 
 	aiPaddleY: (420 - 75) / 2,
 
+// ---------------------------------Control----------------------
+
+	playerUpPressed: false,
+	playerDownPressed: false,
+
+// ---------------------------------Score------------------------
+
 	playerScore: 0,
 	player2Score: 0,
-
 	aiScore: 0,
 	serveCount: 0,
-	powerUpDuration: 5000,
+
+	playerScoreElement: null,
+	player2ScoreElement: null,
+	aiScoreElement: null,
+
+// --------------------------Bricks------------------------------
+
 	brickRowCount: 3,
 	brickColumnCount: 5,
 	brickWidth: 75,
@@ -29,34 +44,52 @@ const gameVar =
 	brickPadding: 10,
 	brickOffsetTop: 30,
 	brickOffsetLeft: 30,
-	aiLevel: 8,
-	targetY: 0,
-	playerIdx: null,
 
+// ----------------------------Settings-------------------------
+
+	powerUpX: null,
+	powerUpY: null,
+	powerUpActive: false,
+	powerUpEnable: false,
+	powerUpDuration: 5000,
+
+	withPowerUp: null,
+	withoutPowerUp: null,
+
+	powerUpSelection: null,
+	difficulty: null,
+	easy: null,
+	medium: null,
+	hard: null,
+
+	customMap: false,
+	tableTennis: null,
+	brickLevel: null,
+
+// -------------------------------Player Data---------------------------
+
+	playerIdx: null,
 	currenServer: 'player',
 	playerReady: false,
-	gameReady: false,
 
+// ---------------------------------Game Data-------------------------
+
+	gameReady: false,
 	gameStart: false,
 	matchOver: false,
-	aiServe: false,
-
-	powerUpActive: false,
-	playerUpPressed: false,
-	playerDownPressed: false,
-	powerUpEnable: false,
-	customMap: false,
-	matchAI: false,
-	leftRoom: false,
-
 	liveMatch: false,
+	animationFrame: null,
 
-	previousBallState: {
-		x: null,
-		y: null,
-		dx: null,
-		dy: null
-	},
+// --------------------------------------AI-----------------------------
+
+	aiServe: false,
+	matchAI: false,
+	aiLevel: 8,
+	targetY: 0,
+	
+	aiMoveInterval: null,
+
+// --------------------------------Ball Data----------------------------
 
 	x: null,
 	y: null,
@@ -65,51 +98,60 @@ const gameVar =
 	ctx: null,
 	init_dx: null,
 	init_dy: null,
-	powerUpX: null,
-	powerUpY: null,
+	
+	previousBallState: {
+		x: null,
+		y: null,
+		dx: null,
+		dy: null
+	},
 
-	playerScoreElement: null,
-	player2ScoreElement: null,
-	aiScoreElement: null,
 
-	aiMoveInterval: null,
-	animationFrame: null,
+// ------------------------------View---------------------------
 
 	defaultView: null,
 	gameView: null,
-	gameplayView: null,
+	settingView: null,
+	roomView: null,
+
+
+// ------------------------------Button---------------------------
+
 	startGameBtn: null,
 	quickGameBtn: null,
 	playsoloGameBtn: null,
 	playmultiGameBtn: null,
-	roomView: null,
+	
+	btnPowerUp: null,
+	settingBtn: null,
+	settingBtn1: null,
+	settingBtn2: null,
+	playBtn: null,
+	playBtn2: null,
+	
+	saveBtn: null,
+	
 	createRoomBtn: null,
 	createRoomName: null,
-
+	
 	tournamentGameBtn: null,
 	rematchBtn: null,
 	quitGameBtn: null,
 
-	
-	withPowerUp: null,
-	withoutPowerUp: null,
-	easy: null,
-	medium: null,
-	hard: null,
-	tableTennis: null,
-	brickLevel: null,
 
 	players: [
 		{ idx: 1, ready: false },
 		{ idx: 2, ready: false }
 	],
-	// -------------room------------------
+
+
+// ---------------------------------Room--------------------------
 
 	createRoomNameInput: null,
 	noRoomsMessage: null,
 	roomsContainer: null,
 	refreshBtn: null,
-
+	leftRoom: false,
 	newRoomName: null,
 	
 	rooms: [
@@ -119,6 +161,9 @@ const gameVar =
 	roomName: null,
 	gameSocket: null,
 
+
+// -------------------Power Ups------------------------
+
 	powerUps: [
 		{ type: 'speed', image: 'static/css/images/FastBall.png'},
 		{ type: 'slow', image: 'static/css/images/SlowBall.png'},
@@ -127,6 +172,8 @@ const gameVar =
 		{ type: 'invincible', image: 'static/css/images/star.png'}
 	],
 	currentPowerUp: null,
+
+// ------------------------------------Level---------------------
 
 	level: [
 		{ type: 'easy'},

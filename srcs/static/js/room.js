@@ -9,10 +9,36 @@ export function createNewRoom(joinRoomCallback)
 	console.log("createnewroom");
 	const roomName = `room_${Math.floor(Math.random() * 10000)}`;
 	gameVar.playerIdx = 1;
-	gameVar.playerReady = true;
 	gameVar.isFirstPlayer = true;
 	joinRoom(roomName);
 }
+
+export function waitingPlayer()
+{
+	const waitingINterval = setInterval(() =>
+	{
+		// if ()
+		if(!gameVar.gameReady)
+		{
+			gameVar.ctx.font = '40px Arial';
+			gameVar.ctx.fillStyle = '#455F78';
+			gameVar.ctx.fillText("Waiting for opponent...", gameVar.canvasW / 4, gameVar.canvasH / 2);
+			gameVar.ctx.strokeStyle = '#1F2E4D'; 
+			gameVar.ctx.lineWidth = 1;
+			gameVar.ctx.strokeText("Waiting for opponent...", gameVar.canvasW / 4, gameVar.canvasH / 2);
+		}
+		else
+		{
+			// console.log("ready");
+			clearInterval(waitingINterval);
+			initializeBall();
+			draw2();
+		}
+	}, 2000);
+	// initializeBall();
+	// draw2();
+}
+
 
 export function joinRoom(roomName)
 {
@@ -28,8 +54,20 @@ export function joinRoom(roomName)
 			gameSocket.send(JSON.stringify({ type: 'join_room' }));
 			gameVar.gameSocket = gameSocket;
 			history.pushState({ view: 'game', room: roomName }, '', `?view=multi&room=${roomName}`);
-			initializeBall();
-			draw2();
+			console.log("idx: ", gameVar.playerIdx);
+			if (gameVar.playerIdx == 1)
+			{
+				waitingPlayer()
+			}
+			if (gameVar.playerIdx == 2)
+			{
+				console.log("player2 sendgamedata");
+				console.log("ready: ", gameVar.gameReady);
+				sendGameData(gameSocket, gameVar.gameStart, gameVar.gameReady);
+				initializeBall();
+				draw2();
+			}
+
 		}
 		catch (error)
 		{
@@ -170,7 +208,7 @@ export function updateRoomList()
 			gameVar.gameView.style.display = 'block';
 			console.log("roomName : ", room.name);
 			gameVar.playerIdx = 2;
-			gameVar.playerReady = true;
+			gameVar.gameReady = true;
 			joinRoom(room.name); 
 		});
 

@@ -1,6 +1,6 @@
 import gameVar from "./var.js";
 
-export function updateLevelSelection(level)
+export function updateDifficultySelection(level)
 {
 	gameVar.init_dx = 5;
 	gameVar.init_dy = 5;
@@ -12,6 +12,7 @@ export function updateLevelSelection(level)
 		gameVar.init_dx = 1;
 		gameVar.init_dy = 1;
 		gameVar.aiLevel = 8;
+		gameVar.difficulty = 'easy';
 	}
 	if (level == 'medium')
 	{
@@ -19,6 +20,7 @@ export function updateLevelSelection(level)
 		gameVar.init_dx = 5;
 		gameVar.init_dy = 5;
 		gameVar.aiLevel = 10;
+		gameVar.difficulty = 'medium';
 	}
 	if (level == 'hard')
 	{
@@ -26,11 +28,12 @@ export function updateLevelSelection(level)
 		gameVar.init_dy = 7;
 		gameVar.aiLevel = 12;
 		console.log('hard mode');
+		gameVar.difficulty = 'hard';
 	}
 
 }
 
-export function updateMapSelection(level)
+export function updateLevelSelection(level)
 {
 	if (level == 'tableTennis')
 		gameVar.customMap = false;

@@ -2,6 +2,8 @@ import gameVar from "./var.js";
 import { PADDLE_SPEED, AI_UPDATE_INTERVAL, PADDLE_THRESHOLD, BALL_RADIUS, CENTER_POSITION } from './const.js';
 import { resetBall } from "./reset.js";
 import { checkCollisionWithWalls } from './manage.js'
+import { keyDownHandler, keyUpHandler, startBallAi } from "./input.js";
+import { showGameView, rematchView } from "./gameView.js";
 
 export function aiServeBall()
 {
