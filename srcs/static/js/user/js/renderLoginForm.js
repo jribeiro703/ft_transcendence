@@ -1,4 +1,4 @@
-import { fetchData, DEBUG, escapeHTML } from "../../utils.js";
+import { fetchData, escapeHTML } from "../../utils.js";
 import { renderOtpForm } from "./renderOtpForm.js"
 
 export function renderLoginForm() {
@@ -17,16 +17,12 @@ export function renderLoginForm() {
         e.preventDefault();
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-        const { data, status } = await fetchData('/user/login/', 'POST', { username, password });
-        const msg = escapeHTML(data.message);
-        
-        
-            console.log(data, status)
+        const responseObject = await fetchData('/user/login/', 'POST', { username, password });
 
-        if (data.otp_verification_url)
-            renderOtpForm(escapeHTML(data.otp_verification_url), msg);
+        if (responseObject.data.otp_verification_url)
+            renderOtpForm(escapeHTML(responseObject.data.otp_verification_url), responseObject.data.message);
 		else {
-			box.innerHTML = `<p>${msg}</p>`;
+			box.innerHTML = `<p>${responseObject.data.message}</p>`;
         	window.history.pushState({ page: "loginResponse" }, "LoginResponse", '#loginResponse');
 		}
     });

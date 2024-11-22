@@ -100,7 +100,6 @@ class OtpCodeSerializer(serializers.Serializer):
 
 class UserSettingsSerializer(serializers.ModelSerializer):
 
-	new_email = serializers.EmailField(write_only=True, required=False, allow_blank=True)
 	new_password = serializers.CharField(write_only=True, required=False, allow_blank=True)
 	new_friend = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
@@ -114,19 +113,26 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 		print("Validated data:", validated_data)
 		success_messages = []
 
+		validated_data = validated_data.copy()
+
 		if 'new_password' in validated_data:
 			if 'password' not in validated_data or validated_data['password'] is None:
+				print("t1")
 				raise serializers.ValidationError({"message": "The current password is required to update your new password."})
 			elif not instance.check_password(validated_data['password']):
+				print("t2")
 				raise serializers.ValidationError({"message": "The current password does not match the existing password."})
 			elif instance.check_password(validated_data['new_password']):
+				print("t3")
 				raise serializers.ValidationError({"message": "Your new password is the same as the existing password."})
 			instance.set_password(validated_data['new_password'])
 			success_messages.append("Password changed successfully !")
 			validated_data.pop('new_password')
+		print("Validated data2:", validated_data)
 
 		if 'new_email' in validated_data and validated_data['new_email'] is not None:
 			if User.objects.filter(email=validated_data['new_email'], is_active=True).exists():
+				print("t4")
 				raise serializers.ValidationError({"message": "Changing to new email failed, this email is already used by a active user."})
 			try:
 				send_activation_email(
@@ -139,8 +145,11 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 					)
 				success_messages.append("A confirmation email has been sent to your new email address.")
 			except Exception as e:
+				print("t5")
 				raise exceptions.APIException({"message": "Send mail to new email adress failed"})
 		
+		print("Validated data3:", validated_data)
+
 		if 'new_friend' in validated_data:
 			try:
 				new_f = User.objects.get(username=validated_data['new_friend'])
@@ -153,12 +162,18 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 					else:
 						success_messages.append(f"You have already sent a friend request to {new_f.username}.")
 			except User.DoesNotExist:
+				print("t6")
 				raise serializers.ValidationError({"message": f"{validated_data['new_friend']} doesn't exist"})
-				
+		
+		print("Validated data4:", validated_data)
+
 		for attr, value in validated_data.items():
 			setattr(instance, attr, value)
 		success_messages.append("Update successfully")
 		instance.save()
+
+		print("Validated data5:", validated_data)
+
 		return instance, success_messages
 
 

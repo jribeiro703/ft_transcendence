@@ -1,4 +1,4 @@
-import { fetchData, escapeHTML, DEBUG } from "../../utils.js";
+import { fetchData } from "../../utils.js";
 
 export function renderOtpForm(url, msg) {
     const box = document.getElementById('mainContent');
@@ -16,14 +16,13 @@ export function renderOtpForm(url, msg) {
     document.getElementById('otpForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const otpCode = document.getElementById('otpCode').value;
-        const { data, status } = await fetchData(url, 'POST', { otp_code: otpCode });
-        console.log(data, status)
+        const responseObject = await fetchData(url, 'POST', { otp_code: otpCode });
         
-        if (data.access_token) {
+        if (responseObject.data.access_token) {
             console.log("Get access token successfully")
-            localStorage.setItem('access_token', data.access_token);
+            localStorage.setItem('access_token', responseObject.data.access_token);
         }
-        box.innerHTML = `<p>${escapeHTML(data.message)}</p>`;
+        box.innerHTML = `<p>${responseObject.data.message}</p>`;
         window.history.pushState({ page: "otpForm" }, 'OtpForm', '#otpForm');
     });
 }

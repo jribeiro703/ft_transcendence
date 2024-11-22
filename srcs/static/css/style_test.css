@@ -79,17 +79,18 @@ button:disabled
 }
 
 
-.navbar:hover .navbar-brand
+/* .navbar:hover  */
+.navbar-brand
 {
     font-size: 3rem; 
     top: 50%; 
     transform: translate(-50%, -50%);
 }
 
-.navbar:hover
+/* .navbar:hover
 {
     height: 150px;
-}
+} */
 
 .navbar .buttons-container
 {

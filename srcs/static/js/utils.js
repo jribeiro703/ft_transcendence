@@ -43,10 +43,44 @@ export async function fetchData(endpoint, method = 'GET', body = null, isFormDat
         }
     }
 
-    const response = await fetch(url, options);
-    const data = await response.json();
-    return { data, status: response.status };
+	const response = await fetch(url, options);
+
+	console.log("response of fetch: ", response);
+
+	const responseObject = {
+		// errorArgs: [],
+		data: null,
+		status: response.status,
+	};
+	
+	// if (!response.ok) {
+		// responseObject.errorArgs = await response.json();
+        // console.log('!response.ok error data :', responseObject.errorArgs);
+        // return {
+			// status: response.status,
+			// data: errorData || "An Unknown error occured"
+		// };
+	// } else {
+		responseObject.data = await response.json();
+	// }
+	
+	console.log("response object : ", responseObject);
+
+	return responseObject;
+	// const data = await response.json();
+    // const textResponse = await response.text(); 
+    // console.log("Response text:", textResponse);
+// 
+    // let data = null;
+    // try {
+        // data = JSON.parse(textResponse);  // Try to parse the response as JSON
+    // } catch (e) {
+        // console.error("Error parsing JSON:", e);
+    // }
+
+    // return { data: data, status: response.status };
 }
+
 
 export function getIdFromJWT() {
 	const token = localStorage.getItem('access_token');
@@ -68,12 +102,12 @@ function isTokenExpired(token) {
 
 async function isAccessTokenRefreshed() {
 	const { data, status } = await fetchData("/user/login/token-refresh/")
-	if (data.access_token) {
+	if (status === 200) {
+		console.log(status);
 		console.log('get new access token successfully');
 		localStorage.setItem('access_token', data.access_token);
 		return true;
 	}
-	console.log(data.message);
 	return false;
 }
 
