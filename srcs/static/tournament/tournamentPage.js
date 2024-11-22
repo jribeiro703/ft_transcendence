@@ -1,4 +1,5 @@
-import { getPlayerList } from "./js/getPlayerList.js"
+import { getPlayerList } from "./handlers/tournamentWebSocketHandler.js"
+import { createTournament } from "./services/tournamentAPIService.js"
 
 export function showTournamentView() {
 	const box = document.getElementById('mainContent');
@@ -16,7 +17,7 @@ export function showTournamentView() {
 				</ul>
 			</div>
 			<div class="button-container">
-				<button id="startTournamentBtn">Start Tournament</button>
+				<button id="createTournamentBtn">Create Tournament</button>
 				<button id="quitTournamentBtn">Quit Tournament</button>
 			</div>
 			<br/>
