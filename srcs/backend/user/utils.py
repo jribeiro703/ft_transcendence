@@ -6,6 +6,8 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from transcendence import settings
+import pyotp
+from datetime import datetime, timezone
 
 def send_activation_email(user, view_name, action, subject, text_file, html_file):
 	uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -25,4 +27,21 @@ def send_activation_email(user, view_name, action, subject, text_file, html_file
 	email.attach_alternative(html_content, "text/html")
 	user.email_sent_at = timezone.now()
 	user.save()
+	email.send()
+
+def send_2FA_mail(user):
+	totp = pyotp.TOTP(user.otp_secret, interval=300)  # validity 5min
+	verification_code = totp.at(datetime.now(timezone.utc))
+
+	context={"username": user.username, "verification_code": verification_code,}
+	html_content = render_to_string("emails/2FA.html", context)
+	text_content = render_to_string("emails/2FA.txt", context)
+
+	email = EmailMultiAlternatives(
+		subject='Your 2FA Verification Code',
+		body=text_content,
+		from_email=settings.DEFAULT_FROM_EMAIL,
+		to=[user.email]
+	)
+	email.attach_alternative(html_content, "text/html")
 	email.send()
