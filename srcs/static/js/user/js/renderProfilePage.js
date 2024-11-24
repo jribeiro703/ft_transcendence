@@ -1,4 +1,4 @@
-import { fetchData, escapeHTML, DEBUG, getIdFromJWT  } from "../../utils.js";
+import { fetchData, escapeHTML, getIdFromJWT  } from "../../utils.js";
 
 function createProfileContent() {
 	const box = document.getElementById('mainContent');

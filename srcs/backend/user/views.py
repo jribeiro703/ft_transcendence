@@ -37,7 +37,7 @@ class CreateUserView(CreateAPIView):
 		try:
 			response = super().create(request, *args, **kwargs)
 			return Response({
-				"message": "User created successfully. Please check your email to activate your account."
+				"message": "Account created successfully. Please check your email to activate your account."
 			}, status=status.HTTP_201_CREATED)
 		
 		except serializers.ValidationError as e:

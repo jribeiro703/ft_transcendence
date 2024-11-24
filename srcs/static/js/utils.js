@@ -1,30 +1,14 @@
-// function for calling API's endpoint
 export const API_BASE_URL = "https://localhost:8081";
-export const DEBUG = true
 
 function getCSRFToken() {
 	const cookies = document.cookie.split(';');
     const csrftoken = cookies.find(cookie => cookie.trim().startsWith("csrftoken="));
+	if (!csrftoken)
+		console.log("getCSRFToken(): token = null");
     return csrftoken ? csrftoken.split('=')[1] : '';
 }
 
-// export async function fetchData(endpoint, method = 'GET', body = null) {
-// 	const url = `${API_BASE_URL}${endpoint}`;
-// 	const options = {
-// 	    method: method,
-// 	    headers: {
-// 			'Content-Type': 'application/json',
-// 			'X-CSRFToken': getCSRFToken(),
-// 		},
-// 		credentials: 'include'
-// 	};
-// 	if (body) {options.body = JSON.stringify(body);}
-// 	const response = await fetch(url, options);
-// 	const data = await response.json()
-// 	return { data: data, status: response.status };
-// }
-
-export async function fetchData(endpoint, method = 'GET', body = null, isFormData = false) {
+async function fetchData(endpoint, method = 'GET', body = null, isFormData = false) {
     const url = `${API_BASE_URL}${endpoint}`;
     const options = {
         method: method,
@@ -43,55 +27,28 @@ export async function fetchData(endpoint, method = 'GET', body = null, isFormDat
         }
     }
 
-	const response = await fetch(url, options);
-
-	console.log("response of fetch: ", response);
-
-	const responseObject = {
-		// errorArgs: [],
-		data: null,
-		status: response.status,
-	};
-	
-	// if (!response.ok) {
-		// responseObject.errorArgs = await response.json();
-        // console.log('!response.ok error data :', responseObject.errorArgs);
-        // return {
-			// status: response.status,
-			// data: errorData || "An Unknown error occured"
-		// };
-	// } else {
-		responseObject.data = await response.json();
-	// }
-	
-	console.log("response object : ", responseObject);
-
-	return responseObject;
-	// const data = await response.json();
-    // const textResponse = await response.text(); 
-    // console.log("Response text:", textResponse);
-// 
-    // let data = null;
-    // try {
-        // data = JSON.parse(textResponse);  // Try to parse the response as JSON
-    // } catch (e) {
-        // console.error("Error parsing JSON:", e);
-    // }
-
-    // return { data: data, status: response.status };
-}
-
-
-export function getIdFromJWT() {
-	const token = localStorage.getItem('access_token');
-	if (token) {
-		const payload = JSON.parse(atob(token.split('.')[1]));
-		console.log(payload);
-		return payload.user_id;
+	try {
+		const response = await fetch(url, options);
+		console.log("response of fetch: ", response);
+		const responseObject = {
+			data: null,
+			status: response.status,
+		};
+		try {
+			responseObject.data = await response.json();
+			console.log("responseObject : ", responseObject);
+		}
+		catch (error) {
+			console.error(`fetchData(): responseObject: ${error}`);	
+		}
+		return responseObject;
 	}
-	console.log("getIdFromJWT : null");
-	return null;
+	catch (error) {
+		console.error(`fetchData(): response of fetch: ${error}`);	
+	}
+	return responseObject;
 }
+
 
 function isTokenExpired(token) {
 	const arrayToken = token.split('.');
@@ -101,26 +58,25 @@ function isTokenExpired(token) {
 }
 
 async function isAccessTokenRefreshed() {
-	const { data, status } = await fetchData("/user/login/token-refresh/")
-	if (status === 200) {
-		console.log(status);
-		console.log('get new access token successfully');
+	const responseObject = await fetchData("/user/login/token-refresh/")
+	if (responseObject.status === 200) {
+		console.log("isAccessTokenRefreshed(): get new access token successfully");
 		localStorage.setItem('access_token', data.access_token);
 		return true;
 	}
 	return false;
 }
 
-export async function isAuthenticated() {
+async function isAuthenticated() {
 	const accessToken = localStorage.getItem('access_token');
 	if (!accessToken) {
-		console.log('No access token found.');
+		console.log("isAuthenticated(): No access token found.");
 		return false;
 	}
 	else if (isTokenExpired(accessToken)) {
 		const refreshed = await isAccessTokenRefreshed()
 		if (!refreshed) {
-			console.log("Refresh access token failed");
+			console.log("isAuthenticated(): Refresh access token failed");
 			alert("Session expired. Please sign in again.");
 			return false;
 		}
@@ -128,13 +84,20 @@ export async function isAuthenticated() {
 	return true;
 }
 
-export function alertUserToLogin() {
-	alert('You must be logged in to use this feature.');
-    return;
+function getIdFromJWT() {
+	const token = localStorage.getItem('access_token');
+	if (token) {
+		const payload = JSON.parse(atob(token.split('.')[1]));
+		console.log(`getTdFromJWT(): JWT payload = ${payload}`);
+		return payload.user_id;
+	}
+	console.log("getIdFromJWT() : access token = null");
+	return null;
 }
 
-export function escapeHTML(unsafe) {
+function escapeHTML(unsafe) {
 	if (typeof unsafe !== 'string') {
+		console.log("escapeHTML(): unsafe !== 'string'");
         return '';
     }
     const map = {
@@ -146,3 +109,5 @@ export function escapeHTML(unsafe) {
     };
     return unsafe.replace(/[&<>"']/g, match => map[match]);
 }
+
+export { fetchData, isAuthenticated, getIdFromJWT, escapeHTML };

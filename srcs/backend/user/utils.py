@@ -1,13 +1,13 @@
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.urls import reverse
-from django.utils import timezone
-from transcendence import settings
 import pyotp
 from datetime import datetime, timezone
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode
+from django.utils.timezone import now
+from django.utils.encoding import force_bytes
+from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth.tokens import default_token_generator
+from django.template.loader import render_to_string
+from transcendence import settings
 
 def send_activation_email(user, view_name, action, subject, text_file, html_file):
 	uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -25,7 +25,7 @@ def send_activation_email(user, view_name, action, subject, text_file, html_file
 		to=[user.email]
 	)
 	email.attach_alternative(html_content, "text/html")
-	user.email_sent_at = timezone.now()
+	user.email_sent_at = now()
 	user.save()
 	email.send()
 

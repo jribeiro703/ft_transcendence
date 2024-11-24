@@ -1,5 +1,4 @@
-import { renderLoginForm } from "./user/js/renderLoginForm.js";
-import { renderRegisterForm } from "./user/js/renderRegisterForm.js";
+import { renderPage } from "./historyManager.js"
 
 function createAuthContent() {
 	const box = document.getElementById('mainContent')
@@ -17,14 +16,12 @@ export function renderAuthPage() {
 
 	document.getElementById('btn-Login').addEventListener('click', () => {
 		history.pushState({page:'login'}, 'Login', '#login');
-		console.log("Login page");
-		renderLoginForm();
+		renderPage("login");
 	});
 
 	document.getElementById('btn-Register').addEventListener('click', () => {
 		history.pushState({page:'register'}, 'Register', '#register');
-		console.log("register page");
-		renderRegisterForm();
+		renderPage("register");
 	});
 
 	document.getElementById('btn-Login42').addEventListener('click', () => {
