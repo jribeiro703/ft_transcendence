@@ -1,6 +1,6 @@
 import { renderProfilePage } from "./user/js/renderProfilePage.js";
 import { renderSettingsPage } from "./user/js/renderSettingPage.js";
-import { fetchData, escapeHTML,DEBUG } from "./utils.js"
+import { fetchData, escapeHTML } from "./utils.js"
 
 function createUserContent() {
     const box = document.getElementById('mainContent');
@@ -8,7 +8,7 @@ function createUserContent() {
 		<div id="defaultView">
 			<div class="container">
 				<div class="mx-auto">
-					<img class="img-fluid" src="${staticImageURL}" alt="Pong Game">
+					<img class="img-fluid" src="${pongCard}" alt="Pong Game">
 					<br><br><br>
 				</div>
 			</div>
@@ -22,7 +22,7 @@ function createUserContent() {
     `;
 }
 
-export function displayUserChoice() {
+export function renderUserPage() {
 	createUserContent();
 
 	document.getElementById('btn-Profile').addEventListener('click', () => {

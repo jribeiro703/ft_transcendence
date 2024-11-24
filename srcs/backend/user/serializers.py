@@ -43,6 +43,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 			)
 		except Exception as e:
 			user.delete()
+			print(f"send activation mail : {str(e)}")
 			raise exceptions.APIException({"message": "Send activation email failed"})
 		return user
 

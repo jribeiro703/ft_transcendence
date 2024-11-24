@@ -1,4 +1,4 @@
-import { alertUserToLogin, isAuthenticated } from "./utils.js"
+import { isAuthenticated } from "./utils.js"
 
 function createHomeContent() {
 	const box = document.getElementById('mainContent');
@@ -6,7 +6,7 @@ function createHomeContent() {
 		<div id="defaultView">
 			<div class="container">
 				<div class="mx-auto">
-					<img class="img-fluid" src="${staticImageURL}" alt="Pong Game">
+					<img class="img-fluid" src="${pongCard}" alt="Pong Game">
 					<br><br><br>
 				</div>
 			</div>
@@ -20,7 +20,7 @@ function createHomeContent() {
 	`;
 }
 
-export function renderHomePage() {
+export async function renderHomePage() {
 	createHomeContent();
 
 	document.getElementById('btn-QuickGame').addEventListener('click', () => {
@@ -28,21 +28,32 @@ export function renderHomePage() {
 	    console.log('QuickGame button clicked');
 	});
 
+	const authenticated = await isAuthenticated();
+
 	document.getElementById('btn-Match').addEventListener('click', () => {
-		if (!isAuthenticated()) { alertUserToLogin(); };
-		history.pushState({ page: 'match' }, 'Match', '#match');
+		if (!authenticated) {
+			alert("You must be logged in to use this feature.");
+			return ;
+		}
 		console.log('Match button clicked');
+		history.pushState({ page: 'match' }, 'Match', '#match');
 	});
 
 	document.getElementById('btn-Tournament').addEventListener('click', () => {
-		if (!isAuthenticated()) { alertUserToLogin(); };
-		history.pushState({ page: 'tournament' }, 'Tournament', '#tournament');
+		if (!authenticated) {
+			alert("You must be logged in to use this feature.");
+			return ;
+		}
 		console.log('Tournament button clicked');
+		history.pushState({ page: 'tournament' }, 'Tournament', '#tournament');
 	});
 
 	document.getElementById('btn-Leaderboard').addEventListener('click', () => {
-		if (!isAuthenticated())  { alertUserToLogin(); };
-		history.pushState({ page: 'leaderboard' }, 'Leaderboard', '#leaderboard');
+		if (!authenticated) {
+			alert("You must be logged in to use this feature.");
+			return ;
+		}
 		console.log('Leaderboard button clicked');
+		history.pushState({ page: 'leaderboard' }, 'Leaderboard', '#leaderboard');
 	});
 }
