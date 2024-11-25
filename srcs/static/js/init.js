@@ -3,11 +3,10 @@ import { showGameView, showGameplaySoloView, showGameplayMultiView, showDefaultV
 import { keyDownHandler, keyUpHandler, startBall, startBallAi } from "./input.js";
 import { addRoom, delRooms, createNewRoom, displayRoomInfo, joinRoom, updateRoomInfo, updateRoomList } from "./room.js";
 import { showSettingView } from "./setting.js";
-import { collectPowerUp } from "./powerUp.js";
 
 export function initGameVar()
 {
-	gameVar.defaultView = document.getElementById('defaultView');
+	// gameVar.defaultView = document.getElementById('defaultView');
 	gameVar.settingView = document.getElementById('settingView');
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.startGameBtn = document.getElementById('startGameBtn');
@@ -16,43 +15,55 @@ export function initGameVar()
 	gameVar.playmultiGameBtn = document.getElementById('playmultiGameBtn');
 	gameVar.tournamentGameBtn = document.getElementById('tournamentGameBtn');
 	gameVar.createRoomBtn = document.getElementById('createRoomBtn');
-	gameVar.rematchBtn = document.getElementById('rematchBtn');	
-	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+	// gameVar.rematchBtn = document.getElementById('rematchBtn');	
+	// gameVar.quitGameBtn = document.getElementById('quitGameBtn');
 	gameVar.roomView = document.getElementById('roomView');
 	gameVar.createRoomNameInput = document.getElementById('createRoomName')
 	gameVar.roomsContainer = document.getElementById('roomsContainer');
 	gameVar.noRoomsMessage = document.getElementById('noRoomsMessage');
 	gameVar.refreshBtn = document.getElementById('refreshBtn');
 	gameVar.settingBtn = document.getElementById('settingBtn');
-	gameVar.saveBtn = document.getElementById('saveBtn');
-	// gameVar.powerUpSelection = document.getElementById('powerUpSelection');
-	// gameVar.btnPowerUp = document.getElementById('btnPowerUp');
-	gameVar.withPowerUp = document.getElementById('withPowerUps');
-	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');
-	gameVar.easy = document.getElementById('easy');
-	gameVar.medium = document.getElementById('medium');
-	gameVar.hard = document.getElementById('hard');
-	gameVar.tableTennis = document.getElementById('tableTennis');
-	gameVar.brickLevel = document.getElementById('bricksLevel');
-	gameVar.playerScoreElement = document.getElementById('playerScore');
-	gameVar.aiScoreElement = document.getElementById('aiScore');
-	// gameVar.settingBtn1 = document.getElementById('settingBtn1');
-	// gameVar.settingBtn2 = document.getElementById('settingBtn2');
-	// gameVar.playBtn = document.getElementById('playBtn');
-	// gameVar.playBtn2 = document.getElementById('playBtn2');
 	gameVar.createRoomName = document.getElementById('createRoomName');
 
+}
+
+
+function removeEventListeners()
+{
+    document.removeEventListener("keydown", keyDownHandler);
+    document.removeEventListener("keyup", keyUpHandler);
+    document.removeEventListener("keydown", startBall);
 }
 
 export function initEventListener()
 {
 
-	// gameVar.quitGameBtn.addEventListener('click', showDefaultView);
+	removeEventListeners();
+
 	gameVar.playsoloGameBtn.addEventListener('click', showGameplaySoloView);
 	gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
-	// gameVar.withoutPowerUp.classList.add('selected');
-	gameVar.medium.classList.add('selected');
-	gameVar.tableTennis.classList.add('selected');
+
+	document.addEventListener("keydown", (e) => {
+        if (e.code === "Space")
+		{
+            startBallAi(e);
+        }
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.code === "ArrowUp" || e.code === "ArrowDown")
+		{
+            keyDownHandler(e);
+        }
+    });
+
+    document.addEventListener("keyup", (e) => {
+        if (e.code === "ArrowUp" || e.code === "ArrowDown")
+		{
+            keyUpHandler(e);
+        }
+    });
+
 }
 
 

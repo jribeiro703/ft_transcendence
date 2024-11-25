@@ -2,15 +2,15 @@ import gameVar from "./var.js";
 
 export function updateDifficultySelection(level)
 {
-	gameVar.init_dx = 5;
-	gameVar.init_dy = 5;
-	gameVar.init_dx2 = 5;
-	gameVar.init_dy2 = 5;
+	// gameVar.init_dx = 5;
+	// gameVar.init_dy = 5;
+	// gameVar.init_dx2 = 5;
+	// gameVar.init_dy2 = 5;
 	if (level == 'easy')
 	{
 		console.log("easy mode");
-		gameVar.init_dx = 1;
-		gameVar.init_dy = 1;
+		gameVar.init_dx = 2;
+		gameVar.init_dy = 2;
 		gameVar.aiLevel = 8;
 		gameVar.difficulty = 'easy';
 	}

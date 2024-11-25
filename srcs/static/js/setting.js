@@ -2,11 +2,12 @@ import gameVar from "./var.js";
 import { updateDifficultySelection, updateLevelSelection } from "./gameMode.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { roomMultiView } from './init.js'
+import { showGameplaySoloView } from "./gameView.js";
 
 export function showSettingView(live)
 {
 
-
+	history.pushState({ view: 'game'}, '', `?view=solo/settings`);
 	const pongUrl = "static/css/images/classic.png";
 	const brickUrl = "static/css/images/brick.png";
 	const maincontent = document.getElementById('mainContent');
@@ -56,20 +57,27 @@ export function showSettingView(live)
 
 	gameVar.powerUpSelection = document.getElementById('powerUpSelection');
 	gameVar.btnPowerUp = document.getElementById('btnPowerUp');
+	gameVar.withPowerUp = document.getElementById('withPowerUps');
+	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');
+	gameVar.easy = document.getElementById('easy');
+	gameVar.medium = document.getElementById('medium');
+	gameVar.hard = document.getElementById('hard');
+	gameVar.tableTennis = document.getElementById('tableTennis');
+	gameVar.brickLevel = document.getElementById('bricksLevel');
+	gameVar.saveBtn = document.getElementById('saveBtn');
 
-	gameVar.gameView.style.display = 'none';
-	gameVar.quickGameBtn.style.display = 'none';
-	gameVar.startGameBtn.style.display = 'none';
-	gameVar.playsoloGameBtn.style.display = 'none';
-	gameVar.tournamentGameBtn.style.display = 'none';
-	gameVar.playmultiGameBtn.style.display = 'none';
+	// gameVar.gameView.style.display = 'none';
+	// gameVar.quickGameBtn.style.display = 'none';
+	// gameVar.startGameBtn.style.display = 'none';
+	// gameVar.playsoloGameBtn.style.display = 'none';
+	// gameVar.tournamentGameBtn.style.display = 'none';
+	// gameVar.playmultiGameBtn.style.display = 'none';
 
-	gameVar.defaultView.style.display = 'none';
-	gameVar.roomView.style.display = 'none';
-	gameVar.createRoomBtn.style.display = 'none';
-	gameVar.refreshBtn.style.display = 'none';
-	gameVar.settingBtn.style.display = 'none';
-	// gameVar.settingView.style.display = 'block';
+	// gameVar.defaultView.style.display = 'none';
+	// gameVar.roomView.style.display = 'none';
+	// gameVar.createRoomBtn.style.display = 'none';
+	// gameVar.refreshBtn.style.display = 'none';
+	// gameVar.settingBtn.style.display = 'none';
 
 	if(live === false)
 	{
@@ -144,13 +152,15 @@ export function showSettingView(live)
 		}
 		else
 		{
-
+			showGameplaySoloView();
+			updateSetting();
 		}
 	});
 }
 
 export function updateSetting()
 {
+	gameVar.settingsChanged = true;
 	const difficulty = gameVar.difficulty;
 	var level = null;
 	var powerUp = null;
@@ -160,12 +170,12 @@ export function updateSetting()
 	else
 		level = 'Table Tennis';
 
-	if (gameVar.powerUpActive)
+	if (gameVar.powerUpEnable)
 		powerUp = "✅";
 	else
 		powerUp = "❌";
 
-	const settingContain = document.getElementById('setting-column');
+	const settingContain = document.getElementById('settings-column');
 
 	settingContain.innerHTML = '';
 

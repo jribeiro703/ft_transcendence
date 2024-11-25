@@ -1,44 +1,27 @@
 import gameVar from "./var.js";
-import { BALL_RADIUS, PADDLE_SPEED } from "./const.js";
+import { PADDLE_SPEED } from "./const.js";
 import { resetBall } from "./reset.js";
-import { sendBallData, sendDirectionData, sendPaddleData } from "./network.js";
-import { displayVar } from "./input.js";
+import { sendBallData, sendPaddleData } from "./network.js";
+import { collisionFoot } from "./foot.js";
+import { collisionPaddleAi, ballOut } from "./collision.js";
 
-export function checkCollisionWithWalls()
+export function manageRealCollision()
 {
-    const map = gameVar.maps['customMap1'];
-    if (map) 
+	gameVar.x += gameVar.dx;
+    gameVar.y += gameVar.dy;
+	if (gameVar.y + gameVar.dy > gameVar.canvasH - gameVar.ballRadius || 
+		gameVar.y + gameVar.dy < gameVar.ballRadius)
 	{
-        map.forEach(wall =>
-		{
-            if (gameVar.x + BALL_RADIUS > wall.x &&
-				gameVar.x - BALL_RADIUS < wall.x + wall.width &&
-                gameVar.y + BALL_RADIUS > wall.y &&
-				gameVar.y - BALL_RADIUS < wall.y + wall.height)
-			{
-				
-                if (gameVar.x + BALL_RADIUS > wall.x &&
-					gameVar.x - BALL_RADIUS < wall.x + wall.height &&
-					wall.sta == 1)
-				{
-                    gameVar.dx = -gameVar.dx;
-					wall.sta = 0;
-                }
-                if (gameVar.y + BALL_RADIUS > wall.y &&
-					gameVar.y - BALL_RADIUS < wall.y + wall.width &&
-					wall.sta == 1)
-				{
-                    gameVar.dy = -gameVar.dy;
-					wall.sta = 0;
-                }
-            }
-        });
-    }
+		gameVar.dy = -gameVar.dy;
+		// directChanged = true;
+	}
+	if (gameVar.football)
+		collisionFoot();
+	collisionPaddleAi();
+	ballOut();
 }
 
-
-
-export function manageCollision()
+export function manageCollisionLive()
 {
 	let directChanged = false;
 	let posChanged = false;
@@ -47,19 +30,14 @@ export function manageCollision()
 	gameVar.y += gameVar.dy;
 
 	posChanged = true;
-	if (gameVar.customMap == true)
-	{
-		checkCollisionWithWalls();
-		directChanged = true;
-	}
-	if(gameVar.y + gameVar.dy > gameVar.canvasH - BALL_RADIUS || gameVar.y + gameVar.dy < BALL_RADIUS)
+	if(gameVar.y + gameVar.dy > gameVar.canvasH - gameVar.ballRadius || gameVar.y + gameVar.dy < gameVar.ballRadius)
 	{
 		gameVar.dy = -gameVar.dy;
 		directChanged = true;
 	}
 	if (gameVar.playerIdx == 1)
 	{
-		if(gameVar.x - BALL_RADIUS < gameVar.playerPaddleWidth &&
+		if(gameVar.x - gameVar.ballRadius < gameVar.playerPaddleWidth &&
 			gameVar.y > gameVar.playerPaddleY &&
 			gameVar.y < gameVar.playerPaddleY + gameVar.playerPaddleHeight)
 		{
@@ -67,7 +45,7 @@ export function manageCollision()
 			{
 				return;
 			}
-			gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS;
+			gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
 			let hitpos = (gameVar.y - gameVar.playerPaddleY) / gameVar.playerPaddleHeight;
 			let angle = (hitpos - 0.5) * Math.PI / 2;
 			gameVar.dx = (Math.cos(angle) * Math.abs(gameVar.dx) + 1);
@@ -82,7 +60,7 @@ export function manageCollision()
 	}
 	if (gameVar.playerIdx == 2)
 	{
-		if (gameVar.x + BALL_RADIUS > gameVar.canvasW - gameVar.player2PaddleWidth &&
+		if (gameVar.x + gameVar.ballRadius > gameVar.canvasW - gameVar.player2PaddleWidth &&
 			gameVar.y > gameVar.player2PaddleY &&
 			gameVar.y < gameVar.player2PaddleY + gameVar.player2PaddleHeight)
 		{
@@ -90,7 +68,7 @@ export function manageCollision()
 			{
 				return ;
 			}
-			gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - BALL_RADIUS;
+			gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
 			let hitpos = (gameVar.y - gameVar.player2PaddleY) / gameVar.player2PaddleHeight;
 			let angle = (hitpos - 0.5) * Math.PI / 2;
 			gameVar.dx = -(Math.cos(angle) * Math.abs(gameVar.dx) + 1);
@@ -115,12 +93,12 @@ export function manageServer()
 {
 	if (gameVar.currenServer == 'player')
 	{
-		gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS;
+		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
 		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
 	}
 	else if (gameVar.currenServer == 'player2')
 	{
-		gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - BALL_RADIUS;
+		gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
 		gameVar.y = gameVar.player2PaddleY + gameVar.player2PaddleHeight / 2;
 	}
 	sendBallData(gameVar.x, gameVar.y, gameVar.gameSocket);
@@ -159,36 +137,35 @@ export function manageMove()
 	}
 }
 
-export function checkball()
-{
-	if (ballPositionChanged())
-	{
-		sendBallData(gameVar.x, gameVar.y, gameVar.gameSocket);
-	}
-	if (ballDirectionChanged())
-	{
-		sendDirectionData(gameVar.dx, gameVar.dy, gameVar.gameSocket);
-	}
-}
 
-export function ballPositionChanged()
-{
-	if (gameVar.x != gameVar.previousBallState.x || gameVar.y != gameVar.previousBallState.y)
-	{
-		gameVar.previousBallState.x = gameVar.x;
-		gameVar.previousBallState.y = gameVar.y;
-		return (true);
-	}
-	return (false);
-}
-
-export function ballDirectionChanged()
-{
-	if (gameVar.dx != gameVar.previousBallState.dx || gameVar.dy != gameVar.previousBallState.dy)
-	{
-		gameVar.previousBallState.dx = gameVar.dx;
-		gameVar.previousBallState.dy = gameVar.dy;
-		return (true);
-	}
-	return (false);
-}
+// export function checkCollisionWithWalls()
+// {
+//     const map = gameVar.maps['customMap1'];
+//     if (map) 
+// 	{
+//         map.forEach(wall =>
+// 		{
+//             if (gameVar.x + gameVar.ballRadius > wall.x &&
+// 				gameVar.x - gameVar.ballRadius < wall.x + wall.width &&
+//                 gameVar.y + gameVar.ballRadius > wall.y &&
+// 				gameVar.y - gameVar.ballRadius < wall.y + wall.height)
+// 			{
+				
+//                 if (gameVar.x + gameVar.ballRadius > wall.x &&
+// 					gameVar.x - gameVar.ballRadius < wall.x + wall.height &&
+// 					wall.sta == 1)
+// 				{
+//                     gameVar.dx = -gameVar.dx;
+// 					wall.sta = 0;
+//                 }
+//                 if (gameVar.y + gameVar.ballRadius > wall.y &&
+// 					gameVar.y - gameVar.ballRadius < wall.y + wall.width &&
+// 					wall.sta == 1)
+// 				{
+//                     gameVar.dy = -gameVar.dy;
+// 					wall.sta = 0;
+//                 }
+//             }
+//         });
+//     }
+// }
