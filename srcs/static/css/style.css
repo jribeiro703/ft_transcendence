@@ -437,6 +437,8 @@ button:disabled
 	overflow-y: scroll;
 	flex: 1;
 	height: calc(100% - 56px);
+	border-bottom: none;
+	border-radius: 5px 5px 0px 0px;
 }
 
 .btn {
@@ -456,4 +458,29 @@ button:disabled
 
 .input-group {
 	margin-top: auto;
+}
+
+#chat-message-input:focus {
+	outline: none;
+	box-shadow: none;
+	border-color: #6c757d;
+}
+
+emoji-picker {
+	--emoji-padding: 0.25rem;
+	height: 300px;
+	width: 300px;
+	--border-radius: 5px 5px 0px 0px;
+}
+
+.emoji-picker-container {
+	display: none;
+	position: absolute;
+	bottom: 52px;
+	left: 15px;
+	z-index: 1000;
+}
+
+#emojiButton {
+	z-index: 1001;
 }

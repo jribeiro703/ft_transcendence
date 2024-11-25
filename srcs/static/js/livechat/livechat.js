@@ -82,8 +82,30 @@ emojiPicker.addEventListener('emoji-click', event => {
     messageInputDom.focus();
 });
 
-// Prevent dropdown from closing when interacting with the emoji picker
-const emojiDropdownMenu = document.querySelector('.dropdown-menu');
-emojiDropdownMenu.addEventListener('click', event => {
-    event.stopPropagation();
+const emojiButton = document.querySelector('#emojiButton');
+const emojiPickerContainer = document.querySelector('#emojiPickerContainer');
+
+function adjustEmojiPickerHeight() {
+    const chatLog = document.querySelector('#chat-log');
+    const chatLogHeight = chatLog.clientHeight;
+    const emojiPickerHeight = Math.min(chatLogHeight, 300); // Set max height to 300px
+    emojiPicker.style.height = `${emojiPickerHeight}px`;
+}
+
+// Show emojiPickerContainer
+emojiButton.addEventListener('click', () => {
+	adjustEmojiPickerHeight();
+    emojiPickerContainer.style.display = emojiPickerContainer.style.display == 'block' ? 'none' : 'block';
+});
+
+// Hide emojiPickerContainer when clicking outside of it
+document.addEventListener('click', (event) => {
+    if (!emojiPickerContainer.contains(event.target) && !emojiButton.contains(event.target)) {
+        emojiPickerContainer.style.display = 'none';
+    }
+});
+
+// Hide emojiPickerContainer when resizing the window
+window.addEventListener('resize', () => {
+        emojiPickerContainer.style.display = 'none';
 });
