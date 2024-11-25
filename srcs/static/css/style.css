@@ -434,11 +434,9 @@ button:disabled
 }
 
 #chat-log {
-    resize: none;
-    font-family: 'Courier New', Courier, monospace; /* Fixed-width font */
-    white-space: pre-wrap; /* Preserve whitespace */
-	height: 100%;
 	overflow-y: scroll;
+	flex: 1;
+	height: calc(100% - 56px);
 }
 
 .btn {
@@ -446,5 +444,16 @@ button:disabled
 }
 
 #livechatView {
-	height: 80vh;
+	height: calc(100vh - 10px);
+}
+
+.card-body {
+	padding: 15px;
+	display: flex;
+	flex-direction: column;
+	height: calc(100% - 56px);
+}
+
+.input-group {
+	margin-top: auto;
 }
