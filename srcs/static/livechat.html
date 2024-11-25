@@ -19,41 +19,53 @@
 </head>
 
 <body>
-  <div id="livechatView" class="container pt-5 pb-5">
-    <div class="card" style="height: 100%; width: 70%;">
-        <div class="container-fluid my-auto">
-            <div class="row w-25 mx-auto">
-                <img class="img-fluid pb-3" src="{% static 'css/images/pong-game-card.png' %}" alt="Pong Game">
-            </div> 
-            <div class="row w-25 mx-auto">
-                <div type="button" class="btn mb-3">Play</div>
-            </div>
-            <div class="row w-25 mx-auto">
-                <div type="button" class="btn">Leaderboard</div>
-            </div>
-        </div>
-    </div>
-    <div class="card" style="height: 100%; width: 30%;">
-      <div class="card-header bg-primary text-white">
-        <h4 class="mb-0">Live Chat</h4>
-      </div>
-      <div class="card-body">
-        <div id="chat-log" class="form-control" aria-label="Chat log">
-            <div class="emoji-picker-container" id="emojiPickerContainer">
-                <emoji-picker id="emoji-picker" aria-label="Emoji picker" class="light"></emoji-picker>
-            </div>
-        </div>
-        <div class="input-group">
-          <div class="dropup">
-            <button class="btn btn-secondary" type="button" id="emojiButton" aria-label="Emoji picker">
-              😊
-            </button>
-          </div>
-          <input id="chat-message-input" type="text" class="form-control" placeholder="Type your message here..." aria-label="Chat message input">
-          <button id="chat-message-submit" class="btn btn-primary" aria-label="Send message">Send</button>
-        </div>
+  <div id="viewportContainer" class="container pt-5 pb-5">
+    <div class="row h-100 w-100">
 
-      </div>
+<!-- GAME -->
+        <div class="col-sm-8 h-100">
+            <div class="card h-100 w-100">
+                <div class="container-fluid my-auto">
+                    <div class="row w-25 mx-auto">
+                        <img class="img-fluid pb-3" src="{% static 'css/images/pong-game-card.png' %}" alt="Pong Game">
+                    </div> 
+                    <div class="row w-25 mx-auto">
+                        <div type="button" class="btn mb-3">Play</div>
+                    </div>
+                    <div class="row w-25 mx-auto">
+                        <div type="button" class="btn">Leaderboard</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- GAME -->
+
+<!-- LIVECHAT -->
+        <div class="col-sm-4 h-100">
+            <div class="card h-100 w-100">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Live Chat</h4>
+            </div>
+            <div class="card-body">
+                <div id="chat-log" class="form-control" aria-label="Chat log">
+                    <div class="emoji-picker-container" id="emojiPickerContainer">
+                        <emoji-picker id="emoji-picker" aria-label="Emoji picker" class="light"></emoji-picker>
+                    </div>
+                </div>
+                <div class="input-group">
+                <div class="dropup">
+                    <button class="btn btn-secondary" type="button" id="emojiButton" aria-label="Emoji picker">
+                    😊
+                    </button>
+                </div>
+                <input id="chat-message-input" type="text" class="form-control" placeholder="Type your message here..." aria-label="Chat message input">
+                <button id="chat-message-submit" class="btn btn-primary" aria-label="Send message">Send</button>
+                </div>
+            </div>
+            </div>
+        </div>
+<!-- LIVECHAT -->
+
     </div>
   </div>
 </body>
