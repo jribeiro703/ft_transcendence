@@ -61,7 +61,7 @@ async function isAccessTokenRefreshed() {
 	const responseObject = await fetchData("/user/login/token-refresh/")
 	if (responseObject.status === 200) {
 		console.log("isAccessTokenRefreshed(): get new access token successfully");
-		localStorage.setItem('access_token', data.access_token);
+		localStorage.setItem('access_token', responseObject.data.access_token);
 		return true;
 	}
 	return false;

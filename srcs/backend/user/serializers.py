@@ -81,7 +81,7 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 			elif instance.check_password(validated_data['new_password']):
 				raise serializers.ValidationError({"message": "Your new password is the same as the existing password."})
 			instance.set_password(validated_data['new_password'])
-			success_messages.append({"new_password": "Password changed successfully !"})
+			success_messages["new_password"] = "Password changed successfully !"
 
 		if 'new_email' in validated_data and validated_data['new_email'] is not None:
 			if User.objects.filter(email=validated_data['new_email'], is_active=True).exists():
@@ -95,7 +95,7 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 					'emails/mail_changed.txt',
 					'emails/mail_changed.html'
 					)
-				success_messages.append({"new_email": "A confirmation email has been sent to your new email address."})
+				success_messages["new_email"] = "A confirmation email has been sent to your new email address."
 			except Exception as e:
 				raise exceptions.APIException({"message": "Failed to send confirmation mail to the new email address."})
 		
@@ -103,13 +103,13 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 			try:
 				new_f = User.objects.get(username=validated_data['new_friend'])
 				if instance.friends.filter(username=new_f.username).exists():
-					success_messages.append({"friends": f"{new_f.username} is already in your actual friends list"})
+					success_messages["friends"] = f"{new_f.username} is already in your actual friends list"
 				else:
 					if not FriendRequest.objects.filter(sender=instance, receiver=new_f).exists():
 						FriendRequest.objects.create(sender=instance, receiver=new_f)
-						success_messages.append({"friends": f"Friend request sent to {new_f.username} successfully."})
+						success_messages["friends"] = f"Friend request sent to {new_f.username} successfully."
 					else:
-						success_messages.append({"friends": f"You have already sent a friend request to {new_f.username}."})
+						success_messages["friends"] = f"You have already sent a friend request to {new_f.username}."
 			except User.DoesNotExist:
 				raise serializers.ValidationError({"message": f"{validated_data['new_friend']} doesn't exist"})
 		
@@ -119,7 +119,7 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 		for attr, value in filtered_data.items():
 			setattr(instance, attr, value)
 
-		success_messages.append({"other": "Update successfully"})
+		success_messages["other"] = "Update successfully"
 
 		instance.save()
 		return instance, success_messages

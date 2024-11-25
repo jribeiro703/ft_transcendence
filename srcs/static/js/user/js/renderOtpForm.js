@@ -12,7 +12,8 @@ export function renderOtpForm(url, msg) {
             <button type="submit">Submit</button>
         </form>
     `;
-
+    window.history.pushState({ page: "otpForm" }, 'OtpForm', '#otpForm');
+    
     document.getElementById('otpForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const otpCode = document.getElementById('otpCode').value;
@@ -23,6 +24,5 @@ export function renderOtpForm(url, msg) {
             localStorage.setItem('access_token', responseObject.data.access_token);
         }
         box.innerHTML = `<p>${responseObject.data.message}</p>`;
-        window.history.pushState({ page: "otpForm" }, 'OtpForm', '#otpForm');
     });
 }
