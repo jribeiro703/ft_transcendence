@@ -3,17 +3,20 @@
 // The UI is updated to reflect success or failure.
 export const createTournament = async () => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				start_date: new Date().toISOString(),
-				max_score: 100,
-				status: 'UPCOMING',
-			}),
-		});
+		const payload = {
+			start_date: new Date().toISOString(),
+			max_score: 100,
+			status: 'UPCOMING'
+		}
+		const endpoint = 'https://localhost:8081/tournament/'
+		const response = await fetch(endpoint,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(payload),
+			});
 
 		if (response.ok) {
 			// Tournament successfully created
@@ -102,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	console.log('DOM fully loaded and parsed');
 
 	// Attach a click event listener to the parent element that exists initially
-	document.getElementById('mainContent').addEventListener('click', (event) => {
+	document.getElementById('mainContent').	('click', (event) => {
 		// Check if the clicked element is the "Create Tournament" button
 		if (event.target && event.target.id === 'createTournamentBtn') {
 			console.log('Create Tournament button clicked');
