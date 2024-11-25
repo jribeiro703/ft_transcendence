@@ -3,6 +3,13 @@ import { renderAuthPage } from "./auth.js"
 import { displayUserChoice } from "./user.js"
 import { isAuthenticated, alertUserToLogin } from "./utils.js";
 
+import { showTournamentView } from "./tournament/tournamentPage.js";
+// import { showRegistration } from "./tournament/stages/registration.js";
+// import { showBracketSetup } from "./tournament/stages/bracketSetup.js";
+// import { showRound1 } from "./tournament/stages/round1.js";
+// import { showRound2 } from "./tournament/stages/round2.js";
+// import { showFinals } from "./tournament/stages/finals.js";
+
 function router() {
 	const box = document.getElementById('mainContent');
 	const hash = window.location.hash;
@@ -22,6 +29,24 @@ function router() {
 				alertUserToLogin();
 				renderAuthPage();
 			}
+			break;
+		case '#tournament':
+			showTournamentView();
+			break;
+		case '#tournament/registration':
+			showRegistration();
+			break;
+		case '#tournament/bracketSetup':
+			showBracketSetup();
+			break;
+		case '#tournament/round1':
+			showRound1();
+			break;
+		case '#tournament/round2':
+			showRound2();
+			break;
+		case '#tournament/finals':
+			showFinals();
 			break;
 		default:
 			renderHomePage();
@@ -45,6 +70,24 @@ window.addEventListener('popstate', (event) => {
 				break;
 			case 'user':
 				renderUserPage();
+				break;
+			case 'tournament':
+				showTournamentView();
+				break;
+			case 'tournament/registration':
+				showRegistration();
+				break;
+			case 'tournament/bracketSetup':
+				showBracketSetup();
+				break;
+			case 'tournament/round1':
+				showRound1();
+				break;
+			case 'tournament/round2':
+				showRound2();
+				break;
+			case 'tournament/finals':
+				showFinals();
 				break;
 			default:
 				renderHomePage();
