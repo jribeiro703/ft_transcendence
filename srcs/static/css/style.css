@@ -437,8 +437,14 @@ button:disabled
     resize: none;
     font-family: 'Courier New', Courier, monospace; /* Fixed-width font */
     white-space: pre-wrap; /* Preserve whitespace */
+	height: 100%;
+	overflow-y: scroll;
 }
 
 .btn {
 	border-radius: 0 !important;
+}
+
+#livechatView {
+	height: 80vh;
 }
