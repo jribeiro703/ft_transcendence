@@ -1,8 +1,14 @@
+:root {
+    --background-color: #0a1730;
+    --text-color: #fefcff;
+    --primary-color: #1f2e4d;
+    --secondary-color: #455f78;
+    --highlight-color: #6DC7C1;
+}
+
 body
 {
-	background-color: #455F78;
-	color: #1A1A40;
-	margin: 0;
+	background: var(--primary-color);
 }
 
 p
@@ -182,12 +188,12 @@ p
 #playGameBtn, #btn1, #btn2, #btn3
 {
 	background-color: #1F2E4D;
-	color: #6DC1C1;
+	color: var(--text-color);
 }
 
 #playGameBtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
 {
-	color: #1F2E4D;
+	color: var(--text-color);
 	background-color: #6DC7C1;
 	border-color: #000000;
 }
@@ -200,8 +206,14 @@ p
 }
 
 .btn {
+	border-radius: 0 !important;
 	background-color: #1F2E4D;
-	color: #6DC1C1;
+	color: var(--text-color);
+}
+
+.btn:hover {
+	background-color: var(--secondary-color);
+	color: var(--highlight-color);
 }
 
 /* -------------------------- Game Play View ------------------------ */
@@ -444,10 +456,9 @@ button:disabled
 	height: calc(100% - 56px);
 	border-bottom: none;
 	border-radius: 5px 5px 0px 0px;
-}
-
-.btn {
-	border-radius: 0 !important;
+	border-color: var(--highlight-color);
+	background-color: var(--background-color);
+	color: var(--text-color)
 }
 
 /* 100vh - size of navbar */
@@ -456,35 +467,77 @@ button:disabled
 	height: 100vh;
 }
 
+.card {
+	border-color: var(--highlight-color);
+	border-radius: 0;
+}
+
 .card-body {
+	background-color: var(--background-color);
 	padding: 15px;
 	display: flex;
 	flex-direction: column;
 	height: calc(100% - 56px);
+	border-color: var(--highlight-color);
+}
+
+.card-game {
+	background-color: var(--background-color);
+}
+
+.card-header:first-child {
+	border-radius: unset;
+}
+
+.card-header {
+	background-color: var(--secondary-color);
+	color: var(--text-color);
+	border-color: var(--highlight-color);
 }
 
 .input-group {
 	margin-top: auto;
 }
 
+#chat-message-input {
+	background-color: var(--secondary-color);
+	color: var(--text-color);
+}
+
+/* Placeholder color */
+#chat-message-input::placeholder {
+	color: var(--text-color);
+}
+
 #chat-message-input:focus {
 	outline: none;
 	box-shadow: none;
-	border-color: #dee2e6;
-	background-color: #dee2e6;
+	border-color: var(--highlight-color);
+	background-color: var(--background-color);
 	z-index: 1002;
 }
 
 #chat-message-submit {
 	z-index: 1000;
-	border-color: #dee2e6;
+	border-color: var(--highlight-color);
 }
 
 emoji-picker {
 	--emoji-padding: 0.25rem;
-	height: 300px;
-	width: 300px;
+	height: 250px;
+	width: 256px;
 	--border-radius: 5px 5px 0px 0px;
+	--border-color: var(--highlight-color);
+	--background: var(--primary-color);
+	--border-color: var(--highlight-color);
+	--indicator-color: var(--highlight-color);
+	--input-border-color: var(--highlight-color);
+	--input-font-color: var(--text-color);
+	--input-placeholder-color: var(--text-color);
+	--outline-color: var(--text-color);
+	--category-font-color: var(--text-color);
+	--button-active-background: var(--secondary-color);
+	--button-hover-background: var(--highlight-color);
 }
 
 .emoji-picker-container {
@@ -497,7 +550,8 @@ emoji-picker {
 
 #emojiButton {
 	z-index: 1001;
-	border-color: #dee2e6;
+	/* border-color: #dee2e6; */
+	border-color: var(--highlight-color);
 }
 
 @media (max-width: 576px) { /* Small devices (sm) */
@@ -505,3 +559,4 @@ emoji-picker {
 		min-height: 300px; /* Adjust the height as needed */
 	}
 }
+

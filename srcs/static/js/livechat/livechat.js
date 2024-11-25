@@ -9,7 +9,7 @@ const clientIdColors = {};
 function getRandomColor() {
     const hue = Math.floor(Math.random() * 360); // Random hue
     const saturation = 100; // Full saturation
-    const lightness = 30; // 50% lightness for good contrast
+    const lightness = 50; // 50% lightness for good contrast
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
@@ -88,14 +88,14 @@ const emojiPickerContainer = document.querySelector('#emojiPickerContainer');
 function adjustEmojiPickerHeight() {
     const chatLog = document.querySelector('#chat-log');
     const chatLogHeight = chatLog.clientHeight;
-    const emojiPickerHeight = Math.min(chatLogHeight, 300); // Set max height to 300px
+    const emojiPickerHeight = Math.min(chatLogHeight, 250); // Set max height to 300px
     emojiPicker.style.height = `${emojiPickerHeight}px`;
 }
 
 function adjustEmojiPickerWidth() {
     const chatLog = document.querySelector('#chat-log');
     const chatLogWidth = chatLog.clientWidth;
-    const emojiPickerWidth = Math.min(chatLogWidth, 300); // Set max width to 300px
+    const emojiPickerWidth = Math.min(chatLogWidth, 250); // Set max width to 300px
     emojiPicker.style.height = `${emojiPickerWidth}px`;
 }
 

@@ -26,15 +26,17 @@
 <!-- GAME -->
         <div class="col-sm-12 col-lg-8 mb-3 h-100 min-height-sm">
             <div class="card h-100">
-                <div class="container-fluid my-auto">
-                    <div class="row w-25 mx-auto">
-                        <img class="img-fluid pb-3" src="{% static 'css/images/pong-game-card.png' %}" alt="Pong Game">
-                    </div> 
-                    <div class="row w-50 mx-auto">
-                        <div type="button" class="btn mb-3">Play</div>
-                    </div>
-                    <div class="row w-50 mx-auto">
-                        <div type="button" class="btn">Leaderboard</div>
+                <div class="card-body">
+                    <div class="container-fluid my-auto">
+                        <div class="row w-25 mx-auto">
+                            <img class="img-fluid pb-3" src="{% static 'css/images/pong-game-card.png' %}" alt="Pong Game">
+                        </div> 
+                        <div class="row w-50 mx-auto">
+                            <div type="button" class="btn mb-3">Play</div>
+                        </div>
+                        <div class="row w-50 mx-auto">
+                            <div type="button" class="btn">Leaderboard</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -44,13 +46,13 @@
 <!-- LIVECHAT -->
         <div class="col-sm-12 col-lg-4 h-100 min-height-sm">
             <div class="card h-100 mb-3">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header">
                     <h4 class="mb-0">Live Chat</h4>
                 </div>
                 <div class="card-body">
                     <div id="chat-log" class="form-control" aria-label="Chat log">
                         <div class="emoji-picker-container" id="emojiPickerContainer">
-                            <emoji-picker id="emoji-picker" aria-label="Emoji picker" class="light"></emoji-picker>
+                            <emoji-picker id="emoji-picker" aria-label="Emoji picker"></emoji-picker>
                         </div>
                     </div>
                     <div class="input-group">
