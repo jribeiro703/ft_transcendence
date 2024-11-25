@@ -47,9 +47,21 @@ const gameVar =
 
 // ----------------------------Settings-------------------------
 
-	powerUpX: null,
-	powerUpY: null,
-	powerUpActive: false,
+	settingsChanged: false,
+	powerUpSpeed: 2,
+
+	powerUpX1: null,
+	powerUpY1: null,
+
+	powerUpX2: null,
+	powerUpY2: null,
+
+	powerUp1Active: false,
+	powerUp2Active: false,
+
+	powerUp1OnScreen: false,
+	powerUp2OnScreen: false,
+
 	powerUpEnable: false,
 	powerUpDuration: 5000,
 
@@ -79,6 +91,10 @@ const gameVar =
 	matchOver: false,
 	liveMatch: false,
 	animationFrame: null,
+	finishGame: false,
+	localGame: false,
+	football: false,
+
 
 // --------------------------------------AI-----------------------------
 
@@ -91,6 +107,7 @@ const gameVar =
 
 // --------------------------------Ball Data----------------------------
 
+	ballRadius: 8, 
 	x: null,
 	y: null,
 	dx: null,
@@ -117,6 +134,7 @@ const gameVar =
 
 // ------------------------------Button---------------------------
 
+	gamerView: null,
 	startGameBtn: null,
 	quickGameBtn: null,
 	playsoloGameBtn: null,

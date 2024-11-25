@@ -1,11 +1,7 @@
 import gameVar from "./var.js";
-import { BALL_RADIUS } from "./const.js";
 import { WIN_SCORE, GAP_SCORE,  } from "./const.js";
-import { draw, initDraw, initializeBall } from "./draw.js";
-import { aiServeBall, manageAi } from "./ai.js";
-import { createPowerUp } from "./powerUp.js";
-import { sendBallData } from "./network.js";
-import { checkball } from "./manage.js";
+import { initializeBall } from "./draw.js";
+import { aiServeBall } from "./ai.js";
 
 export function resetGame()
 {
@@ -86,18 +82,22 @@ export function resetBall(winner)
 		else if (gameVar.liveMatch)
 			gameVar.currenServer = (gameVar.currenServer == 'player') ? 'player2' : 'player';
 	}
+	console.log('initball in resetball');
 	initializeBall();
 	gameVar.dx = 0;
 	gameVar.dy = 0;
-	checkball();
+	if (gameVar.liveMatch)
+		checkball();
 	gameVar.gameStart = false;
 	gameVar.aiScoreElement.textContent = gameVar.aiScore;
 	gameVar.playerScoreElement.textContent = gameVar.playerScore;
+	console.log("server: ", gameVar.currenServer);
 	if (gameVar.currenServer == 'ai')
 	{
 		gameVar.aiServe = true;
 		aiServeBall();
 	}
+	console.log("finish resetball");
 }
 
 // export function updateBallPosition()

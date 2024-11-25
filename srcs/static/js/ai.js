@@ -1,8 +1,5 @@
 import gameVar from "./var.js";
-import { PADDLE_SPEED, AI_UPDATE_INTERVAL, PADDLE_THRESHOLD, BALL_RADIUS, CENTER_POSITION } from './const.js';
-import { resetBall } from "./reset.js";
-import { checkCollisionWithWalls } from './manage.js'
-import { keyDownHandler, keyUpHandler, startBallAi } from "./input.js";
+import { PADDLE_SPEED, AI_UPDATE_INTERVAL, PADDLE_THRESHOLD } from './const.js';
 import { showGameView, rematchView } from "./gameView.js";
 
 export function aiServeBall()
@@ -124,58 +121,17 @@ function predictBallPos(gameVar)
 	return (futurePtsList);
 }
 
-export function manageCollisionAi()
-{
-		gameVar.x += gameVar.dx;
-		gameVar.y += gameVar.dy;
-		if(gameVar.y + gameVar.dy > gameVar.canvasH - BALL_RADIUS || gameVar.y + gameVar.dy < BALL_RADIUS)
-		{
-			gameVar.dy = -gameVar.dy;
-		}
-		if (gameVar.customMap == true)
-			checkCollisionWithWalls();
-		if(gameVar.x - BALL_RADIUS < gameVar.playerPaddleWidth &&
-			gameVar.y > gameVar.playerPaddleY &&
-			gameVar.y < gameVar.playerPaddleY + gameVar.playerPaddleHeight)
-		{
-			gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS;
-			let hitpos = (gameVar.y - gameVar.playerPaddleY) / gameVar.playerPaddleHeight;
-			let angle = (hitpos - 0.5) * Math.PI / 2;
-			gameVar.dx = (Math.cos(angle) * Math.abs(gameVar.dx) + 1);
-			gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.init_dy);
-			if (gameVar.dx > gameVar.init_dx + 1)
-				gameVar.dx -= 1;
-		}
-		else if (gameVar.x + BALL_RADIUS > gameVar.canvasW - gameVar.aiPaddleWidth &&
-			gameVar.y > gameVar.aiPaddleY &&
-			gameVar.y < gameVar.aiPaddleY + gameVar.aiPaddleHeight)
-		{
-			gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - BALL_RADIUS;
-			let hitpos = (gameVar.y - gameVar.aiPaddleY) / gameVar.aiPaddleHeight;
-			let angle = (hitpos - 0.5) * Math.PI / 2;
-			gameVar.dx = -(Math.cos(angle) * Math.abs(gameVar.dx) + 1);
-			gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.init_dy);
-		}
-		if (gameVar.x < 0)
-		{
-			resetBall('ai');
-		}
-		else if (gameVar.x > gameVar.canvasW)
-		{
-			resetBall('player');
-		}
-}
 
 export function manageServerAi()
 {
 	if (gameVar.currenServer == 'player')
 	{
-		gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS;
+		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
 		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
 	}
 	else
 	{
-		gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - BALL_RADIUS;
+		gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - gameVar.ballRadius;
 		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2;
 	}
 }
@@ -197,9 +153,9 @@ export function manageMoveAi()
 export function initEventListenerAi()
 {
 
-	document.addEventListener("keydown", keyDownHandler, false);
-	document.addEventListener("keyup", keyUpHandler, false);
-	document.addEventListener("keydown", startBallAi, false);
+	// document.addEventListener("keydown", keyDownHandler, false);
+	// document.addEventListener("keyup", keyUpHandler, false);
+	// document.addEventListener("keydown", startBallAi, false);
 
 	gameVar.quickGameBtn.addEventListener('click', showGameView);
 	gameVar.rematchBtn.addEventListener('click', rematchView);
