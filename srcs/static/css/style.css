@@ -450,8 +450,10 @@ button:disabled
 	border-radius: 0 !important;
 }
 
+/* 100vh - size of navbar */
+	/* height: calc(100vh - 10px); */
 #viewportContainer {
-	height: calc(100vh - 10px);
+	height: 100vh;
 }
 
 .card-body {
@@ -468,7 +470,14 @@ button:disabled
 #chat-message-input:focus {
 	outline: none;
 	box-shadow: none;
-	border-color: #6c757d;
+	border-color: #dee2e6;
+	background-color: #dee2e6;
+	z-index: 1002;
+}
+
+#chat-message-submit {
+	z-index: 1000;
+	border-color: #dee2e6;
 }
 
 emoji-picker {
@@ -488,6 +497,7 @@ emoji-picker {
 
 #emojiButton {
 	z-index: 1001;
+	border-color: #dee2e6;
 }
 
 @media (max-width: 576px) { /* Small devices (sm) */

@@ -92,9 +92,17 @@ function adjustEmojiPickerHeight() {
     emojiPicker.style.height = `${emojiPickerHeight}px`;
 }
 
+function adjustEmojiPickerWidth() {
+    const chatLog = document.querySelector('#chat-log');
+    const chatLogWidth = chatLog.clientWidth;
+    const emojiPickerWidth = Math.min(chatLogWidth, 300); // Set max width to 300px
+    emojiPicker.style.height = `${emojiPickerWidth}px`;
+}
+
 // Show emojiPickerContainer
 emojiButton.addEventListener('click', () => {
 	adjustEmojiPickerHeight();
+	adjustEmojiPickerWidth();
     emojiPickerContainer.style.display = emojiPickerContainer.style.display == 'block' ? 'none' : 'block';
 });
 
