@@ -13,32 +13,24 @@
 </head>
 
 <body>
-  <div id="livechatView" class="container mt-5">
-    <div class="card" style="width: 80%; height: 100%">
+  <div id="livechatView" class="container pt-5 pb-5">
+    <div class="card" style="height: 100%; width: 80%;">
       <div class="card-header bg-primary text-white">
         <h4 class="mb-0">Live Chat</h4>
       </div>
-      <div class="card-body" style="height: calc(100% - 56px);">
-        <div class="row" style="height: calc(100% - 56px);">
-          <div class="col-12" style="height: 100%;">
-            <div id="chat-log" class="form-control"></div>
-          </div>
-        </div>
-        <div class="row mt-3">
-          <div class="col-12">
-            <div class="input-group">
-              <div class="dropup">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="emojiDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                  😊
-                </button>
-                <div class="dropdown-menu p-2" aria-labelledby="emojiDropdown">
-                  <emoji-picker id="emoji-picker"></emoji-picker>
-                </div>
-              </div>
-              <input id="chat-message-input" type="text" class="form-control" placeholder="Type your message here...">
-              <button id="chat-message-submit" class="btn btn-primary">Send</button>
+      <div class="card-body">
+        <div id="chat-log" class="form-control" aria-label="Chat log"></div>
+        <div class="input-group">
+          <div class="dropup">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="emojiDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Emoji picker">
+              😊
+            </button>
+            <div class="dropdown-menu p-2" aria-labelledby="emojiDropdown">
+              <emoji-picker id="emoji-picker" aria-label="Emoji picker"></emoji-picker>
             </div>
           </div>
+          <input id="chat-message-input" type="text" class="form-control" placeholder="Type your message here..." aria-label="Chat message input">
+          <button id="chat-message-submit" class="btn btn-primary" aria-label="Send message">Send</button>
         </div>
       </div>
     </div>
