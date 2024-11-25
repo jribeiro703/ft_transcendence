@@ -18,6 +18,7 @@ function createHomeContent() {
 			<button id="btn-Leaderboard" class="btn custom-btn mb-4">Leaderboard</button>
 		</div>
 	`;
+	history.pushState({ page: "home" }, "Home", "#home");
 }
 
 export async function renderHomePage() {

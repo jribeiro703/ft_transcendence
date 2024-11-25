@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Activation</title>
+</head>
+<body>
+    <h1>Account Activation</h1>
+	<div id="activation-status">
+    	<p class="status">Processing your activation...</p>
+	</div>
+    <script>
+		
+		function getCSRFToken() {
+			const cookies = document.cookie.split(';');
+			const csrftoken = cookies.find(cookie => cookie.trim().startsWith("csrftoken="));
+			if (!csrftoken)
+				console.log("getCSRFToken(): token = null");
+			return csrftoken ? csrftoken.split('=')[1] : '';
+		}
+
+		async function fetchData(endpoint, method = 'GET', body = null, isFormData = false) {
+    		const url = `${endpoint}`;
+    		const options = {
+    		    method: method,
+    		    headers: {
+    		        'X-CSRFToken': getCSRFToken(),
+    		    },
+    		    credentials: 'include'
+    		};
+
+    		if (body) {
+    		    if (isFormData) {
+    		        options.body = body;
+    		    } else {
+    		        options.headers['Content-Type'] = 'application/json';
+    		        options.body = JSON.stringify(body);
+    		    }
+    		}
+
+			try {
+				const response = await fetch(url, options);
+				console.log("response of fetch: ", response);
+				const responseObject = {
+					data: null,
+					status: response.status,
+				};
+				try {
+					responseObject.data = await response.json();
+					console.log("responseObject : ", responseObject);
+				}
+				catch (error) {
+					console.error(`fetchData(): responseObject: ${error}`);	
+				}
+				return responseObject;
+			}
+			catch (error) {
+				console.error(`fetchData(): response of fetch: ${error}`);	
+			}
+			return responseObject;
+		}
+
+        async function activateAccount() {
+            const url = window.location.href;
+            const box = document.getElementById("activation-status");
+			const responseObject = await fetchData(url);
+			if (responseObject.data.message)
+				box.innerHTML = `<p>${responseObject.data.message}</p>`
+			else
+				box.innerHTML = `<p>Activation failed</p>`
+        }
+
+        activateAccount();
+    </script>
+</body>
+</html>

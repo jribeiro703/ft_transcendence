@@ -1,4 +1,5 @@
 import { fetchData } from "../../utils.js";
+import { renderPage } from "../../historyManager.js"
 
 export function renderOtpForm(url, msg) {
     const box = document.getElementById('mainContent');
@@ -12,7 +13,7 @@ export function renderOtpForm(url, msg) {
             <button type="submit">Submit</button>
         </form>
     `;
-    window.history.pushState({ page: "otpForm" }, 'OtpForm', '#otpForm');
+    // window.history.pushState({ page: "otpForm" }, 'OtpForm', '#otpForm');
     
     document.getElementById('otpForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -22,7 +23,11 @@ export function renderOtpForm(url, msg) {
         if (responseObject.data.access_token) {
             console.log("Get access token successfully")
             localStorage.setItem('access_token', responseObject.data.access_token);
+            alert(responseObject.data.message);
+            renderPage("home");
+        } else {
+            alert(responseObject.data.message);
         }
-        box.innerHTML = `<p>${responseObject.data.message}</p>`;
+        // box.innerHTML = `<p>${responseObject.data.message}</p>`;
     });
 }
