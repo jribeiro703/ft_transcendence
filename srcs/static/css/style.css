@@ -199,6 +199,11 @@ p
     border-color: #000000;
 }
 
+.btn {
+	background-color: #1F2E4D;
+	color: #6DC1C1;
+}
+
 /* -------------------------- Game Play View ------------------------ */
 
 #gameplayView
