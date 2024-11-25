@@ -1,6 +1,4 @@
 import { alertUserToLogin, isAuthenticated } from "./utils.js"
-import { showTournamentView } from "../tournament/tournamentPage.js"
-
 
 function createHomeContent() {
 	const box = document.getElementById('mainContent');
@@ -40,7 +38,6 @@ export function renderHomePage() {
 		// if (!isAuthenticated()) { alertUserToLogin(); };
 		history.pushState({ page: 'tournament' }, 'Tournament', '?page=tournament');
 		console.log('Tournament button clicked');
-		// playerListner();
 		showTournamentView();
 	});
 
