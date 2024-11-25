@@ -1,4 +1,4 @@
-import { fetchData } from "../../utils.js";
+import { fetchData, showToast } from "../../utils.js";
 
 export function renderRegisterForm() {
 	const box = document.getElementById('mainContent');
