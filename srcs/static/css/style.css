@@ -450,7 +450,7 @@ button:disabled
 	border-radius: 0 !important;
 }
 
-#livechatView {
+#viewportContainer {
 	height: calc(100vh - 10px);
 }
 
