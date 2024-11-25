@@ -20,6 +20,7 @@ function createUserContent() {
             <button id= btn-Logout class="btn custom-btn mb-4">Logout</button>
         </div>
     `;
+	history.pushState({ page: "user" }, "User", "#user");
 }
 
 export function renderUserPage() {

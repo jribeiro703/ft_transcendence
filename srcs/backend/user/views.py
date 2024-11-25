@@ -1,5 +1,8 @@
 from django.urls import reverse
 from django.db.models import Q
+from django.http import HttpResponse
+from django.views import View
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.utils import timezone
@@ -45,37 +48,84 @@ class CreateUserView(CreateAPIView):
 		except exceptions.APIException as e:
 			return Response(e.detail, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class ActivateLinkView(APIView):
-	permission_classes = [AllowAny]
+# class ActivateLinkView(APIView):
+# 	permission_classes = [AllowAny]
 
+# 	def get(self, request, uidb64, token, action):
+# 		try:
+# 			uid = force_str(urlsafe_base64_decode(uidb64))
+# 			user = get_object_or_404(User, pk=uid)
+
+# 		except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+# 			return Response({"message": "Activation link is invalid."}, status=status.HTTP_400_BAD_REQUEST)
+            
+# 		if user is not None and default_token_generator.check_token(user, token):
+# 			expiration_duration = timedelta(hours=24)
+# 			if timezone.now() - user.email_sent_at > expiration_duration:
+# 				user.delete()
+# 				return Response({"message": "Activation link has expired."}, status=status.HTTP_410_GONE)
+			
+# 			if action == 'verify_email' and user.new_email:
+# 				user.email = user.new_email
+# 				user.new_email = None
+# 				user.save()
+# 				return Response({"message": "Your email address has been changed successfully."}, status=status.HTTP_200_OK)
+
+# 			if action == 'activate_account':
+# 				if user.is_active:
+# 					return Response({"message": "Your account is already active."}, status=status.HTTP_200_OK)
+# 				user.is_active = True
+# 				user.save()
+# 				return Response({"message": "Your account has been activated successfully!"}, status=status.HTTP_200_OK)
+			
+# 			return Response({"message": "An unknown error occurred."}, status=status.HTTP_400_BAD_REQUEST)
+
+class ActivateLinkView(View):
+	permission_classes = [AllowAny]
+	
 	def get(self, request, uidb64, token, action):
 		try:
 			uid = force_str(urlsafe_base64_decode(uidb64))
 			user = get_object_or_404(User, pk=uid)
-
 		except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-			return Response({"message": "Activation link is invalid."}, status=status.HTTP_400_BAD_REQUEST)
-            
-		if user is not None and default_token_generator.check_token(user, token):
-			expiration_duration = timedelta(hours=24)
-			if timezone.now() - user.email_sent_at > expiration_duration:
-				user.delete()
-				return Response({"message": "Activation link has expired."}, status=status.HTTP_410_GONE)
-			
-			if action == 'verify_email' and user.new_email:
-				user.email = user.new_email
-				user.new_email = None
-				user.save()
-				return Response({"message": "Your email address has been changed successfully."}, status=status.HTTP_200_OK)
+			return render(request, 'activation_failed.html', {
+			    'message': "Activation link is invalid."
+			})
 
-			if action == 'activate_account':
-				if user.is_active:
-					return Response({"message": "Your account is already active."}, status=status.HTTP_200_OK)
-				user.is_active = True
-				user.save()
-				return Response({"message": "Your account has been activated successfully!"}, status=status.HTTP_200_OK)
-			
-			return Response({"message": "An unknown error occurred."}, status=status.HTTP_400_BAD_REQUEST)
+		if not default_token_generator.check_token(user, token):
+			return render(request, 'activation_failed.html', {
+				'message': "Activation link is invalid or has expired."
+			})
+
+		expiration_duration = timedelta(hours=24)
+		if timezone.now() - user.email_sent_at > expiration_duration:
+			user.delete()
+			return render(request, 'activation_failed.html', {
+				'message': "Activation link has expired."
+			})
+
+		if action == 'verify_email' and user.new_email:
+			user.email = user.new_email
+			user.new_email = None
+			user.save()
+			return render(request, 'activation_success.html', {
+				'message': "Your email address has been changed successfully."
+			})
+
+		if action == 'activate_account':
+			if user.is_active:
+				return render(request, 'activation_success.html', {
+					'message': "Your account is already active."
+				})
+			user.is_active = True
+			user.save()
+			return render(request, 'activation_success.html', {
+				'message': "Your account has been activated successfully!"
+			})
+
+		return render(request, 'activation_failed.html', {
+			'message': "An unknown error occurred."
+		})
 
 
 class UserLoginView(APIView):

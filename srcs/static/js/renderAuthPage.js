@@ -8,7 +8,9 @@ function createAuthContent() {
 		<button id="btn-Login" class="btn custom-btn mb-4">Login</button>
         <button id="btn-Register" class="btn custom-btn mb-4">Register</button>
         <button id="btn-Login42" class="btn custom-btn mb-4">42 Login</button>
-		</div>`
+		</div>
+		`;
+	history.pushState({ page: "auth" }, "Auth", "#auth");
 }
 
 export function renderAuthPage() {

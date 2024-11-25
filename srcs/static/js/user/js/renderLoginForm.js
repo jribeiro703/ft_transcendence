@@ -21,6 +21,7 @@ export function renderLoginForm() {
             <button type="submit">Submit</button>
         </form>
     `;
+	history.pushState({page:'login'}, 'Login', '#login');
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -28,6 +29,13 @@ export function renderLoginForm() {
         const password = document.getElementById('password').value;
         const responseObject = await fetchData('/user/login/', 'POST', { username, password });
 
-        renderLoginResponse(responseObject, box);
+        if (responseObject.data.otp_verification_url)
+            renderOtpForm(escapeHTML(responseObject.data.otp_verification_url), responseObject.data.message);
+        else {
+            // box.innerHTML = `<p>${responseObject.data.message}</p>`;
+            alert(responseObject.data.message);
+            // window.history.pushState({ page: "loginResponse" }, "LoginResponse", '#loginResponse');
+        }
+        // renderLoginResponse(responseObject, box);
     });
 }
