@@ -9,10 +9,12 @@ export function showRound2() {
 			<!-- Add stage-specific content here -->
 		</div>
 	`;
+
 	// Add event listeners and other logic specific to Round 2
 	document.getElementById('startRound2Btn').addEventListener('click', () => {
 		alert('Round 2 started!');
 	});
+
 	document.getElementById('nextStageBtn').addEventListener('click', () => {
 		window.location.hash = '#tournament/finals';
 	});

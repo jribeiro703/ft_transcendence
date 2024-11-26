@@ -5,7 +5,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Tournament
+from tournament.models import Tournament
 from user.models import User
 
 class TournamentAnnouncementView(APIView):

@@ -6,13 +6,14 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
 from user.models import User
 from user.serializers import UserSerializer
 
-from ..models import Tournament
-from ..serializers import TournamentSerializer
+from tournament.models import Tournament
+from tournament.serializers import TournamentSerializer
 
 
 # ❶ TOURNAMENT CREATTION STAGE - Create Tournament
@@ -68,7 +69,6 @@ class FetchPlayersView(ListAPIView):
 	"""
 	queryset = User.objects.all()
 	serializer_class = UserSerializer
-
 
 class AddPlayersToTournamentView(APIView):
 	"""

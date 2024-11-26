@@ -9,10 +9,12 @@ export function showBracketSetup() {
 			<!-- Add stage-specific content here -->
 		</div>
 	`;
+
 	// Add event listeners and other logic specific to Bracket Setup
 	document.getElementById('setupBracketBtn').addEventListener('click', () => {
 		alert('Bracket set up successfully!');
 	});
+
 	document.getElementById('nextStageBtn').addEventListener('click', () => {
 		window.location.hash = '#tournament/round1';
 	});

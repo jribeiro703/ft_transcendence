@@ -33,7 +33,7 @@ export const createTournament = async () => {
 
 
 // Fetch participants and populate the list
-export const fetchParticipants = async () => {
+export const fetchPlayers = async () => {
 	try {
 		const response = await fetch('https://localhost:8081/players/', {
 			method: 'GET',
