@@ -17,7 +17,6 @@ export function waitingPlayer()
 {
 	const waitingINterval = setInterval(() =>
 	{
-		// if ()
 		if(!gameVar.gameReady)
 		{
 			gameVar.ctx.font = '40px Arial';
@@ -29,7 +28,6 @@ export function waitingPlayer()
 		}
 		else
 		{
-			// console.log("ready");
 			clearInterval(waitingINterval);
 			initializeBall();
 			draw2();
@@ -200,20 +198,53 @@ export function updateRoomList()
 		const joinBtn = roomItem.querySelector('.joinRoomBtn');
 		joinBtn.addEventListener('click', () =>
 		{
-			gameVar.noRoomsMessage.style.display = 'none';
-			gameVar.roomsContainer.style.display = 'none';
-			gameVar.roomView.style.display = 'none';
-			gameVar.createRoomBtn.style.display = 'none';
-			gameVar.refreshBtn.style.display = 'none';
-			gameVar.gameView.style.display = 'block';
-			console.log("roomName : ", room.name);
-			gameVar.playerIdx = 2;
-			gameVar.gameReady = true;
+			settingRoom();
 			joinRoom(room.name); 
 		});
 
 		gameVar.roomsContainer.appendChild(roomItem);
 	})
+}
+
+export function settingRoom()
+{
+	gameVar.playerIdx = 2;
+	gameVar.gameReady = true;
+
+	const mainContent = document.getElementById('mainContent');
+
+	mainContent.innerHTML = '';
+
+	const insertTo = document.createElement('div');
+
+	insertTo.innerHTML = `
+	<div id="gameView" style="display: none;">
+			<div id="scoreboard">SCORE</div>
+			<div id="scoreRow">
+				<span id="player">Player </span>
+				<span id="playerScore">0</span>
+				<span id="vs">VS</span>
+				<span id="aiScore">0</span>
+				<span id="ai">CPU</span>
+			</div>
+			<canvas id="myCanvas"></canvas>
+			<br><br>
+			<div class="button-container">
+				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+				<button id="quitGameBtn" style="display: none;">Quit Game</button>
+			</div>
+		</div>	
+	`;
+
+	mainContent.appendChild(insertTo);
+
+	gameVar.gameView = document.getElementById('gameView');
+	gameVar.gameView.style.display = 'block';
+	
+	var canvas = document.getElementById('myCanvas');
+	gameVar.ctx = canvas.getContext('2d');
+	canvas.width = gameVar.canvasW;
+	canvas.height = gameVar.canvasH;
 }
 
 
