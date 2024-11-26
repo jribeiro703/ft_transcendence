@@ -241,7 +241,7 @@ class UserSettingsView(RetrieveUpdateDestroyAPIView):
 	queryset = User.objects.all()
 	serializer_class = UserSettingsSerializer
 	authentication_classes = [JWTAuthentication]
-	
+
 	def patch(self, request, *args, **kwargs):
 		try:
 			instance, success_messages = self.get_serializer().update(self.get_object(), request.data)
@@ -257,7 +257,7 @@ class UserSettingsView(RetrieveUpdateDestroyAPIView):
 			token = RefreshToken(refresh_token)
 			token.blacklist()
 			response = Response({
-				"message": "Delete account successfully !",
+				"message": "Your account has been successfully deleted.",
 				"access_token": "",
 				}, status=status.HTTP_205_RESET_CONTENT)
 			response.delete_cookie('refresh_token')

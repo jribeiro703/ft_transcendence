@@ -11,7 +11,7 @@ class User(AbstractUser):
 	password = models.CharField("password", max_length=128, validators=[MinLengthValidator(8)])
 	otp_secret = models.CharField(max_length=32, blank=True, null=True)
 	alias = models.CharField("alias", max_length=30, unique=True, blank=True, null=True, validators=[MinLengthValidator(3)])
-	avatar = models.ImageField("avatar", upload_to='avatars/', default='images/default-avatar.jpg')
+	avatar = models.ImageField("avatar", upload_to='avatars/', default='default-avatar.jpg')
 	friends = models.ManyToManyField('self', related_name='friendship', symmetrical=False, blank=True, verbose_name="friends")
 	is_online = models.BooleanField(default=False)
 	

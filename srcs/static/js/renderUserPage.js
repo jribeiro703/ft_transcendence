@@ -42,8 +42,9 @@ export function renderUserPage() {
 	})
 	document.getElementById('btn-Logout').addEventListener('click', async(e) => {
 		e.preventDefault();
-		confirm("Are you sure to logout ?");
-
+		const confirmation = confirm("Are you sure to logout ?");
+		if (!confirmation)
+			return;
 		const box = document.getElementById('mainContent');
 		const { data, status } = await fetchData('/user/logout/', 'POST');
 		console.log(data, status);

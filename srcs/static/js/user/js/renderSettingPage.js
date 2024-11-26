@@ -1,169 +1,158 @@
-import { fetchData, escapeHTML, getIdFromJWT  } from "../../utils.js";
+import { fetchData, getIdFromJWT  } from "../../utils.js";
 
-function createSettingsPage() {
+async function createSettingsPage(pk) {
 	const box = document.getElementById("mainContent");
 	box.innerHTML = `
-		<div id="settings-page">
-        <h1>User Settings</h1>
-        <div id="user-info">
-            <img id="avatar" src="" alt="Avatar" class="avatar">
-            <p>Username: <span id="username"></span></p>
-            <p>Alias: <span id="alias"></span></p>
-            <p>Email: <span id="email"></span></p>
-            <button id="edit-btn">Edit</button>
-        </div>
-        
-        <div id="edit-form" style="display: none;">
-            <label for="new-avatar">New Avatar:</label>
-            <input type="file" id="new-avatar">
-            
-            <label for="new-alias">Alias:</label>
-            <input type="text" id="new-alias">
-            
-            <label for="new-email">Email:</label>
-            <input type="email" id="new-email">
-            
-            <label for="current-password">Current Password:</label>
-            <input type="password" id="current-password">
-            
-            <label for="new-password">New Password:</label>
-            <input type="password" id="new-password">
-            
-            <button id="save-btn">Save</button>
-        </div>
+		<div id="settings-container">
+			<div id="user-info">
+			    <img id="avatar" src="" alt="Avatar" class="avatar">
+				<button id="change-avatar-btn" class="change-btn">Change</button>
+			    <p>
+					Username: <span id="username"></span>
+				</p>
+			    <p>
+					Alias: <span id="alias"></span>
+					<button id="change-alias-btn" class="change-btn">Change</button>
+				</p>
+			    <p>
+					Email: <span id="email"></span>
+					<button id="change-email-btn" class="change-btn">Change</button>
+				</p>
+							    <p>
+					Password: <span id="password"></span>
+					<button id="change-password-btn" class="change-btn">Change</button>
+				</p>
+			</div>
 
-		<div id="friend-request">
-			<label for="new-friend-username">Add new friend:</label>
-			<input type="text" id="new-friend-username" placeholder="Friend's username" required>
-			<span id="error-message" style="color: red; display: none;">Please enter a valid username!</span>
-			<button id="send-friend-request-btn">Send</button>
-		</div>
-        
-        <button id="delete-account-btn">Delete Account</button>
-    </div>
+			<div id="friend-request">
+				<label for="new-friend-username">Add new friend:</label>
+				<input type="text" id="new-friend-username" placeholder="Friend's username" required>
+				<span id="error-message" style="color: red; display: none;">Please enter a valid username!</span>
+				<button type="submit" id="send-friend-request-btn">Send</button>
+			</div>
+			
+			<button id="delete-account-btn">Delete Account</button>
+    	</div>
 	`
+
+	const responseObject = await fetchData(`/user/settings/${pk}`);
+
+	if (responseObject.status === 200) {
+		const data = responseObject.data;
+		const avatarPAth = data.avatar.substring(data.avatar.indexOf('/media'));
+		document.getElementById("avatar").src = avatarPAth;
+		document.getElementById("username").textContent = data.username;
+		document.getElementById("alias").textContent = data.alias;
+		document.getElementById("email").textContent = data.email;
+	}
+	else {
+		console.log("Retrieve failed: ", responseObject.data);
+		box.innerHTML = `<p>Error: Can not open settings page</p>`
+	}
 }
 
-async function editSettings() {
-    const editForm = document.getElementById("edit-form");
-    const userInfo = document.getElementById("user-info");
-    const deleteAccountBtn = document.getElementById("delete-account-btn");
-	const friendRequest = document.getElementById("friend-request");
-
-    editForm.style.display = "block";
-    userInfo.style.display = "none";
-    deleteAccountBtn.style.display = "none";
-	friendRequest.style.display = "none";
-
-
-    // document.getElementById("new-alias").value = document.getElementById("alias").textContent || "";
-    // document.getElementById("new-email").value = document.getElementById("email").textContent || "";
-
-    document.getElementById("save-btn").addEventListener("click", async (e) => {
-        e.preventDefault();
-        const newAvatar = document.getElementById("new-avatar").files[0];
-        const newAlias = document.getElementById("new-alias").value;
-        const newEmail = document.getElementById("new-email").value;
-        const currentPassword = document.getElementById("current-password").value;
-        const newPassword = document.getElementById("new-password").value;
-
-        const formData = new FormData();
-        if (newAvatar) formData.append("avatar", newAvatar);
-        if (newAlias) formData.append("alias", newAlias);
-        if (newEmail) formData.append("new_email", newEmail);
-        if (currentPassword) formData.append("password", currentPassword);
-        if (newPassword) formData.append("new_password", newPassword);
-
-        const pk = getIdFromJWT();
-        const { data, status } = await fetchData(`/user/settings/${pk}/`, 'PATCH', formData, true);
-
-        if (status === 200) {
-			const avatarPath = data.avatar.replace(/^https?:\/\/[^/]+/, '');
-            document.getElementById("avatar").src = avatarPath;
-            document.getElementById("alias").textContent = data.alias || "No alias";
-            document.getElementById("email").textContent = data.email;
-
-            editForm.style.display = "none";
-            userInfo.style.display = "block";
-			deleteAccountBtn.style.display = "block";
-
-        } else {
-            alert("Erreur lors de la mise à jour des informations !");
-        }
-    });
-}
-
-async function deleteAccount() {
-    const confirmation = confirm("Are you sure you want to delete your account? This action is irreversible.");
-    if (!confirmation) {
-        return;
-    }
-
-	const pk = getIdFromJWT();
-
-    // Send the DELETE request to the API
-    const { data, status } = await fetchData(`/user/settings/${pk}/`, 'DELETE');
-
-    if (status === 205) {
-        alert("Your account has been successfully deleted.");
+async function deleteAccount(pk) {
+	const confirmation = confirm("Are you sure you want to delete your account? This action is irreversible.");
+	if (!confirmation) {
+		return;
+	}
+	const { responseObject } = await fetchData(`/user/settings/${pk}/`, 'DELETE');
+	alert(responseObject.data.message)
+	if (responseObject.status === 205) {
 		localStorage.setItem('access_token', "");
-        window.location.href = "/";
-    } else {
-        alert("Error deleting the account. Please try again.");
-        console.error("Error: ", data);
-    }
+		renderPage("home")
+	}
 }
 
 async function addNewFriend(pk) {
-    const newFriendUsername = document.getElementById("new-friend-username").value; // Prend le nom d'utilisateur du nouvel ami
+    const newFriendUsername = document.getElementById("new-friend-username").value;
 
     if (!newFriendUsername) {
         alert("Please enter a username to add as a friend.");
         return;
     }
-
-    const { data, status } = await fetchData(`/user/settings/${pk}/`, 'PATCH', {new_friend: `${newFriendUsername}`});
-    if (status === 200) {
-        alert(data.message);
-    } else {
-        alert(`Error: ${data.message || "Failed to send friend request."}`);
-    }
+    const { responseObject } = await fetchData(`/user/settings/${pk}/`, 'PATCH', {new_friend: `${newFriendUsername}`});
+	alert(responseObject.data.message);
 }
 
+function DialogObj(id, currentLabel, currentLabelId, newLabel, newLabelId) {
+	this.id = id;
+	this.currentLabel = currentLabel;
+	this.currentLabelId = currentLabelId;
+	this.newLabel = newLabel;
+	this.newLabelId = newLabelId;
+}
+
+function createADialog(dialog) {
+	const mainContent = document.getElementById("mainContent");
+	
+	const dialogElement = document.createElement('dialog');
+	dialogElement.id = dialog.id;
+	dialogElement.innerHTML = `
+		<form method="dialog">
+			<p>
+				<label>${dialog.currentLabel}</label>
+				<input type="text" id=${dialog.currentLabelId} readonly>
+			</p>
+			<p>
+				<label>${dialog.newLabel}</label>
+				<input type="url" id="${dialog.newLabelId}">
+			</p>
+			<menu>
+				<button id="cancel-btn">Cancel</button>
+				<button id="save-btn">Save</button>
+			</menu>
+		</form>
+	`
+	mainContent.appendChild(dialogElement);
+}
 
 export async function renderSettingsPage() {
 
-	const box = document.getElementById("mainContent");
 	const pk = getIdFromJWT();
-	
-	createSettingsPage();
-	
-	const { data,status } = await fetchData(`/user/settings/${pk}`);
+	await createSettingsPage(pk);
+	let dialog;
 
-	console.log(data, status);
+	// document.getElementById("change-avatar-btn").addEventListener("click", async (e) => {
+	// 	dialog = new DialogObj("avatar-dialog", "Current Avatar: ", "current-avatar", "New Avatar: ", "new-avatar");
+	// 	createADialog(dialog);
+	// 	document.getElementById("save-btn").addEventListener("click", async (e) => {
+	// 		const responseObject = await fetchData(`/user/settings/${pk}`, PATCH);
+	// 		console.log(responseObject.status);
+	// 	})
+	// 	document.getElementById("cancel-btn").addEventListener("click", (e) => {
+	// 		return ;
+	// 	})
+	// });
 
-	if (status === 200) {
-		const avatarPath = data.avatar.replace(/^https?:\/\/[^/]+/, '');
-		console.log(avatarPath);
+	// document.getElementById("change-email-btn").addEventListener("click", async (e) => {
+	// });
+	document.getElementById("change-alias-btn").addEventListener("click", async (e) => {
 
-		document.getElementById("avatar").src = avatarPath;
-		document.getElementById("username").textContent = data.username;
-		document.getElementById("alias").textContent = data.alias || "No alias";
-		document.getElementById("email").textContent = data.email;
-	}
-	else
-		console.log("Failed to get data");
+		dialog = new DialogObj("alias-dialog", "Current Alias: ", "current-alias", "New Alias: ", "new-alias");
+		createADialog(dialog);
+		document.getElementById(dialog.id).showModal();
+		const currentAliasValue = getElementById(dialog.currentLabelId).value;
+		const newAlias = document.getElementById(dialog.newLabelId).value;
 
-	document.getElementById("edit-btn").addEventListener("click", async (e) => {
-		editSettings();
+		document.getElementById("save-btn").addEventListener("click", async (e) => {
+			const responseObject = await fetchData(`/user/settings/${pk}`, PATCH, { alias: newAlias });
+			console.log(responseObject.status);
+		})
+		document.getElementById("cancel-btn").addEventListener("click", (e) => {
+			return ;
+		})
 	});
+	// document.getElementById("change-password-btn").addEventListener("click", async (e) => {
+	// });
+
 
 	document.getElementById("send-friend-request-btn").addEventListener("click", async (e) => {
 		addNewFriend(pk);
 	});
 
 	document.getElementById("delete-account-btn").addEventListener("click", async (e) => {
-		deleteAccount();
+		deleteAccount(pk);
 	});
 
 
