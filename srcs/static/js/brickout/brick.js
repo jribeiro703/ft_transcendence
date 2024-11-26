@@ -25,7 +25,7 @@ export function collisionDetectionB()
 					brickVar.dy = -brickVar.dy;
 					b.status = 0;
 					brickVar.score++;
-					if(brickVar.score == 1)
+					if(brickVar.score == brickVar.totalBrick)
 					{
 						brickVar.finishLevel = true;
 						brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);

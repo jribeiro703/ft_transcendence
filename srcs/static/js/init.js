@@ -3,17 +3,16 @@ import { showGameView, showGameplaySoloView, showGameplayMultiView, showDefaultV
 import { keyDownHandler, keyUpHandler, startBall, startBallAi } from "./input.js";
 import { addRoom, delRooms, createNewRoom, displayRoomInfo, joinRoom, updateRoomInfo, updateRoomList } from "./room.js";
 import { showSettingView } from "./setting.js";
+import { checkSetting } from "./setting.js";
 
 export function initGameVar()
 {
-	// gameVar.defaultView = document.getElementById('defaultView');
 	gameVar.settingView = document.getElementById('settingView');
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.startGameBtn = document.getElementById('startGameBtn');
 	gameVar.quickGameBtn = document.getElementById('quickGameBtn');
 	gameVar.playsoloGameBtn = document.getElementById('playsoloGameBtn');
 	gameVar.playmultiGameBtn = document.getElementById('playmultiGameBtn');
-	// gameVar.tournamentGameBtn = document.getElementById('tournamentGameBtn');
 
 }
 
@@ -156,6 +155,7 @@ export function roomMultiView()
 
 function showGameViewRoom(room = null)
 {
+	checkSetting();
 
 	const mainContent = document.getElementById('mainContent');
 
@@ -207,7 +207,6 @@ export function roomNetwork()
 	{
 		tempSocket.send(JSON.stringify({ type: 'lobbyView'}));
 		updateRoomList();
-
 	});
 
 	tempSocket.onopen = function(e)

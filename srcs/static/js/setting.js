@@ -4,6 +4,16 @@ import { updatePowerUpSelection } from "./powerUp.js";
 import { roomMultiView } from './init.js'
 import { showGameplayMultiView, showGameplaySoloView } from "./gameView.js";
 
+export function checkSetting()
+{
+	if (gameVar.settingsChanged === false)
+	{
+		gameVar.difficulty = 'medium';
+		updateDifficultySelection('medium');
+		updateLevelSelection('tableTennis');
+		gameVar.currentLevel = 'tableTennis'
+	}
+}
 
 export function showSettingView(live)
 {
@@ -230,13 +240,22 @@ export function updateSetting()
 }
 export function updateLiveSetting()
 {
-	const difficulty = gameVar.difficulty;
+	gameVar.settingsChanged = true;
+
+	var difficulty = null;
 	var level = null;
+
+	if (gameVar.difficulty)
+		difficulty = gameVar.difficulty;
+	else
+		difficulty = 'medium';
 
 	if (gameVar.football)
 		level = 'Foot Ball';
 	else if (gameVar.tennisTable)
-		level = 'Table Tennis'
+		level = 'Table Tennis';
+	else if (gameVar.tennis)
+		level = 'tennis';
 
 	const settingContain = document.getElementById('setting-container');
 
