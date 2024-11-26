@@ -6,28 +6,24 @@ export function renderOtpForm(url, msg) {
     box.innerHTML = `
         <p>${msg}</p>
         <br><br>
-        <p>Enter your code</p>
         <form id="otpForm">
             <label for="otpCode">OTP Code:</label>
             <input type="text" id="otpCode" name="otpCode" required>
             <button type="submit">Submit</button>
         </form>
     `;
-    // window.history.pushState({ page: "otpForm" }, 'OtpForm', '#otpForm');
+    window.history.pushState({ page: "otpForm" }, 'OtpForm', '#otpForm');
     
     document.getElementById('otpForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const otpCode = document.getElementById('otpCode').value;
         const responseObject = await fetchData(url, 'POST', { otp_code: otpCode });
         
-        if (responseObject.data.access_token) {
+        alert(responseObject.data.message);
+        if (responseObject.data.access_token && responseObject.status === 200) {
             console.log("Get access token successfully")
             localStorage.setItem('access_token', responseObject.data.access_token);
-            alert(responseObject.data.message);
-            renderPage("home");
-        } else {
-            alert(responseObject.data.message);
+            renderPage("user");
         }
-        // box.innerHTML = `<p>${responseObject.data.message}</p>`;
     });
 }

@@ -27,26 +27,32 @@ async function fetchData(endpoint, method = 'GET', body = null, isFormData = fal
         }
     }
 
+	const responseObject = {
+		data: { message: "An unknown error occurred" },
+		status: 500,
+	};
 	try {
 		const response = await fetch(url, options);
 		console.log("response of fetch: ", response);
-		const responseObject = {
-			data: null,
-			status: response.status,
-		};
-		try {
-			responseObject.data = await response.json();
-			console.log("responseObject : ", responseObject);
+		
+		responseObject.status = response.status;
+		responseObject.data = await response.json();
+
+		if (Array.isArray(responseObject.data[Object.keys(responseObject.data)[0]])) {
+			const firstKey = Object.keys(responseObject.data)[0];
+			const firstArray = responseObject.data[firstKey];
+			if (Array.isArray(firstArray)) {
+				responseObject.data.message = firstArray[0];
+			}
 		}
-		catch (error) {
-			console.error(`fetchData(): responseObject: ${error}`);	
-		}
+
+		console.log("responseObject : ", responseObject);
 		return responseObject;
 	}
 	catch (error) {
-		console.error(`fetchData(): response of fetch: ${error}`);	
+		console.log(`fetchData(): response of fetch: ${error}`);
+		return responseObject;	
 	}
-	return responseObject;
 }
 
 
@@ -88,7 +94,7 @@ function getIdFromJWT() {
 	const token = localStorage.getItem('access_token');
 	if (token) {
 		const payload = JSON.parse(atob(token.split('.')[1]));
-		console.log(`getTdFromJWT(): JWT payload = ${payload}`);
+		console.log(`getTdFromJWT(): JWT payload.user_id = ${payload.user_id}`);
 		return payload.user_id;
 	}
 	console.log("getIdFromJWT() : access token = null");

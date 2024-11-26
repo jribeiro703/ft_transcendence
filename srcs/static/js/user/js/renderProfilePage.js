@@ -7,16 +7,16 @@ function createProfileContent() {
 			<div class="profile-header">
 				<div class="avatar-container">
 					<img id="avatar" src="${defaultAvatar}" alt="User Avatar" class="avatar" />
-					<h1 id="username">Username</h1>
+					<h4 id="username">Username</h4>
 				</div>
-				<p id="alias" class="alias">Alias: Not Set</p>
+				<p id="alias" class="alias">()</p>
 			</div>
 			<div class="stats">
 				<div class="stat">
-					<strong>Total Matches:</strong> <span id="totalMatches">0</span>
+					<strong>Total: </strong> <span id="totalMatches">0</span>
 				</div>
 				<div class="stat">
-					<strong>Won Matches:</strong> <span id="wonMatches">0</span>
+					<strong>Won: </strong> <span id="wonMatches">0</span>
 				</div>
 			</div>
 			<div class="match-history">

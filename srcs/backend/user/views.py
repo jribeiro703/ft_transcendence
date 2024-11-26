@@ -38,7 +38,7 @@ class CreateUserView(CreateAPIView):
 	
 	def create(self, request, *args, **kwargs):
 		try:
-			response = super().create(request, *args, **kwargs)
+			super().create(request, *args, **kwargs)
 			return Response({
 				"message": "Account created successfully. Please check your email to activate your account."
 			}, status=status.HTTP_201_CREATED)
@@ -47,38 +47,6 @@ class CreateUserView(CreateAPIView):
 			return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 		except exceptions.APIException as e:
 			return Response(e.detail, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-# class ActivateLinkView(APIView):
-# 	permission_classes = [AllowAny]
-
-# 	def get(self, request, uidb64, token, action):
-# 		try:
-# 			uid = force_str(urlsafe_base64_decode(uidb64))
-# 			user = get_object_or_404(User, pk=uid)
-
-# 		except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-# 			return Response({"message": "Activation link is invalid."}, status=status.HTTP_400_BAD_REQUEST)
-            
-# 		if user is not None and default_token_generator.check_token(user, token):
-# 			expiration_duration = timedelta(hours=24)
-# 			if timezone.now() - user.email_sent_at > expiration_duration:
-# 				user.delete()
-# 				return Response({"message": "Activation link has expired."}, status=status.HTTP_410_GONE)
-			
-# 			if action == 'verify_email' and user.new_email:
-# 				user.email = user.new_email
-# 				user.new_email = None
-# 				user.save()
-# 				return Response({"message": "Your email address has been changed successfully."}, status=status.HTTP_200_OK)
-
-# 			if action == 'activate_account':
-# 				if user.is_active:
-# 					return Response({"message": "Your account is already active."}, status=status.HTTP_200_OK)
-# 				user.is_active = True
-# 				user.save()
-# 				return Response({"message": "Your account has been activated successfully!"}, status=status.HTTP_200_OK)
-			
-# 			return Response({"message": "An unknown error occurred."}, status=status.HTTP_400_BAD_REQUEST)
 
 class ActivateLinkView(View):
 	permission_classes = [AllowAny]
@@ -155,27 +123,6 @@ class UserLoginView(APIView):
 			    "otp_verification_url": reverse('otp_verification', args=[user.id])
 			}, status=status.HTTP_200_OK)
 
-
-class CookieTokenRefreshView(APIView):
-	authentication_classes = [JWTAuthentication]
-
-	def get(self, request, *args, **kwargs):
-		refresh_token = request.COOKIES.get('refresh_token')
-		print(f"Refresh token: {refresh_token}")
-		if not refresh_token:
-			return Response({'message': 'Refresh token not found in cookies.'}, status=status.HTTP_400_BAD_REQUEST)
-		
-		try:
-			refresh = RefreshToken(refresh_token)
-			new_access_token = str(refresh.access_token)
-			return Response({'access_token': new_access_token}, status=status.HTTP_200_OK)
-
-		except TokenError as e:
-			return Response({'message': 'Invalid refresh token.'}, status=status.HTTP_400_BAD_REQUEST)
-
-		except Exception as e:
-			return Response({'message': 'An error occurred while refreshing the token.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 class OtpVerificationView(APIView):
 	model = User
 	permission_classes = [AllowAny]
@@ -211,6 +158,25 @@ class OtpVerificationView(APIView):
 			secure=True
 		)
 		return response
+
+class CookieTokenRefreshView(APIView):
+	authentication_classes = [JWTAuthentication]
+
+	def get(self, request, *args, **kwargs):
+		refresh_token = request.COOKIES.get('refresh_token')
+		if not refresh_token:
+			return Response({'message': 'Refresh token not found in cookies.'}, status=status.HTTP_400_BAD_REQUEST)
+		
+		try:
+			refresh = RefreshToken(refresh_token)
+			new_access_token = str(refresh.access_token)
+			return Response({'access_token': new_access_token}, status=status.HTTP_200_OK)
+
+		except TokenError as e:
+			return Response({'message': 'Invalid refresh token.'}, status=status.HTTP_400_BAD_REQUEST)
+
+		except Exception as e:
+			return Response({'message': 'An error occurred while refreshing the token.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class LogoutView(APIView):
 	authentication_classes = [JWTAuthentication]
@@ -279,10 +245,6 @@ class UserSettingsView(RetrieveUpdateDestroyAPIView):
 	def patch(self, request, *args, **kwargs):
 		try:
 			instance, success_messages = self.get_serializer().update(self.get_object(), request.data)
-			# serializer = self.get_serializer(instance)
-
-			# response_data = serializer.data
-			# response_data['messages'] = success_messages
 			return Response(success_messages, status=status.HTTP_200_OK)
 		except serializers.ValidationError as e:
 			return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)

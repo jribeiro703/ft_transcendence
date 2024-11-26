@@ -1,15 +1,6 @@
 import { fetchData, escapeHTML } from "../../utils.js";
 import { renderOtpForm } from "./renderOtpForm.js"
 
-export function renderLoginResponse(responseObject, box) {
-    if (responseObject.data.otp_verification_url)
-        renderOtpForm(escapeHTML(responseObject.data.otp_verification_url), responseObject.data.message);
-    else {
-        box.innerHTML = `<p>${responseObject.data.message}</p>`;
-        window.history.pushState({ page: "loginResponse" }, "LoginResponse", '#loginResponse');
-    }
-}
-
 export function renderLoginForm() {
     const box = document.getElementById('mainContent');
     box.innerHTML = `
@@ -32,10 +23,7 @@ export function renderLoginForm() {
         if (responseObject.data.otp_verification_url)
             renderOtpForm(escapeHTML(responseObject.data.otp_verification_url), responseObject.data.message);
         else {
-            // box.innerHTML = `<p>${responseObject.data.message}</p>`;
             alert(responseObject.data.message);
-            // window.history.pushState({ page: "loginResponse" }, "LoginResponse", '#loginResponse');
         }
-        // renderLoginResponse(responseObject, box);
     });
 }
