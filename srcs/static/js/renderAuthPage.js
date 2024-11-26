@@ -17,12 +17,10 @@ export function renderAuthPage() {
 	createAuthContent();
 
 	document.getElementById('btn-Login').addEventListener('click', () => {
-		history.pushState({page:'login'}, 'Login', '#login');
 		renderPage("login");
 	});
 
 	document.getElementById('btn-Register').addEventListener('click', () => {
-		history.pushState({page:'register'}, 'Register', '#register');
 		renderPage("register");
 	});
 

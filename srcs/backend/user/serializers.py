@@ -1,3 +1,4 @@
+from attr import validate
 import pyotp
 from .models import User, FriendRequest
 from transcendence import settings
@@ -23,7 +24,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 	def create(self, validated_data):
 		
 		if User.objects.filter(email=validated_data['email'], is_active=True).exists():
-			raise serializers.ValidationError({"message": "Registration failed, this email is already used by a active user"})
+			raise serializers.ValidationError({"message": "This email is already used by a active user"})
 		
 		password = validated_data.pop('password')
 		user = super().create(validated_data)
@@ -66,13 +67,14 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = User
-		fields = ('id', 'username', 'alias', 'avatar', 'email', 'new_email', 'password', 'new_password', 'friends', 'new_friend', 'is_online')
-		read_only_fields = ('id', 'username', 'is_online', 'email', 'friends')
+		fields = ('id', 'is_online', 'username', 'alias', 'avatar', 'email', 'new_email', 'password', 'new_password', 'friends', 'new_friend')
+		read_only_fields = ('id', 'username', 'is_online', 'avatar', 'email', 'friends')
 		extra_kwargs = {'password': {'write_only': True}, 'new_password': {'write_only': True}, 'new_email': {'write_only': True}, 'new_friend': {'write_only': True}}
 
 	def update(self, instance, validated_data):
 		success_messages = {}
 
+		# for password changing
 		if 'new_password' in validated_data:
 			if 'password' not in validated_data or validated_data['password'] is None:
 				raise serializers.ValidationError({"message": "The current password is required to update your new password."})
@@ -83,6 +85,7 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 			instance.set_password(validated_data['new_password'])
 			success_messages["new_password"] = "Password changed successfully !"
 
+		# for email changing
 		if 'new_email' in validated_data and validated_data['new_email'] is not None:
 			if User.objects.filter(email=validated_data['new_email'], is_active=True).exists():
 				raise serializers.ValidationError({"message": "Changing to new email failed, this email is already used by a active user."})
@@ -99,6 +102,7 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 			except Exception as e:
 				raise exceptions.APIException({"message": "Failed to send confirmation mail to the new email address."})
 		
+		# for send new friend request
 		if 'new_friend' in validated_data:
 			try:
 				new_f = User.objects.get(username=validated_data['new_friend'])
@@ -113,14 +117,13 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 			except User.DoesNotExist:
 				raise serializers.ValidationError({"message": f"{validated_data['new_friend']} doesn't exist"})
 		
-		fields_to_skip = ['password', 'email', 'new_email', 'friends']
+		# for others fields
+		fields_to_skip = ['password', 'new_password', 'email', 'new_email', 'friends', 'new_friend']
 		filtered_data = {attr: value for attr, value in validated_data.items() if attr not in fields_to_skip}
-
 		for attr, value in filtered_data.items():
 			setattr(instance, attr, value)
 
-		success_messages["other"] = "Update successfully"
-
+		success_messages["others"] = "Update successfully"
 		instance.save()
 		return instance, success_messages
 

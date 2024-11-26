@@ -23,13 +23,10 @@ export function renderRegisterForm() {
 		const email = document.getElementById('email').value;
 		const password = document.getElementById('password').value;
 		const responseObject = await fetchData('/user/register/', 'POST', { username, email, password });
+		
+		alert(responseObject.data.message);
 		if (responseObject.status === 201) {
-			alert(responseObject.data.message);
 			renderPage("auth");
-		} else {
-			alert(responseObject.data.message);
 		}
-		// box.innerHTML = `<p>${responseObject.data.message}</p>`;
-		// window.history.pushState({ page: "registerResponse" }, 'RegisterResponse', '#registerResponse');
     });
 }

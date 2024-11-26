@@ -1,4 +1,4 @@
-import { isAuthenticated } from "./utils.js"
+import { fetchData, isAuthenticated, getIdFromJWT } from "./utils.js"
 
 function createHomeContent() {
 	const box = document.getElementById('mainContent');
@@ -21,15 +21,32 @@ function createHomeContent() {
 	history.pushState({ page: "home" }, "Home", "#home");
 }
 
+async function updateUserAvatar(authenticated) {
+	const avatar = document.getElementById("user-avatar");
+	try {
+		const pk = getIdFromJWT();
+	
+		if (authenticated) {
+			const userData = await fetchData(`/user/settings/${pk}/`);
+			if (userData.avatar)
+				console.log(userData.avatar);
+				// avatar.src = userData.avatar;
+		}
+	} catch (error) {
+		console.log(`updateAvatar(): ${error}`);
+	}
+}
+
 export async function renderHomePage() {
 	createHomeContent();
-
+	
 	document.getElementById('btn-QuickGame').addEventListener('click', () => {
 		history.pushState({ page: 'quickgame' }, 'QuickGame', '#quickgame')
 	    console.log('QuickGame button clicked');
 	});
-
+	
 	const authenticated = await isAuthenticated();
+	await updateUserAvatar(authenticated);
 
 	document.getElementById('btn-Match').addEventListener('click', () => {
 		if (!authenticated) {
