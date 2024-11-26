@@ -8,11 +8,9 @@ function createProfileContent() {
 				<div class="avatar-container">
 					<img id="avatar" src="${defaultAvatar}" alt="User Avatar" class="avatar" />
 					<h4 id="username">Username</h4>
+					<p id="alias" class="alias"></p>
 				</div>
-				<p id="alias" class="alias">()</p>
-			</div>
-			<div class="stats">
-				<div class="stat">
+				<div class="stats">
 					<strong>Total: </strong> <span id="totalMatches">0</span>
 				</div>
 				<div class="stat">
@@ -21,34 +19,36 @@ function createProfileContent() {
 			</div>
 			<div class="match-history">
 				<h2>Match History</h2>
-				<ul id="matchHistory">
-				</ul>
+				<ul id="matchHistory"></ul>
 			</div>
 		</div>
 	`
 }
 
 export async function renderProfilePage() {
-	const userId = getIdFromJWT();
-		console.log(userId);
-	const { data, status } = await fetchData(`/user/profile/${userId}`);
-		console.log(data, status)
+	const pk = getIdFromJWT();
+	const responseObject = await fetchData(`/user/profile/${pk}`);
 	createProfileContent();
 
-	document.getElementById('username').textContent = data.username;
-	document.getElementById('avatar').src = data.avatar;
-	document.getElementById('alias').textContent = data.alias || "Alias: Not Set";
-	document.getElementById('totalMatches').textContent = data.total_matches;
-	document.getElementById('wonMatches').textContent = data.won_matches;
+	if (responseObject.status === 200) {
 
-	const matchHistoryList = document.getElementById('matchHistory');
-	if (data.match_history.length > 0) {
-		data.match_history.forEach(match => {
-			const listItem = document.createElement('li');
-			listItem.textContent = `Date: ${match.date}, Score: ${match.score}, Winner: ${match.winner}`;
-			matchHistoryList.appendChild(listItem);
-		});
+		const data = responseObject.data;
+		document.getElementById('username').textContent = data.username;
+		document.getElementById('avatar').src = data.avatar;
+		if (data.alias)
+			document.getElementById('alias').textContent = `(${data.alias})`;
+		document.getElementById('totalMatches').textContent = data.total_matches;
+		document.getElementById('wonMatches').textContent = data.won_matches;
+
+		const matchHistoryList = document.getElementById('matchHistory');
+		if (data.match_history.length > 0) {
+			data.match_history.forEach(match => {
+				const listItem = document.createElement('li');
+				listItem.textContent = `Date: ${match.date}, Score: ${match.score}, Winner: ${match.winner}`;
+				matchHistoryList.appendChild(listItem);
+			});
+		} else {
+		    matchHistoryList.innerHTML = '<li>No match history available.</li>';
+		}
 	}
-	else
-	    matchHistoryList.innerHTML = '<li>No match history available.</li>';
 }

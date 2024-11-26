@@ -33,7 +33,7 @@ async function fetchData(endpoint, method = 'GET', body = null, isFormData = fal
 	};
 	try {
 		const response = await fetch(url, options);
-		console.log("response of fetch: ", response);
+		console.log("fetch->resposne =  ", response);
 		
 		responseObject.status = response.status;
 		responseObject.data = await response.json();
@@ -46,7 +46,7 @@ async function fetchData(endpoint, method = 'GET', body = null, isFormData = fal
 			}
 		}
 
-		console.log("responseObject : ", responseObject);
+		console.log("response.json->responseObject = ", responseObject);
 		return responseObject;
 	}
 	catch (error) {
@@ -94,7 +94,7 @@ function getIdFromJWT() {
 	const token = localStorage.getItem('access_token');
 	if (token) {
 		const payload = JSON.parse(atob(token.split('.')[1]));
-		console.log(`getTdFromJWT(): JWT payload.user_id = ${payload.user_id}`);
+		// console.log(`getTdFromJWT(): JWT payload.user_id = ${payload.user_id}`);
 		return payload.user_id;
 	}
 	console.log("getIdFromJWT() : access token = null");
