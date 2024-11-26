@@ -2,10 +2,6 @@ import gameVar from "./var.js";
 
 export function updateDifficultySelection(level)
 {
-	// gameVar.init_dx = 5;
-	// gameVar.init_dy = 5;
-	// gameVar.init_dx2 = 5;
-	// gameVar.init_dy2 = 5;
 	if (level == 'easy')
 	{
 		console.log("easy mode");
@@ -35,8 +31,22 @@ export function updateDifficultySelection(level)
 
 export function updateLevelSelection(level)
 {
-	if (level == 'tableTennis')
-		gameVar.customMap = false;
-	if (level == 'brickLevel')
-		gameVar.customMap = true;
+	if (level === "tableTennis")
+	{
+		gameVar.tennisTable = true;
+		gameVar.football = false;
+		gameVar.tennis = false;
+	}
+	else if (level === "footLevel")
+	{
+		gameVar.tennisTable = false;
+		gameVar.football = true;
+		gameVar.tennis = false;
+	}
+	else if (level === "tennisLevel")
+	{
+		gameVar.tennisTable = false;
+		gameVar.football = false;
+		gameVar.tennis = true;
+	}
 }

@@ -4,6 +4,7 @@ import { resetBall } from "./reset.js";
 import { sendBallData, sendPaddleData } from "./network.js";
 import { collisionFoot } from "./foot.js";
 import { collisionPaddleAi, ballOut } from "./collision.js";
+import { tennisCollision } from "./tennis.js";
 
 export function manageRealCollision()
 {
@@ -17,6 +18,8 @@ export function manageRealCollision()
 	}
 	if (gameVar.football)
 		collisionFoot();
+	if (gameVar.tennis)
+		tennisCollision();
 	collisionPaddleAi();
 	ballOut();
 }

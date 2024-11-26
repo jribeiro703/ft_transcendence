@@ -2,14 +2,16 @@ import gameVar from "./var.js";
 import { updateDifficultySelection, updateLevelSelection } from "./gameMode.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { roomMultiView } from './init.js'
-import { showGameplaySoloView } from "./gameView.js";
+import { showGameplayMultiView, showGameplaySoloView } from "./gameView.js";
+
 
 export function showSettingView(live)
 {
 
 	history.pushState({ view: 'game'}, '', `?view=solo/settings`);
-	const pongUrl = "static/css/images/classic.png";
-	const brickUrl = "static/css/images/brick.png";
+	const pongUrl = "static/css/images/ttLevel.png";
+	const footUrl = "static/css/images/footballLevel.png";
+	const tennisUrl = "static/css/images/tennisLevel.png";
 	const maincontent = document.getElementById('mainContent');
 
 	maincontent.innerHTML = '';
@@ -40,9 +42,13 @@ export function showSettingView(live)
 						<img src="${pongUrl}" alt="classicMap" class="map-image">
 						<button id="tableTennis" class="level">Table Tennis</button>
 					</div>
-					<div id="map2" class="mapOption" data-map-name="customMap1">
-						<img src="${brickUrl}" alt="customMap1" class="map-image">
-						<button id="bricksLevel" class="level">Brick Level</button>
+					<div id="map2" class="mapOption" data-map-name="classicMap">
+						<img src="${footUrl}" alt="footMap1" class="map-image">
+						<button id="footLevel" class="level">FootBall</button>
+					</div>
+					<div id="map3" class="mapOption" data-map-name="clasicMap">
+						<img src="${tennisUrl}" alt="customMap1" class="map-image">
+						<button id="tennisLevel" class="level">Tennis</button>
 					</div>
 				</div>
 			</div>
@@ -63,21 +69,9 @@ export function showSettingView(live)
 	gameVar.medium = document.getElementById('medium');
 	gameVar.hard = document.getElementById('hard');
 	gameVar.tableTennis = document.getElementById('tableTennis');
-	gameVar.brickLevel = document.getElementById('bricksLevel');
+	gameVar.footLevel = document.getElementById('footLevel');
+	gameVar.tennisLevel = document.getElementById('tennisLevel');
 	gameVar.saveBtn = document.getElementById('saveBtn');
-
-	// gameVar.gameView.style.display = 'none';
-	// gameVar.quickGameBtn.style.display = 'none';
-	// gameVar.startGameBtn.style.display = 'none';
-	// gameVar.playsoloGameBtn.style.display = 'none';
-	// gameVar.tournamentGameBtn.style.display = 'none';
-	// gameVar.playmultiGameBtn.style.display = 'none';
-
-	// gameVar.defaultView.style.display = 'none';
-	// gameVar.roomView.style.display = 'none';
-	// gameVar.createRoomBtn.style.display = 'none';
-	// gameVar.refreshBtn.style.display = 'none';
-	// gameVar.settingBtn.style.display = 'none';
 
 	if(live === false)
 	{
@@ -132,23 +126,33 @@ export function showSettingView(live)
 	gameVar.tableTennis.addEventListener('click', () =>
 	{
 		gameVar.tableTennis.classList.add('selected');
-		gameVar.brickLevel.classList.remove('selected');
+		gameVar.footLevel.classList.remove('selected');
+		gameVar.tennisLevel.classList.remove('selected');
 		updateLevelSelection('tableTennis');
 	});
 
-	gameVar.brickLevel.addEventListener('click', () =>
+	gameVar.footLevel.addEventListener('click', () =>
 	{
 		gameVar.tableTennis.classList.remove('selected');
-		gameVar.brickLevel.classList.add('selected');
-		updateLevelSelection('brickLevel');
+		gameVar.footLevel.classList.add('selected');
+		gameVar.tennisLevel.classList.remove('selected');
+		updateLevelSelection('footLevel');
+	});
+
+	gameVar.tennisLevel.addEventListener('click', () =>
+	{
+		gameVar.tableTennis.classList.remove('selected');
+		gameVar.footLevel.classList.remove('selected');
+		gameVar.tennisLevel.classList.add('selected');
+		updateLevelSelection('tennisLevel');
 	});
 
 	gameVar.saveBtn.addEventListener('click', () =>
 	{
 		if (live === true)
 		{
-			updateLiveSetting();
 			roomMultiView();
+			updateLiveSetting();
 		}
 		else
 		{
@@ -158,22 +162,57 @@ export function showSettingView(live)
 	});
 }
 
+
+export function updateCanvasColor()
+{
+	let color = null;
+	if (gameVar.tennisTable)
+		color = '#1A1A40';
+	if (gameVar.football)
+		color = '#006400';
+	else if (gameVar.tennis)
+		color = '#D2691E';
+   
+    const canvas = document.getElementById('myCanvas');
+    if (canvas)
+	{
+        canvas.style.backgroundColor = color;
+    }
+}
 export function updateSetting()
 {
 	gameVar.settingsChanged = true;
-	const difficulty = gameVar.difficulty;
+	var difficulty = null;	
 	var level = null;
 	var powerUp = null;
 
-	if (gameVar.customMap)
-		level = 'Brick Level';
+	if (gameVar.difficulty)
+		difficulty = gameVar.difficulty;
 	else
+	{
+		difficulty = 'medium';
+		updateDifficultySelection('medium');
+	}
+
+	if (gameVar.football)
+		level = 'Football';
+	else if (gameVar.tennisTable)
 		level = 'Table Tennis';
+	else if (gameVar.tennis)
+		level = 'Tennis';
+	else 
+	{
+		level = 'Table Tennis';
+		updateLevelSelection('tableTennis');
+	}
 
 	if (gameVar.powerUpEnable)
 		powerUp = "✅";
 	else
+	{
 		powerUp = "❌";
+		updatePowerUpSelection(false);
+	}
 
 	const settingContain = document.getElementById('settings-column');
 
@@ -194,9 +233,9 @@ export function updateLiveSetting()
 	const difficulty = gameVar.difficulty;
 	var level = null;
 
-	if (gameVar.customMap)
-		level = 'Brick Level';
-	else
+	if (gameVar.football)
+		level = 'Foot Ball';
+	else if (gameVar.tennisTable)
 		level = 'Table Tennis'
 
 	const settingContain = document.getElementById('setting-container');
@@ -208,8 +247,6 @@ export function updateLiveSetting()
 	settingItem.innerHTML = `
 	Difficulty: 
 	<span id="difficultyChoice">${difficulty}</span><br>
-	Power-Ups:
-	<span id="po
 	Level:
 	<span id="levelSelected">${level}</span>
 	`;

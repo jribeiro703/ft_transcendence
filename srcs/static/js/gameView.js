@@ -1,12 +1,15 @@
 import gameVar from "./var.js";
+import brickVar from "./brickout/var.js"
 import { initializeBall } from "./draw.js";
-import { createPowerUp1, createPowerUp2, updatePowerUpSelection } from "./powerUp.js";
+import { createPowerUp1, createPowerUp2, newPowerUp, updatePowerUpSelection } from "./powerUp.js";
 import { draw } from "./draw.js";
 import { resetMatch, checkServer } from "./reset.js";
 import { initEventListenerAi, manageAi } from "./ai.js";
 import { initEventListenerRoom } from "./init.js";
-import { showSettingView } from "./setting.js";
+import { showSettingView, updateCanvasColor } from "./setting.js";
 import { updateDifficultySelection, updateLevelSelection } from "./gameMode.js";
+import { initListenerB } from "./brickout/game.js";
+import { checkSettingB, showSettingViewB } from "./brickout/settings.js";
 
 export function showGameplayMultiView()
 {
@@ -40,8 +43,19 @@ export function showGameplaySoloView()
 
 	const gameSelection = document.createElement('div');
 
-	const pongUrl = "static/css/images/classic.png";
-	const brickUrl = "static/css/images/brick.png";
+	gameVar.pongUrl = "static/css/images/ttLevel.png";
+	if (gameVar.football)
+		gameVar.pongUrl = "static/css/images/footballLevel.png";
+	else if (gameVar.tennis)
+		gameVar.pongUrl = "static/css/images/tennisLevel.png";
+
+	gameVar.brickUrl = "static/css/images/brickout.png";
+	if (brickVar.castle)
+		gameVar.brickUrl = "static/css/images/castleLevel.png";
+	else if (brickVar.x)
+		gameVar.brickUrl = "static/css/images/xLevel.png";
+	else if (brickVar.invader)
+		gameVar.brickUrl = 'static/css/images/invadersLevel.png';
 
 	gameSelection.innerHTML =  `
 	<div id="settingView" class="game-selection">
@@ -52,7 +66,7 @@ export function showGameplaySoloView()
 					<h2 id="gameTitle">PONG</h2>
 				</div>
 				<div class="game-image">
-					<img id="gameImage" src="${pongUrl}" alt="pongGame">
+					<img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
 				</div>
 				<div class="game-settings">
 					<div id="settingsContainer" class="settings-info">
@@ -75,16 +89,16 @@ export function showGameplaySoloView()
 					<h2 id="gameTitle2">BRICKOUT</h2>
 				</div>
 				<div class="game-image">
-					<img id="gameImage2" src="${brickUrl}" alt="brickGame">
+					<img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
 				</div>
 				<div class="game-settings">
 					<div id="settingsContainer" class="settings-info">
 						<div class="settings-inline">
 							<button id="settingBtn2" class="settingsSelect-button2">Settings</button>
-							<div class="settings-column">
-								<p>Difficulty: <span id="difficultyChoice2">Hard</span></p>
-								<p>Power-Up: <span id="powerupChoice2"></span></p>
-								<p>Level: <span id="levelSelected2">Castle</span></p>
+							<div class="settings-column2" id="settings-column2">
+								<p>Difficulty: <span id="difficultyChoice2">Medium</span></p>
+								<p>Power-Up: <span id="powerupChoice2">❌</span></p>
+								<p>Level: <span id="levelSelected2">Classic</span></p>
 							</div>
 						</div>
 					</div>
@@ -110,15 +124,55 @@ export function showGameplaySoloView()
 
 	gameVar.settingBtn2.addEventListener('click', () =>
 	{
-		showSettingView(false);
+		showSettingViewB(false);
 	});
 
 	gameVar.playBtn.addEventListener('click', () =>
 	{
+		gameVar.game = "pong";
 		checkSetting();
 		showGameView();
 		initEventListenerAi();
 	});
+
+	gameVar.playBtn2.addEventListener('click', () =>
+	{
+		gameVar.game = "brickout";
+		checkSettingB();
+		showGameBrickView();
+		initListenerB();
+	});
+
+}
+
+export function showGameBrickView()
+{
+	console.log("brickview");
+	const mainContent = document.getElementById('mainContent');
+
+	mainContent.innerHTML = '';
+
+	const insertTo = document.createElement('div');
+
+	insertTo.innerHTML = `
+	<canvas id="brickoutCanvas"></canvas>
+	`;
+	mainContent.appendChild(insertTo);
+    
+	var canvas = document.getElementById("brickoutCanvas");
+	if (!canvas)
+	{
+        console.error("Canvas not found");
+        return;
+    }
+	brickVar.canvas = canvas;
+	brickVar.ctx = canvas.getContext("2d");
+	canvas.width = brickVar.canvasW;
+	canvas.height = brickVar.canvasH;
+	canvas.style.width = `${brickVar.canvasW}px`;
+    canvas.style.height = `${brickVar.canvasH}px`;
+
+	brickVar.initialize = true;
 }
 
 function checkSetting()
@@ -162,6 +216,8 @@ export function showGameView()
 
 	mainContent.appendChild(gameView);
 
+	updateCanvasColor();
+
 	gameVar.playerScoreElement = document.getElementById('playerScore');
 	gameVar.aiScoreElement = document.getElementById('aiScore');
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
@@ -183,10 +239,9 @@ function startGame()
 	initializeBall();
 	if (gameVar.powerUpEnable)
 	{
-		createPowerUp1();
-		createPowerUp2();
+		newPowerUp(true, 3000);
+		newPowerUp(false, 3000);
 	}
-
 	draw();
 	manageAi();
 }

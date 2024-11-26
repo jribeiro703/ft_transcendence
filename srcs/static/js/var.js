@@ -74,9 +74,11 @@ const gameVar =
 	medium: null,
 	hard: null,
 
-	customMap: false,
+	pongUrl: null,
+	brickUrl: null,
 	tableTennis: null,
-	brickLevel: null,
+	footLevel: null,
+	tennisLevel: null,
 
 // -------------------------------Player Data---------------------------
 
@@ -93,7 +95,14 @@ const gameVar =
 	animationFrame: null,
 	finishGame: false,
 	localGame: false,
+	tennisTable: false,
 	football: false,
+	tennis: false,
+
+	mycanvas: null,
+	canvasColor: null,
+
+	game: null,
 
 
 // --------------------------------------AI-----------------------------
