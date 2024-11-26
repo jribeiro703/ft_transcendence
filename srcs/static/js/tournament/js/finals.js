@@ -9,10 +9,12 @@ export function showFinals() {
 			<!-- Add stage-specific content here -->
 		</div>
 	`;
+
 	// Add event listeners and other logic specific to Finals
 	document.getElementById('startFinalsBtn').addEventListener('click', () => {
 		alert('Finals started!');
 	});
+
 	document.getElementById('finishTournamentBtn').addEventListener('click', () => {
 		alert('Tournament Finished!');
 		window.location.hash = '#home';
