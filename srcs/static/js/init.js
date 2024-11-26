@@ -13,17 +13,7 @@ export function initGameVar()
 	gameVar.quickGameBtn = document.getElementById('quickGameBtn');
 	gameVar.playsoloGameBtn = document.getElementById('playsoloGameBtn');
 	gameVar.playmultiGameBtn = document.getElementById('playmultiGameBtn');
-	gameVar.tournamentGameBtn = document.getElementById('tournamentGameBtn');
-	gameVar.createRoomBtn = document.getElementById('createRoomBtn');
-	// gameVar.rematchBtn = document.getElementById('rematchBtn');	
-	// gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	gameVar.roomView = document.getElementById('roomView');
-	gameVar.createRoomNameInput = document.getElementById('createRoomName')
-	gameVar.roomsContainer = document.getElementById('roomsContainer');
-	gameVar.noRoomsMessage = document.getElementById('noRoomsMessage');
-	gameVar.refreshBtn = document.getElementById('refreshBtn');
-	gameVar.settingBtn = document.getElementById('settingBtn');
-	gameVar.createRoomName = document.getElementById('createRoomName');
+	// gameVar.tournamentGameBtn = document.getElementById('tournamentGameBtn');
 
 }
 
@@ -69,6 +59,7 @@ export function initEventListener()
 
 export function initEventListenerRoom()
 {
+	removeEventListeners();
 	document.addEventListener("keydown", (e) => keyDownHandler(e, gameVar.isFirstPlayer), false);
 	document.addEventListener("keyup", (e) => keyUpHandler(e, gameVar.isFirstPlayer), false);
 	document.addEventListener("keydown", startBall, false);
@@ -85,6 +76,60 @@ export function initEventListenerRoom()
 	});
 }
 
+export function displayRoomView()
+{
+	const mainContent = document.getElementById("mainContent");
+
+	mainContent.innerHTML = '';
+
+	const roomView = document.createElement('div');
+
+	roomView.innerHTML = `
+	<div id="roomView" style="display: none;">
+			<div class="container-room">
+				<div class="server-list">
+					<h2>Room List</h2>
+					<div id="noRoomsMessage" style="display: block;">
+						<p>No room available for now. Create one !</p>
+					</div>
+					<div id="roomsContainer"></div>
+					<div class="refresh"></div>
+					<button id="refreshBtn" class="refresh-button">Refresh</button>
+				</div>
+				<div class="host-server">
+					<h2>Host A Room</h2>
+					<h3>Playing as: <strong>Login</strong></h3>
+					<div class="settings">
+						<button id="settingBtn">Settings</button>
+						<div id="setting-container">
+							<p>Difficulty: <span id="difficultyChoice">Medium</span><br></p>
+							<p>Level: <span id="levelSelected">Table Tennis</span></p>
+						</div>
+					</div>
+					<button id="createRoomBtn" class="start-button">Create Room</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	`;
+
+	mainContent.appendChild(roomView);
+
+	gameVar.createRoomBtn = document.getElementById('createRoomBtn');
+	gameVar.roomView = document.getElementById('roomView');
+	gameVar.roomsContainer = document.getElementById('roomsContainer');
+	gameVar.noRoomsMessage = document.getElementById('noRoomsMessage');
+	gameVar.refreshBtn = document.getElementById('refreshBtn');
+	gameVar.settingBtn = document.getElementById('settingBtn');
+	gameVar.createRoomName = document.getElementById('createRoomName');
+
+	console.log("roomView");
+	gameVar.roomView.style.display = 'block';
+	gameVar.refreshBtn.style.display = 'block';
+	gameVar.settingBtn.style.display = 'block';
+
+}
+
 function checkRoom(rooms)
 {
 	console.log("checkRoom");
@@ -96,6 +141,64 @@ function checkRoom(rooms)
 }
 
 export function roomMultiView()
+{
+	history.pushState({ view: 'game' }, '', '?view=multi');
+
+
+	displayRoomView();
+	roomNetwork();
+
+	// displayRoomView();
+
+	initEventListenerRoom();
+	gameVar.liveMatch = true;
+}
+
+function showGameViewRoom(room = null)
+{
+
+	const mainContent = document.getElementById('mainContent');
+
+	mainContent.innerHTML = '';
+
+	const insertTo = document.createElement('div');
+
+	insertTo.innerHTML = `
+	<div id="gameView" style="display: none;">
+			<div id="scoreboard">SCORE</div>
+			<div id="scoreRow">
+				<span id="player">Player </span>
+				<span id="playerScore">0</span>
+				<span id="vs">VS</span>
+				<span id="aiScore">0</span>
+				<span id="ai">CPU</span>
+			</div>
+			<canvas id="myCanvas"></canvas>
+			<br><br>
+			<div class="button-container">
+				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+				<button id="quitGameBtn" style="display: none;">Quit Game</button>
+			</div>
+		</div>	
+	`;
+
+	mainContent.appendChild(insertTo);
+
+	// gameVar.roomView = document.getElementById('roomView');
+	gameVar.gameView = document.getElementById('gameView');
+	gameVar.roomView.style.display = 'none';
+	gameVar.gameView.style.display = 'block';
+	
+	var canvas = document.getElementById('myCanvas');
+	gameVar.ctx = canvas.getContext('2d');
+	canvas.width = gameVar.canvasW;
+	canvas.height = gameVar.canvasH;	
+	createNewRoom();
+}
+
+
+
+export function roomNetwork()
 {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 	const tempSocket = new WebSocket(protocol + '//' + window.location.host + '/ws/pong/check_rooms/');
@@ -157,41 +260,5 @@ export function roomMultiView()
 	{
     	console.log("WebSocket closeddddd:", event);
 	};
-
-	console.log("roomView");
-	gameVar.settingView.style.display = 'none';
-	gameVar.gameView.style.display = 'none';
-	gameVar.quickGameBtn.style.display = 'none';
-	gameVar.startGameBtn.style.display = 'none';
-	gameVar.playsoloGameBtn.style.display = 'none';
-	gameVar.tournamentGameBtn.style.display = 'none';
-	gameVar.playmultiGameBtn.style.display = 'none';
-
-	gameVar.defaultView.style.display = 'none';
-	gameVar.roomView.style.display = 'block';
-	gameVar.createRoomBtn.style.display = 'block';
-	gameVar.refreshBtn.style.display = 'block';
-	gameVar.settingBtn.style.display = 'block';
-	initEventListenerRoom();
-	history.pushState({ view: 'game' }, '', '?view=multi');
-	gameVar.liveMatch = true;
 }
-
-function showGameViewRoom(room = null)
-{
-	gameVar.defaultView.style.display = 'none';
-	gameVar.settingView.style.display = 'none';
-	gameVar.gameView.style.display = 'block';
-	gameVar.quickGameBtn.style.display = 'none';
-	gameVar.startGameBtn.style.display = 'none';
-	gameVar.tournamentGameBtn.style.display = 'none';
-	gameVar.createRoomBtn.style.display = 'none';
-	gameVar.roomView.style.display = 'none';
-	
-	createNewRoom();
-}
-
-
-
-
 

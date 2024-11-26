@@ -422,7 +422,8 @@ p
     color: #0A1730;
 }
 
-.game-image img {
+.game-image img
+{
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -594,7 +595,8 @@ p
     background-color: #1A1A40; 
 }
 
-#rematchBtn, #quitGameBtn
+
+#rematchBtn, #quitGameBtn, #nextLevelBtn,  #restartLevelBtn, #quitBtn
 {
 	width: 200px;
     height: 60px;
@@ -628,7 +630,8 @@ button:disabled
 
 /* ------------------- Room View ---------------------------- */
 
-.container-room {
+.container-room
+{
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -757,6 +760,26 @@ button:disabled
 	margin-top: 10px;
 }
 
+/* ---------------------------Brickout--------------------------------- */
+#brickoutCanvas
+{
+    display: block; 
+    margin: 0 auto; 
+    border: 2px solid #FEFCFF;
+    border-radius: 8px; 
+    background-color: #1A1A40; 
+}
+
+ .finish, .nextLevel 
+{
+	display: flex;
+	justify-content: center;
+	max-width: 800px;
+	padding-top: 30px;
+	gap: 50px;
+	align-items: center;
+	margin: 0 auto;
+}
 /* -------------------- End Page --------------------------- */
 
 .footer-text

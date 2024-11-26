@@ -16,8 +16,5 @@ document.addEventListener('DOMContentLoaded', function()
 	preventNavTouch();
 	initGameVar();
 	initEventListener();
-	gameVar.football = false;
-
-	updateLevelSelection();
 	updatePowerUpSelection(false);
 });

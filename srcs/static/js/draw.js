@@ -3,6 +3,8 @@ import { drawPowerUp, collectPowerUp, updatePowerUp } from "./powerUp.js";
 import { manageServer, manageMove, manageRealCollision, manageCollisionLive } from "./manage.js";
 import { manageServerAi, manageMoveAi, aiMove} from "./ai.js";
 import { checkball } from "./check.js";
+import { drawFootball } from "./foot.js";
+import { drawTennisCourt } from "./tennis.js";
 
 
 function waitingForPLayer()
@@ -14,10 +16,12 @@ export function initDraw()
 {
 	drawBall();
 	checkPaddles();
-	if (gameVar.customMap == false)
+	if (gameVar.tennisTable)
 		drawLines();	
-	// if (gameVar.football)
-		// drawFootballField();
+	else if (gameVar.football)
+		drawFootball();
+	else if (gameVar.tennis)
+		drawTennisCourt();
 }
 
 export function checkReady()
@@ -122,7 +126,15 @@ function drawPlayerPaddle()
 	
 	const x = 0;
     const radius = gameVar.playerPaddleWidth / 2 + 3;
-    
+	let color = null;
+
+	if (gameVar.tennisTable)
+		color = "#FF414D";
+	else if (gameVar.football)
+		color = "#FF414D";
+	else if (gameVar.tennis)
+		color = "#4169E1";
+
     gameVar.ctx.beginPath();
     gameVar.ctx.moveTo(x, gameVar.playerPaddleY);
     gameVar.ctx.lineTo(x, gameVar.playerPaddleY + gameVar.playerPaddleHeight);
@@ -134,7 +146,7 @@ function drawPlayerPaddle()
         radius, 0, -Math.PI/2, true);
     gameVar.ctx.lineTo(x, gameVar.playerPaddleY);
     
-    gameVar.ctx.fillStyle = "#FF414D";
+    gameVar.ctx.fillStyle = color;
     gameVar.ctx.fill();
     gameVar.ctx.closePath();
 
@@ -165,7 +177,12 @@ function drawAiPaddle(player)
 		paddleWidth = gameVar.aiPaddleWidth;
 		x = gameVar.canvasW - gameVar.aiPaddleWidth;
 		radius = gameVar.aiPaddleWidth / 2 + 3;
-		color = "#0095DD";
+		if (gameVar.football)
+			color = "#0095DD";
+		else if (gameVar.tennisTable)
+			color = "#FF8C00"
+		else if (gameVar.tennis)
+			color = "#228B22"
 	}
 
     gameVar.ctx.beginPath();

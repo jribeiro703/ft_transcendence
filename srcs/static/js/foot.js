@@ -23,7 +23,8 @@ export function collisionFoot()
 	}
 }
 
-export function drawFootballField()
+
+export function drawFootball()
 {
     gameVar.ctx.strokeStyle = 'white';
 	gameVar.ctx.fillStyle = 'white';
@@ -103,7 +104,7 @@ export function drawFootballField()
     gameVar.ctx.fillRect(gameVar.canvasW - wallThickness, 0, wallThickness, (gameVar.canvasH - goalHeight) / 2);
     gameVar.ctx.fillRect(gameVar.canvasW - wallThickness, (gameVar.canvasH + goalHeight) / 2, wallThickness, (gameVar.canvasH - goalHeight) / 2);
 
-    gameVar.ctx.fillRect(0, 0, gameVar.canvasW, wallThickness);
-    gameVar.ctx.fillRect(0, gameVar.canvasH - wallThickness, gameVar.canvasW, wallThickness);
+    // gameVar.ctx.fillRect(0, 0, gameVar.canvasW, wallThickness);
+    // gameVar.ctx.fillRect(0, gameVar.canvasH - wallThickness, gameVar.canvasW, wallThickness);
 
 }
