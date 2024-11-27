@@ -4,6 +4,7 @@ import { renderOtpForm } from "./renderOtpForm.js"
 export function renderLoginForm() {
     const box = document.getElementById('mainContent');
     box.innerHTML = `
+	<div class="custom-form">
         <form id="loginForm">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
@@ -11,6 +12,7 @@ export function renderLoginForm() {
             <input type="password" id="password" name="password" required>
             <button type="submit">Submit</button>
         </form>
+    </div>
     `;
 	history.pushState({page:'login'}, 'Login', '#login');
 

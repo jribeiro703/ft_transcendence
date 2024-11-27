@@ -12,8 +12,8 @@ from .utils import send_activation_email
 class IndexSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = '__all__'
-		# fields = ('id', 'username', 'alias', 'avatar', 'email', 'password', 'friends', 'is_online', 'is_active')
+		# fields = '__all__'
+		fields = ('id', 'username', 'alias', 'avatar', 'email', 'password', 'friends', 'is_online', 'is_active')
 
 class UserCreateSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -44,7 +44,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
 			)
 		except Exception as e:
 			user.delete()
-			print(f"send activation mail : {str(e)}")
 			raise exceptions.APIException({"message": "Send activation email failed"})
 		return user
 

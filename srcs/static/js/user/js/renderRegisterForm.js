@@ -4,6 +4,7 @@ import { fetchData } from "../../utils.js";
 export function renderRegisterForm() {
 	const box = document.getElementById('mainContent');
 	box.innerHTML = `
+	<div class="custom-form">
 		<form id="registerForm">
 			<label for="username">Username:</label>
 			<input type="text" id="username" name="username" required>
@@ -13,6 +14,7 @@ export function renderRegisterForm() {
 			<input type="password" id="password" name="password" required>
 			<button type="submit">Submit</button>
 		</form>
+	</div>
 	`;
 	history.pushState({page:'register'}, 'Register', '#register');
 

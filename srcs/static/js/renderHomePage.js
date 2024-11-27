@@ -30,7 +30,6 @@ async function updateUserAvatar(authenticated) {
 			const userData = await fetchData(`/user/settings/${pk}/`);
 			if (userData.avatar)
 				console.log(userData.avatar);
-				// avatar.src = userData.avatar;
 		}
 	} catch (error) {
 		console.log(`updateAvatar(): ${error}`);
