@@ -30,17 +30,17 @@ class PerformMatchmakingView(APIView):
 				player_two=random_players[1],
 				score_one=randint(0, 10),
 				score_two=randint(0, 10),
-				created_at="2024-11-21T12:00:00Z"
+				created_at="2024-11-26T14:17:03Z"
 			)
 
-			return Response({
-				'game': {
-					'player_one': demo_game.player_one.id if demo_game.player_one else None,
-					'player_two': demo_game.player_two.id if demo_game.player_two else None,
-					'score_one': demo_game.score_one,
-					'score_two': demo_game.score_two,
-				}
-			}, status=status.HTTP_200_OK)
+			bracket = {
+				"matches": [
+					{"player1": demo_game.player_one.username, "player2": demo_game.player_two.username},
+					# Add more matches as needed
+				]
+			}
+
+			return Response(bracket, status=status.HTTP_200_OK)
 		except Exception as e:
 			logger.error(f"Error creating demo game: {e}")
 			return Response({'error': f'Failed to create demo game: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
