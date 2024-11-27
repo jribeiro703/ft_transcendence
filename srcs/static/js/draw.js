@@ -5,14 +5,7 @@ import { manageServerAi, manageMoveAi, aiMove} from "./ai.js";
 import { checkball } from "./check.js";
 import { drawFootball } from "./foot.js";
 import { drawTennisCourt } from "./tennis.js";
-import { updateCanvasColor } from "./setting.js";
 import { drawScoreBoard } from "./gameView.js";
-
-
-function waitingForPLayer()
-{
-	console.log("Waiting for player");
-}
 
 export function initDraw()
 {
@@ -26,22 +19,8 @@ export function initDraw()
 		drawTennisCourt();
 }
 
-export function checkReady()
-{
-	const allPlayer = gameVar.players.every(player => player.ready);
-	if (allPlayer)	
-	{
-		console.log("check ready true");
-		return true;
-	}
-	else
-	{
-		console.log("check ready false");
-		return false;
-	}
-}
 
-export function draw2()
+export function drawLive()
 {
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
@@ -53,7 +32,7 @@ export function draw2()
 	manageMove();
 	if (gameVar.animationFrame)
 		cancelAnimationFrame(gameVar.animationFrame);
-	gameVar.animationFrame = requestAnimationFrame(draw2);	
+	gameVar.animationFrame = requestAnimationFrame(drawLive);	
 }
 
 export function draw()
@@ -212,7 +191,7 @@ export function drawLines()
 
 export function initializeBall()
 {
-	if (gameVar.currenServer === 'player')
+	if (gameVar.currentServer === 'player')
 	{
 		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius; 
 		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;

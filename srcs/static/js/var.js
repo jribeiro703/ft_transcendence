@@ -81,7 +81,7 @@ const gameVar =
 // -------------------------------Player Data---------------------------
 
 	playerIdx: null,
-	currenServer: 'player',
+	currentServer: 'player',
 	playerReady: false,
 
 // ---------------------------------Game Data-------------------------

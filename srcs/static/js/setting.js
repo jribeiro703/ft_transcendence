@@ -80,7 +80,7 @@ export function checkSetting()
 
 export function checkSettingLive()
 {
-	console.log("stg change live", gameVar.settingsChanged);
+	// console.log("stg change live", gameVar.settingsChanged);
 	if (gameVar.settingsChanged === false)
 	{
 		updateDifficultySelection('medium');
@@ -174,12 +174,8 @@ export function updateLiveSetting()
 	else
 		difficulty = 'medium';
 
-	// if (gameVar.football)
-	// 	level = 'Foot Ball';
-	// else if (gameVar.tennisTable)
-	// 	level = 'Table Tennis';
-	// else if (gameVar.tennis)
-	// 	level = 'tennis';
+	if (gameVar.currentLevel)
+		level = gameVar.currentLevel;
 
 	const settingContain = document.getElementById('setting-container');
 
@@ -191,7 +187,7 @@ export function updateLiveSetting()
 	Difficulty: 
 	<span id="difficultyChoice">${difficulty}</span><br>
 	Level:
-	<span id="levelSelected">${gameVar.currentLevel}</span>
+	<span id="levelSelected">${level}</span>
 	`;
 
 	settingContain.appendChild(settingItem);

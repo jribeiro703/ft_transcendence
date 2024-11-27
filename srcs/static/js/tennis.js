@@ -1,6 +1,6 @@
 import gameVar from "./var.js";
 
-export function tennisCollision()
+export function collisionTennis()
 {
 	const width = gameVar.canvasW;
     const height = gameVar.canvasH;
@@ -14,11 +14,13 @@ export function tennisCollision()
         {
 			gameVar.x = gameVar.ballRadius;
         	gameVar.dx = -gameVar.dx;
+			return (true);
 		}
 		if (gameVar.x + gameVar.ballRadius >  width)
 		{
 			gameVar.x = width - gameVar.ballRadius;
 			gameVar.dx = -gameVar.dx;
+			return (true);
 		}
     }
     
