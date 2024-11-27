@@ -3,6 +3,10 @@ from django.db import models
 # helps for lazy references to avoid circular dependencies
 from django.utils.translation import gettext as _ 
 
+from django.db import models
+from user.models import User
+from tournament.models import Tournament
+
 class Game(models.Model):
 	GAME_STATUS_CHOICES = [
 		('NOT_STARTED', 'Not Started'),
@@ -12,7 +16,22 @@ class Game(models.Model):
 		('CANCELED', 'Canceled'),
 	]
 	status = models.CharField(max_length=20, choices=GAME_STATUS_CHOICES, default='NOT_STARTED')
- 
+
+	DIFFICULTY_CHOICES = [
+		('EASY', 'Easy'),
+		('MEDIUM', 'Medium'),
+		('HARD', 'Hard'),
+	]
+	difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES, default='EASY')
+
+	LEVEL_CHOICES = [
+		('TABLETENNIS', 'Table Tennis'),
+		('FOOTBALL', 'Football'),
+		('TENNIS', 'Tennis'),
+		('CLASSIC', 'Classic'),
+	]
+	level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='CLASSIC')
+
 	player_one = models.ForeignKey(
 		'user.User', related_name='game_as_player_one', on_delete=models.SET_NULL, null=True
 	) # FK to User
@@ -29,11 +48,14 @@ class Game(models.Model):
 		'tournament.Tournament', related_name='tournament_games', on_delete=models.CASCADE, null=True
 	) # FK to Tournament
 	max_score = models.PositiveIntegerField(default=10)
-	
-	
+ 
 	created_at = models.DateTimeField(auto_now_add=True)  # Automatically set when created
 	start_time = models.DateTimeField(null=True, blank=True)
 	end_time = models.DateTimeField(null=True, blank=True)
+
+	# Customization options
+	powerup = models.BooleanField(default=False)  # True = Active, False = Inactive
+	time_played = models.IntegerField(default=0)  # Time in seconds (or minutes)
 
 	def __str__(self):
 		return f"Game {self.id} between {self.player_one} and {self.player_two}"
