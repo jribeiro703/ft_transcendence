@@ -1,6 +1,5 @@
 import gameVar from "./var.js";
 import { PADDLE_SPEED, AI_UPDATE_INTERVAL, PADDLE_THRESHOLD } from './const.js';
-import { showGameView, rematchView } from "./gameView.js";
 
 export function aiServeBall()
 {
@@ -124,7 +123,7 @@ function predictBallPos(gameVar)
 
 export function manageServerAi()
 {
-	if (gameVar.currenServer == 'player')
+	if (gameVar.currentServer == 'player')
 	{
 		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
 		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
@@ -149,14 +148,4 @@ export function manageMoveAi()
 			gameVar.playerPaddleY += PADDLE_SPEED;
 		} 
 	}
-}
-export function initEventListenerAi()
-{
-
-	// document.addEventListener("keydown", keyDownHandler, false);
-	// document.addEventListener("keyup", keyUpHandler, false);
-	// document.addEventListener("keydown", startBallAi, false);
-
-	// gameVar.quickGameBtn.addEventListener('click', showGameView);
-	// gameVar.rematchBtn.addEventListener('click', rematchView);
 }

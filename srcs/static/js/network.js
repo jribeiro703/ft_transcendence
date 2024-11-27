@@ -29,6 +29,9 @@ export function sendDirectionData(dx, dy, initDx, initDy, socket)
 		};
 		socket.send(JSON.stringify(data));
 	}
+	else
+		console.log("Error websocket");
+
 }
 
 export function sendPaddleData(paddle_y, socket, playerIdx)
@@ -47,7 +50,7 @@ export function sendPaddleData(paddle_y, socket, playerIdx)
 		console.log("Error websocket");
 }
 
-export function sendPlayerData(socket, playerReady, currentServer)
+export function sendPlayerData(socket, playerReady)
 {
 	if (socket && socket.readyState == WebSocket.OPEN)
 	{
@@ -55,33 +58,46 @@ export function sendPlayerData(socket, playerReady, currentServer)
 		{
 			type: 'player_data',
 			playerReady: playerReady,
-			currentServer: currentServer,
 		};
 		socket.send(JSON.stringify(data));
 	}
+	else
+		console.log("Error websocket");
 }
 
-export function sendGameData(socket, gameStart, gameReady, difficulty, currentLevel)
+export function sendGameData(socket, gameStart, currentServer, startTime)
 {
-	if (gameVar.playerIdx === 1)
-		console.log("1 send gameData ");
-	if (gameVar.playerIdx === 2)
-		console.log("2 send gameData ");
 	if (socket && socket.readyState == WebSocket.OPEN)
 	{
 		const data = 
 		{
 			type: 'game_data',
 			gameStart: gameStart,
+			currentServer: currentServer,
+			startTime: startTime,
+		};
+		socket.send(JSON.stringify(data));
+	}
+	else
+		console.log("Error websocket");
+}
+
+export function sendSettingData(socket, gameReady, difficulty, currentLevel)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data = 
+		{
+			type: 'setting_data',
 			gameReady: gameReady,
 			difficulty: difficulty,
 			currentLevel: currentLevel,
 		};
 		socket.send(JSON.stringify(data));
-		console.log("send game data ok");
 	}
+	else
+		console.log("Error websocket");
 }
-
 
 export function sendRoomData(socket, idx, name, nbPlayer, status)
 {
@@ -97,4 +113,6 @@ export function sendRoomData(socket, idx, name, nbPlayer, status)
 		};
 		socket.send(JSON.stringify(data));
 	}
+	else
+		console.log("Error websocket");
 }

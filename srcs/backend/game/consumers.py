@@ -56,18 +56,6 @@ class PongConsumer(WebsocketConsumer):
 				else:
 					logger.info(f'Client {self.channel_name} disconnected, room {self.room_name} still has clients: {self.rooms[self.room_name]}')
 			self.log_all_rooms()
-			# 		logger.info(f'Room {self.room_name} is now empty and has been deleted.')
-			# 		self.log_all_rooms()
-			# 	async_to_sync(self.channel_layer.group_send)(
-			# 		self.room_group_name,
-			# 		{
-			# 			'type': 'client_left',
-			# 			'message': f'Client {self.channel_name} has left the room.'
-			# 		}
-			# 	)
-			# if self.channel_name in self.last_active:
-			# 	del self.last_active[self.channel_name]
-			# self.log_all_rooms()
 
 	def start_pinging(self):
 		"""Démarrer l'envoi de messages de ping pour vérifier la connexion."""
@@ -80,24 +68,6 @@ class PongConsumer(WebsocketConsumer):
 		if self.ping_timer:
 			self.ping_timer.cancel()
 
-	# def check_ping_response(self):
-	# 	"""Vérifier si le client a répondu au dernier ping."""
-	# 	last_time = self.last_active.get(self.channel_name)
-	# 	if last_time and (time.time() - last_time > self.ping_interval):
-	# 		logger.warning(f'Aucun pong reçu de {self.channel_name}. Déconnexion.')
-	# 		self.close()
-	# 	else:
-	# 		self.start_pinging()
-	# def check_ping_response(self):
-	# 	last_time = self.last_active.get(self.channel_name)
-	# 	if time.time() - last_time > self.ping_interval:
-	# 		if self.channel_name in self.rooms.get(self.room_name, []):
-	# 			self.rooms[self.room_name].remove(self.channel_name)
-	# 			if not self.rooms[self.room_name]:
-	# 				self.close_room(self.room_name)
-	# 			self.close()
-	# 		else:
-	# 			self.reconnect_or_clean_client()
 	def check_ping_response(self):
 		last_time = self.last_active.get(self.channel_name)
 		if last_time and time.time() - last_time > self.ping_interval:
@@ -118,8 +88,6 @@ class PongConsumer(WebsocketConsumer):
 
 	def receive(self, text_data):
 		data = json.loads(text_data)
-		# if data['type'] != 'ball_data':
-		# 	logger.info(f"Received data: {data}")
 		self.last_active[self.channel_name] = time.time()
 		if data['type'] == 'pong':
 			logger.info(f'pong recu de {self.channel_name}')
@@ -135,6 +103,8 @@ class PongConsumer(WebsocketConsumer):
 			self.broadcast_player_data(data)
 		elif data['type'] == 'game_data':
 			self.broadcast_game_data(data)
+		elif data['type'] == 'setting_data':
+			self.broadcast_setting_data(data)
 		elif data['type'] == 'lobbyView':
 			self.lobby()
 		elif data['type'] == 'room_deleted':
@@ -231,22 +201,28 @@ class PongConsumer(WebsocketConsumer):
 			'type': 'player_data',
 			'player_data': {
 				'playerReady': event['playerReady'],
-				'currentServer': event['currentServer']
 			}
 		}))
 
 	def game_data(self, event):
-		logger.info(f"sending game data to client {self.channel_name}")
 		self.send(text_data=json.dumps({
 			'type': 'game_data',
 			'game_data': {
 				'gameStart': event['gameStart'],
-				'gameReady': event['gameReady'],
-				'difficulty': event['difficulty'],
-				'currentLevel': event['currentLevel']
+				'currentServer': event['currentServer'],
+				'startTime': event['startTime'],
 			}
 		}))
-		logger.info(f"Game data sent to client {self.channel_name}")
+
+	def setting_data(self, event):
+		self.send(text_data=json.dumps({
+			'type': 'setting_data',
+			'setting_data': {
+				'gameReady': event['gameReady'],
+				'difficulty': event['difficulty'],
+				'currentLevel': event['currentLevel'],
+			}
+		}))
 
 	def broadcast_ball_data(self, data):
 		async_to_sync(self.channel_layer.group_send)(
@@ -286,20 +262,28 @@ class PongConsumer(WebsocketConsumer):
 			{
 				'type': 'player_data',
 				'playerReady': data['playerReady'],
-				'currentServer': data['currentServer'],
 			}
 		)
 
 	def broadcast_game_data(self, data):
-		logger.info(f"broadcast game data from {self.channel_name}: {data}")
 		async_to_sync(self.channel_layer.group_send)(
 			self.room_group_name,
 			{
 				'type': 'game_data',
 				'gameStart': data['gameStart'],
+				'currentServer': data['currentServer'],
+				'startTime': data['startTime'],
+			}
+		)
+
+	def broadcast_setting_data(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'setting_data',
 				'gameReady': data['gameReady'],
 				'difficulty': data['difficulty'],
 				'currentLevel': data['currentLevel'],
 			}
 		)
-		logger.info(f"Game data broadcasted to group {self.room_group_name}")
+		

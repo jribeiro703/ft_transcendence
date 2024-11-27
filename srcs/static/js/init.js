@@ -1,7 +1,7 @@
 import gameVar from "./var.js";
 import { showGameSelectionView } from "./gameView.js";
 import { keyDownHandler, keyUpHandler, startBall, startBallAi } from "./input.js";
-import { addRoom, delRooms, createNewRoom, displayRoomInfo, joinRoom, updateRoomInfo, updateRoomList } from "./room.js";
+import { addRoom, delRooms, createNewRoom, updateRoomInfo, updateRoomList } from "./room.js";
 import { showSettingView } from "./setting.js";
 import { checkSettingLive } from "./setting.js";
 import { SCORE_CANVAS_HEIGHT } from "./const.js";
@@ -196,7 +196,6 @@ function createRoomView(room = null)
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	// gameVar.roomView.style.display = 'none';
 	gameVar.gameView.style.display = 'block';
 	
 	var canvas = document.getElementById('myCanvas');

@@ -3,10 +3,10 @@ import { WIN_SCORE, GAP_SCORE,  } from "./const.js";
 import { initializeBall } from "./draw.js";
 import { aiServeBall } from "./ai.js";
 import { checkball } from "./check.js";
-import { sendGameData, sendPlayerData } from "./network.js";
+import { sendGameData } from "./network.js";
 import { startGame } from "./gameView.js";
 
-export function listenRematchBtn()
+export function listenBtn()
 {
 	gameVar.rematchBtn.addEventListener('click', () =>
 	{
@@ -25,7 +25,7 @@ export function resetMatch()
 	gameVar.matchOver = false;
 	gameVar.serveCount = 0;
 	gameVar.gameStart = false;
-	gameVar.currenServer = 'player';
+	gameVar.currentServer = 'player';
 	gameVar.aiPaddleY = (420 - 75) / 2;
 	gameVar.targetY = (420 - 75) / 2;
 	gameVar.gameTime = 0;
@@ -46,13 +46,13 @@ export function checkServer()
 {
 	if (gameVar.scoreBoard.length % 2 == 0)
 	{
-		gameVar.currenServer = 'player';
+		gameVar.currentServer = 'player';
 		gameVar.aiServe = false;
 		resetBall('player');
 	}
 	else
 	{
-		gameVar.currenServer = 'ai';
+		gameVar.currentServer = 'ai';
 		gameVar.aiServe = true;
 		resetBall('ai');
 	}
@@ -71,7 +71,7 @@ export function checkScore()
 		gameVar.rematchBtn.style.cursor = false ? "pointer" : "not-allowed";
 		cancelAnimationFrame(gameVar.animationFrame);
 		sendScore();
-		listenRematchBtn();
+		listenBtn();
 	}	
 }
 
@@ -102,11 +102,11 @@ export function resetBall(winner)
 	{
 		gameVar.serveCount = 0;
 		if (!gameVar.liveMatch)
-			gameVar.currenServer = (gameVar.currenServer == 'player') ? 'ai' : 'player';
+			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'ai' : 'player';
 		else if (gameVar.liveMatch)
 		{
-			gameVar.currenServer = (gameVar.currenServer == 'player') ? 'player2' : 'player';
-			sendPlayerData(gameVar.gameSocket, gameVar.playerReady, gameVar.currenServer);
+			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'player2' : 'player';
+			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime);
 		}
 	}
 	initializeBall();
@@ -115,9 +115,10 @@ export function resetBall(winner)
 	if (gameVar.liveMatch)
 		checkball();
 	gameVar.gameStart = false;
-	sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
-	console.log("server: ", gameVar.currenServer);
-	if (gameVar.currenServer == 'ai')
+	if (gameVar.liveMatch)
+		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime);
+	console.log("server: ", gameVar.currentServer);
+	if (gameVar.currentServer == 'ai')
 	{
 		gameVar.aiServe = true;
 		aiServeBall();

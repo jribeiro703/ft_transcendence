@@ -1,6 +1,6 @@
 import gameVar from './var.js';
-import { sendGameData, sendPlayerData } from './network.js';
-import { draw2, initializeBall } from './draw.js';
+import { sendGameData, sendPlayerData, sendSettingData } from './network.js';
+import { drawLive, initializeBall } from './draw.js';
 import { updateCanvasColor } from './setting.js';
 import { SCORE_CANVAS_HEIGHT } from './const.js';
 import { drawScoreBoard } from './gameView.js';
@@ -41,14 +41,11 @@ export function waitingPlayer()
 		{
 			gameVar.gameReady = true;
 			clearInterval(waitingINterval);
-			displayGameData(1);
-			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
-			displayGameData(1);
-			displayPlayerData(1);
+			sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
 			initializeBall();
 			updateCanvasColor();
 			drawScoreBoard();
-			draw2();
+			drawLive();
 		}
 	}, 2000);
 }
@@ -56,7 +53,7 @@ export function waitingPlayer()
 export function displayPlayerData(idx)
 {
 	console.log("playerReady: ", gameVar.playerReady);
-	console.log("currentServer: ", gameVar.currenServer);
+	console.log("currentServer: ", gameVar.currentServer);
 }
 
 
@@ -74,17 +71,15 @@ export function joinRoom(roomName)
 			gameSocket.send(JSON.stringify({ type: 'join_room' }));
 			gameVar.gameSocket = gameSocket;
 			history.pushState({ view: 'game', room: roomName }, '', `?view=multi&room=${roomName}`);
-			if (gameVar.playerIdx == 1 && !gameVar.gameReady)
+			if (gameVar.playerIdx == 1)
 			{
 				waitingPlayer();
 			}
-			if (gameVar.playerIdx == 2 && !gameVar.gameReady)
+			if (gameVar.playerIdx == 2)
 			{
-				console.log("player2 sendgamedata");
-				sendPlayerData(gameVar.gameSocket, gameVar.playerReady, gameVar.currenServer);
+				sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
 				updateSettingLive();
 			}
-
 		}
 		catch (error)
 		{
@@ -97,12 +92,12 @@ export function joinRoom(roomName)
 		try
 		{
 			const data = JSON.parse(e.data);
-			if (data.type !== 'ball_data' && data.type !== 'paddle_data')
-				console.log("data: ", data);
+			// if (data.type !== 'ball_data' && data.type !== 'paddle_data')
+				// console.log("data: ", data);
 			if (data.type === 'ping')
 			{
 				gameSocket.send(JSON.stringify({ type: 'pong' }));
-				console.log('Pong envoyé en réponse');
+				// console.log('Pong envoyé en réponse');
 			}
 			else if (data.type == 'ball_data')
 			{
@@ -115,7 +110,6 @@ export function joinRoom(roomName)
 				gameVar.dy = data.direction_data.dy;
 				gameVar.init_dx = data.direction_data.initDx;
 				gameVar.init_dy = data.direction_data.initDy;
-				console.log("direction recu");
 			}
 			else if (data.type == 'paddle_data') 
 			{
@@ -130,20 +124,19 @@ export function joinRoom(roomName)
 			} 
 			else if (data.type == 'player_data')
 			{
-				console.log("playerDataonmsg");
 				gameVar.playerReady = data.player_data.playerReady;
-				gameVar.currentServer = data.player_data.currentServer;
 			}
 			else if (data.type == 'game_data')
 			{
-				console.log("receive gameData start avant: ", gameVar.gameStart);
-
 				gameVar.gameStart = data.game_data.gameStart;
-				gameVar.gameReady = data.game_data.gameReady;
-				gameVar.difficulty = data.game_data.difficulty;
-				gameVar.currentLevel = data.game_data.currentLevel;
-				console.log("receive gameData start apres: ", gameVar.gameStart);
-				// displayGameData(2);
+				gameVar.currentServer = data.game_data.currentServer;
+				gameVar.startTime = data.game_data.startTime;
+			}
+			else if (data.type == 'setting_data')
+			{
+				gameVar.gameReady = data.setting_data.gameReady;
+				gameVar.difficulty = data.setting_data.difficulty;
+				gameVar.currentLevel = data.setting_data.currentLevel;
 			}
 		}
 		catch (error)
@@ -167,10 +160,6 @@ export function delRooms()
 {
 	while (gameVar.rooms.length > 0)
 		gameVar.rooms.pop();
-}
-export function displayRoomInfo()
-{
-	console.log("rooms : ", gameVar.rooms);
 }
 
 export function updateRoomInfo(index, roomName, playerCount, roomStatus)
@@ -201,8 +190,8 @@ export function addRoom(index, roomName, status)
 
 export function updateRoomList()
 {
-	console.log("updateRooomList");
-	console.log("gameRoom: ", gameVar.rooms);
+	// console.log("updateRooomList");
+	// console.log("gameRoom: ", gameVar.rooms);
 	gameVar.noRoomsMessage.style.display = 'none';
 	gameVar.roomsContainer.style.display = 'block';
 
@@ -227,7 +216,6 @@ export function updateRoomList()
 		joinBtn.addEventListener('click', () =>
 		{
 			showGameRoom();
-			console.log("player2 join room");
 			joinRoom(room.name); 
 		});
 
@@ -237,9 +225,7 @@ export function updateRoomList()
 
 export function showGameRoom()
 {
-	console.log("showGameRoom");
 	gameVar.playerIdx = 2;
-	// gameVar.gameReady = true;
 	gameVar.playerReady = true;
 
 	const mainContent = document.getElementById('mainContent');
@@ -291,7 +277,6 @@ export function showGameRoom()
     }, 1000);
 
     scoreCanvas.style.marginBottom = '10px';
-	// updateSettingLive(roomName);
 }
 
 export function updateSettingLive()
@@ -304,20 +289,10 @@ export function updateSettingLive()
 		}
 		else
 		{
-			if (gameVar.playerIdx === 1)
-			{
-				console.log("!!!!!!!!!!!!!1");
-			}
-			else if (gameVar.playerIdx === 2)
-			{
-				console.log("updatesettinglive");
-				displayGameData(2);
-				displayPlayerData(2);
-			}
 			updateCanvasColor();
 			drawScoreBoard();
 			initializeBall();
-			draw2();
+			drawLive();
 			clearInterval(waitingINterval);
 		}
 	}, 2000);

@@ -4,7 +4,7 @@ import { resetBall } from "./reset.js";
 import { sendBallData, sendPaddleData } from "./network.js";
 import { collisionFoot } from "./foot.js";
 import { collisionPaddleAi, ballOut } from "./collision.js";
-import { tennisCollision } from "./tennis.js";
+import { collisionTennis } from "./tennis.js";
 import { checkball } from "./check.js";
 
 export function manageRealCollision()
@@ -20,9 +20,52 @@ export function manageRealCollision()
 	if (gameVar.football)
 		collisionFoot();
 	if (gameVar.tennis)
-		tennisCollision();
+		collisionTennis();
 	collisionPaddleAi();
 	ballOut();
+}
+
+export function collisionPaddleP1()
+{
+	if (gameVar.x > gameVar.playerPaddleWidth)
+		return;
+	gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
+	let hitpos = (gameVar.y - gameVar.playerPaddleY) / gameVar.playerPaddleHeight;
+	let angle = (hitpos - 0.5) * Math.PI / 2;
+	gameVar.dx = (Math.cos(angle) * Math.abs(gameVar.dx) + 1);
+	gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.init_dy);
+	if (gameVar.dx > gameVar.init_dx + 1)
+		gameVar.dx -= 1;
+}
+
+export function collisionPaddleP2()
+{
+	if (gameVar.x < gameVar.canvasW - gameVar.player2PaddleWidth)
+		return ;
+	gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
+	let hitpos = (gameVar.y - gameVar.player2PaddleY) / gameVar.player2PaddleHeight;
+	let angle = (hitpos - 0.5) * Math.PI / 2;
+	gameVar.dx = -(Math.cos(angle) * Math.abs(gameVar.dx) + 1);
+	gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.init_dy);
+}
+
+export function collisionWall()
+{
+	if(gameVar.y + gameVar.dy > gameVar.canvasH - gameVar.ballRadius || gameVar.y + gameVar.dy < gameVar.ballRadius)
+	{
+		gameVar.dy = -gameVar.dy;
+		return (true);
+	}
+	if (gameVar.currentLevel == 'football')
+	{
+		if (collisionFoot())
+			return (true);
+	}
+	else if (gameVar.currentLevel == 'tennis')
+	{
+		if (collisionTennis())
+			return (true);
+	}
 }
 
 export function manageCollisionLive()
@@ -32,34 +75,19 @@ export function manageCollisionLive()
 
 	gameVar.x += gameVar.dx;
 	gameVar.y += gameVar.dy;
-
 	posChanged = true;
-	if(gameVar.y + gameVar.dy > gameVar.canvasH - gameVar.ballRadius || gameVar.y + gameVar.dy < gameVar.ballRadius)
-	{
-		gameVar.dy = -gameVar.dy;
+
+	if (collisionWall())
 		directChanged = true;
-	}
 	if (gameVar.playerIdx == 1)
 	{
 		if(gameVar.x - gameVar.ballRadius < gameVar.playerPaddleWidth &&
 			gameVar.y > gameVar.playerPaddleY &&
 			gameVar.y < gameVar.playerPaddleY + gameVar.playerPaddleHeight)
 		{
-			if (gameVar.x > gameVar.playerPaddleWidth)
-			{
-				return;
-			}
-			gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
-			let hitpos = (gameVar.y - gameVar.playerPaddleY) / gameVar.playerPaddleHeight;
-			let angle = (hitpos - 0.5) * Math.PI / 2;
-			gameVar.dx = (Math.cos(angle) * Math.abs(gameVar.dx) + 1);
-			gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.init_dy);
+			collisionPaddleP1();
 			posChanged = true;
-			directChanged = true;
-			if (gameVar.dx > gameVar.init_dx + 1)
-			{
-				gameVar.dx -= 1;
-			}
+			directChanged = true;		
 		}
 	}
 	if (gameVar.playerIdx == 2)
@@ -68,15 +96,7 @@ export function manageCollisionLive()
 			gameVar.y > gameVar.player2PaddleY &&
 			gameVar.y < gameVar.player2PaddleY + gameVar.player2PaddleHeight)
 		{
-			if (gameVar.x < gameVar.canvasW - gameVar.player2PaddleWidth)
-			{
-				return ;
-			}
-			gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
-			let hitpos = (gameVar.y - gameVar.player2PaddleY) / gameVar.player2PaddleHeight;
-			let angle = (hitpos - 0.5) * Math.PI / 2;
-			gameVar.dx = -(Math.cos(angle) * Math.abs(gameVar.dx) + 1);
-			gameVar.dy = (Math.sin(angle) * Math.abs(gameVar.dy) - gameVar.init_dy);
+			collisionPaddleP2();
 			directChanged = true;
 			posChanged = true;
 		}
@@ -101,12 +121,12 @@ export function manageCollisionLive()
 
 export function manageServer()
 {
-	if (gameVar.currenServer == 'player')
+	if (gameVar.currentServer == 'player')
 	{
 		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
 		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
 	}
-	else if (gameVar.currenServer == 'player2')
+	else if (gameVar.currentServer == 'player2')
 	{
 		gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
 		gameVar.y = gameVar.player2PaddleY + gameVar.player2PaddleHeight / 2;

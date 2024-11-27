@@ -3,7 +3,6 @@ import gameVar from "./var.js";
 export function collisionFoot()
 {
 	const penaltyAreaHeight = gameVar.canvasH * 0.4;
-	const penaltyAreaWidth = gameVar.canvasW * 0.13;
 	const goalY = (gameVar.canvasH - penaltyAreaHeight) / 2;
 
 	if (gameVar.y < goalY || gameVar.y > goalY + penaltyAreaHeight)
@@ -12,12 +11,14 @@ export function collisionFoot()
 		{
 			gameVar.x = gameVar.ballRadius;
 			gameVar.dx = -gameVar.dx;
+			return (true);
 			// directChanged = true;
 		}
 		if (gameVar.x + gameVar.ballRadius > gameVar.canvasW)
 		{
 			gameVar.x = gameVar.canvasW - gameVar.ballRadius;
 			gameVar.dx = -gameVar.dx;
+			return (true);
 			// directChanged = true;
 		}
 	}
@@ -103,8 +104,5 @@ export function drawFootball()
 
     gameVar.ctx.fillRect(gameVar.canvasW - wallThickness, 0, wallThickness, (gameVar.canvasH - goalHeight) / 2);
     gameVar.ctx.fillRect(gameVar.canvasW - wallThickness, (gameVar.canvasH + goalHeight) / 2, wallThickness, (gameVar.canvasH - goalHeight) / 2);
-
-    // gameVar.ctx.fillRect(0, 0, gameVar.canvasW, wallThickness);
-    // gameVar.ctx.fillRect(0, gameVar.canvasH - wallThickness, gameVar.canvasW, wallThickness);
 
 }

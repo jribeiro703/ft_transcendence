@@ -1,13 +1,12 @@
 import gameVar from "./var.js";
 import brickVar from "./brickout/var.js"
-import { SCORE_CANVAS_HEIGHT, SCORE_FONT } from "./const.js";
+import { SCORE_CANVAS_HEIGHT } from "./const.js";
 import { initializeBall } from "./draw.js";
-import { newPowerUp, updatePowerUpSelection } from "./powerUp.js";
+import { newPowerUp } from "./powerUp.js";
 import { draw } from "./draw.js";
 import { resetMatch, checkServer } from "./reset.js";
 import { manageAi } from "./ai.js";
 import { updateCanvasColor } from "./setting.js";
-import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { listenPlayBtn, listenSettingBtn } from "./listenerSetting.js";
 import { initControl } from "./init.js";
 
@@ -212,49 +211,7 @@ export function showGameView()
 
 	startGame();
 }
-// export function showGameView()
-// {
-// 	history.pushState({ view: 'game'}, '', `?view=solo/play`);
-// 	const mainContent = document.getElementById('mainContent');
-// 	mainContent.innerHTML = ``;
-// 	const gameView = document.createElement('div');
-// 	gameView.innerHTML=`
-// 	<div id="gameView" style="display: none;">
-// 		<div id="scoreboard">SCORE</div>
-// 		<div id="scoreRow">
-// 			<span id="player">Player </span>
-// 			<span id="playerScore">0</span>
-// 			<span id="vs">VS</span>
-// 			<span id="aiScore">0</span>
-// 			<span id="ai">CPU</span>
-// 		</div>
-// 		<canvas id="myCanvas"></canvas>
-// 		<br><br>
-// 		<div class="button-container">
-// 			<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
-// 			<button id="quitGameBtn" style="display: none;">Quit Game</button>
-// 		</div>
-// 	</div>
-// 	`;
 
-// 	mainContent.appendChild(gameView);
-
-// 	updateCanvasColor();
-
-// 	gameVar.playerScoreElement = document.getElementById('playerScore');
-// 	gameVar.aiScoreElement = document.getElementById('aiScore');
-// 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
-// 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-// 	gameVar.gameView = document.getElementById('gameView');
-
-// 	gameVar.gameView.style.display = 'block';
-
-// 	var canvas = document.getElementById('myCanvas');
-// 	gameVar.ctx = canvas.getContext('2d');
-// 	canvas.width = gameVar.canvasW;
-// 	canvas.height = gameVar.canvasH;
-	// startGame();
-// }
 
 export function startGame()
 {
@@ -301,7 +258,6 @@ export function saveScore()
 
 export function updateImageUrl()
 {
-
 	gameVar.pongUrl = "static/css/images/ttLevel.png";
 	if (gameVar.football)
 		gameVar.pongUrl = "static/css/images/footballLevel.png";
@@ -349,4 +305,47 @@ export function updateImageUrl()
 
 // 	gameView.style.display = 'block';
 
+// }
+// export function showGameView()
+// {
+// 	history.pushState({ view: 'game'}, '', `?view=solo/play`);
+// 	const mainContent = document.getElementById('mainContent');
+// 	mainContent.innerHTML = ``;
+// 	const gameView = document.createElement('div');
+// 	gameView.innerHTML=`
+// 	<div id="gameView" style="display: none;">
+// 		<div id="scoreboard">SCORE</div>
+// 		<div id="scoreRow">
+// 			<span id="player">Player </span>
+// 			<span id="playerScore">0</span>
+// 			<span id="vs">VS</span>
+// 			<span id="aiScore">0</span>
+// 			<span id="ai">CPU</span>
+// 		</div>
+// 		<canvas id="myCanvas"></canvas>
+// 		<br><br>
+// 		<div class="button-container">
+// 			<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+// 			<button id="quitGameBtn" style="display: none;">Quit Game</button>
+// 		</div>
+// 	</div>
+// 	`;
+
+// 	mainContent.appendChild(gameView);
+
+// 	updateCanvasColor();
+
+// 	gameVar.playerScoreElement = document.getElementById('playerScore');
+// 	gameVar.aiScoreElement = document.getElementById('aiScore');
+// 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
+// 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+// 	gameVar.gameView = document.getElementById('gameView');
+
+// 	gameVar.gameView.style.display = 'block';
+
+// 	var canvas = document.getElementById('myCanvas');
+// 	gameVar.ctx = canvas.getContext('2d');
+// 	canvas.width = gameVar.canvasW;
+// 	canvas.height = gameVar.canvasH;
+	// startGame();
 // }

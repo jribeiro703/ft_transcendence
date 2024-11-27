@@ -1,7 +1,6 @@
 import gameVar from "./var.js";
 import { resetBall } from "./reset.js";
 
-
 export function collisionPaddleAi()
 {
 	if(gameVar.x - gameVar.ballRadius < gameVar.playerPaddleWidth &&
