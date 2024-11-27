@@ -6,25 +6,8 @@ import { initBallB, updateBallPositionB, startBallB, handleBallB } from './ball.
 import { manageCollisionB, manageMoveB } from './manage.js';
 import { collectPowerUpB, createPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
 import { checkLevelB } from './level.js';
-import { startBall } from '../input.js';
 
 
-// document.addEventListener("DOMContentLoaded", function()
-// {
-// 	if (!brickVar.initialize)
-//     {
-// 		var canvas = document.getElementById("myCanvas");
-// 		brickVar.canvas = canvas;
-//  		brickVar.ctx = canvas.getContext("2d");
-//     	canvas.width = brickVar.canvasW;
-// 		canvas.height = brickVar.canvasH;
-// 		initListener();
-// 		brickVar.initialize = true;
-// 		brickVar.initDx = 3;
-// 		brickVar.initDy = -3;
-// 	}
-
-// });
 export function initListenerB()
 {
 	removeEventListenersB();
@@ -65,10 +48,6 @@ function removeEventListenersB()
     document.removeEventListener("keydown", keyDownHandlerB);
     document.removeEventListener("keyup", keyUpHandlerB);
     document.removeEventListener("keydown", startBallB);
-    // if (brickVar.startBtn) 
-	// {
-    //     brickVar.startBtn.removeEventListener('click', () => startGameB("classic"));
-    // }
 }
 
 export function startGameB(level)
@@ -77,11 +56,10 @@ export function startGameB(level)
 	{
 		initBallB();
 		checkLevelB(level);
-		if (!brickVar.powerUpenable)
+		if (brickVar.powerUpenable)
 			createPowerUpB();
 		drawB();
 		brickVar.initGame = true;
-	
 	}
 }
 

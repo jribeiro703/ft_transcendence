@@ -24,7 +24,7 @@ export function updatePowerUpSelectionB(selected)
 
 export function updatePowerUpB()
 {
-	if (brickVar.gameStart)
+	if (brickVar.powerUpenable)
     {
 		if (!brickVar.powerUpActive)
 		{
@@ -75,59 +75,64 @@ export function RandomPowerUpB()
 
 export function drawPowerUpB()
 {
-    if (!brickVar.powerUpActive && brickVar.ctx)
-	{
-        if (img.complete && img.naturalHeight !== 0)
+	if (brickVar.powerUpenable)
+    {
+		if (!brickVar.powerUpActive && brickVar.ctx)
 		{
-            const imgWidth = 40;
-            const imgHeight = 40;
-            try
+			if (img.complete && img.naturalHeight !== 0)
 			{
-                brickVar.ctx.drawImage(img, 
-                    brickVar.powerUpX - imgWidth / 2, 
-                    brickVar.powerUpY - imgHeight / 2, 
-                    imgWidth, 
-                    imgHeight
-                );
-            }
-			catch (error)
+				const imgWidth = 40;
+				const imgHeight = 40;
+				try
+				{
+					brickVar.ctx.drawImage(img, 
+						brickVar.powerUpX - imgWidth / 2, 
+						brickVar.powerUpY - imgHeight / 2, 
+						imgWidth, 
+						imgHeight
+					);
+				}
+				catch (error)
+				{
+					console.error('Error drawing power-up:', error);
+				}
+			}
+			else
 			{
-                console.error('Error drawing power-up:', error);
-            }
-        }
-		else
-		{
-            // Fallback en attendant le chargement de l'image
-            brickVar.ctx.beginPath();
-            brickVar.ctx.arc(brickVar.powerUpX, brickVar.powerUpY, 20, 0, Math.PI * 2);
-            brickVar.ctx.fillStyle = '#FF0000';
-            brickVar.ctx.fill();
-            brickVar.ctx.closePath();
-        }
-    }
+				brickVar.ctx.beginPath();
+				brickVar.ctx.arc(brickVar.powerUpX, brickVar.powerUpY, 20, 0, Math.PI * 2);
+				brickVar.ctx.fillStyle = '#FF0000';
+				brickVar.ctx.fill();
+				brickVar.ctx.closePath();
+			}
+		}
+	}
 }
 
 export function collectPowerUpB()
 {
-	if (!brickVar.powerUpActive && !brickVar.finishLevel)
+	if (brickVar.powerUpenable)
 	{
-		const powerUpCenterX = brickVar.powerUpX + (brickVar.POWER_UP_SIZE / 2);
-        const powerUpCenterY = brickVar.powerUpY + (brickVar.POWER_UP_SIZE / 2);
-        const paddleTop = brickVar.canvasH - brickVar.paddleHeight;
-        const paddleBottom = brickVar.canvasH;
-        const paddleLeft = brickVar.paddleX;
-        const paddleRight = brickVar.paddleX + brickVar.paddleWidth;
-        const tolerance = 10;
-        
-        if (powerUpCenterX >= paddleLeft - tolerance &&
-            powerUpCenterX <= paddleRight + tolerance &&
-            powerUpCenterY >= paddleTop - tolerance &&
-            powerUpCenterY <= paddleBottom + tolerance)
+		if (!brickVar.powerUpActive && !brickVar.finishLevel)
 		{
-            console.log("PowerUp collected!");
-            brickVar.powerUpActive = true;
-            checkPowerUpB();
-        }
+			const powerUpCenterX = brickVar.powerUpX + (brickVar.POWER_UP_SIZE / 2);
+			const powerUpCenterY = brickVar.powerUpY + (brickVar.POWER_UP_SIZE / 2);
+			const paddleTop = brickVar.canvasH - brickVar.paddleHeight;
+			const paddleBottom = brickVar.canvasH;
+			const paddleLeft = brickVar.paddleX;
+			const paddleRight = brickVar.paddleX + brickVar.paddleWidth;
+			const tolerance = 10;
+			
+			if (powerUpCenterX >= paddleLeft - tolerance &&
+				powerUpCenterX <= paddleRight + tolerance &&
+				powerUpCenterY >= paddleTop - tolerance &&
+				powerUpCenterY <= paddleBottom + tolerance)
+			{
+				console.log("PowerUp collected!");
+				brickVar.powerUpActive = true;
+				checkPowerUpB();
+			}
+		}
 	}
 }
 

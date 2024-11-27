@@ -1,8 +1,15 @@
 const gameVar = 
 {
+
+// ----------------------------Canvas-------------------------
+
 	canvasW: 840,
 	canvasH: 420,
-
+	scoreCanvW: 420,
+	scoreCanvH: 120,
+	scoreCtx: null, 
+	gameTime: 0,
+	gameTimer: null,
 
 // ---------------------------Paddle------------------------
 
@@ -35,15 +42,6 @@ const gameVar =
 	player2ScoreElement: null,
 	aiScoreElement: null,
 
-// --------------------------Bricks------------------------------
-
-	brickRowCount: 3,
-	brickColumnCount: 5,
-	brickWidth: 75,
-	brickHeight: 20,
-	brickPadding: 10,
-	brickOffsetTop: 30,
-	brickOffsetLeft: 30,
 
 // ----------------------------Settings-------------------------
 
@@ -103,6 +101,7 @@ const gameVar =
 	canvasColor: null,
 
 	game: null,
+	startTime: false,
 
 
 // --------------------------------------AI-----------------------------
@@ -129,7 +128,9 @@ const gameVar =
 		x: null,
 		y: null,
 		dx: null,
-		dy: null
+		dy: null,
+		initDx: null,
+		initDy: null,
 	},
 
 
@@ -209,26 +210,26 @@ const gameVar =
 	],
 	currentLevel: null,
 
-	currentMap: 'classicMap',
-	maps: {
-		classicMap: [],
-		customMap1: [
-			{sta: 1, x: 840 / 2 - 15, y: 5, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 - 15, y: 65, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 - 15, y: 125, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 - 15, y: 185, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 - 15, y: 245, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 - 15, y: 305, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 - 15, y: 365, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 + 15, y: 5, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 + 15, y: 65, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 + 15, y: 125, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 + 15, y: 185, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 + 15, y: 245, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 + 15, y: 305, width: 20, height: 50 },
-			{sta: 1, x: 840 / 2 + 15, y: 365, width: 20, height: 50 },
-		],
-	},
+	// currentMap: 'classicMap',
+	// maps: {
+	// 	classicMap: [],
+	// 	customMap1: [
+	// 		{sta: 1, x: 840 / 2 - 15, y: 5, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 - 15, y: 65, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 - 15, y: 125, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 - 15, y: 185, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 - 15, y: 245, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 - 15, y: 305, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 - 15, y: 365, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 + 15, y: 5, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 + 15, y: 65, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 + 15, y: 125, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 + 15, y: 185, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 + 15, y: 245, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 + 15, y: 305, width: 20, height: 50 },
+	// 		{sta: 1, x: 840 / 2 + 15, y: 365, width: 20, height: 50 },
+	// 	],
+	// },
 
 	scoreBoard: [],
 };

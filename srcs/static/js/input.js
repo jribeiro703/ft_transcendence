@@ -1,5 +1,6 @@
 import gameVar from "./var.js";
-import { sendGameData } from "./network.js";
+import { sendDirectionData, sendGameData } from "./network.js";
+import { displayGameData } from "./room.js";
 
 export function keyDownHandler(e, isFirstPlayer)
 {
@@ -56,6 +57,7 @@ export function startBallAi(e)
 	{
 		if (!gameVar.finishGame)
 		{
+			gameVar.startTime = true;
 			gameVar.gameStart = true;
 			gameVar.dx = gameVar.init_dx;
 			gameVar.dy = (Math.random() < 0.5 ? gameVar.init_dy : -gameVar.init_dy);
@@ -74,12 +76,15 @@ export function startBall(e)
 	{
 		if (e.code == "Space" && !gameVar.matchOver && !gameVar.gameStart)
 		{
-			console.log("staaaaaaaaaaaaaaaaaaaaaaaaaaartt");
-			gameVar.gameStart = true;
-
-			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.gameReady);
 			gameVar.dx = gameVar.init_dx;
-			gameVar.dy = (Math.random() < 0.5 ? gameVar.init_dy : -gameVar.init_dy);
+            gameVar.dy = (Math.random() < 0.5 ? gameVar.init_dy : -gameVar.init_dy);
+            sendDirectionData(gameVar.dx, gameVar.dy, gameVar.init_dx, gameVar.init_dy, gameVar.gameSocket);
+			displayVar();
+			displayBall();
+            gameVar.gameStart = true;
+			gameVar.startTime = true;
+            sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.gameReady, 
+                      gameVar.difficulty, gameVar.currentLevel);
 		}
 	}
 }

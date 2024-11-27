@@ -211,7 +211,9 @@ class PongConsumer(WebsocketConsumer):
 			'type': 'direction_data',
 			'direction_data': {
 				'dx': event['dx'],
-				'dy': event['dy']
+				'dy': event['dy'],
+				'initDx': event['initDx'],
+				'initDy': event['initDy'],
 			}
 		}))
 
@@ -234,14 +236,17 @@ class PongConsumer(WebsocketConsumer):
 		}))
 
 	def game_data(self, event):
+		logger.info(f"sending game data to client {self.channel_name}")
 		self.send(text_data=json.dumps({
 			'type': 'game_data',
 			'game_data': {
 				'gameStart': event['gameStart'],
 				'gameReady': event['gameReady'],
-				# 'animationFrame': event['animationFrame']	
+				'difficulty': event['difficulty'],
+				'currentLevel': event['currentLevel']
 			}
 		}))
+		logger.info(f"Game data sent to client {self.channel_name}")
 
 	def broadcast_ball_data(self, data):
 		async_to_sync(self.channel_layer.group_send)(
@@ -260,6 +265,8 @@ class PongConsumer(WebsocketConsumer):
 				'type': 'direction_data',
 				'dx': data['dx'],
 				'dy': data['dy'],
+				'initDx': data['initDx'],
+				'initDy': data['initDy'],
 			}
 		)
 
@@ -284,12 +291,15 @@ class PongConsumer(WebsocketConsumer):
 		)
 
 	def broadcast_game_data(self, data):
+		logger.info(f"broadcast game data from {self.channel_name}: {data}")
 		async_to_sync(self.channel_layer.group_send)(
 			self.room_group_name,
 			{
 				'type': 'game_data',
 				'gameStart': data['gameStart'],
 				'gameReady': data['gameReady'],
-				# 'animationFrame': data['animationFrame'],
+				'difficulty': data['difficulty'],
+				'currentLevel': data['currentLevel'],
 			}
 		)
+		logger.info(f"Game data broadcasted to group {self.room_group_name}")

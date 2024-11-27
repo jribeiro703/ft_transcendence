@@ -157,6 +157,6 @@ export function initEventListenerAi()
 	// document.addEventListener("keyup", keyUpHandler, false);
 	// document.addEventListener("keydown", startBallAi, false);
 
-	gameVar.quickGameBtn.addEventListener('click', showGameView);
-	gameVar.rematchBtn.addEventListener('click', rematchView);
+	// gameVar.quickGameBtn.addEventListener('click', showGameView);
+	// gameVar.rematchBtn.addEventListener('click', rematchView);
 }

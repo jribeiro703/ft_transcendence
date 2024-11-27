@@ -1,23 +1,10 @@
 import gameVar from "./var.js";
-import { updateDifficultySelection, updateLevelSelection } from "./gameMode.js";
+import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
-import { roomMultiView } from './init.js'
-import { showGameplayMultiView, showGameplaySoloView } from "./gameView.js";
-
-export function checkSetting()
-{
-	if (gameVar.settingsChanged === false)
-	{
-		gameVar.difficulty = 'medium';
-		updateDifficultySelection('medium');
-		updateLevelSelection('tableTennis');
-		gameVar.currentLevel = 'tableTennis'
-	}
-}
+import { listenSettingDifficulty, listenSettingPU, listenSettingLevel, listenSettingSave} from "./listenerSetting.js"
 
 export function showSettingView(live)
 {
-
 	history.pushState({ view: 'game'}, '', `?view=solo/settings`);
 	const pongUrl = "static/css/images/ttLevel.png";
 	const footUrl = "static/css/images/footballLevel.png";
@@ -70,117 +57,47 @@ export function showSettingView(live)
 
 	maincontent.appendChild(insertTo);
 
+	getBtnById();
+	addPuBtn(live);
 
-	gameVar.powerUpSelection = document.getElementById('powerUpSelection');
-	gameVar.btnPowerUp = document.getElementById('btnPowerUp');
-	gameVar.withPowerUp = document.getElementById('withPowerUps');
-	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');
-	gameVar.easy = document.getElementById('easy');
-	gameVar.medium = document.getElementById('medium');
-	gameVar.hard = document.getElementById('hard');
-	gameVar.tableTennis = document.getElementById('tableTennis');
-	gameVar.footLevel = document.getElementById('footLevel');
-	gameVar.tennisLevel = document.getElementById('tennisLevel');
-	gameVar.saveBtn = document.getElementById('saveBtn');
-
-	if(live === false)
-	{
-		gameVar.powerUpSelection.style.display = 'block';
-		gameVar.btnPowerUp.style.display = 'block';
-	}
-	else
-	{
-		gameVar.powerUpSelection.style.display = 'none';
-		gameVar.btnPowerUp.style.display = 'none';
-	}		
-
-	gameVar.withPowerUp.addEventListener('click', () =>
-	{
-		gameVar.withPowerUp.classList.add('selected');
-		gameVar.withoutPowerUp.classList.remove('selected');
-		updatePowerUpSelection(true);
-
-	});
-
-	gameVar.withoutPowerUp.addEventListener('click', () => 
-	{
-		gameVar.withoutPowerUp.classList.add('selected');
-		gameVar.withPowerUp.classList.remove('selected');
-		updatePowerUpSelection(false); 
-	});
-
-	gameVar.easy.addEventListener('click', () => 
-	{
-		gameVar.easy.classList.add('selected');
-		gameVar.medium.classList.remove('selected');
-		gameVar.hard.classList.remove('selected');
-		updateDifficultySelection('easy');
-	});
-	
-	gameVar.medium.addEventListener('click', () => 
-	{
-		gameVar.easy.classList.remove('selected');
-		gameVar.medium.classList.add('selected');
-		gameVar.hard.classList.remove('selected');
-		updateDifficultySelection('medium');
-	});
-
-	gameVar.hard.addEventListener('click', () => 
-	{
-		gameVar.easy.classList.remove('selected');
-		gameVar.medium.classList.remove('selected');
-		gameVar.hard.classList.add('selected');
-		updateDifficultySelection('hard');
-	});
-
-	gameVar.tableTennis.addEventListener('click', () =>
-	{
-		gameVar.tableTennis.classList.add('selected');
-		gameVar.footLevel.classList.remove('selected');
-		gameVar.tennisLevel.classList.remove('selected');
-		updateLevelSelection('tableTennis');
-	});
-
-	gameVar.footLevel.addEventListener('click', () =>
-	{
-		gameVar.tableTennis.classList.remove('selected');
-		gameVar.footLevel.classList.add('selected');
-		gameVar.tennisLevel.classList.remove('selected');
-		updateLevelSelection('footLevel');
-	});
-
-	gameVar.tennisLevel.addEventListener('click', () =>
-	{
-		gameVar.tableTennis.classList.remove('selected');
-		gameVar.footLevel.classList.remove('selected');
-		gameVar.tennisLevel.classList.add('selected');
-		updateLevelSelection('tennisLevel');
-	});
-
-	gameVar.saveBtn.addEventListener('click', () =>
-	{
-		if (live === true)
-		{
-			roomMultiView();
-			updateLiveSetting();
-		}
-		else
-		{
-			showGameplaySoloView();
-			updateSetting();
-		}
-	});
+	listenSettingPU();
+	listenSettingDifficulty();
+	listenSettingLevel();
+	listenSettingSave(live);
 }
 
+export function checkSetting()
+{
+	if (gameVar.settingsChanged === false)
+	{
+		updatePowerUpSelection(false); 
+		updateDifficultySelection('medium');
+		gameVar.difficulty = "medium";
+		updateLevelSelection("tableTennis");
+		gameVar.currentLevel = 'tableTennis'
+	}
+}
+
+export function checkSettingLive()
+{
+	console.log("stg change live", gameVar.settingsChanged);
+	if (gameVar.settingsChanged === false)
+	{
+		updateDifficultySelection('medium');
+		gameVar.difficulty = 'medium';
+		updateLevelSelection('tableTennis');
+		gameVar.currentLevel = 'tableTennis'
+	}
+}
 
 export function updateCanvasColor()
 {
 	let color = null;
-	if (gameVar.tennisTable)
+	if (gameVar.currentLevel === 'tennisTable')
 		color = '#1A1A40';
-	if (gameVar.football)
+	if (gameVar.currentLevel === 'football')
 		color = '#006400';
-	else if (gameVar.tennis)
+	else if (gameVar.currentLevel === 'tennis')
 		color = '#D2691E';
    
     const canvas = document.getElementById('myCanvas');
@@ -189,6 +106,7 @@ export function updateCanvasColor()
         canvas.style.backgroundColor = color;
     }
 }
+
 export function updateSetting()
 {
 	gameVar.settingsChanged = true;
@@ -224,8 +142,14 @@ export function updateSetting()
 		updatePowerUpSelection(false);
 	}
 
-	const settingContain = document.getElementById('settings-column');
+	displaySetting(difficulty, powerUp, level);
+}
 
+export function displaySetting(difficulty, powerUp, level)
+{
+	const settingContain = document.getElementById('settings-column');
+	if (!settingContain)
+		console.log("error on settingContain");
 	settingContain.innerHTML = '';
 
 	const settingItem = document.createElement('div');
@@ -236,8 +160,8 @@ export function updateSetting()
 	<p>Level: <span id="levelSelected">${level}</span></p>`;
 
 	settingContain.appendChild(settingItem);
-
 }
+
 export function updateLiveSetting()
 {
 	gameVar.settingsChanged = true;
@@ -250,12 +174,12 @@ export function updateLiveSetting()
 	else
 		difficulty = 'medium';
 
-	if (gameVar.football)
-		level = 'Foot Ball';
-	else if (gameVar.tennisTable)
-		level = 'Table Tennis';
-	else if (gameVar.tennis)
-		level = 'tennis';
+	// if (gameVar.football)
+	// 	level = 'Foot Ball';
+	// else if (gameVar.tennisTable)
+	// 	level = 'Table Tennis';
+	// else if (gameVar.tennis)
+	// 	level = 'tennis';
 
 	const settingContain = document.getElementById('setting-container');
 
@@ -267,9 +191,38 @@ export function updateLiveSetting()
 	Difficulty: 
 	<span id="difficultyChoice">${difficulty}</span><br>
 	Level:
-	<span id="levelSelected">${level}</span>
+	<span id="levelSelected">${gameVar.currentLevel}</span>
 	`;
 
 	settingContain.appendChild(settingItem);
 
+}
+
+export function getBtnById()
+{
+	gameVar.powerUpSelection = document.getElementById('powerUpSelection');
+	gameVar.btnPowerUp = document.getElementById('btnPowerUp');
+	gameVar.withPowerUp = document.getElementById('withPowerUps');
+	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');
+	gameVar.easy = document.getElementById('easy');
+	gameVar.medium = document.getElementById('medium');
+	gameVar.hard = document.getElementById('hard');
+	gameVar.tableTennis = document.getElementById('tableTennis');
+	gameVar.footLevel = document.getElementById('footLevel');
+	gameVar.tennisLevel = document.getElementById('tennisLevel');
+	gameVar.saveBtn = document.getElementById('saveBtn');
+}
+
+export function addPuBtn(live)
+{
+	if(live === false)
+	{
+		gameVar.powerUpSelection.style.display = 'block';
+		gameVar.btnPowerUp.style.display = 'block';
+	}
+	else
+	{
+		gameVar.powerUpSelection.style.display = 'none';
+		gameVar.btnPowerUp.style.display = 'none';
+	}		
 }

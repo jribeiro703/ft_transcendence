@@ -36,17 +36,20 @@ export function updateLevelSelection(level)
 		gameVar.tennisTable = true;
 		gameVar.football = false;
 		gameVar.tennis = false;
+		gameVar.currentLevel = "tableTennis";
 	}
-	else if (level === "footLevel")
+	else if (level === "football")
 	{
 		gameVar.tennisTable = false;
 		gameVar.football = true;
 		gameVar.tennis = false;
+		gameVar.currentLevel = "football";
 	}
-	else if (level === "tennisLevel")
+	else if (level === "tennis")
 	{
 		gameVar.tennisTable = false;
 		gameVar.football = false;
 		gameVar.tennis = true;
+		gameVar.currentLevel = "tennis";
 	}
 }

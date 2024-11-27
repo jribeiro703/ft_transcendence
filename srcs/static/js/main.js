@@ -1,6 +1,6 @@
 import gameVar from './var.js';
 import { updatePowerUpSelection } from './powerUp.js';
-import { updateLevelSelection } from './gameMode.js';
+import { updateLevelSelection } from './update.js';
 import { initGameVar, initEventListener, initEventListenerRoom } from './init.js';
 import { preventNavTouch } from './input.js';
 
@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', function()
 
 	document.head.appendChild(link);
 
-	preventNavTouch();
+	// preventNavTouch();
 	initGameVar();
 	initEventListener();
-	updatePowerUpSelection(false);
 });

@@ -15,7 +15,7 @@ export function sendBallData(x, y, socket)
 	}
 }
 
-export function sendDirectionData(dx, dy, socket)
+export function sendDirectionData(dx, dy, initDx, initDy, socket)
 {
 	if (socket && socket.readyState == WebSocket.OPEN)
 	{
@@ -24,6 +24,8 @@ export function sendDirectionData(dx, dy, socket)
 			type: 'direction_data',
 			dx: dx,
 			dy: dy,
+			initDx: initDx,
+			initDy: initDy,
 		};
 		socket.send(JSON.stringify(data));
 	}
@@ -59,9 +61,12 @@ export function sendPlayerData(socket, playerReady, currentServer)
 	}
 }
 
-export function sendGameData(socket, gameStart, gameReady)
+export function sendGameData(socket, gameStart, gameReady, difficulty, currentLevel)
 {
-	console.log("gamedatasend");
+	if (gameVar.playerIdx === 1)
+		console.log("1 send gameData ");
+	if (gameVar.playerIdx === 2)
+		console.log("2 send gameData ");
 	if (socket && socket.readyState == WebSocket.OPEN)
 	{
 		const data = 
@@ -69,8 +74,11 @@ export function sendGameData(socket, gameStart, gameReady)
 			type: 'game_data',
 			gameStart: gameStart,
 			gameReady: gameReady,
+			difficulty: difficulty,
+			currentLevel: currentLevel,
 		};
 		socket.send(JSON.stringify(data));
+		console.log("send game data ok");
 	}
 }
 

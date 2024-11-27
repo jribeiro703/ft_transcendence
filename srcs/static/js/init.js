@@ -1,21 +1,16 @@
 import gameVar from "./var.js";
-import { showGameView, showGameplaySoloView, showGameplayMultiView, showDefaultView, rematchView } from "./gameView.js";
+import { showGameSelectionView } from "./gameView.js";
 import { keyDownHandler, keyUpHandler, startBall, startBallAi } from "./input.js";
 import { addRoom, delRooms, createNewRoom, displayRoomInfo, joinRoom, updateRoomInfo, updateRoomList } from "./room.js";
 import { showSettingView } from "./setting.js";
-import { checkSetting } from "./setting.js";
+import { checkSettingLive } from "./setting.js";
+import { SCORE_CANVAS_HEIGHT } from "./const.js";
 
 export function initGameVar()
 {
-	gameVar.settingView = document.getElementById('settingView');
-	gameVar.gameView = document.getElementById('gameView');
-	gameVar.startGameBtn = document.getElementById('startGameBtn');
-	gameVar.quickGameBtn = document.getElementById('quickGameBtn');
 	gameVar.playsoloGameBtn = document.getElementById('playsoloGameBtn');
 	gameVar.playmultiGameBtn = document.getElementById('playmultiGameBtn');
-
 }
-
 
 function removeEventListeners()
 {
@@ -26,12 +21,36 @@ function removeEventListeners()
 
 export function initEventListener()
 {
-
 	removeEventListeners();
-
-	gameVar.playsoloGameBtn.addEventListener('click', showGameplaySoloView);
+	gameVar.playsoloGameBtn.addEventListener('click', showGameSelectionView);
 	gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
+}
 
+export function initControlLive()
+{
+	document.addEventListener("keydown", (e) => {
+        if (e.code === "Space")
+		{
+            startBall(e);
+        }
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.code === "ArrowUp" || e.code === "ArrowDown")
+		{
+            keyDownHandler(e);
+        }
+    });
+
+    document.addEventListener("keyup", (e) => {
+        if (e.code === "ArrowUp" || e.code === "ArrowDown")
+		{
+            keyUpHandler(e);
+        }
+    });
+}
+export function initControl()
+{
 	document.addEventListener("keydown", (e) => {
         if (e.code === "Space")
 		{
@@ -52,7 +71,6 @@ export function initEventListener()
             keyUpHandler(e);
         }
     });
-
 }
 
 
@@ -66,7 +84,7 @@ export function initEventListenerRoom()
 	gameVar.createRoomBtn.addEventListener('click', () => 
 	{
 		console.log("createRoombtn");
-		showGameViewRoom();
+		createRoomView();
 	});
 	gameVar.settingBtn.addEventListener('click', () =>
 	{
@@ -101,8 +119,8 @@ export function displayRoomView()
 					<div class="settings">
 						<button id="settingBtn">Settings</button>
 						<div id="setting-container">
-							<p>Difficulty: <span id="difficultyChoice">Medium</span><br></p>
-							<p>Level: <span id="levelSelected">Table Tennis</span></p>
+							Difficulty: <span id="difficultyChoice">Medium</span><br>
+							Level: <span id="levelSelected">Table Tennis</span>
 						</div>
 					</div>
 					<button id="createRoomBtn" class="start-button">Create Room</button>
@@ -141,21 +159,17 @@ function checkRoom(rooms)
 
 export function roomMultiView()
 {
+	initControlLive();
 	history.pushState({ view: 'game' }, '', '?view=multi');
-
-
 	displayRoomView();
-	roomNetwork();
-
-	// displayRoomView();
-
 	initEventListenerRoom();
+	roomNetwork();
 	gameVar.liveMatch = true;
 }
 
-function showGameViewRoom(room = null)
+function createRoomView(room = null)
 {
-	checkSetting();
+	checkSettingLive();
 
 	const mainContent = document.getElementById('mainContent');
 
@@ -165,13 +179,8 @@ function showGameViewRoom(room = null)
 
 	insertTo.innerHTML = `
 	<div id="gameView" style="display: none;">
-			<div id="scoreboard">SCORE</div>
-			<div id="scoreRow">
-				<span id="player">Player </span>
-				<span id="playerScore">0</span>
-				<span id="vs">VS</span>
-				<span id="aiScore">0</span>
-				<span id="ai">CPU</span>
+			<div id="scoreboard">
+				<canvas id="scoreCanvas"></canvas>
 			</div>
 			<canvas id="myCanvas"></canvas>
 			<br><br>
@@ -184,15 +193,33 @@ function showGameViewRoom(room = null)
 
 	mainContent.appendChild(insertTo);
 
-	// gameVar.roomView = document.getElementById('roomView');
 	gameVar.gameView = document.getElementById('gameView');
-	gameVar.roomView.style.display = 'none';
+	gameVar.rematchBtn = document.getElementById('rematchBtn');	
+	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+	// gameVar.roomView.style.display = 'none';
 	gameVar.gameView.style.display = 'block';
 	
 	var canvas = document.getElementById('myCanvas');
 	gameVar.ctx = canvas.getContext('2d');
 	canvas.width = gameVar.canvasW;
 	canvas.height = gameVar.canvasH;	
+
+	var scoreCanvas = document.getElementById('scoreCanvas');
+	gameVar.scoreCtx = scoreCanvas.getContext('2d');
+	scoreCanvas.width = gameVar.scoreCanvW;
+	scoreCanvas.height = SCORE_CANVAS_HEIGHT;
+
+	gameVar.gameTime = 0;
+    gameVar.gameTimer = setInterval(() =>
+	{
+        if (gameVar.startTime)
+		{
+            gameVar.gameTime++;
+        }
+    }, 1000);
+
+    scoreCanvas.style.marginBottom = '10px';
+
 	createNewRoom();
 }
 

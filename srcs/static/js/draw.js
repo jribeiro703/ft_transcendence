@@ -5,6 +5,8 @@ import { manageServerAi, manageMoveAi, aiMove} from "./ai.js";
 import { checkball } from "./check.js";
 import { drawFootball } from "./foot.js";
 import { drawTennisCourt } from "./tennis.js";
+import { updateCanvasColor } from "./setting.js";
+import { drawScoreBoard } from "./gameView.js";
 
 
 function waitingForPLayer()
@@ -16,11 +18,11 @@ export function initDraw()
 {
 	drawBall();
 	checkPaddles();
-	if (gameVar.tennisTable)
+	if (gameVar.currentLevel === 'tableTennis')
 		drawLines();	
-	else if (gameVar.football)
+	else if (gameVar.currentLevel === 'football')
 		drawFootball();
-	else if (gameVar.tennis)
+	else if (gameVar.currentLevel === 'tennis')
 		drawTennisCourt();
 }
 
@@ -41,48 +43,32 @@ export function checkReady()
 
 export function draw2()
 {
-	// displayVar();
-	// if (!checkReady())
-	// {
-		gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
-		initDraw();
-		if (gameVar.gameStart)
-		{
-			manageCollisionLive();
-		}
-		else
-			manageServer();
-		manageMove();
-		if (gameVar.animationFrame)
-			cancelAnimationFrame(gameVar.animationFrame);
-		// if (gameVar.playerIdx == 1)
-		// {
-			// gameVar.animationFrame = requestAnimationFrame(draw2);
-			// sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.animationFrame);
-		// }
-		// else
-			gameVar.animationFrame = requestAnimationFrame(draw2);	
-	// }
+	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+	initDraw();
+	drawScoreBoard();
+	if (gameVar.gameStart)
+		manageCollisionLive();
+	else
+		manageServer();
+	manageMove();
+	if (gameVar.animationFrame)
+		cancelAnimationFrame(gameVar.animationFrame);
+	gameVar.animationFrame = requestAnimationFrame(draw2);	
 }
 
 export function draw()
 {
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
-	if (gameVar.powerUpEnable)
-	{
-		drawPowerUp();
-		collectPowerUp();
-		updatePowerUp();
-	}
-	// if (gameVar.customMap == true)
-	// 	drawBricks();
+	drawScoreBoard();
+	drawPowerUp();
+	collectPowerUp();
+	updatePowerUp();
 	if (gameVar.gameStart)
 		manageRealCollision()
 	else
 		manageServerAi();
 	manageMoveAi();
-	// updatePowerUp();
 	aiMove(gameVar.targetY);
 	if (gameVar.animationFrame)
 		cancelAnimationFrame(gameVar.animationFrame);
@@ -102,7 +88,7 @@ export function checkPaddles()
 	else
 	{
 		drawPlayerPaddle();
-		drawAiPaddle("ai");
+		drawOtherPaddle("ai");
 	}
 }
 
@@ -112,27 +98,26 @@ function drawPaddle(player)
 	if (player === 1)
 	{
 		drawPlayerPaddle();
-		drawAiPaddle("player2");
+		drawOtherPaddle("player2");
 	}
 	if (player === 2)
 	{
-		drawAiPaddle("player2");
+		drawOtherPaddle("player2");
 		drawPlayerPaddle();
 	}
 }
 
 function drawPlayerPaddle()
 {
-	
 	const x = 0;
     const radius = gameVar.playerPaddleWidth / 2 + 3;
 	let color = null;
 
-	if (gameVar.tennisTable)
+	if (gameVar.currentLevel === 'tableTennis')
 		color = "#FF414D";
-	else if (gameVar.football)
+	else if (gameVar.currentLevel === 'football')
 		color = "#FF414D";
-	else if (gameVar.tennis)
+	else if (gameVar.currentLevel === 'tennis')
 		color = "#4169E1";
 
     gameVar.ctx.beginPath();
@@ -145,14 +130,12 @@ function drawPlayerPaddle()
     gameVar.ctx.arc(x + gameVar.playerPaddleWidth - radius, gameVar.playerPaddleY + radius,
         radius, 0, -Math.PI/2, true);
     gameVar.ctx.lineTo(x, gameVar.playerPaddleY);
-    
     gameVar.ctx.fillStyle = color;
     gameVar.ctx.fill();
     gameVar.ctx.closePath();
-
 }
 
-function drawAiPaddle(player)
+function drawOtherPaddle(player)
 {
 	let paddleY = 0;
 	let paddleHeight = 0;
@@ -168,7 +151,12 @@ function drawAiPaddle(player)
 		paddleWidth = gameVar.player2PaddleWidth;
 		x = gameVar.canvasW - gameVar.player2PaddleWidth;
 		radius = gameVar.player2PaddleWidth / 2 + 3;
-		color = "red";
+		if (gameVar.currentLevel === 'tableTennis')
+			color = "#0095DD";
+		else if (gameVar.currentLevel === 'football')
+			color = "#FF8C00";
+		else if (gameVar.currentLevel === 'tennis')
+			color = "#228B22";
 	}
 	else if (player === "ai")
 	{
@@ -177,12 +165,12 @@ function drawAiPaddle(player)
 		paddleWidth = gameVar.aiPaddleWidth;
 		x = gameVar.canvasW - gameVar.aiPaddleWidth;
 		radius = gameVar.aiPaddleWidth / 2 + 3;
-		if (gameVar.football)
+		if (gameVar.currentLevel === 'tableTennis')
 			color = "#0095DD";
-		else if (gameVar.tennisTable)
-			color = "#FF8C00"
-		else if (gameVar.tennis)
-			color = "#228B22"
+		else if (gameVar.currentLevel === 'football')
+			color = "#FF8C00";
+		else if (gameVar.currentLevel === 'tennis')
+			color = "#228B22";
 	}
 
     gameVar.ctx.beginPath();
@@ -195,11 +183,9 @@ function drawAiPaddle(player)
     gameVar.ctx.arc(x + radius, paddleY + radius,
         radius, Math.PI, -Math.PI/2, false);
     gameVar.ctx.lineTo(x + paddleWidth, paddleY);
-    
     gameVar.ctx.fillStyle = color;
     gameVar.ctx.fill();
     gameVar.ctx.closePath();
-	
 }
 
 export function drawLines() 
@@ -233,8 +219,7 @@ export function initializeBall()
 	}
 	else 
 	{
-		console.log("else");
-		if (gameVar.localGame)
+		if (gameVar.localGame || gameVar.liveMatch)
 		{
 			console.log("player2");
 			gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
