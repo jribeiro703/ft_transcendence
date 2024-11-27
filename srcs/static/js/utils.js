@@ -55,7 +55,6 @@ async function fetchData(endpoint, method = 'GET', body = null, isFormData = fal
 	}
 }
 
-
 function isTokenExpired(token) {
 	const arrayToken = token.split('.');
 	const tokenPayload = JSON.parse(atob(arrayToken[1])); // atob() decode payload part, JSON.parse() change JSON string to JS object
