@@ -24,6 +24,15 @@ p
 
 /* david work */
 
+.livechat-height {
+  max-height: 100%;
+  height: 742px;
+}
+
+.height-btn {
+  height: 50px;
+}
+
 
 /* .full-page { */
 /*   width: 100%; */
