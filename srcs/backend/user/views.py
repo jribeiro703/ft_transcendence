@@ -52,6 +52,7 @@ class ActivateLinkView(View):
 	permission_classes = [AllowAny]
 	
 	def get(self, request, uidb64, token, action):
+
 		try:
 			uid = force_str(urlsafe_base64_decode(uidb64))
 			user = get_object_or_404(User, pk=uid)
@@ -71,6 +72,8 @@ class ActivateLinkView(View):
 			return render(request, 'activation_failed.html', {
 				'message': "Activation link has expired."
 			})
+
+		print("user new_email:", user.new_email)
 
 		if action == 'verify_email' and user.new_email:
 			user.email = user.new_email

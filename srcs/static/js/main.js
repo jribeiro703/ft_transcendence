@@ -16,4 +16,11 @@ document.getElementById('btn-Home').addEventListener('click', async () => {
 });
 
 // Execute as soon as the structure of the page is ready for interaction
-document.addEventListener('DOMContentLoaded', renderPage("home"));
+document.addEventListener('DOMContentLoaded', () => {
+	const hash = window.location.hash;
+
+	if (hash)
+		renderPage(hash)
+	else
+		renderPage("home");
+});

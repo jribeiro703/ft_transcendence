@@ -74,6 +74,8 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 	def update(self, instance, validated_data):
 		success_messages = {}
 
+		print("validated_data", validated_data)
+
 		# for password changing
 		if 'new_password' in validated_data:
 			if 'password' not in validated_data or validated_data['password'] is None:
@@ -88,7 +90,8 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 		# for email changing
 		if 'new_email' in validated_data and validated_data['new_email'] is not None:
 			if User.objects.filter(email=validated_data['new_email'], is_active=True).exists():
-				raise serializers.ValidationError({"message": "Changing to new email failed, this email is already used by a active user."})
+				raise serializers.ValidationError({"message": "Changing to new email failed, this email is already used by a active user."}) 
+			instance.new_email = validated_data['new_email']
 			try:
 				send_activation_email(
 					instance,
@@ -117,13 +120,16 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 			except User.DoesNotExist:
 				raise serializers.ValidationError({"message": f"{validated_data['new_friend']} doesn't exist"})
 		
-		# for others fields
-		fields_to_skip = ['password', 'new_password', 'email', 'new_email', 'friends', 'new_friend']
-		filtered_data = {attr: value for attr, value in validated_data.items() if attr not in fields_to_skip}
-		for attr, value in filtered_data.items():
-			setattr(instance, attr, value)
-
-		success_messages["others"] = "Update successfully"
+		try:
+			if 'alias' in validated_data:
+				setattr(instance, 'alias', validated_data['alias'])
+				success_messages['alias'] = "Alais update successfully."
+			if 'avatar' in validated_data:
+				setattr(instance, 'avatar', validated_data['avatar'])
+				success_messages['avatar'] = "Avatar update successfully."
+		except Exception as e:
+			raise serializers.ValidationError({"message": "Update failed."})
+			
 		instance.save()
 		return instance, success_messages
 
