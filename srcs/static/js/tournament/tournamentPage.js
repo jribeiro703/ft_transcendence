@@ -29,9 +29,9 @@ export function showTournamentView() {
 
 	// Add event listeners for the buttons
 	document.getElementById('createTournamentBtn').addEventListener('click', async () => {
-		await createTournament();
+		const tournament = await createTournament();
 		await fetchParticipants();
-		performMatchmaking();
+		await performMatchmaking(tournament.id); // Ensure matchmaking is performed after creating the tournament
 	});
 
 	document.getElementById('quitTournamentBtn').addEventListener('click', () => {

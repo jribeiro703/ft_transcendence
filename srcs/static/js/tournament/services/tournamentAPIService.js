@@ -48,6 +48,7 @@ export const createTournament = async () => {
 			const tournament = await response.json();
 			console.log('Tournament started:', tournament);
 			alert('Tournament created successfully!');
+			return tournament.id;
 		} else {
 			console.error('Failed to create tournament:', response.status);
 			alert('Failed to create tournament.');
@@ -58,28 +59,32 @@ export const createTournament = async () => {
 };
 
 // Perform random matchmaking and display the bracket
-export const performMatchmaking = async () => {
+export const performMatchmaking = async (tournamentId) => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/players/', {
-			method: 'GET',
+		if (!tournamentId) {
+			tournamentId = 0;
+		}
+		// Call the backend endpoint to perform matchmaking
+		const response = await fetch('https://localhost:8081/tournament/matchmaking/', {
+			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
+			body: JSON.stringify({ tournament_id: tournamentId }), // Send the tournament ID
 		});
 
 		if (response.ok) {
-			const players = await response.json();
-			const bracket = [];
+			const bracket = await response.json();
 
-			// Create matches for each pair of players
-			for (let i = 0; i < players.length; i += 2) {
-				const player1 = players[i];
-				const player2 = players[i + 1] ? players[i + 1] : 'BYE'; // Handle odd number of players
-				bracket.push({ player1: player1.username, player2: player2 === 'BYE' ? 'BYE' : player2.username });
+			// Clear previous bracket if exists
+			const existingBracketContainer = document.getElementById('bracketContainer');
+			if (existingBracketContainer) {
+				existingBracketContainer.remove();
 			}
 
 			// Display the bracket
 			const bracketContainer = document.createElement('div');
+			bracketContainer.id = 'bracketContainer';
 			bracketContainer.innerHTML = `
 				<h3>Bracket</h3>
 				<ul id="bracketList" class="list-group">
@@ -89,7 +94,8 @@ export const performMatchmaking = async () => {
 			document.getElementById('tournamentView').appendChild(bracketContainer);
 
 			const bracketList = document.getElementById('bracketList');
-			bracket.forEach(match => {
+			bracketList.innerHTML = ''; // Clear previous bracket list
+			bracket.matches.forEach(match => {
 				const listItem = document.createElement('li');
 				listItem.className = 'list-group-item';
 				listItem.textContent = `${match.player1} vs ${match.player2}`;
