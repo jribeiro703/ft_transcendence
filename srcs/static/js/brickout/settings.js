@@ -1,7 +1,7 @@
 import brickVar from "./var.js";
 import { updatePowerUpSelectionB } from "./powerUp.js";
 import { updateLevelSelectionB } from "./level.js";
-import { showGameplaySoloView } from "../gameView.js";
+import { showGameSelectionView } from "../gameView.js";
 
 export function showSettingViewB(live)
 {
@@ -48,7 +48,7 @@ export function showSettingViewB(live)
 		}
 		else
 		{
-			showGameplaySoloView();
+			showGameSelectionView();
 			updateSettingB();
 		}
 	});

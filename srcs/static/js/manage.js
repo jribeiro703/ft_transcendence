@@ -5,6 +5,7 @@ import { sendBallData, sendPaddleData } from "./network.js";
 import { collisionFoot } from "./foot.js";
 import { collisionPaddleAi, ballOut } from "./collision.js";
 import { tennisCollision } from "./tennis.js";
+import { checkball } from "./check.js";
 
 export function manageRealCollision()
 {
@@ -80,9 +81,15 @@ export function manageCollisionLive()
 			posChanged = true;
 		}
 	}
-	if (gameVar.x < 0 || gameVar.x > gameVar.canvasW)
+	if (gameVar.x < 0)
 	{
-		resetBall(gameVar.x < 0 ? 'player2' : 'player');
+		resetBall('player2');
+		directChanged = true;
+		posChanged = true;
+	}
+	else if (gameVar.x > gameVar.canvasW)
+	{
+		resetBall('player');
 		directChanged = true;
 		posChanged = true;
 	}

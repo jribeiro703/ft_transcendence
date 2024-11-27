@@ -1,10 +1,11 @@
 import gameVar from './var.js';
-import { sendBallData, sendGameData, sendPaddleData, sendPlayerData, sendRoomData } from './network.js';
+import { sendGameData, sendPlayerData } from './network.js';
 import { draw2, initializeBall } from './draw.js';
-import { showGameplayMultiView } from './gameView.js';
+import { updateCanvasColor } from './setting.js';
+import { SCORE_CANVAS_HEIGHT } from './const.js';
+import { drawScoreBoard } from './gameView.js';
 
 export function createNewRoom(joinRoomCallback)
-
 {
 	console.log("createnewroom");
 	const roomName = `room_${Math.floor(Math.random() * 10000)}`;
@@ -13,11 +14,21 @@ export function createNewRoom(joinRoomCallback)
 	joinRoom(roomName);
 }
 
+export function displayGameData(idx)
+{
+	console.log(idx);
+	console.log("gamestart: ", gameVar.gameStart);
+	console.log("gameReady: ", gameVar.gameReady);
+	console.log("diff: ", gameVar.difficulty);
+	console.log("level: ", gameVar.currentLevel);
+}
+
 export function waitingPlayer()
 {
 	const waitingINterval = setInterval(() =>
 	{
-		if(!gameVar.gameReady)
+		console.log("player ready in waiting: ", gameVar.playerReady);
+		if(!gameVar.playerReady)
 		{
 			gameVar.ctx.font = '40px Arial';
 			gameVar.ctx.fillStyle = '#455F78';
@@ -28,13 +39,24 @@ export function waitingPlayer()
 		}
 		else
 		{
+			gameVar.gameReady = true;
 			clearInterval(waitingINterval);
+			displayGameData(1);
+			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
+			displayGameData(1);
+			displayPlayerData(1);
 			initializeBall();
+			updateCanvasColor();
+			drawScoreBoard();
 			draw2();
 		}
 	}, 2000);
-	// initializeBall();
-	// draw2();
+}
+
+export function displayPlayerData(idx)
+{
+	console.log("playerReady: ", gameVar.playerReady);
+	console.log("currentServer: ", gameVar.currenServer);
 }
 
 
@@ -52,18 +74,15 @@ export function joinRoom(roomName)
 			gameSocket.send(JSON.stringify({ type: 'join_room' }));
 			gameVar.gameSocket = gameSocket;
 			history.pushState({ view: 'game', room: roomName }, '', `?view=multi&room=${roomName}`);
-			console.log("idx: ", gameVar.playerIdx);
-			if (gameVar.playerIdx == 1)
+			if (gameVar.playerIdx == 1 && !gameVar.gameReady)
 			{
-				waitingPlayer()
+				waitingPlayer();
 			}
-			if (gameVar.playerIdx == 2)
+			if (gameVar.playerIdx == 2 && !gameVar.gameReady)
 			{
 				console.log("player2 sendgamedata");
-				console.log("ready: ", gameVar.gameReady);
-				sendGameData(gameSocket, gameVar.gameStart, gameVar.gameReady);
-				initializeBall();
-				draw2();
+				sendPlayerData(gameVar.gameSocket, gameVar.playerReady, gameVar.currenServer);
+				updateSettingLive();
 			}
 
 		}
@@ -78,6 +97,8 @@ export function joinRoom(roomName)
 		try
 		{
 			const data = JSON.parse(e.data);
+			if (data.type !== 'ball_data' && data.type !== 'paddle_data')
+				console.log("data: ", data);
 			if (data.type === 'ping')
 			{
 				gameSocket.send(JSON.stringify({ type: 'pong' }));
@@ -92,6 +113,9 @@ export function joinRoom(roomName)
 			{
 				gameVar.dx = data.direction_data.dx;
 				gameVar.dy = data.direction_data.dy;
+				gameVar.init_dx = data.direction_data.initDx;
+				gameVar.init_dy = data.direction_data.initDy;
+				console.log("direction recu");
 			}
 			else if (data.type == 'paddle_data') 
 			{
@@ -112,9 +136,14 @@ export function joinRoom(roomName)
 			}
 			else if (data.type == 'game_data')
 			{
-				console.log("gameDataonmsg");
+				console.log("receive gameData start avant: ", gameVar.gameStart);
+
 				gameVar.gameStart = data.game_data.gameStart;
 				gameVar.gameReady = data.game_data.gameReady;
+				gameVar.difficulty = data.game_data.difficulty;
+				gameVar.currentLevel = data.game_data.currentLevel;
+				console.log("receive gameData start apres: ", gameVar.gameStart);
+				// displayGameData(2);
 			}
 		}
 		catch (error)
@@ -125,7 +154,6 @@ export function joinRoom(roomName)
 
 	gameSocket.onerror = function(e)
 	{
-
 		console.error('Game socket error:', e);
 	};
 
@@ -198,7 +226,8 @@ export function updateRoomList()
 		const joinBtn = roomItem.querySelector('.joinRoomBtn');
 		joinBtn.addEventListener('click', () =>
 		{
-			settingRoom();
+			showGameRoom();
+			console.log("player2 join room");
 			joinRoom(room.name); 
 		});
 
@@ -206,10 +235,12 @@ export function updateRoomList()
 	})
 }
 
-export function settingRoom()
+export function showGameRoom()
 {
+	console.log("showGameRoom");
 	gameVar.playerIdx = 2;
-	gameVar.gameReady = true;
+	// gameVar.gameReady = true;
+	gameVar.playerReady = true;
 
 	const mainContent = document.getElementById('mainContent');
 
@@ -219,13 +250,8 @@ export function settingRoom()
 
 	insertTo.innerHTML = `
 	<div id="gameView" style="display: none;">
-			<div id="scoreboard">SCORE</div>
-			<div id="scoreRow">
-				<span id="player">Player </span>
-				<span id="playerScore">0</span>
-				<span id="vs">VS</span>
-				<span id="aiScore">0</span>
-				<span id="ai">CPU</span>
+			<div id="scoreboard">
+				<canvas id="scoreCanvas"></canvas>
 			</div>
 			<canvas id="myCanvas"></canvas>
 			<br><br>
@@ -238,15 +264,64 @@ export function settingRoom()
 
 	mainContent.appendChild(insertTo);
 
+	gameVar.rematchBtn = document.getElementById('rematchBtn');	
+	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
 	gameVar.gameView = document.getElementById('gameView');
+
 	gameVar.gameView.style.display = 'block';
 	
 	var canvas = document.getElementById('myCanvas');
 	gameVar.ctx = canvas.getContext('2d');
 	canvas.width = gameVar.canvasW;
 	canvas.height = gameVar.canvasH;
+
+
+	var scoreCanvas = document.getElementById('scoreCanvas');
+	gameVar.scoreCtx = scoreCanvas.getContext('2d');
+	scoreCanvas.width = gameVar.scoreCanvW;
+	scoreCanvas.height = SCORE_CANVAS_HEIGHT;
+
+	gameVar.gameTime = 0;
+    gameVar.gameTimer = setInterval(() =>
+	{
+        if (gameVar.startTime)
+		{
+            gameVar.gameTime++;
+        }
+    }, 1000);
+
+    scoreCanvas.style.marginBottom = '10px';
+	// updateSettingLive(roomName);
 }
 
+export function updateSettingLive()
+{
+	const waitingINterval = setInterval(() =>
+	{
+		if(gameVar.currentLevel === null || gameVar.difficulty === null)
+		{
+			console.log("waiting for setting");
+		}
+		else
+		{
+			if (gameVar.playerIdx === 1)
+			{
+				console.log("!!!!!!!!!!!!!1");
+			}
+			else if (gameVar.playerIdx === 2)
+			{
+				console.log("updatesettinglive");
+				displayGameData(2);
+				displayPlayerData(2);
+			}
+			updateCanvasColor();
+			drawScoreBoard();
+			initializeBall();
+			draw2();
+			clearInterval(waitingINterval);
+		}
+	}, 2000);
+}
 
 // export function checkForExistingRooms(joinRoomCallback)
 // {

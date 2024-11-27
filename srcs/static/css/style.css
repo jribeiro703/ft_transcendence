@@ -595,6 +595,19 @@ p
     background-color: #1A1A40; 
 }
 
+#scoreCanvas
+{
+    background-color: #252525;
+	border: 3px solid #FEFCFF;
+    border-bottom: 5px solid #455F78;
+
+    margin-bottom: 10px;
+}
+
+@font-face {
+    font-family: 'fontScore';
+    src: url('static/css/font/scoreboard.ttf') format('truetype');
+}
 
 #rematchBtn, #quitGameBtn, #nextLevelBtn,  #restartLevelBtn, #quitBtn
 {

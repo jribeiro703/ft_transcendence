@@ -2,11 +2,19 @@ import gameVar from "./var.js";
 import { WIN_SCORE, GAP_SCORE,  } from "./const.js";
 import { initializeBall } from "./draw.js";
 import { aiServeBall } from "./ai.js";
+import { checkball } from "./check.js";
+import { sendGameData, sendPlayerData } from "./network.js";
+import { startGame } from "./gameView.js";
 
-export function resetGame()
+export function listenRematchBtn()
 {
-	console.log("resetGame");
-	resetMatch();
+	gameVar.rematchBtn.addEventListener('click', () =>
+	{
+		resetMatch();
+		startGame();
+	});
+
+	gameVar.quitGameBtn.addEventListener('click', () => document.location.reload());
 }
 
 export function resetMatch()
@@ -16,13 +24,12 @@ export function resetMatch()
 	gameVar.aiScore = 0;
 	gameVar.matchOver = false;
 	gameVar.serveCount = 0;
-	document.getElementById("playerScore").innerText = gameVar.playerScore;
-	document.getElementById("aiScore").innerText = gameVar.aiScore;
-	gameVar.playerScoreElement.textContent = gameVar.playerScore;
-	gameVar.aiScoreElement.textContent = gameVar.aiScore;
-	console.log("player : ", gameVar.playerScore);
-	console.log("ai: ", gameVar.aiScore);
 	gameVar.gameStart = false;
+	gameVar.currenServer = 'player';
+	gameVar.aiPaddleY = (420 - 75) / 2;
+	gameVar.targetY = (420 - 75) / 2;
+	gameVar.gameTime = 0;
+	gameVar.finishGame = false;
 	if (gameVar.animationFrame)
 	{
 		cancelAnimationFrame(gameVar.animationFrame);
@@ -57,15 +64,32 @@ export function checkScore()
 	if ((gameVar.playerScore >= WIN_SCORE || gameVar.aiScore >= WIN_SCORE) && Math.abs(gameVar.playerScore - gameVar.aiScore) >= GAP_SCORE)
 	{
 		gameVar.matchOver = true;
+		gameVar.startTime = false;
+		gameVar.rematchBtn.style.display = 'block';
+		gameVar.quitGameBtn.style.display = 'block';
 		gameVar.rematchBtn.disabled = false;
 		gameVar.rematchBtn.style.cursor = false ? "pointer" : "not-allowed";
 		cancelAnimationFrame(gameVar.animationFrame);
+		sendScore();
+		listenRematchBtn();
 	}	
+}
+
+export function sendScore()
+{
+	console.log("we send =>");
+	console.log("name player1"); // string
+	console.log("name player2"); // string
+	console.log("score player : ", gameVar.playerScore); // int
+	console.log("score opponent : ", gameVar.aiScore); // int 
+	console.log("game time : ", gameVar.gameTime); // int
+	console.log("Difficulty : ",gameVar.difficulty); // string = 'easy' || 'medium' || 'hard'
+	console.log("PowerUp active : ", gameVar.powerUpEnable); // boolean
+	console.log("Level : ", gameVar.currentLevel);  // string = 'tableTennis' || 'Football' || 'tennis' ( maybe an other : 'classic')
 }
 
 export function resetBall(winner)
 {
-	console.log("resetBall win: ", winner);
 	if (gameVar.matchOver)
 		return;
 	if (winner == 'player')
@@ -80,24 +104,24 @@ export function resetBall(winner)
 		if (!gameVar.liveMatch)
 			gameVar.currenServer = (gameVar.currenServer == 'player') ? 'ai' : 'player';
 		else if (gameVar.liveMatch)
+		{
 			gameVar.currenServer = (gameVar.currenServer == 'player') ? 'player2' : 'player';
+			sendPlayerData(gameVar.gameSocket, gameVar.playerReady, gameVar.currenServer);
+		}
 	}
-	console.log('initball in resetball');
 	initializeBall();
 	gameVar.dx = 0;
 	gameVar.dy = 0;
 	if (gameVar.liveMatch)
 		checkball();
 	gameVar.gameStart = false;
-	gameVar.aiScoreElement.textContent = gameVar.aiScore;
-	gameVar.playerScoreElement.textContent = gameVar.playerScore;
+	sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
 	console.log("server: ", gameVar.currenServer);
 	if (gameVar.currenServer == 'ai')
 	{
 		gameVar.aiServe = true;
 		aiServeBall();
 	}
-	console.log("finish resetball");
 }
 
 // export function updateBallPosition()

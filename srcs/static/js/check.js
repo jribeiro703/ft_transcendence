@@ -10,7 +10,7 @@ export function checkball()
 	}
 	if (ballDirectionChanged())
 	{
-		sendDirectionData(gameVar.dx, gameVar.dy, gameVar.gameSocket);
+		sendDirectionData(gameVar.dx, gameVar.dy, gameVar.init_dx, gameVar.init_dy, gameVar.gameSocket);
 	}
 }
 
@@ -27,10 +27,14 @@ export function ballPositionChanged()
 
 export function ballDirectionChanged()
 {
-	if (gameVar.dx != gameVar.previousBallState.dx || gameVar.dy != gameVar.previousBallState.dy)
+	if (gameVar.dx != gameVar.previousBallState.dx || gameVar.dy != gameVar.previousBallState.dy
+		|| gameVar.init_dx != gameVar.previousBallState.initDx || gameVar.init_dy != gameVar.previousBallState.initDy)
 	{
 		gameVar.previousBallState.dx = gameVar.dx;
 		gameVar.previousBallState.dy = gameVar.dy;
+		gameVar.previousBallState.initDx = gameVar.init_dx;
+		gameVar.previousBallState.initDy = gameVar.init_dy
+
 		return (true);
 	}
 	return (false);

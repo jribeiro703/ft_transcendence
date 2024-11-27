@@ -8,6 +8,8 @@ export const POWER_UP_DURATION = 7000;
 export const BUFFER_COLLISION = 20;
 export const CENTER_POSITION = (420 - 75) / 2;
 export const FRAME_RATE = 60;
+export const SCORE_CANVAS_HEIGHT = 100;
+export const SCORE_FONT = '24px Arial';
 export const PADDLE_THRESHOLD = 10;
 export const AI = {
 	refreshTime: 1000,
