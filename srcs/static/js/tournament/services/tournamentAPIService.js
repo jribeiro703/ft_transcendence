@@ -60,15 +60,25 @@ export const createTournament = async () => {
 // Perform random matchmaking and display the bracket
 export const performMatchmaking = async () => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/matchmaking/', {
-			method: 'POST',
+		const response = await fetch('https://localhost:8081/tournament/players/', {
+			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		});
 
 		if (response.ok) {
-			const bracket = await response.json();
+			const players = await response.json();
+			const bracket = [];
+
+			// Create matches for each pair of players
+			for (let i = 0; i < players.length; i += 2) {
+				const player1 = players[i];
+				const player2 = players[i + 1] ? players[i + 1] : 'BYE'; // Handle odd number of players
+				bracket.push({ player1: player1.username, player2: player2 === 'BYE' ? 'BYE' : player2.username });
+			}
+
+			// Display the bracket
 			const bracketContainer = document.createElement('div');
 			bracketContainer.innerHTML = `
 				<h3>Bracket</h3>
@@ -79,7 +89,7 @@ export const performMatchmaking = async () => {
 			document.getElementById('tournamentView').appendChild(bracketContainer);
 
 			const bracketList = document.getElementById('bracketList');
-			bracket.matches.forEach(match => {
+			bracket.forEach(match => {
 				const listItem = document.createElement('li');
 				listItem.className = 'list-group-item';
 				listItem.textContent = `${match.player1} vs ${match.player2}`;
