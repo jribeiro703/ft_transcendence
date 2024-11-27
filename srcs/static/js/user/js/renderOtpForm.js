@@ -2,15 +2,16 @@ import { fetchData } from "../../utils.js";
 import { renderPage } from "../../historyManager.js"
 
 export function renderOtpForm(url, msg) {
+    alert(msg);
     const box = document.getElementById('mainContent');
     box.innerHTML = `
-        <p>${msg}</p>
-        <br><br>
+    <div class="custom-form">
         <form id="otpForm">
             <label for="otpCode">OTP Code:</label>
             <input type="text" id="otpCode" name="otpCode" required>
             <button type="submit">Submit</button>
         </form>
+    </div>
     `;
     window.history.pushState({ page: "otpForm" }, 'OtpForm', '#otpForm');
     

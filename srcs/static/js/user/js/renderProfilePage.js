@@ -13,7 +13,7 @@ function createProfileContent() {
 				<div class="stats">
 					<strong>Total: </strong> <span id="totalMatches">0</span>
 				</div>
-				<div class="stat">
+				<div class="stats">
 					<strong>Won: </strong> <span id="wonMatches">0</span>
 				</div>
 			</div>
