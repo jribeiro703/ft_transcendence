@@ -47,7 +47,7 @@ chatSocket.onmessage = function(e) {
     // Create a new message element
     const messageElement = document.createElement('div');
     messageElement.innerHTML = `<span style="color: ${clientIdColor};">[${formattedTime}] ${clientId}:</span> ${message}`;
-    chatLog.appendChild(messageElement);
+    chatLog.prepend(messageElement);
     chatLog.scrollTop = chatLog.scrollHeight; // Scroll to the bottom
 };
 
@@ -58,9 +58,18 @@ chatSocket.onclose = function(e) {
 document.querySelector('#chat-message-input').focus();
 document.querySelector('#chat-message-input').onkeyup = function(e) {
     if (e.keyCode === 13) {  // Enter key
-        document.querySelector('#chat-message-submit').click();
+        document.querySelectoscrollHeightr('#chat-message-submit').click();
     }
 };
+
+// Add an event listener on the focus of the chat message input and then listen to keyboard keypress and send submit when 'Enter' key is pressed
+document.querySelector('#chat-message-input').addEventListener('focus', function() {
+    document.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            document.querySelector('#chat-message-submit').click();
+        }
+    });
+});
 
 document.querySelector('#chat-message-submit').onclick = function(e) {
     const messageInputDom = document.querySelector('#chat-message-input');
@@ -102,7 +111,7 @@ function adjustEmojiPickerWidth() {
 // Show emojiPickerContainer
 emojiButton.addEventListener('click', () => {
 	adjustEmojiPickerHeight();
-	adjustEmojiPickerWidth();
+	adjustEmojiPickerWidth();scrollHeight
     emojiPickerContainer.style.display = emojiPickerContainer.style.display == 'block' ? 'none' : 'block';
 });
 
