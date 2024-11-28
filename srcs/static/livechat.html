@@ -21,7 +21,7 @@
 
   <body class="vw-100 vh-100 mh-100 mw-100">
     <div class="d-flex flex-column mw-100 mh-100 w-100 h-100">
-      <div class="navbar-parent">
+      <div class="navbar-parent px-4">
         <div class="navbar-background"></div>
         <nav class="navbar px-5">
           <div class="container-fluid d-flex justify-content-between">
@@ -31,8 +31,8 @@
         </nav>
       </div>
 
-      <div class="w-100 h-100" style="max-height: calc(100vh - 52px);">
-        <div class="w-100 h-100 flex-grow-1 d-flex justify-content-center align-items-center p-5 gap-5">
+      <div class="w-100 h-100" style="max-height: calc(100vh - 100px);">
+        <div class="w-100 h-100 flex-grow-1 d-flex justify-content-center align-items-center px-5 pb-5 gap-5">
           <div id="mainContent" class="flex-grow-1 d-flex h-100 align-item-center border rounded justify-content-center">
             <div id="defaultView" class="d-flex flex-column
                      justify-content-center align-items-center gap-5 h-100">
@@ -50,10 +50,10 @@
             <div class="emoji-picker-container" id="emojiPickerContainer">
               <emoji-picker id="emoji-picker" aria-label="Emoji picker"></emoji-picker>
             </div>
-            <div class="input-group d-flex gap-1">
-              <button class="btn btn-secondary" type="button" id="emojiButton" aria-label="Emoji picker">😊</button>
-              <input id="chat-message-input" type="text" class="form-control" placeholder="Type here..." aria-label="Chat message input">
-              <button id="chat-message-submit" class="btn btn-primary" aria-label="Send message">Send</button>
+            <div class="input-group d-flex gap-2">
+              <button class="bg btn btn-secondary rounded border" type="button" id="emojiButton" aria-label="Emoji picker">😊</button>
+              <input id="chat-message-input" type="text" class="border rounded form-control bg" placeholder="Type here..." aria-label="Chat message input">
+              <button id="chat-message-submit" class="btn btn-primary border rounded bg" aria-label="Send message">Send</button>
             </div>
 
             <!-- <div class="align-items-center p-2 w-100 h-100 border rounded"> -->

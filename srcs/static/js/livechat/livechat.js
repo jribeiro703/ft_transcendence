@@ -134,3 +134,20 @@ document.addEventListener('click', (event) => {
 window.addEventListener('resize', () => {
         emojiPickerContainer.style.display = 'none';
 });
+
+// test qui disparait dans le focus de lindex ou on ecrit
+document.addEventListener('DOMContentLoaded', function() {
+    const messageInput = document.querySelector('#chat-message-input');
+
+    if (messageInput) {
+        messageInput.addEventListener('focus', function() {
+            messageInput.placeholder = '';
+        });
+
+        messageInput.addEventListener('blur', function() {
+            messageInput.placeholder = 'Type here...';
+        });
+    } else {
+        console.error('Message input not found');
+    }
+});

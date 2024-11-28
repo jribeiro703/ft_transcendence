@@ -1,12 +1,10 @@
 :root {
     --background-color: #000000;
-    --text-color: #e9e9e9;
     --primary-color: #000000;
     --secondary-color: #ffffff;
+    --text-color: #e9e9e9;
     --highlight-color: #ffffff;
 }
-
-
 
 body
 {
@@ -35,6 +33,9 @@ p
   height: 50px;
 }
 
+.bg {
+  background-color: var(--primary-color);
+}
 
 /* ---------------------- Nav Bar ---------------------- */
 
@@ -85,7 +86,7 @@ p
 {
   position: relative;
   display: flex;
-  height: 80px;
+  height: 100px;
 }
 
 .navbar-background {
@@ -938,7 +939,7 @@ button:disabled
 }
 
 #chat-message-input {
-	background-color: var(--secondary-color);
+	background-color: var(--background-color);
 	color: var(--text-color);
 }
 
