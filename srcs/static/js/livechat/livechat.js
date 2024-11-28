@@ -135,6 +135,26 @@ window.addEventListener('resize', () => {
         emojiPickerContainer.style.display = 'none';
 });
 
+// David add //////////////////////////////////////////////////
+
+document.addEventListener('DOMContentLoaded', function() {
+  const grandparent = document.getElementById('livechat');
+  const focusableElements = ['emojiButton', 'chat-message-input', 'chat-message-submit'];
+
+  focusableElements.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.addEventListener('focus', function() {
+        grandparent.classList.add('livechat-neon-focus');
+      });
+
+      element.addEventListener('blur', function() {
+        grandparent.classList.remove('livechat-neon-focus');
+      });
+    }
+  });
+});
+
 // test qui disparait dans le focus de lindex ou on ecrit
 document.addEventListener('DOMContentLoaded', function() {
     const messageInput = document.querySelector('#chat-message-input');
