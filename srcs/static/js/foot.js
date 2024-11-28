@@ -24,7 +24,6 @@ export function collisionFoot()
 	}
 }
 
-
 export function drawFootball()
 {
     gameVar.ctx.strokeStyle = 'white';

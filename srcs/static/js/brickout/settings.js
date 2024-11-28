@@ -2,26 +2,14 @@ import brickVar from "./var.js";
 import { updatePowerUpSelectionB } from "./powerUp.js";
 import { updateLevelSelectionB } from "./level.js";
 import { showGameSelectionView } from "../gameView.js";
+import { displayBallB } from "./ball.js";
 
 export function showSettingViewB(live)
 {
-
 	history.pushState({ view: 'game'}, '', `?view=solo/settings`);
 
 	displaySettingB();
-
-	brickVar.powerUpSelection = document.getElementById('powerUpSelection');
-	brickVar.btnPowerUp = document.getElementById('btnPowerUp');
-	brickVar.withPowerUp = document.getElementById('withPowerUps');
-	brickVar.withoutPowerUp = document.getElementById('withoutPowerUps');
-	brickVar.easy = document.getElementById('easy');
-	brickVar.medium = document.getElementById('medium');
-	brickVar.hard = document.getElementById('hard');
-	brickVar.saveBtn = document.getElementById('saveBtn');
-	brickVar.classicLevel = document.getElementById('classicLevel');
-	brickVar.castleLevel = document.getElementById('castleLevel');
-	brickVar.xLevel = document.getElementById('xLevel');
-	brickVar.invaderLevel = document.getElementById('invaderLevel');
+	getSettingBtn();
 
 	if(live === false)
 	{
@@ -37,7 +25,6 @@ export function showSettingViewB(live)
 	listenSettingPUB();
 	listenSettingDifficultyB();
 	listenSettingLevelB();
-
 
 	brickVar.saveBtn.addEventListener('click', () =>
 	{
@@ -89,20 +76,10 @@ export function updateSettingB()
 		updatePowerUpSelectionB(false);
 	}
 
-	const settingContain = document.getElementById('settings-column2');
-
-	settingContain.innerHTML = '';
-
-	const settingItem = document.createElement('div');
-
-	settingItem.innerHTML = `
-	<p>Difficulty: <span id="difficultyChoice2">${difficulty}</span></p>
-	<p>Power-Up: <span id="powerupChoice2">${powerUp}</span></p>
-	<p>Level: <span id="levelSelected2">${level}</span></p>`;
-
-	settingContain.appendChild(settingItem);
-
+	displayUpdateSetting(difficulty, powerUp, level);
 }
+
+
 export function updateDifficultySelectionB(level)
 {
 	if (level == 'easy')
@@ -115,18 +92,18 @@ export function updateDifficultySelectionB(level)
 	if (level == 'medium')
 	{
 		console.log('medium mode');
-		brickVar.initDx = 4;
-		brickVar.initDy = 4;
+		brickVar.initDx = 5;
+		brickVar.initDy = 5;
 		brickVar.difficulty = 'medium';
 	}
 	if (level == 'hard')
 	{
-		brickVar.initDx = 6;
-		brickVar.initDy = 6;
+		brickVar.initDx = 7;
+		brickVar.initDy = 7;
 		console.log('hard mode');
 		brickVar.difficulty = 'hard';
 	}
-
+	displayBallB();
 }
 
 export function displaySettingB()
@@ -190,12 +167,12 @@ export function displaySettingB()
 
 export function listenSettingPUB()
 {
+
 	brickVar.withPowerUp.addEventListener('click', () =>
 	{
 		brickVar.withPowerUp.classList.add('selected');
 		brickVar.withoutPowerUp.classList.remove('selected');
 		updatePowerUpSelectionB(true);
-
 	});
 
 	brickVar.withoutPowerUp.addEventListener('click', () => 
@@ -282,3 +259,35 @@ export function checkSettingB()
 		updateLevelSelectionB('classic')
 	}
 }	
+
+export function getSettingBtn()
+{
+	brickVar.powerUpSelection = document.getElementById('powerUpSelection');
+	brickVar.btnPowerUp = document.getElementById('btnPowerUp');
+	brickVar.withPowerUp = document.getElementById('withPowerUps');
+	brickVar.withoutPowerUp = document.getElementById('withoutPowerUps');
+	brickVar.easy = document.getElementById('easy');
+	brickVar.medium = document.getElementById('medium');
+	brickVar.hard = document.getElementById('hard');
+	brickVar.saveBtn = document.getElementById('saveBtn');
+	brickVar.classicLevel = document.getElementById('classicLevel');
+	brickVar.castleLevel = document.getElementById('castleLevel');
+	brickVar.xLevel = document.getElementById('xLevel');
+	brickVar.invaderLevel = document.getElementById('invaderLevel');
+}
+
+export function displayUpdateSetting(difficulty, powerUp, level)
+{
+	const settingContain = document.getElementById('settings-column2');
+
+	settingContain.innerHTML = '';
+
+	const settingItem = document.createElement('div');
+
+	settingItem.innerHTML = `
+	<p>Difficulty: <span id="difficultyChoice2">${difficulty}</span></p>
+	<p>Power-Up: <span id="powerupChoice2">${powerUp}</span></p>
+	<p>Level: <span id="levelSelected2">${level}</span></p>`;
+
+	settingContain.appendChild(settingItem);
+}

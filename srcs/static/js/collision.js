@@ -27,17 +27,17 @@ export function collisionPaddleAi()
 	}
 }
 
-export function manageCollision()
-{
-	gameVar.x += gameVar.dx;
-	gameVar.y += gameVar.dy;
-	if(gameVar.y + gameVar.dy > gameVar.canvasH - gameVar.ballRadius || gameVar.y + gameVar.dy < gameVar.ballRadius)
-	{
-		gameVar.dy = -gameVar.dy;
-	}
-	collisionPaddle();	
-	ballOut();
-}
+// export function manageCollision()
+// {
+// 	gameVar.x += gameVar.dx;
+// 	gameVar.y += gameVar.dy;
+// 	if(gameVar.y + gameVar.dy > gameVar.canvasH - gameVar.ballRadius || gameVar.y + gameVar.dy < gameVar.ballRadius)
+// 	{
+// 		gameVar.dy = -gameVar.dy;
+// 	}
+// 	collisionPaddle();	
+// 	ballOut();
+// }
 
 export function ballOut()
 {

@@ -6,6 +6,7 @@ import { collisionFoot } from "./foot.js";
 import { collisionPaddleAi, ballOut } from "./collision.js";
 import { collisionTennis } from "./tennis.js";
 import { checkball } from "./check.js";
+import { initControl } from "./init.js";
 
 export function manageRealCollision()
 {
@@ -21,7 +22,10 @@ export function manageRealCollision()
 		collisionFoot();
 	if (gameVar.tennis)
 		collisionTennis();
-	collisionPaddleAi();
+	if (!gameVar.localGame)
+		collisionPaddleAi();
+	else
+		collisionPaddleP2();
 	ballOut();
 }
 
@@ -40,6 +44,7 @@ export function collisionPaddleP1()
 
 export function collisionPaddleP2()
 {
+	initControl(true);
 	if (gameVar.x < gameVar.canvasW - gameVar.player2PaddleWidth)
 		return ;
 	gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;

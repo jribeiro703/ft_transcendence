@@ -1,7 +1,6 @@
 import brickVar from './var.js';
 import { youWinB } from './level.js';
 
-
 for(var c = 0; c < brickVar.brickColumnCount; c++)
 {
 	brickVar.brick[c] = [];

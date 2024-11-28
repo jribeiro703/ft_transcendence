@@ -1,7 +1,8 @@
 import brickVar from "./var.js";
-import { startGameB, initListenerB } from "./game.js";
+import { initListenerB } from "./game.js";
 import { initBricksB } from "./brick.js";
 import { sendScoreB } from "./manage.js";
+import { startGameB } from "../start.js";
 
 export function youWinB()
 {
@@ -14,6 +15,7 @@ export function youWinB()
 	levelDisplayB();
 	addBtnB();
 }
+
 export function checkLevelB(level)
 {
 	if (level == "classic")
@@ -25,6 +27,7 @@ export function checkLevelB(level)
 	else if (level == 'invader')
 		initBricksB(brickVar.PATTERNS.INVADER);
 }
+
 export function levelDisplayB()
 {
 	brickVar.ctx.font = "35px Arial";
@@ -77,6 +80,7 @@ export function updateLevelSelectionB(level)
 		brickVar.invader = true;
 	}
 }
+
 export function addImageB(url)
 {
 	const mainContent = document.getElementById("brickoutCanvas");

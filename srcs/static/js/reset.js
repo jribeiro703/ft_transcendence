@@ -4,7 +4,7 @@ import { initializeBall } from "./draw.js";
 import { aiServeBall } from "./ai.js";
 import { checkball } from "./check.js";
 import { sendGameData } from "./network.js";
-import { startGame } from "./gameView.js";
+import { startGame } from "./start.js";
 
 export function listenBtn()
 {

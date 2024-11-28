@@ -5,6 +5,7 @@ import { addRoom, delRooms, createNewRoom, updateRoomInfo, updateRoomList } from
 import { showSettingView } from "./setting.js";
 import { checkSettingLive } from "./setting.js";
 import { SCORE_CANVAS_HEIGHT } from "./const.js";
+import { showGameSelectionMultiView } from "./gameView.js";
 
 export function initGameVar()
 {
@@ -23,7 +24,8 @@ export function initEventListener()
 {
 	removeEventListeners();
 	gameVar.playsoloGameBtn.addEventListener('click', showGameSelectionView);
-	gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
+	// gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
+	gameVar.playmultiGameBtn.addEventListener('click', showGameSelectionMultiView);
 }
 
 export function initControlLive()
@@ -49,28 +51,28 @@ export function initControlLive()
         }
     });
 }
-export function initControl()
+export function initControl(local)
 {
 	document.addEventListener("keydown", (e) => {
-        if (e.code === "Space")
+		if (e.code === "Space")
 		{
-            startBallAi(e);
-        }
-    });
+			startBallAi(e);
+		}
+	});
 
-    document.addEventListener("keydown", (e) => {
-        if (e.code === "ArrowUp" || e.code === "ArrowDown")
+	document.addEventListener("keydown", (e) => {
+		if (e.code === "ArrowUp" || e.code === "ArrowDown" || e.code === "keyW" || e.code === "keyS")
 		{
-            keyDownHandler(e);
-        }
-    });
+			keyDownHandler(e);
+		}
+	});
 
-    document.addEventListener("keyup", (e) => {
-        if (e.code === "ArrowUp" || e.code === "ArrowDown")
+	document.addEventListener("keyup", (e) => {
+		if (e.code === "ArrowUp" || e.code === "ArrowDown" || e.code === "keyW" || e.code === "keyA")
 		{
-            keyUpHandler(e);
-        }
-    });
+			keyUpHandler(e);
+		}
+	});
 }
 
 
@@ -222,8 +224,6 @@ function createRoomView(room = null)
 	createNewRoom();
 }
 
-
-
 export function roomNetwork()
 {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -275,7 +275,6 @@ export function roomNetwork()
 			tempSocket.send(JSON.stringify({ type: 'pong' }));
 		}
 	}
-
 	tempSocket.onerror = function(event)
 	{
     	console.error("WebSocket error observed:", event);

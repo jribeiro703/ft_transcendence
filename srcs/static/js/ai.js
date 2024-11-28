@@ -17,14 +17,17 @@ export function aiServeBall()
 
 export function aiMove(targetY)
 {
-	if (gameVar.targetY != 0)
+	if (!gameVar.localGame)
 	{
-		if (Math.abs(gameVar.aiPaddleY - gameVar.targetY) > PADDLE_THRESHOLD)
+		if (gameVar.targetY != 0)
 		{
-			if (gameVar.aiPaddleY < targetY && gameVar.aiPaddleY < gameVar.canvasH - gameVar.aiPaddleHeight)
-				gameVar.aiPaddleY += PADDLE_SPEED;
-			else if (gameVar.aiPaddleY > targetY && gameVar.aiPaddleY > 0)
-				gameVar.aiPaddleY -= PADDLE_SPEED;
+			if (Math.abs(gameVar.aiPaddleY - gameVar.targetY) > PADDLE_THRESHOLD)
+			{
+				if (gameVar.aiPaddleY < targetY && gameVar.aiPaddleY < gameVar.canvasH - gameVar.aiPaddleHeight)
+					gameVar.aiPaddleY += PADDLE_SPEED;
+				else if (gameVar.aiPaddleY > targetY && gameVar.aiPaddleY > 0)
+					gameVar.aiPaddleY -= PADDLE_SPEED;
+			}
 		}
 	}
 }
@@ -128,6 +131,11 @@ export function manageServerAi()
 		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
 		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
 	}
+	else if (gameVar.localGame)
+	{
+		gameVar.x = gameVar.player2PaddleWidth + gameVar.ballRadius;
+		gameVar.y = gameVar.player2PaddleY + gameVar.player2PaddleHeight / 2;	
+	}
 	else
 	{
 		gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - gameVar.ballRadius;
@@ -146,6 +154,17 @@ export function manageMoveAi()
 		else if (gameVar.playerDownPressed && gameVar.playerPaddleY < gameVar.canvasH - gameVar.playerPaddleHeight)
 		{
 			gameVar.playerPaddleY += PADDLE_SPEED;
-		} 
+		}
+		if (gameVar.localGame)
+		{
+			if (gameVar.player2UpPressed && gameVar.player2PaddleY > 0)
+			{
+				gameVar.player2PaddleY -= PADDLE_SPEED;
+			} 
+			else if (gameVar.player2DownPressed && gameVar.player2PaddleY < gameVar.canvasH - gameVar.player2PaddleHeight)
+			{
+				gameVar.player2PaddleY += PADDLE_SPEED;
+			}
+		}
 	}
 }

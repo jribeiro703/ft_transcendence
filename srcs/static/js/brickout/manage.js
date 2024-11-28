@@ -37,11 +37,11 @@ export function manageCollisionB()
 			brickVar.y = brickVar.canvasH - brickVar.paddleHeight - brickVar.ballRadius - 1;
 		}
 		else
-			losePointB();
+			loseLives();
 	}
 }
 
-export function losePointB()
+export function loseLives()
 {
 	brickVar.lives--;
 	if(!brickVar.lives)

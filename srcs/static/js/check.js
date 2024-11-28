@@ -1,7 +1,6 @@
 import gameVar from "./var.js";
 import { sendBallData, sendDirectionData } from "./network.js";
 
-
 export function checkball()
 {
 	if (ballPositionChanged())

@@ -9,15 +9,15 @@ import { showSettingView } from "./setting.js";
 import { checkSetting } from "./setting.js";
 import { showGameView } from "./gameView.js";
 import { checkSettingB } from "./brickout/settings.js";
-import { showGameBrickView } from "./gameView.js";
 import { initListenerB } from "./brickout/game.js";
 import { showSettingViewB } from "./brickout/settings.js";
-
+import { showGameBrickView } from "./brickout/game.js";
+import { showSettingMultiView } from "./setting.js";
+import { showGameSelectionMultiView } from "./gameView.js";
 import brickVar from "./brickout/var.js";
 
 export function listenSettingPU()
 {
-
 	gameVar.withPowerUp.addEventListener('click', () =>
 	{
 		gameVar.withPowerUp.classList.add('selected');
@@ -106,11 +106,44 @@ export function listenSettingSave(live)
 	});
 }
 
+
+export function listenSettingMultiSave(live)
+{
+	
+	gameVar.saveBtn.addEventListener('click', () =>
+	{
+		if (live === true)
+		{
+			roomMultiView();
+			updateLiveSetting();
+		}
+		else
+		{
+			showGameSelectionMultiView();
+			updateSetting();
+		}
+	});
+}
+
 export function listenSettingBtn()
 {
 	gameVar.settingBtn1.addEventListener('click', () =>
 	{
 		showSettingView(false);
+	});
+
+	gameVar.settingBtn2.addEventListener('click', () =>
+	{
+		showSettingViewB(false);
+	});
+}
+
+
+export function listenSettingMultiBtn()
+{
+	gameVar.settingBtn1.addEventListener('click', () =>
+	{
+		showSettingMultiView(false);
 	});
 
 	gameVar.settingBtn2.addEventListener('click', () =>
@@ -132,7 +165,26 @@ export function listenPlayBtn()
 	gameVar.playBtn2.addEventListener('click', () =>
 	{
 		gameVar.game = "brickout";
-		console.log("settingchane", brickVar.settingChanged);
+		checkSettingB();
+		showGameBrickView();
+		initListenerB();
+	});
+}
+
+export function listenPlayMultiBtn()
+{
+
+	gameVar.playBtn.addEventListener('click', () =>
+	{
+		gameVar.game = "pong";
+		gameVar.localGame = true;
+		checkSetting();
+		showGameView();
+	});
+
+	gameVar.playBtn2.addEventListener('click', () =>
+	{
+		gameVar.game = "brickout";
 		checkSettingB();
 		showGameBrickView();
 		initListenerB();
