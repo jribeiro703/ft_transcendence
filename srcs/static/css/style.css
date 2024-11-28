@@ -36,6 +36,17 @@ p
 
 .bg {
   background-color: var(--primary-color);
+  color: var(--highlight-color);
+}
+
+.bg:hover {
+  background-color: var(--text-color);
+  color: #da96ff;
+}
+
+.bg:focus {
+  background-color: var(--text-color);
+  color: #da96ff;
 }
 
 /* ---------------------- Nav Bar ---------------------- */
@@ -86,6 +97,13 @@ p
 }
 
  /* fin ajouts david */
+
+.main-img
+{
+  width: 490px;
+  border-radius: 10px;
+  /* height: ; */
+}
 
 .navbar-parent
 {
@@ -254,6 +272,49 @@ p
   margin: 0 auto;
 }
 
+.neon-white
+{
+  transition: box-shadow 0.4s ease-in-out;
+}
+
+.neon-white:focus
+{
+  box-shadow:
+  0 0 0px #ffffff,
+  0 0 1px #ffffff,
+  0 0 2px #ffffff,
+  0 0 3px #ffffff,
+  0 0 4px #ffffff,
+  0 0 7px #ffffff,
+  0 0 8px #ffffff,
+  inset 0 0 0px #ffffff,
+  inset 0 0 1px #ffffff,
+  inset 0 0 2px #ffffff,
+  inset 0 0 3px #ffffff,
+  inset 0 0 4px #ffffff,
+  inset 0 0 7px #ffffff,
+  inset 0 0 8px #ffffff;
+}
+
+.neon-white:hover
+{
+  box-shadow:
+  0 0 0px #ffffff,
+  0 0 1px #ffffff,
+  0 0 2px #ffffff,
+  0 0 3px #ffffff,
+  0 0 4px #ffffff,
+  0 0 7px #ffffff,
+  0 0 8px #ffffff,
+  inset 0 0 0px #ffffff,
+  inset 0 0 1px #ffffff,
+  inset 0 0 2px #ffffff,
+  inset 0 0 3px #ffffff,
+  inset 0 0 4px #ffffff,
+  inset 0 0 7px #ffffff,
+  inset 0 0 8px #ffffff;
+}
+
 .neon-blue
 {
   transition: box-shadow 0.4s ease-in-out;
@@ -292,14 +353,12 @@ p
   0 0 3px #682a87,
   0 0 4px #8937b3,
   0 0 7px #ab45de,
-  0 0 8px #c04dfa,
   inset 0 0 0px #682a87,
   inset 0 0 1px #682a87,
   inset 0 0 2px #682a87,
   inset 0 0 3px #682a87,
   inset 0 0 4px #8937b3,
-  inset 0 0 7px #ab45de,
-  inset 0 0 8px #c04dfa;
+  inset 0 0 7px #ab45de;
 }
 
 .neon-purple:focus
@@ -311,14 +370,12 @@ p
   0 0 3px #682a87,
   0 0 4px #8937b3,
   0 0 7px #ab45de,
-  0 0 8px #c04dfa,
   inset 0 0 0px #682a87,
   inset 0 0 1px #682a87,
   inset 0 0 2px #682a87,
   inset 0 0 3px #682a87,
   inset 0 0 4px #8937b3,
-  inset 0 0 7px #ab45de,
-  inset 0 0 8px #c04dfa;
+  inset 0 0 7px #ab45de;
 }
 
 .neon-purple:hover
@@ -330,14 +387,12 @@ p
   0 0 3px #682a87,
   0 0 4px #8937b3,
   0 0 7px #ab45de,
-  0 0 8px #c04dfa,
   inset 0 0 0px #682a87,
   inset 0 0 1px #682a87,
   inset 0 0 2px #682a87,
   inset 0 0 3px #682a87,
   inset 0 0 4px #8937b3,
-  inset 0 0 7px #ab45de,
-  inset 0 0 8px #c04dfa;
+  inset 0 0 7px #ab45de;
 }
 
 /* ------------------------ Main Button ---------------------------- */
