@@ -4,7 +4,7 @@ import { renderUserPage } from "./renderUserPage.js";
 import { renderLoginForm } from "./user/js/renderLoginForm.js";
 import { renderOtpForm } from "./user/js/renderOtpForm.js";
 import { renderRegisterForm } from "./user/js/renderRegisterForm.js";
-
+import { renderSettingsPage } from "./user/js/renderSettingPage.js";
 const pageMap = {
 	home: renderHomePage,
 	auth: renderAuthPage,
@@ -12,6 +12,7 @@ const pageMap = {
 	login: renderLoginForm,
 	optForm: renderOtpForm,
 	register: renderRegisterForm,
+	settings: renderSettingsPage,
 }
 
 function renderPage(page) {

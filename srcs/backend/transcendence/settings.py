@@ -187,6 +187,6 @@ DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
 # CSRF_COOKIE_HTTPONLY = False
 # CSRF_COOKIE_SAMESITE = 'Lax'
 
-# CSRF_TRUSTED_ORIGINS = [
-# 	'https://localhost:8081',
-# ]
+CSRF_TRUSTED_ORIGINS = [
+	'https://localhost:8081',
+]

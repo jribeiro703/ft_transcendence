@@ -1,5 +1,6 @@
-import { fetchData, escapeHTML } from "../../utils.js";
+import { escapeHTML, showToast } from "../tools.js";
 import { renderOtpForm } from "./renderOtpForm.js"
+import { fetchData } from "../fetchData.js";
 
 export function renderLoginForm() {
     const box = document.getElementById('mainContent');
@@ -24,8 +25,7 @@ export function renderLoginForm() {
 
         if (responseObject.data.otp_verification_url)
             renderOtpForm(escapeHTML(responseObject.data.otp_verification_url), responseObject.data.message);
-        else {
-            alert(responseObject.data.message);
-        }
+        else
+            showToast(responseObject.data.message, "error")
     });
 }

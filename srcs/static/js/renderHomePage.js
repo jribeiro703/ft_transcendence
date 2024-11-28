@@ -1,4 +1,6 @@
-import { fetchData, isAuthenticated, getIdFromJWT } from "./utils.js"
+import { isAuthenticated, getIdFromJWT } from "./user/token.js"
+import { PONG_CARD, showToast } from "./user/tools.js"
+import { fetchData } from "./user/fetchData.js"
 
 function createHomeContent() {
 	const box = document.getElementById('mainContent');
@@ -6,7 +8,7 @@ function createHomeContent() {
 		<div id="defaultView">
 			<div class="container">
 				<div class="mx-auto">
-					<img class="img-fluid" src="${pongCard}" alt="Pong Game">
+					<img class="img-fluid" src="${PONG_CARD}" alt="Pong Game">
 					<br><br><br>
 				</div>
 			</div>
@@ -21,56 +23,65 @@ function createHomeContent() {
 	history.pushState({ page: "home" }, "Home", "#home");
 }
 
-async function updateUserAvatar(authenticated) {
-	const avatar = document.getElementById("user-avatar");
-	try {
-		const pk = getIdFromJWT();
-	
-		if (authenticated) {
-			const userData = await fetchData(`/user/settings/${pk}/`);
-			if (userData.avatar)
-				console.log(userData.avatar);
-		}
-	} catch (error) {
-		console.log(`updateAvatar(): ${error}`);
-	}
+async function updateUserAvatar(pk) {
+    const avatar = document.getElementById("user-avatar");
+    try {
+		const userData = await fetchData(`/user/settings/${pk}/`);
+        if (userData.avatar && avatar) {
+            avatar.src = userData.avatar;
+            avatar.alt = "User Avatar";
+        }
+    } catch (error) {
+        console.error(`updateUserAvatar(): ${error}`);
+    }
 }
 
-export async function renderHomePage() {
+async function renderHomePage() {
 	createHomeContent();
 	
 	document.getElementById('btn-QuickGame').addEventListener('click', () => {
 		history.pushState({ page: 'quickgame' }, 'QuickGame', '#quickgame')
-	    console.log('QuickGame button clicked');
+		console.log('QuickGame button clicked');
 	});
 	
 	const authenticated = await isAuthenticated();
-	await updateUserAvatar(authenticated);
+	if (authenticated) {
+		const pk = getIdFromJWT(localStorage.getItem('access_token'));
+		if (pk)
+			await updateUserAvatar(pk);
+	}
 
-	document.getElementById('btn-Match').addEventListener('click', () => {
-		if (!authenticated) {
-			alert("You must be logged in to use this feature.");
-			return ;
+	const authButtons = [
+		{
+			id: 'btn-Match',
+			page: 'match',
+			title: 'Match',
+			handler: () => console.log('Match handler')
+		},
+		{
+			id: 'btn-Tournament',
+			page: 'tournament',
+			title: 'Tournament',
+			handler: () => console.log('Tournament handler')
+		},
+		{
+			id: 'btn-Leaderboard',
+			page: 'leaderboard',
+			title: 'Leaderboard',
+			handler: () => console.log('Leaderboard handler')
 		}
-		console.log('Match button clicked');
-		history.pushState({ page: 'match' }, 'Match', '#match');
-	});
+	];
 
-	document.getElementById('btn-Tournament').addEventListener('click', () => {
-		if (!authenticated) {
-			alert("You must be logged in to use this feature.");
-			return ;
-		}
-		console.log('Tournament button clicked');
-		history.pushState({ page: 'tournament' }, 'Tournament', '#tournament');
-	});
-
-	document.getElementById('btn-Leaderboard').addEventListener('click', () => {
-		if (!authenticated) {
-			alert("You must be logged in to use this feature.");
-			return ;
-		}
-		console.log('Leaderboard button clicked');
-		history.pushState({ page: 'leaderboard' }, 'Leaderboard', '#leaderboard');
+	authButtons.forEach(({ id, page, title }) => {
+		document.getElementById(id).addEventListener('click', () => {
+			if (!authenticated) {
+				showToast("You must be logged in to use this feature.", "warning");
+				return;
+			}
+			handler();
+			history.pushState({ page }, title, `#${page}`);
+		});
 	});
 }
+
+export { renderHomePage };

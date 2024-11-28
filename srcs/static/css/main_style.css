@@ -1,10 +1,16 @@
 @import url('_user.css');
+@import url('_home.css');
 
 body
 {
 	background-color: #455F78;
 	color: #1A1A40;
 	margin: 0;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	padding-bottom: 60px;
 }
 
 p
@@ -241,4 +247,5 @@ button:disabled
 	padding: 10px 20;
 	font-size: 20px;
 	color: #FEFCFF !important;
+	height: 50px;
 }

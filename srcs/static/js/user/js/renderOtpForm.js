@@ -1,8 +1,9 @@
-import { fetchData } from "../../utils.js";
+import { fetchData } from "../fetchData.js";
 import { renderPage } from "../../historyManager.js"
+import { showToast } from "../tools.js"
 
 export function renderOtpForm(url, msg) {
-    alert(msg);
+    showToast(msg, "success");
     const box = document.getElementById('mainContent');
     box.innerHTML = `
     <div class="custom-form">
@@ -20,11 +21,10 @@ export function renderOtpForm(url, msg) {
         const otpCode = document.getElementById('otpCode').value;
         const responseObject = await fetchData(url, 'POST', { otp_code: otpCode });
         
-        alert(responseObject.data.message);
         if (responseObject.data.access_token && responseObject.status === 200) {
-            console.log("Get access token successfully")
             localStorage.setItem('access_token', responseObject.data.access_token);
             renderPage("user");
-        }
+        } else
+            showToast(responseObject.data.message, "error");
     });
 }
