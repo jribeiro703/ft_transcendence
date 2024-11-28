@@ -63,12 +63,20 @@ document.querySelector('#chat-message-input').onkeyup = function(e) {
 };
 
 // Add an event listener on the focus of the chat message input and then listen to keyboard keypress and send submit when 'Enter' key is pressed
-document.querySelector('#chat-message-input').addEventListener('focus', function() {
-    document.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            document.querySelector('#chat-message-submit').click();
-        }
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    const messageInput = document.querySelector('#chat-message-input');
+    const messageSubmit = document.querySelector('#chat-message-submit');
+
+    if (messageInput && messageSubmit) {
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Empêche le comportement par défaut de la touche Entrée
+                messageSubmit.click();
+            }
+        });
+    } else {
+        console.error('Message input or submit button not found');
+    }
 });
 
 document.querySelector('#chat-message-submit').onclick = function(e) {
@@ -111,7 +119,7 @@ function adjustEmojiPickerWidth() {
 // Show emojiPickerContainer
 emojiButton.addEventListener('click', () => {
 	adjustEmojiPickerHeight();
-	adjustEmojiPickerWidth();scrollHeight
+	adjustEmojiPickerWidth();
     emojiPickerContainer.style.display = emojiPickerContainer.style.display == 'block' ? 'none' : 'block';
 });
 

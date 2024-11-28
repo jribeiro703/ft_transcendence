@@ -35,7 +35,7 @@
         <div class="w-100 h-100 flex-grow-1 d-flex justify-content-center align-items-center p-5 gap-5">
           <div id="mainContent" class="flex-grow-1 d-flex h-100 align-item-center border rounded justify-content-center">
             <div id="defaultView" class="d-flex flex-column
-                    justify-content-center align-items-center gap-5 h-100">
+                     justify-content-center align-items-center gap-5 h-100">
               <img class="img-fluid w-75 h-50" src="{% static 'css/images/pong-game-card.png' %}" alt="Pong Game">
               <button id="playsoloGameBtn" class="btn custom-btn height-btn w-25">Single Player</button>
               <button id="playmultiGameBtn" class="btn custom-btn height-btn w-25">Multiplayer</button>
@@ -44,33 +44,37 @@
 
           <div class="h-100 d-flex flex-column border rounded p-4" style="width: 300px; max-width: 300px;">
             <div class="flex-grow-1 w-100 h-100 overflow-auto">
-              <div id="chat-log" class="w-100 h-100 d-flex flex-column-reverse text-break overflow-auto" aria-label="Chat log"></div>
+              <div id="chat-log" class="w-100 h-100 d-flex flex-column-reverse text-break overflow-auto" aria-label="Chat log">
+              </div>
             </div>
-
+            <div class="emoji-picker-container" id="emojiPickerContainer">
+              <emoji-picker id="emoji-picker" aria-label="Emoji picker"></emoji-picker>
+            </div>
             <div class="input-group mt-3">
               <button class="btn btn-secondary" type="button" id="emojiButton" aria-label="Emoji picker">😊</button>
-              <input id="chat-message-input" type="text" class="form-control" placeholder="Type your message here..." aria-label="Chat message input">
+              <input id="chat-message-input" type="text" class="form-control" placeholder="Type here..." aria-label="Chat message input">
               <button id="chat-message-submit" class="btn btn-primary" aria-label="Send message">Send</button>
             </div>
 
-            <!-- <div class="align-items-center p-2 w-100 h-100 border rounded">
-              <div class="d-flex justify-content-center align-items-center">
-                <h4 class="mb-0">Live Chat</h4>
-              </div>
-              <div class="d-flex flex-column mh-100 mw-100">
-                <div id="chat-log" class="flex-grow-1" aria-label="Chat log">
-                  <div class="emoji-picker-container" id="emojiPickerContainer">
-                    <emoji-picker id="emoji-picker" aria-label="Emoji picker"></emoji-picker>
-                  </div>
-                </div>
+            <!-- <div class="align-items-center p-2 w-100 h-100 border rounded"> -->
+            <!--  <div class="d-flex justify-content-center align-items-center"> -->
+            <!--  <h4 class="mb-0">Live Chat</h4> -->
+            <!--  </div> -->
+            <!--  <div class="d-flex flex-column mh-100 mw-100"> -->
+            <!--  <div id="chat-log" class="flex-grow-1" aria-label="Chat log"> -->
+            <!--  <div class="emoji-picker-container" id="emojiPickerContainer"> -->
+            <!--  <emoji-picker id="emoji-picker" aria-label="Emoji picker"></emoji-picker> -->
+            <!--  </div> -->
+            <!--  </div> -->
+            <!---->
+            <!--  <div class="input-group mt-3"> -->
+            <!--  <button class="btn btn-secondary" type="button" id="emojiButton" aria-label="Emoji picker">😊</button> -->
+            <!--  <input id="chat-message-input" type="text" class="form-control" placeholder="Type your message here..." aria-label="Chat message input"> -->
+            <!--  <button id="chat-message-submit" class="btn btn-primary" aria-label="Send message">Send</button> -->
+            <!--  </div> -->
+            <!--  </div> -->
+            <!--  </div>  -->
 
-                <div class="input-group mt-3">
-                  <button class="btn btn-secondary" type="button" id="emojiButton" aria-label="Emoji picker">😊</button>
-                  <input id="chat-message-input" type="text" class="form-control" placeholder="Type your message here..." aria-label="Chat message input">
-                  <button id="chat-message-submit" class="btn btn-primary" aria-label="Send message">Send</button>
-                </div>
-              </div>
-            </div> -->
           </div>
         </div>
       </div>

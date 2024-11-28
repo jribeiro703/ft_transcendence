@@ -981,8 +981,8 @@ emoji-picker {
 .emoji-picker-container {
 	display: none;
 	position: absolute;
-	bottom: 52px;
-	left: 15px;
+	bottom: 92px;
+	left: -20px;
 	z-index: 1000;
 }
 
