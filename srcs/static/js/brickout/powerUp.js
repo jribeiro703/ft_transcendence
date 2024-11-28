@@ -1,3 +1,5 @@
+import { showGameSelectionView } from "../gameView.js";
+import gameVar from "../var.js";
 import brickVar from "./var.js";
 
 const img = new Image();
@@ -17,14 +19,14 @@ export function updatePowerUpSelectionB(selected)
 	brickVar.powerUpEnable = selected;
 
 	if (selected)
-		console.log("Power-Ups activés !");
+		console.log("Power-Ups activés B !");
 	else 
-		console.log("Power-Ups désactivés !");
+		console.log("Power-Ups désactivés B !");
 }
 
 export function updatePowerUpB()
 {
-	if (brickVar.powerUpenable)
+	if (brickVar.powerUpEnable)
     {
 		if (!brickVar.powerUpActive)
 		{
@@ -34,7 +36,7 @@ export function updatePowerUpB()
 				createPowerUpB();
 		}
 	}
-}	
+}
 
 export function resetPowerUpB()
 {
@@ -46,10 +48,15 @@ export function resetPowerUpB()
 
 export function createPowerUpB()
 {
-	RandomPowerUpB();
-	img.src = brickVar.currentPowerUp.image;
-	brickVar.powerUpX = Math.random() * (brickVar.canvasW - 2 * 75) + 75;
-	brickVar.powerUpY = brickVar.brickOffsetTop;
+	if (!brickVar.powerUpOnscreen)
+	{
+		brickVar.powerUpX = Math.random() * (brickVar.canvasW);
+		brickVar.powerUpY = brickVar.brickOffsetTop;
+
+		RandomPowerUpB();
+		img.src = brickVar.currentPowerUp.image;
+		brickVar.powerUpOnscreen = true;
+	}
 }
 
 export function RandomPowerUpB()
@@ -58,31 +65,17 @@ export function RandomPowerUpB()
 	brickVar.currentPowerUp = brickVar.powerUps[randomIndex];
 }
 
-// export function drawPowerUpB()
-// {
-// 	if (!brickVar.powerUpActive)
-// 	{
-// 		if (brickVar.ctx)
-// 		{
-// 			const imgWidth = 40;
-// 			const imgHeight = 40;
-// 			brickVar.ctx.drawImage(img, brickVar.powerUpX - imgWidth / 2, brickVar.powerUpY - imgHeight / 2, imgWidth, imgHeight);
-// 		}
-// 		else
-// 			console.log("errror drawPU");
-// 	}
-// }
 
 export function drawPowerUpB()
 {
-	if (brickVar.powerUpenable)
+	if (brickVar.powerUpEnable)
     {
 		if (!brickVar.powerUpActive && brickVar.ctx)
 		{
 			if (img.complete && img.naturalHeight !== 0)
 			{
-				const imgWidth = 40;
-				const imgHeight = 40;
+				const imgWidth = 50;
+				const imgHeight = 50;
 				try
 				{
 					brickVar.ctx.drawImage(img, 
@@ -111,9 +104,9 @@ export function drawPowerUpB()
 
 export function collectPowerUpB()
 {
-	if (brickVar.powerUpenable)
+	if (brickVar.powerUpEnable)
 	{
-		if (!brickVar.powerUpActive && !brickVar.finishLevel)
+		if (!brickVar.powerUpActive && !brickVar.finishLevel && brickVar.powerUpOnscreen)
 		{
 			const powerUpCenterX = brickVar.powerUpX + (brickVar.POWER_UP_SIZE / 2);
 			const powerUpCenterY = brickVar.powerUpY + (brickVar.POWER_UP_SIZE / 2);
@@ -129,8 +122,10 @@ export function collectPowerUpB()
 				powerUpCenterY <= paddleBottom + tolerance)
 			{
 				console.log("PowerUp collected!");
-				brickVar.powerUpActive = true;
+				brickVar.powerUpOnscreen = false;
+				brickVar.powerUpX = -100;
 				checkPowerUpB();
+				brickVar.powerUpActive = true;
 			}
 		}
 	}
@@ -156,23 +151,15 @@ export function checkPowerUpB()
 		puSizeMB();
 	else if (brickVar.currentPowerUp?.type === "invincible")
 		puInvicibleB();
-	else if (brickVar.currentPowerUp?.type === 'bbsp')
-		puBbspB();
+	else if (brickVar.currentPowerUp?.type === 'extraLife')
+		puExtraLife();
 }
 
-function puBbspB()
+function puExtraLife()
 {
-	brickVar.ballRadius *= 3;
-	brickVar.paddleWidth /= 3;
-	brickVar.powerUpActive = true;
 
-	setTimeout(() => 
-	{
-		brickVar.ballRadius /= 3;
-		brickVar.paddleWidth *= 3;
-		brickVar.powerUpActive = false;
-
-	}, brickVar.POWER_UP_DURATION);
+	brickVar.lives++;
+	brickVar.powerUpActive = false;
 	newPowerUpB();
 	
 }
@@ -180,14 +167,17 @@ function puBbspB()
 function puSpeedB()
 {
 	console.log("on accelere");
+	const originSpeed = Math.sqrt(brickVar.dx * brickVar.dx + brickVar.dy * brickVar.dy);
+
 	brickVar.dx *= 2;
 	brickVar.dy *= 2;
 
-	brickVar.powerUpActive = true;
 	setTimeout(() => 
 	{
-		brickVar.dx /= 2;
-		brickVar.dy /= 2;
+		const direction = Math.atan2(brickVar.dy, brickVar.dx);
+
+		brickVar.dx = originSpeed * Math.cos(direction);
+		brickVar.dy = originSpeed * Math.sin(direction);
 		brickVar.powerUpActive = false;
 
 	}, brickVar.POWER_UP_DURATION);
@@ -196,14 +186,15 @@ function puSpeedB()
 
 function puSlowB()
 {
+	const originSpeed = Math.sqrt(brickVar.dx * brickVar.dx + brickVar.dy * brickVar.dy);
 	brickVar.dx /= 2;
 	brickVar.dy /= 2;
-
-	brickVar.powerUpActive = true;
 	setTimeout(() => 
 	{
-		brickVar.dx *= 2;
-		brickVar.dy *= 2;
+		const direction = Math.atan2(brickVar.dy, brickVar.dx);
+
+		brickVar.dx = originSpeed * Math.cos(direction);
+		brickVar.dy = originSpeed * Math.sin(direction);
 		brickVar.powerUpActive = false;
 
 	}, brickVar.POWER_UP_DURATION);
@@ -212,11 +203,10 @@ function puSlowB()
 
 function puSizePB()
 {
-	brickVar.paddleWidth *= 1.4;
-	brickVar.powerUpActive = true;
+	brickVar.paddleWidth *= 2;
 	setTimeout(() => 
 	{
-		brickVar.paddleWidth /= 1.4;
+		brickVar.paddleWidth /= 2;
 
 		brickVar.powerUpActive = false;
 
@@ -226,11 +216,10 @@ function puSizePB()
 
 function puSizeMB()
 {
-	brickVar.paddleWidth /= 1.4;
-	brickVar.powerUpActive = true;
+	brickVar.paddleWidth /= 2;
 	setTimeout(() => 
 	{
-		brickVar.paddleWidth *= 1.4;
+		brickVar.paddleWidth *= 2;
 		brickVar.powerUpActive = false;
 
 	}, brickVar.POWER_UP_DURATION);
@@ -239,11 +228,11 @@ function puSizeMB()
 
 function puInvicibleB()
 {
-	brickVar.paddleWidth *= 5;
+	brickVar.paddleWidth *= 6;
 	brickVar.powerUpActive = true;
 	setTimeout(() => 
 	{
-		brickVar.paddleWidth /= 5;
+		brickVar.paddleWidth /= 6;
 		brickVar.powerUpActive = false;
 
 	}, brickVar.POWER_UP_DURATION);

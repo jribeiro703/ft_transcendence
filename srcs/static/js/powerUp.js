@@ -1,5 +1,6 @@
 import gameVar from "./var.js";
 import { POWER_UP_DURATION, BUFFER_COLLISION} from "./const.js";
+import { showGameSelectionView } from "./gameView.js";
 
 const img1 = new Image();
 const img2 = new Image();
@@ -18,8 +19,9 @@ export function drawPowerUp()
 {
 	if (gameVar.powerUpEnable)
 	{
-		if (!gameVar.powerUpActive1 && gameVar.ctx)
+		if (!gameVar.powerUp1Active && gameVar.ctx)
 		{
+			console.log("draw pu active is false")
 			const imgWidth = 50;
 			const imgHeight = 50;
 			
@@ -41,7 +43,7 @@ export function drawPowerUp()
 				gameVar.ctx.closePath();
 			}
 		}
-		if (!gameVar.powerUpActive2 && gameVar.ctx)
+		if (!gameVar.powerUp2Active && gameVar.ctx)
 		{
 			const imgWidth = 50;
 			const imgHeight = 50;
@@ -69,6 +71,11 @@ export function drawPowerUp()
 
 export function newPowerUp(isFirstPu, time)
 {
+	if (isFirstPu && gameVar.powerUp1Active || !isFirstPu && gameVar.powerUp2Active) 
+	{
+		console.log("pu deja active pour :", isFirstPu);
+		return;
+	}
 	setTimeout(() =>
 	{
 		if(isFirstPu)
@@ -78,15 +85,28 @@ export function newPowerUp(isFirstPu, time)
 	}, 3000 + time);
 }
 
+function isSpeedPowerUp(powerUp)
+{
+    return powerUp?.type === 'speed' || powerUp?.type === 'slow';
+}
+
 export function createPowerUp1()
 {
     if (!gameVar.powerUp1OnScreen)
 	{
+		const availablePu = gameVar.powerUps.filter(pu =>
+		{
+			if (gameVar.speedPuActive || isSpeedPowerUp(gameVar.currentPowerUp2))
+			{
+				return pu.type !== 'spped'  && pu.type !== 'slow';
+			}
+			return (true);
+		});
         gameVar.powerUpX1 = gameVar.canvasW / 2;
         gameVar.powerUpY1 = Math.random() * (gameVar.canvasH - 50) + 25;
         
-        const randomPowerUp1 = Math.floor(Math.random() * gameVar.powerUps.length);
-        gameVar.currentPowerUp1 = gameVar.powerUps[randomPowerUp1];
+        const randomPowerUp1 = Math.floor(Math.random() * availablePu.length);
+        gameVar.currentPowerUp1 = availablePu[randomPowerUp1];
         
         img1.src = gameVar.currentPowerUp1.image;
         gameVar.powerUp1OnScreen = true;
@@ -97,11 +117,19 @@ export function createPowerUp2()
 {
     if (!gameVar.powerUp2OnScreen)
 	{
+		const availablePu = gameVar.powerUps.filter(pu =>
+		{
+			if (gameVar.speedPuActive || isSpeedPowerUp(gameVar.currentPowerUp1))
+			{
+				return pu.type !== 'spped'  && pu.type !== 'slow';
+			}
+			return (true);
+		});
         gameVar.powerUpX2 = gameVar.canvasW / 2;
         gameVar.powerUpY2 = Math.random() * (gameVar.canvasH - 50) + 25;
         
-        const randomPowerUp2 = Math.floor(Math.random() * gameVar.powerUps.length);
-        gameVar.currentPowerUp2 = gameVar.powerUps[randomPowerUp2];
+        const randomPowerUp2 = Math.floor(Math.random() * availablePu.length);
+        gameVar.currentPowerUp2 = availablePu[randomPowerUp2];
         
         img2.src = gameVar.currentPowerUp2.image;
         gameVar.powerUp2OnScreen = true;
@@ -144,8 +172,9 @@ export function collectPowerUp()
 				gameVar.powerUp1OnScreen = false;
 				gameVar.powerUpX1 = -100;
 				checkPowerUp('player', gameVar.currentPowerUp1);
+				console.log("player catch :", gameVar.currentPowerUp1);
 				gameVar.powerUp1Active = true;
-				newPowerUp(true, 7000);
+				// newPowerUp(true, 7000);
 			}
 		}
 		if (!gameVar.powerUp2Active && gameVar.powerUp2OnScreen)
@@ -159,8 +188,9 @@ export function collectPowerUp()
 					gameVar.powerUp2OnScreen = false;
 					gameVar.powerUpX2 = gameVar.canvasW + 100;
 					checkPowerUp('player2', gameVar.currentPowerUp2);
+					console.log("player2 catch :", gameVar.currentPowerUp2);
 					gameVar.powerUp2Active = true;
-					newPowerUp(false, 7000);
+					// newPowerUp(false, 7000);
 				}
 			}
 			else
@@ -173,7 +203,7 @@ export function collectPowerUp()
 					gameVar.powerUpX2 = gameVar.canvasW + 100;
 					checkPowerUp('ai', gameVar.currentPowerUp2);
 					gameVar.powerUp2Active = true;
-					newPowerUp(false, 7000);
+					// newPowerUp(false, 7000);
 				}
 			}
 		}
@@ -185,38 +215,63 @@ function applyPowerUpEffect(player, effect, duration = POWER_UP_DURATION)
     if (player === 'player')
 	{
         gameVar.powerUp1Active = true;
-        setTimeout(() => {
+		if (gameVar.currentPowerUp1?.type === 'speed' || gameVar.currentPowerUp1?.type === 'slow')
+			gameVar.speedPuActive = true;
+        setTimeout(() =>
+		{
             effect();
             gameVar.powerUp1Active = false;
+			if (gameVar.currentPowerUp1?.type === 'speed' || gameVar.currentPowerUp1?.type === 'slow')
+				gameVar.speedPuActive = false;
+			newPowerUp(true, 0);
         }, duration);
     }
 	else
 	{
+		if (gameVar.currentPowerUp2?.type === 'speed' || gameVar.currentPowerUp2?.type === 'slow')
+			gameVar.speedPuActive = true;
         gameVar.powerUp2Active = true;
-        setTimeout(() => {
+        setTimeout(() =>
+		{
             effect();
             gameVar.powerUp2Active = false;
+			if (gameVar.currentPowerUp2?.type === 'speed' || gameVar.currentPowerUp2?.type === 'slow')
+				gameVar.speedPuActive = false;
+			newPowerUp(false, 0);
         }, duration);
     }
 }
 
 function puSpeed(player)
 {
-    const originalSpeed = gameVar.dx;
+    const originSpeed = Math.sqrt(gameVar.dx * gameVar.dx + gameVar.dy * gameVar.dy);
+
     gameVar.dx *= 2;
+	gameVar.dy *= 2;
     
-    applyPowerUpEffect(player, () => {
-        gameVar.dx = originalSpeed;
+    applyPowerUpEffect(player, () =>
+	{
+		const direction = Math.atan2(gameVar.dy, gameVar.dx);
+
+        gameVar.dx = originSpeed * Math.cos(direction);
+		gameVar.dy = originSpeed * Math.sin(direction);
     });
 }
 
 function puSlow(player)
 {
-    const originalSpeed = gameVar.dx;
-    gameVar.dx *= 0.5;
+	const originSpeed = Math.sqrt(gameVar.dx * gameVar.dx + gameVar.dy * gameVar.dy)
+
+    gameVar.dx /= 2;
+	gameVar.dy /= 2;
     
-    applyPowerUpEffect(player, () => {
-        gameVar.dx = originalSpeed;
+    applyPowerUpEffect(player, () =>
+	{
+		const currentDirection = Math.atan2(gameVar.dy, gameVar.dx);
+
+        gameVar.dx = originSpeed * Math.cos(currentDirection);
+		gameVar.dy = originSpeed * Math.sin(currentDirection);
+
     });
 }
 
@@ -225,7 +280,7 @@ function puSizeP(player)
     if (player === 'player')
 	{
         const originalHeight = gameVar.playerPaddleHeight;
-        gameVar.playerPaddleHeight *= 1.5;
+        gameVar.playerPaddleHeight *= 2;
         
         applyPowerUpEffect(player, () => {
             gameVar.playerPaddleHeight = originalHeight;
@@ -234,7 +289,7 @@ function puSizeP(player)
 	else if (player == 'player2')
 	{
         const originalHeight = gameVar.player2PaddleHeight;
-        gameVar.player2PaddleHeight *= 1.5;
+        gameVar.player2PaddleHeight *= 2;
         
         applyPowerUpEffect(player, () => {
             gameVar.player2PaddleHeight = originalHeight;
@@ -243,7 +298,7 @@ function puSizeP(player)
 	else if (player == 'ai')
 	{
         const originalHeight = gameVar.aiPaddleHeight;
-        gameVar.aiPaddleHeight *= 1.5;
+        gameVar.aiPaddleHeight *= 2;
         
         applyPowerUpEffect(player, () => {
             gameVar.aiPaddleHeight = originalHeight;
@@ -256,7 +311,7 @@ function puSizeM(player)
     if (player === 'player')
 	{
         const originalHeight = gameVar.playerPaddleHeight;
-        gameVar.playerPaddleHeight *= 0.5;
+        gameVar.playerPaddleHeight /= 2;
         
         applyPowerUpEffect(player, () => {
             gameVar.playerPaddleHeight = originalHeight;
@@ -265,7 +320,7 @@ function puSizeM(player)
 	else if (player === 'player2') 
 	{
         const originalHeight = gameVar.player2PaddleHeight;
-        gameVar.player2PaddleHeight *= 0.5;
+        gameVar.player2PaddleHeight /= 2;
         
         applyPowerUpEffect(player, () => {
             gameVar.player2PaddleHeight = originalHeight;
@@ -274,7 +329,7 @@ function puSizeM(player)
 	else if (player === 'ai') 
 	{
         const originalHeight = gameVar.aiPaddleHeight;
-        gameVar.aiPaddleHeight *= 0.5;
+        gameVar.aiPaddleHeight /= 2;
         
         applyPowerUpEffect(player, () => {
             gameVar.aiPaddleHeight = originalHeight;
@@ -287,7 +342,7 @@ function puInvincible(player)
     if (player === 'player')
 	{
 		const originalHeight = gameVar.playerPaddleHeight;
-		gameVar.playerPaddleHeight *= 3;
+		gameVar.playerPaddleHeight *= 4;
         applyPowerUpEffect(player, () => {
             gameVar.playerPaddleHeight = originalHeight;
         });
@@ -295,7 +350,7 @@ function puInvincible(player)
 	else if (player === 'player2')
 	{
 		const originalHeight = gameVar.player2PaddleHeight;
-		gameVar.player2PaddleHeight *= 3;
+		gameVar.player2PaddleHeight *= 4;
         applyPowerUpEffect(player, () => {
             gameVar.playerPaddleHeight = originalHeight;
         });
@@ -303,13 +358,12 @@ function puInvincible(player)
 	else if (player === 'ai')
 	{
 		const originalHeight = gameVar.aiPaddleHeight;
-		gameVar.aiPaddleHeight *= 3;
+		gameVar.aiPaddleHeight *= 4;
         applyPowerUpEffect(player, () => {
             gameVar.aiPaddleHeight = originalHeight;
         });
     }
 }
-
 
 export function checkPowerUp(player, power)
 {
@@ -336,7 +390,7 @@ export function updatePowerUp()
 			{
 				gameVar.powerUpX1 = -100;
 				gameVar.powerUp1OnScreen = false;
-				newPowerUp(true, 0);
+				newPowerUp(true, 3000);
 			}
 		}
 
@@ -347,7 +401,7 @@ export function updatePowerUp()
 			{
 				gameVar.powerUpX2 = gameVar.canvasW + 100;
 				gameVar.powerUp2OnScreen = false;
-				newPowerUp(false, 0);
+				newPowerUp(false, 3000);
 			}
 		}
 	}

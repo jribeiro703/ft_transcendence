@@ -7,6 +7,14 @@ const brickVar = {
 	canvasH: 420,
 	ctx: null,
 
+	scoreCtx: null,
+	scoreCanvW: 420,
+	scoreCanvH: 100,
+
+	gameTime: 0,
+	gameTimer: null,
+
+
 // -------------------------------------Ball-----------------
 
 	ballRadius: 7,
@@ -57,21 +65,23 @@ const brickVar = {
 	POWER_UP_DURATION: 7000,
 	BUFFER_COLLISION: 10,
 
-	powerUpenable: false,
+	powerUpEnable: false,
+	powerUpOnscreen: false,
 	powerUpX: null,
 	powerUpY: null,
 	powerUpActive: false,
-	powerUpSpeed: 1,
+	
+	powerUpSpeed: 3,
 
 
 	powerUps: 
 	[
-		{ type: 'speed', image: '/static/css/images/FastBall.png'},
-		{ type: 'slow', image: '/static/css/images/SlowBall.png'},
-		{ type: 'sizeP', image: '/static/css/images/paddleBigger.png'},
-		{ type: 'sizeM', image: '/static/css/images/smallerPaddle.png'},
-		{ type: 'invincible', image: '/static/css/images/star.png'},
-		{ type: 'bbsp', image: '/static/css/images/bbsp.png'},
+		{ type: 'speed', image: '/static/css/images/fast.png'},
+		{ type: 'slow', image: '/static/css/images/slow.png'},
+		{ type: 'sizeP', image: '/static/css/images/paddleSp.png'},
+		{ type: 'sizeM', image: '/static/css/images/paddleSm.png'},
+		{ type: 'invincible', image: '/static/css/images/shield.png'},
+		{ type: 'ExtraLife', image: '/static/css/images/extraLife.png'},
 	],
 	currentPowerUp: null,
 

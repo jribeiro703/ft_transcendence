@@ -6,7 +6,7 @@ const gameVar =
 	canvasW: 840,
 	canvasH: 420,
 	scoreCanvW: 420,
-	scoreCanvH: 120,
+	scoreCanvH: 100,
 	scoreCtx: null, 
 	gameTime: 0,
 	gameTimer: null,
@@ -30,6 +30,9 @@ const gameVar =
 
 	playerUpPressed: false,
 	playerDownPressed: false,
+	
+	player2UpPressed: false,
+	player2DownPressed: false,
 
 // ---------------------------------Score------------------------
 
@@ -46,7 +49,7 @@ const gameVar =
 // ----------------------------Settings-------------------------
 
 	settingsChanged: false,
-	powerUpSpeed: 2,
+	powerUpSpeed: 3,
 
 	powerUpX1: null,
 	powerUpY1: null,
@@ -67,6 +70,7 @@ const gameVar =
 	withoutPowerUp: null,
 
 	powerUpSelection: null,
+	speedPuActive: false,
 	difficulty: null,
 	easy: null,
 	medium: null,
@@ -193,13 +197,14 @@ const gameVar =
 // -------------------Power Ups------------------------
 
 	powerUps: [
-		{ type: 'speed', image: 'static/css/images/FastBall.png'},
-		{ type: 'slow', image: 'static/css/images/SlowBall.png'},
-		{ type: 'sizeP', image: 'static/css/images/paddleBigger.png'},
-		{ type: 'sizeM', image: 'static/css/images/smallerPaddle.png'},
-		{ type: 'invincible', image: 'static/css/images/star.png'}
+		{ type: 'speed', image: 'static/css/images/fast.png'},
+		{ type: 'slow', image: 'static/css/images/slow.png'},
+		{ type: 'sizeP', image: 'static/css/images/paddleSp.png'},
+		{ type: 'sizeM', image: 'static/css/images/paddleSm.png'},
+		{ type: 'invincible', image: 'static/css/images/shield.png'}
 	],
-	currentPowerUp: null,
+	currentPowerUp1: null,
+	currentPowerUp2: null,
 
 // ------------------------------------Level---------------------
 

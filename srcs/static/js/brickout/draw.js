@@ -1,3 +1,4 @@
+import gameVar from "../var.js";
 import brickVar from "./var.js";
 
 export function drawBallB()
@@ -40,16 +41,57 @@ export function drawPaddleB()
     brickVar.ctx.closePath();
 }
 
-export function drawScoreB()
+// export function drawScoreB()
+// {
+//     brickVar.ctx.font = "16px Arial";
+//     brickVar.ctx.fillStyle = "grey";
+//     brickVar.ctx.fillText("Score: "+brickVar.score, 8, 20);
+// }
+
+// export function drawLivesB()
+// {
+//     brickVar.ctx.font = "16px Arial";
+//     brickVar.ctx.fillStyle = "grey";
+//     brickVar.ctx.fillText("Lives: "+brickVar.lives, brickVar.canvasW - 65, 20);
+// }
+
+function loadCustomFont()
 {
-    brickVar.ctx.font = "16px Arial";
-    brickVar.ctx.fillStyle = "grey";
-    brickVar.ctx.fillText("Score: "+brickVar.score, 8, 20);
+    return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');
 }
 
-export function drawLivesB()
+
+export function drawScoreBoardB()
 {
-    brickVar.ctx.font = "16px Arial";
-    brickVar.ctx.fillStyle = "grey";
-    brickVar.ctx.fillText("Lives: "+brickVar.lives, brickVar.canvasW - 65, 20);
+
+    loadCustomFont().load().then(function(font) 
+	{
+        document.fonts.add(font);
+		const ctx = brickVar.scoreCtx;
+		ctx.clearRect(0, 0, brickVar.scoreCanvW, brickVar.scoreCanvH);
+		
+		ctx.font = '24px fontScore';
+		ctx.fillStyle = '#FFFFFF';
+		ctx.textAlign = 'center';
+		
+		const centerX = brickVar.scoreCanvW / 2;
+		const leftX = brickVar.scoreCanvW * 0.25;
+		const rightX = brickVar.scoreCanvW * 0.75;
+		const y = 35;
+
+		ctx.fillText('Score', leftX, y);
+		ctx.fillText('Lives', rightX, y);
+
+		ctx.font = '32px fontScore';
+		ctx.fillText(brickVar.score, leftX, y + brickVar.scoreCanvH / 2);
+		ctx.fillText(brickVar.lives, rightX, y + brickVar.scoreCanvH / 2);
+		const minutes = Math.floor(brickVar.gameTime / 60);
+		const seconds = brickVar.gameTime % 60;
+		const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+		ctx.font = '20px fontScore';
+		ctx.fillText(time, centerX, y + brickVar.scoreCanvH / 2);
+	}).catch(function(error)
+	{
+		console.error("Error on font load", error);
+	});
 }

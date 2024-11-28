@@ -11,6 +11,7 @@ export function startBallB(e)
             brickVar.gameStart = true;
             brickVar.dx = brickVar.initDx;
             brickVar.dy = (Math.random() < 0.5 ? brickVar.initDy : -brickVar.initDy);
+			displayBallB();
         }
 		else
 		{
@@ -22,10 +23,12 @@ export function startBallB(e)
 }
 export function displayBallB()
 {
-	console.log("x: ", brickVar.x);
-	console.log("y: ", brickVar.y);
-	console.log("dx: ", brickVar.dx);
-	console.log("dy: ", brickVar.dy);
+	// console.log("x: ", brickVar.x);
+	// console.log("y: ", brickVar.y);
+	// console.log("dx: ", brickVar.dx);
+	// console.log("dy: ", brickVar.dy);
+	console.log("init Dx :", brickVar.initDx);
+	console.log("init Dy :", brickVar.initDy);
 }
 
 export function initBallB()

@@ -379,7 +379,117 @@ p
 
 /* -------------------------- Game Selection ---------------------- */
 
+.games-row2
+{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
 
+.game-column 
+{
+    flex: 1;
+    /* padding: 10px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.container-game2
+{
+    display: flex;
+    flex-direction: column; 
+    gap: 15px; 
+    padding: 20px;
+    background: #0A1730;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 1600px;
+	max-height: 200px;
+    margin: 0 auto; 
+	margin-top: 40px;
+}
+
+.game-settings2
+{
+	margin-right: 50px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.settings-info2 p 
+{
+    margin: 5px 0;
+	color: #6DC1C1;
+    font-size: 20px;
+	/* margin-bottom: 50px; */
+}
+.settings-inline
+{
+    display: flex;
+    align-items: left; 
+    gap: -10px; 
+}
+
+.settings-column2
+{
+    display: flex;
+    flex-direction: column; 
+    gap: 5px; 
+	margin-bottom: 15px;
+}
+
+
+.title-image-container
+{
+    display: flex;
+    align-items: center;
+    gap: 100px;
+}
+
+.game-title3 img {
+    width: 20%;
+    height: 20%;
+    object-fit: cover;
+    border-radius: 3px;
+	border: 10px;
+	border-color: white;
+    margin-top: 30px;
+}
+
+.game-title3 h2 {
+    margin: 0;
+    font-size: 34px;
+    color: #455F78;
+	margin-bottom: 30px;
+}
+.game-settings3 {
+    margin-top: -55px;  /* Ajustez cette valeur selon vos besoins */
+}
+
+.startSelect-button2
+{
+	font-size: 48px;
+    padding: 8px 12px;
+	background-color: #1F2E4D;
+	border: none;
+	color: #6DC1C1;
+	padding: 10px;
+	width: 100%;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-top: 150px;
+}
+.game-play
+{
+	margin-top: -50px;
+}
+.game-play2
+{
+	margin-top: -20px;
+}
 .container-game
 {
     display: flex;
@@ -513,7 +623,7 @@ p
     opacity: 0.9;
 }
 
-#playBtn, #playBtn2
+#playBtn, #playBtn2, #playBtn3, #playBtn4
 {
 	width: 200px;
     height: 60px;
@@ -527,19 +637,34 @@ p
 	margin-bottom: 40px;
 }
 
-#playBtn:hover, #playBtn2:hover
+#playBtn:hover, #playBtn2:hover, #playBtn3:hover, #playBtn4:hover
 {
 	color: #1F2E4D;
     background-color: #6DC7C1;
     border-color: #000000;
 }
 
-#playBtn:active, #playBtn2:active
+#playBtn:active, #playBtn2:active, #playBtn3:active, #playBtn4:active
 {
 	color: #1F2E4D;
     background-color: #6DC7C1;
     border-color: #000000;
 }
+
+#playBtn3
+{
+	width: 200px;
+    height: 60px;
+    font-size: 20px;
+    background-color: #0A1730;
+    color: #FEFCFF; 
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.4s;
+}
+
+
 /* ----------------------- Score Board ------------------------- */
 
 #scoreboard 
@@ -606,7 +731,7 @@ p
 
 @font-face {
     font-family: 'fontScore';
-    src: url('static/css/font/scoreboard.ttf') format('truetype');
+    src: url('/static/css/font/scoreboard-webfont.woff2') format('truetype');
 }
 
 #rematchBtn, #quitGameBtn, #nextLevelBtn,  #restartLevelBtn, #quitBtn

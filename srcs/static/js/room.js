@@ -2,12 +2,11 @@ import gameVar from './var.js';
 import { sendGameData, sendPlayerData, sendSettingData } from './network.js';
 import { drawLive, initializeBall } from './draw.js';
 import { updateCanvasColor } from './setting.js';
-import { SCORE_CANVAS_HEIGHT } from './const.js';
 import { drawScoreBoard } from './gameView.js';
+import { startGame } from './start.js';
 
 export function createNewRoom(joinRoomCallback)
 {
-	console.log("createnewroom");
 	const roomName = `room_${Math.floor(Math.random() * 10000)}`;
 	gameVar.playerIdx = 1;
 	gameVar.isFirstPlayer = true;
@@ -42,12 +41,19 @@ export function waitingPlayer()
 			gameVar.gameReady = true;
 			clearInterval(waitingINterval);
 			sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
-			initializeBall();
-			updateCanvasColor();
-			drawScoreBoard();
-			drawLive();
+
+			startLiveGame();
+
 		}
 	}, 2000);
+
+}
+
+export function startLiveGame()
+{
+	initializeBall();
+	updateCanvasColor();
+	drawLive();
 }
 
 export function displayPlayerData(idx)
@@ -59,7 +65,6 @@ export function displayPlayerData(idx)
 
 export function joinRoom(roomName)
 {
-	console.log("join room call back");
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 	const gameSocket = new WebSocket(protocol + '//' + window.location.host + `/ws/pong/${roomName}/`);
 
@@ -83,7 +88,7 @@ export function joinRoom(roomName)
 		}
 		catch (error)
 		{
-			console.error("erreur send message", error);
+			console.error("error on send message: ", error);
 		}
 	};
 
@@ -93,7 +98,7 @@ export function joinRoom(roomName)
 		{
 			const data = JSON.parse(e.data);
 			// if (data.type !== 'ball_data' && data.type !== 'paddle_data')
-				// console.log("data: ", data);
+			console.log("data: ", data);
 			if (data.type === 'ping')
 			{
 				gameSocket.send(JSON.stringify({ type: 'pong' }));
@@ -190,8 +195,6 @@ export function addRoom(index, roomName, status)
 
 export function updateRoomList()
 {
-	// console.log("updateRooomList");
-	// console.log("gameRoom: ", gameVar.rooms);
 	gameVar.noRoomsMessage.style.display = 'none';
 	gameVar.roomsContainer.style.display = 'block';
 
@@ -228,27 +231,7 @@ export function showGameRoom()
 	gameVar.playerIdx = 2;
 	gameVar.playerReady = true;
 
-	const mainContent = document.getElementById('mainContent');
-
-	mainContent.innerHTML = '';
-
-	const insertTo = document.createElement('div');
-
-	insertTo.innerHTML = `
-	<div id="gameView" style="display: none;">
-			<div id="scoreboard">
-				<canvas id="scoreCanvas"></canvas>
-			</div>
-			<canvas id="myCanvas"></canvas>
-			<br><br>
-			<div class="button-container">
-				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
-				<button id="quitGameBtn" style="display: none;">Quit Game</button>
-			</div>
-		</div>	
-	`;
-
-	mainContent.appendChild(insertTo);
+	displayCanvas();
 
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
@@ -256,16 +239,7 @@ export function showGameRoom()
 
 	gameVar.gameView.style.display = 'block';
 	
-	var canvas = document.getElementById('myCanvas');
-	gameVar.ctx = canvas.getContext('2d');
-	canvas.width = gameVar.canvasW;
-	canvas.height = gameVar.canvasH;
-
-
-	var scoreCanvas = document.getElementById('scoreCanvas');
-	gameVar.scoreCtx = scoreCanvas.getContext('2d');
-	scoreCanvas.width = gameVar.scoreCanvW;
-	scoreCanvas.height = SCORE_CANVAS_HEIGHT;
+	getCanvasInfo();
 
 	gameVar.gameTime = 0;
     gameVar.gameTimer = setInterval(() =>
@@ -275,8 +249,6 @@ export function showGameRoom()
             gameVar.gameTime++;
         }
     }, 1000);
-
-    scoreCanvas.style.marginBottom = '10px';
 }
 
 export function updateSettingLive()
@@ -298,6 +270,46 @@ export function updateSettingLive()
 	}, 2000);
 }
 
+export function displayCanvas()
+{
+	const mainContent = document.getElementById('mainContent');
+
+	mainContent.innerHTML = '';
+
+	const insertTo = document.createElement('div');
+
+	insertTo.innerHTML = `
+	<div id="gameView" style="display: none;">
+			<div id="scoreboard">
+				<canvas id="scoreCanvas"></canvas>
+			</div>
+			<canvas id="myCanvas"></canvas>
+			<br><br>
+			<div class="button-container">
+				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+				<button id="quitGameBtn" style="display: none;">Quit Game</button>
+			</div>
+		</div>	
+	`;
+
+	mainContent.appendChild(insertTo);
+}
+
+export function getCanvasInfo()
+{
+	var canvas = document.getElementById('myCanvas');
+	gameVar.ctx = canvas.getContext('2d');
+	canvas.width = gameVar.canvasW;
+	canvas.height = gameVar.canvasH;
+
+
+	var scoreCanvas = document.getElementById('scoreCanvas');
+	gameVar.scoreCtx = scoreCanvas.getContext('2d');
+	scoreCanvas.width = gameVar.scoreCanvW;
+	scoreCanvas.height = gameVar.scoreCanvH;
+
+    scoreCanvas.style.marginBottom = '10px';
+}
 // export function checkForExistingRooms(joinRoomCallback)
 // {
 // 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';

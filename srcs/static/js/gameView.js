@@ -1,14 +1,149 @@
 import gameVar from "./var.js";
 import brickVar from "./brickout/var.js"
-import { SCORE_CANVAS_HEIGHT } from "./const.js";
 import { initializeBall } from "./draw.js";
-import { newPowerUp } from "./powerUp.js";
 import { draw } from "./draw.js";
 import { resetMatch, checkServer } from "./reset.js";
 import { manageAi } from "./ai.js";
 import { updateCanvasColor } from "./setting.js";
 import { listenPlayBtn, listenSettingBtn } from "./listenerSetting.js";
 import { initControl } from "./init.js";
+import { startGame, startGameB } from "./start.js";
+import { showGameBrickView } from "./brickout/game.js";
+import { listenSettingMultiBtn } from "./listenerSetting.js";
+import { listenPlayMultiBtn } from "./listenerSetting.js";
+
+
+export function showGameSelectionMultiView()
+{
+	// gameVar.liveMatch = true;
+	initControl();
+	// history.pushState({ view: 'game'}, '', `?view=settingMulti`);
+	const maincontent = document.getElementById('mainContent');
+	maincontent.innerHTML = '';
+	const gameSelection = document.createElement('div');
+
+	updateImageUrl();
+
+	gameSelection.innerHTML = `
+    <div id="settingView" class="game-selection">
+        <h1>Multiplayer</h1>
+        <h1>Local Play</h1>
+        <div class="container-game2">
+            <div class="games-row2">
+                <!-- PONG Column -->
+                <div class="game-column">
+                    <div class="game-title3">
+						<div class="title-image-container">
+							<img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
+      		                <h2 id="gameTitle">PONG GAME</h2>
+						</div>
+                    </div>
+                    <div class="game-settings3">
+                        <div id="settingsContainer" class="settings-info2">
+                            <div class="settings-inline">
+                                <button id="settingBtn1" class="settingsSelect-button2">Settings</button>
+                                <div class="settings-column2" id="settings-column">
+                                    <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
+                                    <p>Power-Up: <span id="powerupChoice">❌</span></p>
+                                    <p>Level: <span id="levelSelected">Table Tennis</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-play">
+                        <button id="playBtn" class="startSelect-button">Play</button>
+                    </div>
+                </div>
+                <!-- BRICKOUT Column -->
+                <div class="game-column">
+                    <div class="game-title3">
+						<div class="title-image-container">
+							<img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
+      		                <h2 id="gameTitle">BRICKOUT GAME</h2>
+						</div>
+                    </div>
+                    <div class="game-settings3">
+                        <div id="settingsContainer" class="settings-info2">
+                            <div class="settings-inline">
+                                <button id="settingBtn2" class="settingsSelect-button2">Settings</button>
+                                <div class="settings-column2" id="settings-column">
+                                    <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
+                                    <p>Power-Up: <span id="powerupChoice">❌</span></p>
+                                    <p>Level: <span id="levelSelected">Table Tennis</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-play">
+                        <button id="playBtn2" class="startSelect-button">Play</button>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+		<h1>Online Play</h1>
+        <div class="container-game2">
+            <div class="games-row2">
+                <!-- PONG Column -->
+                <div class="game-column">
+                    <div class="game-title3">
+						<div class="title-image-container">
+							<img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
+      		                <h2 id="gameTitle">PONG GAME</h2>
+						</div>
+                    </div>
+                    <div class="game-settings3">
+                        <div id="settingsContainer" class="settings-info2">
+                            <div class="settings-inline">
+                                <button id="settingBtn3" class="settingsSelect-button2">Settings</button>
+                                <div class="settings-column2" id="settings-column">
+                                    <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
+                                    <p>Level: <span id="levelSelected">Table Tennis</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-play2">
+                        <button id="playBtn3" class="startSelect-button">Play</button>
+                    </div>
+                </div>
+                <!-- BRICKOUT Column -->
+                <div class="game-column">
+                    <div class="game-title3">
+						<div class="title-image-container">
+							<img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
+      		                <h2 id="gameTitle">BRICKOUT GAME</h2>
+						</div>
+                    </div>
+                    <div class="game-settings3">
+                        <div id="settingsContainer" class="settings-info2">
+                            <div class="settings-inline">
+                                <button id="settingBtn4" class="settingsSelect-button2">Settings</button>
+                                <div class="settings-column2" id="settings-column">
+                                    <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
+                                    <p>Level: <span id="levelSelected">Table Tennis</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-play2">
+                        <button id="playBtn4" class="startSelect-button">Play</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+ 
+	maincontent.appendChild(gameSelection);
+	gameVar.settingBtn1 = document.getElementById('settingBtn1');
+	gameVar.settingBtn2 = document.getElementById('settingBtn2');
+	gameVar.settingBtn3 = document.getElementById('settingBtn3');
+	gameVar.settingBtn4 = document.getElementById('settingBtn4');
+	gameVar.playBtn = document.getElementById('playBtn');
+	gameVar.playBtn2 = document.getElementById('playBtn2');
+	
+	listenSettingMultiBtn();
+	listenPlayMultiBtn();
+}
 
 export function showGameSelectionView()
 {
@@ -84,37 +219,13 @@ export function showGameSelectionView()
 	listenPlayBtn();
 }
 
-export function showGameBrickView()
-{
-	console.log("brickview");
-	const mainContent = document.getElementById('mainContent');
-	mainContent.innerHTML = '';
-	const insertTo = document.createElement('div');
-	insertTo.innerHTML = `
-	<canvas id="brickoutCanvas"></canvas>
-	`;
-	mainContent.appendChild(insertTo);
-    
-	var canvas = document.getElementById("brickoutCanvas");
-	if (!canvas)
-	{
-        console.error("Canvas not found");
-        return;
-    }
-	brickVar.canvas = canvas;
-	brickVar.ctx = canvas.getContext("2d");
-	canvas.width = brickVar.canvasW;
-	canvas.height = brickVar.canvasH;
-	canvas.style.width = `${brickVar.canvasW}px`;
-    canvas.style.height = `${brickVar.canvasH}px`;
 
-	brickVar.initialize = true;
-}
 
 function loadCustomFont()
 {
-    return new FontFace('fontScore', 'url(static/css/font/scoreboard.ttf)');
+    return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');
 }
+
 
 export function drawScoreBoard()
 {
@@ -144,14 +255,14 @@ export function drawScoreBoard()
 			ctx.fillText('AI', rightX, y);
 		}
 		ctx.font = '32px fontScore';
-		ctx.fillText(gameVar.playerScore, leftX, y + SCORE_CANVAS_HEIGHT / 2);
-		ctx.fillText(gameVar.aiScore, rightX, y + SCORE_CANVAS_HEIGHT / 2);
+		ctx.fillText(gameVar.playerScore, leftX, y + gameVar.scoreCanvH / 2);
+		ctx.fillText(gameVar.aiScore, rightX, y + gameVar.scoreCanvH / 2);
 		ctx.fillText('VS', centerX, y);
 		const minutes = Math.floor(gameVar.gameTime / 60);
 		const seconds = gameVar.gameTime % 60;
 		const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 		ctx.font = '20px fontScore';
-		ctx.fillText(time, centerX, y + SCORE_CANVAS_HEIGHT / 2);
+		ctx.fillText(time, centerX, y + gameVar.scoreCanvH / 2);
 	}).catch(function(error)
 	{
 		console.error("Error on font load", error);
@@ -160,7 +271,7 @@ export function drawScoreBoard()
 
 export function showGameView()
 {
-	history.pushState({ view: 'game'}, '', `?view=solo/play`);
+	history.pushState({ view: 'game'}, '', `?view=solo/pong`);
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = ``;
 	const gameView = document.createElement('div');
@@ -196,7 +307,7 @@ export function showGameView()
 	var scoreCanvas = document.getElementById('scoreCanvas');
 	gameVar.scoreCtx = scoreCanvas.getContext('2d');
 	scoreCanvas.width = gameVar.scoreCanvW;
-	scoreCanvas.height = SCORE_CANVAS_HEIGHT;
+	scoreCanvas.height = gameVar.scoreCanvH;
 
 	gameVar.gameTime = 0;
     gameVar.gameTimer = setInterval(() =>
@@ -213,18 +324,7 @@ export function showGameView()
 }
 
 
-export function startGame()
-{
-	drawScoreBoard();
-	initializeBall();
-	if (gameVar.powerUpEnable)
-	{
-		newPowerUp(true, 3000);
-		newPowerUp(false, 3000);
-	}
-	draw();
-	manageAi();
-}
+
 
 export function rematchView()
 {
@@ -272,80 +372,3 @@ export function updateImageUrl()
 	else if (brickVar.invader)
 		gameVar.brickUrl = 'static/css/images/invadersLevel.png';
 }
-
-// export function showGameplayMultiView()
-// {
-// 	defaultView.style.display = 'none';
-// 	playsoloGameBtn.style.display = 'none';
-
-// 	gameplayView.style.display = 'block';
-// 	quickGameBtn.style.display = 'none';
-// 	startGameBtn.style.display = 'block';
-// 	tournamentGameBtn.style.display = 'block'
-
-// 	initEventListenerRoom();
-// }
-
-// export function showDefaultView()
-// {
-// 	gameView.style.display = 'none';
-// 	rematchBtn.style.display = 'none';
-// 	quitGameBtn.style.display = 'none';
-// 	defaultView.style.display = 'block';
-// 	playsoloGameBtn.style.display = 'block';
-// 	playmultiGameBtn.style.display = 'block';
-// }
-
-// export function startGameVieW()
-// {
-// 	gameplayView.style.display = 'none';
-// 	quickGameBtn.style.display = 'none';
-// 	startGameBtn.style.display = 'none';
-// 	tournamentGameBtn.style.display = 'none';
-
-// 	gameView.style.display = 'block';
-
-// }
-// export function showGameView()
-// {
-// 	history.pushState({ view: 'game'}, '', `?view=solo/play`);
-// 	const mainContent = document.getElementById('mainContent');
-// 	mainContent.innerHTML = ``;
-// 	const gameView = document.createElement('div');
-// 	gameView.innerHTML=`
-// 	<div id="gameView" style="display: none;">
-// 		<div id="scoreboard">SCORE</div>
-// 		<div id="scoreRow">
-// 			<span id="player">Player </span>
-// 			<span id="playerScore">0</span>
-// 			<span id="vs">VS</span>
-// 			<span id="aiScore">0</span>
-// 			<span id="ai">CPU</span>
-// 		</div>
-// 		<canvas id="myCanvas"></canvas>
-// 		<br><br>
-// 		<div class="button-container">
-// 			<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
-// 			<button id="quitGameBtn" style="display: none;">Quit Game</button>
-// 		</div>
-// 	</div>
-// 	`;
-
-// 	mainContent.appendChild(gameView);
-
-// 	updateCanvasColor();
-
-// 	gameVar.playerScoreElement = document.getElementById('playerScore');
-// 	gameVar.aiScoreElement = document.getElementById('aiScore');
-// 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
-// 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-// 	gameVar.gameView = document.getElementById('gameView');
-
-// 	gameVar.gameView.style.display = 'block';
-
-// 	var canvas = document.getElementById('myCanvas');
-// 	gameVar.ctx = canvas.getContext('2d');
-// 	canvas.width = gameVar.canvasW;
-// 	canvas.height = gameVar.canvasH;
-	// startGame();
-// }

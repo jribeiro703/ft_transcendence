@@ -40,11 +40,16 @@ export function draw()
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
 	drawScoreBoard();
-	drawPowerUp();
-	collectPowerUp();
-	updatePowerUp();
+	// drawPowerUp();
+	// collectPowerUp();
+	// updatePowerUp();
 	if (gameVar.gameStart)
-		manageRealCollision()
+	{
+		manageRealCollision();
+		drawPowerUp();
+		collectPowerUp();
+		updatePowerUp();
+	}
 	else
 		manageServerAi();
 	manageMoveAi();
@@ -67,7 +72,10 @@ export function checkPaddles()
 	else
 	{
 		drawPlayerPaddle();
-		drawOtherPaddle("ai");
+		if (!gameVar.localGame)
+			drawOtherPaddle("ai");
+		else
+			drawOtherPaddle('player2');
 	}
 }
 
@@ -125,6 +133,7 @@ function drawOtherPaddle(player)
 
 	if (player === "player2")
 	{
+		console.log("draw player2 paddle");
 		paddleY = gameVar.player2PaddleY;
 		paddleHeight = gameVar.player2PaddleHeight;
 		paddleWidth = gameVar.player2PaddleWidth;
