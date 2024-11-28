@@ -1,10 +1,5 @@
-from attr import validate
 import pyotp
 from .models import User, FriendRequest
-from transcendence import settings
-from django.core.mail import EmailMultiAlternatives
-from django.contrib.auth import authenticate
-from django.template.loader import render_to_string
 from rest_framework import serializers, exceptions
 from datetime import datetime, timezone
 from .utils import send_activation_email
@@ -35,12 +30,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 		try:
 			send_activation_email(
-			user,
-			'activate_link',
-			'activate_account',
-			'Activate your account',
-			'emails/account_activation.txt',
-			'emails/account_activation.html'
+				user,
+				'activate_link',
+				'activate_account',
+				'Activate your account',
+				'emails/account_activation.txt',
+				'emails/account_activation.html'
 			)
 		except Exception as e:
 			user.delete()
@@ -84,7 +79,7 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 			elif instance.check_password(validated_data['new_password']):
 				raise serializers.ValidationError({"message": "Your new password is the same as the existing password."})
 			instance.set_password(validated_data['new_password'])
-			success_messages["new_password"] = "Password changed successfully !"
+			success_messages["password"] = "Password changed successfully !"
 
 		# for email changing
 		if 'new_email' in validated_data and validated_data['new_email'] is not None:
@@ -122,10 +117,10 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 		try:
 			if 'alias' in validated_data:
 				setattr(instance, 'alias', validated_data['alias'])
-				success_messages['alias'] = "Alais update successfully."
+				success_messages['alias'] = "Alias updated successfully."
 			if 'avatar' in validated_data:
 				setattr(instance, 'avatar', validated_data['avatar'])
-				success_messages['avatar'] = "Avatar update successfully."
+				success_messages['avatar'] = "Avatar updated successfully."
 		except Exception as e:
 			raise serializers.ValidationError({"message": "Update failed."})
 			

@@ -1,9 +1,10 @@
 import { renderPage } from "../../historyManager.js";
-import { fetchData } from "../../utils.js";
+import { fetchData } from "../fetchData.js";
+import { showToast } from "../tools.js";
 
 export function renderRegisterForm() {
-	const box = document.getElementById('mainContent');
-	box.innerHTML = `
+	const mainContent = document.getElementById('mainContent');
+	mainContent.innerHTML = `
 	<div class="custom-form">
 		<form id="registerForm">
 			<label for="username">Username:</label>
@@ -26,9 +27,10 @@ export function renderRegisterForm() {
 		const password = document.getElementById('password').value;
 		const responseObject = await fetchData('/user/register/', 'POST', { username, email, password });
 		
-		alert(responseObject.data.message);
 		if (responseObject.status === 201) {
+			showToast(responseObject.data.message, "success");	
 			renderPage("auth");
-		}
+		} else
+			showToast(responseObject.data.message, "error");
     });
 }
