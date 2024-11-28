@@ -6,6 +6,8 @@
     --highlight-color: #ffffff;
 }
 
+
+
 body
 {
 	background: var(--primary-color);
@@ -33,38 +35,6 @@ p
   height: 50px;
 }
 
-
-/* .full-page { */
-/*   width: 100%; */
-/*   height: 100%; */
-/*   display: flex; */
-/*   flex-direction: column; */
-/* } */
-/**/
-/* .maincontent-and-livechat { */
-/*   display: flex; */
-/*   padding: 42px; */
-/*   height: 100%; */
-/*   align-items: center; */
-/* } */
-
-/* .defaultView { */
-/*   display: flex; */
-/*   flex-direction: column; */
-/*   justify-content: center; */
-/*   align-items: center; */
-/*   gap: 20px; */
-/*   width: 66%; */
-/*   height: 100%; */
-/* } */
-
-/* .livechat { */
-/*   display: flex; */
-/*   flex-direction: column; */
-/*   gap: 20px; */
-/*   width: 33%; */
-/*   height: 100%; */
-/* } */
 
 /* ---------------------- Nav Bar ---------------------- */
 
@@ -262,8 +232,8 @@ p
 
 .custom-home:active, .custom-leaderboard:active, .custom-register:active, .custom-42:active
 {
-  color: #0A1730 !important;
-  background-color: var(--quartiary-color) !important;
+  color: #0A1730 ;
+  background-color: var(--quartiary-color) ;
 }
 
 
@@ -688,7 +658,7 @@ p
 
 #playerScore, #aiScore
 {
-  font-size: 50px !important;
+  font-size: 50px ;
 }
 
 #vs
@@ -860,9 +830,9 @@ button:disabled
 
 #refreshBtn 
 {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
+  display: flex ;
+  justify-content: center ;
+  align-items: center ;
   background-color: var(--primary-color);
   border: none;
   color: #6DC7C1;
@@ -904,7 +874,7 @@ button:disabled
   text-align: center;
   padding: 10px 20;
   font-size: 20px;
-  color: var(--secondary-color); !important;
+  color: var(--secondary-color); ;
 }
 
 .footer-text
@@ -916,11 +886,10 @@ button:disabled
 	text-align: center;
 	padding: 10px 20;
 	font-size: 20px;
-	color: #FEFCFF !important;
+	color: #FEFCFF ;
 }
 
 #chat-log {
-	overflow-y: scroll;
 	flex: 1;
 	height: calc(100% - 56px);
 	border-bottom: none;
