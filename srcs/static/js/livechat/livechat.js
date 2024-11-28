@@ -79,16 +79,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// protege des messages vides et envoi les messages
 document.querySelector('#chat-message-submit').onclick = function(e) {
     const messageInputDom = document.querySelector('#chat-message-input');
-    const message = messageInputDom.value;
+    let message = messageInputDom.value.trim();
+    if (message.toLowerCase().includes("david")) {
+        message = message.replace(/david/gi, "Maitre David");
+    }
+    if (message === "") {
+        return;
+    }
     chatSocket.send(JSON.stringify({
         'message': message,
         'client_id': 'client_id'
     }));
     messageInputDom.value = '';
     const chatLog = document.querySelector('#chat-log');
-    chatLog.scrollTop = chatLog.scrollHeight; // Scroll to the bottom
+    chatLog.scrollTop = chatLog.scrollHeight;
 };
 
 // Handle emoji selection
