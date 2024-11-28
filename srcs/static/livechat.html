@@ -33,16 +33,16 @@
 
       <div class="w-100 h-100" style="max-height: calc(100vh - 100px);">
         <div class="w-100 h-100 flex-grow-1 d-flex justify-content-center align-items-center px-5 pb-5 gap-5">
-          <div id="mainContent" class="flex-grow-1 d-flex h-100 align-item-center justify-content-center">
+          <div id="mainContent" class=" flex-grow-1 d-flex h-100 align-item-center justify-content-center">
             <div id="defaultView" class="d-flex flex-column
                      justify-content-center align-items-center gap-5 h-100">
               <img class="img-fluid w-75 h-50" src="{% static 'css/images/pong-game-card.png' %}" alt="Pong Game">
-              <button id="playsoloGameBtn" class="btn custom-btn height-btn w-25">Single Player</button>
-              <button id="playmultiGameBtn" class="btn custom-btn height-btn w-25">Multiplayer</button>
+              <button id="playsoloGameBtn" class="btn custom-btn height-btn ">Single Player</button>
+              <button id="playmultiGameBtn" class="btn custom-btn height-btn ">Multiplayer</button>
             </div>
           </div>
 
-          <div class="h-100 d-flex flex-column border rounded p-4 gap-3" style="width: 300px; max-width: 300px;">
+          <div id="livechat" class="neon-purple h-100 d-flex flex-column p-4 gap-3" style="width: 300px; max-width: 300px;">
             <div class="flex-grow-1 w-100 h-100 overflow-auto">
               <div id="chat-log" class="w-100 h-100 d-flex flex-column-reverse text-break overflow-auto" aria-label="Chat log">
               </div>
