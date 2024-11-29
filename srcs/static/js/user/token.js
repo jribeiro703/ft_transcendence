@@ -5,10 +5,6 @@ const TokenType = {
 	REFRESH: 'refresh'
 };
 
-function isTokenExpired(payload) {
-	return payload.exp && Date.now() >= payload.exp * 1000;
-}
-
 function decodeToken(token, tokenType) {
 
 	const tokenParts = token.split('.');
@@ -38,6 +34,10 @@ function getIdFromJWT(token) {
 		return null;
 	}
 	return payload.user_id;
+}
+
+function isTokenExpired(payload) {
+	return payload.exp && Date.now() >= payload.exp * 1000;
 }
 
 async function refreshAccessToken() {

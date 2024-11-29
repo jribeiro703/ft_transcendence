@@ -53,7 +53,6 @@ async function createSettingsPage(mainContent, pk) {
 		</div>
 		`
 	}
-	// history.pushState({page:'settings'}, 'Settings', '#settings');
 }
 
 export async function renderSettingsPage() {

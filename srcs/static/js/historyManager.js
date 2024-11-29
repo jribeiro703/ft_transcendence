@@ -6,27 +6,51 @@ import { renderOtpForm } from "./user/js/renderOtpForm.js";
 import { renderProfilePage } from "./user/js/renderProfilePage.js";
 import { renderRegisterForm } from "./user/js/renderRegisterForm.js";
 import { renderSettingsPage } from "./user/js/renderSettingPage.js";
+import { isAuthenticated } from "./user/token.js";
+import { updateUserAvatar } from "./user/tools.js";
 
-const pageMap = {
-	home: renderHomePage,
+
+const authPages = {
+	// home: renderHomePage,
 	auth: renderAuthPage,
-	user: renderUserPage,
 	login: renderLoginForm,
 	optForm: renderOtpForm,
 	register: renderRegisterForm,
-	settings: renderSettingsPage,
-	profile: renderProfilePage,
 }
 
-function renderPage(page) {
-	const renderFunction = pageMap[page] || renderHomePage;
-	history.pushState({ page: page }, page, `#${page}`);
+const userPages = {
+	user: renderUserPage,
+	settings: renderSettingsPage,
+	profile: renderProfilePage,
+	// inbox: renderInboxPage,
+}
+
+async function renderPage(page, updateHistory = true) {
+	
+	let renderFunction;
+	const authenticated = await isAuthenticated();
+	await updateUserAvatar();
+	
+	if (authenticated)
+		renderFunction = userPages[page];
+	else
+		renderFunction = authPages[page];
+
+	if (!renderFunction) {
+		history.replaceState({ page: "home" }, "home", "#home");
+		renderFunction = renderHomePage;
+	} else {
+		if (updateHistory)
+			history.pushState({ page: page }, page, `#${page}`);
+	}
+	
 	renderFunction();
 }
 
+// listen to precedent or next page event but don't push state to history
 window.addEventListener('popstate', (event) => {
 	if (event.state) {
-	  renderPage(event.state.page);
+	  renderPage(event.state.page, false);
 	}
 });
 

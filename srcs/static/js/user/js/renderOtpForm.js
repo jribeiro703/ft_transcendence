@@ -1,6 +1,6 @@
 import { fetchData } from "../fetchData.js";
 import { showToast } from "../tools.js"
-import { renderUserPage } from "../../renderUserPage.js";
+import { renderPage } from "../../historyManager.js";
 
 export function renderOtpForm(url, msg) {
     showToast(msg, "success");
@@ -14,7 +14,7 @@ export function renderOtpForm(url, msg) {
         </form>
     </div>
     `;
-    window.// history.pushState({ page: "otpForm" }, 'OtpForm', '#otpForm');
+	history.pushState({ page: "otpForm" }, 'OtpForm', '#otpForm');
     
     document.getElementById('otpForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -23,9 +23,8 @@ export function renderOtpForm(url, msg) {
         
         if (responseObject.data.access_token && responseObject.status === 200) {
             localStorage.setItem('access_token', responseObject.data.access_token);
-            // renderUserPage();
-            window.location.href = "#user";
-        } else
+			renderPage("user");
+		} else
             showToast(responseObject.data.message, "error");
     });
 }
