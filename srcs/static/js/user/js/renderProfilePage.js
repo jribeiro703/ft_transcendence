@@ -53,7 +53,7 @@ export async function renderProfilePage() {
 				matchHistoryList.innerHTML = '<li>No match history available.</li>';
 			}
 		}
-		history.pushState({ page: "profile" }, "Profile", "#profile");
+		// history.pushState({ page: "profile" }, "Profile", "#profile");
 	} catch (error) {
 		console.error(`renderProfilePage(): ${error}`);
 		showToast("An error occurred while fetching profile data.", "error");

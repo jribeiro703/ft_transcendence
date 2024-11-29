@@ -1,6 +1,4 @@
-import { isAuthenticated, getIdFromJWT } from "./user/token.js"
 import { PONG_CARD, showToast } from "./user/tools.js"
-import { fetchData } from "./user/fetchData.js"
 
 function createHomeContent() {
 	const box = document.getElementById('mainContent');
@@ -20,37 +18,16 @@ function createHomeContent() {
 			<button id="btn-Leaderboard" class="btn custom-btn mb-4">Leaderboard</button>
 		</div>
 	`;
-	history.pushState({ page: "home" }, "Home", "#home");
+	// history.pushState({ page: "home" }, "Home", "#home");
 }
-
-// async function updateUserAvatar(pk) {
-//     const avatar = document.getElementById("user-avatar");
-//     try {
-// 		const userData = await fetchData(`/user/settings/${pk}/`);
-//         if (userData.avatar && avatar) {
-// 			console.log(`updateUserAvatar(): userData.avatar: ${userData.avatar}`);
-//             avatar.src = userData.avatar;
-//             avatar.alt = "User Avatar";
-//         }
-//     } catch (error) {
-//         console.error(`updateUserAvatar(): ${error}`);
-//     }
-// }
 
 async function renderHomePage() {
 	createHomeContent();
 	
 	document.getElementById('btn-QuickGame').addEventListener('click', () => {
-		history.pushState({ page: 'quickgame' }, 'QuickGame', '#quickgame')
+		// history.pushState({ page: 'quickgame' }, 'QuickGame', '#quickgame')
 		console.log('QuickGame button clicked');
 	});
-	
-	// const authenticated = await isAuthenticated();
-	// if (authenticated) {
-	// 	const pk = getIdFromJWT(localStorage.getItem('access_token'));
-	// 	if (pk)
-	// 		await updateUserAvatar(pk);
-	// }
 
 	const authButtons = [
 		{
@@ -80,7 +57,7 @@ async function renderHomePage() {
 				return;
 			}
 			handler();
-			history.pushState({ page }, title, `#${page}`);
+			// history.pushState({ page }, title, `#${page}`);
 		});
 	});
 }
