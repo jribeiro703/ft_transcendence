@@ -49,7 +49,6 @@ SECURE_HSTS_PRELOAD = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
-
 INSTALLED_APPS = [
 
 	'daphne',
@@ -67,7 +66,12 @@ INSTALLED_APPS = [
 	'user',
 	'game',
 	'tournament',
+	'admin_interface',
+	'colorfield',
 ]
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SILENCED_SYSTEM_CHECKS = ["security.W019"]
 
 MIDDLEWARE = [
 	'django.middleware.security.SecurityMiddleware',
@@ -144,15 +148,19 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, '../staticfiles')
+
 STATICFILES_DIRS = [
 	os.path.join(BASE_DIR, '../static')
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
+
+os.makedirs(STATIC_ROOT, exist_ok=True)
+os.makedirs(MEDIA_ROOT, exist_ok=True)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -181,12 +189,15 @@ EMAIL_FILE_PATH = "../../email-messages"
 
 DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
 
-# CSRF config
-# CSRF_COOKIE_NAME = "csrftoken"
-# CSRF_COOKIE_SECURE = True
-# CSRF_COOKIE_HTTPONLY = False
-# CSRF_COOKIE_SAMESITE = 'Lax'
-
 CSRF_TRUSTED_ORIGINS = [
 	'https://localhost:8081',
 ]
+
+CHANNEL_LAYERS = {
+	'default': {
+		'BACKEND': 'channels_redis.core.RedisChannelLayer',
+		'CONFIG': {
+			"hosts": [('redis', 6379)],
+		},
+	},
+}
