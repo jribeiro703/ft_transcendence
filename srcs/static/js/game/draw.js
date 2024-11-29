@@ -1,31 +1,52 @@
 import gameVar from "./var.js";
-import { BALL_RADIUS } from "./const.js";
-import { drawPowerUp, collectPowerUp } from "./powerUp.js";
-import { manageCollision, manageServer, manageMove } from "./manage.js";
-import { manageAi, aiMove } from "./ai.js";
-import { drawBricks } from "./brick.js";
-import { checkScore } from "./reset.js";
+import { drawPowerUp, collectPowerUp, updatePowerUp, newPowerUp, delayDrawPu } from "./powerUp.js";
+import { manageServer, manageMove, manageMoveLive, manageRealCollision, manageCollisionLive } from "./manage.js";
+import { aiMove} from "./ai.js";
+import { checkball } from "./check.js";
+import { drawFootball } from "./foot.js";
+import { drawTennisCourt } from "./tennis.js";
+import { drawScoreBoard } from "./gameView.js";
 
 export function initDraw()
 {
 	drawBall();
-	drawPaddles();
-	if (gameVar.customMap == false)
+	checkPaddles();
+	drawScoreBoard();
+	if (gameVar.currentLevel === 'tableTennis')
 		drawLines();	
+	else if (gameVar.currentLevel === 'football')
+		drawFootball();
+	else if (gameVar.currentLevel === 'tennis')
+		drawTennisCourt();
 }
 
-// setInterval(manageAi, 1000);
+
+export function drawLive()
+{
+	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+	initDraw();
+	drawScoreBoard();
+	if (gameVar.gameStart)
+		manageCollisionLive();
+	else
+		manageServer();
+	manageMoveLive();
+	if (gameVar.animationFrame)
+		cancelAnimationFrame(gameVar.animationFrame);
+	gameVar.animationFrame = requestAnimationFrame(drawLive);	
+}
 
 export function draw()
 {
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
-	drawPowerUp();
-	collectPowerUp();
-	if (gameVar.customMap == true)
-		drawBricks();
 	if (gameVar.gameStart)
-		manageCollision();
+	{
+		manageRealCollision();
+		drawPowerUp();
+		collectPowerUp();
+		updatePowerUp();
+	}
 	else
 		manageServer();
 	manageMove();
@@ -35,19 +56,120 @@ export function draw()
 	gameVar.animationFrame = requestAnimationFrame(draw);
 }
 
-export function drawPaddles()
-{
-	gameVar.ctx.beginPath();
-	gameVar.ctx.rect(0, gameVar.playerPaddleY, gameVar.playerPaddleWidth, gameVar.playerPaddleHeight);
-	gameVar.ctx.fillStyle = "#FF414D";
-	gameVar.ctx.fill();
-	gameVar.ctx.closePath();
 
-	gameVar.ctx.beginPath();
-	gameVar.ctx.rect(gameVar.canvasW - gameVar.aiPaddleWidth, gameVar.aiPaddleY, gameVar.aiPaddleWidth, gameVar.aiPaddleHeight);
-	gameVar.ctx.fillStyle = "#FF414D";
-	gameVar.ctx.fill();
-	gameVar.ctx.closePath();
+export function checkPaddles()
+{
+	if (gameVar.liveMatch)
+	{
+		if (gameVar.playerIdx == 1)
+			drawPaddle(1);
+		if (gameVar.playerIdx == 2)
+			drawPaddle(2)
+	}
+	else
+	{
+		drawPlayerPaddle();
+		if (!gameVar.localGame)
+			drawOtherPaddle("ai");
+		else
+			drawOtherPaddle('player2');
+	}
+}
+
+
+function drawPaddle(player)
+{
+	if (player === 1)
+	{
+		drawPlayerPaddle();
+		drawOtherPaddle("player2");
+	}
+	if (player === 2)
+	{
+		drawOtherPaddle("player2");
+		drawPlayerPaddle();
+	}
+}
+
+function drawPlayerPaddle()
+{
+	const x = 0;
+    const radius = gameVar.playerPaddleWidth / 2 + 3;
+	let color = null;
+
+	if (gameVar.currentLevel === 'tableTennis')
+		color = "#FF414D";
+	else if (gameVar.currentLevel === 'football')
+		color = "#FF414D";
+	else if (gameVar.currentLevel === 'tennis')
+		color = "#4169E1";
+
+    gameVar.ctx.beginPath();
+    gameVar.ctx.moveTo(x, gameVar.playerPaddleY);
+    gameVar.ctx.lineTo(x, gameVar.playerPaddleY + gameVar.playerPaddleHeight);
+    gameVar.ctx.lineTo(x + gameVar.playerPaddleWidth - radius, gameVar.playerPaddleY + gameVar.playerPaddleHeight);
+    gameVar.ctx.arc(x + gameVar.playerPaddleWidth - radius, gameVar.playerPaddleY + gameVar.playerPaddleHeight - radius,
+        radius, Math.PI/2, 0, true);
+    gameVar.ctx.lineTo(x + gameVar.playerPaddleWidth, gameVar.playerPaddleY + radius);
+    gameVar.ctx.arc(x + gameVar.playerPaddleWidth - radius, gameVar.playerPaddleY + radius,
+        radius, 0, -Math.PI/2, true);
+    gameVar.ctx.lineTo(x, gameVar.playerPaddleY);
+    gameVar.ctx.fillStyle = color;
+    gameVar.ctx.fill();
+    gameVar.ctx.closePath();
+}
+
+function drawOtherPaddle(player)
+{
+	let paddleY = 0;
+	let paddleHeight = 0;
+	let paddleWidth = 0;
+	let x = 0
+	let radius = 0;
+	let color = null;
+
+	if (player === "player2")
+	{
+		paddleY = gameVar.player2PaddleY;
+		paddleHeight = gameVar.player2PaddleHeight;
+		paddleWidth = gameVar.player2PaddleWidth;
+		x = gameVar.canvasW - gameVar.player2PaddleWidth;
+		radius = gameVar.player2PaddleWidth / 2 + 3;
+		if (gameVar.currentLevel === 'tableTennis')
+			color = "#0095DD";
+		else if (gameVar.currentLevel === 'football')
+			color = "#FF8C00";
+		else if (gameVar.currentLevel === 'tennis')
+			color = "#228B22";
+	}
+	else if (player === "ai")
+	{
+		paddleY = gameVar.aiPaddleY
+		paddleHeight = gameVar.aiPaddleHeight;
+		paddleWidth = gameVar.aiPaddleWidth;
+		x = gameVar.canvasW - gameVar.aiPaddleWidth;
+		radius = gameVar.aiPaddleWidth / 2 + 3;
+		if (gameVar.currentLevel === 'tableTennis')
+			color = "#0095DD";
+		else if (gameVar.currentLevel === 'football')
+			color = "#FF8C00";
+		else if (gameVar.currentLevel === 'tennis')
+			color = "#228B22";
+	}
+
+    gameVar.ctx.beginPath();
+    gameVar.ctx.moveTo(x + paddleWidth, paddleY);
+    gameVar.ctx.lineTo(x + paddleWidth, paddleY + paddleHeight);
+    gameVar.ctx.lineTo(x + radius, paddleY + paddleHeight);
+    gameVar.ctx.arc(x + radius, paddleY + paddleHeight - radius,
+        radius, Math.PI/2, Math.PI, false);
+    gameVar.ctx.lineTo(x, paddleY + radius);
+    gameVar.ctx.arc(x + radius, paddleY + radius,
+        radius, Math.PI, -Math.PI/2, false);
+    gameVar.ctx.lineTo(x + paddleWidth, paddleY);
+    gameVar.ctx.fillStyle = color;
+    gameVar.ctx.fill();
+    gameVar.ctx.closePath();
 }
 
 export function drawLines() 
@@ -72,29 +194,61 @@ export function drawLines()
 }
 
 
-
 export function initializeBall()
 {
-	if (gameVar.currenServer === 'player')
+	console.log("init ball, curr : ", gameVar.currentServer);
+	if (gameVar.currentServer === 'player')
 	{
-		gameVar.x = gameVar.playerPaddleWidth + BALL_RADIUS; 
+		console.log("init player");
+		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius; 
 		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
 	}
-	else 
+	else if (gameVar.currentServer === 'player2') 
 	{
-		gameVar.x = gameVar.canvasw - gameVar.aiPaddleWidth - BALL_RADIUS;
-		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2;
+
+		console.log("init player2");
+		gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
+		gameVar.y = gameVar.player2PaddleY + gameVar.player2PaddleHeight / 2;
+	}
+	else if (gameVar.currentServer === 'ai')
+	{	
+
+		console.log("init ai");
+		gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - gameVar.ballRadius;
+		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2		
 	}
 	gameVar.dx = 0;
 	gameVar.dy = 0;
+	if (gameVar.liveMatch)
+		checkball();
 }
 
 export function drawBall()
 {
-	gameVar.ctx.beginPath();
-	gameVar.ctx.arc(gameVar.x, gameVar.y, BALL_RADIUS, 0, Math.PI * 2);
-	gameVar.ctx.fillStyle = "#F8FF00";
-	gameVar.ctx.fill();
-	gameVar.ctx.closePath();
+	 if (isNaN(gameVar.x) || isNaN(gameVar.y) || !isFinite(gameVar.x) || !isFinite(gameVar.y)) {
+        console.error('Invalid ball coordinates:', gameVar.x, gameVar.y);
+        return;
+    }
+	const x = gameVar.x - gameVar.ballRadius;
+    const y = gameVar.y - gameVar.ballRadius;
+    const gradient = gameVar.ctx.createLinearGradient
+	(
+        Number(x) || 0,
+		Number (y) || 0,                                         
+        Number (x + gameVar.ballRadius * 2) || 0,
+        Number (y + gameVar.ballRadius * 2) || 0
+    );
+
+	gradient.addColorStop(0, "#FFFFFF");
+	gradient.addColorStop(0.4, "#E0E0E0");
+    gradient.addColorStop(0.65, "#808080");
+	gradient.addColorStop(0.8, "#404040"); 
+    gradient.addColorStop(1, "#000000");   
+
+    gameVar.ctx.beginPath();
+    gameVar.ctx.arc(gameVar.x, gameVar.y, gameVar.ballRadius, 0, Math.PI*2);
+    gameVar.ctx.fillStyle = gradient;
+    gameVar.ctx.fill();
+    gameVar.ctx.closePath();
 }
 

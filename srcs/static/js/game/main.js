@@ -1,8 +1,8 @@
 import gameVar from './var.js';
 import { updatePowerUpSelection } from './powerUp.js';
-import { updateLevelSelection } from './gameMode.js';
-import { initGameVar, initEventListener } from './init.js';
-import { manageAi } from './ai.js';
+import { updateLevelSelection } from './update.js';
+import { initGameVar, initEventListener, initEventListenerRoom } from './init.js';
+import { preventNavTouch } from './input.js';
 
 document.addEventListener('DOMContentLoaded', function() 
 {
@@ -12,14 +12,8 @@ document.addEventListener('DOMContentLoaded', function()
 	link.type = 'text/css';
 
 	document.head.appendChild(link);
-	var canvas = document.getElementById('myCanvas');
-	gameVar.ctx = canvas.getContext('2d');
-	canvas.width = gameVar.canvasW;
-	canvas.height = gameVar.canvasH;
 
+	// preventNavTouch();
 	initGameVar();
 	initEventListener();
-
-	updateLevelSelection();
-	updatePowerUpSelection(false);
 });

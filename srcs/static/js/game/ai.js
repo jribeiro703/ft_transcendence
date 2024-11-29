@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { PADDLE_SPEED, AI_UPDATE_INTERVAL, PADDLE_THRESHOLD, CENTER_POSITION } from './const.js';
+import { PADDLE_SPEED, AI_UPDATE_INTERVAL, PADDLE_THRESHOLD } from './const.js';
 
 export function aiServeBall()
 {
@@ -17,14 +17,17 @@ export function aiServeBall()
 
 export function aiMove(targetY)
 {
-	if (gameVar.targetY != 0)
+	if (!gameVar.localGame)
 	{
-		if (Math.abs(gameVar.aiPaddleY - gameVar.targetY) > PADDLE_THRESHOLD)
+		if (gameVar.targetY != 0)
 		{
-			if (gameVar.aiPaddleY < targetY && gameVar.aiPaddleY < gameVar.canvasH - gameVar.aiPaddleHeight)
-				gameVar.aiPaddleY += PADDLE_SPEED;
-			else if (gameVar.aiPaddleY > targetY && gameVar.aiPaddleY > 0)
-				gameVar.aiPaddleY -= PADDLE_SPEED;
+			if (Math.abs(gameVar.aiPaddleY - gameVar.targetY) > PADDLE_THRESHOLD)
+			{
+				if (gameVar.aiPaddleY < targetY && gameVar.aiPaddleY < gameVar.canvasH - gameVar.aiPaddleHeight)
+					gameVar.aiPaddleY += PADDLE_SPEED;
+				else if (gameVar.aiPaddleY > targetY && gameVar.aiPaddleY > 0)
+					gameVar.aiPaddleY -= PADDLE_SPEED;
+			}
 		}
 	}
 }
@@ -119,3 +122,7 @@ function predictBallPos(gameVar)
 	}
 	return (futurePtsList);
 }
+
+
+
+
