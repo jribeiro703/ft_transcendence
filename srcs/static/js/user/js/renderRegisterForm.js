@@ -17,7 +17,6 @@ export function renderRegisterForm() {
 		</form>
 	</div>
 	`;
-	// history.pushState({page:'register'}, 'Register', '#register');
 
 	document.getElementById('registerForm').addEventListener('submit', async (e) => {
 		e.preventDefault();
@@ -29,8 +28,7 @@ export function renderRegisterForm() {
 		
 		if (responseObject.status === 201) {
 			showToast(responseObject.data.message, "success");	
-			// renderPage("auth");
-			window.location.href = "#auth";
+			renderPage("auth");
 		} else
 			showToast(responseObject.data.message, "error");
     });

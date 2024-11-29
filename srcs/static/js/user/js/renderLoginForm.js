@@ -15,7 +15,6 @@ export function renderLoginForm() {
         </form>
     </div>
     `;
-	// history.pushState({page:'login'}, 'Login', '#login');
 
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();

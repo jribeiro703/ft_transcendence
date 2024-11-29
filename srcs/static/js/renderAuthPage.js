@@ -12,7 +12,6 @@ function createAuthContent() {
 		</div>
 	</div>
 	`;
-	// history.pushState({ page: "auth" }, "Auth", "#auth");
 }
 
 export function renderAuthPage() {
@@ -27,7 +26,6 @@ export function renderAuthPage() {
 	});
 
 	document.getElementById('btn-Login42').addEventListener('click', () => {
-		// history.pushState({page:'login42'}, 'Login42', '#login42');
 		console.log("Login 42 page");
 	});
 }

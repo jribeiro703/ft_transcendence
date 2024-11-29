@@ -18,14 +18,12 @@ function createHomeContent() {
 			<button id="btn-Leaderboard" class="btn custom-btn mb-4">Leaderboard</button>
 		</div>
 	`;
-	// history.pushState({ page: "home" }, "Home", "#home");
 }
 
 async function renderHomePage() {
 	createHomeContent();
 	
 	document.getElementById('btn-QuickGame').addEventListener('click', () => {
-		// history.pushState({ page: 'quickgame' }, 'QuickGame', '#quickgame')
 		console.log('QuickGame button clicked');
 	});
 
@@ -57,7 +55,6 @@ async function renderHomePage() {
 				return;
 			}
 			handler();
-			// history.pushState({ page }, title, `#${page}`);
 		});
 	});
 }

@@ -12,7 +12,7 @@ urlpatterns = [
 	path('logout/', views.LogoutView.as_view(), name="logout"),
 	
 	#for profile (public)
-	path('', views.user_index, name="list_users"),
+	path('list/', views.user_index, name="list_users"),
 	path('profile/<int:pk>/', views.UserProfileView.as_view(), name="user_profile"),
 
 	# for settings (private)
