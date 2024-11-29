@@ -9,34 +9,30 @@ function isTokenExpired(payload) {
 	return payload.exp && Date.now() >= payload.exp * 1000;
 }
 
-function checkToken(token, tokenType) {
-	if (!token || token === '') {
-		console.warn(`checkToken: ${tokenType} token not found or empty`);
-		return null;
-	}
+function decodeToken(token, tokenType) {
 
 	const tokenParts = token.split('.');
 	if (tokenParts.length !== 3) {
-		console.error(`checkToken: invalid ${tokenType} token format`);
+		console.error(`decodeToken: invalid ${tokenType} token format`);
 		return null;
 	}
 
 	try {
 		const payload = JSON.parse(atob(tokenParts[1]));
 		if (!payload || payload.token_type !== tokenType) {
-			console.error(`checkToken: invalid ${tokenType} payload or type mismatch`);
+			console.error(`decodeToken: invalid ${tokenType} payload or type mismatch`);
 			return null;
 		}
 
 		return payload;
 	} catch (error) {
-		console.error(`checkToken: failed to decode ${tokenType} token:`, error);
+		console.error(`decodeToken: failed to decode ${tokenType} token:`, error);
 		return null;
 	}
 }
 
 function getIdFromJWT(token) {
-	const payload = checkToken(token, TokenType.ACCESS);
+	const payload = decodeToken(token, TokenType.ACCESS);
 	if (!payload) {
 		console.warn("getIdFromJWT: access token is invalid");
 		return null;
@@ -57,8 +53,11 @@ async function refreshAccessToken() {
 
 async function isAuthenticated() {
 	const accessToken = localStorage.getItem('access_token');
-	const payload = checkToken(accessToken, TokenType.ACCESS);
-
+	if (!accessToken) {
+		console.warn("isAuthenticated: access token not found");
+		return false;
+	}
+	const payload = decodeToken(accessToken, TokenType.ACCESS);
 	if (!payload) {
 		console.warn("isAuthenticated: access token is invalid");
 		return false;
@@ -75,4 +74,4 @@ async function isAuthenticated() {
 	return true;
 }
 
-export { refreshAccessToken, checkToken, TokenType, isTokenExpired, getIdFromJWT, isAuthenticated };
+export { refreshAccessToken, decodeToken, TokenType, isTokenExpired, getIdFromJWT, isAuthenticated };

@@ -1,7 +1,9 @@
 import { renderProfilePage } from "./user/js/renderProfilePage.js";
 import { renderSettingsPage } from "./user/js/renderSettingPage.js";
-import { PONG_CARD, escapeHTML } from "./user/tools.js"
+import { PONG_CARD } from "./user/tools.js"
 import { fetchData } from "./user/fetchData.js";
+import { showToast } from "./user/tools.js";
+import { renderPage } from "./historyManager.js";
 
 function createUserContent() {
     const box = document.getElementById('mainContent');
@@ -49,13 +51,15 @@ export function renderUserPage() {
 		const confirmation = confirm("Are you sure to logout ?");
 		if (!confirmation)
 			return;
-		
-		const box = document.getElementById('mainContent');
+
 		const responseObject = await fetchData('/user/logout/', 'POST');
 
-		if (responseObject.status == 205)
-			localStorage.setItem('access_token', responseObject.access_token);
-		showToast(responseObject.message, "success");
+		if (responseObject.status == 205) {
+			showToast(responseObject.data.message, "success");
+			localStorage.setItem('access_token', "");
+			renderPage("home");
+		} else
+			showToast(responseObject.data.message, "error");
 		history.pushState({ page: 'logout' }, 'Logout', '#logout');
 	});
 
