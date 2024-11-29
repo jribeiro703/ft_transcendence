@@ -14,6 +14,7 @@ body
   height: 100vh;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 p
@@ -58,18 +59,18 @@ p
 
 #me
 {
-	font-family: 'Dancing Script', cursive;
-	font-weight: bold;
-	color: #FEFCFF;
-	white-space: nowrap;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	transition: font-size 1.8s ease, top 1.5s ease;
-	font-size: 1.5rem;
+  font-family: 'Dancing Script', cursive;
+  font-weight: bold;
+  color: #FEFCFF;
+  white-space: nowrap;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: font-size 1.8s ease, top 1.5s ease;
+  font-size: 1.5rem;
 }
 
- /* ajouts david */
+/* ajouts david */
 
 .btn-glow {
   color: var(--text-color);
@@ -101,7 +102,7 @@ p
   transition: opacity 0.3s ease-in-out;
 }
 
- /* fin ajouts david */
+/* fin ajouts david */
 
 .main-img
 {
@@ -402,7 +403,7 @@ p
 
 /* ------------------------ Main Button ---------------------------- */
 
-#playsoloGameBtn, #playmultiGameBtn, #createRoomBtn, #settingBtn, #joinRoomBtn, #refreshBtn, #btn1, #btn2, #btn3
+#liveChatBtn, #playsoloGameBtn, #playmultiGameBtn, #createRoomBtn, #settingBtn, #joinRoomBtn, #refreshBtn, #btn1, #btn2, #btn3
 {
   background-color: var(--primary-color);
   color: var(--text-color);
@@ -420,19 +421,19 @@ p
   transition: border-color 0.3s ease-in-out;
 }
 
-#playsoloGameBtn:focus, #playmultiGameBtn:focus, #createRoomBtn:focus, #settingBtn:focus, #refreshBtn:focus, #joinRoomBtn:focus, #btn1:focus, #btn2:focus, #btn3:focus
+#liveChatBtn:focus, #playsoloGameBtn:focus, #playmultiGameBtn:focus, #createRoomBtn:focus, #settingBtn:focus, #refreshBtn:focus, #joinRoomBtn:focus, #btn1:focus, #btn2:focus, #btn3:focus
 {
   border-color: var(--secondary-color);
   color: var(--secondary-color);
 }
 
-#playsoloGameBtn:hover, #playmultiGameBtn:hover, #createRoomBtn:hover, #settingBtn:hover, #refreshBtn:hover, #joinRoomBtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
+#liveChatBtn:hover, #playsoloGameBtn:hover, #playmultiGameBtn:hover, #createRoomBtn:hover, #settingBtn:hover, #refreshBtn:hover, #joinRoomBtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
 {
   border-color: var(--secondary-color);
   color: var(--secondary-color);
 }
 
-#playGameBtn:active, #playmultiGameBtn:active,  #createRoomBtn:active, #settingBtn:active, #refreshBtn:active,#joinRoomBtn:active, #btn1:active, #btn2:active, #btn3:active
+#liveChatBtn:active, #playGameBtn:active, #playmultiGameBtn:active,  #createRoomBtn:active, #settingBtn:active, #refreshBtn:active,#joinRoomBtn:active, #btn1:active, #btn2:active, #btn3:active
 {
   color: #0A1730;
   background-color: var(--quartiary-color);
@@ -440,7 +441,7 @@ p
 }
 
 @media (max-width: 768px) {
-  #playsoloGameBtn, #playmultiGameBtn, #createRoomBtn, #settingBtn, #joinRoomBtn, #refreshBtn, #btn1, #btn2, #btn3
+  #liveChatBtn, #playsoloGameBtn, #playmultiGameBtn, #createRoomBtn, #settingBtn, #joinRoomBtn, #refreshBtn, #btn1, #btn2, #btn3
   {
     width: 90%;
     max-width: 90%;
@@ -1059,16 +1060,48 @@ button:disabled
 
   outline: none;
   flex: 1;
-  height: calc(100% - 56px);
-  border-bottom: none;
-  border-radius: 5px 5px 0px 0px;
-  border-color: var(--highlight-color);
+  /* height: calc(100% - 56px); */
+  /* border-bottom: none; */
+  /* border-radius: 5px 5px 0px 0px; */
+  /* border-color: var(--highlight-color); */
+  border: 1px solid var(--highlight-color);
+  border-radius: 5px;
   background-color: var(--background-color);
-  color: var(--text-color)
+  color: var(--text-color);
+  padding: 10px;
 }
 
-/* 100vh - size of navbar */
-/* height: calc(100vh - 10px); */
+/* live chat qui slide */
+
+.slideWithLiveChat {
+  flex: 1;
+  transition: flex 0.5s ease;
+}
+
+.slidingDiv {
+  width: 0;
+  max-width: 33%;
+  height: 100%;
+  overflow: hidden;
+  transition: width 0.5s ease;
+  visibility: hidden;
+  pointer-events: none;
+  padding: 0;
+}
+
+.slidingDiv.visible {
+  width: 33%;
+  visibility: visible;
+  pointer-events: none;
+  padding: 20px;
+}
+
+.slidingDiv.hide-children * {
+  display: none;
+}
+
+/* end live chat qui slide */
+
 #viewportContainer {
   height: 100vh;
 }
