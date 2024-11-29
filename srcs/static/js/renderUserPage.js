@@ -23,7 +23,7 @@ function createUserContent() {
             <button id= btn-Logout class="btn custom-btn mb-4">Logout</button>
         </div>
     `;
-	history.pushState({ page: "user" }, "User", "#user");
+	// history.pushState({ page: "user" }, "User", "#user");
 }
 
 export function renderUserPage() {
@@ -31,17 +31,17 @@ export function renderUserPage() {
 	createUserContent();
 
 	document.getElementById('btn-Profile').addEventListener('click', () => {
-		history.pushState({ page: 'profile' }, 'Profile', '#profile');
+		// history.pushState({ page: 'profile' }, 'Profile', '#profile');
 		renderProfilePage();
 	})
 
 	document.getElementById('btn-Settings').addEventListener('click', () => {
-		history.pushState({ page: 'settings' }, 'Settings', '#settings');
+		// history.pushState({ page: 'settings' }, 'Settings', '#settings');
 		renderSettingsPage();
 	})
 
 	document.getElementById('btn-Inbox').addEventListener('click', () => {
-		history.pushState({ page: 'inbox' }, 'Inbox', '#inbox');
+		// history.pushState({ page: 'inbox' }, 'Inbox', '#inbox');
 		console.log('Inbox button clicked');
 	})
 
@@ -60,7 +60,7 @@ export function renderUserPage() {
 			renderPage("home");
 		} else
 			showToast(responseObject.data.message, "error");
-		history.pushState({ page: 'logout' }, 'Logout', '#logout');
+		// history.pushState({ page: 'logout' }, 'Logout', '#logout');
 	});
 
 }

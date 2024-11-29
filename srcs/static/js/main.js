@@ -48,9 +48,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 		await updateUserAvatar();
 	}
 
-	const hash = window.location.hash.substring(1);
-	if (hash)
-		renderPage(hash)
-	else
+	const hash = window.location.hash
+	if (hash === "" || hash === "#home")
 		renderPage("home");
+	else
+		renderPage(hash.substring(1));
 });
