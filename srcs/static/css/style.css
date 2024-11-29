@@ -1092,7 +1092,7 @@ button:disabled
 .slidingDiv.visible {
   width: 33%;
   visibility: visible;
-  pointer-events: none;
+  pointer-events: auto;
   padding: 20px;
 }
 
@@ -1104,11 +1104,34 @@ button:disabled
   cursor: pointer;
   color: var(--highlight-color);
   position: absolute;
-  top: 88%;  /* ajustez selon vos besoins */
-  right: 25px;  /* ajustez selon vos besoins */
+  bottom: 4%;  /* ajustez selon vos besoins */
+  right: 3%;  /* ajustez selon vos besoins */
 }
 
 /* end live chat qui slide */
+
+/* petite icone fill et dots */
+
+.chat-icon-dots {
+    fill: var(--text-color);
+    transition: fill 0.3s ease;
+}
+
+.chat-icon-dots:hover {
+    fill: var(--highlight-color);
+}
+
+.chat-icon-fill {
+    fill: var(--text-color);
+    transition: fill 0.3s ease;
+}
+
+
+.chat-icon-fill:hover {
+    fill: var(--highlight-color);
+}
+
+/**/
 
 #viewportContainer {
   height: 100vh;
