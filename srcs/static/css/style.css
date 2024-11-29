@@ -1100,6 +1100,13 @@ button:disabled
   display: none;
 }
 
+[data-chat-icon] {
+  position: absolute;
+  top: 10px;  /* ajustez selon vos besoins */
+  right: 10px;  /* ajustez selon vos besoins */
+  z-index: 1000;  /* pour s'assurer qu'il est au-dessus des autres éléments */
+}
+
 /* end live chat qui slide */
 
 #viewportContainer {
