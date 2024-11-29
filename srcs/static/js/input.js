@@ -3,47 +3,45 @@ import { sendDirectionData, sendGameData } from "./network.js";
 
 export function keyDownHandler(e, isFirstPlayer)
 {
-	if (e.key === "ArrowUp")
+	if (e.code === "ArrowUp")
 	{
 		gameVar.playerUpPressed = true;
 	} 
-	else if (e.key === "ArrowDown")
+	else if (e.code === "ArrowDown")
 	{
 		gameVar.playerDownPressed = true;
 	}
-	if (e.key === 'w' || e.key === 'W')
+	if (e.code === 'KeyW')
 	{
-		console.log("touch press");
 		gameVar.player2UpPressed = true;
 	}
-	else if (e.key === 's' || e.key === 'S')
+	else if (e.code === 'KeyS')
 	{
-		console.log("touch press");
 		gameVar.player2DownPressed = true;
 	}
 }
 
 export function keyUpHandler(e, isFirstPlayer)
 {
-	if (e.key === "ArrowUp")
+	if (e.code === "ArrowUp")
 	{
 		gameVar.playerUpPressed = false;
 	}
-	else if (e.key === "ArrowDown")
+	else if (e.code === "ArrowDown")
 	{
 		gameVar.playerDownPressed = false;
 	}
-	if (e.key === "w" || e.key === 'W')
+	if (e.code === "KeyW")
 	{
 		gameVar.player2UpPressed = false;
 	}
-	else if (e.key === "s" || e.key === 'S')
+	else if (e.code === "KeyS")
 	{
 		gameVar.player2DownPressed = false;
 	}
 }
 
-export function startBallAi(e)
+export function startBall(e)
 {
 	if (e.code == "Space" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart)
 	{
@@ -63,7 +61,7 @@ export function startBallAi(e)
 	}
 }
 
-export function startBall(e)
+export function startBallLive(e)
 {
 	if ((gameVar.playerIdx == 1 && gameVar.currentServer == 'player') || (gameVar.playerIdx == 2 && gameVar.currentServer == 'player2'))
 	{

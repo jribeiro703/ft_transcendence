@@ -12,25 +12,22 @@ export function manageRealCollision()
 {
 	gameVar.x += gameVar.dx;
     gameVar.y += gameVar.dy;
-	if (gameVar.y + gameVar.dy > gameVar.canvasH - gameVar.ballRadius || 
-		gameVar.y + gameVar.dy < gameVar.ballRadius)
-	{
-		gameVar.dy = -gameVar.dy;
-		// directChanged = true;
-	}
-	if (gameVar.football)
-		collisionFoot();
-	if (gameVar.tennis)
-		collisionTennis();
+	collisionWall();
 	if (!gameVar.localGame)
+	{
 		collisionPaddleAi();
+		ballOut('ai');
+	}
 	else
-		collisionPaddleP2();
-	ballOut();
+	{
+		collisionPaddle();
+		ballOut('player2');
+	}
 }
 
 export function collisionPaddleP1()
 {
+	console.log("collision paddle p1");
 	if (gameVar.x > gameVar.playerPaddleWidth)
 		return;
 	gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
@@ -44,7 +41,8 @@ export function collisionPaddleP1()
 
 export function collisionPaddleP2()
 {
-	initControl(true);
+
+	console.log("collision paddle p2");
 	if (gameVar.x < gameVar.canvasW - gameVar.player2PaddleWidth)
 		return ;
 	gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
@@ -58,19 +56,41 @@ export function collisionWall()
 {
 	if(gameVar.y + gameVar.dy > gameVar.canvasH - gameVar.ballRadius || gameVar.y + gameVar.dy < gameVar.ballRadius)
 	{
+		console.log("collision Wall");
 		gameVar.dy = -gameVar.dy;
 		return (true);
 	}
-	if (gameVar.currentLevel == 'football')
+	else if (gameVar.currentLevel === 'football')
 	{
+		console.log("collision Wallfoot");
+		// gameVar.dy = -gameVar.dy;
 		if (collisionFoot())
 			return (true);
 	}
-	else if (gameVar.currentLevel == 'tennis')
+	else if (gameVar.currentLevel === 'tennis')
 	{
+		console.log("collision Walltennis");
+		// gameVar.dy = -gameVar.dy;
 		if (collisionTennis())
 			return (true);
 	}
+}
+
+export function collisionPaddle()
+{
+	if(gameVar.x - gameVar.ballRadius < gameVar.playerPaddleWidth &&
+			gameVar.y > gameVar.playerPaddleY &&
+			gameVar.y < gameVar.playerPaddleY + gameVar.playerPaddleHeight)
+	{
+		collisionPaddleP1();
+	}
+	if (gameVar.x + gameVar.ballRadius > gameVar.canvasW - gameVar.player2PaddleWidth &&
+			gameVar.y > gameVar.player2PaddleY &&
+			gameVar.y < gameVar.player2PaddleY + gameVar.player2PaddleHeight)
+	{
+		collisionPaddleP2();
+	}
+
 }
 
 export function manageCollisionLive()
@@ -124,22 +144,22 @@ export function manageCollisionLive()
 	}
 }
 
-export function manageServer()
-{
-	if (gameVar.currentServer == 'player')
-	{
-		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
-		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
-	}
-	else if (gameVar.currentServer == 'player2')
-	{
-		gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
-		gameVar.y = gameVar.player2PaddleY + gameVar.player2PaddleHeight / 2;
-	}
-	sendBallData(gameVar.x, gameVar.y, gameVar.gameSocket);
-}
+// export function manageServerLive()
+// {
+// 	if (gameVar.currentServer == 'player')
+// 	{
+// 		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
+// 		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
+// 	}
+// 	else if (gameVar.currentServer == 'player2')
+// 	{
+// 		gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
+// 		gameVar.y = gameVar.player2PaddleY + gameVar.player2PaddleHeight / 2;
+// 	}
+// 	sendBallData(gameVar.x, gameVar.y, gameVar.gameSocket);
+// }
 
-export function manageMove()
+export function manageMoveLive()
 {
 	if (!gameVar.matchOver)
 	{
@@ -172,7 +192,50 @@ export function manageMove()
 	}
 }
 
+export function manageMove()
+{
+	if (!gameVar.matchOver)
+	{
+		if (gameVar.playerUpPressed && gameVar.playerPaddleY > 0)
+		{
+			gameVar.playerPaddleY -= PADDLE_SPEED;
+		} 
+		else if (gameVar.playerDownPressed && gameVar.playerPaddleY < gameVar.canvasH - gameVar.playerPaddleHeight)
+		{
+			gameVar.playerPaddleY += PADDLE_SPEED;
+		}
+		if (gameVar.player2UpPressed && gameVar.player2PaddleY > 0)
+		{
+			gameVar.player2PaddleY -= PADDLE_SPEED;
+		} 
+		else if (gameVar.player2DownPressed && gameVar.player2PaddleY < gameVar.canvasH - gameVar.player2PaddleHeight)
+		{
+			gameVar.player2PaddleY += PADDLE_SPEED;
+		}
+	}
+}
 
+export function manageServer()
+{
+	console.log("manageServer, curr : ", gameVar.currentServer);
+	if (gameVar.currentServer == 'player')
+	{
+		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
+		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
+	}
+	if (gameVar.currentServer === 'player2')
+	{
+		gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
+		gameVar.y = gameVar.player2PaddleY + gameVar.player2PaddleHeight / 2;
+	}
+	else if (gameVar.currentServer === 'ai')
+	{
+		gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - gameVar.ballRadius;
+		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2;
+	}
+	if (gameVar.liveMatch)
+		sendBallData(gameVar.x, gameVar.y, gameVar.gameSocket);
+}
 // export function checkCollisionWithWalls()
 // {
 //     const map = gameVar.maps['customMap1'];

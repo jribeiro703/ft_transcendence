@@ -1,6 +1,6 @@
 import gameVar from "./var.js";
 import { updateSetting, updateLiveSetting } from "./setting.js";
-import { roomMultiView } from "./init.js";
+import { initControl, roomMultiView } from "./init.js";
 import { updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { updateDifficultySelection } from "./update.js";
@@ -14,7 +14,10 @@ import { showSettingViewB } from "./brickout/settings.js";
 import { showGameBrickView } from "./brickout/game.js";
 import { showSettingMultiView } from "./setting.js";
 import { showGameSelectionMultiView } from "./gameView.js";
+import { showSettingMultiViewB } from "./brickout/settings.js";
 import brickVar from "./brickout/var.js";
+import { showGameBrickMultiView } from "./brickout/game.js";
+import { initListenerMultiB } from "./brickout/game.js";
 
 export function listenSettingPU()
 {
@@ -148,7 +151,7 @@ export function listenSettingMultiBtn()
 
 	gameVar.settingBtn2.addEventListener('click', () =>
 	{
-		showSettingViewB(false);
+		showSettingMultiViewB();
 	});
 }
 
@@ -178,15 +181,16 @@ export function listenPlayMultiBtn()
 	{
 		gameVar.game = "pong";
 		gameVar.localGame = true;
+		initControl(gameVar.localGame)
 		checkSetting();
 		showGameView();
 	});
 
 	gameVar.playBtn2.addEventListener('click', () =>
 	{
-		gameVar.game = "brickout";
+		gameVar.game = "brickout2p";
 		checkSettingB();
-		showGameBrickView();
-		initListenerB();
+		showGameBrickMultiView();
+		initListenerMultiB();
 	});
 }

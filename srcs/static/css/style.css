@@ -918,6 +918,26 @@ button:disabled
 	align-items: center;
 	margin: 0 auto;
 }
+
+/* ---------------------------2P Brickout--------------------------------- */
+
+#brickoutCanvas2
+{
+    display: block; 
+    margin: 0 auto; 
+    border: 2px solid #FEFCFF;
+    border-radius: 8px; 
+    background-color: #1A1A40; 
+}
+
+
+#twoPlayerBrick
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 /* -------------------- End Page --------------------------- */
 
 .footer-text

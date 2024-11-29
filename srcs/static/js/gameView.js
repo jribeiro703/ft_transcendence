@@ -7,8 +7,7 @@ import { manageAi } from "./ai.js";
 import { updateCanvasColor } from "./setting.js";
 import { listenPlayBtn, listenSettingBtn } from "./listenerSetting.js";
 import { initControl } from "./init.js";
-import { startGame, startGameB } from "./start.js";
-import { showGameBrickView } from "./brickout/game.js";
+import { startGame } from "./start.js";
 import { listenSettingMultiBtn } from "./listenerSetting.js";
 import { listenPlayMultiBtn } from "./listenerSetting.js";
 
@@ -16,7 +15,7 @@ import { listenPlayMultiBtn } from "./listenerSetting.js";
 export function showGameSelectionMultiView()
 {
 	// gameVar.liveMatch = true;
-	initControl();
+	// initControl();
 	// history.pushState({ view: 'game'}, '', `?view=settingMulti`);
 	const maincontent = document.getElementById('mainContent');
 	maincontent.innerHTML = '';

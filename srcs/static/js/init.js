@@ -1,6 +1,6 @@
 import gameVar from "./var.js";
 import { showGameSelectionView } from "./gameView.js";
-import { keyDownHandler, keyUpHandler, startBall, startBallAi } from "./input.js";
+import { keyDownHandler, keyUpHandler, startBallLive, startBall } from "./input.js";
 import { addRoom, delRooms, createNewRoom, updateRoomInfo, updateRoomList } from "./room.js";
 import { showSettingView } from "./setting.js";
 import { checkSettingLive } from "./setting.js";
@@ -17,6 +17,7 @@ function removeEventListeners()
 {
     document.removeEventListener("keydown", keyDownHandler);
     document.removeEventListener("keyup", keyUpHandler);
+    document.removeEventListener("keydown", startBallLive);
     document.removeEventListener("keydown", startBall);
 }
 
@@ -33,7 +34,7 @@ export function initControlLive()
 	document.addEventListener("keydown", (e) => {
         if (e.code === "Space")
 		{
-            startBall(e);
+            startBallLive(e);
         }
     });
 
@@ -56,19 +57,19 @@ export function initControl(local)
 	document.addEventListener("keydown", (e) => {
 		if (e.code === "Space")
 		{
-			startBallAi(e);
+			startBall(e);
 		}
 	});
 
 	document.addEventListener("keydown", (e) => {
-		if (e.code === "ArrowUp" || e.code === "ArrowDown" || e.code === "keyW" || e.code === "keyS")
+		if (e.code === "ArrowUp" || e.code === "ArrowDown" || e.code === "KeyW" || e.code === "KeyS")
 		{
 			keyDownHandler(e);
 		}
 	});
 
 	document.addEventListener("keyup", (e) => {
-		if (e.code === "ArrowUp" || e.code === "ArrowDown" || e.code === "keyW" || e.code === "keyA")
+		if (e.code === "ArrowUp" || e.code === "ArrowDown" || e.code === "KeyW" || e.code === "KeyS")
 		{
 			keyUpHandler(e);
 		}
