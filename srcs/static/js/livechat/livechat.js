@@ -142,8 +142,15 @@ window.addEventListener('resize', () => {
         emojiPickerContainer.style.display = 'none';
 });
 
-// David add //////////////////////////////////////////////////
 
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// David add ////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 document.addEventListener('DOMContentLoaded', function() {
   const grandparent = document.getElementById('livechat');
   const focusableElements = ['emojiButton', 'chat-message-input', 'chat-message-submit'];
@@ -179,8 +186,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// slide le livechat
-
 
 // petite icone pour le livechat
 const chatIconDots = `
@@ -195,11 +200,14 @@ const chatIconFill = `
   </svg>
 `;
 
+// slide le livechat avec focus touche entrer + clic souris
 document.addEventListener('DOMContentLoaded', function() {
-  document.querySelector('[data-chat-icon]').innerHTML = chatIconFill;
+  const chatIcon = document.querySelector('[data-chat-icon]');
+  chatIcon.innerHTML = chatIconFill;
+  chatIcon.setAttribute('tabindex', '0');
 });
 
-function slideDiv() {
+function toggleChat() {
   const slidingDiv = document.getElementById('livechat');
   const chatIcon = document.querySelector('[data-chat-icon]');
 
@@ -210,5 +218,11 @@ function slideDiv() {
   chatIcon.innerHTML = slidingDiv.classList.contains('visible') ? chatIconDots : chatIconFill;
 }
 
-document.getElementById('liveChatBtn').addEventListener('click', slideDiv);
-document.querySelector('[data-chat-icon]').addEventListener('click', slideDiv);
+document.querySelector('[data-chat-icon]').addEventListener('click', toggleChat);
+
+document.addEventListener('keydown', function(event) {
+  const chatIcon = document.querySelector('[data-chat-icon]');
+  if (event.key === 'Enter' && document.activeElement === chatIcon) {
+    toggleChat();
+  }
+});
