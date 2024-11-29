@@ -17,5 +17,5 @@
 		}
 	},
 	"remoteUser": "root",
-	"initializeCommand": "make generate-env"
+	"initializeCommand": "./.devcontainer/init.sh"
 }
