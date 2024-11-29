@@ -36,4 +36,4 @@ class Tournament(models.Model):
 	)  # Optional: quick access to match progress or a serialized view of the tournament
 
 	def __str__(self):
-		return _(f"Tournament created by {self.created_by.username} with {self.players.count()} players")
+		return _(f"Tournament {self.id} created by {self.created_by.username} with {self.players.count()} players")
