@@ -1,24 +1,41 @@
-// Fetch participants and populate the list
+// Create a new tournament dynamically via the API
+export const createTournament = async () => {
+	try {
+		const payload = {
+			start_date: new Date().toISOString(),
+			max_score: 100,
+			status: 'UPCOMING',
+		};
+
+		const response = await fetch('https://localhost:8081/tournament/', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(payload),
+		});
+
+		if (response.ok) {
+			const tournament = await response.json();
+			console.log('Tournament created:', tournament);
+			return tournament.tournament_id; // Return the tournament ID
+		} else {
+			console.error('Failed to create tournament:', response.status);
+		}
+	} catch (error) {
+		console.error('Error creating tournament:', error);
+	}
+};
+
 export const fetchParticipants = async () => {
 	try {
 		const response = await fetch('https://localhost:8081/tournament/players/', {
 			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			headers: { 'Content-Type': 'application/json' },
 		});
 
 		if (response.ok) {
-			const players = await response.json();
-			const playersList = document.getElementById('playersList');
-			playersList.innerHTML = ''; // Clear existing participants
-
-			players.forEach(player => {
-				const listItem = document.createElement('li');
-				listItem.className = 'list-group-item';
-				listItem.textContent = player.username;
-				playersList.appendChild(listItem);
-			});
+			const data = await response.json();
+			console.log('Eligible players:', data);
+			return data.eligible_players; // Return the list of eligible players
 		} else {
 			console.error('Failed to fetch participants:', response.status);
 		}
@@ -27,84 +44,74 @@ export const fetchParticipants = async () => {
 	}
 };
 
-// Create a new tournament dynamically via the API
-export const createTournament = async () => {
-	try {
-		const payload = {
-			start_date: new Date().toISOString(),
-			max_score: 100,
-			status: 'UPCOMING'
-		};
-		const endpoint = 'https://localhost:8081/tournament/';
-		const response = await fetch(endpoint, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(payload),
-		});
-
-		if (response.ok) {
-			const tournament = await response.json();
-			console.log('Tournament started:', tournament);
-			alert('Tournament created successfully!');
-			return tournament.id;
-		} else {
-			console.error('Failed to create tournament:', response.status);
-			alert('Failed to create tournament.');
-		}
-	} catch (error) {
-		console.error('Error creating tournament:', error);
-	}
-};
-
 // Perform random matchmaking and display the bracket
 export const performMatchmaking = async (tournamentId) => {
 	try {
-		if (!tournamentId) {
-			tournamentId = 0;
-		}
-		// Call the backend endpoint to perform matchmaking
 		const response = await fetch('https://localhost:8081/tournament/matchmaking/', {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ tournament_id: tournamentId }), // Send the tournament ID
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ tournament_id: tournamentId }),
 		});
 
 		if (response.ok) {
-			const bracket = await response.json();
-
-			// Clear previous bracket if exists
-			const existingBracketContainer = document.getElementById('bracketContainer');
-			if (existingBracketContainer) {
-				existingBracketContainer.remove();
-			}
-
-			// Display the bracket
-			const bracketContainer = document.createElement('div');
-			bracketContainer.id = 'bracketContainer';
-			bracketContainer.innerHTML = `
-				<h3>Bracket</h3>
-				<ul id="bracketList" class="list-group">
-					<!-- Dynamically insert bracket here -->
-				</ul>
-			`;
-			document.getElementById('tournamentView').appendChild(bracketContainer);
-
-			const bracketList = document.getElementById('bracketList');
-			bracketList.innerHTML = ''; // Clear previous bracket list
-			bracket.matches.forEach(match => {
-				const listItem = document.createElement('li');
-				listItem.className = 'list-group-item';
-				listItem.textContent = `${match.player1} vs ${match.player2}`;
-				bracketList.appendChild(listItem);
-			});
+			const data = await response.json();
+			console.log('Matchmaking successful:', data);
 		} else {
 			console.error('Failed to perform matchmaking:', response.status);
 		}
 	} catch (error) {
 		console.error('Error performing matchmaking:', error);
+	}
+};
+
+export const preRegisterPlayers = async (tournamentId, playerIds) => {
+	try {
+		const response = await fetch('https://localhost:8081/tournament/preregister/', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				tournament_id: tournamentId,
+				player_ids: playerIds,
+			}),
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			console.log('Players pre-registered:', data);
+			return data;
+		} else {
+			const errorData = await response.json();
+			console.error('Failed to pre-register players:', errorData);
+		}
+	} catch (error) {
+		console.error('Error pre-registering players:', error);
+	}
+};
+
+
+
+export const setupTournamentFlow = async () => {
+	try {
+		// Step 1: Create the tournament
+		const tournamentId = await createTournament();
+		if (!tournamentId) return;
+
+		// Step 2: Fetch eligible players
+		const eligiblePlayers = await fetchParticipants();
+		if (!eligiblePlayers || eligiblePlayers.length < 2) {
+			console.error('Not enough players to proceed.');
+			return;
+		}
+
+		// Step 3: Pre-register players
+		const playerIds = eligiblePlayers.map(player => player.id);
+		await preRegisterPlayers(tournamentId, playerIds);
+
+		// Step 4: Perform matchmaking
+		await performMatchmaking(tournamentId);
+
+		console.log('Tournament setup completed successfully.');
+	} catch (error) {
+		console.error('Error during tournament setup flow:', error);
 	}
 };
