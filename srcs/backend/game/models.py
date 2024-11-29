@@ -82,4 +82,4 @@ class GamePlayer(models.Model):
 	is_winner  = models.BooleanField(default=False)
 
 	def __str__(self):
-		return f"GamePlayer {self.user_id.username} in Game {self.game_id.id}"
+		return f"GamePlayer {self.user.username} in Game {self.game.id}"
