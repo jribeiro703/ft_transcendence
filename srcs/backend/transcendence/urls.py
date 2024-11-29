@@ -5,8 +5,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-	path('', TemplateView.as_view(template_name="index_test.html")),  # Home page
-	path('admin/', admin.site.urls),
+	path('', TemplateView.as_view(template_name="index_thibaut.html")),	# Home page
+    path('admin/', admin.site.urls),
 	path('user/', include('user.urls')),
 	path('game/', include('game.urls')),
 	path('tournament/', include('tournament.urls')),
