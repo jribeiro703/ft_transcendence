@@ -1,7 +1,7 @@
 import gameVar from "./var.js";
-import { drawPowerUp, collectPowerUp, updatePowerUp } from "./powerUp.js";
-import { manageServer, manageMove, manageRealCollision, manageCollisionLive } from "./manage.js";
-import { manageServerAi, manageMoveAi, aiMove} from "./ai.js";
+import { drawPowerUp, collectPowerUp, updatePowerUp, newPowerUp, delayDrawPu } from "./powerUp.js";
+import { manageServer, manageMove, manageMoveLive, manageRealCollision, manageCollisionLive } from "./manage.js";
+import { aiMove} from "./ai.js";
 import { checkball } from "./check.js";
 import { drawFootball } from "./foot.js";
 import { drawTennisCourt } from "./tennis.js";
@@ -11,6 +11,7 @@ export function initDraw()
 {
 	drawBall();
 	checkPaddles();
+	drawScoreBoard();
 	if (gameVar.currentLevel === 'tableTennis')
 		drawLines();	
 	else if (gameVar.currentLevel === 'football')
@@ -29,7 +30,7 @@ export function drawLive()
 		manageCollisionLive();
 	else
 		manageServer();
-	manageMove();
+	manageMoveLive();
 	if (gameVar.animationFrame)
 		cancelAnimationFrame(gameVar.animationFrame);
 	gameVar.animationFrame = requestAnimationFrame(drawLive);	
@@ -39,10 +40,6 @@ export function draw()
 {
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
-	drawScoreBoard();
-	// drawPowerUp();
-	// collectPowerUp();
-	// updatePowerUp();
 	if (gameVar.gameStart)
 	{
 		manageRealCollision();
@@ -51,8 +48,8 @@ export function draw()
 		updatePowerUp();
 	}
 	else
-		manageServerAi();
-	manageMoveAi();
+		manageServer();
+	manageMove();
 	aiMove(gameVar.targetY);
 	if (gameVar.animationFrame)
 		cancelAnimationFrame(gameVar.animationFrame);
@@ -133,7 +130,6 @@ function drawOtherPaddle(player)
 
 	if (player === "player2")
 	{
-		console.log("draw player2 paddle");
 		paddleY = gameVar.player2PaddleY;
 		paddleHeight = gameVar.player2PaddleHeight;
 		paddleWidth = gameVar.player2PaddleWidth;
@@ -200,25 +196,26 @@ export function drawLines()
 
 export function initializeBall()
 {
+	console.log("init ball, curr : ", gameVar.currentServer);
 	if (gameVar.currentServer === 'player')
 	{
+		console.log("init player");
 		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius; 
 		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
 	}
-	else 
+	else if (gameVar.currentServer === 'player2') 
 	{
-		if (gameVar.localGame || gameVar.liveMatch)
-		{
-			console.log("player2");
-			gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
-			gameVar.y = gameVar.player2PaddleY + gameVar.player2PaddleHeight / 2;
-		}
-		else
-		{
-			console.log("ai");
-			gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - gameVar.ballRadius;
-			gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2		
-		}
+
+		console.log("init player2");
+		gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
+		gameVar.y = gameVar.player2PaddleY + gameVar.player2PaddleHeight / 2;
+	}
+	else if (gameVar.currentServer === 'ai')
+	{	
+
+		console.log("init ai");
+		gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - gameVar.ballRadius;
+		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2		
 	}
 	gameVar.dx = 0;
 	gameVar.dy = 0;

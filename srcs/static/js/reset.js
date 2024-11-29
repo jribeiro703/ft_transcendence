@@ -101,12 +101,15 @@ export function resetBall(winner)
 	if (gameVar.serveCount >= 2)
 	{
 		gameVar.serveCount = 0;
-		if (!gameVar.liveMatch)
+		if (!gameVar.liveMatch && !gameVar.localGame)
 			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'ai' : 'player';
-		else if (gameVar.liveMatch)
+		else
 		{
+			console.log("in if curr server before: ", gameVar.currentServer);
 			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'player2' : 'player';
-			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime);
+			console.log("in if curr server after: ", gameVar.currentServer);
+			if (gameVar.liveMatch)
+				sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime);
 		}
 	}
 	initializeBall();
@@ -117,7 +120,7 @@ export function resetBall(winner)
 	gameVar.gameStart = false;
 	if (gameVar.liveMatch)
 		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime);
-	console.log("server: ", gameVar.currentServer);
+	console.log("server current in reset: ", gameVar.currentServer);
 	if (gameVar.currentServer == 'ai')
 	{
 		gameVar.aiServe = true;

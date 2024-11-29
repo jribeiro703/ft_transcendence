@@ -13,30 +13,15 @@ import { drawB } from "./brickout/game.js";
 
 export function startGame()
 {
-	
 	drawScoreBoard();
 	initializeBall();
 	if (gameVar.powerUpEnable)
 	{
-		newPowerUp(true, 3000);
-		newPowerUp(false, 3000);
+		newPowerUp(true, 1000);
+		newPowerUp(false, 1000);
 	}
 	draw();
 	if (!gameVar.localGame)
-	manageAi();
+		manageAi();
 }
 
-export function startGameB(level)
-{
-	displayBallB();
-	console.log("pu enable :", brickVar.powerUpEnable);
-	if (!brickVar.initGame)
-	{
-		initBallB();
-		checkLevelB(level);
-		if (brickVar.powerUpEnable)
-			createPowerUpB();
-		drawB();
-		brickVar.initGame = true;
-	}
-}

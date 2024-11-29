@@ -3,6 +3,7 @@ import { resetBall } from "./reset.js";
 
 export function collisionPaddleAi()
 {
+	console.log("collisonpaddleai");
 	if(gameVar.x - gameVar.ballRadius < gameVar.playerPaddleWidth &&
 			gameVar.y > gameVar.playerPaddleY &&
 			gameVar.y < gameVar.playerPaddleY + gameVar.playerPaddleHeight)
@@ -39,11 +40,14 @@ export function collisionPaddleAi()
 // 	ballOut();
 // }
 
-export function ballOut()
+export function ballOut(player)
 {
 	if (gameVar.x < 0)
 	{
-		resetBall('ai');
+		if (player === 'ai')
+			resetBall('ai');
+		else if (player === 'player2')
+			resetBall('player2');
 	}
 	else if (gameVar.x > gameVar.canvasW)
 	{

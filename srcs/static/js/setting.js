@@ -3,6 +3,7 @@ import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { listenSettingDifficulty, listenSettingPU, listenSettingLevel, listenSettingSave} from "./listenerSetting.js"
 import { listenSettingMultiSave } from "./listenerSetting.js";
+import { displayGameData } from "./room.js";
 
 export function showSettingMultiView(live)
 {
@@ -139,6 +140,7 @@ export function checkSetting()
 		updateLevelSelection("tableTennis");
 		gameVar.currentLevel = 'tableTennis'
 	}
+	// displayGameData();
 }
 
 export function checkSettingLive()

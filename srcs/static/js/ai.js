@@ -124,47 +124,5 @@ function predictBallPos(gameVar)
 }
 
 
-export function manageServerAi()
-{
-	if (gameVar.currentServer == 'player')
-	{
-		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
-		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
-	}
-	else if (gameVar.localGame)
-	{
-		gameVar.x = gameVar.player2PaddleWidth + gameVar.ballRadius;
-		gameVar.y = gameVar.player2PaddleY + gameVar.player2PaddleHeight / 2;	
-	}
-	else
-	{
-		gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - gameVar.ballRadius;
-		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2;
-	}
-}
 
-export function manageMoveAi()
-{
-	if (!gameVar.matchOver)
-	{
-		if (gameVar.playerUpPressed && gameVar.playerPaddleY > 0)
-		{
-			gameVar.playerPaddleY -= PADDLE_SPEED;
-		} 
-		else if (gameVar.playerDownPressed && gameVar.playerPaddleY < gameVar.canvasH - gameVar.playerPaddleHeight)
-		{
-			gameVar.playerPaddleY += PADDLE_SPEED;
-		}
-		if (gameVar.localGame)
-		{
-			if (gameVar.player2UpPressed && gameVar.player2PaddleY > 0)
-			{
-				gameVar.player2PaddleY -= PADDLE_SPEED;
-			} 
-			else if (gameVar.player2DownPressed && gameVar.player2PaddleY < gameVar.canvasH - gameVar.player2PaddleHeight)
-			{
-				gameVar.player2PaddleY += PADDLE_SPEED;
-			}
-		}
-	}
-}
+

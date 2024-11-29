@@ -15,13 +15,20 @@ img2.onload = function()
 	drawPowerUp();
 }
 
+export function delayDrawPu()
+{
+	setTimeout(() => 
+	{
+		drawPowerUp();
+	}, 3000);
+}
+
 export function drawPowerUp()
 {
 	if (gameVar.powerUpEnable)
 	{
 		if (!gameVar.powerUp1Active && gameVar.ctx)
 		{
-			console.log("draw pu active is false")
 			const imgWidth = 50;
 			const imgHeight = 50;
 			
@@ -174,7 +181,6 @@ export function collectPowerUp()
 				checkPowerUp('player', gameVar.currentPowerUp1);
 				console.log("player catch :", gameVar.currentPowerUp1);
 				gameVar.powerUp1Active = true;
-				// newPowerUp(true, 7000);
 			}
 		}
 		if (!gameVar.powerUp2Active && gameVar.powerUp2OnScreen)
@@ -190,7 +196,6 @@ export function collectPowerUp()
 					checkPowerUp('player2', gameVar.currentPowerUp2);
 					console.log("player2 catch :", gameVar.currentPowerUp2);
 					gameVar.powerUp2Active = true;
-					// newPowerUp(false, 7000);
 				}
 			}
 			else
@@ -203,7 +208,6 @@ export function collectPowerUp()
 					gameVar.powerUpX2 = gameVar.canvasW + 100;
 					checkPowerUp('ai', gameVar.currentPowerUp2);
 					gameVar.powerUp2Active = true;
-					// newPowerUp(false, 7000);
 				}
 			}
 		}
@@ -352,7 +356,7 @@ function puInvincible(player)
 		const originalHeight = gameVar.player2PaddleHeight;
 		gameVar.player2PaddleHeight *= 4;
         applyPowerUpEffect(player, () => {
-            gameVar.playerPaddleHeight = originalHeight;
+            gameVar.player2PaddleHeight = originalHeight;
         });
     }
 	else if (player === 'ai')
