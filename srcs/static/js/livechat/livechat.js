@@ -178,3 +178,15 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Message input not found');
     }
 });
+
+// slide le livechat
+
+function slideDiv() {
+  const slidingDiv = document.getElementById('livechat');
+  slidingDiv.classList.toggle('visible');
+  slidingDiv.classList.toggle('hide-children');
+  slidingDiv.classList.toggle('disable-neon');
+}
+
+document.getElementById('liveChatBtn').addEventListener('click', slideDiv);
+// end slide le livechat
