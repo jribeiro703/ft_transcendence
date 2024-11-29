@@ -335,7 +335,7 @@ export function rematchView()
 	gameView.style.display = 'block';
 	rematchBtn.style.display = 'block';
 	rematchBtn.disabled = true;
-	quitGameBtn.style.display = 'block';	
+	quitGameBtn.style.display = 'block';
 	saveScore();
 	resetMatch();
 	initializeBall();
