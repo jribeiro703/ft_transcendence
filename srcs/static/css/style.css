@@ -1100,6 +1100,10 @@ button:disabled
   display: none;
 }
 
+/* end live chat qui slide */
+
+/* petite icone fill et dots */
+
 .chat-close-icon {
   cursor: pointer;
   color: var(--highlight-color);
@@ -1107,10 +1111,6 @@ button:disabled
   bottom: 4%;  /* ajustez selon vos besoins */
   right: 3%;  /* ajustez selon vos besoins */
 }
-
-/* end live chat qui slide */
-
-/* petite icone fill et dots */
 
 .chat-icon-dots {
     fill: var(--text-color);
@@ -1121,13 +1121,31 @@ button:disabled
     fill: var(--highlight-color);
 }
 
+.chat-icon-dots:focus {
+    fill: var(--highlight-color);
+}
+
+
+
+
 .chat-icon-fill {
     fill: var(--text-color);
     transition: fill 0.3s ease;
 }
 
-
 .chat-icon-fill:hover {
+    fill: var(--highlight-color);
+}
+
+.chat-icon-fill:focus {
+    fill: var(--highlight-color);
+}
+
+[data-chat-icon]:focus {
+    outline: none;
+}
+
+[data-chat-icon]:focus svg {
     fill: var(--highlight-color);
 }
 
