@@ -25,8 +25,8 @@ export function initEventListener()
 {
 	removeEventListeners();
 	gameVar.playsoloGameBtn.addEventListener('click', showGameSelectionView);
-	// gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
-	gameVar.playmultiGameBtn.addEventListener('click', showGameSelectionMultiView);
+	gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
+	// gameVar.playmultiGameBtn.addEventListener('click', showGameSelectionMultiView);
 }
 
 export function initControlLive()
