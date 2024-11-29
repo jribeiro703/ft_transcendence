@@ -1,18 +1,22 @@
 from django.urls import path
-from .views.tournament_creation import (
+from .views.stage_1_create_tournament import (
 	CreateTournamentView,
-	FetchPlayersView,
-	AddPlayersToTournamentView,
+	PreRegisterPlayersView,
+)
+from .views.stage_1_fetch_eligible_players import (
+	FetchEligiblePlayersView,
+)
+from .views.stage_1_fetch_participants import (
+	FetchParticipantsView,
 )
 from .views.tournament_progress import TournamentProgressView
 from .views.tournament_announcement import TournamentAnnouncementView
-from .views.tournament_matchmaking import PerformMatchmakingView 
+from .views.stage_2_matchmaking import PerformMatchmakingView 
 
 urlpatterns = [
 	path('', CreateTournamentView.as_view(), name='create_tournament'),
-	path('players/', FetchPlayersView.as_view(), name='fetch_players'),
-	path('<int:tournament_id>/players/', AddPlayersToTournamentView.as_view(), name='add_players'),
-	path('<int:tournament_id>/progress/', TournamentProgressView.as_view(), name='tournament_progress'),
-	path('<int:tournament_id>/announcement/', TournamentAnnouncementView.as_view(), name='tournament_announcement'),
+	path('players/', FetchEligiblePlayersView.as_view(), name='fetch_eligible_players'),
+	path('preregister/', PreRegisterPlayersView.as_view(), name='preregister_players'),
 	path('matchmaking/', PerformMatchmakingView.as_view(), name='perform_matchmaking'),
 ]
+
