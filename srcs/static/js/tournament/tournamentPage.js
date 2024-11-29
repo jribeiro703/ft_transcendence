@@ -1,5 +1,5 @@
 import { getPlayerList } from "./handlers/tournamentWebSocketHandler.js";
-import { createTournament, fetchParticipants, performMatchmaking } from "./services/tournamentAPIService.js";
+import { setupTournamentFlow, createTournament, fetchParticipants, performMatchmaking } from "./services/tournamentAPIService.js";
 
 export function showTournamentView() {
 	const box = document.getElementById('mainContent');
@@ -15,7 +15,7 @@ export function showTournamentView() {
 				</ul>
 			</div>
 			<div class="button-container">
-				<button id="createTournamentBtn">Create Tournament</button>
+				<button id="setupTournamentBtn">Setup Tournament</button>
 				<button id="quitTournamentBtn">Quit Tournament</button>
 			</div>
 			<br/>
@@ -27,13 +27,6 @@ export function showTournamentView() {
 		<!-- Tournament View ends here -->
 	`;
 
-	// Add event listeners for the buttons
-	document.getElementById('createTournamentBtn').addEventListener('click', async () => {
-		const tournament = await createTournament();
-		await fetchParticipants();
-		await performMatchmaking(tournament.id); // Ensure matchmaking is performed after creating the tournament
-	});
-
 	document.getElementById('quitTournamentBtn').addEventListener('click', () => {
 		alert('Quit Tournament functionality not implemented yet!');
 	});
@@ -41,4 +34,8 @@ export function showTournamentView() {
 	document.getElementById('createGameBtn').addEventListener('click', () => {
 		alert('Create Demo Game functionality not implemented yet!');
 	});
+
+	// Trigger the flow on button click
+	document.getElementById('setupTournamentBtn').addEventListener('click', setupTournamentFlow);
+
 }
