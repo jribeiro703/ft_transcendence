@@ -1,3 +1,4 @@
+ER Diagram
 ```mermaid
 %%{init: {
   "theme": "default",
