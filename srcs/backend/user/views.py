@@ -191,7 +191,6 @@ class LogoutView(APIView):
 			token.blacklist()
 			response = Response({
 				"message": "Logout successfully !",
-				"access_token": "",
 				}, status=status.HTTP_205_RESET_CONTENT)
 			response.delete_cookie('refresh_token')
 			return response

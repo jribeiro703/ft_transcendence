@@ -1,5 +1,6 @@
 import { fetchData } from "../fetchData.js";
 import { showToast } from "../tools.js";
+import { renderPage } from "../../historyManager.js";
 
 async function createDialog(mainContent, dialogConfig) {
 	const dialogElement = document.createElement('dialog');
@@ -118,12 +119,13 @@ async function deleteAccount(pk) {
 	if (!confirmation) {
 		return;
 	}
-	const { responseObject } = await fetchData(`/user/settings/${pk}/`, 'DELETE');
-	alert(responseObject.data.message)
+	const responseObject = await fetchData(`/user/settings/${pk}/`, 'DELETE');
 	if (responseObject.status === 205) {
+		showToast(responseObject.data.message, "success");
 		localStorage.setItem('access_token', "");
 		renderPage("home")
-	}
+	} else
+		showToast(responseObject.data.message, "error");
 }
 
 async function addNewFriend(pk) {
