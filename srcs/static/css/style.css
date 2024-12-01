@@ -332,6 +332,13 @@ p {
 
 .neon-purple {
   transition: box-shadow 0.4s ease-in-out;
+  box-shadow:
+    0 0 0px transparent,
+    0 0 0px transparent,
+    0 0 0px transparent,
+    0 0 0px transparent,
+    0 0 0px transparent,
+    0 0 0px transparent;
 }
 
 .livechat-neon-focus {
@@ -342,14 +349,9 @@ p {
     0 0 6px #682a87,
     0 0 8px #8937b3,
     0 0 14px #ab45de;
-  /* inset 0 0 0px #682a87, */
-  /* inset 0 0 1px #682a87, */
-  /* inset 0 0 2px #682a87, */
-  /* inset 0 0 3px #682a87, */
-  /* inset 0 0 4px #8937b3, */
-  /* inset 0 0 7px #ab45de; */
 }
 
+.neon-purple:hover,
 .neon-purple:focus {
   box-shadow:
     0 0 0px #682a87,
@@ -358,28 +360,6 @@ p {
     0 0 6px #682a87,
     0 0 8px #8937b3,
     0 0 14px #ab45de;
-  /* inset 0 0 0px #682a87, */
-  /* inset 0 0 1px #682a87, */
-  /* inset 0 0 2px #682a87, */
-  /* inset 0 0 3px #682a87, */
-  /* inset 0 0 4px #8937b3, */
-  /* inset 0 0 7px #ab45de; */
-}
-
-.neon-purple:hover {
-  box-shadow:
-    0 0 0px #682a87,
-    0 0 2px #682a87,
-    0 0 4px #682a87,
-    0 0 6px #682a87,
-    0 0 8px #8937b3,
-    0 0 14px #ab45de;
-  /* inset 0 0 0px #682a87, */
-  /* inset 0 0 1px #682a87, */
-  /* inset 0 0 2px #682a87, */
-  /* inset 0 0 3px #682a87, */
-  /* inset 0 0 4px #8937b3, */
-  /* inset 0 0 7px #ab45de; */
 }
 
 /* ------------------------ Main Button ---------------------------- */
