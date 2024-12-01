@@ -1,5 +1,5 @@
 const chatSocket = new WebSocket(
-    'wss://' + window.location.host + '/ws/livechat/'
+  "wss://" + window.location.host + "/ws/livechat/",
 );
 
 // Object to store clientId-color mappings
@@ -7,185 +7,191 @@ const clientIdColors = {};
 
 // Function to generate a random, visible color
 function getRandomColor() {
-    const hue = Math.floor(Math.random() * 360); // Random hue
-    const saturation = 100; // Full saturation
-    const lightness = 50; // 50% lightness for good contrast
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  const hue = Math.floor(Math.random() * 360); // Random hue
+  const saturation = 100; // Full saturation
+  const lightness = 50; // 50% lightness for good contrast
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
 // Function to get or assign a color for a clientId
 function getColorForClientId(clientId) {
-    if (!clientIdColors[clientId]) {
-        clientIdColors[clientId] = getRandomColor();
-    }
-    return clientIdColors[clientId];
+  if (!clientIdColors[clientId]) {
+    clientIdColors[clientId] = getRandomColor();
+  }
+  return clientIdColors[clientId];
 }
 
-chatSocket.onmessage = function(e) {
-    const data = JSON.parse(e.data);
-    const message = data.message;
-    const clientId = data.client_id;
-    const timestamp = data.timestamp;
-    const chatLog = document.querySelector('#chat-log');
-    const userTimezone = moment.tz.guess();
-    const formattedTime = moment(timestamp).tz(userTimezone).calendar(null, {
-        sameDay: 'HH:mm',
-        lastDay: '[Yesterday]',
-        lastWeek: function (now) {
-            const daysAgo = Math.floor(moment.duration(now.diff(this)).asDays());
-            return `[${daysAgo} days ago]`;
-        },
-        sameElse: function (now) {
-            const daysAgo = Math.floor(moment.duration(now.diff(this)).asDays());
-            return `[${daysAgo} days ago]`;
-        }
+chatSocket.onmessage = function (e) {
+  const data = JSON.parse(e.data);
+  const message = data.message;
+  const clientId = data.client_id;
+  const timestamp = data.timestamp;
+  const chatLog = document.querySelector("#chat-log");
+  const userTimezone = moment.tz.guess();
+  const formattedTime = moment(timestamp)
+    .tz(userTimezone)
+    .calendar(null, {
+      sameDay: "HH:mm",
+      lastDay: "[Yesterday]",
+      lastWeek: function (now) {
+        const daysAgo = Math.floor(moment.duration(now.diff(this)).asDays());
+        return `[${daysAgo} days ago]`;
+      },
+      sameElse: function (now) {
+        const daysAgo = Math.floor(moment.duration(now.diff(this)).asDays());
+        return `[${daysAgo} days ago]`;
+      },
     });
 
-    // Get or assign a color for the clientId
-    const clientIdColor = getColorForClientId(clientId);
+  // Get or assign a color for the clientId
+  const clientIdColor = getColorForClientId(clientId);
 
-    // Create a new message element
-    const messageElement = document.createElement('div');
-    messageElement.innerHTML = `<span style="color: ${clientIdColor};">[${formattedTime}] ${clientId}:</span> ${message}`;
-    chatLog.prepend(messageElement);
-    chatLog.scrollTop = chatLog.scrollHeight; // Scroll to the bottom
+  // Create a new message element
+  const messageElement = document.createElement("div");
+  messageElement.innerHTML = `<span style="color: ${clientIdColor};">[${formattedTime}] ${clientId}:</span> ${message}`;
+  chatLog.prepend(messageElement);
+  chatLog.scrollTop = chatLog.scrollHeight; // Scroll to the bottom
 };
 
-chatSocket.onclose = function(e) {
-    console.error('Chat socket closed unexpectedly');
+chatSocket.onclose = function (e) {
+  console.error("Chat socket closed unexpectedly");
 };
 
-document.querySelector('#chat-message-input').focus();
-document.querySelector('#chat-message-input').onkeyup = function(e) {
-    if (e.keyCode === 13) {  // Enter key
-        document.querySelectoscrollHeightr('#chat-message-submit').click();
-    }
+document.querySelector("#chat-message-input").focus();
+document.querySelector("#chat-message-input").onkeyup = function (e) {
+  if (e.keyCode === 13) {
+    // Enter key
+    document.querySelectoscrollHeightr("#chat-message-submit").click();
+  }
 };
 
 // Add an event listener on the focus of the chat message input and then listen to keyboard keypress and send submit when 'Enter' key is pressed
-document.addEventListener('DOMContentLoaded', function() {
-    const messageInput = document.querySelector('#chat-message-input');
-    const messageSubmit = document.querySelector('#chat-message-submit');
+document.addEventListener("DOMContentLoaded", function () {
+  const messageInput = document.querySelector("#chat-message-input");
+  const messageSubmit = document.querySelector("#chat-message-submit");
 
-    if (messageInput && messageSubmit) {
-        messageInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault(); // Empêche le comportement par défaut de la touche Entrée
-                messageSubmit.click();
-            }
-        });
-    } else {
-        console.error('Message input or submit button not found');
-    }
+  if (messageInput && messageSubmit) {
+    messageInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault(); // Empêche le comportement par défaut de la touche Entrée
+        messageSubmit.click();
+      }
+    });
+  } else {
+    console.error("Message input or submit button not found");
+  }
 });
 
 // protege des messages vides et envoi les messages
-document.querySelector('#chat-message-submit').onclick = function(e) {
-    const messageInputDom = document.querySelector('#chat-message-input');
-    let message = messageInputDom.value.trim();
-    if (message.toLowerCase().includes("david")) {
-        message = message.replace(/david/gi, "Maitre David");
-    }
-    if (message === "") {
-        return;
-    }
-    chatSocket.send(JSON.stringify({
-        'message': message,
-        'client_id': 'client_id'
-    }));
-    messageInputDom.value = '';
-    const chatLog = document.querySelector('#chat-log');
-    chatLog.scrollTop = chatLog.scrollHeight;
+document.querySelector("#chat-message-submit").onclick = function (e) {
+  const messageInputDom = document.querySelector("#chat-message-input");
+  let message = messageInputDom.value.trim();
+  if (message.toLowerCase().includes("david")) {
+    message = message.replace(/david/gi, "Maitre David");
+  }
+  if (message === "") {
+    return;
+  }
+  chatSocket.send(
+    JSON.stringify({
+      message: message,
+      client_id: "client_id",
+    }),
+  );
+  messageInputDom.value = "";
+  const chatLog = document.querySelector("#chat-log");
+  chatLog.scrollTop = chatLog.scrollHeight;
 };
 
 // Handle emoji selection
-const emojiPicker = document.querySelector('#emoji-picker');
-emojiPicker.addEventListener('emoji-click', event => {
-    const messageInputDom = document.querySelector('#chat-message-input');
-    messageInputDom.value += event.detail.unicode;
-    messageInputDom.focus();
+const emojiPicker = document.querySelector("#emoji-picker");
+emojiPicker.addEventListener("emoji-click", (event) => {
+  const messageInputDom = document.querySelector("#chat-message-input");
+  messageInputDom.value += event.detail.unicode;
+  messageInputDom.focus();
 });
 
-const emojiButton = document.querySelector('#emojiButton');
-const emojiPickerContainer = document.querySelector('#emojiPickerContainer');
+const emojiButton = document.querySelector("#emojiButton");
+const emojiPickerContainer = document.querySelector("#emojiPickerContainer");
 
 function adjustEmojiPickerHeight() {
-    const chatLog = document.querySelector('#chat-log');
-    const chatLogHeight = chatLog.clientHeight;
-    const emojiPickerHeight = Math.min(chatLogHeight, 250); // Set max height to 300px
-    emojiPicker.style.height = `${emojiPickerHeight}px`;
+  const chatLog = document.querySelector("#chat-log");
+  const chatLogHeight = chatLog.clientHeight;
+  const emojiPickerHeight = Math.min(chatLogHeight, 250); // Set max height to 300px
+  emojiPicker.style.height = `${emojiPickerHeight}px`;
 }
 
 function adjustEmojiPickerWidth() {
-    const chatLog = document.querySelector('#chat-log');
-    const chatLogWidth = chatLog.clientWidth;
-    const emojiPickerWidth = Math.min(chatLogWidth, 250); // Set max width to 300px
-    emojiPicker.style.height = `${emojiPickerWidth}px`;
+  const chatLog = document.querySelector("#chat-log");
+  const chatLogWidth = chatLog.clientWidth;
+  const emojiPickerWidth = Math.min(chatLogWidth, 250); // Set max width to 300px
+  emojiPicker.style.height = `${emojiPickerWidth}px`;
 }
 
 // Show emojiPickerContainer
-emojiButton.addEventListener('click', () => {
-	adjustEmojiPickerHeight();
-	adjustEmojiPickerWidth();
-    emojiPickerContainer.style.display = emojiPickerContainer.style.display == 'block' ? 'none' : 'block';
+emojiButton.addEventListener("click", () => {
+  adjustEmojiPickerHeight();
+  adjustEmojiPickerWidth();
+  emojiPickerContainer.style.display =
+    emojiPickerContainer.style.display == "block" ? "none" : "block";
 });
 
 // Hide emojiPickerContainer when clicking outside of it
-document.addEventListener('click', (event) => {
-    if (!emojiPickerContainer.contains(event.target) && !emojiButton.contains(event.target)) {
-        emojiPickerContainer.style.display = 'none';
-    }
+document.addEventListener("click", (event) => {
+  if (
+    !emojiPickerContainer.contains(event.target) &&
+    !emojiButton.contains(event.target)
+  ) {
+    emojiPickerContainer.style.display = "none";
+  }
 });
 
 // Hide emojiPickerContainer when resizing the window
-window.addEventListener('resize', () => {
-        emojiPickerContainer.style.display = 'none';
+window.addEventListener("resize", () => {
+  emojiPickerContainer.style.display = "none";
 });
-
-
-
-
-
-
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// David add ////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-document.addEventListener('DOMContentLoaded', function() {
-  const grandparent = document.getElementById('livechat');
-  const focusableElements = ['emojiButton', 'chat-message-input', 'chat-message-submit'];
+document.addEventListener("DOMContentLoaded", function () {
+  const grandparent = document.getElementById("livechat");
+  const focusableElements = [
+    "emojiButton",
+    "chat-message-input",
+    "chat-message-submit",
+  ];
 
-  focusableElements.forEach(id => {
+  focusableElements.forEach((id) => {
     const element = document.getElementById(id);
     if (element) {
-      element.addEventListener('focus', function() {
-        grandparent.classList.add('livechat-neon-focus');
+      element.addEventListener("focus", function () {
+        grandparent.classList.add("livechat-neon-focus");
       });
 
-      element.addEventListener('blur', function() {
-        grandparent.classList.remove('livechat-neon-focus');
+      element.addEventListener("blur", function () {
+        grandparent.classList.remove("livechat-neon-focus");
       });
     }
   });
 });
 
 // test qui disparait dans le focus de lindex ou on ecrit
-document.addEventListener('DOMContentLoaded', function() {
-    const messageInput = document.querySelector('#chat-message-input');
+document.addEventListener("DOMContentLoaded", function () {
+  const messageInput = document.querySelector("#chat-message-input");
 
-    if (messageInput) {
-        messageInput.addEventListener('focus', function() {
-            messageInput.placeholder = '';
-        });
+  if (messageInput) {
+    messageInput.addEventListener("focus", function () {
+      messageInput.placeholder = "";
+    });
 
-        messageInput.addEventListener('blur', function() {
-            messageInput.placeholder = 'Type here...';
-        });
-    } else {
-        console.error('Message input not found');
-    }
+    messageInput.addEventListener("blur", function () {
+      messageInput.placeholder = "Type here...";
+    });
+  } else {
+    console.error("Message input not found");
+  }
 });
-
 
 // petite icone pour le livechat
 const chatIconDots = `
@@ -201,28 +207,32 @@ const chatIconFill = `
 `;
 
 // slide le livechat avec focus touche entrer + clic souris
-document.addEventListener('DOMContentLoaded', function() {
-  const chatIcon = document.querySelector('[data-chat-icon]');
+document.addEventListener("DOMContentLoaded", function () {
+  const chatIcon = document.querySelector("[data-chat-icon]");
   chatIcon.innerHTML = chatIconFill;
-  chatIcon.setAttribute('tabindex', '0');
+  chatIcon.setAttribute("tabindex", "0");
 });
 
 function toggleChat() {
-  const slidingDiv = document.getElementById('livechat');
-  const chatIcon = document.querySelector('[data-chat-icon]');
+  const slidingDiv = document.getElementById("livechat");
+  const chatIcon = document.querySelector("[data-chat-icon]");
 
-  slidingDiv.classList.toggle('visible');
-  slidingDiv.classList.toggle('hide-children');
-  slidingDiv.classList.toggle('disable-neon');
+  slidingDiv.classList.toggle("visible");
+  slidingDiv.classList.toggle("hide-children");
+  slidingDiv.classList.toggle("disable-neon");
 
-  chatIcon.innerHTML = slidingDiv.classList.contains('visible') ? chatIconDots : chatIconFill;
+  chatIcon.innerHTML = slidingDiv.classList.contains("visible")
+    ? chatIconDots
+    : chatIconFill;
 }
 
-document.querySelector('[data-chat-icon]').addEventListener('click', toggleChat);
+document
+  .querySelector("[data-chat-icon]")
+  .addEventListener("click", toggleChat);
 
-document.addEventListener('keydown', function(event) {
-  const chatIcon = document.querySelector('[data-chat-icon]');
-  if (event.key === 'Enter' && document.activeElement === chatIcon) {
+document.addEventListener("keydown", function (event) {
+  const chatIcon = document.querySelector("[data-chat-icon]");
+  if (event.key === "Enter" && document.activeElement === chatIcon) {
     toggleChat();
   }
 });
