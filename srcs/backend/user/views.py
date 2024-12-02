@@ -24,12 +24,83 @@ from .serializers import IndexSerializer, UserCreateSerializer, OtpCodeSerialize
 from .models import User, FriendRequest
 from .permissions import IsOwner
 from .utils import send_2FA_mail
+from transcendence import settings
+import requests
 
 @api_view(['GET'])
 def user_index(request):
 	users = User.objects.all()
 	serializer = IndexSerializer(users, many=True)
 	return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST', 'GET'])
+def login42(request):
+	code = request.data.get('code')
+	token_url = "https://api.intra.42.fr/oauth/token"
+	client_id = settings.FT_CLIENT_ID
+	client_secret = settings.FT_CLIENT_SECRET
+	redirect_uri = settings.FT_REDIRECT_URI
+
+	data = {
+		"grant_type": "authorization_code",
+		"client_id": client_id,
+		"client_secret": client_secret,
+		"code": code,
+		"redirect_uri": redirect_uri
+	}
+
+	try:
+		response = requests.post(token_url, data=data)
+		token_data = response.json()
+
+		print("token_data:", token_data)
+
+		# if "access_token" not in token_data:
+		# 	return Response({"message": "Failed to authenticate with 42"}, status=status.HTTP_400_BAD_REQUEST)
+		
+		# user_info = requests.get('https://api.intra.42.fr/v2/me', 
+		# 	headers={'Authorization': f"Bearer {token_data['access_token']}"})
+		# user_data = user_info.json()
+
+		# print("user_data:", user_data)
+
+		if "access_token" not in token_data:
+			print("Error: No access token in response")
+			return Response({"message": "Failed to authenticate with 42"}, status=status.HTTP_400_BAD_REQUEST)
+    
+		print("Access Token:", token_data['access_token'])
+    
+		headers = {'Authorization': f"Bearer {token_data['access_token']}"}
+		print("Headers:", headers)
+    
+		user_info_response = requests.get('https://api.intra.42.fr/v2/me', headers=headers)
+		print("User Info Status Code:", user_info_response.status_code)
+		print("User Info Response:", user_info_response.text)
+    
+		if user_info_response.status_code != 200:
+			print("Error getting user info:", user_info_response.text)
+			return Response({"message": "Failed to get user information"}, 
+                      status=status.HTTP_400_BAD_REQUEST)
+    
+		user_data = user_info_response.json()
+		print("user_data:", user_data)
+
+		user, created = User.objects.get_or_create(
+			email=user_data['email'],
+			defaults={
+				'username': user_data['login'],
+				'is_active': True,
+			}
+		)
+
+		refresh = RefreshToken.for_user(user)
+	
+		return Response({
+			'access_token': str(refresh.access_token),
+			'refresh_token': str(refresh)
+		}, status=status.HTTP_200_OK)
+	except Exception as e:
+		return Response({"message": "An unknown error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class CreateUserView(CreateAPIView):
 	queryset = User.objects.all()

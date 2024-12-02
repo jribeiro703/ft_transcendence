@@ -22,4 +22,5 @@ urlpatterns = [
 	path('friend-requests/<int:pk>/', views.ListFriendRequestView.as_view(), name='list_friend_request'),
     path('friend-requests/accept/<int:request_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),
 	
+	path('login42/', views.login42, name='login42'),
 ]

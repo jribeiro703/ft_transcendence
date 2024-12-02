@@ -1,6 +1,7 @@
 import { renderAuthPage } from "./renderAuthPage.js";
 import { renderHomePage } from "./renderHomePage.js";
 import { renderUserPage } from "./renderUserPage.js";
+import { renderLogin42Page } from "./user/js/renderLogin42Page.js";
 import { renderLoginForm } from "./user/js/renderLoginForm.js";
 import { renderOtpForm } from "./user/js/renderOtpForm.js";
 import { renderProfilePage } from "./user/js/renderProfilePage.js";
@@ -13,14 +14,15 @@ import { showSettingMultiView, showSettingView } from "./game/setting.js";
 import { showGameBrickView } from "./game/brickout/game.js";
 import { showSettingMultiViewB } from "./game/brickout/settings.js";
 import { roomMultiView } from "./game/init.js";
-
-
+import { handleAuth42Callback } from "./user/js/renderLogin42Page.js";	
 const authPages = {
 	// home: renderHomePage,
 	auth: renderAuthPage,
 	login: renderLoginForm,
 	optForm: renderOtpForm,
 	register: renderRegisterForm,
+	login42: renderLogin42Page,
+	auth42: handleAuth42Callback,
 }
 
 const userPages = {

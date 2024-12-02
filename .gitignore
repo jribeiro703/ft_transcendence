@@ -135,3 +135,4 @@ cython_debug/
 docker/django/zsh_history
 docker/nginx/htpasswd
 docker/nginx/certs
+docker/.42
