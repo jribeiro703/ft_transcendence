@@ -115,3 +115,41 @@ export const setupTournamentFlow = async () => {
 		console.error('Error during tournament setup flow:', error);
 	}
 };
+
+export const generateTournamentName = async () => {
+	try {
+		const response = await fetch('http://localhost:8081/generate_name/');
+		if (response.ok) {
+			const data = await response.json();
+			return data.name;
+		} else {
+			console.error('Failed to generate tournament name:', response.status);
+			return '';
+		}
+	} catch (error) {
+		console.error('Error generating tournament name:', error);
+		return '';
+	}
+};
+
+export const validateTournamentName = async (name) => {
+	try {
+		const response = await fetch('http://localhost:8081/validate_name/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ name })
+		});
+		if (response.ok) {
+			const data = await response.json();
+			return data.isValid;
+		} else {
+			console.error('Failed to validate tournament name:', response.status);
+			return false;
+		}
+	} catch (error) {
+		console.error('Error validating tournament name:', error);
+		return false;
+	}
+};
