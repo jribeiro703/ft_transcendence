@@ -30,7 +30,6 @@
   <body class="vw-100 vh-100 mh-100 mw-100">
     <div class="d-flex flex-column mw-100 mh-100 w-100 h-100">
       <div class="navbar-parent px-4">
-        <div class="navbar-background"></div>
         <nav class="navbar px-5">
           <div class="container-fluid d-flex justify-content-between">
             <!-- <button class="btn btn-glow" type="button">home</button> -->
@@ -54,14 +53,14 @@
             </div>
           </div>
           <div id="livechat"
-               class="slidingDiv hide-children neon-purple h-100 d-flex flex-column gap-3 ">
+               class="slidingDiv hide-children neon-purple d-flex flex-column gap-3 ">
             <div class="flex-grow-1 w-100 h-100 overflow-auto">
               <div id="chat-log"
                    class="w-100 h-100 d-flex flex-column-reverse text-break overflow-auto"
                    aria-label="Chat log"></div>
             </div>
             <div class="input-group d-flex gap-2">
-              <button class="bg btn rounded border"
+              <button class="chat-btn btn rounded border"
                       type="button"
                       id="emojiButton"
                       aria-label="Emoji picker">😊</button>
@@ -71,7 +70,7 @@
                      placeholder="Type here..."
                      aria-label="Chat message input">
               <button id="chat-message-submit"
-                      class="btn  border rounded bg"
+                      class="btn  border rounded chat-btn"
                       aria-label="Send message">Send</button>
             </div>
           </div>
