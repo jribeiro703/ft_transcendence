@@ -39,7 +39,7 @@ export function showSettingViewB(live)
 		else
 		{
 			// showGameSelectionView();
-			renderPage("pongGameSolo");
+			renderPage("gameSelectionSoloPage");
 			updateSettingB();
 		}
 	});

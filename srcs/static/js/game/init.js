@@ -26,9 +26,9 @@ export function initEventListener()
 {
 	removeEventListeners();
 	// gameVar.playsoloGameBtn.addEventListener('click', showGameSelectionView);
-	gameVar.playsoloGameBtn.addEventListener('click', () => renderPage("pongGameSolo"));
-	gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
-	// gameVar.playmultiGameBtn.addEventListener('click', showGameSelectionMultiView);
+	gameVar.playsoloGameBtn.addEventListener('click', () => renderPage("GameSelectionSoloPage"));
+	// gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
+	gameVar.playmultiGameBtn.addEventListener('click', () => renderPage("showGameSelectionMultiView"));
 }
 
 export function initControlLive()

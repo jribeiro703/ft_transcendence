@@ -16,9 +16,8 @@ import { updateSettingSelectionForSecond } from './settings.js';
 
 export function showGameBrickView()
 {
-	console.log("brickview");
 
-	history.pushState({ view: 'game'}, '', `?view=solo/brickout`);
+	// history.pushState({ view: 'game'}, '', `?view=solo/brickout`);
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = '';
 	const insertTo = document.createElement('div');
@@ -37,7 +36,11 @@ export function showGameBrickView()
         return;
     }
 	brickVar.canvas = canvas;
+	if (!brickVar.canvas)
+		console.log("nuuuulll canvas");
 	brickVar.ctx = canvas.getContext("2d");
+	if (!brickVar.ctx)
+		console.log("nuuuulll");
 	canvas.width = brickVar.canvasW;
 	canvas.height = brickVar.canvasH;
 	canvas.style.width = `${brickVar.canvasW}px`;
@@ -61,6 +64,8 @@ export function showGameBrickView()
 
 	brickVar.initialize = true;
 }
+
+
 export function showGameBrickMultiView()
 {
 	console.log("brickMultiview");
@@ -124,21 +129,21 @@ export function showGameBrickMultiView()
 	canvas2.style.width = `${brickVar2.canvasW}px`;
     canvas2.style.height = `${brickVar2.canvasH}px`;
 
-	// var scoreCanvas = document.getElementById('scoreCanvas');
-	// brickVar.scoreCtx = scoreCanvas.getContext('2d');
-	// scoreCanvas.width = brickVar.scoreCanvW;
-	// scoreCanvas.height = brickVar.scoreCanvH;
+	var scoreCanvas = document.getElementById('scoreCanvas');
+	brickVar.scoreCtx = scoreCanvas.getContext('2d');
+	scoreCanvas.width = brickVar.scoreCanvW;
+	scoreCanvas.height = brickVar.scoreCanvH;
 
-	// brickVar.gameTime = 0;
-    // brickVar.gameTimer = setInterval(() =>
-	// {
-    //     if (brickVar.startTime)
-	// 	{
-    //         brickVar.gameTime++;
-    //     }
-    // }, 1000);
+	brickVar.gameTime = 0;
+    brickVar.gameTimer = setInterval(() =>
+	{
+        if (brickVar.startTime)
+		{
+            brickVar.gameTime++;
+        }
+    }, 1000);
 
-    // scoreCanvas.style.marginBottom = '10px';
+    scoreCanvas.style.marginBottom = '10px';
 
 	brickVar.initialize = true;
 	brickVar2.initialize = true;
@@ -233,12 +238,7 @@ export function initListenerMultiB()
 		startGameSecond('classic');
 	}
 
-
-	
-
-	
 }
-
 
 
 function removeEventListenersB()
@@ -246,7 +246,6 @@ function removeEventListenersB()
     document.removeEventListener("keydown", keyDownHandlerB);
     document.removeEventListener("keyup", keyUpHandlerB);
     document.removeEventListener("keydown", startBallFirst, startBallSecond);
-    // document.removeEventListener("keydown", startBallSecond);
 }
 
 

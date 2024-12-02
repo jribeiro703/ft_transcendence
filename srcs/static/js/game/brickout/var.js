@@ -13,7 +13,7 @@ const brickVar = {
 
 	gameTime: 0,
 	gameTimer: null,
-
+	currentListeners: {},
 
 // -------------------------------------Ball-----------------
 

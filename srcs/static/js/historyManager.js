@@ -11,8 +11,9 @@ import { updateUserAvatar } from "./user/tools.js";
 import { showGameSelectionView, showGameSelectionMultiView, showGameView,  } from "./game/gameView.js"
 import { showSettingMultiView, showSettingView } from "./game/setting.js";
 import { showGameBrickView } from "./game/brickout/game.js";
-import { showSettingMultiViewB } from "./game/brickout/settings.js";
+import { showSettingMultiViewB, showSettingViewB } from "./game/brickout/settings.js";
 import { roomMultiView } from "./game/init.js";
+import { initListenerB } from "./game/brickout/game.js";
 
 
 const authPages = {
@@ -31,9 +32,17 @@ const userPages = {
 }
 
 const pongGamePages = {
-	pongGameSolo: showGameSelectionView,
-	pongGameMulti: showGameSelectionMultiView,
+	gameSelectionSoloPage: showGameSelectionView,
+	gameSelectionMultiPage: showGameSelectionMultiView,
+
 	pongSettingSolo: (params) => showSettingView(params),
+	playPongSolo: showGameView,
+
+
+	brickoutSettingSolo: (params) => showSettingViewB(params),
+	playBrickoutSolo: showGameBrickView,
+
+
 	// pongSettingMulti:showSettingMultiView,
 	// pongGameMultiLocal:showGameView,
 	// pongLobbyMulti: roomMultiView,
@@ -59,7 +68,7 @@ async function renderPage(page, updateHistory = true, params = null) {
 	if (authenticated)
 		renderFunction = userPages[page] || pongGamePages[page];
 	else
-		renderFunction = authPages[page] || gameGamePages[page];
+		renderFunction = authPages[page] || pongGamePages[page];
 
 	if (!renderFunction) {
 		history.replaceState({ page: "home" }, "home", "#home");
@@ -69,14 +78,16 @@ async function renderPage(page, updateHistory = true, params = null) {
 			history.pushState({ page: page, params: params }, page, `#${page}`);
 	}
 	
-	renderFunction(params);
+	await renderFunction(params);
 }
 
 // listen to precedent or next page event but don't push state to history
-window.addEventListener('popstate', (event) => {
+window.addEventListener('popstate', async (event) => {
 	if (event.state) {
-	  renderPage(event.state.page, false, event.state.params);
+	  await renderPage(event.state.page, false, event.state.params);
 	}
 });
+
+
 
 export { renderPage };

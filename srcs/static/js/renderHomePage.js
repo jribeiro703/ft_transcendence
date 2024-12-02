@@ -25,7 +25,7 @@ async function renderHomePage() {
 	createHomeContent();
 	
 	document.getElementById('playsoloGameBtn').addEventListener('click', () => {
-		renderPage("pongGameSolo");
+		renderPage("gameSelectionSoloPage");
 	});
 
 	const authenticated = await isAuthenticated();

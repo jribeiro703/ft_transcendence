@@ -12,7 +12,7 @@ import gameVar from "../var.js";
 
 export function showSettingViewB(live)
 {
-	history.pushState({ view: 'game'}, '', `?view=solo/settings`);
+	// history.pushState({ view: 'game'}, '', `?view=solo/settings`);
 
 	displaySettingB();
 	getSettingBtn();
@@ -41,8 +41,7 @@ export function showSettingViewB(live)
 		}
 		else
 		{
-			// showGameSelectionView();
-			renderPage("pongGameSolo");
+			renderPage("gameSelectionSoloPage");
 			updateSettingB();
 		}
 	});
