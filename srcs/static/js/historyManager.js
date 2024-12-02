@@ -8,8 +8,11 @@ import { renderRegisterForm } from "./user/js/renderRegisterForm.js";
 import { renderSettingsPage } from "./user/js/renderSettingPage.js";
 import { isAuthenticated } from "./user/token.js";
 import { updateUserAvatar } from "./user/tools.js";
-import { showGameSelectionView, showGameSelectionMultiView,  } from "./game/gameView.js"
-
+import { showGameSelectionView, showGameSelectionMultiView, showGameView,  } from "./game/gameView.js"
+import { showSettingMultiView, showSettingView } from "./game/setting.js";
+import { showGameBrickView } from "./game/brickout/game.js";
+import { showSettingMultiViewB } from "./game/brickout/settings.js";
+import { roomMultiView } from "./game/init.js";
 
 
 const authPages = {
@@ -27,37 +30,52 @@ const userPages = {
 	// inbox: renderInboxPage,
 }
 
-const gamePages = {
-	soloGame: showGameSelectionView,
-	multiGame: showGameSelectionMultiView,
+const pongGamePages = {
+	pongGameSolo: showGameSelectionView,
+	pongGameMulti: showGameSelectionMultiView,
+	pongSettingSolo: (params) => showSettingView(params),
+	pongSettingMulti:showSettingMultiView,
+	pongGameMultiLocal:showGameView,
+	pongLobbyMulti: roomMultiView,
+	pongGameMultiRemote: createRoomView
+
 }
 
-async function renderPage(page, updateHistory = true) {
+const brickoutGamePages = {
+	brickoutGameSolo: showGameBrickView,
+	brickoutSettingMulti: showSettingMultiViewB,
+	brickoutGameMultiLocal: showGameSelectionMultiView,
+	brickoutLobbyMulti: roomMultiViewB,
+	brickoutMultiRemote: createRoomView,
+
+}
+
+async function renderPage(page, updateHistory = true, params = null) {
 	
 	let renderFunction;
 	const authenticated = await isAuthenticated();
 	await updateUserAvatar();
 	
 	if (authenticated)
-		renderFunction = userPages[page] || gamePages[page];
+		renderFunction = userPages[page] || pongGamePages[page] || brickoutGamePages;
 	else
-		renderFunction = authPages[page] || gamePages[page];
+		renderFunction = authPages[page] || gameGamePages[page] || brickoutGamePages;
 
 	if (!renderFunction) {
 		history.replaceState({ page: "home" }, "home", "#home");
 		renderFunction = renderHomePage;
 	} else {
 		if (updateHistory)
-			history.pushState({ page: page }, page, `#${page}`);
+			history.pushState({ page: page, params: params }, page, `#${page}`);
 	}
 	
-	renderFunction();
+	renderFunction(params);
 }
 
 // listen to precedent or next page event but don't push state to history
 window.addEventListener('popstate', (event) => {
 	if (event.state) {
-	  renderPage(event.state.page, false);
+	  renderPage(event.state.page, false, event.state.params);
 	}
 });
 
