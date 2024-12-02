@@ -102,10 +102,26 @@ p {
 
 /* fin ajouts david */
 
+@media (max-height: 1000px) {
+  #defaultView {
+    gap: 5% !important;
+  }
+}
+
 .main-img {
   width: 380px;
   border-radius: 10px;
   /* height: ; */
+}
+
+@media (max-height: 600px) {
+  .main-img {
+    width: auto;
+    height: 50%;
+  }
+  #defaultView {
+    gap: 5% !important;
+  }
 }
 
 .navbar-parent {
@@ -1040,8 +1056,8 @@ button:disabled {
 
 .slidingDiv {
   width: 0;
+  height: 0;
   max-width: 33%;
-  height: 100%;
   overflow: hidden;
   transition: width 0.5s ease;
   visibility: hidden;
@@ -1051,9 +1067,28 @@ button:disabled {
 
 .slidingDiv.visible {
   width: 33%;
+  height: 100%;
   visibility: visible;
   pointer-events: auto;
   padding: 20px;
+}
+
+@media (max-width: 1000px) {
+  .slidingDiv {
+    width: 0;
+    height: 0;
+    max-width: 100%;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+    padding: 0;
+    position: absolute;
+  }
+  .slidingDiv.visible {
+    height: 90%;
+    width: 90%;
+    position: absolute;
+  }
 }
 
 .slidingDiv.hide-children * {
@@ -1068,8 +1103,8 @@ button:disabled {
   cursor: pointer;
   color: var(--highlight-color);
   position: absolute;
-  bottom: 1%; /* ajustez selon vos besoins */
-  right: 1%; /* ajustez selon vos besoins */
+  bottom: 3%; /* ajustez selon vos besoins */
+  right: 3%; /* ajustez selon vos besoins */
 }
 
 /* new ajouts */
