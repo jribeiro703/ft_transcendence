@@ -183,10 +183,13 @@ SIMPLE_JWT = {
 	"BLACKLIST_AFTER_ROTATION": True,
 }
 
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = "user/django-email-messages"
-
-DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ['EMAIL_HOST']
+EMAIL_PORT = int(os.environ['EMAIL_PORT'])
+EMAIL_USE_TLS = os.environ['EMAIL_USE_TLS'].lower() == 'true'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')  # Optional for prod
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')  # Optional for prod
+DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
 
 CSRF_TRUSTED_ORIGINS = [
 	'https://localhost:8081',
@@ -200,3 +203,4 @@ CHANNEL_LAYERS = {
 		},
 	},
 }
+

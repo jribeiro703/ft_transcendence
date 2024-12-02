@@ -2,11 +2,14 @@ import pyotp
 from .models import User, FriendRequest
 from transcendence import settings
 from django.core.mail import EmailMultiAlternatives
+from smtplib import SMTPException
 from django.contrib.auth import authenticate
 from django.template.loader import render_to_string
 from rest_framework import serializers, exceptions
 from datetime import datetime, timezone
 from .utils import send_activation_email
+import logging
+logger = logging.getLogger(__name__)
 
 class IndexSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -42,7 +45,14 @@ class UserCreateSerializer(serializers.ModelSerializer):
 			'emails/account_activation.txt',
 			'emails/account_activation.html'
 			)
+		except SMTPException as e:
+			logger.error(f"SMTP error sending activation email: {str(e)}")
+			user.delete()
+			raise exceptions.APIException({
+				"message": f"SMTP error sending activation email: {str(e)}"
+			})
 		except Exception as e:
+			logger.error(f"Unexpected error sending activation email: {str(e)}")
 			user.delete()
 			raise exceptions.APIException({"message": "Send activation email failed"})
 		return user
