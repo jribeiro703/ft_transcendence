@@ -6,3 +6,6 @@ class TournamentSerializer(serializers.ModelSerializer):
 		model = Tournament
 		fields = ['id', 'status', 'start_date', 'end_date', 'created_by', 'max_score']
 		read_only_fields = ['id', 'created_by']
+		extra_kwargs = {
+			'name': {'required': False}
+		}
