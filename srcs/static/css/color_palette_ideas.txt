@@ -1,17 +1,19 @@
-/*couleur de base*/
+couleurs de base :
+
 :root {
   --background-color: #000000;
-  --primary-color: #bef574;
-  --secondary-color: #e0cda9;
-  --text-color: #ffffff;
-  --boder-btn-color: #303030;
+  --text-color: #3e3f4a;
+  --border-btn-color: #000000;
   --highlight-color: #ffffff;
   /* icon color */
-  --icon-color: #5b3c11;
+  --icon-color: #3e3f4a;
   /* placeholder color */
-  --placeholder-color: #808080;
+  --placeholder-color: #3e3f4a;
   /* chat */
-  --chat-btn-highlight: #6dc7c1;
-  --chat-bg: #1a1a40;
-  --chat-msg: #fefc12;
+  --chat-btn-highlight: #000000;
+  --chat-bg: #000000;
+  --chat-msg: #3e3f4a;
+  --chat-border: #ffffff;
 }
+
+idée de palette de couleurs 1 (crepuscule) :
