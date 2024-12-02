@@ -7,6 +7,9 @@ const TokenType = {
 
 function decodeToken(token, tokenType) {
 
+	if (!token)
+		return null;
+	
 	const tokenParts = token.split('.');
 	if (tokenParts.length !== 3) {
 		console.error(`decodeToken: invalid ${tokenType} token format`);
