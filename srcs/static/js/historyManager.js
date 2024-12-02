@@ -59,7 +59,7 @@ async function renderPage(page, updateHistory = true, params = null) {
 	if (authenticated)
 		renderFunction = userPages[page] || pongGamePages[page];
 	else
-		renderFunction = authPages[page] || gameGamePages[page];
+		renderFunction = authPages[page] || pongGamePages[page];
 
 	if (!renderFunction) {
 		history.replaceState({ page: "home" }, "home", "#home");
