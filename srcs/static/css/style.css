@@ -1068,8 +1068,23 @@ button:disabled {
   cursor: pointer;
   color: var(--highlight-color);
   position: absolute;
-  bottom: 4%; /* ajustez selon vos besoins */
-  right: 3%; /* ajustez selon vos besoins */
+  bottom: 1%; /* ajustez selon vos besoins */
+  right: 1%; /* ajustez selon vos besoins */
+}
+
+/* new ajouts */
+.homeIcon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  color: var(--highlight-color);
+}
+
+.profileIcon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  color: var(--highlight-color);
 }
 
 .chat-icon-dots {
@@ -1098,12 +1113,46 @@ button:disabled {
   fill: var(--highlight-color);
 }
 
+/* chat icon */
 [data-chat-icon]:focus {
   outline: none;
 }
-
+[data-chat-icon] svg:hover {
+  transform: scale(1.2); /* Grossit de 10% */
+}
 [data-chat-icon]:focus svg {
   fill: var(--highlight-color);
+  transform: scale(1.2);
+}
+
+/*  home icon */
+[data-home-icon]:focus {
+  outline: none;
+}
+[data-home-icon]:focus svg {
+  fill: var(--highlight-color);
+  transform: scale(1.5);
+}
+[data-home-icon] svg:hover {
+  transform: scale(1.5);
+}
+
+/* profile icon */
+[data-profile-icon]:focus {
+  outline: none;
+}
+[data-profile-icon]:focus svg {
+  fill: var(--highlight-color);
+  transform: scale(1.5);
+}
+[data-profile-icon] svg:hover {
+  transform: scale(1.5);
+}
+
+[data-home-icon] svg,
+[data-profile-icon] svg,
+[data-chat-icon] svg {
+  transition: transform 0.3s ease; /* Animation douce */
 }
 
 /**/
