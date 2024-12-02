@@ -17,3 +17,54 @@ couleurs de base :
 }
 
 idée de palette de couleurs 1 (crepuscule) :
+
+:root {
+  --background-color: #1b1833;
+  --text-color: #f29f58;
+  --border-btn-color: #1b1833;
+  --highlight-color: #efb6c8;
+  /* icon color */
+  --icon-color: #f29f58;
+  /* placeholder color */
+  --placeholder-color: #3e3f4a;
+  /* chat */
+  --chat-btn-highlight: #1b1833;
+  --chat-bg: #1b1833;
+  --chat-msg: #f29f58;
+  --chat-border: #f29f58;
+}
+
+lune de sang :
+
+:root {
+  --background-color: #12151c;
+  --text-color: #531516;
+  --border-btn-color: #12151c;
+  --highlight-color: #efb6c8;
+  /* icon color */
+  --icon-color: #531516;
+  /* placeholder color */
+  --placeholder-color: #3e3f4a;
+  /* chat */
+  --chat-btn-highlight: #12151c;
+  --chat-bg: #12151c;
+  --chat-msg: #531516;
+  --chat-border: #531516;
+}
+
+gray blue :
+:root {
+  --background-color: #121212;
+  --text-color: #294f8b;
+  --border-btn-color: #121212;
+  --highlight-color: #efb6c8;
+  /* icon color */
+  --icon-color: #294f8b;
+  /* placeholder color */
+  --placeholder-color: #3e3f4a;
+  /* chat */
+  --chat-btn-highlight: #121212;
+  --chat-bg: #121212;
+  --chat-msg: #294f8b;
+  --chat-border: #294f8b;
+}
