@@ -1237,8 +1237,8 @@ emoji-picker {
 .emoji-picker-container {
   display: none;
   position: absolute;
-  bottom: 92px;
-  left: -20px;
+  bottom: 150px;
+  right: 30%;
   z-index: 1000;
 }
 
