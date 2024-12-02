@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     messageInput.addEventListener("blur", function () {
-      messageInput.placeholder = "Type here.. ❤️.";
+      messageInput.placeholder = "Type here...";
     });
   } else {
     console.error("Message input not found");
@@ -273,18 +273,12 @@ document.addEventListener("keydown", function (event) {
 document.addEventListener("mousedown", function (event) {
   const focusableSelectors = [
     "button",
-    "[href]",
-    "input",
-    "select",
-    "textarea",
-    '[tabindex]:not([tabindex="-1"])',
     "[data-chat-icon]",
     "[data-home-icon]",
     "[data-profile-icon]",
-    "#chat-message-input",
     "#chat-message-submit",
     "#emojiButton",
-  ].join(", ");
+  ];
 
   const target = event.target;
 
