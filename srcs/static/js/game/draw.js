@@ -34,7 +34,7 @@ export function addBtn()
 	const btn = document.createElement('div');
 	btn.innerHTML = `
 	<div class="finish id="finish">
-		<button id="returnLobbyBtn">Return Lobby</button> 
+		<button id="returnLobbyBtn" class="">Return Lobby</button> 
 		<button id="quitBtn">Return Home</button>
 	</div>
 	`;
@@ -54,8 +54,9 @@ export function kickOut()
 	cancelAnimationFrame(gameVar.animationFrame);
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	gameVar.ctx.font = "35px Arial";
-	gameVar.ctx.fillStyle = "white";	
-	gameVar.ctx.fillText("Opponent has rage quit" , gameVar.canvasW / 2 - 100, gameVar.canvasH / 6 - 30);
+	gameVar.ctx.fillStyle = "red";	
+	gameVar.ctx.fillText("Opponent has rage quit" , gameVar.canvasW / 4, gameVar.canvasH / 6);
+	add
 	addBtn();
 }
 

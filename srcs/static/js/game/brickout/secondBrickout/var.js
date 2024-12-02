@@ -92,7 +92,7 @@ const brickVar2 = {
 	initGame: false,
 	startBtn: null,
 	score: 0,
-	lives: 5,
+	lives: 2,
 	gameStart: false,
 	anim: null,
 	startBtn: null,

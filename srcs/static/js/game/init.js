@@ -25,8 +25,8 @@ export function initEventListener()
 {
 	removeEventListeners();
 	gameVar.playsoloGameBtn.addEventListener('click', showGameSelectionView);
-	gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
-	// gameVar.playmultiGameBtn.addEventListener('click', showGameSelectionMultiView);
+	// gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
+	gameVar.playmultiGameBtn.addEventListener('click', showGameSelectionMultiView);
 }
 
 export function initControlLive()
@@ -106,7 +106,6 @@ export function initEventListenerRoom()
 
 export function displayRoomView()
 {
-
 	console.log("game: ", gameVar.game);
 	let level = null;
 	if (gameVar.game == 'pong')
@@ -125,7 +124,7 @@ export function displayRoomView()
 				<div class="server-list">
 					<h2>Room List</h2>
 					<div id="noRoomsMessage" style="display: block;">
-						<p>No room available for now. Create one !</p>
+						No room available for now. Create one !
 					</div>
 					<div id="roomsContainer"></div>
 					<div class="refresh"></div>

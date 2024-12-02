@@ -4,19 +4,19 @@ import { initializeBall } from "./draw.js";
 import { draw } from "./draw.js";
 import { resetMatch, checkServer } from "./reset.js";
 import { manageAi } from "./ai.js";
-import { updateCanvasColor } from "./setting.js";
+import { showSettingView, updateCanvasColor } from "./setting.js";
 import { listenPlayBtn, listenSettingBtn } from "./listenerSetting.js";
 import { initControl } from "./init.js";
 import { startGame } from "./start.js";
 import { listenSettingMultiBtn } from "./listenerSetting.js";
 import { listenPlayMultiBtn } from "./listenerSetting.js";
-
+import { showSettingViewB } from "./brickout/settings.js";
 
 export function showGameSelectionMultiView()
 {
 	// gameVar.liveMatch = true;
 	// initControl();
-	// history.pushState({ view: 'game'}, '', `?view=settingMulti`);
+	history.pushState({ view: 'game'}, '', `view=settingMulti`);
 	const maincontent = document.getElementById('mainContent');
 	maincontent.innerHTML = '';
 	const gameSelection = document.createElement('div');
@@ -126,6 +126,40 @@ export function showGameSelectionMultiView()
 	listenSettingMultiBtn();
 	listenPlayMultiBtn();
 }
+
+// home
+
+
+// btn single Player => GAME SELECTION SOLO = function showGameSelectionView
+
+// btn setting ponggame in game Selection => PONG SETTING SOLO = function showSettingView;
+// btn setting brickout in game Selection => BRICKOUT SETTING SOLO = funtion showSettingViewB;
+
+// btn play pong in game selection => PONG GAME SOLO = function showGameView()
+// btn play brickout in game selection => BRICKOUT GAME SOLO = function showGameBrickView;
+
+// btn multiplayer => GAME SELECTION MULTI = function showGameSelectionMultiView;
+
+// btn setting ponggame in game selection multi => PONG SETTING MULTI = function showSettingMultiView;
+// btn setting brickout in game selection multi => BRICKOUT SETTING MULTI = function showSettingMultiViewB
+
+// btn play pong in game selection multi => PONG GAME MULTI LOCAL = function showGameView;
+// btn play brickout in game selection multi =>BRICKOUT GAME MULTI LOCAL = function showGameBrickMultiView;
+
+// btn joinLobby for pong in game selection multi => LOBBY VIEW PONG MULTI = function roomMultiView;
+// btn joinLobby for brickout in game selection multi => LOBBY VIEW BRICKOUT MULTI = funciton roomMultiViewB;
+
+// btn setting for pong in lobby view => PONG SETTING MULTI = function showSettingMultiView;
+// btn setting for brickout in lobby view => BRICKOUT SETTING MULTI = function showSettingMultiViewB
+
+// btn createRoom for pong in lobbyview => PONG GAME MULTI REMOTE = function createRoomView;
+// btn createRoom for brickout in lobbyview => BRICKOUT GAME MULTI REMOTE = function createRoomViewB;
+
+// btn createRoom for pong in lobbyview => PONG GAME MULTI REMOTE = function createRoomView;
+// btn createRoom for brickout in lobbyview => BRICKOUT GAME MULTI REMOTE = function createRoomViewB;
+
+
+
 
 export function showGameSelectionView()
 {

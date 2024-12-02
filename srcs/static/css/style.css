@@ -734,7 +734,7 @@ p
     src: url('/static/css/font/scoreboard-webfont.woff2') format('truetype');
 }
 
-#rematchBtn, #quitGameBtn, #nextLevelBtn,  #restartLevelBtn, #quitBtn
+#rematchBtn, #quitGameBtn, #nextLevelBtn,  #restartLevelBtn, #quitBtn, #returnLobbyBtn
 {
 	width: 200px;
     height: 60px;
@@ -747,13 +747,13 @@ p
     transition: background-color 0.3s, transform 0.4s;
 }
 
-#rematchBtn:not(:disabled):hover, #quitGameBtn:hover
+#rematchBtn:not(:disabled):hover, #quitGameBtn:hover, #returnLobbyBtn:hover
 {
     background-color: #6DC7C1;
     transform: scale(1.05);
 }
 
-#rematchBtn:not(:disabled):active, #quitGameBtn:active
+#rematchBtn:not(:disabled):active, #quitGameBtn:active, #returnLobbyBtn:active
 {
     background-color: #003372; 
     transform: scale(0.95);
@@ -832,6 +832,11 @@ button:disabled
 {
 	background-color: #555;
 	cursor: not-allowed;
+}
+
+#noRoomsMessage
+{
+	font-size: 20px;
 }
 .refresh 
 {

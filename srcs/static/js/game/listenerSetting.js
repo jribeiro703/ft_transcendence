@@ -193,6 +193,7 @@ export function listenPlayMultiBtn()
 	gameVar.playBtn2.addEventListener('click', () =>
 	{
 		gameVar.game = "brickout2p";
+		gameVar.localGame = true;
 		showGameBrickMultiView();
 		initListenerMultiB();
 	});

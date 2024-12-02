@@ -209,7 +209,7 @@ export function addRoom(index, roomName, status)
 
 export function updateRoomList()
 {
-	gameVar.noRoomsMessage.style.display = 'none';
+	// gameVar.noRoomsMessage.style.display = 'none';
 	gameVar.roomsContainer.style.display = 'block';
 
 	gameVar.roomsContainer.innerHTML = '';
