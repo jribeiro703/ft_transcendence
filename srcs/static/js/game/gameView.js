@@ -14,9 +14,6 @@ import { showSettingViewB } from "./brickout/settings.js";
 
 export function showGameSelectionMultiView()
 {
-	// gameVar.liveMatch = true;
-	// initControl();
-	history.pushState({ view: 'game'}, '', `view=settingMulti`);
 	const maincontent = document.getElementById('mainContent');
 	maincontent.innerHTML = '';
 	const gameSelection = document.createElement('div');

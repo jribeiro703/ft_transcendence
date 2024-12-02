@@ -4,6 +4,7 @@ import { addBtnB, addImageB } from "./level.js";
 import gameVar from "../../var.js";
 import brickVar from "../var.js";
 import { displayScore } from "../manage.js";
+import { drawScoreBoardB } from "../draw.js";
 
 export function manageCollisionB()
 {
@@ -64,11 +65,11 @@ function compareScore()
 		brickVar2.ctx.fillText(brickVar.finalScore, brickVar2.canvasW / 4 + 420, brickVar2.canvasH / 2 + 50);
 
 		brickVar.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4 , (brickVar.canvasH / 2) - 100);
-		brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
-		brickVar.ctx.fillText(brickVar.finalScore, brickVar.canvasW / 4 + 250, brickVar.canvasH / 2 + 50);
+		brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
+		brickVar.ctx.fillText(brickVar.finalScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
 
-		brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 100);
-		brickVar.ctx.fillText(brickVar2.finalScore, brickVar.canvasW / 4 + 250, brickVar.canvasH / 2 + 100)
+		brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
+		brickVar.ctx.fillText(brickVar2.finalScore, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50)
 	}
 }
 
@@ -84,6 +85,7 @@ export function chechOpponent()
 				if (!display)
 				{
 					display = true;
+					drawScoreBoardB();
 					brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
 					brickVar2.ctx.font = 'bold 24px fontScore';
 					brickVar2.ctx.fillStyle = '#66a5e8';

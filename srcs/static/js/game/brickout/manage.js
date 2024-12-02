@@ -3,6 +3,8 @@ import brickVar2 from "./secondBrickout/var.js";
 import { resetBallB } from "./ball.js";
 import { addBtnB, addImageB } from "./level.js";
 import gameVar from "../var.js";
+import { drawScoreBoard } from "../gameView.js";
+import { drawScoreBoardB } from "./draw.js";
 
 export function manageCollisionB()
 {
@@ -56,6 +58,7 @@ export function chechOpponent()
 				{
 					display = true;
 					brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
+					drawScoreBoardB();
 					brickVar.ctx.font = 'bold 24px fontScore';
 					brickVar.ctx.fillStyle = '#66a5e8';
 					brickVar.ctx.textAlign = 'left';
@@ -98,12 +101,12 @@ function compareScore()
 		brickVar.ctx.fillText("Your opponent has score only : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
 		brickVar.ctx.fillText(brickVar2.finalScore, brickVar.canvasW / 4 + 420, brickVar.canvasH / 2 + 50);
 
-		brickVar2.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4, brickVar.canvasH / 2 - 100);
-		brickVar2.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
-		brickVar2.ctx.fillText(brickVar2.finalScore, brickVar.canvasW / 4 + 250, brickVar.canvasH / 2 + 50);
+		brickVar2.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4, (brickVar.canvasH / 2) - 100);
+		brickVar2.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
+		brickVar2.ctx.fillText(brickVar2.finalScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
 
-		brickVar2.ctx.fillText("Your opponent has score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 100);
-		brickVar2.ctx.fillText(brickVar.finalScore, brickVar2.canvasW / 4 + 250, brickVar2.canvasH / 2 + 100)
+		brickVar2.ctx.fillText("Your opponent has score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
+		brickVar2.ctx.fillText(brickVar.finalScore, brickVar2.canvasW / 4 + 380, brickVar2.canvasH / 2 + 50)
 
 	}
 }
@@ -117,16 +120,8 @@ export function loseLives()
 		brickVar.startTime = false;
 		brickVar.finishLevel = true;
 		saveScoreB();
-		// brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
-		// brickVar.ctx.font = "35px Arial";
-		// brickVar.ctx.fillStyle = "white";	
-		// brickVar.ctx.fillText("You lose..." , brickVar.canvasW / 2 - 100, brickVar.canvasH / 6 - 30);
-		// brickVar.ctx.fillText("Score : " + brickVar.finalScore, brickVar.canvasW / 2 - 100, brickVar.canvasH / 6 + 20);
-		// addBtnB();
-		// addImageB('/static/css/images/nooo.png');
 		chechOpponent();
 		addBtnB();
-
 	}
 	else
 		resetBallB();

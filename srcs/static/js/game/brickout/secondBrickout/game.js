@@ -5,6 +5,8 @@ import { keyDownHandlerB, keyUpHandlerB, mouseMoveHandlerB} from './control.js';
 import { initBallB, updateBallPositionB, startBallB, handleBallB } from './ball.js';
 import { manageCollisionB, manageMoveB } from './manage.js';
 import { collectPowerUpB, createPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
+import gameVar from '../../var.js';
+import { drawScoreBoardB } from '../draw.js';
 
 export function showGameBrickView()
 {
@@ -158,6 +160,8 @@ function baseDrawB()
 {
 	brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
 	// drawScoreBoardB();
+	if (gameVar.localGame && gameVar.game == 'brickout2p')
+		drawScoreBoardB();
 	drawBricksB();
 	drawBallB();
 	drawPaddleB();
