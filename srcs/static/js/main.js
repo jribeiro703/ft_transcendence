@@ -28,6 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	else
 		renderPage(hash.substring(1));
 
-	initGameVar();
-	initEventListener();
+	// initGameVar();
+	// initEventListener();
 });

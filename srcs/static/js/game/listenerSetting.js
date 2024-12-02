@@ -18,6 +18,7 @@ import { showSettingMultiViewB } from "./brickout/settings.js";
 import brickVar from "./brickout/var.js";
 import { showGameBrickMultiView } from "./brickout/game.js";
 import { initListenerMultiB } from "./brickout/game.js";
+import { renderPage } from "../historyManager.js";
 
 export function listenSettingPU()
 {
@@ -103,7 +104,8 @@ export function listenSettingSave(live)
 		}
 		else
 		{
-			showGameSelectionView();
+			// showGameSelectionView();
+			renderPage("pongGameSolo");
 			updateSetting();
 		}
 	});
@@ -122,7 +124,8 @@ export function listenSettingMultiSave(live)
 		}
 		else
 		{
-			showGameSelectionMultiView();
+			// showGameSelectionMultiView();
+			renderPage("pongGameMulti");
 			updateSetting();
 		}
 	});
@@ -132,12 +135,14 @@ export function listenSettingBtn()
 {
 	gameVar.settingBtn1.addEventListener('click', () =>
 	{
-		showSettingView(false);
+		// showSettingView(false);
+		renderPage("pongSettingSolo", true, false);
 	});
 
 	gameVar.settingBtn2.addEventListener('click', () =>
 	{
 		showSettingViewB(false);
+		// renderPage("pongSettingMulti", false, false);
 	});
 }
 
