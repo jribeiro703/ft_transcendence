@@ -1,0 +1,17 @@
+/*couleur de base*/
+:root {
+  --background-color: #000000;
+  --primary-color: #bef574;
+  --secondary-color: #e0cda9;
+  --text-color: #ffffff;
+  --boder-btn-color: #303030;
+  --highlight-color: #ffffff;
+  /* icon color */
+  --icon-color: #5b3c11;
+  /* placeholder color */
+  --placeholder-color: #808080;
+  /* chat */
+  --chat-btn-highlight: #6dc7c1;
+  --chat-bg: #1a1a40;
+  --chat-msg: #fefc12;
+}
