@@ -104,6 +104,20 @@ export function joinRoom(roomName)
 				gameSocket.send(JSON.stringify({ type: 'pong' }));
 				// console.log('Pong envoyé en réponse');
 			}
+			else if (data.type == 'client_left')
+			{
+				console.log("left before: ", gameVar.clientLeft);
+				console.log("client Left !");
+				gameVar.clientLeft = true;
+				console.log("left after: ", gameVar.clientLeft);
+				if (gameSocket && gameSocket.readyState === WebSocket.OPEN)
+				{
+					gameSocket.send(JSON.stringify({
+            		type: 'room_deleted',
+            		room_name: roomName
+        		}));
+    }
+			}
 			else if (data.type == 'ball_data')
 			{
 				gameVar.x = data.ball_data.x;

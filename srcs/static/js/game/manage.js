@@ -234,7 +234,9 @@ export function manageServer()
 		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2;
 	}
 	if (gameVar.liveMatch)
-		sendBallData(gameVar.x, gameVar.y, gameVar.gameSocket);
+	{
+		checkball();
+	}
 }
 // export function checkCollisionWithWalls()
 // {

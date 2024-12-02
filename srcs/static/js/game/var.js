@@ -106,8 +106,7 @@ const gameVar =
 
 	game: null,
 	startTime: false,
-
-
+	clientLeft: false,
 // --------------------------------------AI-----------------------------
 
 	aiServe: false,
@@ -171,6 +170,7 @@ const gameVar =
 	tournamentGameBtn: null,
 	rematchBtn: null,
 	quitGameBtn: null,
+	returnLobby: null,
 
 
 	players: [

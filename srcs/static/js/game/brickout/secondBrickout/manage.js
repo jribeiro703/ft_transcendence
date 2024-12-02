@@ -79,9 +79,10 @@ export function loseLives()
 		brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
 		brickVar2.ctx.font = "35px Arial";
 		brickVar2.ctx.fillStyle = "white";	
+		brickVar2.ctx.fillText("You lose..." , brickVar2.canvasW / 2 - 100, brickVar2.canvasH / 6 - 30);
+		brickVar2.ctx.fillText("Score : " + brickVar2.finalScore, brickVar2.canvasW / 2 - 100, brickVar2.canvasH / 6 + 20);
+
 		chechOpponent();
-		// brickVar2.ctx.fillText("You lose..." , brickVar2.canvasW / 2 - 100, brickVar2.canvasH / 6 - 30);
-		// brickVar2.ctx.fillText("Score : " + brickVar2.finalScore, brickVar2.canvasW / 2 - 100, brickVar2.canvasH / 6 + 20);
 		if (!gameVar.localGame)
 		{
 			addBtnB();

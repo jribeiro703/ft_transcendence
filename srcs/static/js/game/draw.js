@@ -6,6 +6,9 @@ import { checkball } from "./check.js";
 import { drawFootball } from "./foot.js";
 import { drawTennisCourt } from "./tennis.js";
 import { drawScoreBoard } from "./gameView.js";
+import { addBtnB } from "./brickout/level.js";
+import { listenBtn } from "./reset.js";
+import { roomMultiView } from "./init.js";
 
 export function initDraw()
 {
@@ -20,9 +23,51 @@ export function initDraw()
 		drawTennisCourt();
 }
 
+export function addBtn()
+{
+	const mainContent = document.getElementById("mainContent");
+	if (!mainContent)
+	{
+		console.error("Container element not found!");
+		return;
+	}
+	const btn = document.createElement('div');
+	btn.innerHTML = `
+	<div class="finish id="finish">
+		<button id="returnLobbyBtn">Return Lobby</button> 
+		<button id="quitBtn">Return Home</button>
+	</div>
+	`;
+	mainContent.appendChild(btn);
+
+	const returnLobbtyBtn = document.getElementById("returnLobbyBtn");
+	const quitBtn = document.getElementById("quitBtn");
+		if (returnLobbtyBtn)
+			returnLobbtyBtn.addEventListener("click", roomMultiView);
+		if (quitBtn)
+			quitBtn.addEventListener('click', () => document.location.reload());
+
+}
+export function kickOut()
+{
+	console.log("kickout");
+	cancelAnimationFrame(gameVar.animationFrame);
+	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+	gameVar.ctx.font = "35px Arial";
+	gameVar.ctx.fillStyle = "white";	
+	gameVar.ctx.fillText("Opponent has rage quit" , gameVar.canvasW / 2 - 100, gameVar.canvasH / 6 - 30);
+	addBtn();
+}
 
 export function drawLive()
 {
+
+	console.log("left after: ", gameVar.clientLeft);
+	if (gameVar.clientLeft)
+	{
+		kickOut();
+		return ;
+	}
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
 	drawScoreBoard();
