@@ -6,6 +6,7 @@ import { showSettingView } from "./setting.js";
 import { checkSettingLive } from "./setting.js";
 import { SCORE_CANVAS_HEIGHT } from "./const.js";
 import { showGameSelectionMultiView } from "./gameView.js";
+import { renderPage } from "../historyManager.js";
 
 export function initGameVar()
 {
@@ -92,6 +93,7 @@ export function initEventListenerRoom()
 	gameVar.settingBtn.addEventListener('click', () =>
 	{
 		console.log("setting");
+		// renderPage("pongSettingSolo", true, true);
 		showSettingView(true);
 	});
 }
