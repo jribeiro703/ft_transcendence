@@ -69,7 +69,8 @@ export function showSettingMultiView(live)
 }
 export function showSettingView(live)
 {
-	history.pushState({ view: 'game'}, '', `?view=solo/settings`);
+	// history.pushState({ view: 'game'}, '', `?view=solo/settings`);
+	// history.pushState({ page: 'settingView'}, '', `?view=solo/settings`);
 	const pongUrl = "static/css/images/ttLevel.png";
 	const footUrl = "static/css/images/footballLevel.png";
 	const tennisUrl = "static/css/images/tennisLevel.png";

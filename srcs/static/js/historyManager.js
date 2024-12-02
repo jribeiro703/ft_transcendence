@@ -34,21 +34,21 @@ const pongGamePages = {
 	pongGameSolo: showGameSelectionView,
 	pongGameMulti: showGameSelectionMultiView,
 	pongSettingSolo: (params) => showSettingView(params),
-	pongSettingMulti:showSettingMultiView,
-	pongGameMultiLocal:showGameView,
-	pongLobbyMulti: roomMultiView,
-	pongGameMultiRemote: createRoomView
+	// pongSettingMulti:showSettingMultiView,
+	// pongGameMultiLocal:showGameView,
+	// pongLobbyMulti: roomMultiView,
+	// pongGameMultiRemote: createRoomView
 
 }
 
-const brickoutGamePages = {
-	brickoutGameSolo: showGameBrickView,
-	brickoutSettingMulti: showSettingMultiViewB,
-	brickoutGameMultiLocal: showGameSelectionMultiView,
-	brickoutLobbyMulti: roomMultiViewB,
-	brickoutMultiRemote: createRoomView,
+// const brickoutGamePages = {
+// 	brickoutGameSolo: showGameBrickView,
+// 	brickoutSettingMulti: showSettingMultiViewB,
+// 	brickoutGameMultiLocal: showGameSelectionMultiView,
+// 	brickoutLobbyMulti: roomMultiViewB,
+// 	brickoutMultiRemote: createRoomView,
 
-}
+// }
 
 async function renderPage(page, updateHistory = true, params = null) {
 	
@@ -57,9 +57,9 @@ async function renderPage(page, updateHistory = true, params = null) {
 	await updateUserAvatar();
 	
 	if (authenticated)
-		renderFunction = userPages[page] || pongGamePages[page] || brickoutGamePages;
+		renderFunction = userPages[page] || pongGamePages[page];
 	else
-		renderFunction = authPages[page] || gameGamePages[page] || brickoutGamePages;
+		renderFunction = authPages[page] || gameGamePages[page];
 
 	if (!renderFunction) {
 		history.replaceState({ page: "home" }, "home", "#home");

@@ -25,7 +25,8 @@ function removeEventListeners()
 export function initEventListener()
 {
 	removeEventListeners();
-	gameVar.playsoloGameBtn.addEventListener('click', showGameSelectionView);
+	// gameVar.playsoloGameBtn.addEventListener('click', showGameSelectionView);
+	gameVar.playsoloGameBtn.addEventListener('click', () => renderPage("pongGameSolo"));
 	gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
 	// gameVar.playmultiGameBtn.addEventListener('click', showGameSelectionMultiView);
 }
@@ -93,8 +94,8 @@ export function initEventListenerRoom()
 	gameVar.settingBtn.addEventListener('click', () =>
 	{
 		console.log("setting");
-		// renderPage("pongSettingSolo", true, true);
-		showSettingView(true);
+		// showSettingView(true);
+		renderPage("pongSettingSolo", true, true);
 	});
 }
 
