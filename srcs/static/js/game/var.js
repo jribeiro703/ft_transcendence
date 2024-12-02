@@ -160,6 +160,8 @@ const gameVar =
 	settingBtn2: null,
 	playBtn: null,
 	playBtn2: null,
+	playBtn3: null,
+	playBtn4: null,
 	
 	saveBtn: null,
 	

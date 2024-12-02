@@ -6,13 +6,13 @@ import { keyDownHandlerB, keyUpHandlerB, mouseMoveHandlerB} from './control.js';
 import { initBallB, updateBallPositionB, handleBallB } from './ball.js';
 import { manageCollisionB, manageMoveB } from './manage.js';
 import { collectPowerUpB, createPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
-// import { startGameB } from '../start.js';
 import { drawScoreBoardB } from './draw.js';
 import { startBallB as startBallFirst } from './ball.js';
 import { startBallB as startBallSecond } from './secondBrickout/ball.js'
 import { startGameB as startGameFirst} from './control.js';
 import { startGameB as startGameSecond } from './secondBrickout/control.js';
 import { updateSettingSelectionForSecond } from './settings.js';
+import { checkSettingB } from './settings.js';
 
 export function showGameBrickView()
 {
@@ -95,8 +95,8 @@ export function showGameBrickMultiView()
 
 	var scoreCanvas = document.getElementById('scoreCanvas');
 	brickVar.scoreCtx = scoreCanvas.getContext('2d');
-	scoreCanvas.width = brickVar.scoreCanvW;
-	scoreCanvas.height = brickVar.scoreCanvH;
+	scoreCanvas.width = brickVar.scoreCanvW
+	scoreCanvas.height = brickVar.scoreCanvH + 100;
 
 	brickVar.gameTime = 0;
     brickVar.gameTimer = setInterval(() =>
@@ -107,9 +107,16 @@ export function showGameBrickMultiView()
         }
     }, 1000);
 
-    scoreCanvas.style.marginBottom = '10px';
+	brickVar2.gameTime = 0;
+    brickVar2.gameTimer = setInterval(() =>
+	{
+        if (brickVar2.startTime)
+		{
+            brickVar2.gameTime++;
+        }
+    }, 1000);
 
-	brickVar.initialize = true;
+    scoreCanvas.style.marginBottom = '10px';
 
 	var canvas2 = document.getElementById("brickoutCanvas2");
 	if (!canvas2)
@@ -123,22 +130,6 @@ export function showGameBrickMultiView()
 	canvas2.height = brickVar2.canvasH;
 	canvas2.style.width = `${brickVar2.canvasW}px`;
     canvas2.style.height = `${brickVar2.canvasH}px`;
-
-	// var scoreCanvas = document.getElementById('scoreCanvas');
-	// brickVar.scoreCtx = scoreCanvas.getContext('2d');
-	// scoreCanvas.width = brickVar.scoreCanvW;
-	// scoreCanvas.height = brickVar.scoreCanvH;
-
-	// brickVar.gameTime = 0;
-    // brickVar.gameTimer = setInterval(() =>
-	// {
-    //     if (brickVar.startTime)
-	// 	{
-    //         brickVar.gameTime++;
-    //     }
-    // }, 1000);
-
-    // scoreCanvas.style.marginBottom = '10px';
 
 	brickVar.initialize = true;
 	brickVar2.initialize = true;
@@ -155,13 +146,14 @@ export function initListenerB()
     });
 
     document.addEventListener("keydown", (e) => {
-        if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
+        if (e.code === "ArrowRight" || e.code === "ArrowLeft" || e.code === 'KeyA' || e.code === 'KeyD') {
+			console.log("pppp");
             keyDownHandlerB(e);
         }
     });
 
     document.addEventListener("keyup", (e) => {
-        if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
+        if (e.code === "ArrowRight" || e.code === "ArrowLeft" || e.code === 'KeyA' || e.code === 'KeyD') {
             keyUpHandlerB(e);
         }
     });
@@ -207,6 +199,8 @@ export function initListenerMultiB()
     });
 
 	updateSettingSelectionForSecond();
+	
+	checkSettingB();
 	if (brickVar.classic)
 	{
 		startGameFirst("classic");
@@ -225,7 +219,7 @@ export function initListenerMultiB()
 	else if (brickVar.invader)
 	{
 		startGameFirst('invader');
-		startGameSecond('invader;')
+		startGameSecond('invader');
 	}
 	else
 	{

@@ -1,49 +1,79 @@
 import gameVar from "./var.js";
 import { sendDirectionData, sendGameData } from "./network.js";
 
-export function keyDownHandler(e, isFirstPlayer)
+export function keyDownHandler(e, local)
 {
-	if (e.code === "ArrowUp")
+	if (!local)
 	{
-		gameVar.playerUpPressed = true;
-	} 
-	else if (e.code === "ArrowDown")
-	{
-		gameVar.playerDownPressed = true;
+		if (e.code === "ArrowUp" || e.code === 'KeyW')
+		{
+			gameVar.playerUpPressed = true;
+		} 
+		else if (e.code === "ArrowDown" || e.code === 'KeyS')
+		{
+			gameVar.playerDownPressed = true;
+		}
 	}
-	if (e.code === 'KeyW')
+	else
 	{
-		gameVar.player2UpPressed = true;
-	}
-	else if (e.code === 'KeyS')
-	{
-		gameVar.player2DownPressed = true;
+		if (e.code === 'KeyW')
+		{
+			gameVar.playerUpPressed = true;
+		}
+		else if (e.code === 'KeyS')
+		{
+			gameVar.playerDownPressed = true;
+		}
+		if (e.code === "ArrowUp")
+		{
+			gameVar.player2UpPressed = true;
+		} 
+		else if (e.code === "ArrowDown")
+		{
+			gameVar.player2DownPressed = true;
+		}
+		
 	}
 }
 
-export function keyUpHandler(e, isFirstPlayer)
+export function keyUpHandler(e, local)
 {
-	if (e.code === "ArrowUp")
+	if (!local)
 	{
-		gameVar.playerUpPressed = false;
+		if (e.code === "ArrowUp" || e.code === 'KeyW')
+		{
+			gameVar.playerUpPressed = false;
+		}
+		else if (e.code === "ArrowDown" || e.code === 'KeyS')
+		{
+			gameVar.playerDownPressed = false;
+		}
 	}
-	else if (e.code === "ArrowDown")
+	else
 	{
-		gameVar.playerDownPressed = false;
-	}
-	if (e.code === "KeyW")
-	{
-		gameVar.player2UpPressed = false;
-	}
-	else if (e.code === "KeyS")
-	{
-		gameVar.player2DownPressed = false;
+		if (e.code === "KeyW")
+		{
+			gameVar.playerUpPressed = false;
+		}
+		else if (e.code === "KeyS")
+		{
+			gameVar.playerDownPressed = false;
+		}
+		if (e.code === "ArrowUp")
+		{
+			gameVar.player2UpPressed = false;
+		}
+		else if (e.code === "ArrowDown")
+		{
+			gameVar.player2DownPressed = false;
+		}
 	}
 }
 
 export function startBall(e)
 {
-	if (e.code == "Space" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart)
+	if (e.code == "Space" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart && gameVar.currentServer == 'player'
+		|| e.code == "Enter" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart && gameVar.currentServer == 'player2')
 	{
 		if (!gameVar.finishGame)
 		{

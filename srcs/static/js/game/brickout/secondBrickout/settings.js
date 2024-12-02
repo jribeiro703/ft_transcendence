@@ -1,11 +1,11 @@
 import brickVar2 from "./var.js";
 import { updatePowerUpSelectionB } from "./powerUp.js";
 import { updateLevelSelectionB } from "./level.js";
-import { showGameSelectionView } from "../gameView.js";
+import { showGameSelectionView } from "../../gameView.js";
 import { displayBallB } from "./ball.js";
 import { showGameBrickView } from "./game.js";
 import { showGameBrickMultiView } from "./game.js";
-import { showGameSelectionMultiView } from "../gameView.js";
+import { showGameSelectionMultiView } from "../../gameView.js";
 
 export function showSettingViewB(live)
 {
@@ -104,7 +104,7 @@ export function updateSettingB()
 }
 
 
-export function updateDifficultySelectionB(level)
+export function updateDifficultySelectionSB(level)
 {
 	if (level == 'easy')
 	{
@@ -122,8 +122,8 @@ export function updateDifficultySelectionB(level)
 	}
 	if (level == 'hard')
 	{
-		brickVar2.initDx = 7;
-		brickVar2.initDy = 7;
+		brickVar2.initDx = 8;
+		brickVar2.initDy = 8;
 		console.log('hard mode');
 		brickVar2.difficulty = 'hard';
 	}

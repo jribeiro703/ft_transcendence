@@ -1,12 +1,16 @@
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
-import { updatePowerUpSelectionB } from "./powerUp.js";
-import { updateLevelSelectionB } from "./level.js";
+import { updatePowerUpSelectionB as updatePowerUpSelectionFirst} from "./powerUp.js";
+import { updatePowerUpSelectionB as updatePowerUpSelectionSecond } from "./secondBrickout/powerUp.js";
+import { updateLevelSelectionB as updateLevelSelectionFirst} from "./level.js";
+import { updateLevelSelectionB as updateLevelSelectionSecond} from "./secondBrickout/level.js";
+import { updateDifficultySelectionSB  } from "./secondBrickout/settings.js";
 import { showGameSelectionView } from "../gameView.js";
 import { displayBallB } from "./ball.js";
 import { showGameBrickView } from "./game.js";
 import { showGameBrickMultiView } from "./game.js";
 import { showGameSelectionMultiView } from "../gameView.js";
+import { updatePowerUpB } from "./secondBrickout/powerUp.js";
 import gameVar from "../var.js";
 
 export function showSettingViewB(live)
@@ -65,6 +69,7 @@ export function showSettingMultiViewB(live)
 		// showGameBrickMultiView();
 		showGameSelectionMultiView();
 		updateSettingB();
+		brickVar.settingChanged = true;
 	});
 }
 export function updateSettingB()
@@ -83,15 +88,25 @@ export function updateSettingB()
 	}
 
 	if (brickVar.castle)
+	{
 		level = 'the Castle';
+		brickVar.currLevel = 'castle';
+	}
 	else if (brickVar.x)
+	{
 		level = 'X Level';
+		brickVar.currLevel = 'x';
+	}
 	else if (brickVar.invader)
+	{
 		level = 'Space Invader';
+		brickVar.currLevel = 'invader';
+	}
 	else 
 	{
 		level = 'Classic';
-		updateLevelSelectionB('clasic');
+		brickVar.currLevel = 'classic';
+		updateLevelSelectionFirst('clasic');
 	}
 
 	if (brickVar.powerUpEnable)
@@ -99,7 +114,7 @@ export function updateSettingB()
 	else
 	{
 		powerUp = "❌";
-		updatePowerUpSelectionB(false);
+		updatePowerUpSelectionFirst(false);
 	}
 
 	displayUpdateSetting(difficulty, powerUp, level);
@@ -124,12 +139,11 @@ export function updateDifficultySelectionB(level)
 	}
 	if (level == 'hard')
 	{
-		brickVar.initDx = 7;
-		brickVar.initDy = 7;
+		brickVar.initDx = 8;
+		brickVar.initDy = 8;
 		console.log('hard mode');
 		brickVar.difficulty = 'hard';
 	}
-	displayBallB();
 }
 
 
@@ -140,6 +154,9 @@ export function updateSettingSelectionForSecond()
 	brickVar2.currLevel = brickVar.currLevel;
 	brickVar2.powerUpEnable = brickVar.powerUpEnable;
 	brickVar2.difficulty = brickVar.difficulty;
+	updateDifficultySelectionSB(brickVar2.difficulty);
+	updatePowerUpSelectionSecond(brickVar2.powerUpEnable);
+	updateLevelSelectionSecond(brickVar2.currLevel);
 }
 export function displaySettingB()
 {
@@ -207,14 +224,14 @@ export function listenSettingPUB()
 	{
 		brickVar.withPowerUp.classList.add('selected');
 		brickVar.withoutPowerUp.classList.remove('selected');
-		updatePowerUpSelectionB(true);
+		updatePowerUpSelectionFirst(true);
 	});
 
 	brickVar.withoutPowerUp.addEventListener('click', () => 
 	{
 		brickVar.withoutPowerUp.classList.add('selected');
 		brickVar.withPowerUp.classList.remove('selected');
-		updatePowerUpSelectionB(false); 
+		updatePowerUpSelectionFirst(false); 
 	});
 }
 
@@ -254,7 +271,7 @@ export function listenSettingLevelB()
 		brickVar.castleLevel.classList.remove('selected');
 		brickVar.xLevel.classList.remove('selected');
 		brickVar.invaderLevel.classList.remove('selected');
-		updateLevelSelectionB('classic');
+		updateLevelSelectionFirst('classic');
 	});
 
 	brickVar.castleLevel.addEventListener('click', () =>
@@ -263,7 +280,7 @@ export function listenSettingLevelB()
 		brickVar.castleLevel.classList.add('selected');
 		brickVar.xLevel.classList.remove('selected');
 		brickVar.invaderLevel.classList.remove('selected');
-		updateLevelSelectionB('castle');
+		updateLevelSelectionFirst('castle');
 	});
 
 	brickVar.xLevel.addEventListener('click', () =>
@@ -272,7 +289,7 @@ export function listenSettingLevelB()
 		brickVar.castleLevel.classList.remove('selected');
 		brickVar.xLevel.classList.add('selected');
 		brickVar.invaderLevel.classList.remove('selected');
-		updateLevelSelectionB('x');
+		updateLevelSelectionFirst('x');
 	});
 
 	brickVar.invaderLevel.addEventListener('click', () =>
@@ -281,7 +298,7 @@ export function listenSettingLevelB()
 		brickVar.castleLevel.classList.remove('selected');
 		brickVar.xLevel.classList.remove('selected');
 		brickVar.invaderLevel.classList.add('selected');
-		updateLevelSelectionB('invader');
+		updateLevelSelectionFirst('invader');
 	});
 }
 
@@ -289,9 +306,11 @@ export function checkSettingB()
 {
 	if (brickVar.settingChanged === false)
 	{
-		updatePowerUpSelectionB(false); 
+		console.log("check setting");
+		updatePowerUpSelectionFirst(false); 
 		updateDifficultySelectionB('medium');
-		updateLevelSelectionB('classic')
+		updateDifficultySelectionSB('medium');
+		updateLevelSelectionFirst('classic')
 	}
 }	
 

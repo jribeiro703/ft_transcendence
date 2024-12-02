@@ -54,6 +54,7 @@ export function initControlLive()
 }
 export function initControl(local)
 {
+	removeEventListeners();
 	document.addEventListener("keydown", (e) => {
 		if (e.code === "Space")
 		{
@@ -64,16 +65,23 @@ export function initControl(local)
 	document.addEventListener("keydown", (e) => {
 		if (e.code === "ArrowUp" || e.code === "ArrowDown" || e.code === "KeyW" || e.code === "KeyS")
 		{
-			keyDownHandler(e);
+			keyDownHandler(e, local);
 		}
 	});
 
 	document.addEventListener("keyup", (e) => {
 		if (e.code === "ArrowUp" || e.code === "ArrowDown" || e.code === "KeyW" || e.code === "KeyS")
 		{
-			keyUpHandler(e);
+			keyUpHandler(e, local);
 		}
 	});
+
+	document.addEventListener("keydown", (e) => {
+		if (e.code === 'Enter')
+		{
+			startBall(e);
+		}
+	})
 }
 
 
@@ -98,6 +106,13 @@ export function initEventListenerRoom()
 
 export function displayRoomView()
 {
+
+	console.log("game: ", gameVar.game);
+	let level = null;
+	if (gameVar.game == 'pong')
+		level = 'TableTennis';
+	else if (gameVar.game == 'brickout')
+		level = 'Classic';
 	const mainContent = document.getElementById("mainContent");
 
 	mainContent.innerHTML = '';
@@ -123,7 +138,7 @@ export function displayRoomView()
 						<button id="settingBtn">Settings</button>
 						<div id="setting-container">
 							Difficulty: <span id="difficultyChoice">Medium</span><br>
-							Level: <span id="levelSelected">Table Tennis</span>
+							Level: <span id="levelSelected">${level}</span>
 						</div>
 					</div>
 					<button id="createRoomBtn" class="start-button">Create Room</button>

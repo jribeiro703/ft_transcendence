@@ -1,6 +1,8 @@
 import brickVar2 from "./var.js";
 import { resetBallB } from "./ball.js";
 import { addBtnB, addImageB } from "./level.js";
+import gameVar from "../../var.js";
+import brickVar from "../var.js";
 
 export function manageCollisionB()
 {
@@ -41,6 +43,30 @@ export function manageCollisionB()
 	}
 }
 
+export function compareScore()
+{
+
+}
+
+export function chechOpponent()
+{
+	if (gameVar.localGame)
+	{
+		if (brickVar.startTime === true)
+		{
+			brickVar2.ctx.fillText("Score : " + brickVar2.finalScore, brickVar2.canvasW / 2 - 100, brickVar2.canvasH / 6 + 20);
+			// addImageB('/static/css/images/nooo.png');
+			brickVar2.ctx.fillText("Waiting for opponent...", brickVar2.canvasW / 4, brickVar2.canvasH / 2);
+		}
+		else
+		{
+			compareScore();
+		}
+	}
+}
+
+
+
 export function loseLives()
 {
 	brickVar2.lives--;
@@ -48,13 +74,18 @@ export function loseLives()
 	{
 		brickVar2.finish = true;
 		brickVar2.finishLevel = true;
+		brickVar2.startTime = false;
 		saveScoreB();
 		brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
 		brickVar2.ctx.font = "35px Arial";
 		brickVar2.ctx.fillStyle = "white";	
-		brickVar2.ctx.fillText("You lose..." , brickVar2.canvasW / 2 - 100, brickVar2.canvasH / 6 - 30);
-		brickVar2.ctx.fillText("Score : " + brickVar2.finalScore, brickVar2.canvasW / 2 - 100, brickVar2.canvasH / 6 + 20);
-		addBtnB();
+		chechOpponent();
+		// brickVar2.ctx.fillText("You lose..." , brickVar2.canvasW / 2 - 100, brickVar2.canvasH / 6 - 30);
+		// brickVar2.ctx.fillText("Score : " + brickVar2.finalScore, brickVar2.canvasW / 2 - 100, brickVar2.canvasH / 6 + 20);
+		if (!gameVar.localGame)
+		{
+			addBtnB();
+		}
 		addImageB('/static/css/images/nooo.png');
 	}
 	else

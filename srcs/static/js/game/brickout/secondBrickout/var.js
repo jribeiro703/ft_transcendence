@@ -13,6 +13,7 @@ const brickVar2 = {
 
 	gameTime: 0,
 	gameTimer: null,
+	startTime: false,
 
 
 // -------------------------------------Ball-----------------

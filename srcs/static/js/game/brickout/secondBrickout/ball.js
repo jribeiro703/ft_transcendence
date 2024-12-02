@@ -9,9 +9,10 @@ export function startBallB(e)
 		{
             console.log("Starting ball2");
             brickVar2.gameStart = true;
+			brickVar2.startTime = true;
             brickVar2.dx = brickVar2.initDx;
-            brickVar2.dy = (Math.random() < 0.5 ? brickVar2.initDy : -brickVar2.initDy);
-			// displayBallB();
+            brickVar2.dy = -brickVar2.initDy;
+			displayBallB();
 			console.log("New dx, dy:", brickVar2.dx, brickVar2.dy);
 		}
 	else

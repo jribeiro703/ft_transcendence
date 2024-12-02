@@ -1,6 +1,7 @@
 import brickVar from "./var.js";
 import { resetBallB } from "./ball.js";
 import { addBtnB, addImageB } from "./level.js";
+import gameVar from "../var.js";
 
 export function manageCollisionB()
 {
@@ -44,9 +45,10 @@ export function manageCollisionB()
 export function loseLives()
 {
 	brickVar.lives--;
-	if(!brickVar.lives)
+	if(!brickVar.lives )
 	{
 		brickVar.finish = true;
+		brickVar.startTime = false;
 		brickVar.finishLevel = true;
 		saveScoreB();
 		brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);

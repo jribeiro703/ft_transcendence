@@ -1,5 +1,6 @@
 import { resetPowerUpB } from "./powerUp.js";
 import brickVar from "./var.js";
+import brickVar2 from "./secondBrickout/var.js";
 
 export function startBallB(e)
 {
@@ -7,11 +8,13 @@ export function startBallB(e)
 	{
 		if (!brickVar.finishLevel)
 		{
-            console.log("Starting ball");
             brickVar.gameStart = true;
+			brickVar.startTime = true;
             brickVar.dx = brickVar.initDx;
-            brickVar.dy = (Math.random() < 0.5 ? brickVar.initDy : -brickVar.initDy);
+            // brickVar.dy = (Math.random() < 0.5 ? brickVar.initDy : -brickVar.initDy);
+            brickVar.dy = -brickVar.initDy;
 			displayBallB();
+			console.log("New dx, dy:", brickVar.dx, brickVar.dy);
         }
 		else
 		{

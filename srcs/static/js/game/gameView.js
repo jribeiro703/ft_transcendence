@@ -20,6 +20,8 @@ export function showGameSelectionMultiView()
 	const maincontent = document.getElementById('mainContent');
 	maincontent.innerHTML = '';
 	const gameSelection = document.createElement('div');
+	const pongUrl = "/static/css/images/ttLevel.png";
+	const brickUrl = "/static/css/images/brickout.png";
 
 	updateImageUrl();
 
@@ -65,10 +67,10 @@ export function showGameSelectionMultiView()
                         <div id="settingsContainer" class="settings-info2">
                             <div class="settings-inline">
                                 <button id="settingBtn2" class="settingsSelect-button2">Settings</button>
-                                <div class="settings-column2" id="settings-column">
+                                <div class="settings-column2" id="settings-column2">
                                     <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
                                     <p>Power-Up: <span id="powerupChoice">❌</span></p>
-                                    <p>Level: <span id="levelSelected">Table Tennis</span></p>
+                                    <p>Level: <span id="levelSelected">Classic</span></p>
                                 </div>
                             </div>
                         </div>
@@ -86,46 +88,24 @@ export function showGameSelectionMultiView()
                 <div class="game-column">
                     <div class="game-title3">
 						<div class="title-image-container">
-							<img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
+							<img id="gameImage" src="${pongUrl}" alt="pongGame">
       		                <h2 id="gameTitle">PONG GAME</h2>
 						</div>
                     </div>
-                    <div class="game-settings3">
-                        <div id="settingsContainer" class="settings-info2">
-                            <div class="settings-inline">
-                                <button id="settingBtn3" class="settingsSelect-button2">Settings</button>
-                                <div class="settings-column2" id="settings-column">
-                                    <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
-                                    <p>Level: <span id="levelSelected">Table Tennis</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="game-play2">
-                        <button id="playBtn3" class="startSelect-button">Play</button>
+                   <div class="game-play2">
+                        <button id="playBtn3" class="startSelect-button">Join Lobby</button>
                     </div>
                 </div>
                 <!-- BRICKOUT Column -->
                 <div class="game-column">
                     <div class="game-title3">
 						<div class="title-image-container">
-							<img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
+							<img id="gameImage" src="${brickUrl}" alt="brickGame">
       		                <h2 id="gameTitle">BRICKOUT GAME</h2>
 						</div>
                     </div>
-                    <div class="game-settings3">
-                        <div id="settingsContainer" class="settings-info2">
-                            <div class="settings-inline">
-                                <button id="settingBtn4" class="settingsSelect-button2">Settings</button>
-                                <div class="settings-column2" id="settings-column">
-                                    <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
-                                    <p>Level: <span id="levelSelected">Table Tennis</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="game-play2">
-                        <button id="playBtn4" class="startSelect-button">Play</button>
+                        <button id="playBtn4" class="startSelect-button">Join Lobby</button>
                     </div>
                 </div>
             </div>
@@ -139,6 +119,9 @@ export function showGameSelectionMultiView()
 	gameVar.settingBtn4 = document.getElementById('settingBtn4');
 	gameVar.playBtn = document.getElementById('playBtn');
 	gameVar.playBtn2 = document.getElementById('playBtn2');
+	gameVar.playBtn3 = document.getElementById('playBtn3');
+	gameVar.playBtn4 = document.getElementById('playBtn4');
+	
 	
 	listenSettingMultiBtn();
 	listenPlayMultiBtn();
@@ -147,7 +130,7 @@ export function showGameSelectionMultiView()
 export function showGameSelectionView()
 {
 	gameVar.liveMatch = false;
-	initControl();
+	// initControl();
 	history.pushState({ view: 'game'}, '', `?view=solo`);
 	const maincontent = document.getElementById('mainContent');
 	maincontent.innerHTML = '';
@@ -323,7 +306,17 @@ export function showGameView()
 }
 
 
-
+export function cleanupTimers()
+{
+    if (brickVar.gameTimer)
+	{
+        clearInterval(brickVar.gameTimer);
+    }
+    if (brickVar2.gameTimer)
+	{
+        clearInterval(brickVar2.gameTimer);
+    }
+}
 
 export function rematchView()
 {
