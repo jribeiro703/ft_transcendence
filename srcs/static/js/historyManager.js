@@ -8,6 +8,8 @@ import { renderRegisterForm } from "./user/js/renderRegisterForm.js";
 import { renderSettingsPage } from "./user/js/renderSettingPage.js";
 import { isAuthenticated } from "./user/token.js";
 import { updateUserAvatar } from "./user/tools.js";
+import { showGameSelectionView, showGameSelectionMultiView,  } from "./game/gameView.js"
+
 
 
 const authPages = {
@@ -25,6 +27,11 @@ const userPages = {
 	// inbox: renderInboxPage,
 }
 
+const gamePages = {
+	soloGame: showGameSelectionView,
+	multiGame: showGameSelectionMultiView,
+}
+
 async function renderPage(page, updateHistory = true) {
 	
 	let renderFunction;
@@ -32,9 +39,9 @@ async function renderPage(page, updateHistory = true) {
 	await updateUserAvatar();
 	
 	if (authenticated)
-		renderFunction = userPages[page];
+		renderFunction = userPages[page] || gamePages[page];
 	else
-		renderFunction = authPages[page];
+		renderFunction = authPages[page] || gamePages[page];
 
 	if (!renderFunction) {
 		history.replaceState({ page: "home" }, "home", "#home");

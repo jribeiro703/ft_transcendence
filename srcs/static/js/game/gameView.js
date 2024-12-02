@@ -148,7 +148,7 @@ export function showGameSelectionView()
 {
 	gameVar.liveMatch = false;
 	initControl();
-	history.pushState({ view: 'game'}, '', `?view=solo`);
+	// history.pushState({ view: 'game'}, '', `?view=solo`);
 	const maincontent = document.getElementById('mainContent');
 	maincontent.innerHTML = '';
 	const gameSelection = document.createElement('div');
@@ -270,7 +270,7 @@ export function drawScoreBoard()
 
 export function showGameView()
 {
-	history.pushState({ view: 'game'}, '', `?view=solo/pong`);
+	// history.pushState({ view: 'game'}, '', `?view=solo/pong`);
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = ``;
 	const gameView = document.createElement('div');
