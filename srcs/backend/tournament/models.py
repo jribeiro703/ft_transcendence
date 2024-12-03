@@ -2,8 +2,10 @@ from django.db import models
 # ensures that _ is defined as a shortcut for the gettext function for internationalization (i18n)
 # helps for lazy references to avoid circular dependencies
 from django.utils.translation import gettext as _ 
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, RegexValidator
 from .validators import alphanumeric
+
+alphanumeric_with_spaces = RegexValidator(r'^[0-9a-zA-Z\s]*$', 'Only alphanumeric characters and spaces are allowed.')
 
 class Tournament(models.Model):
 	TOURNAMENT_STATUS_CHOICES = [
@@ -15,7 +17,7 @@ class Tournament(models.Model):
 	status = models.CharField(
 		max_length=20, default="upcoming"
 	)
-	name = models.CharField("tournamentname", max_length=30, unique=True, blank=False, validators=[MinLengthValidator(3), alphanumeric])
+	name = models.CharField("tournamentname", max_length=30, unique=True, blank=False, validators=[MinLengthValidator(3), alphanumeric_with_spaces])
 	created_by = models.ForeignKey(
 		'user.User', related_name='created_tournaments', on_delete=models.CASCADE
 	)
