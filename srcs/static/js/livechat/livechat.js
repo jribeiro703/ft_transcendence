@@ -248,6 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function toggleChat() {
   const slidingDiv = document.getElementById("livechat");
   const chatIcon = document.querySelector("[data-chat-icon]");
+  const messageInput = document.querySelector("#chat-message-input");
 
   slidingDiv.classList.toggle("visible");
   slidingDiv.classList.toggle("hide-children");
@@ -256,6 +257,12 @@ function toggleChat() {
   chatIcon.innerHTML = slidingDiv.classList.contains("visible")
     ? chatIconDots
     : chatIconFill;
+
+  if (slidingDiv.classList.contains("visible")) {
+    setTimeout(() => {
+      messageInput.focus();
+    }, 100);
+  }
 }
 
 document
