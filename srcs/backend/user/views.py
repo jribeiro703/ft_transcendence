@@ -2,7 +2,7 @@ import requests
 from django.urls import reverse
 from django.db.models import Q
 from django.views import View
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.utils import timezone
@@ -161,6 +161,7 @@ class UserProfileView(APIView):
 			"username": user.username,
 			"avatar": user.avatar.url,
 			"alias": user.alias,
+			"is_online": user.is_online,
 			"total_matches": total_matches,
 			"won_matches": won_matches,
 			"match_history": match_history
@@ -310,7 +311,8 @@ class OtpVerificationView(APIView):
 			status=status.HTTP_200_OK
 		)
 		set_refresh_token_in_cookies(response, refresh_token)
-		
+		user.is_online = True
+		user.save()
 		return response
 
 # ------------------------------LOGIN 42 ENDPOINTS--------------------------------	
@@ -326,7 +328,7 @@ def get_42_auth_url(request):
 	except Exception as e:
 		return Response({"message": "failed to get 42 auth url"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-@api_view(['POST', 'GET'])
+@api_view(['GET'])
 @permission_classes([AllowAny])
 def login42(request):
 	code = request.query_params.get('code')
@@ -341,46 +343,42 @@ def login42(request):
 		"client_secret": client_secret,
 		"code": code,
 		"redirect_uri": redirect_uri,
-		"scope": "public profile"
 	}
 
-	try:
+	try:                                        
 		response = requests.post(token_url, data=data)
 		token_data = response.json()
 
 		if "access_token" not in token_data:
-			return Response({"message": "Failed to authenticate with 42"}, status=status.HTTP_400_BAD_REQUEST)
+			print("token_data = ", token_data)
+			response = redirect(reverse('login'))
+			return response
 		
 		user_info = requests.get('https://api.intra.42.fr/v2/me', 
 			headers={'Authorization': f"Bearer {token_data['access_token']}"})
 		user_data = user_info.json()
 
+		print("user_data['image_url'] = ", user_data['image_url'])
+
 		user, created = User.objects.get_or_create(
 			email=user_data['email'],
 			defaults={
 				'username': user_data['login'],
+				'avatar': user_data['image_url'],
 				'is_active': True,
 			}
 		)
-
+		response = redirect("https://localhost:8081/#home")
 		access_token, refresh_token = generate_tokens_for_user(user)
-		response = Response({
-			"message": "Connection successful !",
-			"access_token": access_token,
-			},
-			status=status.HTTP_200_OK
-		)
 		set_refresh_token_in_cookies(response, refresh_token)
-		
 		return response
 	
 	except Exception as e:
-		return Response({"message": "An unknown error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def login42_callback(request):
-	code = request.data.get('code')
+		print("login42 error: ", e)
+		login_url = reverse('login')
+		print("login_url = ", login_url)
+		response = redirect("https://localhost:8081/#home")
+		return response
 
 # ------------------------------LOGOUT ENDPOINTS--------------------------------	
 
@@ -396,6 +394,9 @@ class LogoutView(APIView):
 				"message": "Logout successfully !",
 				}, status=status.HTTP_205_RESET_CONTENT)
 			response.delete_cookie('refresh_token')
+			user = request.user
+			user.is_online = False
+			user.save()
 			return response
 
 		except exceptions.AuthenticationFailed:

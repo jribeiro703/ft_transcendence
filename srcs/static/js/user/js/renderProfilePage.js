@@ -10,6 +10,7 @@ function createProfileContent() {
 					<img id="avatar" src="${DEFAULT_AVATAR}" alt="User Avatar" class="avatar" />
 					<h4 id="username">Username</h4>
 					<p id="alias" class="alias"></p>
+					<p id="isOnline" class="isOnline"></p>
 				</div>
 				<div class="stats">
 					<strong>Total: </strong> <span id="totalMatches">0</span>
@@ -39,6 +40,7 @@ export async function renderProfilePage() {
 		const data = responseObject.data;
 		document.getElementById('username').textContent = data.username;
 		document.getElementById('avatar').src = data.avatar;
+		document.getElementById('isOnline').textContent = data.is_online ? "Online" : "Offline";
 		if (data.alias)
 			document.getElementById('alias').textContent = `(${data.alias})`;
 		document.getElementById('totalMatches').textContent = data.total_matches;

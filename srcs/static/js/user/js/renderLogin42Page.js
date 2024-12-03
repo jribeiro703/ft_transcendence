@@ -21,16 +21,16 @@ import { renderPage } from "../../historyManager.js";
 //     }
 // }
 
-// function checkForAuthCode() {
-// 	const urlParams = new URLSearchParams(window.location.search);
-// 	if (urlParams.has('code')) {
-// 	    handleAuth42Callback();
-// 	}
-// }
+function checkForAuthCode() {
+	const urlParams = new URLSearchParams(window.location.search);
+	if (urlParams.has('code')) {
+	    handleAuth42Callback();
+	}
+}
 
 async function renderLogin42Page() {
 
-    const responseObject = await fetchData(`/user/login42/auth_url/`, "GET", null, false, "simple");
+    let responseObject = await fetchData(`/user/login42/auth_url/`, "GET", null, false, "simple");
     if (responseObject.status === 200 && responseObject.data.auth_url) {
 		window.location.href = responseObject.data.auth_url;
     } else {
