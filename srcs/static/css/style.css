@@ -347,6 +347,39 @@ p
 
 #startGameBtn, #quickGameBtn, #tournamentGameBtn
 {
+	position: absolute;
+	/* top: 50%; */
+	left: 45%;
+	/* transform: translate(-50%, -50%); */
+	width: 200px;
+    height: 60px;
+    font-size: 20px;
+    background-color: #0A1730;
+    color: #FEFCFF; 
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.4s;
+	text-align: center;
+    line-height: 60px; 
+}
+
+#saveBtn:hover
+{
+	color: #1F2E4D;
+    background-color: #6DC7C1;
+    border-color: #000000;
+}
+
+#saveBtn:active
+{
+	color: #1F2E4D;
+    background-color: #6DC7C1;
+    border-color: #000000;
+}
+
+#startGameBtn, #quickGameBtn, #tournamentGameBtn
+{
 	width: 200px;
 	height: 60px;
 	font-size: 20px;
@@ -835,6 +868,233 @@ button:disabled
 {
 	background-color: #555;
 	cursor: not-allowed;
+}
+.refresh 
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 0.9em;
+	color: #ccc;
+	padding-top: 10px;
+}
+
+
+.host-server input 
+{
+	width: 100%;
+	padding: 8px;
+	margin: 5px 0;
+	border-radius: 5px;
+	border: none;
+}
+.settings 
+{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 0;
+}
+
+.settings button 
+{
+	background-color: #455F78;
+	border: none;
+	color: white;
+	padding: 5px 8px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.start-button 
+{
+	background-color: #1A1A40;
+	border: none;
+	color: white;
+	padding: 10px;
+	font-size: 1.2em;
+	width: 100%;
+	border-radius: 5px;
+	cursor: pointer;
+	margin-top: 10px;
+}
+
+#refreshBtn 
+{
+	display: flex !important;
+	justify-content: center !important;
+	align-items: center !important;
+	background-color: #1F2E4D;
+	border: none;
+	color: #6DC7C1;
+	padding: 8px;
+	border-radius: 5px;
+	cursor: pointer;
+	text-align: center;
+	margin-top: 10px;
+}
+
+/* ---------------------------Brickout--------------------------------- */
+#brickoutCanvas
+{
+    display: block; 
+    margin: 0 auto; 
+    border: 2px solid #FEFCFF;
+    border-radius: 8px; 
+    background-color: #1A1A40; 
+}
+
+#scoreCanvas
+{
+    background-color: #252525;
+	border: 3px solid #FEFCFF;
+    border-bottom: 5px solid #455F78;
+
+    margin-bottom: 10px;
+}
+
+@font-face {
+    font-family: 'fontScore';
+    src: url('/static/css/font/scoreboard-webfont.woff2') format('truetype');
+}
+
+#rematchBtn, #quitGameBtn, #nextLevelBtn,  #restartLevelBtn, #quitBtn, #returnLobbyBtn
+{
+	display: flex;
+	justify-content: center;
+	max-width: 800px;
+	padding-top: 30px;
+	gap: 50px;
+	align-items: center;
+	margin: 0 auto;
+}
+
+#rematchBtn:not(:disabled):hover, #quitGameBtn:hover, #returnLobbyBtn:hover
+{
+    display: block; 
+    margin: 0 auto; 
+    border: 2px solid #FEFCFF;
+    border-radius: 8px; 
+    background-color: #1A1A40; 
+}
+
+#rematchBtn:not(:disabled):active, #quitGameBtn:active, #returnLobbyBtn:active
+{
+    background-color: #003372; 
+    transform: scale(0.95);
+}
+button:disabled
+{
+    background-color: grey;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ------------------- Room View ---------------------------- */
+
+.container-room
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 200px;
+	padding: 20px;
+	background: #0A1730;
+	border-radius: 10px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.server-list, .host-server 
+{
+	background: #455F78;
+	border-radius: 10px;
+	padding: 20px;
+	width: 500px;
+	color: white;
+}
+
+.server-list h2, .host-server h2 
+{
+	margin: 0;
+	padding: 10px 0;
+	text-align: center;
+	font-size: 1.2em;
+	color: #ffffff;
+}
+
+.host-server h3
+{
+	text-align: center;
+	padding: 30px 0;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	font-size: 1.4em;
+	color: #6DC7C1;
+}
+
+.server-item {
+    background-color: #1F2E4D;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.room-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #455F78;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.room-name {
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.room-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    color: #ccc;
+    padding-top: 5px;
+}
+
+.room-players, .room-difficulty, .room-level, .room-status {
+    font-size: 0.9em;
+}
+
+.joinRoomBtn {
+    /* Keep your existing button styles */
+    background-color: #455F78;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.server-item button 
+{
+	background-color: #455F78;
+	border: none;
+	color: white;
+	padding: 5px 10px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.server-item button:disabled 
+{
+	background-color: #555;
+	cursor: not-allowed;
+}
+
+#noRoomsMessage
+{
+	font-size: 20px;
 }
 .refresh 
 {

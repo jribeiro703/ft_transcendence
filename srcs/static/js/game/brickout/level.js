@@ -1,8 +1,9 @@
 import brickVar from "./var.js";
-import { initListenerB } from "./game.js";
+import gameVar from "../pong/var.js";
+import { initListenerB, showGameBrickMultiView } from "./game.js";
 import { initBricksB } from "./brick.js";
 import { sendScoreB } from "./manage.js";
-// import { startGameB } from "../start.js";
+import { startGameB } from "./control.js";
 
 export function youWinB()
 {
@@ -117,24 +118,45 @@ export function addImageB(url)
 
 export function addBtnB()
 {
-	if (!brickVar.finish)
+	if (!gameVar.localGame)
 	{
-		const mainContent = document.getElementById("mainContent");
-		if (!mainContent)
+		if (!brickVar.finish)
 		{
-			console.error("Container element not found!");
-			return;
+			const mainContent = document.getElementById("mainContent");
+			if (!mainContent)
+			{
+				console.error("Container element not found!");
+				return;
+			}
+			const btn = document.createElement('div');
+			btn.innerHTML = `
+				<div class="nextLevel" id="nextLevel">
+					<button id="nextLevelBtn">Next Level</button> 
+					<button id="restartLevelBtn">Restart Game</button> 
+					<button id="quitBtn">Return Home</button>
+				</div>
+			`;
+			mainContent.appendChild(btn);
+			checkBtnB('nextLevel');
 		}
-		const btn = document.createElement('div');
-		btn.innerHTML = `
-			<div class="nextLevel" id="nextLevel">
-				<button id="nextLevelBtn">Next Level</button> 
+		else
+		{
+			const mainContent = document.getElementById("mainContent");
+			if (!mainContent)
+			{
+				console.error("Container element not found!");
+				return;
+			}
+			const btn = document.createElement('div');
+			btn.innerHTML = `
+			<div class="finish id="finish">
 				<button id="restartLevelBtn">Restart Game</button> 
 				<button id="quitBtn">Return Home</button>
 			</div>
-		`;
-		mainContent.appendChild(btn);
-		checkBtnB('nextLevel');
+			`;
+			mainContent.appendChild(btn);
+			checkBtnB("finish");
+		}
 	}
 	else
 	{
@@ -147,16 +169,14 @@ export function addBtnB()
 		const btn = document.createElement('div');
 		btn.innerHTML = `
 		<div class="finish id="finish">
-			<button id="restartLevelBtn">Restart Game</button> 
+			<button id="rematchBtn">Rematch</button> 
 			<button id="quitBtn">Return Home</button>
 		</div>
 		`;
 		mainContent.appendChild(btn);
-		checkBtnB("finish");
+		checkBtnB("localRematch");	
 	}
 }
-
-
 
 export function checkBtnB(status)
 {
@@ -182,7 +202,17 @@ export function checkBtnB(status)
 		if (quitBtn)
 			quitBtn.addEventListener('click', () => document.location.reload());
 	}
+	else if (status === 'localRematch')
+	{
+		const rematchBtn = document.getElementById('rematchBtn');
+		const quitBtn = document.getElementById('quitBtn');
+		if (rematchBtn)
+			rematchBtn.addEventListener('clcik', () => showGameBrickMultiView);
+		if (quitBtn)
+			quitBtn.addEventListener('click', () => document.location.reload());
+	}
 }
+
 export function clearBtnB()
 {
 	const nextLevel = document.getElementById("nextLevel");

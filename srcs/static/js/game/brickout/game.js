@@ -1,22 +1,22 @@
 import brickVar from './var.js';
 import brickVar2 from './secondBrickout/var.js';
-import { collisionDetectionB, drawBricksB, initBricksB } from './brick.js'
+import { collisionDetectionB, drawBricksB} from './brick.js'
 import { drawBallB, drawPaddleB } from './draw.js';
-import { keyDownHandlerB, keyUpHandlerB, mouseMoveHandlerB} from './control.js';
-import { initBallB, updateBallPositionB, handleBallB } from './ball.js';
+import { keyDownHandlerB, keyUpHandlerB} from './control.js';
+import { updateBallPositionB, handleBallB } from './ball.js';
 import { manageCollisionB, manageMoveB } from './manage.js';
-import { collectPowerUpB, createPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
-// import { startGameB } from '../start.js';
+import { collectPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
 import { drawScoreBoardB } from './draw.js';
 import { startBallB as startBallFirst } from './ball.js';
 import { startBallB as startBallSecond } from './secondBrickout/ball.js'
 import { startGameB as startGameFirst} from './control.js';
 import { startGameB as startGameSecond } from './secondBrickout/control.js';
 import { updateSettingSelectionForSecond } from './settings.js';
+import { checkSettingB } from './settings.js';
 
 export function showGameBrickView()
 {
-
+	console.log("brickview");
 	// history.pushState({ view: 'game'}, '', `?view=solo/brickout`);
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = '';
@@ -36,11 +36,7 @@ export function showGameBrickView()
         return;
     }
 	brickVar.canvas = canvas;
-	if (!brickVar.canvas)
-		console.log("nuuuulll canvas");
 	brickVar.ctx = canvas.getContext("2d");
-	if (!brickVar.ctx)
-		console.log("nuuuulll");
 	canvas.width = brickVar.canvasW;
 	canvas.height = brickVar.canvasH;
 	canvas.style.width = `${brickVar.canvasW}px`;
@@ -64,8 +60,6 @@ export function showGameBrickView()
 
 	brickVar.initialize = true;
 }
-
-
 export function showGameBrickMultiView()
 {
 	console.log("brickMultiview");
@@ -100,8 +94,8 @@ export function showGameBrickMultiView()
 
 	var scoreCanvas = document.getElementById('scoreCanvas');
 	brickVar.scoreCtx = scoreCanvas.getContext('2d');
-	scoreCanvas.width = brickVar.scoreCanvW;
-	scoreCanvas.height = brickVar.scoreCanvH;
+	scoreCanvas.width = brickVar.scoreCanvW
+	scoreCanvas.height = brickVar.scoreCanvH + 100;
 
 	brickVar.gameTime = 0;
     brickVar.gameTimer = setInterval(() =>
@@ -112,9 +106,16 @@ export function showGameBrickMultiView()
         }
     }, 1000);
 
-    scoreCanvas.style.marginBottom = '10px';
+	brickVar2.gameTime = 0;
+    brickVar2.gameTimer = setInterval(() =>
+	{
+        if (brickVar2.startTime)
+		{
+            brickVar2.gameTime++;
+        }
+    }, 1000);
 
-	brickVar.initialize = true;
+    scoreCanvas.style.marginBottom = '10px';
 
 	var canvas2 = document.getElementById("brickoutCanvas2");
 	if (!canvas2)
@@ -128,22 +129,6 @@ export function showGameBrickMultiView()
 	canvas2.height = brickVar2.canvasH;
 	canvas2.style.width = `${brickVar2.canvasW}px`;
     canvas2.style.height = `${brickVar2.canvasH}px`;
-
-	var scoreCanvas = document.getElementById('scoreCanvas');
-	brickVar.scoreCtx = scoreCanvas.getContext('2d');
-	scoreCanvas.width = brickVar.scoreCanvW;
-	scoreCanvas.height = brickVar.scoreCanvH;
-
-	brickVar.gameTime = 0;
-    brickVar.gameTimer = setInterval(() =>
-	{
-        if (brickVar.startTime)
-		{
-            brickVar.gameTime++;
-        }
-    }, 1000);
-
-    scoreCanvas.style.marginBottom = '10px';
 
 	brickVar.initialize = true;
 	brickVar2.initialize = true;
@@ -160,7 +145,8 @@ export function initListenerB()
     });
 
     document.addEventListener("keydown", (e) => {
-        if (e.code === "ArrowRight" || e.code === "ArrowLeft" || e.code === 'KeyA' || e.code === 'KeyD'){
+        if (e.code === "ArrowRight" || e.code === "ArrowLeft" || e.code === 'KeyA' || e.code === 'KeyD') {
+			console.log("pppp");
             keyDownHandlerB(e);
         }
     });
@@ -212,6 +198,8 @@ export function initListenerMultiB()
     });
 
 	updateSettingSelectionForSecond();
+	
+	checkSettingB();
 	if (brickVar.classic)
 	{
 		startGameFirst("classic");
@@ -230,30 +218,21 @@ export function initListenerMultiB()
 	else if (brickVar.invader)
 	{
 		startGameFirst('invader');
-		startGameSecond('invader;')
+		startGameSecond('invader');
 	}
 	else
 	{
 		startGameFirst('classic');
 		startGameSecond('classic');
 	}
-
 }
-
 
 function removeEventListenersB()
 {
     document.removeEventListener("keydown", keyDownHandlerB);
     document.removeEventListener("keyup", keyUpHandlerB);
-    document.removeEventListener("keydown", startBallFirst, startBallSecond);
-}
-
-
-
-function initVar()
-{
-	console.log("dx :", brickVar.initDx);
-	console.log("dy :", brickVar.initDy);
+    document.removeEventListener("keydown", startBallFirst);
+    document.removeEventListener("keydown", startBallSecond);
 }
 
 function baseDrawB()
@@ -263,8 +242,6 @@ function baseDrawB()
 	drawBricksB();
 	drawBallB();
 	drawPaddleB();
-	// drawScoreB();
-	// drawLivesB();
 }
 
 export function drawB()
@@ -283,7 +260,6 @@ export function drawB()
 		else
 		{
 			handleBallB();
-			// displayBallB();
 		}
 		manageMoveB();
 		updateBallPositionB();

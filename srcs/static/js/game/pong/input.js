@@ -3,22 +3,6 @@ import { sendDirectionData, sendGameData } from "./network.js";
 
 export function keyDownHandler(e, local)
 {
-	// if (e.code === "ArrowUp")
-	// {
-	// 	gameVar.playerUpPressed = true;
-	// } 
-	// else if (e.code === "ArrowDown")
-	// {
-	// 	gameVar.playerDownPressed = true;
-	// }
-	// if (e.code === 'KeyW')
-	// {
-	// 	gameVar.player2UpPressed = true;
-	// }
-	// else if (e.code === 'KeyS')
-	// {
-	// 	gameVar.player2DownPressed = true;
-	// }
 	if (!local)
 	{
 		if (e.code === "ArrowUp" || e.code === 'KeyW')
@@ -84,27 +68,12 @@ export function keyUpHandler(e, local)
 			gameVar.player2DownPressed = false;
 		}
 	}
-	// if (e.code === "ArrowUp")
-	// {
-	// 	gameVar.playerUpPressed = false;
-	// }
-	// else if (e.code === "ArrowDown")
-	// {
-	// 	gameVar.playerDownPressed = false;
-	// }
-	// if (e.code === "KeyW")
-	// {
-	// 	gameVar.player2UpPressed = false;
-	// }
-	// else if (e.code === "KeyS")
-	// {
-	// 	gameVar.player2DownPressed = false;
-	// }
 }
 
 export function startBall(e)
 {
-	if (e.code == "Space" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart)
+	if (e.code == "Space" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart && gameVar.currentServer == 'player'
+		|| e.code == "Enter" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart && gameVar.currentServer == 'player2')
 	{
 		if (!gameVar.finishGame)
 		{
@@ -136,41 +105,4 @@ export function startBallLive(e)
             sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime);
 		}
 	}
-}
-
-export function displayVar()
-{
-	console.log("-------------");
-	console.log("player id: ", gameVar.playerIdx);
-	console.log("currentServer: ", gameVar.currentServer);
-	console.log("gameStart: ", gameVar.gameStart);
-	console.log("game ready: ", gameVar.gameReady);
-}
-
-export function displayBall()
-{
-	console.log("x: ", gameVar.x);
-	console.log("y: ", gameVar.y);
-	console.log("dx: ", gameVar.dx);
-	console.log("dy: ", gameVar.dy);
-}
-
-export function preventNavTouch()
-{
-	document.addEventListener('keydown', function(e)
-	{
-		const keysToPrevent =
-		[
-			'ArrowUp',
-			'ArrowDown',
-			'ArrowLeft',
-			'ArrowRight',
-			' ' // Espace
-		];
-		
-		if (keysToPrevent.includes(e.key))
-		{
-			e.preventDefault();
-		}
-	}, false);
 }

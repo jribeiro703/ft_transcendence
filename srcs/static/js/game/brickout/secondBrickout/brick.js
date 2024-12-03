@@ -41,7 +41,6 @@ export function collisionDetectionB()
 export function initBricksB(pattern)
 {
     brickVar2.brick = [];
-    
     switch(pattern)
 	{
         case brickVar2.PATTERNS.CLASSIC:
@@ -112,19 +111,6 @@ function createCastlePattern()
 	countBrick(pattern);
 	brickVar2.currLevel = 'castle';
 	brickVar2.finishLevel = false;
-}
-
-function countBrick(pattern)
-{
-	let brickCount = 0;
-	for(let c = 0; c < pattern.length; c++)
-	{
-        for(let r = 0; r < pattern[0].length; r++)
-		{
-            if (pattern[c][r] === 1) brickCount++;
-        }
-    }
-    brickVar2.totalBrick = brickCount;
 }
 
 function createXPattern() 
@@ -207,9 +193,6 @@ function createInvaderPattern()
 	brickVar2.finishLevel = false;
 }
 
-
-
-
 export function drawBricksB()
 {
 	for(var c = 0; c < brickVar2.brick.length; c++)
@@ -261,4 +244,17 @@ function changeColor()
 		brickVar2.gradient.addColorStop(0.66, "yellow");
 		brickVar2.gradient.addColorStop(1, "green");
 	}
+}
+
+function countBrick(pattern)
+{
+	let brickCount = 0;
+	for(let c = 0; c < pattern.length; c++)
+	{
+        for(let r = 0; r < pattern[0].length; r++)
+		{
+            if (pattern[c][r] === 1) brickCount++;
+        }
+    }
+    brickVar2.totalBrick = brickCount;
 }

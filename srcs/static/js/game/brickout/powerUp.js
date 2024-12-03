@@ -1,5 +1,3 @@
-import { showGameSelectionView } from "../gameView.js";
-import gameVar from "../var.js";
 import brickVar from "./var.js";
 
 const img = new Image();
@@ -151,17 +149,15 @@ export function checkPowerUpB()
 		puSizeMB();
 	else if (brickVar.currentPowerUp?.type === "invincible")
 		puInvicibleB();
-	else if (brickVar.currentPowerUp?.type === 'extraLife')
+	else if (brickVar.currentPowerUp?.type === "extraLife")
 		puExtraLife();
 }
 
 function puExtraLife()
 {
-
 	brickVar.lives++;
 	brickVar.powerUpActive = false;
 	newPowerUpB();
-	
 }
 
 function puSpeedB()

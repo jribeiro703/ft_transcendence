@@ -1,11 +1,12 @@
 import gameVar from "./var.js";
-import { drawPowerUp, collectPowerUp, updatePowerUp, newPowerUp, delayDrawPu } from "./powerUp.js";
-import { manageServer, manageMove, manageMoveLive, manageRealCollision, manageCollisionLive } from "./manage.js";
+import { drawPowerUp, collectPowerUp, updatePowerUp, newPowerUp } from "./powerUp.js";
+import { manageServer } from "./manage.js";
+import { manageCollisionLive, manageRealCollision } from "./collision.js";
 import { aiMove} from "./ai.js";
 import { checkball } from "./check.js";
 import { drawFootball } from "./foot.js";
 import { drawTennisCourt } from "./tennis.js";
-import { drawScoreBoard } from "./gameView.js";
+import { manageMoveLive, manageMove } from './movement.js';
 
 export function initDraw()
 {
@@ -20,12 +21,55 @@ export function initDraw()
 		drawTennisCourt();
 }
 
+export function addBtn()
+{
+	const mainContent = document.getElementById("mainContent");
+	if (!mainContent)
+	{
+		console.error("Container element not found!");
+		return;
+	}
+	const btn = document.createElement('div');
+	btn.innerHTML = `
+	<div class="finish id="finish">
+		<button id="returnLobbyBtn" class="">Return Lobby</button> 
+		<button id="quitBtn">Return Home</button>
+	</div>
+	`;
+	mainContent.appendChild(btn);
+
+	const returnLobbtyBtn = document.getElementById("returnLobbyBtn");
+	const quitBtn = document.getElementById("quitBtn");
+		if (returnLobbtyBtn)
+			returnLobbtyBtn.addEventListener("click", initLobbyView);
+		if (quitBtn)
+			quitBtn.addEventListener('click', () => document.location.reload());
+
+}
+
+
+export function kickOut()
+{
+	console.log("kickout");
+	cancelAnimationFrame(gameVar.animationFrame);
+	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+	gameVar.ctx.font = "35px Arial";
+	gameVar.ctx.fillStyle = "red";	
+	gameVar.ctx.fillText("Opponent has rage quit" , gameVar.canvasW / 4, gameVar.canvasH / 6);
+	add
+	addBtn();
+}
 
 export function drawLive()
 {
+	console.log("left after: ", gameVar.clientLeft);
+	if (gameVar.clientLeft)
+	{
+		kickOut();
+		return ;
+	}
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
-	drawScoreBoard();
 	if (gameVar.gameStart)
 		manageCollisionLive();
 	else
@@ -55,7 +99,6 @@ export function draw()
 		cancelAnimationFrame(gameVar.animationFrame);
 	gameVar.animationFrame = requestAnimationFrame(draw);
 }
-
 
 export function checkPaddles()
 {
@@ -252,3 +295,48 @@ export function drawBall()
     gameVar.ctx.closePath();
 }
 
+function loadCustomFont()
+{
+    return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');
+}
+
+export function drawScoreBoard()
+{
+    loadCustomFont().load().then(function(font) 
+	{
+        document.fonts.add(font);
+		const ctx = gameVar.scoreCtx;
+		ctx.clearRect(0, 0, gameVar.scoreCanvW, gameVar.scoreCanvH);
+		
+		ctx.font = '24px fontScore';
+		ctx.fillStyle = '#FFFFFF';
+		ctx.textAlign = 'center';
+		
+		const centerX = gameVar.scoreCanvW / 2;
+		const leftX = gameVar.scoreCanvW * 0.25;
+		const rightX = gameVar.scoreCanvW * 0.75;
+		const y = 35;
+		if (gameVar.localGame)
+		{
+			ctx.fillText('Player 1', leftX, y);
+			ctx.fillText('Player 2', rightX, y);
+		}
+		else 
+		{
+			ctx.fillText('Player', leftX, y);
+			ctx.fillText('AI', rightX, y);
+		}
+		ctx.font = '32px fontScore';
+		ctx.fillText(gameVar.playerScore, leftX, y + gameVar.scoreCanvH / 2);
+		ctx.fillText(gameVar.aiScore, rightX, y + gameVar.scoreCanvH / 2);
+		ctx.fillText('VS', centerX, y);
+		const minutes = Math.floor(gameVar.gameTime / 60);
+		const seconds = gameVar.gameTime % 60;
+		const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+		ctx.font = '20px fontScore';
+		ctx.fillText(time, centerX, y + gameVar.scoreCanvH / 2);
+	}).catch(function(error)
+	{
+		console.error("Error on font load", error);
+	});
+}

@@ -63,7 +63,6 @@ export function RandomPowerUpB()
 	brickVar2.currentPowerUp = brickVar2.powerUps[randomIndex];
 }
 
-
 export function drawPowerUpB()
 {
 	if (brickVar2.powerUpEnable)
@@ -155,11 +154,9 @@ export function checkPowerUpB()
 
 function puExtraLife()
 {
-
 	brickVar2.lives++;
 	brickVar2.powerUpActive = false;
 	newPowerUpB();
-	
 }
 
 function puSpeedB()

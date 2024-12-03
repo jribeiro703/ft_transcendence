@@ -29,8 +29,6 @@ export function mouseMoveHandlerB(e)
 
 export function startGameB(level)
 {
-	// displayBallB();
-	// console.log("pu enable :", brickVar.powerUpEnable);
 	if (!brickVar2.initGame)
 	{
 		initBallB();

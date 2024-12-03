@@ -50,7 +50,6 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 INSTALLED_APPS = [
-
 	'daphne',
 	'channels',
 	'django.contrib.admin',
@@ -153,7 +152,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, '../staticfiles')
 
 STATICFILES_DIRS = [
-	os.path.join(BASE_DIR, '../static')
+	os.path.join(BASE_DIR, '../static'),
 ]
 
 MEDIA_URL = '/media/'

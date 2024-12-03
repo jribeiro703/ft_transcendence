@@ -1,6 +1,10 @@
 import brickVar from "./var.js";
+import brickVar2 from "./secondBrickout/var.js";
+import gameVar from "../pong/var.js";
 import { resetBallB } from "./ball.js";
-import { addBtnB, addImageB } from "./level.js";
+import { addBtnB } from "./level.js";
+import { drawScoreBoardB } from "./draw.js";
+import { displayScore } from "../pong/displayVar.js";
 
 export function manageCollisionB()
 {
@@ -22,7 +26,7 @@ export function manageCollisionB()
                 MAX_ANGLE_DEVIATION = Math.PI / 3;
 			else
                 MAX_ANGLE_DEVIATION = Math.PI / 4;
-            const currentSpeed = brickVar.powerUpActive ? Math.sqrt(brickVar.dx * brickVar.dx + brickVar.dy * brickVar.dy) : 5;
+            const currentSpeed = brickVar.powerUpActive ? Math.sqrt(brickVar.dx * brickVar.dx + brickVar.dy * brickVar.dy) : brickVar.initDx;
             if (hitPos < 0.5)
 			{
                 let angle = BASE_ANGLE - (0.5 - hitPos) * 2 * MAX_ANGLE_DEVIATION;
@@ -41,21 +45,76 @@ export function manageCollisionB()
 	}
 }
 
+export function chechOpponent()
+{
+	let display = false;
+	if (gameVar.localGame)
+	{
+		const waiting = setInterval(() =>
+		{
+			if (brickVar2.startTime === true)
+			{
+				if (!display)
+				{
+					display = true;
+					brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
+					drawScoreBoardB();
+					brickVar.ctx.font = 'bold 24px fontScore';
+					brickVar.ctx.fillStyle = '#66a5e8';
+					brickVar.ctx.textAlign = 'left';
+					brickVar.ctx.fillText("Waiting for opponent to finish...", brickVar.canvasW / 4, brickVar.canvasH / 2 - 100);
+					brickVar.ctx.fillText("Your final score :", brickVar.canvasW / 4, (brickVar.canvasH / 2));
+					brickVar.ctx.fillText(brickVar.finalScore, brickVar.canvasW / 4 + 250, (brickVar.canvasH / 2));
+				}
+			}
+			else
+			{
+				clearInterval(waiting);
+				compareScore();
+			}
+		},1000);
+	}
+}
+
+function compareScore()
+{
+	console.log("compare1");
+	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
+	brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
+	displayScore();
+	if (brickVar.finalScore > brickVar2.finalScore)
+	{
+		brickVar.ctx.font = 'bold 24px fontScore';
+		brickVar.ctx.fillStyle = '#66a5e8';
+		brickVar.ctx.textAlign = 'left';
+		brickVar.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar.canvasW/ 4 - 100, (brickVar.canvasH / 2) - 100);
+		brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
+		brickVar.ctx.fillText(brickVar.finalScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2)
+
+		brickVar.ctx.fillText("Your opponent has score only : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
+		brickVar.ctx.fillText(brickVar2.finalScore, brickVar.canvasW / 4 + 420, brickVar.canvasH / 2 + 50);
+
+		brickVar2.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4, (brickVar.canvasH / 2) - 100);
+		brickVar2.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
+		brickVar2.ctx.fillText(brickVar2.finalScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
+
+		brickVar2.ctx.fillText("Your opponent has score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
+		brickVar2.ctx.fillText(brickVar.finalScore, brickVar2.canvasW / 4 + 380, brickVar2.canvasH / 2 + 50)
+
+	}
+}
+
 export function loseLives()
 {
 	brickVar.lives--;
-	if(!brickVar.lives)
+	if(!brickVar.lives )
 	{
 		brickVar.finish = true;
+		brickVar.startTime = false;
 		brickVar.finishLevel = true;
 		saveScoreB();
-		brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
-		brickVar.ctx.font = "35px Arial";
-		brickVar.ctx.fillStyle = "white";	
-		brickVar.ctx.fillText("You lose..." , brickVar.canvasW / 2 - 100, brickVar.canvasH / 6 - 30);
-		brickVar.ctx.fillText("Score : " + brickVar.finalScore, brickVar.canvasW / 2 - 100, brickVar.canvasH / 6 + 20);
+		chechOpponent();
 		addBtnB();
-		addImageB('/static/css/images/nooo.png');
 	}
 	else
 		resetBallB();

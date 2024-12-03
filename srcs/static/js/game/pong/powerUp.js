@@ -1,6 +1,5 @@
 import gameVar from "./var.js";
 import { POWER_UP_DURATION, BUFFER_COLLISION} from "./const.js";
-import { showGameSelectionView } from "./gameView.js";
 
 const img1 = new Image();
 const img2 = new Image();
@@ -13,14 +12,6 @@ img1.onload = function()
 img2.onload = function()
 {
 	drawPowerUp();
-}
-
-export function delayDrawPu()
-{
-	setTimeout(() => 
-	{
-		drawPowerUp();
-	}, 3000);
 }
 
 export function drawPowerUp()
@@ -158,13 +149,6 @@ export function updatePowerUpSelection(selected)
 		console.log("Power-Ups désactivés !");
 	}
 }
-	
-export function puVar()
-{
-	console.log("pux: ", gameVar.powerUpX);
-	console.log("puy: ", gameVar.powerUpY);
-}
-
 
 export function collectPowerUp()
 {
