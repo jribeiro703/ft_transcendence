@@ -115,10 +115,7 @@ rootless-docker:
 
 open:
 	@xdg-open https://$$(hostname):8081
-	@xdg-open https://grafana.localhost:8081
-	@xdg-open https://prometheus.localhost:8081
-	@xdg-open https://node-exporter.localhost:8081/metrics
-	@xdg-open https://postgres-exporter.localhost:8081/metrics
+	@xdg-open https://$$(hostname):8081/admin
 
 generate-env:
 	@echo "Generating docker/.env file..."
