@@ -1,5 +1,4 @@
 import { escapeHTML } from "../tools.js";
-import { getIdFromJWT } from "../token.js";
 import { fetchData } from "../fetchData.js";
 import { createDialog, listenForDialog, deleteAccount, addNewFriend, uploadAvatar } from "./settingsPageTools.js";
 
@@ -36,7 +35,7 @@ async function createSettingsPage(mainContent, pk) {
 			<button id="delete-account-btn">Delete Account</button>
     	</div>
 	`
-	const responseObject = await fetchData(`/user/settings/${pk}`);
+	const responseObject = await fetchData(`/user/settings/${pk}`, "GET", null, false, "authenticated");
 
 	if (responseObject.status === 200) {
 		const data = responseObject.data;
@@ -57,7 +56,12 @@ async function createSettingsPage(mainContent, pk) {
 
 export async function renderSettingsPage() {
 	const mainContent = document.getElementById("mainContent");
-	const pk = getIdFromJWT(localStorage.getItem("access_token"));
+	let responseObject = await fetchData("/user/private/pk/", "GET", null, false, "authenticated");
+	if (responseObject.status !== 200) {
+		showToast("An error occurred while getting your settings data.", "error");
+		return;
+	}
+	const pk = responseObject.data.pk;
 
 	await createSettingsPage(mainContent, pk);
 

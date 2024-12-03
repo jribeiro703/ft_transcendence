@@ -1,58 +1,59 @@
+import { isAuthenticated } from "./isAuthenticated.js";
+
 const API_BASE_URL = "https://localhost:8081";
 
-function getCSRFToken() {
+function getCookie(name) {
 	const cookies = document.cookie.split(';');
-    const csrftoken = cookies.find(cookie => cookie.trim().startsWith("csrftoken="));
-	if (!csrftoken)
-		console.log("getCSRFToken(): token = null");
-    return csrftoken ? csrftoken.split('=')[1] : '';
+	const cookie = cookies.find(cookie => cookie.trim().startsWith(`${name}=`));
+	if (!cookie)
+		console.log(`getCookie(): cookie ${name} = null`);
+	return cookie ? cookie.split('=')[1] : '';
 }
 
-async function fetchData(endpoint, method = 'GET', body = null, isFormData = false) {
-    const url = `${API_BASE_URL}${endpoint}`;
-    const options = {
-        method: method,
-        headers: {
-            'X-CSRFToken': getCSRFToken(),
-        },
-        credentials: 'include'
-    };
+async function makeOptions(method, body, isFormData, mode) {
+	const options = {
+		method: method,
+		headers: {
+			'X-CSRFToken': getCookie('csrftoken'),
+		},
+		credentials: 'include'
+	};
+	if (mode == "authenticated" && await isAuthenticated()) {
+		options.headers['Authorization'] = `Bearer ${sessionStorage.getItem('access_token')}`
+	}
+    if (body && isFormData) {
+        options.body = body;
+    } else if (body) {
+		options.headers['Content-Type'] = 'application/json';
+		options.body = JSON.stringify(body);
+	}
+	return options;
+}
 
-    if (body) {
-        if (isFormData) {
-            options.body = body;
-        } else {
-            options.headers['Content-Type'] = 'application/json';
-            options.body = JSON.stringify(body);
-        }
-    }
+async function fetchData(endpoint, method = 'GET', body = null, isFormData = false, mode = 'simple') {
+    const url = `${API_BASE_URL}${endpoint}`;
+	const options = await makeOptions(method, body, isFormData, mode);
+
+	console.log("fetchData(): options = ", options);
 
 	const responseObject = {
-		data: { message: "An unknown error occurred" },
-		status: 500,
+		data: { message: "An unknown error occurred while fetching data" },
+		status: 400,
 	};
 	try {
 		const response = await fetch(url, options);
-		console.log("fetch->resposne =  ", response);
+		console.log("fetchData(): RESPONSE OF FETCH =  ", response);
 		
 		responseObject.status = response.status;
 		responseObject.data = await response.json();
 
-		if (Array.isArray(responseObject.data[Object.keys(responseObject.data)[0]])) {
-			const firstKey = Object.keys(responseObject.data)[0];
-			const firstArray = responseObject.data[firstKey];
-			if (Array.isArray(firstArray)) {
-				responseObject.data.message = firstArray[0];
-			}
-		}
-
-		console.log("response.json->responseObject = ", responseObject);
+		console.log("fetchData(): RESPONSE OBJECT = ", responseObject);
 		return responseObject;
 	}
 	catch (error) {
-		console.log(`fetchData(): response of fetch: ${error}`);
+		console.error(`fetchData(): response of fetch: ${error}`);
 		return responseObject;	
 	}
 }
 
-export { fetchData, API_BASE_URL };
+export { fetchData, API_BASE_URL, getCookie };

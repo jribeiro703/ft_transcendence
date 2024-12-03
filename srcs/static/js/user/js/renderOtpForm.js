@@ -19,10 +19,10 @@ export function renderOtpForm(url, msg) {
     document.getElementById('otpForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const otpCode = document.getElementById('otpCode').value;
-        const responseObject = await fetchData(url, 'POST', { otp_code: otpCode });
+        const responseObject = await fetchData(url, 'POST', { otp_code: otpCode }, false, "simple");
         
-        if (responseObject.data.access_token && responseObject.status === 200) {
-            localStorage.setItem('access_token', responseObject.data.access_token);
+        if (responseObject.status === 200) {
+            sessionStorage.setItem('access_token', responseObject.data.access_token);
 			renderPage("user");
 		} else
             showToast(responseObject.data.message, "error");
