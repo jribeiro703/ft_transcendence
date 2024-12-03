@@ -1,11 +1,19 @@
+// Function to sanitize the tournament name
+function sanitizeTournamentName(name) {
+	return name.replace(/[^a-zA-Z0-9]/g, '');
+}
+
 // Create a new tournament dynamically via the API
-export const createTournament = async () => {
+export const createTournament = async (name) => {
 	try {
+		const sanitizedName = sanitizeTournamentName(name);
 		const payload = {
+			name: sanitizedName,
 			start_date: new Date().toISOString(),
 			max_score: 100,
 			status: 'UPCOMING',
 		};
+		console.log('Payload:', payload);
 
 		const response = await fetch('https://localhost:8081/tournament/', {
 			method: 'POST',
@@ -19,6 +27,8 @@ export const createTournament = async () => {
 			return tournament.tournament_id; // Return the tournament ID
 		} else {
 			console.error('Failed to create tournament:', response.status);
+			const errorData = await response.json();
+			console.error('Error details:', errorData);
 		}
 	} catch (error) {
 		console.error('Error creating tournament:', error);
@@ -88,12 +98,10 @@ export const preRegisterPlayers = async (tournamentId, playerIds) => {
 	}
 };
 
-
-
-export const setupTournamentFlow = async () => {
+export const setupTournamentFlow = async (name) => {
 	try {
 		// Step 1: Create the tournament
-		const tournamentId = await createTournament();
+		const tournamentId = await createTournament(name);
 		if (!tournamentId) return;
 
 		// Step 2: Fetch eligible players
@@ -110,6 +118,10 @@ export const setupTournamentFlow = async () => {
 		// Step 4: Perform matchmaking
 		await performMatchmaking(tournamentId);
 
+		// Fetch and render the tournament bracket
+		const bracket = await fetchTournamentBracket(tournamentId);
+		renderBracket(bracket);
+
 		console.log('Tournament setup completed successfully.');
 	} catch (error) {
 		console.error('Error during tournament setup flow:', error);
@@ -118,7 +130,7 @@ export const setupTournamentFlow = async () => {
 
 export const generateTournamentName = async () => {
 	try {
-		const response = await fetch('http://localhost:8081/generate_name/');
+		const response = await fetch('https://localhost:8081/tournament/generate-name/');
 		if (response.ok) {
 			const data = await response.json();
 			return data.name;
@@ -134,7 +146,7 @@ export const generateTournamentName = async () => {
 
 export const validateTournamentName = async (name) => {
 	try {
-		const response = await fetch('http://localhost:8081/validate_name/', {
+		const response = await fetch('https://localhost:8081/tournament/validate-name/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -153,3 +165,63 @@ export const validateTournamentName = async (name) => {
 		return false;
 	}
 };
+
+// services/tournamentAPIService.js
+
+export const fetchTournamentBracket = async (tournamentId) => {
+	try {
+		const response = await fetch(`https://localhost:8081/tournament/${tournamentId}/bracket/`, {
+			method: 'GET',
+			headers: { 'Content-Type': 'application/json' },
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			return data.bracket;
+		} else {
+			console.error('Failed to fetch tournament bracket:', response.status);
+		}
+	} catch (error) {
+		console.error('Error fetching tournament bracket:', error);
+	}
+};
+
+export const fetchCurrentPlayers = async (tournamentId) => {
+	try {
+		const response = await fetch(`https://localhost:8081/tournament/${tournamentId}/players/`, {
+			method: 'GET',
+			headers: { 'Content-Type': 'application/json' },
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			return data.players;
+		} else {
+			console.error('Failed to fetch current players:', response.status);
+		}
+	} catch (error) {
+		console.error('Error fetching current players:', error);
+	}
+};
+
+
+function renderBracket(bracket) {
+	const bracketContainer = document.getElementById('current-players');
+	bracketContainer.innerHTML = ''; // Clear existing content
+
+	bracket.forEach((match, index) => {
+		const matchDiv = document.createElement('div');
+		matchDiv.className = 'match';
+		matchDiv.innerHTML = `
+			<span>${match.player1}</span> vs <span>${match.player2}</span>
+		`;
+		bracketContainer.appendChild(matchDiv);
+
+		// Add a connector line if it's not the last match
+		if (index < bracket.length - 1) {
+			const connector = document.createElement('div');
+			connector.className = 'connector';
+			bracketContainer.appendChild(connector);
+		}
+	});
+}
