@@ -1,6 +1,6 @@
+import requests
 from django.urls import reverse
 from django.db.models import Q
-from django.http import HttpResponse
 from django.views import View
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate
@@ -12,95 +12,56 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status, serializers, exceptions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from datetime import timedelta
 from game.models import Game
-from .serializers import IndexSerializer, UserCreateSerializer, OtpCodeSerializer, UserSettingsSerializer
-from .models import User, FriendRequest
-from .permissions import IsOwner
-from .utils import send_2FA_mail
 from transcendence import settings
-import requests
+from .serializers import UserCreateSerializer, OtpCodeSerializer, UserSettingsSerializer, UserPrivateInfosSerializer, UserPublicInfosSerializer
+from .models import User, FriendRequest
+from .utils import send_2FA_mail, generate_tokens_for_user, set_refresh_token_in_cookies
+
+# -----------------------------------GET USER INFOS ENDPOINTS--------------------------------
 
 @api_view(['GET'])
-def user_index(request):
+def getUserPk(request):
+	user = request.user
+	return Response({"pk": user.id}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getListOfUsers(request):
 	users = User.objects.all()
-	serializer = IndexSerializer(users, many=True)
+	serializer = UserPublicInfosSerializer(users, many=True)
+	return Response(serializer.data, status=status.HTTP_200_OK)	
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def searchUser(request):
+	username = request.query_params.get('username')
+	users = User.objects.filter(username__icontains=username)
+	serializer = UserPublicInfosSerializer(users, many=True)
 	return Response(serializer.data, status=status.HTTP_200_OK)
 
-@api_view(['POST', 'GET'])
-def login42(request):
-	code = request.data.get('code')
-	token_url = "https://api.intra.42.fr/oauth/token"
-	client_id = settings.FT_CLIENT_ID
-	client_secret = settings.FT_CLIENT_SECRET
-	redirect_uri = settings.FT_REDIRECT_URI
-
-	data = {
-		"grant_type": "authorization_code",
-		"client_id": client_id,
-		"client_secret": client_secret,
-		"code": code,
-		"redirect_uri": redirect_uri
-	}
-
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def GetUserPublicInfos(request, pk):
 	try:
-		response = requests.post(token_url, data=data)
-		token_data = response.json()
+		user = User.objects.get(id=pk)
+	except User.DoesNotExist:
+		return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+	serializer = UserPublicInfosSerializer(user)
+	return Response(serializer.data, status=status.HTTP_200_OK)
 
-		print("token_data:", token_data)
+@api_view(['GET'])
+def GetUserPrivateInfos(request):
+	serializer = UserPrivateInfosSerializer(request.user)
+	return Response(serializer.data, status=status.HTTP_200_OK)
 
-		# if "access_token" not in token_data:
-		# 	return Response({"message": "Failed to authenticate with 42"}, status=status.HTTP_400_BAD_REQUEST)
-		
-		# user_info = requests.get('https://api.intra.42.fr/v2/me', 
-		# 	headers={'Authorization': f"Bearer {token_data['access_token']}"})
-		# user_data = user_info.json()
-
-		# print("user_data:", user_data)
-
-		if "access_token" not in token_data:
-			print("Error: No access token in response")
-			return Response({"message": "Failed to authenticate with 42"}, status=status.HTTP_400_BAD_REQUEST)
-    
-		print("Access Token:", token_data['access_token'])
-    
-		headers = {'Authorization': f"Bearer {token_data['access_token']}"}
-		print("Headers:", headers)
-    
-		user_info_response = requests.get('https://api.intra.42.fr/v2/me', headers=headers)
-		print("User Info Status Code:", user_info_response.status_code)
-		print("User Info Response:", user_info_response.text)
-    
-		if user_info_response.status_code != 200:
-			print("Error getting user info:", user_info_response.text)
-			return Response({"message": "Failed to get user information"}, 
-                      status=status.HTTP_400_BAD_REQUEST)
-    
-		user_data = user_info_response.json()
-		print("user_data:", user_data)
-
-		user, created = User.objects.get_or_create(
-			email=user_data['email'],
-			defaults={
-				'username': user_data['login'],
-				'is_active': True,
-			}
-		)
-
-		refresh = RefreshToken.for_user(user)
-	
-		return Response({
-			'access_token': str(refresh.access_token),
-			'refresh_token': str(refresh)
-		}, status=status.HTTP_200_OK)
-	except Exception as e:
-		return Response({"message": "An unknown error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+# ------------------------------REGISTER USER ENDPOINTS--------------------------------	
 
 class CreateUserView(CreateAPIView):
 	queryset = User.objects.all()
@@ -109,7 +70,7 @@ class CreateUserView(CreateAPIView):
 	
 	def create(self, request, *args, **kwargs):
 		try:
-			super().create(request, *args, **kwargs)
+			response = super().create(request, *args, **kwargs)
 			return Response({
 				"message": "Account created successfully. Please check your email to activate your account."
 			}, status=status.HTTP_201_CREATED)
@@ -144,8 +105,6 @@ class ActivateLinkView(View):
 				'message': "Activation link has expired."
 			})
 
-		print("user new_email:", user.new_email)
-
 		if action == 'verify_email' and user.new_email:
 			user.email = user.new_email
 			user.new_email = None
@@ -169,6 +128,136 @@ class ActivateLinkView(View):
 			'message': "An unknown error occurred."
 		})
 
+# ------------------------------USER PROFILE ENDPOINTS--------------------------------	
+
+class UserProfileView(APIView):
+	permission_classes = [AllowAny]
+
+	def get(self, request, pk, *args, **kwargs):
+		try:
+			user = User.objects.get(id=pk)
+		except User.DoesNotExist:
+			return Response({"message": "Profile Not Found"}, status=status.HTTP_404_NOT_FOUND)
+
+		total_matches = Game.objects.filter(
+			Q(player_one=user) | Q(player_two=user)
+		).count()
+		won_matches = Game.objects.filter(winner=user).count()
+
+		last_matches = Game.objects.filter(
+			Q(player_one=user) | Q(player_two=user)
+		).order_by('-created_at')[:5]
+
+		match_history = []
+		for match in last_matches:
+			match_info = {
+			    "date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+			    "score": f"{match.score_one} - {match.score_two}",
+			    "winner": match.winner.username
+			}
+			match_history.append(match_info)
+
+		data = {
+			"username": user.username,
+			"avatar": user.avatar.url,
+			"alias": user.alias,
+			"total_matches": total_matches,
+			"won_matches": won_matches,
+			"match_history": match_history
+		}
+		return Response(data, status=status.HTTP_200_OK)
+
+# ------------------------------USER SETTINGS ENDPOINTS--------------------------------	
+
+class UserSettingsView(RetrieveUpdateDestroyAPIView):
+	queryset = User.objects.all()
+	serializer_class = UserSettingsSerializer
+
+	def patch(self, request, *args, **kwargs):
+		try:
+			instance, message = self.get_serializer().update(self.get_object(), request.data)
+			return Response(message, status=status.HTTP_200_OK)
+		except serializers.ValidationError as e:
+			return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+		except exceptions.APIException as e:
+			return Response(e.detail, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+	
+	def delete(self, request, *args, **kwargs):
+		try:
+			refresh_token = request.COOKIES.get('refresh_token')
+			token = RefreshToken(refresh_token)
+			token.blacklist()
+			response = Response({
+				"message": "Your account has been successfully deleted.",
+				"access_token": "", 
+				}, status=status.HTTP_205_RESET_CONTENT)
+			response.delete_cookie('refresh_token')
+			super().delete(request, *args, **kwargs)
+			return response
+		except Exception as e:
+		    return Response({"message": "An unknown error occured, failed to delete account."}, status=status.HTTP_400_BAD_REQUEST)
+
+# ------------------------------FRIENDS ENDPOINTS--------------------------------	
+
+class AcceptFriendRequestView(APIView):
+    
+	def post(self, request, *args, **kwargs):
+		request_id = kwargs.get('request_id')
+		try:
+			friend_request = FriendRequest.objects.get(id=request_id)
+			if friend_request.receiver != request.user:
+				return Response({"message": "You are not authorized to accept this request."}, status=status.HTTP_403_FORBIDDEN)
+
+			friend_request.is_accepted = True
+			friend_request.save()
+			friend_request.sender.friends.add(friend_request.receiver)
+			friend_request.receiver.friends.add(friend_request.sender)
+
+			return Response({"message": "Friend request accepted."}, status=status.HTTP_200_OK)
+		except FriendRequest.DoesNotExist:
+			return Response({"message": "Friend request not found."}, status=status.HTTP_404_NOT_FOUND)
+		
+class ListFriendRequestView(APIView):
+	
+	def get(self, request, *args, **kwargs):
+		user = User.objects.get(pk=kwargs['pk'])
+		received_requests = user.received_requests.filter(is_accepted=False)
+		sent_requests = user.sent_requests.filter(is_accepted=False)
+
+		return Response({
+		    "received_requests": [{"id": req.id, "sender": req.sender.username} for req in received_requests],
+		    "sent_requests": [{"id": req.id, "receiver": req.receiver.username} for req in sent_requests],
+		})
+
+
+# -----------------------------------CHECK AUTHENTICATION ENDPOINTS--------------------------------
+
+@api_view(['GET'])
+def check_auth(request):
+	return Response({
+		"message": "User is authenticated"
+		}, status=status.HTTP_200_OK)
+
+class CookieTokenRefreshView(APIView):
+	permission_classes = [AllowAny]
+
+	def get(self, request, *args, **kwargs):
+		refresh_token = request.COOKIES.get('refresh_token')
+		if not refresh_token:
+			return Response({'message': 'Refresh token not found in cookies.'}, status=status.HTTP_400_BAD_REQUEST)
+		
+		try:
+			refresh = RefreshToken(refresh_token)
+			new_access_token = str(refresh.access_token)
+			return Response({'access_token': new_access_token}, status=status.HTTP_200_OK)
+
+		except TokenError as e:
+			return Response({'message': 'Invalid refresh token.'}, status=status.HTTP_400_BAD_REQUEST)
+
+		except Exception as e:
+			return Response({'message': 'An error occurred while refreshing the token.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# ------------------------------LOGIN ENDPOINTS--------------------------------	
 
 class UserLoginView(APIView):
 	model = User
@@ -213,47 +302,90 @@ class OtpVerificationView(APIView):
 		except exceptions.NotAuthenticated as e:
 			return Response(e.detail, status=status.HTTP_401_UNAUTHORIZED)
 		
-		refresh = RefreshToken.for_user(user)
-		access_token = str(refresh.access_token)
-		refresh_token = str(refresh)
-
+		access_token, refresh_token = generate_tokens_for_user(user)
 		response = Response({
 			"message": "Code is valid, you are now connected !",
-			"access_token": access_token
+			"access_token": access_token,
 			},
 			status=status.HTTP_200_OK
 		)
-		cookie_max_age = 3600 * 24
-		response.set_cookie(
-			'refresh_token',
-		    refresh_token,
-		    max_age=cookie_max_age,
-		    httponly=True,
-			secure=True
-		)
+		set_refresh_token_in_cookies(response, refresh_token)
+		
 		return response
 
-class CookieTokenRefreshView(APIView):
-	authentication_classes = [JWTAuthentication]
+# ------------------------------LOGIN 42 ENDPOINTS--------------------------------	
 
-	def get(self, request, *args, **kwargs):
-		refresh_token = request.COOKIES.get('refresh_token')
-		if not refresh_token:
-			return Response({'message': 'Refresh token not found in cookies.'}, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_42_auth_url(request):
+	try:
+		client_id = settings.FT_CLIENT_ID	
+		redirect_uri = settings.FT_REDIRECT_URI
+		auth_url = f"https://api.intra.42.fr/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
+		return Response({"auth_url": auth_url}, status=status.HTTP_200_OK)
+	except Exception as e:
+		return Response({"message": "failed to get 42 auth url"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST', 'GET'])
+@permission_classes([AllowAny])
+def login42(request):
+	code = request.query_params.get('code')
+	token_url = "https://api.intra.42.fr/oauth/token"
+	client_id = settings.FT_CLIENT_ID
+	client_secret = settings.FT_CLIENT_SECRET
+	redirect_uri = settings.FT_REDIRECT_URI
+
+	data = {
+		"grant_type": "authorization_code",
+		"client_id": client_id,
+		"client_secret": client_secret,
+		"code": code,
+		"redirect_uri": redirect_uri,
+		"scope": "public profile"
+	}
+
+	try:
+		response = requests.post(token_url, data=data)
+		token_data = response.json()
+
+		if "access_token" not in token_data:
+			return Response({"message": "Failed to authenticate with 42"}, status=status.HTTP_400_BAD_REQUEST)
 		
-		try:
-			refresh = RefreshToken(refresh_token)
-			new_access_token = str(refresh.access_token)
-			return Response({'access_token': new_access_token}, status=status.HTTP_200_OK)
+		user_info = requests.get('https://api.intra.42.fr/v2/me', 
+			headers={'Authorization': f"Bearer {token_data['access_token']}"})
+		user_data = user_info.json()
 
-		except TokenError as e:
-			return Response({'message': 'Invalid refresh token.'}, status=status.HTTP_400_BAD_REQUEST)
+		user, created = User.objects.get_or_create(
+			email=user_data['email'],
+			defaults={
+				'username': user_data['login'],
+				'is_active': True,
+			}
+		)
 
-		except Exception as e:
-			return Response({'message': 'An error occurred while refreshing the token.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+		access_token, refresh_token = generate_tokens_for_user(user)
+		response = Response({
+			"message": "Connection successful !",
+			"access_token": access_token,
+			},
+			status=status.HTTP_200_OK
+		)
+		set_refresh_token_in_cookies(response, refresh_token)
+		
+		return response
+	
+	except Exception as e:
+		return Response({"message": "An unknown error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login42_callback(request):
+	code = request.data.get('code')
+
+# ------------------------------LOGOUT ENDPOINTS--------------------------------	
 
 class LogoutView(APIView):
-	authentication_classes = [JWTAuthentication]
+	permission_classes = [AllowAny]
 
 	def post(self, request):
 		try:
@@ -273,101 +405,3 @@ class LogoutView(APIView):
 		except Exception as e:
 		    return Response({"message": "Logout failed."}, status=status.HTTP_400_BAD_REQUEST)
 
-class UserProfileView(APIView):
-	permission_classes = [AllowAny]
-
-	def get(self, request, pk, *args, **kwargs):
-		try:
-			user = User.objects.get(id=pk)
-		except User.DoesNotExist:
-			return Response({"message": "Profile Not Found"}, status=status.HTTP_404_NOT_FOUND)
-
-		total_matches = Game.objects.filter(
-			Q(player_one=user) | Q(player_two=user)
-		).count()
-		won_matches = Game.objects.filter(winner=user).count()
-
-		last_matches = Game.objects.filter(
-			Q(player_one=user) | Q(player_two=user)
-		).order_by('-created_at')[:5]
-
-		match_history = []
-		for match in last_matches:
-			match_info = {
-			    "date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-			    "score": f"{match.score_one} - {match.score_two}",
-			    "winner": match.winner.username
-			}
-			match_history.append(match_info)
-
-		data = {
-			"username": user.username,
-			"avatar": user.avatar.url,
-			"alias": user.alias,
-			"total_matches": total_matches,
-			"won_matches": won_matches,
-			"match_history": match_history
-		}
-		return Response(data, status=status.HTTP_200_OK)
-
-class UserSettingsView(RetrieveUpdateDestroyAPIView):
-	queryset = User.objects.all()
-	serializer_class = UserSettingsSerializer
-	authentication_classes = [JWTAuthentication]
-
-	def patch(self, request, *args, **kwargs):
-		try:
-			instance, success_messages = self.get_serializer().update(self.get_object(), request.data)
-			return Response(success_messages, status=status.HTTP_200_OK)
-		except serializers.ValidationError as e:
-			return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
-		except exceptions.APIException as e:
-			return Response(e.detail, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-	
-	def delete(self, request, *args, **kwargs):
-		try:
-			refresh_token = request.COOKIES.get('refresh_token')
-			token = RefreshToken(refresh_token)
-			token.blacklist()
-			response = Response({
-				"message": "Your account has been successfully deleted.",
-				"access_token": "",
-				}, status=status.HTTP_205_RESET_CONTENT)
-			response.delete_cookie('refresh_token')
-			super().delete(request, *args, **kwargs)
-			return response
-		except Exception as e:
-		    return Response({"message": "An unknown error occured, failed to delete account."}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AcceptFriendRequestView(APIView):
-	authentication_classes = [JWTAuthentication]
-    
-	def post(self, request, *args, **kwargs):
-		request_id = kwargs.get('request_id')
-		try:
-			friend_request = FriendRequest.objects.get(id=request_id)
-			if friend_request.receiver != request.user:
-				return Response({"message": "You are not authorized to accept this request."}, status=status.HTTP_403_FORBIDDEN)
-
-			friend_request.is_accepted = True
-			friend_request.save()
-			friend_request.sender.friends.add(friend_request.receiver)
-			friend_request.receiver.friends.add(friend_request.sender)
-
-			return Response({"message": "Friend request accepted."}, status=status.HTTP_200_OK)
-		except FriendRequest.DoesNotExist:
-			return Response({"message": "Friend request not found."}, status=status.HTTP_404_NOT_FOUND)
-		
-class ListFriendRequestView(APIView):
-	authentication_classes = [JWTAuthentication]
-	
-	def get(self, request, *args, **kwargs):
-		user = User.objects.get(pk=kwargs['pk'])
-		received_requests = user.received_requests.filter(is_accepted=False)
-		sent_requests = user.sent_requests.filter(is_accepted=False)
-
-		return Response({
-		    "received_requests": [{"id": req.id, "sender": req.sender.username} for req in received_requests],
-		    "sent_requests": [{"id": req.id, "receiver": req.receiver.username} for req in sent_requests],
-		})

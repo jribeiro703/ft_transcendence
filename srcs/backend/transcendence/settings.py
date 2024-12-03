@@ -172,23 +172,33 @@ AUTH_USER_MODEL = 'user.User'
 REST_FRAMEWORK = {
 	'DEFAULT_AUTHENTICATION_CLASSES': (
 		'rest_framework_simplejwt.authentication.JWTAuthentication',
+	),
+	'DEFAULT_PERMISSION_CLASSES': (
+		'rest_framework.permissions.IsAuthenticated',
 	)
 }
 
-from datetime import timedelta
 
+# JWT settings
+from datetime import timedelta
 SIMPLE_JWT = {
 	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
 	"REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 	"ROTATE_REFRESH_TOKENS": True,
 	"BLACKLIST_AFTER_ROTATION": True,
+	"AUTH_HEADER_TYPES": ("Bearer",),
+	"AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
 
+# email settings
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = "../../email-messages"
-
 DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
 
+# CSRF settings
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = [
 	'https://localhost:8081',
 ]
@@ -202,6 +212,7 @@ CHANNEL_LAYERS = {
 	},
 }
 
+# login with 42 settings
 FT_CLIENT_ID = os.getenv('FT_CLIENT_ID')
 FT_CLIENT_SECRET = os.getenv('FT_CLIENT_SECRET')
 FT_REDIRECT_URI = os.getenv('FT_REDIRECT_URI')

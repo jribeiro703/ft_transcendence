@@ -55,9 +55,9 @@ async function listenForDialog(mainContent, dialogElement, pk, newInputId, key) 
 
 		console.log("body", body);
 
-		const responseObject = await fetchData(`/user/settings/${pk}/`, "PATCH", body);
+		const responseObject = await fetchData(`/user/settings/${pk}/`, "PATCH", body, false, "authenticated");
 		if (responseObject.status === 200)
-			showToast(responseObject.data[key], "success");
+			showToast(responseObject.data.message, "success");
 		else
 			showToast(responseObject.data.message, "error");
 		dialogElement.close();
@@ -93,21 +93,16 @@ async function uploadAvatar(pk) {
 		const formData = new FormData();
 		formData.append('avatar', file);
 		
-		const responseObject = await fetchData(
-			`/user/settings/${pk}/`, 
-			'PATCH', 
-			formData, 
-			true
-		);
+		const responseObject = await fetchData(`/user/settings/${pk}/`, 'PATCH', formData, true, "authenticated");
 
 		if (responseObject.status === 200) {
 			const avatarPath = responseObject.data.avatar.substring(
 				responseObject.data.avatar.indexOf('/media')
 			);
 			document.getElementById('avatar').src = avatarPath;
-			alert("Avatar updated successfully");
+			showToast(responseObject.data.message, "success");
 		} else {
-			alert(responseObject.data.message || 'Error while updating the avatar');
+			showToast(responseObject.data.message, "error");
 		}
 	});
 	
@@ -119,7 +114,7 @@ async function deleteAccount(pk) {
 	if (!confirmation) {
 		return;
 	}
-	const responseObject = await fetchData(`/user/settings/${pk}/`, 'DELETE');
+	const responseObject = await fetchData(`/user/settings/${pk}/`, 'DELETE', null, false, "authenticated");
 	if (responseObject.status === 205) {
 		showToast(responseObject.data.message, "success");
 		localStorage.setItem('access_token', "");
@@ -135,9 +130,15 @@ async function addNewFriend(pk) {
         showToast("Please enter a username to add as a friend.", "error");
         return;
     }
-    const responseObject = await fetchData(`/user/settings/${pk}/`, 'PATCH', {new_friend: `${newFriendUsername}`});
+    const responseObject = await fetchData(
+		`/user/settings/${pk}/`, 
+		'PATCH', 
+		{new_friend: `${newFriendUsername}`}, 
+		false, 
+		"authenticated"
+	);
 	if (responseObject.status === 200)
-		showToast(responseObject.data.friends, "success");
+		showToast(responseObject.data.message, "success");
 	else
 		showToast(responseObject.data.message, "error");
 }

@@ -1,5 +1,5 @@
 import { PONG_CARD, showToast } from "./user/tools.js"
-import { isAuthenticated } from "./user/token.js"
+import { isAuthenticated } from "./user/isAuthenticated.js";
 import { renderPage } from "./historyManager.js";
 
 function createHomeContent() {

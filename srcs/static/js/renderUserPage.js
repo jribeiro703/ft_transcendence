@@ -1,5 +1,3 @@
-import { renderProfilePage } from "./user/js/renderProfilePage.js";
-import { renderSettingsPage } from "./user/js/renderSettingPage.js";
 import { PONG_CARD } from "./user/tools.js"
 import { fetchData } from "./user/fetchData.js";
 import { showToast } from "./user/tools.js";
@@ -35,7 +33,6 @@ export function renderUserPage() {
 
 	document.getElementById('btn-Settings').addEventListener('click', () => {
 		renderPage("settings")
-		renderSettingsPage();
 	})
 
 	document.getElementById('btn-Inbox').addEventListener('click', () => {
@@ -49,11 +46,11 @@ export function renderUserPage() {
 		if (!confirmation)
 			return;
 
-		const responseObject = await fetchData('/user/logout/', 'POST');
+		const responseObject = await fetchData('/user/logout/', 'POST', null, false, "simple");
 
 		if (responseObject.status == 205) {
 			showToast(responseObject.data.message, "success");
-			localStorage.setItem('access_token', "");
+			sessionStorage.clear();
 			renderPage("home");
 		} else
 			showToast(responseObject.data.message, "error");

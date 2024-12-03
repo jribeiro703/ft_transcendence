@@ -1,30 +1,43 @@
 import { fetchData } from "../fetchData.js";
+import { showToast } from "../tools.js";
+import { renderPage } from "../../historyManager.js";
 
-async function handleAuth42Callback() {
-	const urlParams = new URLSearchParams(window.location.search);
-	const code = urlParams.get('code');
+// async function handleAuth42Callback() {
+//     const urlParams = new URLSearchParams(window.location.search);
+//     const code = urlParams.get('code');
+    
+// 	console.log("handleAuth42Callback(): code = ", code);
 
-	if (code) {
-		const responseObject = await fetchData(`/user/login42/`, "POST", {
-			code: code
-		});
-		if (responseObject.access_token) {
-			localStorage.setItem("access_token", responseObject.access_token);
-			window.location.href = "/";
-		}
-		else {
-			alert("Failed to authenticate with 42");
-		}
-	}
+//     if (code) {
+// 		const responseObject = await fetchData(`/user/login42/callback/`, "POST", {
+// 		    code: code
+// 		}, false, "simple");
+// 		if (responseObject.status === 200) {
+// 			sessionStorage.setItem('access_token', responseObject.data.access_token);
+// 			renderPage("home");
+// 		} else {
+// 			showToast(responseObject.data.message, "error");
+// 		}
+//     }
+// }
+
+// function checkForAuthCode() {
+// 	const urlParams = new URLSearchParams(window.location.search);
+// 	if (urlParams.has('code')) {
+// 	    handleAuth42Callback();
+// 	}
+// }
+
+async function renderLogin42Page() {
+
+    const responseObject = await fetchData(`/user/login42/auth_url/`, "GET", null, false, "simple");
+    if (responseObject.status === 200 && responseObject.data.auth_url) {
+		window.location.href = responseObject.data.auth_url;
+    } else {
+       console.error("renderLogin42Page: failed to get 42 auth url");
+	   showToast("Failed to get 42 auth url", "error");
+	   renderPage("auth");
+    }
 }
 
-function renderLogin42Page() {
-	const clientId = "u-s4t2ud-3add379a531eec316a1b4bc2b449eb553a9b9885006b2f6fee5291b2b171ad64";
-	const redirectUri = 'https://localhost:8081/user/login42/';
-	const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
-		
-	window.location.href = authUrl;
-	handleAuth42Callback();
-}
-
-export { renderLogin42Page, handleAuth42Callback };
+export { renderLogin42Page, checkForAuthCode };

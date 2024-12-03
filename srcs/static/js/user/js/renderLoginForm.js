@@ -20,7 +20,7 @@ export function renderLoginForm() {
         e.preventDefault();
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-        const responseObject = await fetchData('/user/login/', 'POST', { username, password });
+        const responseObject = await fetchData('/user/login/', 'POST', { username, password }, false, "simple");
 
         if (responseObject.data.otp_verification_url)
             renderOtpForm(escapeHTML(responseObject.data.otp_verification_url), responseObject.data.message);
