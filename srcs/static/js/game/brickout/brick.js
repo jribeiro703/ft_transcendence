@@ -114,19 +114,6 @@ function createCastlePattern()
 	brickVar.finishLevel = false;
 }
 
-function countBrick(pattern)
-{
-	let brickCount = 0;
-	for(let c = 0; c < pattern.length; c++)
-	{
-        for(let r = 0; r < pattern[0].length; r++)
-		{
-            if (pattern[c][r] === 1) brickCount++;
-        }
-    }
-    brickVar.totalBrick = brickCount;
-}
-
 function createXPattern() 
 {
 	brickVar.brickColumnCount = 16;
@@ -207,7 +194,18 @@ function createInvaderPattern()
 	brickVar.finishLevel = false;
 }
 
-
+function countBrick(pattern)
+{
+	let brickCount = 0;
+	for(let c = 0; c < pattern.length; c++)
+	{
+        for(let r = 0; r < pattern[0].length; r++)
+		{
+            if (pattern[c][r] === 1) brickCount++;
+        }
+    }
+    brickVar.totalBrick = brickCount;
+}
 
 
 export function drawBricksB()

@@ -5,17 +5,12 @@ import { updatePowerUpSelectionB as updatePowerUpSelectionSecond } from "./secon
 import { updateLevelSelectionB as updateLevelSelectionFirst} from "./level.js";
 import { updateLevelSelectionB as updateLevelSelectionSecond} from "./secondBrickout/level.js";
 import { updateDifficultySelectionSB  } from "./secondBrickout/settings.js";
-import { showGameSelectionView } from "../gameView.js";
-import { displayBallB } from "./ball.js";
-import { showGameBrickView } from "./game.js";
-import { showGameBrickMultiView } from "./game.js";
-import { showGameSelectionMultiView } from "../gameView.js";
-import { updatePowerUpB } from "./secondBrickout/powerUp.js";
-import gameVar from "../var.js";
+import { showGameSelectionView } from "../pong/gameSelectionView.js";
+import { showGameSelectionMultiView } from "../pong/gameViewMulti.js";
 
 export function showSettingViewB(live)
 {
-	history.pushState({ view: 'game'}, '', `?view=solo/settings`);
+	// history.pushState({ view: 'game'}, '', `?view=solo/settings`);
 
 	displaySettingB();
 	getSettingBtn();
@@ -39,8 +34,8 @@ export function showSettingViewB(live)
 	{
 		if (live === true)
 		{
-			roomMultiView();
-			updateLiveSetting();
+			// roomMultiView();
+			// updateLiveSetting();
 		}
 		else
 		{
@@ -219,7 +214,6 @@ export function displaySettingB()
 
 export function listenSettingPUB()
 {
-
 	brickVar.withPowerUp.addEventListener('click', () =>
 	{
 		brickVar.withPowerUp.classList.add('selected');
@@ -237,7 +231,6 @@ export function listenSettingPUB()
 
 export function listenSettingDifficultyB()
 {
-
 	brickVar.easy.addEventListener('click', () => 
 	{
 		brickVar.easy.classList.add('selected');

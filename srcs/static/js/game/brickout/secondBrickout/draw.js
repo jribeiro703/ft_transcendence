@@ -1,4 +1,3 @@
-import gameVar from "../var.js";
 import brickVar2 from "./var.js";
 
 export function drawBallB()
@@ -41,29 +40,13 @@ export function drawPaddleB()
     brickVar2.ctx.closePath();
 }
 
-// export function drawScoreB()
-// {
-//     brickVar2.ctx.font = "16px Arial";
-//     brickVar2.ctx.fillStyle = "grey";
-//     brickVar2.ctx.fillText("Score: "+brickVar2.score, 8, 20);
-// }
-
-// export function drawLivesB()
-// {
-//     brickVar2.ctx.font = "16px Arial";
-//     brickVar2.ctx.fillStyle = "grey";
-//     brickVar2.ctx.fillText("Lives: "+brickVar2.lives, brickVar2.canvasW - 65, 20);
-// }
-
 function loadCustomFont()
 {
     return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');
 }
 
-
 export function drawScoreBoardB()
 {
-
     loadCustomFont().load().then(function(font) 
 	{
         document.fonts.add(font);

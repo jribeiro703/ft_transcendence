@@ -1,10 +1,10 @@
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
+import gameVar from "../pong/var.js";
 import { resetBallB } from "./ball.js";
-import { addBtnB, addImageB } from "./level.js";
-import gameVar from "../var.js";
-import { drawScoreBoard } from "../gameView.js";
+import { addBtnB } from "./level.js";
 import { drawScoreBoardB } from "./draw.js";
+import { displayScore } from "../pong/displayVar.js";
 
 export function manageCollisionB()
 {
@@ -26,7 +26,7 @@ export function manageCollisionB()
                 MAX_ANGLE_DEVIATION = Math.PI / 3;
 			else
                 MAX_ANGLE_DEVIATION = Math.PI / 4;
-            const currentSpeed = brickVar.powerUpActive ? Math.sqrt(brickVar.dx * brickVar.dx + brickVar.dy * brickVar.dy) : 5;
+            const currentSpeed = brickVar.powerUpActive ? Math.sqrt(brickVar.dx * brickVar.dx + brickVar.dy * brickVar.dy) : brickVar.initDx;
             if (hitPos < 0.5)
 			{
                 let angle = BASE_ANGLE - (0.5 - hitPos) * 2 * MAX_ANGLE_DEVIATION;
@@ -76,15 +76,8 @@ export function chechOpponent()
 	}
 }
 
-
-export function displayScore()
-{
-	console.log("score p1 : ", brickVar.finalScore);
-	console.log("score p2 : ", brickVar2.finalScore);
-}
 function compareScore()
 {
-
 	console.log("compare1");
 	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
 	brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
@@ -156,5 +149,5 @@ function saveScoreB()
 
 export function sendScoreB()
 {
-	// console.log("finalScroe : ", brickVar.finalScore);
+	console.log("finalScroe : ", brickVar.finalScore);
 }

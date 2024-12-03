@@ -1,5 +1,3 @@
-import gameVar from "./var.js";
-
 export function sendBallData(x, y, socket)
 {
 	if (socket && socket.readyState == WebSocket.OPEN)

@@ -1,4 +1,5 @@
 import gameVar from "./var.js";
+import brickVar from "../brickout/var.js";
 
 export function updateDifficultySelection(level)
 {
@@ -52,4 +53,36 @@ export function updateLevelSelection(level)
 		gameVar.tennis = true;
 		gameVar.currentLevel = "tennis";
 	}
+}
+export function updateImageUrl()
+{
+	gameVar.pongUrl = "static/css/images/ttLevel.png";
+	if (gameVar.football)
+		gameVar.pongUrl = "static/css/images/footballLevel.png";
+	else if (gameVar.tennis)
+		gameVar.pongUrl = "static/css/images/tennisLevel.png";
+
+	gameVar.brickUrl = "static/css/images/brickout.png";
+	if (brickVar.castle)
+		gameVar.brickUrl = "static/css/images/castleLevel.png";
+	else if (brickVar.x)
+		gameVar.brickUrl = "static/css/images/xLevel.png";
+	else if (brickVar.invader)
+		gameVar.brickUrl = 'static/css/images/invadersLevel.png';
+}
+export function updateCanvasColor()
+{
+	let color = null;
+	if (gameVar.currentLevel === 'tennisTable')
+		color = '#1A1A40';
+	if (gameVar.currentLevel === 'football')
+		color = '#006400';
+	else if (gameVar.currentLevel === 'tennis')
+		color = '#D2691E';
+   
+    const canvas = document.getElementById('myCanvas');
+    if (canvas)
+	{
+        canvas.style.backgroundColor = color;
+    }
 }

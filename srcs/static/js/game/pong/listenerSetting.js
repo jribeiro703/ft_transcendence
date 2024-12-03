@@ -1,24 +1,22 @@
 import gameVar from "./var.js";
 import { updateSetting, updateLiveSetting } from "./setting.js";
-import { initControl, initEventListener, roomMultiView } from "./init.js";
 import { updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { updateDifficultySelection } from "./update.js";
-import { showGameSelectionView } from "./gameView.js";
-import { showSettingView } from "./setting.js";
 import { checkSetting } from "./setting.js";
 import { showGameView } from "./gameView.js";
-import { checkSettingB } from "./brickout/settings.js";
-import { initListenerB } from "./brickout/game.js";
-import { showSettingViewB } from "./brickout/settings.js";
-import { showGameBrickView } from "./brickout/game.js";
-import { showSettingMultiView } from "./setting.js";
-import { showGameSelectionMultiView } from "./gameView.js";
-import { showSettingMultiViewB } from "./brickout/settings.js";
-import brickVar from "./brickout/var.js";
-import { showGameBrickMultiView } from "./brickout/game.js";
-import { initListenerMultiB } from "./brickout/game.js";
-import { showGameRoom } from "./room.js";
+import { checkSettingB } from "../brickout/settings.js";
+import { initListenerB } from "../brickout/game.js";
+import { showSettingViewB } from "../brickout/settings.js";
+import { showGameBrickView } from "../brickout/game.js";
+import { showSettingMultiViewB } from "../brickout/settings.js";
+import { initListenerMultiB } from "../brickout/game.js";
+import { initLobbyView } from "./init.js";
+import { showGameSelectionView } from './gameSelectionView.js'
+import { showGameSelectionMultiView } from "./gameViewMulti.js";
+import { showSettingView, showSettingMultiView } from "./settingsView.js";
+import { initControl } from "./control.js";
+
 
 export function listenSettingPU()
 {
@@ -99,7 +97,7 @@ export function listenSettingSave(live)
 	{
 		if (live === true)
 		{
-			roomMultiView();
+			initLobbyView();
 			updateLiveSetting();
 		}
 		else
@@ -110,7 +108,6 @@ export function listenSettingSave(live)
 	});
 }
 
-
 export function listenSettingMultiSave(live)
 {
 	
@@ -118,7 +115,7 @@ export function listenSettingMultiSave(live)
 	{
 		if (live === true)
 		{
-			roomMultiView();
+			initLobbyView();
 			updateLiveSetting();
 		}
 		else
@@ -141,7 +138,6 @@ export function listenSettingBtn()
 		showSettingViewB(false);
 	});
 }
-
 
 export function listenSettingMultiBtn()
 {
@@ -202,14 +198,14 @@ export function listenPlayMultiBtn()
 	{
 		gameVar.game = 'pong';
 		gameVar.liveMatch = true;
-		roomMultiView();
+		initLobbyView();
 	});
 
 	gameVar.playBtn4.addEventListener('click', () =>
 	{
 		gameVar.game = "brickout";
 		gameVar.liveMatch = true;
-		roomMultiView();
+		initLobbyView();
 		// showGameBrickMultiView();
 		// initListenerMultiB();
 	});

@@ -1,6 +1,6 @@
-import { resetPowerUpB } from "./powerUp.js";
 import brickVar from "./var.js";
-import brickVar2 from "./secondBrickout/var.js";
+import { resetPowerUpB } from "./powerUp.js";
+import { displayBallB } from "../pong/displayVar.js";
 
 export function startBallB(e)
 {
@@ -11,10 +11,8 @@ export function startBallB(e)
             brickVar.gameStart = true;
 			brickVar.startTime = true;
             brickVar.dx = brickVar.initDx;
-            // brickVar.dy = (Math.random() < 0.5 ? brickVar.initDy : -brickVar.initDy);
             brickVar.dy = -brickVar.initDy;
 			displayBallB();
-			console.log("New dx, dy:", brickVar.dx, brickVar.dy);
         }
 		else
 		{
@@ -23,15 +21,6 @@ export function startBallB(e)
             e.stopPropagation();
         }
 	}
-}
-export function displayBallB()
-{
-	// console.log("x: ", brickVar.x);
-	// console.log("y: ", brickVar.y);
-	// console.log("dx: ", brickVar.dx);
-	// console.log("dy: ", brickVar.dy);
-	console.log("init Dx :", brickVar.initDx);
-	console.log("init Dy :", brickVar.initDy);
 }
 
 export function initBallB()

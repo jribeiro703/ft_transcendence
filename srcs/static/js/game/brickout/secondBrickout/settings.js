@@ -1,11 +1,9 @@
 import brickVar2 from "./var.js";
 import { updatePowerUpSelectionB } from "./powerUp.js";
 import { updateLevelSelectionB } from "./level.js";
-import { showGameSelectionView } from "../../gameView.js";
-import { displayBallB } from "./ball.js";
-import { showGameBrickView } from "./game.js";
-import { showGameBrickMultiView } from "./game.js";
-import { showGameSelectionMultiView } from "../../gameView.js";
+import { showGameSelectionView } from "../../pong/gameSelectionView.js";
+import { showGameSelectionMultiView } from "../../pong/gameViewMulti.js";
+import { displayBallB } from "../../pong/displayVar.js";
 
 export function showSettingViewB(live)
 {
@@ -33,8 +31,8 @@ export function showSettingViewB(live)
 	{
 		if (live === true)
 		{
-			roomMultiView();
-			updateLiveSetting();
+			// roomMultiView();
+			// updateLiveSetting();
 		}
 		else
 		{
@@ -77,7 +75,7 @@ export function updateSettingB()
 	else
 	{
 		difficulty = 'medium';
-		updateDifficultySelectionB('medium');
+		updateDifficultySelectionSB('medium');
 	}
 
 	if (brickVar2.castle)
@@ -102,7 +100,6 @@ export function updateSettingB()
 
 	displayUpdateSetting(difficulty, powerUp, level);
 }
-
 
 export function updateDifficultySelectionSB(level)
 {
@@ -215,7 +212,7 @@ export function listenSettingDifficultyB()
 		brickVar2.easy.classList.add('selected');
 		brickVar2.medium.classList.remove('selected');
 		brickVar2.hard.classList.remove('selected');
-		updateDifficultySelectionB('easy');
+		updateDifficultySelectionSB('easy');
 	});
 	
 	brickVar2.medium.addEventListener('click', () => 
@@ -223,7 +220,7 @@ export function listenSettingDifficultyB()
 		brickVar2.easy.classList.remove('selected');
 		brickVar2.medium.classList.add('selected');
 		brickVar2.hard.classList.remove('selected');
-		updateDifficultySelectionB('medium');
+		updateDifficultySelectionSB('medium');
 	});
 
 	brickVar2.hard.addEventListener('click', () => 
@@ -231,7 +228,7 @@ export function listenSettingDifficultyB()
 		brickVar2.easy.classList.remove('selected');
 		brickVar2.medium.classList.remove('selected');
 		brickVar2.hard.classList.add('selected');
-		updateDifficultySelectionB('hard');
+		updateDifficultySelectionSB('hard');
 	});
 }
 
@@ -279,7 +276,7 @@ export function checkSettingB()
 	if (brickVar2.settingChanged === false)
 	{
 		updatePowerUpSelectionB(false); 
-		updateDifficultySelectionB('medium');
+		updateDifficultySelectionSB('medium');
 		updateLevelSelectionB('classic')
 	}
 }	

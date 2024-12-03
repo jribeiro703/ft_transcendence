@@ -1,9 +1,9 @@
 import gameVar from './var.js';
-import { sendGameData, sendPlayerData, sendSettingData } from './network.js';
+import { sendPlayerData, sendSettingData } from './network.js';
 import { drawLive, initializeBall } from './draw.js';
-import { updateCanvasColor } from './setting.js';
-import { drawScoreBoard } from './gameView.js';
-import { startGame } from './start.js';
+import { updateCanvasColor } from './update.js';
+import { showGameRoom } from './gameView.js';
+import { drawScoreBoard } from './draw.js';
 
 export function createNewRoom(joinRoomCallback)
 {
@@ -11,15 +11,6 @@ export function createNewRoom(joinRoomCallback)
 	gameVar.playerIdx = 1;
 	gameVar.isFirstPlayer = true;
 	joinRoom(roomName);
-}
-
-export function displayGameData(idx)
-{
-	console.log(idx);
-	console.log("gamestart: ", gameVar.gameStart);
-	console.log("gameReady: ", gameVar.gameReady);
-	console.log("diff: ", gameVar.difficulty);
-	console.log("level: ", gameVar.currentLevel);
 }
 
 export function waitingPlayer()
@@ -35,15 +26,14 @@ export function waitingPlayer()
 			gameVar.ctx.strokeStyle = '#1F2E4D'; 
 			gameVar.ctx.lineWidth = 1;
 			gameVar.ctx.strokeText("Waiting for opponent...", gameVar.canvasW / 4, gameVar.canvasH / 2);
+			sendSettingData(gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
 		}
 		else
 		{
 			gameVar.gameReady = true;
 			clearInterval(waitingINterval);
 			sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
-
 			startLiveGame();
-
 		}
 	}, 2000);
 
@@ -55,13 +45,6 @@ export function startLiveGame()
 	updateCanvasColor();
 	drawLive();
 }
-
-export function displayPlayerData(idx)
-{
-	console.log("playerReady: ", gameVar.playerReady);
-	console.log("currentServer: ", gameVar.currentServer);
-}
-
 
 export function joinRoom(roomName)
 {
@@ -102,7 +85,6 @@ export function joinRoom(roomName)
 			if (data.type === 'ping')
 			{
 				gameSocket.send(JSON.stringify({ type: 'pong' }));
-				// console.log('Pong envoyé en réponse');
 			}
 			else if (data.type == 'client_left')
 			{
@@ -116,7 +98,7 @@ export function joinRoom(roomName)
             		type: 'room_deleted',
             		room_name: roomName
         		}));
-    }
+				}
 			}
 			else if (data.type == 'ball_data')
 			{
@@ -180,21 +162,17 @@ export function delRooms()
 	while (gameVar.rooms.length > 0)
 		gameVar.rooms.pop();
 }
-
-export function updateRoomInfo(index, roomName, playerCount, roomStatus)
+export function updateRoomInfo(index, difficulty, level)
 {
     const room = gameVar.rooms.find(room => room.idx === index);
 
     if (room)
 	{
-        room.name = roomName || room.name; 
-        room.players = playerCount;
-        room.status = roomStatus;
+		room.difficulty = difficulty;
+		room.level = level;
     } 
 }
-
-
-export function addRoom(index, roomName, status)
+export function addRoom(index, roomName, status, nbplayer, difficulty = null, level = null)
 {
     if (!gameVar.rooms.some(room => room.name === roomName))
 	{
@@ -202,6 +180,9 @@ export function addRoom(index, roomName, status)
 		{
             idx: index,      
             name: roomName,
+			players: nbplayer,
+			difficulty: difficulty,
+			level: level,
             status: status
         });
     }
@@ -219,15 +200,22 @@ export function updateRoomList()
 		if (room.idx === null || room.idx === undefined)
 			return ;
 
+		gameVar.noRoomsMessage.style.display = 'none';
 		const roomItem = document.createElement('div');
 		roomItem.className = 'server-item';
 
 		roomItem.innerHTML = `
-			<span class="room-name">${room.name}</span>
-			<span class="room-players">${room.players}/2</span>
-			<span class="room-status">${room.status}</span>
-			<button class="joinRoomBtn" ${room.status} === 'Started' ? 'disabled' : ''}>Join</button>
-		`;
+            <div class="room-header">
+                <span class="room-name">${room.name}</span>
+                <button class="joinRoomBtn" ${room.status === 'Started' ? 'disabled' : ''}>Join</button>
+            </div>
+            <div class="room-info">
+                <span class="room-players">Players: ${room.players}/2</span>
+                <span class="room-difficulty">Difficulty: ${room.difficulty}</span>
+                <span class="room-level">Level: ${room.level}</span>
+                <span class="room-status">Status: ${room.status}</span>
+            </div>
+        `;
 
 		const joinBtn = roomItem.querySelector('.joinRoomBtn');
 		joinBtn.addEventListener('click', () =>
@@ -238,31 +226,6 @@ export function updateRoomList()
 
 		gameVar.roomsContainer.appendChild(roomItem);
 	})
-}
-
-export function showGameRoom()
-{
-	gameVar.playerIdx = 2;
-	gameVar.playerReady = true;
-
-	displayCanvas();
-
-	gameVar.rematchBtn = document.getElementById('rematchBtn');	
-	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	gameVar.gameView = document.getElementById('gameView');
-
-	gameVar.gameView.style.display = 'block';
-	
-	getCanvasInfo();
-
-	gameVar.gameTime = 0;
-    gameVar.gameTimer = setInterval(() =>
-	{
-        if (gameVar.startTime)
-		{
-            gameVar.gameTime++;
-        }
-    }, 1000);
 }
 
 export function updateSettingLive()
@@ -283,118 +246,82 @@ export function updateSettingLive()
 		}
 	}, 2000);
 }
-
-export function displayCanvas()
+export function checkRoom(rooms)
 {
-	const mainContent = document.getElementById('mainContent');
+	console.log("checkRoom");
+    if (rooms && Array.isArray(rooms)) 
+	{
+        gameVar.rooms = gameVar.rooms.filter(room => rooms.includes(room.name));
+        updateRoomList();
+    }
+}
+export function roomNetwork()
+{
+	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+	const tempSocket = new WebSocket(protocol + '//' + window.location.host + '/ws/pong/check_rooms/');
+	gameVar.lobbySocket = tempSocket;
+	var idx = 0;
+	gameVar.refreshBtn.addEventListener('click', () =>
+	{
+		tempSocket.send(JSON.stringify({type: 'lobbyView'}));
+		updateRoomList();
+	});
 
-	mainContent.innerHTML = '';
+	tempSocket.onopen = function(e)
+	{
+		console.log('Temporary socket opened');
+		console.log("on send lobbyView :");
+		tempSocket.send(JSON.stringify({type: 'lobbyView'}));
+	};
 
-	const insertTo = document.createElement('div');
+	tempSocket.onmessage = function(e)
+	{
+		const data = JSON.parse(e.data);
+		console.log("data: ", data);
+		if (data.type === 'looks_rooms')
+		{
+			if (data.rooms)
+			{
+				idx = gameVar.rooms.length;
 
-	insertTo.innerHTML = `
-	<div id="gameView" style="display: none;">
-			<div id="scoreboard">
-				<canvas id="scoreCanvas"></canvas>
-			</div>
-			<canvas id="myCanvas"></canvas>
-			<br><br>
-			<div class="button-container">
-				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
-				<button id="quitGameBtn" style="display: none;">Quit Game</button>
-			</div>
-		</div>	
-	`;
+				data.rooms.forEach(roomName => 
+				{
+					checkRoom(data.rooms);	
+					const roomExists = gameVar.rooms.some(room => room.name === roomName);
+				
+					if (!roomExists)
+					{
+						addRoom(idx, roomName, 'Waiting for opponent', 1);
+						idx++;
+					}
+    			});
+			}
+		}
+		if (data.type == 'norooms')
+		{
+			delRooms();
+			gameVar.noRoomsMessage.style.display = 'block';
+			updateRoomList();
+		}
+		if (data.type === 'ping')
+		{
+			tempSocket.send(JSON.stringify({ type: 'pong' }));
+		}
+		if (data.type === 'setting_data')
+		{
+			idx--;
+			updateRoomInfo(idx, data.setting_data.difficulty, data.setting_data.currentLevel);
+			updateRoomList();
+		}
+	}
+	tempSocket.onerror = function(event)
+	{
+    	console.error("WebSocket error observed:", event);
+	};
 
-	mainContent.appendChild(insertTo);
+	tempSocket.onclose = function(event)
+	{
+    	console.log("WebSocket closed:", event);
+	};
 }
 
-export function getCanvasInfo()
-{
-	var canvas = document.getElementById('myCanvas');
-	gameVar.ctx = canvas.getContext('2d');
-	canvas.width = gameVar.canvasW;
-	canvas.height = gameVar.canvasH;
-
-
-	var scoreCanvas = document.getElementById('scoreCanvas');
-	gameVar.scoreCtx = scoreCanvas.getContext('2d');
-	scoreCanvas.width = gameVar.scoreCanvW;
-	scoreCanvas.height = gameVar.scoreCanvH;
-
-    scoreCanvas.style.marginBottom = '10px';
-}
-// export function checkForExistingRooms(joinRoomCallback)
-// {
-// 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-// 	const tempSocket = new WebSocket(protocol + '//' + window.location.host + '/ws/pong/check_rooms/');
-
-// 	tempSocket.onopen = function(e)
-// 	{
-// 		console.log('Temporary socket opened');
-// 		tempSocket.send(JSON.stringify({ type: 'check_rooms' }));
-// 	};
-
-// 	tempSocket.onmessage = function(e)
-// 	{
-// 		const data = JSON.parse(e.data);
-// 		if (data.type === 'available_rooms' && data.rooms.length > 0)
-// 		{
-// 			console.log("join room call backkkkkk");
-// 			const roomName = data.rooms[0];
-// 			joinRoomCallback(roomName);
-// 			gameVar.playerIdx = 2;
-// 			// // gameVar.playerReady = true;
-// 			// const player = gameVar.players.find(player => player.idx === gameVar.playerIdx)
-// 			// if (player)
-// 			// 	player.ready = true;
-// 			console.log("started 2");
-			
-// 		}
-// 		else
-// 		{
-// 			console.log("createnewroooom");
-// 			const newRoom = createNewRoom(joinRoomCallback);
-// 			gameVar.playerIdx = 1;
-// 			// gameVar.playerReady = true;
-// 			// gameVar.isFirstPlayer = true;
-// 			// const player = gameVar.players.find(player => player.idx === gameVar.playerIdx);
-// 			// if (player)
-// 				// player.ready = true;
-// 			console.log("waiting 1");
-			
-
-// 		}
-// 		tempSocket.close();
-// 	};
-
-// 	tempSocket.onerror = function(e)
-// 	{
-// 		console.error('Temporary socket error:', e);
-// 		createNewRoom(joinRoomCallback);
-// 		tempSocket.close();
-// 	};
-
-// 	tempSocket.onclose = function(e)
-// 	{
-// 		console.log('Temporary socket closed');
-// 	};
-// }
-// else if (data.type == 'room_data')
-			// {
-			// 	updateRoomInfo(data.room_data.idx, data.room_data.name, data.room_data.nbPlayer, data.room_data.status);
-			// }
-			// else if (data.type == 'room_joined')
-			// {
-			// 	console.log(`Joined room: ${data.room_name}`);
-			// } 
-			// else if (data.type == 'client_joined')
-			// {
-			// 	console.log(data.message);
-			// } 
-			// else if (data.type == 'client_left')
-			// {
-			// 	gameVar.playerReady = false;
-			// 	gameSocket.send(JSON.stringify({ type: 'room_deleted'}));
-			// 	sendPlayerData(gameVar.gameSocket, gameVar.playerReady, gameVar.currentServer);
-			// }

@@ -12,14 +12,12 @@ export function collisionFoot()
 			gameVar.x = gameVar.ballRadius;
 			gameVar.dx = -gameVar.dx;
 			return (true);
-			// directChanged = true;
 		}
 		if (gameVar.x + gameVar.ballRadius > gameVar.canvasW)
 		{
 			gameVar.x = gameVar.canvasW - gameVar.ballRadius;
 			gameVar.dx = -gameVar.dx;
 			return (true);
-			// directChanged = true;
 		}
 	}
 }

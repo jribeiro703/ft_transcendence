@@ -1,4 +1,4 @@
-import gameVar from "../var.js";
+import gameVar from "../pong/var.js";
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 
@@ -42,29 +42,13 @@ export function drawPaddleB()
     brickVar.ctx.closePath();
 }
 
-// export function drawScoreB()
-// {
-//     brickVar.ctx.font = "16px Arial";
-//     brickVar.ctx.fillStyle = "grey";
-//     brickVar.ctx.fillText("Score: "+brickVar.score, 8, 20);
-// }
-
-// export function drawLivesB()
-// {
-//     brickVar.ctx.font = "16px Arial";
-//     brickVar.ctx.fillStyle = "grey";
-//     brickVar.ctx.fillText("Lives: "+brickVar.lives, brickVar.canvasW - 65, 20);
-// }
-
 function loadCustomFont()
 {
     return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');
 }
 
-
 export function drawScoreBoardB()
 {
-
     loadCustomFont().load().then(function(font) 
 	{
         document.fonts.add(font);
@@ -124,8 +108,6 @@ export function drawScoreBoardB()
 			ctx.font = '20px fontScore';
 			ctx.fillText(time, centerX, y + brickVar.scoreCanvH / 2);
 		}
-
-
 	}).catch(function(error)
 	{
 		console.error("Error on font load", error);

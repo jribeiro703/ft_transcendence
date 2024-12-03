@@ -25,7 +25,6 @@ export function collisionTennis()
     }
     
 }
-
 export function drawTennisCourt()
 {
     gameVar.ctx.strokeStyle = 'white';

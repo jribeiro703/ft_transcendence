@@ -1,5 +1,6 @@
-import { resetPowerUpB } from "./powerUp.js";
 import brickVar2 from "./var.js";
+import { resetPowerUpB } from "./powerUp.js";
+import { displayBallB } from "../../pong/displayVar.js";
 
 export function startBallB(e)
 {
@@ -22,15 +23,6 @@ export function startBallB(e)
             e.stopPropagation();
         }
 	}
-}
-export function displayBallB()
-{
-	// console.log("x: ", brickVar2.x);
-	// console.log("y: ", brickVar2.y);
-	// console.log("dx: ", brickVar2.dx);
-	// console.log("dy: ", brickVar2.dy);
-	console.log("init Dx :", brickVar2.initDx);
-	console.log("init Dy :", brickVar2.initDy);
 }
 
 export function initBallB()

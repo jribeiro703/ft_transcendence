@@ -1,11 +1,11 @@
 import brickVar from './var.js';
 import brickVar2 from './secondBrickout/var.js';
-import { collisionDetectionB, drawBricksB, initBricksB } from './brick.js'
+import { collisionDetectionB, drawBricksB} from './brick.js'
 import { drawBallB, drawPaddleB } from './draw.js';
-import { keyDownHandlerB, keyUpHandlerB, mouseMoveHandlerB} from './control.js';
-import { initBallB, updateBallPositionB, handleBallB } from './ball.js';
+import { keyDownHandlerB, keyUpHandlerB} from './control.js';
+import { updateBallPositionB, handleBallB } from './ball.js';
 import { manageCollisionB, manageMoveB } from './manage.js';
-import { collectPowerUpB, createPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
+import { collectPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
 import { drawScoreBoardB } from './draw.js';
 import { startBallB as startBallFirst } from './ball.js';
 import { startBallB as startBallSecond } from './secondBrickout/ball.js'
@@ -17,8 +17,7 @@ import { checkSettingB } from './settings.js';
 export function showGameBrickView()
 {
 	console.log("brickview");
-
-	history.pushState({ view: 'game'}, '', `?view=solo/brickout`);
+	// history.pushState({ view: 'game'}, '', `?view=solo/brickout`);
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = '';
 	const insertTo = document.createElement('div');
@@ -226,29 +225,14 @@ export function initListenerMultiB()
 		startGameFirst('classic');
 		startGameSecond('classic');
 	}
-
-
-	
-
-	
 }
-
-
 
 function removeEventListenersB()
 {
     document.removeEventListener("keydown", keyDownHandlerB);
     document.removeEventListener("keyup", keyUpHandlerB);
-    document.removeEventListener("keydown", startBallFirst, startBallSecond);
-    // document.removeEventListener("keydown", startBallSecond);
-}
-
-
-
-function initVar()
-{
-	console.log("dx :", brickVar.initDx);
-	console.log("dy :", brickVar.initDy);
+    document.removeEventListener("keydown", startBallFirst);
+    document.removeEventListener("keydown", startBallSecond);
 }
 
 function baseDrawB()
@@ -258,8 +242,6 @@ function baseDrawB()
 	drawBricksB();
 	drawBallB();
 	drawPaddleB();
-	// drawScoreB();
-	// drawLivesB();
 }
 
 export function drawB()
@@ -278,7 +260,6 @@ export function drawB()
 		else
 		{
 			handleBallB();
-			// displayBallB();
 		}
 		manageMoveB();
 		updateBallPositionB();

@@ -1,10 +1,9 @@
 import brickVar from "./var.js";
+import gameVar from "../pong/var.js";
 import { initListenerB, showGameBrickMultiView } from "./game.js";
 import { initBricksB } from "./brick.js";
 import { sendScoreB } from "./manage.js";
-import gameVar from "../var.js";
-import { rematchView } from "../gameView.js";
-// import { startGameB } from "../start.js";
+import { startGameB } from "./control.js";
 
 export function youWinB()
 {
@@ -178,8 +177,6 @@ export function addBtnB()
 		checkBtnB("localRematch");	
 	}
 }
-
-
 
 export function checkBtnB(status)
 {

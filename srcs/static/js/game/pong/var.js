@@ -8,6 +8,7 @@ const gameVar =
 	scoreCanvW: 420,
 	scoreCanvH: 100,
 	scoreCtx: null, 
+
 	gameTime: 0,
 	gameTimer: null,
 
@@ -45,29 +46,13 @@ const gameVar =
 	player2ScoreElement: null,
 	aiScoreElement: null,
 
+	scoreBoard: [],
 
 // ----------------------------Settings-------------------------
 
 	settingsChanged: false,
-	powerUpSpeed: 3,
 
-	powerUpX1: null,
-	powerUpY1: null,
-
-	powerUpX2: null,
-	powerUpY2: null,
-
-	powerUp1Active: false,
-	powerUp2Active: false,
-
-	powerUp1OnScreen: false,
-	powerUp2OnScreen: false,
-
-	powerUpEnable: false,
-	powerUpDuration: 5000,
-
-	withPowerUp: null,
-	withoutPowerUp: null,
+	liveSettingChanged: false,
 
 	powerUpSelection: null,
 	speedPuActive: false,
@@ -154,6 +139,8 @@ const gameVar =
 	playmultiGameBtn: null,
 	
 	btnPowerUp: null,
+	withPowerUp: null,
+	withoutPowerUp: null,
 	settingBtn: null,
 	settingBtn1: null,
 	settingBtn2: null,
@@ -165,7 +152,7 @@ const gameVar =
 	saveBtn: null,
 	
 	createRoomBtn: null,
-	createRoomName: null,
+	// createRoomName: null,
 	
 	tournamentGameBtn: null,
 	rematchBtn: null,
@@ -189,14 +176,34 @@ const gameVar =
 	newRoomName: null,
 	
 	rooms: [
-		{ idx: null, name: null, players: 0, status: null},
+		{ idx: null, name: null, difficulty: null, level: null, players: 0, status: null},
 	],
+	
 	isFirstPlayer: false,
+
 	roomName: null,
 	gameSocket: null,
+	lobbySocket: null,
 
 
 // -------------------Power Ups------------------------
+
+	powerUpSpeed: 3,
+
+	powerUpX1: null,
+	powerUpY1: null,
+
+	powerUpX2: null,
+	powerUpY2: null,
+
+	powerUp1Active: false,
+	powerUp2Active: false,
+
+	powerUp1OnScreen: false,
+	powerUp2OnScreen: false,
+
+	powerUpEnable: false,
+	powerUpDuration: 5000,
 
 	powerUps: [
 		{ type: 'speed', image: 'static/css/images/fast.png'},
@@ -217,28 +224,6 @@ const gameVar =
 	],
 	currentLevel: null,
 
-	// currentMap: 'classicMap',
-	// maps: {
-	// 	classicMap: [],
-	// 	customMap1: [
-	// 		{sta: 1, x: 840 / 2 - 15, y: 5, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 - 15, y: 65, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 - 15, y: 125, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 - 15, y: 185, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 - 15, y: 245, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 - 15, y: 305, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 - 15, y: 365, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 + 15, y: 5, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 + 15, y: 65, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 + 15, y: 125, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 + 15, y: 185, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 + 15, y: 245, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 + 15, y: 305, width: 20, height: 50 },
-	// 		{sta: 1, x: 840 / 2 + 15, y: 365, width: 20, height: 50 },
-	// 	],
-	// },
-
-	scoreBoard: [],
 };
 
 export default gameVar;

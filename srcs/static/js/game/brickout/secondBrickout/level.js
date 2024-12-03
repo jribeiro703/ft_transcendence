@@ -2,7 +2,7 @@ import brickVar2 from "./var.js";
 import { initListenerB } from "./game.js";
 import { initBricksB } from "./brick.js";
 import { sendScoreB } from "./manage.js";
-// import { startGameB } from "./game.js";
+import { startGameB } from "./control.js";
 
 export function youWinB()
 {
@@ -156,8 +156,6 @@ export function addBtnB()
 	}
 }
 
-
-
 export function checkBtnB(status)
 {
 	if (status === 'nextLevel')
@@ -183,6 +181,7 @@ export function checkBtnB(status)
 			quitBtn.addEventListener('click', () => document.location.reload());
 	}
 }
+
 export function clearBtnB()
 {
 	const nextLevel = document.getElementById("nextLevel");

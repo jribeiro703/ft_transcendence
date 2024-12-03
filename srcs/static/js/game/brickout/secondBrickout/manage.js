@@ -1,10 +1,10 @@
+import gameVar from "../../pong/var.js";
+import brickVar from "../var.js";
 import brickVar2 from "./var.js";
 import { resetBallB } from "./ball.js";
-import { addBtnB, addImageB } from "./level.js";
-import gameVar from "../../var.js";
-import brickVar from "../var.js";
-import { displayScore } from "../manage.js";
-import { drawScoreBoardB } from "../draw.js";
+import { addBtnB } from "./level.js";
+import { drawScoreBoardB } from "./draw.js";
+import { displayScore } from "../../pong/displayVar.js";
 
 export function manageCollisionB()
 {
@@ -26,7 +26,7 @@ export function manageCollisionB()
                 MAX_ANGLE_DEVIATION = Math.PI / 3;
 			else
                 MAX_ANGLE_DEVIATION = Math.PI / 4;
-            const currentSpeed = brickVar2.powerUpActive ? Math.sqrt(brickVar2.dx * brickVar2.dx + brickVar2.dy * brickVar2.dy) : 5;
+            const currentSpeed = brickVar2.powerUpActive ? Math.sqrt(brickVar2.dx * brickVar2.dx + brickVar2.dy * brickVar2.dy) : brickVar2.initDx;
             if (hitPos < 0.5)
 			{
                 let angle = BASE_ANGLE - (0.5 - hitPos) * 2 * MAX_ANGLE_DEVIATION;
@@ -44,7 +44,6 @@ export function manageCollisionB()
 			loseLives();
 	}
 }
-
 
 function compareScore()
 {
@@ -103,8 +102,6 @@ export function chechOpponent()
 		}, 1000);
 	}
 }
-
-
 
 export function loseLives()
 {
