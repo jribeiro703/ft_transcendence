@@ -1065,7 +1065,6 @@ button:disabled {
   width: 0;
   height: 0;
   max-width: 33%;
-  overflow: hidden;
   transition:
     width 0.5s ease,
     box-shadow 0.5s ease;
@@ -1265,7 +1264,7 @@ emoji-picker {
   --emoji-padding: 0.25rem;
   height: 250px;
   width: 256px;
-  --border-radius: 5px 5px 0px 0px;
+  --border-radius: 5px;
   --border-color: var(--highlight-color);
   --background: var(--background-color);
   --border-color: var(--highlight-color);
@@ -1282,9 +1281,9 @@ emoji-picker {
 .emoji-picker-container {
   display: none;
   position: absolute;
-  bottom: 150px;
-  right: 30%;
-  z-index: 1000;
+  bottom: 55px;
+  transform: translateX(0%);
+  border-radius: 5px;
 }
 
 #emojiButton {
