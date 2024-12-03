@@ -98,36 +98,6 @@ export const preRegisterPlayers = async (tournamentId, playerIds) => {
 	}
 };
 
-export const setupTournamentFlow = async (name) => {
-	try {
-		// Step 1: Create the tournament
-		const tournamentId = await createTournament(name);
-		if (!tournamentId) return;
-
-		// Step 2: Fetch eligible players
-		const eligiblePlayers = await fetchParticipants();
-		if (!eligiblePlayers || eligiblePlayers.length < 2) {
-			console.error('Not enough players to proceed.');
-			return;
-		}
-
-		// Step 3: Pre-register players
-		const playerIds = eligiblePlayers.map(player => player.id);
-		await preRegisterPlayers(tournamentId, playerIds);
-
-		// Step 4: Perform matchmaking
-		await performMatchmaking(tournamentId);
-
-		// Fetch and render the tournament bracket
-		const bracket = await fetchTournamentBracket(tournamentId);
-		renderBracket(bracket);
-
-		console.log('Tournament setup completed successfully.');
-	} catch (error) {
-		console.error('Error during tournament setup flow:', error);
-	}
-};
-
 export const generateTournamentName = async () => {
 	try {
 		const response = await fetch('https://localhost:8081/tournament/generate-name/');
@@ -204,24 +174,66 @@ export const fetchCurrentPlayers = async (tournamentId) => {
 	}
 };
 
-
 function renderBracket(bracket) {
 	const bracketContainer = document.getElementById('current-players');
 	bracketContainer.innerHTML = ''; // Clear existing content
 
 	bracket.forEach((match, index) => {
+		// Create the match div
 		const matchDiv = document.createElement('div');
-		matchDiv.className = 'match';
+		matchDiv.className = 'match d-flex justify-content-between align-items-center px-3 py-2 bg-light rounded border mb-2';
+//		const player1Class = match.player1 === loggedInUser ? 'highlighted-user' : '';
+		const player2Class = match.player2 === 'highlighted-user';
+
 		matchDiv.innerHTML = `
-			<span>${match.player1}</span> vs <span>${match.player2}</span>
+			<div class="player text-success d-flex align-items-center gap-2">
+				🎉 <span class="fw-bold">${match.player1}</span>
+			</div>
+			<div class="vs text-muted fw-bold text-center">vs</div>
+			<div class="player text-danger d-flex align-items-center gap-2">
+				<span class="fw-bold">${match.player2}</span> 🔥
+			</div>
 		`;
 		bracketContainer.appendChild(matchDiv);
 
 		// Add a connector line if it's not the last match
 		if (index < bracket.length - 1) {
 			const connector = document.createElement('div');
-			connector.className = 'connector';
+			connector.className = 'connector d-flex justify-content-center align-items-center';
+			connector.innerHTML = `
+				<span class="line"></span>
+			`;
 			bracketContainer.appendChild(connector);
 		}
 	});
 }
+
+export const setupTournamentFlow = async (name) => {
+	try {
+		// Step 1: Create the tournament
+		const tournamentId = await createTournament(name);
+		if (!tournamentId) return;
+
+		// Step 2: Fetch eligible players
+		const eligiblePlayers = await fetchParticipants();
+		if (!eligiblePlayers || eligiblePlayers.length < 2) {
+			console.error('Not enough players to proceed.');
+			return;
+		}
+
+		// Step 3: Pre-register players
+		const playerIds = eligiblePlayers.map(player => player.id);
+		await preRegisterPlayers(tournamentId, playerIds);
+
+		// Step 4: Perform matchmaking
+		await performMatchmaking(tournamentId);
+
+		// Fetch and render the tournament bracket
+		const bracket = await fetchTournamentBracket(tournamentId);
+		renderBracket(bracket);
+
+		console.log('Tournament setup completed successfully.');
+	} catch (error) {
+		console.error('Error during tournament setup flow:', error);
+	}
+};
