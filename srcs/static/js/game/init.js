@@ -25,7 +25,7 @@ function removeEventListeners()
 export function initEventListener()
 {
 	removeEventListeners();
-	// gameVar.playsoloGameBtn.addEventListener('click', showGameSelectionView);
+	gameVar.playsoloGameBtn.addEventListener('click', showGameSelectionView);
 	gameVar.playsoloGameBtn.addEventListener('click', () => renderPage("GameSelectionSoloPage"));
 	// gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
 	gameVar.playmultiGameBtn.addEventListener('click', () => renderPage("showGameSelectionMultiView"));
@@ -66,14 +66,14 @@ export function initControl(local)
 	document.addEventListener("keydown", (e) => {
 		if (e.code === "ArrowUp" || e.code === "ArrowDown" || e.code === "KeyW" || e.code === "KeyS")
 		{
-			keyDownHandler(e);
+			keyDownHandler(e, local);
 		}
 	});
 
 	document.addEventListener("keyup", (e) => {
 		if (e.code === "ArrowUp" || e.code === "ArrowDown" || e.code === "KeyW" || e.code === "KeyS")
 		{
-			keyUpHandler(e);
+			keyUpHandler(e, local);
 		}
 	});
 }
@@ -82,8 +82,8 @@ export function initControl(local)
 export function initEventListenerRoom()
 {
 	removeEventListeners();
-	document.addEventListener("keydown", (e) => keyDownHandler(e, gameVar.isFirstPlayer), false);
-	document.addEventListener("keyup", (e) => keyUpHandler(e, gameVar.isFirstPlayer), false);
+	document.addEventListener("keydown", (e) => keyDownHandler(e), false);
+	document.addEventListener("keyup", (e) => keyUpHandler(e), false);
 	document.addEventListener("keydown", startBall, false);
 
 	gameVar.createRoomBtn.addEventListener('click', () => 

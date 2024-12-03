@@ -137,13 +137,13 @@ export function listenSettingBtn()
 	gameVar.settingBtn1.addEventListener('click', () =>
 	{
 		// showSettingView(false);
-		renderPage("pongSettingSolo", true, false);
+		renderPage("pongSettingSolo", true, false, false);
 	});
 
 	gameVar.settingBtn2.addEventListener('click', () =>
 	{
 		// showSettingViewB(false);
-		renderPage("brickoutSettingSolo", true, false);
+		renderPage("brickoutSettingSolo", true, false, false);
 	});
 }
 

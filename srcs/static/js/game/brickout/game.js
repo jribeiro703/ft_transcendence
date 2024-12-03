@@ -160,13 +160,13 @@ export function initListenerB()
     });
 
     document.addEventListener("keydown", (e) => {
-        if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
+        if (e.code === "ArrowRight" || e.code === "ArrowLeft" || e.code === 'KeyA' || e.code === 'KeyD'){
             keyDownHandlerB(e);
         }
     });
 
     document.addEventListener("keyup", (e) => {
-        if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
+        if (e.code === "ArrowRight" || e.code === "ArrowLeft" || e.code === 'KeyA' || e.code === 'KeyD') {
             keyUpHandlerB(e);
         }
     });

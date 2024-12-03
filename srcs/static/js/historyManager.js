@@ -58,7 +58,6 @@ const pongGamePages = {
 // 	brickoutMultiRemote: createRoomView,
 
 // }
-
 async function renderPage(page, updateHistory = true, params = null) {
 	
 	let renderFunction;
@@ -70,24 +69,83 @@ async function renderPage(page, updateHistory = true, params = null) {
 	else
 		renderFunction = authPages[page] || pongGamePages[page];
 
-	if (!renderFunction) {
-		history.replaceState({ page: "home" }, "home", "#home");
+	const lastPage = sessionStorage.getItem('lastPage');
+    const isRefresh = lastPage === page;
+
+	 if (params !== null)
+	{
+        sessionStorage.setItem('pageParams', JSON.stringify(params));
+    }
+
+	if (!renderFunction)
+	{
+		history.replaceState({ page: "home", params: params }, "home", "#home");
 		renderFunction = renderHomePage;
-	} else {
+	} 
+	else
+	{
 		if (updateHistory)
-			history.pushState({ page: page, params: params }, page, `#${page}`);
+		{
+			const historyMethod = isRefresh ? 'replaceState' : 'pushState';
+            history[historyMethod](
+			{ 
+                page: page, 
+                params: params || JSON.parse(sessionStorage.getItem('pageParams'))
+
+            }, page, `#${page}`);
+		}
 	}
+
+	sessionStorage.setItem('lastPage', page);
+
+	if (params === null && history.state && history.state.params !== undefined) 
+	{
+        params = history.state.params;
+    }
 	
+	console.log("renderpage : ", params);
 	await renderFunction(params);
 }
 
-// listen to precedent or next page event but don't push state to history
-window.addEventListener('popstate', async (event) => {
-	if (event.state) {
-	  await renderPage(event.state.page, false, event.state.params);
+
+window.addEventListener('popstate', async (event) =>
+{
+	if (event.state)
+	{
+		const storedParams = event.state.params || JSON.parse(sessionStorage.getItem('pageParams'));
+		await renderPage(event.state.page, false, storedParams);
 	}
 });
 
 
+window.addEventListener('load', () =>
+{
+    const currentHash = window.location.hash.slice(1) || 'home';
+    const currentState = history.state || {};
+	sessionStorage.setItem('lastPage', currentHash);
+    renderPage(currentHash, false, currentState.params || false);
+});
 
+// async function renderPage(page, updateHistory = true, params = null) {
+	
+// 	let renderFunction;
+// 	const authenticated = await isAuthenticated();
+// 	await updateUserAvatar();
+	
+// 	if (authenticated)
+// 		renderFunction = userPages[page] || pongGamePages[page];
+// 	else
+// 		renderFunction = authPages[page] || pongGamePages[page];
+
+// 	if (!renderFunction) {
+// 		history.replaceState({ page: "home" }, "home", "#home");
+// 		renderFunction = renderHomePage;
+// 	} else {
+// 		if (updateHistory)
+// 			history.pushState({ page: page, params: params }, page, `#${page}`);
+// 	}
+	
+// 	console.log("renderpage : ", params);
+// 	await renderFunction(params);
+// }
 export { renderPage };
