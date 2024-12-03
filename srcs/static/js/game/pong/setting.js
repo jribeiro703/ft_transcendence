@@ -22,7 +22,7 @@ export function checkSettingLive()
 
 export function updateSetting()
 {
-	gameVar.settingsChanged = true;
+	// gameVar.settingsChanged = true;
 	var difficulty = null;	
 	var level = null;
 	var powerUp = null;
@@ -59,6 +59,7 @@ export function updateSetting()
 
 export function displaySetting(difficulty, powerUp, level)
 {
+	console.log("displaySetting");
 	const settingContain = document.getElementById('settings-column');
 	if (!settingContain)
 		console.log("error on settingContain");

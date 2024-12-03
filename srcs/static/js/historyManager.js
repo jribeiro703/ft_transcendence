@@ -8,12 +8,12 @@ import { renderRegisterForm } from "./user/js/renderRegisterForm.js";
 import { renderSettingsPage } from "./user/js/renderSettingPage.js";
 import { isAuthenticated } from "./user/token.js";
 import { updateUserAvatar } from "./user/tools.js";
-import { showGameSelectionView, showGameSelectionMultiView, showGameView,  } from "./game/gameView.js"
-import { showSettingMultiView, showSettingView } from "./game/setting.js";
+import { showGameSelectionView } from "./game/pong/gameSelectionView.js";
+import { showGameSelectionMultiView } from "./game/pong/gameViewMulti.js";
+import { showGameView } from "./game/pong/gameView.js";
+import { showSettingView } from "./game/pong/settingsView.js";
 import { showGameBrickView } from "./game/brickout/game.js";
-import { showSettingMultiViewB, showSettingViewB } from "./game/brickout/settings.js";
-import { roomMultiView } from "./game/init.js";
-import { initListenerB } from "./game/brickout/game.js";
+import { showSettingViewB } from "./game/brickout/settings.js";
 
 
 const authPages = {
@@ -58,8 +58,8 @@ const pongGamePages = {
 // 	brickoutMultiRemote: createRoomView,
 
 // }
-async function renderPage(page, updateHistory = true, params = null) {
-	
+async function renderPage(page, updateHistory = true, params = null)
+{
 	let renderFunction;
 	const authenticated = await isAuthenticated();
 	await updateUserAvatar();
@@ -76,7 +76,6 @@ async function renderPage(page, updateHistory = true, params = null) {
 	{
         sessionStorage.setItem('pageParams', JSON.stringify(params));
     }
-
 	if (!renderFunction)
 	{
 		history.replaceState({ page: "home", params: params }, "home", "#home");
@@ -95,15 +94,12 @@ async function renderPage(page, updateHistory = true, params = null) {
             }, page, `#${page}`);
 		}
 	}
-
 	sessionStorage.setItem('lastPage', page);
-
 	if (params === null && history.state && history.state.params !== undefined) 
 	{
         params = history.state.params;
     }
 	
-	console.log("renderpage : ", params);
 	await renderFunction(params);
 }
 
@@ -117,13 +113,18 @@ window.addEventListener('popstate', async (event) =>
 	}
 });
 
-
 window.addEventListener('load', () =>
 {
     const currentHash = window.location.hash.slice(1) || 'home';
     const currentState = history.state || {};
 	sessionStorage.setItem('lastPage', currentHash);
-    renderPage(currentHash, false, currentState.params || false);
+
+	if (currentHash === 'playPongSolo') 
+		renderPage("home");
+	else if (currentHash === 'playBrickoutSolo')
+		renderPage('home');
+	else
+		renderPage(currentHash, false, currentState.params || false);
 });
 
 // async function renderPage(page, updateHistory = true, params = null) {

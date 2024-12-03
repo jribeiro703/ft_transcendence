@@ -1,7 +1,7 @@
 import gameVar from './var.js';
-import { showGameSelectionView } from './gameSelectionView.js';
 import { showGameSelectionMultiView } from './gameViewMulti.js'
 import { removeEventListeners } from './init.js';
+import { renderPage } from '../../historyManager.js';
 
 document.addEventListener('DOMContentLoaded', function() 
 {
@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function()
 
 	document.head.appendChild(link);
 
+	console.log("mon DOM");
 	// preventNavTouch();
 	initGameVar();
 	initEventListener();
@@ -19,16 +20,17 @@ document.addEventListener('DOMContentLoaded', function()
 
 export function initGameVar()
 {
-	gameVar.playsoloGameBtn = document.getElementById('playsoloGameBtn');
-	gameVar.playmultiGameBtn = document.getElementById('playmultiGameBtn');
+	// console.log("initGameVar");
+	// gameVar.playsoloGameBtn = document.getElementById('playsoloGameBtn');
+	// gameVar.playmultiGameBtn = document.getElementById('playmultiGameBtn');
 }
 
 export function initEventListener()
 {
-	removeEventListeners();
-	gameVar.playsoloGameBtn.addEventListener('click', showGameSelectionView);
+	// removeEventListeners();
+	// gameVar.playsoloGameBtn.addEventListener('click', renderPage("showGameSelectionSoloPage"));
 	// gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
-	gameVar.playmultiGameBtn.addEventListener('click', showGameSelectionMultiView);
+	// gameVar.playmultiGameBtn.addEventListener('click', showGameSelectionMultiView);
 }
 export function preventNavTouch()
 {

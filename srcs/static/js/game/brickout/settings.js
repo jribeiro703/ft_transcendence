@@ -7,11 +7,12 @@ import { updateLevelSelectionB as updateLevelSelectionSecond} from "./secondBric
 import { updateDifficultySelectionSB  } from "./secondBrickout/settings.js";
 import { showGameSelectionView } from "../pong/gameSelectionView.js";
 import { showGameSelectionMultiView } from "../pong/gameViewMulti.js";
+import { renderPage } from "../../historyManager.js";
 
 export function showSettingViewB(live)
 {
 	// history.pushState({ view: 'game'}, '', `?view=solo/settings`);
-
+	brickVar.settingChanged = true;
 	displaySettingB();
 	getSettingBtn();
 
@@ -39,8 +40,9 @@ export function showSettingViewB(live)
 		}
 		else
 		{
-			showGameSelectionView();
-			updateSettingB();
+			renderPage("gameSelectionSoloPage");
+			// showGameSelectionView();
+			// updateSettingB();
 		}
 	});
 }

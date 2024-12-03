@@ -1,3 +1,4 @@
+import gameVar from '../pong/var.js';
 import brickVar from './var.js';
 import brickVar2 from './secondBrickout/var.js';
 import { collisionDetectionB, drawBricksB} from './brick.js'
@@ -16,6 +17,8 @@ import { checkSettingB } from './settings.js';
 
 export function showGameBrickView()
 {
+	gameVar.game = "brickout";
+	checkSettingB();
 	console.log("brickview");
 	// history.pushState({ view: 'game'}, '', `?view=solo/brickout`);
 	const mainContent = document.getElementById('mainContent');
@@ -59,6 +62,7 @@ export function showGameBrickView()
     scoreCanvas.style.marginBottom = '10px';
 
 	brickVar.initialize = true;
+	initListenerB();
 }
 export function showGameBrickMultiView()
 {

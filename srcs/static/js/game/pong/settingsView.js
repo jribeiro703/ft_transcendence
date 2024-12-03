@@ -66,7 +66,7 @@ export function showSettingMultiView(live)
 }
 export function showSettingView(live)
 {
-	gameVar.liveSettingChanged = true;
+	gameVar.settingsChanged = true;
 	// history.pushState({ view: 'game'}, '', `?view=solo/settings`);
 	const pongUrl = "static/css/images/ttLevel.png";
 	const footUrl = "static/css/images/footballLevel.png";

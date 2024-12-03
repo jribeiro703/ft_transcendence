@@ -9,10 +9,18 @@ import { updateCanvasColor } from "./update.js";
 import { saveScore } from "./score.js";
 import { createPowerUp1, createPowerUp2 } from "./powerUp.js";
 import { checkServer } from "./manage.js";
+import { initControl } from "./control.js";
+import { checkSetting } from "./setting.js";
 
 
 export function showGameView()
 {
+	if (!gameVar.game)
+	{
+        gameVar.game = "pong";
+        gameVar.localGame = false;
+        checkSetting();
+    }
 	// history.pushState({ view: 'game'}, '', `?view=solo/pong`);
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = ``;
@@ -62,6 +70,7 @@ export function showGameView()
 
     scoreCanvas.style.marginBottom = '10px';
 
+	initControl(gameVar.localGame)
 	startGame();
 }
 

@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { updateSetting, updateLiveSetting } from "./setting.js";
+import { updateSetting, updateLiveSetting, displaySetting } from "./setting.js";
 import { updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { updateDifficultySelection } from "./update.js";
@@ -16,6 +16,7 @@ import { showGameSelectionView } from './gameSelectionView.js'
 import { showGameSelectionMultiView } from "./gameViewMulti.js";
 import { showSettingView, showSettingMultiView } from "./settingsView.js";
 import { initControl } from "./control.js";
+import { renderPage } from "../../historyManager.js";
 
 
 export function listenSettingPU()
@@ -102,8 +103,10 @@ export function listenSettingSave(live)
 		}
 		else
 		{
-			showGameSelectionView();
-			updateSetting();
+			renderPage("gameSelectionSoloPage", true);
+			// showGameSelectionView();
+			// updateSetting();
+			// displaySetting();
 		}
 	});
 }
@@ -130,11 +133,12 @@ export function listenSettingBtn()
 {
 	gameVar.settingBtn1.addEventListener('click', () =>
 	{
-		showSettingView(false);
+		renderPage("pongSettingSolo", true, false)
 	});
 
 	gameVar.settingBtn2.addEventListener('click', () =>
 	{
+		renderPage("brickoutSettingSolo", true, false);
 		showSettingViewB(false);
 	});
 }
@@ -160,17 +164,19 @@ export function listenPlayBtn()
 		gameVar.game = "pong";
 		gameVar.localGame = false;
 		checkSetting();
-		showGameView();
+		renderPage("playPongSolo", true);
+		// showGameView();
 		initControl(gameVar.localGame);
 		// initEventListener();
 	});
 
 	gameVar.playBtn2.addEventListener('click', () =>
 	{
-		gameVar.game = "brickout";
-		checkSettingB();
-		showGameBrickView();
-		initListenerB();
+		// gameVar.game = "brickout";
+		// checkSettingB();
+		renderPage("playBrickoutSolo", true);
+		// showGameBrickView();
+		// initListenerB();
 	});
 }
 
