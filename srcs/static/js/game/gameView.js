@@ -148,7 +148,11 @@ export function showGameSelectionView()
 {
 	gameVar.liveMatch = false;
 	initControl();
+<<<<<<< HEAD
 	history.pushState({ view: 'game'}, '', `?view=solo`);
+=======
+	// history.pushState({ view: 'game'}, '', `?view=solo`);
+>>>>>>> new_user
 	const maincontent = document.getElementById('mainContent');
 	maincontent.innerHTML = '';
 	const gameSelection = document.createElement('div');
@@ -270,7 +274,11 @@ export function drawScoreBoard()
 
 export function showGameView()
 {
+<<<<<<< HEAD
 	history.pushState({ view: 'game'}, '', `?view=solo/pong`);
+=======
+	// history.pushState({ view: 'game'}, '', `?view=solo/pong`);
+>>>>>>> new_user
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = ``;
 	const gameView = document.createElement('div');

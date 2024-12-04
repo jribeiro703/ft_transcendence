@@ -1,20 +1,26 @@
 import pyotp
 from .models import User, FriendRequest
-from transcendence import settings
-from django.core.mail import EmailMultiAlternatives
-from smtplib import SMTPException
-from django.contrib.auth import authenticate
-from django.template.loader import render_to_string
 from rest_framework import serializers, exceptions
 from datetime import datetime, timezone
 from .utils import send_activation_email
+from smtplib import SMTPException
 import logging
 logger = logging.getLogger(__name__)
 
-class IndexSerializer(serializers.ModelSerializer):
+
+# ------------------------------GET USER INFOS SERIALIZERS--------------------------------
+
+class UserPrivateInfosSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('id', 'username', 'alias', 'avatar', 'email', 'password', 'friends', 'is_online', 'is_active')
+		fields = '__all__'
+
+class UserPublicInfosSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = User
+		fields = ('id', 'username', 'alias', 'avatar', 'is_online')
+
+# ------------------------------REGISTER USER SERIALIZERS--------------------------------	
 
 class UserCreateSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -25,9 +31,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 	def create(self, validated_data):
 		
 		if User.objects.filter(email=validated_data['email'], is_active=True).exists():
-			raise serializers.ValidationError({
-				"message": "Registration failed, this email is already used by a active user"
-			})
+			raise serializers.ValidationError({"message": "This email is already used by a active user"})
 		
 		password = validated_data.pop('password')
 		user = super().create(validated_data)
@@ -38,12 +42,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 		try:
 			send_activation_email(
-			user,
-			'activate_link',
-			'activate_account',
-			'Activate your account',
-			'emails/account_activation.txt',
-			'emails/account_activation.html'
+				user,
+				'activate_link',
+				'activate_account',
+				'Activate your account',
+				'emails/account_activation.txt',
+				'emails/account_activation.html'
 			)
 		except SMTPException as e:
 			logger.error(f"SMTP error sending activation email: {str(e)}")
@@ -57,44 +61,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
 			raise exceptions.APIException({"message": "Send activation email failed"})
 		return user
 
-	  
-class UserLoginSerializer(serializers.Serializer):
-	username = serializers.CharField(max_length=30)
-	password = serializers.CharField(write_only=True)
 
-	def _send_2FA_mail(self, user):
-		totp = pyotp.TOTP(user.otp_secret, interval=300)  # validity 5min
-		verification_code = totp.at(datetime.now(timezone.utc))
-
-		context={"username": user.username, "verification_code": verification_code,}
-		html_content = render_to_string("emails/2FA.html", context)
-		text_content = render_to_string("emails/2FA.txt", context)
-
-		try:
-			email = EmailMultiAlternatives(
-				subject='Your 2FA Verification Code',
-				body=text_content,
-				from_email=settings.DEFAULT_FROM_EMAIL,
-				to=[user.email]
-			)
-			email.attach_alternative(html_content, "text/html")
-			email.send()
-		except Exception as e:
-			raise exceptions.APIException({"message": "Send 2FA verification email failed"})
-
-	def validate(self, attrs):
-		username = attrs.get('username')
-		password = attrs.get('password')
-		
-		if not username or not password:
-			raise serializers.ValidationError({"message": "Username and password are required"})
-		user = authenticate(username=username, password=password)
-		if user is None or user.is_staff:
-			raise exceptions.NotAuthenticated({"message": "Non-active account or Invalid username/password"})
-		
-		self._send_2FA_mail(user)
-		attrs['user'] = user
-		return attrs
+# ------------------------------OTP VERIFICATION SERIALIZERS--------------------------------
 
 class OtpCodeSerializer(serializers.Serializer):
 	otp_code = serializers.CharField(required=True, write_only=True)
@@ -108,26 +76,25 @@ class OtpCodeSerializer(serializers.Serializer):
 			raise exceptions.NotAuthenticated({"message": "Invalid OTP code."})
 		return value
 
-# class UserProfileSerializer(serializers.ModelSerializer):
-# 	class Meta:
-# 		model = User
-# 		fields = ()
+
+# ------------------------------USER SETTINGS SERIALIZERS--------------------------------
 
 class UserSettingsSerializer(serializers.ModelSerializer):
 
-	new_email = serializers.EmailField(write_only=True, required=False, allow_blank=True)
 	new_password = serializers.CharField(write_only=True, required=False, allow_blank=True)
 	new_friend = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
 	class Meta:
 		model = User
-		fields = ('id', 'username', 'alias', 'avatar', 'email', 'new_email', 'password', 'new_password', 'friends','new_friend', 'is_online', 'is_active')
-		read_only_fields = ('id', 'username', 'is_active', 'is_online', 'email', 'friends')
+		fields = ('id', 'is_online', 'username', 'alias', 'avatar', 'email', 'new_email', 'password', 'new_password', 'friends', 'new_friend')
+		read_only_fields = ('id', 'username', 'is_online', 'avatar', 'email', 'friends')
 		extra_kwargs = {'password': {'write_only': True}, 'new_password': {'write_only': True}, 'new_email': {'write_only': True}, 'new_friend': {'write_only': True}}
 
 	def update(self, instance, validated_data):
-		success_messages = []
 
+		# print("validated_data", validated_data)
+
+		# for password changing
 		if 'new_password' in validated_data:
 			if 'password' not in validated_data or validated_data['password'] is None:
 				raise serializers.ValidationError({"message": "The current password is required to update your new password."})
@@ -136,12 +103,13 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 			elif instance.check_password(validated_data['new_password']):
 				raise serializers.ValidationError({"message": "Your new password is the same as the existing password."})
 			instance.set_password(validated_data['new_password'])
-			success_messages.append("Password changed successfully !")
-			validated_data.pop('new_password')
+			message = {"message": "Password changed successfully !"}
 
+		# for email changing
 		if 'new_email' in validated_data and validated_data['new_email'] is not None:
 			if User.objects.filter(email=validated_data['new_email'], is_active=True).exists():
-				raise serializers.ValidationError({"message": "Changing to new email failed, this email is already used by a active user."})
+				raise serializers.ValidationError({"message": "Changing to new email failed, this email is already used by a active user."}) 
+			instance.new_email = validated_data['new_email']
 			try:
 				send_activation_email(
 					instance,
@@ -151,29 +119,37 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 					'emails/mail_changed.txt',
 					'emails/mail_changed.html'
 					)
-				success_messages.append("A confirmation email has been sent to your new email address.")
+				message = {"message": "A confirmation email has been sent to your new email address."}
 			except Exception as e:
-				raise exceptions.APIException({"message": "Send mail to new email adress failed"})
+				raise exceptions.APIException({"message": "Failed to send confirmation mail to the new email address."})
 		
+		# for send new friend request
 		if 'new_friend' in validated_data:
 			try:
 				new_f = User.objects.get(username=validated_data['new_friend'])
 				if instance.friends.filter(username=new_f.username).exists():
-					success_messages.append(f"{new_f.username} is already in your actual friends list")
+					message = {"message": f"{new_f.username} is already in your actual friends list"}
 				else:
 					if not FriendRequest.objects.filter(sender=instance, receiver=new_f).exists():
 						FriendRequest.objects.create(sender=instance, receiver=new_f)
-						success_messages.append(f"Friend request sent to {new_f.username} successfully.")
+						message = {"message": f"Friend request sent to {new_f.username} successfully."}
 					else:
-						success_messages.append(f"You have already sent a friend request to {new_f.username}.")
+						message = {"message": f"You have already sent a friend request to {new_f.username}."}
 			except User.DoesNotExist:
 				raise serializers.ValidationError({"message": f"{validated_data['new_friend']} doesn't exist"})
-				
-		for attr, value in validated_data.items():
-			setattr(instance, attr, value)
-		success_messages.append("Update successfully")
+		
+		try:
+			if 'alias' in validated_data:
+				setattr(instance, 'alias', validated_data['alias'])
+				message = {"message": "Alias updated successfully."}
+			if 'avatar' in validated_data:
+				setattr(instance, 'avatar', validated_data['avatar'])
+				message = {"message": "Avatar updated successfully."}
+		except Exception as e:
+			raise serializers.ValidationError({"message": "Update failed."})
+			
 		instance.save()
-		return instance, success_messages
+		return instance, message
 
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:

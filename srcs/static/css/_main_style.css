@@ -1,8 +1,16 @@
+@import url('_user.css');
+@import url('_home.css');
+
 body
 {
 	background-color: #455F78;
 	color: #1A1A40;
 	margin: 0;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	padding-bottom: 60px;
 }
 
 p
@@ -79,17 +87,18 @@ button:disabled
 }
 
 
-.navbar:hover .navbar-brand
+/* .navbar:hover  */
+.navbar-brand
 {
     font-size: 3rem; 
     top: 50%; 
     transform: translate(-50%, -50%);
 }
 
-.navbar:hover
+/* .navbar:hover
 {
     height: 150px;
-}
+} */
 
 .navbar .buttons-container
 {
@@ -174,21 +183,21 @@ button:disabled
 
 /* profile button effect */
 
-.profile-choices {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 50px; /* Ajuste cette valeur selon ta mise en page */
-    left: 0;  /* Ajuste cette valeur selon ta mise en page */
-}
-
-.hidden {
-    display: none;
-}
-
-.profile-btn {
-    margin: 5px 0;
-}
+/* .profile-choices { */
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* position: absolute; */
+    /* top: 50px; */
+    /* left: 0; */
+/* } */
+/*  */
+/* .hidden { */
+    /* display: none; */
+/* } */
+/*  */
+/* .profile-btn { */
+    /* margin: 5px 0; */
+/* } */
 
 /* ----------------------- Main Content ---------------------------- */
 .container
@@ -238,4 +247,5 @@ button:disabled
 	padding: 10px 20;
 	font-size: 20px;
 	color: #FEFCFF !important;
+	height: 50px;
 }
