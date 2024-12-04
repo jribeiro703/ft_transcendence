@@ -8,7 +8,7 @@ from django.apps import apps
 from rest_framework.permissions import IsAuthenticated
 
 from user.models import User
-# from user.serializers import UserSerializer
+from user.serializers import UserSerializer
 
 from tournament.models import Tournament
 from tournament.serializers import TournamentSerializer

@@ -22,6 +22,13 @@ services:
     environment:
       - VIRTUAL_HOST=localhost,${HOSTNAME}
       - VIRTUAL_PORT=8000
+      - EMAIL_HOST=${EMAIL_HOST:-mailhog}  # Default to mailhog for dev
+      - EMAIL_PORT=${EMAIL_PORT:-1025}
+      - EMAIL_USE_TLS=${EMAIL_USE_TLS:-False}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER:-}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD:-}
+      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL:-noreply@localhost}
+
 
   migration:
     platform: ${DOCKER_PLATFORM}
@@ -85,6 +92,19 @@ services:
     restart: on-failure
     networks:
       - transcendence
+
+  mailhog:
+    platform: ${DOCKER_PLATFORM}
+    image: mailhog/mailhog:latest
+    container_name: mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - transcendence
+    environment:
+      - VIRTUAL_HOST=mailhog.localhost,mailhog.${HOSTNAME}
+      - VIRTUAL_PORT=8025
 
   # prometheus:
   #   platform: ${DOCKER_PLATFORM}
