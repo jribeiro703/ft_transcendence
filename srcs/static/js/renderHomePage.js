@@ -1,6 +1,6 @@
 import { PONG_CARD, showToast } from "./user/tools.js"
 import { isAuthenticated } from "./user/isAuthenticated.js";
-import { renderPage } from "./historyManager.js";
+import { renderPage } from "./user/historyManager.js";
 
 function createHomeContent() {
 	const box = document.getElementById('mainContent');
@@ -28,8 +28,6 @@ async function renderHomePage() {
 		renderPage("pongGameSolo");
 	});
 
-	const authenticated = await isAuthenticated();
-
 	const authButtons = [
 		{
 			id: 'playmultiGameBtn',
@@ -40,9 +38,10 @@ async function renderHomePage() {
 			handler: () => console.log('Leaderboard handler')
 		}
 	];
-
+	
 	authButtons.forEach(({ id, handler }) => {
-		document.getElementById(id).addEventListener('click', () => {
+		document.getElementById(id).addEventListener('click', async () => {
+			const authenticated = await isAuthenticated();
 			if (!authenticated) {
 				showToast("You must be logged in to use this feature.", "warning");
 				return;

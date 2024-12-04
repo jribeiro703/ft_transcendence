@@ -6,7 +6,7 @@ function getCookie(name) {
 	const cookies = document.cookie.split(';');
 	const cookie = cookies.find(cookie => cookie.trim().startsWith(`${name}=`));
 	if (!cookie)
-		console.log(`getCookie(): cookie ${name} = null`);
+		// console.log(`getCookie(): cookie ${name} = null`);
 	return cookie ? cookie.split('=')[1] : '';
 }
 
