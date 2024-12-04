@@ -112,26 +112,33 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 			}))
 
 # ------------------------------ USER related websockets ------------------------#
+
 class FriendConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
+		logger.info("WebSocket connection established")
 		self.user = self.scope["user"]
 		# if self.user == AnonymousUser():
-		#	await self.close()
-		#else:
+		#    await self.close()
+		# else:
 		await self.accept()
 
 	async def disconnect(self, close_code):
-		pass
+		logger.info(f"WebSocket connection closed with code: {close_code}")
 
 	async def receive(self, text_data):
+		logger.info("Received message from client")
 		data = json.loads(text_data)
+		logger.info(f"Received data: {data}")
 		if data['action'] == 'get_friends':
 			await self.send_friends_list()
 
 	async def send_friends_list(self):
 		User = apps.get_model('user', 'User')
 		default_user = User.objects.first()
+		logger.info(f"Default user: {default_user}")
 		# friends = self.user.friends.all() # TODO: Later change it with user auth
 		friends = default_user.friends.all()
+		logger.info(f"Friends list: {friends}")
 		friend_list = [{'id': friend.id, 'username': friend.username, 'avatar': friend.avatar.url} for friend in friends]
+		logger.info(f"Friend list to send: {friend_list}")
 		await self.send(text_data=json.dumps({'action': 'get_friends', 'friends': friend_list}))
