@@ -153,7 +153,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, '../staticfiles')
 
 STATICFILES_DIRS = [
-	os.path.join(BASE_DIR, '../static')
+	os.path.join(BASE_DIR, '../static'),
 ]
 
 MEDIA_URL = '/media/'
@@ -190,10 +190,18 @@ SIMPLE_JWT = {
 	"AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
 
-# email settings
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = "../../email-messages"
-DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
+# # email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ['EMAIL_HOST']
+EMAIL_PORT = int(os.environ['EMAIL_PORT'])
+EMAIL_USE_TLS = os.environ['EMAIL_USE_TLS'].lower() == 'true'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')  # Optional for prod
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')  # Optional for prod
+DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
+
+# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# EMAIL_FILE_PATH = "../../email-messages"
+# DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
 
 # CSRF settings
 CSRF_COOKIE_SECURE = True
