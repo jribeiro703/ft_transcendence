@@ -1,4 +1,4 @@
-import { renderPage } from "../../historyManager.js";
+import { renderPage } from "../historyManager.js";
 import { fetchData } from "../fetchData.js";
 import { showToast } from "../tools.js";
 

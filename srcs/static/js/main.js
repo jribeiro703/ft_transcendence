@@ -1,6 +1,6 @@
 import { isAuthenticated } from "./user/isAuthenticated.js";
-import { renderPage } from "./historyManager.js";
-import { checkForAuthCode } from "./user/js/renderLogin42Page.js";
+import { renderPage } from "./user/historyManager.js";
+import { checkForAuthCode } from "./user/pages/renderLogin42Page.js";
 
 document.getElementById('user-avatar').addEventListener('click', async () => {
 	

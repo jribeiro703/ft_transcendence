@@ -1,4 +1,4 @@
-import { renderPage } from "./historyManager.js"
+import { renderPage } from "../historyManager.js"
 
 function createAuthContent() {
 	const box = document.getElementById('mainContent')

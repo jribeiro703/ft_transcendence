@@ -1,7 +1,6 @@
-import { PONG_CARD } from "./user/tools.js"
-import { fetchData } from "./user/fetchData.js";
-import { showToast } from "./user/tools.js";
-import { renderPage } from "./historyManager.js";
+import { fetchData } from "../fetchData.js";
+import { showToast, PONG_CARD } from "../tools.js";
+import { renderPage } from "../historyManager.js";
 
 function createUserContent() {
     const box = document.getElementById('mainContent');

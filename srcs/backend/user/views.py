@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import get_object_or_404
+from django.core.files.base import ContentFile
 from rest_framework import status, serializers, exceptions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -350,33 +351,34 @@ def login42(request):
 		token_data = response.json()
 
 		if "access_token" not in token_data:
-			print("token_data = ", token_data)
-			response = redirect(reverse('login'))
+			response = redirect("https:localhost:8081/#home")
 			return response
 		
 		user_info = requests.get('https://api.intra.42.fr/v2/me', 
 			headers={'Authorization': f"Bearer {token_data['access_token']}"})
 		user_data = user_info.json()
 
-		print("user_data['image_url'] = ", user_data['image_url'])
+		# avatar_url = requests.get(user_data['image']['versions']['small'])
+		# if (avatar_url.status_code == 200):
+			# filename = f"avatar_{user_data['login']}.jpg"
+			# user.avatar.save(filename, ContentFile(avatar_url.content), save=True)
 
 		user, created = User.objects.get_or_create(
 			email=user_data['email'],
 			defaults={
 				'username': user_data['login'],
-				'avatar': user_data['image_url'],
+				# 'avatar_url': user_data['image']['versions']['micro'],
 				'is_active': True,
 			}
 		)
-		response = redirect("https://localhost:8081/#home")
+		response = redirect("https://localhost:8081/#user")
 		access_token, refresh_token = generate_tokens_for_user(user)
 		set_refresh_token_in_cookies(response, refresh_token)
+		print("set tokens in cookies and redirect to user page")
 		return response
 	
 	except Exception as e:
-		print("login42 error: ", e)
-		login_url = reverse('login')
-		print("login_url = ", login_url)
+		print("login42 exception error: ", e)
 		response = redirect("https://localhost:8081/#home")
 		return response
 
@@ -394,9 +396,6 @@ class LogoutView(APIView):
 				"message": "Logout successfully !",
 				}, status=status.HTTP_205_RESET_CONTENT)
 			response.delete_cookie('refresh_token')
-			user = request.user
-			user.is_online = False
-			user.save()
 			return response
 
 		except exceptions.AuthenticationFailed:
@@ -404,5 +403,6 @@ class LogoutView(APIView):
 		except exceptions.PermissionDenied:
 			return Response({"message": "Permission denied."}, status=status.HTTP_403_FORBIDDEN)
 		except Exception as e:
-		    return Response({"message": "Logout failed."}, status=status.HTTP_400_BAD_REQUEST)
+			print("logout failed: ", e)
+			return Response({"message": "Logout failed."}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -1,6 +1,6 @@
 import { fetchData } from "../fetchData.js";
 import { showToast } from "../tools.js"
-import { renderPage } from "../../historyManager.js";
+import { renderPage } from "../historyManager.js";
 
 export function renderOtpForm(url, msg) {
     showToast(msg, "success");
