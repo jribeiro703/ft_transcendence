@@ -5,6 +5,8 @@ import { fetchTournamentBracket, fetchCurrentPlayers } from "./services/tourname
 import { createTournamentFormHTML } from "./templates/createTournamentFormTemplate.js";
 import { createTournamentLayoutHTML } from "./templates/createTournamentLayoutTemplate.js";
 
+import { getFriendsList } from "./handlers/tournamentWebSocketHandler.js";
+
 export async function showCreateTournamentForm()
 {
 	const box = document.getElementById('mainContent');
@@ -30,6 +32,7 @@ export async function showTournamentView(tournamentName)
 	box.innerHTML = createTournamentLayoutHTML(tournamentName);
 	// Trigger the setup flow on button click
 	setupTournamentFlow(tournamentName);
+	//getFriendsList();
 	//document.getElementById('startGameBtn').addEventListener('click', <>);
 }
 

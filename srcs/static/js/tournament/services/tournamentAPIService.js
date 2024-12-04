@@ -1,3 +1,5 @@
+import { getFriendsList } from "../handlers/tournamentWebSocketHandler.js";
+
 // Function to sanitize the tournament name
 function sanitizeTournamentName(name) {
 	return name.replace(/[^a-zA-Z0-9]/g, '');
@@ -228,10 +230,13 @@ export const setupTournamentFlow = async (name) => {
 		// Step 4: Perform matchmaking
 		await performMatchmaking(tournamentId);
 
-		// Fetch and render the tournament bracket
+		// Step 5: Fetch and render the tournament bracket
 		const bracket = await fetchTournamentBracket(tournamentId);
 		renderBracket(bracket);
 
+		// Step 6: Fetch and render the friends list
+		getFriendsList();
+		console.log("just before the friends list call");
 		console.log('Tournament setup completed successfully.');
 	} catch (error) {
 		console.error('Error during tournament setup flow:', error);
