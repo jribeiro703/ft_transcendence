@@ -1,4 +1,6 @@
-import { renderLogoutPage } from "./user/js/logout.js"
+import { fetchData } from "../fetchData.js";
+import { showToast, PONG_CARD } from "../tools.js";
+import { renderPage } from "../historyManager.js";
 
 function createUserContent() {
     const box = document.getElementById('mainContent');
@@ -6,7 +8,7 @@ function createUserContent() {
 		<div id="defaultView">
 			<div class="container">
 				<div class="mx-auto">
-					<img class="img-fluid" src="${staticImageURL}" alt="Pong Game">
+					<img class="img-fluid" src="${PONG_CARD}" alt="Pong Game">
 					<br><br><br>
 				</div>
 			</div>
@@ -20,25 +22,37 @@ function createUserContent() {
     `;
 }
 
-export function displayUserChoice() {
+export function renderUserPage() {
+
 	createUserContent();
 
 	document.getElementById('btn-Profile').addEventListener('click', () => {
-		history.pushState({ page: 'profile' }, 'Profile', '?page=profile');
-		console.log('Profile button clicked');
+		renderPage("profile");
 	})
+
 	document.getElementById('btn-Settings').addEventListener('click', () => {
-		history.pushState({ page: 'settings' }, 'Settings', '?page=settings');
-		console.log('Settings button clicked');
+		renderPage("settings")
 	})
+
 	document.getElementById('btn-Inbox').addEventListener('click', () => {
-		history.pushState({ page: 'inbox' }, 'Inbox', '?page=inbox');
 		console.log('Inbox button clicked');
 	})
-	document.getElementById('btn-Logout').addEventListener('click', () => {
-		history.pushState({ page: 'logout' }, 'Logout', '?page=logout');
-		console.log('Logout button clicked');
-		renderLogoutPage();
-	})
+
+	document.getElementById('btn-Logout').addEventListener('click', async(e) => {
+		e.preventDefault();
+
+		const confirmation = confirm("Are you sure to logout ?");
+		if (!confirmation)
+			return;
+
+		const responseObject = await fetchData('/user/logout/', 'POST', null, false, "simple");
+
+		if (responseObject.status == 205) {
+			showToast(responseObject.data.message, "success");
+			sessionStorage.clear();
+			renderPage("home");
+		} else
+			showToast(responseObject.data.message, "error");
+	});
 
 }

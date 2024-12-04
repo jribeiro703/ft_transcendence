@@ -1,3 +1,6 @@
+@import url('_user.css');
+@import url('_home.css');
+
 body
 {
 	background-color: #455F78;
@@ -179,20 +182,32 @@ p
 
 /* ------------------------ Main Button ---------------------------- */
 
+<<<<<<< HEAD
 #playsoloGameBtn, #playmultiGameBtn, #createRoomBtn, #settingBtn, #joinRoomBtn, #refreshBtn, #btn1, #btn2, #btn3
+=======
+#playsoloGameBtn, #playmultiGameBtn, #btn-Leaderboard, #createRoomBtn, #settingBtn, #joinRoomBtn, #refreshBtn, #btn1, #btn2, #btn3
+>>>>>>> new_user
 {
 	background-color: #1F2E4D;
 	color: #6DC1C1;
 }
 
+<<<<<<< HEAD
 #playsoloGameBtn:hover, #playmultiGameBtn:hover, #createRoomBtn:hover, #settingBtn:hover, #refreshBtn:hover, #joinRoomBtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
+=======
+#playsoloGameBtn:hover, #playmultiGameBtn:hover, #btn-Leaderboard:hover, #createRoomBtn:hover, #settingBtn:hover, #refreshBtn:hover, #joinRoomBtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
+>>>>>>> new_user
 {
 	color: #1F2E4D;
 	background-color: #6DC7C1;
 	border-color: #000000;
 }
 
+<<<<<<< HEAD
 #playGameBtn:active, #playmultiGameBtn:active,  #createRoomBtn:active, #settingBtn:active, #refreshBtn:active,#joinRoomBtn:active, #btn1:active, #btn2:active, #btn3:active
+=======
+#playGameBtn:active, #playmultiGameBtn:active, #btn-Leaderboard:active,  #createRoomBtn:active, #settingBtn:active, #refreshBtn:active,#joinRoomBtn:active, #btn1:active, #btn2:active, #btn3:active
+>>>>>>> new_user
 {
 	color: #0A1730;
 	background-color: #455F78;

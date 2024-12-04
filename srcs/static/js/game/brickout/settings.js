@@ -7,6 +7,10 @@ import { displayBallB } from "./ball.js";
 import { showGameBrickView } from "./game.js";
 import { showGameBrickMultiView } from "./game.js";
 import { showGameSelectionMultiView } from "../gameView.js";
+<<<<<<< HEAD
+=======
+import { renderPage } from "../../historyManager.js";
+>>>>>>> new_user
 import gameVar from "../var.js";
 
 export function showSettingViewB(live)
@@ -40,7 +44,12 @@ export function showSettingViewB(live)
 		}
 		else
 		{
+<<<<<<< HEAD
 			showGameSelectionView();
+=======
+			// showGameSelectionView();
+			renderPage("pongGameSolo");
+>>>>>>> new_user
 			updateSettingB();
 		}
 	});
@@ -63,7 +72,12 @@ export function showSettingMultiViewB(live)
 	brickVar.saveBtn.addEventListener('click', () =>
 	{
 		// showGameBrickMultiView();
+<<<<<<< HEAD
 		showGameSelectionMultiView();
+=======
+		// showGameSelectionMultiView();
+		renderPage("pongGameMulti");
+>>>>>>> new_user
 		updateSettingB();
 	});
 }
