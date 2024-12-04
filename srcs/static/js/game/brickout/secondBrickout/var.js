@@ -106,6 +106,9 @@ const brickVar2 = {
 	x: false,
 	invader: false,
 	settingChanged: false,
+	checkPu: false,
+	checkDiff: false,
+	checkLevel: false,
 
 	// -------------------------------------Button---------------------------
 

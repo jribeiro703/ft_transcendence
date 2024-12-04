@@ -15,13 +15,6 @@ import { checkSetting } from "./setting.js";
 
 export function showGameView()
 {
-	if (!gameVar.game)
-	{
-        gameVar.game = "pong";
-        gameVar.localGame = false;
-        checkSetting();
-    }
-	// history.pushState({ view: 'game'}, '', `?view=solo/pong`);
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = ``;
 	const gameView = document.createElement('div');
@@ -70,6 +63,7 @@ export function showGameView()
 
     scoreCanvas.style.marginBottom = '10px';
 
+	checkSetting();
 	initControl(gameVar.localGame)
 	startGame();
 }

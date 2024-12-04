@@ -55,6 +55,9 @@ const gameVar =
 	liveSettingChanged: false,
 
 	powerUpSelection: null,
+	checkPu: false,
+	checkDiff: false,
+	checkLevel: false,
 	speedPuActive: false,
 	difficulty: null,
 	easy: null,
@@ -66,6 +69,8 @@ const gameVar =
 	tableTennis: null,
 	footLevel: null,
 	tennisLevel: null,
+
+	saveSetting: false,
 
 // -------------------------------Player Data---------------------------
 
@@ -152,7 +157,6 @@ const gameVar =
 	saveBtn: null,
 	
 	createRoomBtn: null,
-	// createRoomName: null,
 	
 	tournamentGameBtn: null,
 	rematchBtn: null,

@@ -1,7 +1,44 @@
 import gameVar from "../pong/var.js";
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
+import { collisionDetectionB, drawBricksB} from './brick.js'
+import { updateBallPositionB, handleBallB } from './ball.js';
+import { manageCollisionB, manageMoveB } from './manage.js';
+import { collectPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
 
+function baseDrawB()
+{
+	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
+	drawScoreBoardB();
+	drawBricksB();
+	drawBallB();
+	drawPaddleB();
+}
+
+export function drawB()
+{
+	if (brickVar.finishLevel == false)
+	{
+		baseDrawB();
+		if (brickVar.gameStart)
+		{
+			drawPowerUpB();
+			collectPowerUpB();
+			collisionDetectionB();
+			manageCollisionB();
+			updatePowerUpB();
+		}
+		else
+		{
+			handleBallB();
+		}
+		manageMoveB();
+		updateBallPositionB();
+		if (brickVar.anim)
+			cancelAnimationFrame(brickVar.anim); 
+		brickVar.anim = requestAnimationFrame(drawB);
+	}
+}
 export function drawBallB()
 {
 	const x = brickVar.x - brickVar.ballRadius;

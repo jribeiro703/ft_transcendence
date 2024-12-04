@@ -1,15 +1,11 @@
 import gameVar from "./var.js";
 import { listenSettingBtn, listenPlayBtn } from "./listenerSetting.js";
 import { updateImageUrl } from "./update.js";
-import { updateSetting } from "./setting.js";
-import brickVar from "../brickout/var.js";
-import { updateSettingB } from "../brickout/settings.js";
 
 export function showGameSelectionView()
 {
 	gameVar.liveMatch = false;
-	// initControl();
-	// history.pushState({ view: 'game'}, '', `?view=solo`);
+	gameVar.localGame = false;
 	const maincontent = document.getElementById('mainContent');
 	maincontent.innerHTML = '';
 	const gameSelection = document.createElement('div');
@@ -75,10 +71,10 @@ export function showGameSelectionView()
 	gameVar.playBtn = document.getElementById('playBtn');
 	gameVar.playBtn2 = document.getElementById('playBtn2');
 
-	if (gameVar.settingsChanged)
-		updateSetting();
-	if (brickVar.settingChanged)
-		updateSettingB();
+	// if (gameVar.settingsChanged)
+		// updateSetting();
+	// if (brickVar.settingChanged)
+	// 	updateSettingB();
 	listenSettingBtn();
 	listenPlayBtn();
 }

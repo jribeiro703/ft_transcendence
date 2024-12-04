@@ -1,6 +1,7 @@
 import { PONG_CARD, showToast } from "./user/tools.js"
 import { isAuthenticated } from "./user/token.js"
 import { renderPage } from "./historyManager.js";
+import { renderPageGame } from './game/pong/myHistory.js';
 
 function createHomeContent() {
 	const box = document.getElementById('mainContent');
@@ -25,7 +26,7 @@ async function renderHomePage() {
 	createHomeContent();
 	
 	document.getElementById('playsoloGameBtn').addEventListener('click', () => {
-		renderPage("gameSelectionSoloPage");
+		renderPageGame("gameSelectionSoloPage");
 	});
 
 	const authenticated = await isAuthenticated();
@@ -33,7 +34,7 @@ async function renderHomePage() {
 	const authButtons = [
 		{
 			id: 'playmultiGameBtn',
-			handler: () => renderPage('pongGameMulti')
+			handler: () => renderPage('pongLobbyMulti')
 		},
 		{
 			id: 'btn-Leaderboard',
@@ -43,10 +44,10 @@ async function renderHomePage() {
 
 	authButtons.forEach(({ id, handler }) => {
 		document.getElementById(id).addEventListener('click', () => {
-			if (!authenticated) {
-				showToast("You must be logged in to use this feature.", "warning");
-				return;
-			}
+			// if (!authenticated) {
+			// 	showToast("You must be logged in to use this feature.", "warning");
+			// 	return;
+			// }
 			handler();
 		});
 	});

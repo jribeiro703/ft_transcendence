@@ -20,3 +20,22 @@ export function startGame()
 		manageAi();
 }
 
+export function preventNavTouch()
+{
+	document.addEventListener('keydown', function(e)
+	{
+		const keysToPrevent =
+		[
+			'ArrowUp',
+			'ArrowDown',
+			'ArrowLeft',
+			'ArrowRight',
+			' ' // Espace
+		];
+		
+		if (keysToPrevent.includes(e.key))
+		{
+			e.preventDefault();
+		}
+	}, false);
+}

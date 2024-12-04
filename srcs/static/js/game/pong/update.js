@@ -3,6 +3,7 @@ import brickVar from "../brickout/var.js";
 
 export function updateDifficultySelection(level)
 {
+	gameVar.checkDiff = true;
 	if (level == 'easy')
 	{
 		console.log("easy mode");
@@ -32,6 +33,7 @@ export function updateDifficultySelection(level)
 
 export function updateLevelSelection(level)
 {
+	gameVar.checkLevel = true;
 	if (level === "tableTennis")
 	{
 		gameVar.tennisTable = true;

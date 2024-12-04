@@ -6,17 +6,18 @@ import { updateDifficultySelection } from "./update.js";
 import { checkSetting } from "./setting.js";
 import { showGameView } from "./gameView.js";
 import { checkSettingB } from "../brickout/settings.js";
-import { initListenerB } from "../brickout/game.js";
+import { initListenerB } from "../brickout/init.js";
 import { showSettingViewB } from "../brickout/settings.js";
-import { showGameBrickView } from "../brickout/game.js";
+import { showGameBrickView } from "../brickout/gameView.js";
 import { showSettingMultiViewB } from "../brickout/settings.js";
-import { initListenerMultiB } from "../brickout/game.js";
+import { initListenerMultiB } from "../brickout/init.js";
 import { initLobbyView } from "./init.js";
 import { showGameSelectionView } from './gameSelectionView.js'
 import { showGameSelectionMultiView } from "./gameViewMulti.js";
-import { showSettingView, showSettingMultiView } from "./settingsView.js";
+import { showSettingView, showSettingMultiView, checkSaveBtn } from "./settingsView.js";
 import { initControl } from "./control.js";
 import { renderPage } from "../../historyManager.js";
+import { renderPageGame } from "./myHistory.js";
 
 
 export function listenSettingPU()
@@ -26,7 +27,7 @@ export function listenSettingPU()
 		gameVar.withPowerUp.classList.add('selected');
 		gameVar.withoutPowerUp.classList.remove('selected');
 		updatePowerUpSelection(true);
-
+		checkSaveBtn();
 	});
 
 	gameVar.withoutPowerUp.addEventListener('click', () => 
@@ -34,6 +35,7 @@ export function listenSettingPU()
 		gameVar.withoutPowerUp.classList.add('selected');
 		gameVar.withPowerUp.classList.remove('selected');
 		updatePowerUpSelection(false); 
+		checkSaveBtn();
 	});
 }
 
@@ -45,6 +47,7 @@ export function listenSettingDifficulty()
 		gameVar.medium.classList.remove('selected');
 		gameVar.hard.classList.remove('selected');
 		updateDifficultySelection('easy');
+		checkSaveBtn();
 	});
 	
 	gameVar.medium.addEventListener('click', () => 
@@ -53,6 +56,7 @@ export function listenSettingDifficulty()
 		gameVar.medium.classList.add('selected');
 		gameVar.hard.classList.remove('selected');
 		updateDifficultySelection('medium');
+		checkSaveBtn();
 	});
 
 	gameVar.hard.addEventListener('click', () => 
@@ -61,6 +65,7 @@ export function listenSettingDifficulty()
 		gameVar.medium.classList.remove('selected');
 		gameVar.hard.classList.add('selected');
 		updateDifficultySelection('hard');
+		checkSaveBtn();
 	});
 }
 
@@ -72,6 +77,7 @@ export function listenSettingLevel()
 		gameVar.footLevel.classList.remove('selected');
 		gameVar.tennisLevel.classList.remove('selected');
 		updateLevelSelection('tableTennis');
+		checkSaveBtn();
 	});
 
 	gameVar.footLevel.addEventListener('click', () =>
@@ -80,6 +86,7 @@ export function listenSettingLevel()
 		gameVar.footLevel.classList.add('selected');
 		gameVar.tennisLevel.classList.remove('selected');
 		updateLevelSelection('football');
+		checkSaveBtn();
 	});
 
 	gameVar.tennisLevel.addEventListener('click', () =>
@@ -88,12 +95,13 @@ export function listenSettingLevel()
 		gameVar.footLevel.classList.remove('selected');
 		gameVar.tennisLevel.classList.add('selected');
 		updateLevelSelection('tennis');
+		checkSaveBtn();
 	});
 }
 
+
 export function listenSettingSave(live)
 {
-	
 	gameVar.saveBtn.addEventListener('click', () =>
 	{
 		if (live === true)
@@ -103,7 +111,10 @@ export function listenSettingSave(live)
 		}
 		else
 		{
-			renderPage("gameSelectionSoloPage", true);
+			gameVar.saveSetting = true;
+			console.log("listenSave :", gameVar.saveSetting)
+			renderPageGame("gameSelectionSoloPage", true);
+			// renderPage("gameSelectionSoloPage", true);
 			// showGameSelectionView();
 			// updateSetting();
 			// displaySetting();
@@ -133,13 +144,14 @@ export function listenSettingBtn()
 {
 	gameVar.settingBtn1.addEventListener('click', () =>
 	{
-		renderPage("pongSettingSolo", true, false)
+		renderPageGame("pongSettingSolo", true, false);
+		// showSettingView(false);
 	});
 
 	gameVar.settingBtn2.addEventListener('click', () =>
 	{
-		renderPage("brickoutSettingSolo", true, false);
-		showSettingViewB(false);
+		renderPageGame("brickoutSettingSolo", true, false);
+		// showSettingViewB(false);
 	});
 }
 
@@ -164,19 +176,17 @@ export function listenPlayBtn()
 		gameVar.game = "pong";
 		gameVar.localGame = false;
 		checkSetting();
-		renderPage("playPongSolo", true);
-		// showGameView();
-		initControl(gameVar.localGame);
-		// initEventListener();
+		renderPageGame("playPongSolo", true);
+		//showGameView()
 	});
 
 	gameVar.playBtn2.addEventListener('click', () =>
 	{
-		// gameVar.game = "brickout";
-		// checkSettingB();
-		renderPage("playBrickoutSolo", true);
+
+		gameVar.game = "brickout";
+		gameVar.localGame = false;
+		renderPageGame("playBrickoutSolo", true); 
 		// showGameBrickView();
-		// initListenerB();
 	});
 }
 

@@ -7,12 +7,14 @@ import { updateLevelSelectionB as updateLevelSelectionSecond} from "./secondBric
 import { updateDifficultySelectionSB  } from "./secondBrickout/settings.js";
 import { showGameSelectionView } from "../pong/gameSelectionView.js";
 import { showGameSelectionMultiView } from "../pong/gameViewMulti.js";
-import { renderPage } from "../../historyManager.js";
+import { renderPageGame } from "../pong/myHistory.js";
 
 export function showSettingViewB(live)
 {
-	// history.pushState({ view: 'game'}, '', `?view=solo/settings`);
-	brickVar.settingChanged = true;
+	brickVar.settingChanged = false;
+	brickVar.checkDiff = false;
+	brickVar.checkPu = false;
+	brickVar.checkLevel = false
 	displaySettingB();
 	getSettingBtn();
 
@@ -40,7 +42,8 @@ export function showSettingViewB(live)
 		}
 		else
 		{
-			renderPage("gameSelectionSoloPage");
+			// renderPage("gameSelectionSoloPage");
+			renderPageGame("gameSelectionSoloPage")
 			// showGameSelectionView();
 			// updateSettingB();
 		}
@@ -141,6 +144,7 @@ export function updateDifficultySelectionB(level)
 		console.log('hard mode');
 		brickVar.difficulty = 'hard';
 	}
+	brickVar.checkDiff = true;
 }
 
 
@@ -207,7 +211,7 @@ export function displaySettingB()
 			</div>
 		</div>
 		<div>
-			<button id="saveBtn">Save and Return</button>
+			<button id="saveBtn" disabled="true">Save and Return</button>
 		</div>
 	</div>`
 
@@ -221,6 +225,7 @@ export function listenSettingPUB()
 		brickVar.withPowerUp.classList.add('selected');
 		brickVar.withoutPowerUp.classList.remove('selected');
 		updatePowerUpSelectionFirst(true);
+		checkSaveBtn();
 	});
 
 	brickVar.withoutPowerUp.addEventListener('click', () => 
@@ -228,6 +233,7 @@ export function listenSettingPUB()
 		brickVar.withoutPowerUp.classList.add('selected');
 		brickVar.withPowerUp.classList.remove('selected');
 		updatePowerUpSelectionFirst(false); 
+		checkSaveBtn();
 	});
 }
 
@@ -239,6 +245,7 @@ export function listenSettingDifficultyB()
 		brickVar.medium.classList.remove('selected');
 		brickVar.hard.classList.remove('selected');
 		updateDifficultySelectionB('easy');
+		checkSaveBtn();
 	});
 	
 	brickVar.medium.addEventListener('click', () => 
@@ -247,6 +254,7 @@ export function listenSettingDifficultyB()
 		brickVar.medium.classList.add('selected');
 		brickVar.hard.classList.remove('selected');
 		updateDifficultySelectionB('medium');
+		checkSaveBtn();
 	});
 
 	brickVar.hard.addEventListener('click', () => 
@@ -255,6 +263,7 @@ export function listenSettingDifficultyB()
 		brickVar.medium.classList.remove('selected');
 		brickVar.hard.classList.add('selected');
 		updateDifficultySelectionB('hard');
+		checkSaveBtn();
 	});
 }
 
@@ -267,6 +276,7 @@ export function listenSettingLevelB()
 		brickVar.xLevel.classList.remove('selected');
 		brickVar.invaderLevel.classList.remove('selected');
 		updateLevelSelectionFirst('classic');
+		checkSaveBtn();
 	});
 
 	brickVar.castleLevel.addEventListener('click', () =>
@@ -276,6 +286,7 @@ export function listenSettingLevelB()
 		brickVar.xLevel.classList.remove('selected');
 		brickVar.invaderLevel.classList.remove('selected');
 		updateLevelSelectionFirst('castle');
+		checkSaveBtn();
 	});
 
 	brickVar.xLevel.addEventListener('click', () =>
@@ -285,6 +296,7 @@ export function listenSettingLevelB()
 		brickVar.xLevel.classList.add('selected');
 		brickVar.invaderLevel.classList.remove('selected');
 		updateLevelSelectionFirst('x');
+		checkSaveBtn();
 	});
 
 	brickVar.invaderLevel.addEventListener('click', () =>
@@ -294,9 +306,20 @@ export function listenSettingLevelB()
 		brickVar.xLevel.classList.remove('selected');
 		brickVar.invaderLevel.classList.add('selected');
 		updateLevelSelectionFirst('invader');
+		checkSaveBtn();
 	});
 }
 
+export function checkSaveBtn()
+{
+	console.log("check btn");
+	if (brickVar.checkPu && brickVar.checkLevel && brickVar.checkDiff)
+	{
+		const btn = document.getElementById('saveBtn');
+		btn.disabled = false;
+		brickVar.settingChanged = true;
+	}
+}
 export function checkSettingB()
 {
 	if (brickVar.settingChanged === false)

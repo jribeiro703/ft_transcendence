@@ -1,6 +1,7 @@
 import brickVar from "./var.js";
 import gameVar from "../pong/var.js";
-import { initListenerB, showGameBrickMultiView } from "./game.js";
+import { showGameBrickMultiView } from "./gameView.js";
+import { initListenerB } from "./init.js";
 import { initBricksB } from "./brick.js";
 import { sendScoreB } from "./manage.js";
 import { startGameB } from "./control.js";
@@ -52,12 +53,14 @@ export function levelDisplayB()
 
 export function updateLevelSelectionB(level)
 {
+	brickVar.checkLevel = true;
 	if (level === "classic")
 	{
 		brickVar.classic = true;
 		brickVar.castle = false;
 		brickVar.x = false;
 		brickVar.invader = false;
+		brickVar.currLevel = "classic";
 	}
 	else if (level === "castle")
 	{
@@ -65,6 +68,7 @@ export function updateLevelSelectionB(level)
 		brickVar.castle = true;
 		brickVar.x = false;
 		brickVar.invader = false;
+		brickVar.currLevel = "castle";
 	}
 	else if (level === "x")
 	{
@@ -72,6 +76,7 @@ export function updateLevelSelectionB(level)
 		brickVar.castle = false;
 		brickVar.x = true;
 		brickVar.invader = false;
+		brickVar.currLevel = "x";
 	}
 	else if (level === "invader")
 	{
@@ -79,6 +84,7 @@ export function updateLevelSelectionB(level)
 		brickVar.castle = false;
 		brickVar.x = false;
 		brickVar.invader = true;
+		brickVar.currLevel = "invader";
 	}
 }
 

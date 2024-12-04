@@ -315,9 +315,7 @@ p
 #saveBtn
 {
 	position: absolute;
-	/* top: 50%; */
 	left: 45%;
-	/* transform: translate(-50%, -50%); */
 	width: 200px;
     height: 60px;
     font-size: 20px;
@@ -331,26 +329,30 @@ p
     line-height: 60px; 
 }
 
-#saveBtn:hover
+#saveBtn:not(:disabled):hover
 {
 	color: #1F2E4D;
     background-color: #6DC7C1;
     border-color: #000000;
 }
 
-#saveBtn:active
+#saveBtn:not(:disabled):active
 {
 	color: #1F2E4D;
-    background-color: #6DC7C1;
+    background-color: #6DC1C1;
+    border-color: #000000;
+}
+#saveBtn:disabled:hover
+{
+	color: #1F2E4D;
+    background-color: #6dc7c136;
     border-color: #000000;
 }
 
 #startGameBtn, #quickGameBtn, #tournamentGameBtn
 {
 	position: absolute;
-	/* top: 50%; */
 	left: 45%;
-	/* transform: translate(-50%, -50%); */
 	width: 200px;
     height: 60px;
     font-size: 20px;
@@ -425,7 +427,6 @@ p
 .game-column 
 {
     flex: 1;
-    /* padding: 10px; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -460,8 +461,8 @@ p
     margin: 5px 0;
 	color: #6DC1C1;
     font-size: 20px;
-	/* margin-bottom: 50px; */
 }
+
 .settings-inline
 {
     display: flex;
@@ -485,7 +486,8 @@ p
     gap: 100px;
 }
 
-.game-title3 img {
+.game-title3 img
+{
     width: 20%;
     height: 20%;
     object-fit: cover;
@@ -495,14 +497,17 @@ p
     margin-top: 30px;
 }
 
-.game-title3 h2 {
+.game-title3 h2
+{
     margin: 0;
     font-size: 34px;
     color: #455F78;
 	margin-bottom: 30px;
 }
-.game-settings3 {
-    margin-top: -55px;  /* Ajustez cette valeur selon vos besoins */
+
+.game-settings3
+{
+    margin-top: -55px; 
 }
 
 .startSelect-button2
@@ -1063,12 +1068,13 @@ button:disabled
     padding-top: 5px;
 }
 
-.room-players, .room-difficulty, .room-level, .room-status {
+.room-players, .room-difficulty, .room-level, .room-status
+{
     font-size: 0.9em;
 }
 
-.joinRoomBtn {
-    /* Keep your existing button styles */
+.joinRoomBtn
+{
     background-color: #455F78;
     border: none;
     color: white;
@@ -1086,6 +1092,7 @@ button:disabled
 	border-radius: 5px;
 	cursor: pointer;
 }
+
 .server-item button:disabled 
 {
 	background-color: #555;

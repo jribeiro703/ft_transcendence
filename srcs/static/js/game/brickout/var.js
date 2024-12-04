@@ -100,6 +100,10 @@ const brickVar = {
 	finish: false,
 	finalScore: 0,
 
+	checkPu: false,
+	checkDiff: false,
+	checkLevel: false,
+
 	difficulty: null,
 	classic: false,
 	castle: false,

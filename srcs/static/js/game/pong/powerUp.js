@@ -137,7 +137,7 @@ export function createPowerUp2()
 export function updatePowerUpSelection(selected)
 {
 	gameVar.powerUpEnable = selected;
-
+	gameVar.checkPu = true;
 	if (selected)
 	{
 		console.log("Power-Ups activés !");

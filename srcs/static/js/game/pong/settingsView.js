@@ -4,7 +4,6 @@ import { listenSettingPU, listenSettingDifficulty, listenSettingLevel, listenSet
 
 export function showSettingMultiView(live)
 {
-	// history.pushState({ view: 'game'}, '', `?view=solo/settings`);
 	const pongUrl = "static/css/images/ttLevel.png";
 	const footUrl = "static/css/images/footballLevel.png";
 	const tennisUrl = "static/css/images/tennisLevel.png";
@@ -66,8 +65,10 @@ export function showSettingMultiView(live)
 }
 export function showSettingView(live)
 {
-	gameVar.settingsChanged = true;
-	// history.pushState({ view: 'game'}, '', `?view=solo/settings`);
+	gameVar.settingsChanged = false;
+	gameVar.checkDiff = false;
+	gameVar.checkLevel = false;
+	gameVar.checkPu = false;
 	const pongUrl = "static/css/images/ttLevel.png";
 	const footUrl = "static/css/images/footballLevel.png";
 	const tennisUrl = "static/css/images/tennisLevel.png";
@@ -113,7 +114,7 @@ export function showSettingView(live)
 			</div>
 		</div>
 		<div>
-			<button id="saveBtn">Save and Return</button>
+			<button id="saveBtn" disabled="true">Save and Return</button>
 		</div>
 	</div>`
 
@@ -121,9 +122,20 @@ export function showSettingView(live)
 
 	getBtnById();
 	addPuBtn(live);
-
 	listenSettingPU();
 	listenSettingDifficulty();
 	listenSettingLevel();
 	listenSettingSave(live);
+}
+
+export function checkSaveBtn()
+{
+	console.log("check btn");
+	if (gameVar.checkPu && gameVar.checkLevel && gameVar.checkDiff)
+	{
+		console.log("check btn ok");
+		const btn = document.getElementById('saveBtn');
+		btn.disabled = false;
+		gameVar.settingsChanged = true;
+	}
 }

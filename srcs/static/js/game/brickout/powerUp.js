@@ -15,6 +15,7 @@ img.onload = function()
 export function updatePowerUpSelectionB(selected)
 {
 	brickVar.powerUpEnable = selected;
+	brickVar.checkPu = true;
 
 	if (selected)
 		console.log("Power-Ups activés B !");
