@@ -9,6 +9,7 @@ import { renderRegisterForm } from "./pages/renderRegisterForm.js";
 import { renderSettingsPage } from "./pages/renderSettingPage.js";
 import { isAuthenticated } from "./isAuthenticated.js";
 import { updateUserAvatar } from "./tools.js";
+import { isGamePage, renderPageGame } from "../game/pong/myHistory.js";
 
 const authPages = {
 	auth: renderAuthPage,
@@ -49,8 +50,12 @@ async function renderPage(page, updateHistory = true) {
 // listen to precedent or next page event but don't push state to history
 window.addEventListener('popstate', (event) => {
 	
+	console.log("event state:", event.state);
 	if (event.state) {
-	  renderPage(event.state.page, false);
+		if (isGamePage("#" + event.state.page))
+			renderPageGame(event.state.page, false);
+		else
+			renderPage(event.state.page, false);
 	}
 });
 

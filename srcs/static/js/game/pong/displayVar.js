@@ -32,6 +32,8 @@ export function displayBall()
 	console.log("y: ", gameVar.y);
 	console.log("dx: ", gameVar.dx);
 	console.log("dy: ", gameVar.dy);
+	console.log("initDx: ", gameVar.init_dx);
+	console.log("initDy: ", gameVar.init_dy);
 }
 
 export function diplayPuVar()

@@ -24,6 +24,7 @@ export function checkSettingLive()
 
 export function updateSetting()
 {
+	console.log("updateSetting");
 	var difficulty = null;	
 	var level = null;
 	var powerUp = null;
