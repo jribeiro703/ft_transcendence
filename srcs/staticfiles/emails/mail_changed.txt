@@ -1,0 +1,8 @@
+Subject: New Email Activation
+
+Hey, you have changed your email.
+
+Please activate your new email address by clicking the link below:
+[Activate Your Email](<{{ full_link }}>)
+
+This link is valid for 24 hours.

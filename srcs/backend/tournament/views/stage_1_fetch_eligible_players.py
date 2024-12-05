@@ -10,8 +10,8 @@ class FetchEligiblePlayersView(APIView):
 	def get(self, request):
 		try:
 			logger.debug("Attempting to fetch eligible players.")
-			#eligible_players = User.objects.filter(is_online=True)
-			eligible_players = User.objects.all()
+			eligible_players = User.objects.filter(is_online=True)
+			# eligible_players = User.objects.all()
 			logger.debug(f"Found players: {eligible_players}")
 
 			if not eligible_players.exists():

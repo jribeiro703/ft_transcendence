@@ -1,0 +1,9 @@
+Subject: Your 2FA Code
+
+Dear {{ username }},
+
+Your authentication code is:
+
+{{ verification_code }}
+
+This code is valid for 5 minutes.

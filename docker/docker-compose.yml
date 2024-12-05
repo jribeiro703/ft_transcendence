@@ -22,7 +22,12 @@ services:
     environment:
       - VIRTUAL_HOST=localhost,${HOSTNAME}
       - VIRTUAL_PORT=8000
-      - TZ=Europe/Paris
+      - EMAIL_HOST=${EMAIL_HOST:-mailhog}  # Default to mailhog for dev
+      - EMAIL_PORT=${EMAIL_PORT:-1025}
+      - EMAIL_USE_TLS=${EMAIL_USE_TLS:-False}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER:-}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD:-}
+      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL:-noreply@localhost}
 
   migration:
     platform: ${DOCKER_PLATFORM}
@@ -38,6 +43,13 @@ services:
       - db
     networks:
       - transcendence
+    environment:
+      - EMAIL_HOST=${EMAIL_HOST:-mailhog}  # Default to mailhog for dev
+      - EMAIL_PORT=${EMAIL_PORT:-1025}
+      - EMAIL_USE_TLS=${EMAIL_USE_TLS:-False}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER:-}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD:-}
+      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL:-noreply@localhost}
     command: >
       sh -c "
       python manage.py makemigrations --noinput &&
@@ -89,6 +101,19 @@ services:
     restart: on-failure
     networks:
       - transcendence
+
+  mailhog:
+    platform: ${DOCKER_PLATFORM}
+    image: richarvey/mailhog:latest
+    container_name: mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - transcendence
+    environment:
+      - VIRTUAL_HOST=mailhog.localhost,mailhog.${HOSTNAME}
+      - VIRTUAL_PORT=8025
 
   # prometheus:
   #   platform: ${DOCKER_PLATFORM}
