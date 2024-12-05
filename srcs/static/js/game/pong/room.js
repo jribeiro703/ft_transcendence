@@ -59,7 +59,7 @@ export function joinRoom(roomName)
 		{
 			gameSocket.send(JSON.stringify({ type: 'join_room' }));
 			gameVar.gameSocket = gameSocket;
-			history.pushState({ view: 'game', room: roomName }, '', `?view=multi&room=${roomName}`);
+			// history.pushState({ view: 'game', room: roomName }, '', `?view=multi&room=${roomName}`);
 			if (gameVar.playerIdx == 1)
 			{
 				waitingPlayer();

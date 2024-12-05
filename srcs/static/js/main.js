@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const hash = window.location.hash
 	if (isGamePage(hash))
 		renderPageGame(hash.substring(1));
-	if (hash === "" || hash === "#home")
+	else if (hash === "" || hash === "#home")
 		renderPage("home");
 	else
 		renderPage(hash.substring(1));

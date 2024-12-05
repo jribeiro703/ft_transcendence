@@ -35,6 +35,12 @@ const gameVar =
 	player2UpPressed: false,
 	player2DownPressed: false,
 
+	eventHandlers: {
+    keydown: null,
+    keyup: null,
+    startBall: null
+	},
+
 // ---------------------------------Score------------------------
 
 	playerScore: 0,

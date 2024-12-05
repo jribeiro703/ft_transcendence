@@ -10,19 +10,23 @@ import { createPowerUp1, createPowerUp2 } from "./powerUp.js";
 import { checkServer } from "./manage.js";
 import { initControl } from "./control.js";
 import { displayGameView, displayCanvas } from "./display.js";
+import { initializeCanvas } from "./canvas.js";
 
-export function showGameView()
+export async function showGameView()
 {
 	displayGameView();
 	updateCanvasColor();
+
+	await initializeCanvas();
 
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.gameView.style.display = 'block';
 
-	loadCanvasAndScore();
+	// loadCanvasAndScore();
 
+	console.log("local: ", gameVar.localGame);
 	initControl(gameVar.localGame)
 	startGame();
 }

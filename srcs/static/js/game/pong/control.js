@@ -1,5 +1,5 @@
+import gameVar from "./var.js";
 import { keyDownHandler, keyUpHandler, startBallLive, startBall } from "./input.js";
-import { removeEventListeners } from "./init.js";
 
 export function initControlLive()
 {
@@ -24,34 +24,40 @@ export function initControlLive()
         }
     });
 }
+function removeEventListeners()
+{
+    if (gameVar.eventHandlers.keydown)
+        document.removeEventListener("keydown", gameVar.eventHandlers.keydown);
+    if (gameVar.eventHandlers.keyup) 
+        document.removeEventListener("keyup", gameVar.eventHandlers.keyup);
+    if (gameVar.eventHandlers.startBall) 
+        document.removeEventListener("keydown", gameVar.eventHandlers.startBall);
+}
+
 export function initControl(local)
 {
-	removeEventListeners();
-	document.addEventListener("keydown", (e) => {
-		if (e.code === "Space")
-		{
-			startBall(e);
-		}
-	});
+    removeEventListeners();
+    gameVar.eventHandlers.startBall = (e) =>
+	{
+        if (e.code === "Space" || e.code === "Enter")
+            startBall(e);
+    };
 
-	document.addEventListener("keydown", (e) => {
-		if (e.code === "ArrowUp" || e.code === "ArrowDown" || e.code === "KeyW" || e.code === "KeyS")
-		{
-			keyDownHandler(e, local);
-		}
-	});
+    gameVar.eventHandlers.keydown = (e) =>
+	{
+        if (e.code === "ArrowUp" || e.code === "ArrowDown" || 
+            e.code === "KeyW" || e.code === "KeyS")
+            keyDownHandler(e, local);
+    };
 
-	document.addEventListener("keyup", (e) => {
-		if (e.code === "ArrowUp" || e.code === "ArrowDown" || e.code === "KeyW" || e.code === "KeyS")
-		{
-			keyUpHandler(e, local);
-		}
-	});
+    gameVar.eventHandlers.keyup = (e) =>
+	{
+        if (e.code === "ArrowUp" || e.code === "ArrowDown" || 
+            e.code === "KeyW" || e.code === "KeyS")
+            keyUpHandler(e, local);
+    };
 
-	document.addEventListener("keydown", (e) => {
-		if (e.code === 'Enter')
-		{
-			startBall(e);
-		}
-	})
+    document.addEventListener("keydown", gameVar.eventHandlers.startBall);
+    document.addEventListener("keydown", gameVar.eventHandlers.keydown);
+    document.addEventListener("keyup", gameVar.eventHandlers.keyup);
 }
