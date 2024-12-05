@@ -101,7 +101,6 @@ services:
 
   mailhog:
     platform: ${DOCKER_PLATFORM}
-    # image: mailhog/mailhog:latest
     image: richarvey/mailhog:latest
     container_name: mailhog
     ports:
