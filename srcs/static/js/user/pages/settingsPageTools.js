@@ -39,7 +39,7 @@ async function listenForDialog(mainContent, dialogElement, pk, newInputId, key) 
 		const isPasswordDialog = dialogElement.id === "password-dialog";
 		let body;
 
-		console.log("isPasswordDialog", isPasswordDialog);
+		// console.log("isPasswordDialog", isPasswordDialog);
 
 		if (isPasswordDialog) {
 			const oldPassword = document.getElementById("current-password").value;
@@ -53,12 +53,14 @@ async function listenForDialog(mainContent, dialogElement, pk, newInputId, key) 
 			body = { [key]: newValue };
 		}
 
-		console.log("body", body);
+		// console.log("body", body);
 
 		const responseObject = await fetchData(`/user/settings/${pk}/`, "PATCH", body, false, "authenticated");
-		if (responseObject.status === 200)
+		if (responseObject.status === 200) {
+			if (!isPasswordDialog)
+				renderPage("settings", false);
 			showToast(responseObject.data.message, "success");
-		else
+		} else
 			showToast(responseObject.data.message, "error");
 		dialogElement.close();
 		mainContent.removeChild(dialogElement);
@@ -76,7 +78,10 @@ async function uploadAvatar(pk) {
 	
 	fileInput.addEventListener('change', async (e) => {
 		const file = e.target.files[0];
-		if (!file) return;
+		if (!file) {
+			alert('No file selected');
+			return;
+		}
 		
 		const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
 		if (!validTypes.includes(file.type)) {
@@ -94,13 +99,9 @@ async function uploadAvatar(pk) {
 		formData.append('avatar', file);
 		
 		const responseObject = await fetchData(`/user/settings/${pk}/`, 'PATCH', formData, true, "authenticated");
-
 		if (responseObject.status === 200) {
-			const avatarPath = responseObject.data.avatar.substring(
-				responseObject.data.avatar.indexOf('/media')
-			);
-			document.getElementById('avatar').src = avatarPath;
 			showToast(responseObject.data.message, "success");
+			renderPage("settings", false);
 		} else {
 			showToast(responseObject.data.message, "error");
 		}

@@ -29,7 +29,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 		extra_kwargs = {'password': {'write_only': True}}
 
 	def create(self, validated_data):
-		
+
 		if User.objects.filter(email=validated_data['email'], is_active=True).exists():
 			raise serializers.ValidationError({"message": "This email is already used by a active user"})
 		

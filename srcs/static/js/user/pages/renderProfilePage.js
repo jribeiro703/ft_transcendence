@@ -38,6 +38,9 @@ export async function renderProfilePage() {
 	if (responseObject.status === 200) {
 		createProfileContent();
 		const data = responseObject.data;
+
+		console.log("avatar = ", data.avatar);
+
 		document.getElementById('username').textContent = data.username;
 		document.getElementById('avatar').src = data.avatar;
 		document.getElementById('isOnline').textContent = data.is_online ? "Online" : "Offline";
