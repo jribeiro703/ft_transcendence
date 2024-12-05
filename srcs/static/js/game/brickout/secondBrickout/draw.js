@@ -1,6 +1,50 @@
-import gameVar from "../var.js";
+import gameVar from "../../pong/var.js";
 import brickVar2 from "./var.js";
+import { drawScoreBoardB } from "./score.js";
+import { drawBricksB } from "./brick.js";
+import { drawPowerUpB } from "./powerUp.js";
+import { collectPowerUpB } from "./powerUp.js";
+import { collisionDetectionB } from "./brick.js";
+import { manageCollisionB } from "./manage.js";
+import { handleBallB } from "./ball.js";
+import { manageMoveB } from "./manage.js";
+import { updateBallPositionB } from "./ball.js";
+import { updatePowerUpB } from "./update.js";
 
+function baseDrawB()
+{
+	brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
+	if (!gameVar.localGame && gameVar.game != 'brickout2p')
+		drawScoreBoardB();
+	drawBricksB();
+	drawBallB();
+	drawPaddleB();
+}
+
+export function drawB()
+{
+	if (brickVar2.finishLevel == false)
+	{
+		baseDrawB();
+		if (brickVar2.gameStart)
+		{
+			drawPowerUpB();
+			collectPowerUpB();
+			collisionDetectionB();
+			manageCollisionB();
+			updatePowerUpB();
+		}
+		else
+		{
+			handleBallB();
+		}
+		manageMoveB();
+		updateBallPositionB();
+		if (brickVar2.anim)
+			cancelAnimationFrame(brickVar2.anim); 
+		brickVar2.anim = requestAnimationFrame(drawB);
+	}
+}
 export function drawBallB()
 {
 	const x = brickVar2.x - brickVar2.ballRadius;
@@ -41,57 +85,3 @@ export function drawPaddleB()
     brickVar2.ctx.closePath();
 }
 
-// export function drawScoreB()
-// {
-//     brickVar2.ctx.font = "16px Arial";
-//     brickVar2.ctx.fillStyle = "grey";
-//     brickVar2.ctx.fillText("Score: "+brickVar2.score, 8, 20);
-// }
-
-// export function drawLivesB()
-// {
-//     brickVar2.ctx.font = "16px Arial";
-//     brickVar2.ctx.fillStyle = "grey";
-//     brickVar2.ctx.fillText("Lives: "+brickVar2.lives, brickVar2.canvasW - 65, 20);
-// }
-
-function loadCustomFont()
-{
-    return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');
-}
-
-
-export function drawScoreBoardB()
-{
-
-    loadCustomFont().load().then(function(font) 
-	{
-        document.fonts.add(font);
-		const ctx = brickVar2.scoreCtx;
-		ctx.clearRect(0, 0, brickVar2.scoreCanvW, brickVar2.scoreCanvH);
-		
-		ctx.font = '24px fontScore';
-		ctx.fillStyle = '#FFFFFF';
-		ctx.textAlign = 'center';
-		
-		const centerX = brickVar2.scoreCanvW / 2;
-		const leftX = brickVar2.scoreCanvW * 0.25;
-		const rightX = brickVar2.scoreCanvW * 0.75;
-		const y = 35;
-
-		ctx.fillText('Score', leftX, y);
-		ctx.fillText('Lives', rightX, y);
-
-		ctx.font = '32px fontScore';
-		ctx.fillText(brickVar2.score, leftX, y + brickVar2.scoreCanvH / 2);
-		ctx.fillText(brickVar2.lives, rightX, y + brickVar2.scoreCanvH / 2);
-		const minutes = Math.floor(brickVar2.gameTime / 60);
-		const seconds = brickVar2.gameTime % 60;
-		const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-		ctx.font = '20px fontScore';
-		ctx.fillText(time, centerX, y + brickVar2.scoreCanvH / 2);
-	}).catch(function(error)
-	{
-		console.error("Error on font load", error);
-	});
-}

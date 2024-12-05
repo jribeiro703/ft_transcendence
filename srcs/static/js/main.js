@@ -1,6 +1,8 @@
 import { isAuthenticated } from "./user/isAuthenticated.js";
 import { renderPage } from "./user/historyManager.js";
 import { checkForAuthCode } from "./user/pages/renderLogin42Page.js";
+import { isGamePage } from "./game/pong/myHistory.js";
+import { renderPageGame } from "./game/pong/myHistory.js";
 
 document.getElementById('user-avatar').addEventListener('click', async () => {
 	
@@ -23,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// listen for hash change to call right page render and push the state in history
 	const hash = window.location.hash
+	if (isGamePage(hash))
+		renderPageGame(hash.substring(1));
 	if (hash === "" || hash === "#home")
 		renderPage("home");
 	else

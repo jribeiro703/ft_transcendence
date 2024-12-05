@@ -13,6 +13,7 @@ const brickVar2 = {
 
 	gameTime: 0,
 	gameTimer: null,
+	startTime: false,
 
 
 // -------------------------------------Ball-----------------
@@ -91,7 +92,7 @@ const brickVar2 = {
 	initGame: false,
 	startBtn: null,
 	score: 0,
-	lives: 5,
+	lives: 2,
 	gameStart: false,
 	anim: null,
 	startBtn: null,
@@ -105,6 +106,9 @@ const brickVar2 = {
 	x: false,
 	invader: false,
 	settingChanged: false,
+	checkPu: false,
+	checkDiff: false,
+	checkLevel: false,
 
 	// -------------------------------------Button---------------------------
 

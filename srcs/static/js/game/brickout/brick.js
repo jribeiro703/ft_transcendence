@@ -1,5 +1,6 @@
 import brickVar from './var.js';
 import { youWinB } from './level.js';
+import { createCastlePattern, createInvaderPattern, createXPattern, createClassicPattern } from './brickPattern.js';
 
 for(var c = 0; c < brickVar.brickColumnCount; c++)
 {
@@ -59,62 +60,7 @@ export function initBricksB(pattern)
     }
 }
 
-function createClassicPattern()
-{
-	console.log('createclassic');
-	brickVar.brickColumnCount = 8;
-    for(let c = 0; c < brickVar.brickColumnCount; c++)
-	{
-        brickVar.brick[c] = [];
-        for(let r = 0; r < brickVar.brickRowCount; r++)
-		{
-            brickVar.brick[c][r] = { x: 0, y: 0, status: 1 };
-        }
-    }
-    brickVar.totalBrick = brickVar.brickColumnCount * brickVar.brickRowCount;
-	brickVar.currLevel = 'classic';
-}
-
-function createCastlePattern()
-{
-	brickVar.brickColumnCount = 16;
-    const pattern = [
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,1,1,1,1,1,1,1,1,1,1,0,0,1],
-        [1,0,0,1,1,1,1,1,1,1,1,1,1,0,0,1],
-        [1,0,0,1,1,1,1,1,1,1,1,1,1,0,0,1],
-        [1,0,0,1,1,1,1,1,1,1,1,1,1,0,0,1],
-        [1,0,0,1,1,1,1,1,1,1,1,1,1,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,1,1,1,0,0,0,0,1,1,1,0,0,1],
-        [1,0,0,1,1,1,0,0,0,0,1,1,1,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    ];
-    
-    for(let c = 0; c < pattern.length; c++)
-	{
-        brickVar.brick[c] = [];
-        for(let r = 0; r < pattern[0].length; r++)
-		{
-            brickVar.brick[c][r] = { 
-                x: 0, 
-                y: 0, 
-                status: pattern[c][r]
-            };
-        }
-    }
-	countBrick(pattern);
-	brickVar.currLevel = 'castle';
-	brickVar.finishLevel = false;
-}
-
-function countBrick(pattern)
+export function countBrick(pattern)
 {
 	let brickCount = 0;
 	for(let c = 0; c < pattern.length; c++)
@@ -126,89 +72,6 @@ function countBrick(pattern)
     }
     brickVar.totalBrick = brickCount;
 }
-
-function createXPattern() 
-{
-	brickVar.brickColumnCount = 16;
-    const pattern = [
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0],
-        [1,0,0,0,0,0,1,1,1,1,0,0,0,0,0,1],
-        [1,1,0,0,0,0,0,1,1,0,0,0,0,0,1,1],
-        [1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1],
-        [1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1],
-        [1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1],
-        [1,1,0,0,0,0,0,1,1,0,0,0,0,0,1,1],
-        [1,0,0,0,0,0,1,1,1,1,0,0,0,0,0,1],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    ];
-	for(let c = 0; c < pattern.length; c++) 
-	{
-        brickVar.brick[c] = [];
-        for(let r = 0; r < pattern[0].length; r++)
-		{
-            brickVar.brick[c][r] =
-			{ 
-                x: 0, 
-                y: 0, 
-                status: pattern[c][r]
-            };
-        }
-    }
-	countBrick(pattern);
-	brickVar.currLevel = 'x';
-	brickVar.finishLevel = false;
-}
-	
-function createInvaderPattern()
-{
-	brickVar.brickColumnCount = 16;
-    const pattern = [
-        [0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0],
-        [0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0],
-        [0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],
-        [0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0],
-        [0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0],
-        [0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0],
-        [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0],
-        [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0],
-        [0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
-        [0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
-        [0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
-        [0,0,1,0,1,1,1,1,1,1,1,1,0,1,0,0],
-        [0,0,1,0,1,0,0,0,0,0,0,1,0,1,0,0],
-        [0,0,1,0,1,0,0,0,0,0,0,1,0,1,0,0],
-        [0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0],
-        [0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0],
-
-    ];
-    
-    for(let c = 0; c < pattern.length; c++)
-	{
-        brickVar.brick[c] = [];
-        for(let r = 0; r < pattern[0].length; r++)
-		{
-            brickVar.brick[c][r] =
-			{ 
-                x: 0, 
-                y: 0, 
-                status: pattern[c][r]
-            };
-        }
-    }
-	countBrick(pattern);
-	brickVar.currLevel = 'invader';
-	brickVar.finishLevel = false;
-}
-
-
-
 
 export function drawBricksB()
 {
@@ -222,7 +85,6 @@ export function drawBricksB()
 				var brickY = (c * (brickVar.brickHeight + brickVar.brickPadding)) + brickVar.brickOffsetTop;
 				brickVar.gradient = brickVar.ctx.createLinearGradient(0, 0, 0, 250);
 				changeColor();
-
 				brickVar.brick[c][r].x = brickX;
 				brickVar.brick[c][r].y = brickY;
 				brickVar.ctx.beginPath();

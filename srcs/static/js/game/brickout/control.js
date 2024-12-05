@@ -3,30 +3,51 @@ import brickVar from "./var.js";
 import { checkLevelB } from "./level.js";
 import { initBallB } from "./ball.js";
 import { createPowerUpB } from "./powerUp.js"; 
-import { drawB } from "./game.js";
+import { drawB } from "./draw.js";
+import gameVar from "../pong/var.js";
 
 export function keyDownHandlerB(e)
 {
-	if(e.code === "ArrowRight")
-		brickVar2.rightPressed = true;
-	else if(e.code  === "ArrowLeft")
-		brickVar2.leftPressed = true;
-	else if (e.code === "KeyA")
-		brickVar.leftPressed = true;
-	else if (e.code === "KeyD")
-		brickVar.rightPressed = true;
+	if (gameVar.localGame)
+	{
+		if(e.code === "ArrowRight")
+			brickVar2.rightPressed = true;
+		else if(e.code  === "ArrowLeft")
+			brickVar2.leftPressed = true;
+		else if (e.code === "KeyA")
+			brickVar.leftPressed = true;
+		else if (e.code === "KeyD")
+			brickVar.rightPressed = true;
+	}
+	else
+	{
+		if (e.code === "KeyA" || e.code === "ArrowLeft")
+			brickVar.leftPressed = true;
+		else if (e.code === "KeyD" || e.code === "ArrowRight")
+			brickVar.rightPressed = true;	
+	}
 }
 
 export function keyUpHandlerB(e)
 {
-	if(e.code === "ArrowRight")
-		brickVar2.rightPressed = false;
-	else if(e.code === "ArrowLeft")
-		brickVar2.leftPressed = false;
-	else if (e.code === "KeyA")
-		brickVar.leftPressed = false;
-	else if (e.code === "KeyD")
-		brickVar.rightPressed = false;
+	if (gameVar.localGame)
+	{
+		if(e.code === "ArrowRight")
+			brickVar2.rightPressed = false;
+		else if(e.code === "ArrowLeft")
+			brickVar2.leftPressed = false;
+		else if (e.code === "KeyA")
+			brickVar.leftPressed = false;
+		else if (e.code === "KeyD")
+			brickVar.rightPressed = false;
+	}
+	else
+	{
+		if (e.code === "KeyA" || e.code === "ArrowLeft")
+			brickVar.leftPressed = false;
+		else if (e.code === "KeyD" || e.code === "ArrowRight")
+			brickVar.rightPressed = false;
+	}
 }
 
 export function mouseMoveHandlerB(e)
@@ -38,8 +59,6 @@ export function mouseMoveHandlerB(e)
 
 export function startGameB(level)
 {
-	// displayBallB();
-	// console.log("pu enable :", brickVar.powerUpEnable);
 	if (!brickVar.initGame)
 	{
 		initBallB();

@@ -2,7 +2,7 @@ import brickVar2 from "./var.js";
 import { initBallB } from "./ball.js";
 import { checkLevelB } from "./level.js";
 import { createPowerUpB } from "./powerUp.js";
-import { drawB } from "./game.js";
+import { drawB } from "./draw.js";
 
 export function keyDownHandlerB(e)
 {
@@ -29,8 +29,6 @@ export function mouseMoveHandlerB(e)
 
 export function startGameB(level)
 {
-	// displayBallB();
-	// console.log("pu enable :", brickVar.powerUpEnable);
 	if (!brickVar2.initGame)
 	{
 		initBallB();

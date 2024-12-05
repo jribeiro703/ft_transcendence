@@ -1,6 +1,12 @@
+import gameVar from "../../pong/var.js";
 import brickVar2 from "./var.js";
 import { resetBallB } from "./ball.js";
-import { addBtnB, addImageB } from "./level.js";
+import { saveScoreB } from "./score.js";
+import { handleNextLevelB, restartLevelB } from "./level.js";
+import { displayFinish, displayNextLevel } from "./display.js";
+import { listenFinishBtn, listenNextLevelBtn} from "./listenBtn.js";
+import { renderPageGame } from "../../pong/myHistory.js";
+
 
 export function manageCollisionB()
 {
@@ -22,7 +28,7 @@ export function manageCollisionB()
                 MAX_ANGLE_DEVIATION = Math.PI / 3;
 			else
                 MAX_ANGLE_DEVIATION = Math.PI / 4;
-            const currentSpeed = brickVar2.powerUpActive ? Math.sqrt(brickVar2.dx * brickVar2.dx + brickVar2.dy * brickVar2.dy) : 5;
+            const currentSpeed = brickVar2.powerUpActive ? Math.sqrt(brickVar2.dx * brickVar2.dx + brickVar2.dy * brickVar2.dy) : brickVar2.initDx;
             if (hitPos < 0.5)
 			{
                 let angle = BASE_ANGLE - (0.5 - hitPos) * 2 * MAX_ANGLE_DEVIATION;
@@ -48,14 +54,11 @@ export function loseLives()
 	{
 		brickVar2.finish = true;
 		brickVar2.finishLevel = true;
+		brickVar2.startTime = false;
 		saveScoreB();
-		brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
-		brickVar2.ctx.font = "35px Arial";
-		brickVar2.ctx.fillStyle = "white";	
-		brickVar2.ctx.fillText("You lose..." , brickVar2.canvasW / 2 - 100, brickVar2.canvasH / 6 - 30);
-		brickVar2.ctx.fillText("Score : " + brickVar2.finalScore, brickVar2.canvasW / 2 - 100, brickVar2.canvasH / 6 + 20);
-		addBtnB();
-		addImageB('/static/css/images/nooo.png');
+		chechOpponent();
+		if (!gameVar.localGame)
+			addBtnB();
 	}
 	else
 		resetBallB();
@@ -73,22 +76,44 @@ export function manageMoveB()
 	}
 }
 
-function saveScoreB()
+export function addBtnB()
 {
-	var levelScore = 0;
-	if (brickVar2.currLevel === 'classic')
-		levelScore = 0;
-	if (brickVar2.currLevel === 'castle')
-		levelScore = 104;
-	else if (brickVar2.currLevel === 'x')
-		levelScore = 104 + 169;
-	else if (brickVar2.currLevel === 'invader')
-		levelScore = 104 + 169 + 169;
-	brickVar2.finalScore = brickVar2.score + levelScore;
-	sendScoreB();
+	if (!brickVar2.finish)
+		displayNextLevel();
+	else
+		displayFinish();
 }
 
-export function sendScoreB()
+export function checkBtnB(status)
 {
-	console.log("finalScroe : ", brickVar2.finalScore);
+	if (status === 'nextLevel')
+	{
+		listenNextLevelBtn();
+	}
+	else if (status === 'finish')
+	{
+		listenFinishBtn();
+	}
+}
+
+export function clearBtnB()
+{
+	const nextLevel = document.getElementById("nextLevel");
+    try
+	{
+        const nextLevelBtn = document.getElementById("nextLevelBtn");
+		const quitBtn = document.getElementById("quitBtn");
+        const restartLevelBtn = document.getElementById("restartLevelBtn");
+        if (nextLevelBtn)
+            nextLevelBtn.removeEventListener("click", handleNextLevelB);
+    	if (restartLevelBtn)
+            restartLevelBtn.removeEventListener("click", restartLevelB);
+		if (quitBtn)
+			quitBtn.addEventListener('click', () => renderPageGame("home", true));
+        nextLevel.parentNode.remove();
+    }
+	catch (error)
+	{
+        console.error("Error removing buttons:", error);
+    }
 }

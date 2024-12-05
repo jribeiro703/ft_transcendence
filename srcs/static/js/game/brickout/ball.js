@@ -1,5 +1,5 @@
-import { resetPowerUpB } from "./powerUp.js";
 import brickVar from "./var.js";
+import { resetPowerUpB } from "./powerUp.js";
 
 export function startBallB(e)
 {
@@ -7,11 +7,10 @@ export function startBallB(e)
 	{
 		if (!brickVar.finishLevel)
 		{
-            console.log("Starting ball");
             brickVar.gameStart = true;
+			brickVar.startTime = true;
             brickVar.dx = brickVar.initDx;
-            brickVar.dy = (Math.random() < 0.5 ? brickVar.initDy : -brickVar.initDy);
-			displayBallB();
+            brickVar.dy = -brickVar.initDy;
         }
 		else
 		{
@@ -20,15 +19,6 @@ export function startBallB(e)
             e.stopPropagation();
         }
 	}
-}
-export function displayBallB()
-{
-	// console.log("x: ", brickVar.x);
-	// console.log("y: ", brickVar.y);
-	// console.log("dx: ", brickVar.dx);
-	// console.log("dy: ", brickVar.dy);
-	console.log("init Dx :", brickVar.initDx);
-	console.log("init Dy :", brickVar.initDy);
 }
 
 export function initBallB()
