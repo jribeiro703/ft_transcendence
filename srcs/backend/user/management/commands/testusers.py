@@ -2,16 +2,9 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 import pyotp
-import random
-import string
 
 class Command(BaseCommand):
     help = 'Create random test users with OTP secrets'
-
-    def generate_username(self, length=8):
-        letters = string.ascii_lowercase
-        digits = string.digits
-        return ''.join(random.choice(letters) + ''.join(random.choices(letters + digits, k=length-1)))
 
     def handle(self, *args, **kwargs):
         User = get_user_model()
@@ -19,11 +12,11 @@ class Command(BaseCommand):
         created_users = []
 
         for i in range(num_users):
-            username = self.generate_username()
+            username = f'user{i+1}'
             user_data = {
                 'username': username,
                 'email': f'{username}@example.com',
-                'password': 'Password123!',
+                'password': '88888888',
                 'otp_secret': pyotp.random_base32()  # Generate base32 OTP secret
             }
             
