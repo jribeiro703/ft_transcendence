@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { initializeBall } from "./draw.js";
+import { initializeBall } from "./ball.js";
 import { aiServeBall } from "./ai.js";
 import { checkball } from "./check.js";
 import { sendGameData } from "./network.js";
@@ -19,7 +19,6 @@ export function listenBtn()
 
 export function resetMatch()
 {
-	console.log("resetMatch");
 	gameVar.playerScore = 0;
 	gameVar.aiScore = 0;
 	gameVar.matchOver = false;

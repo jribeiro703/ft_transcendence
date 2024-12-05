@@ -1,10 +1,12 @@
 import brickVar from "./var.js";
-import brickVar2 from "./secondBrickout/var.js";
 import gameVar from "../pong/var.js";
 import { resetBallB } from "./ball.js";
-import { addBtnB } from "./level.js";
-import { drawScoreBoardB } from "./draw.js";
-import { displayScore } from "../pong/displayVar.js";
+import { chechOpponent } from "./score.js"
+import { saveScoreB } from "./score.js";
+import { displayNextLevel, displayFinish, displayLocalRematch } from "./display.js";
+import { listenFinishBtn, listenNextLevelBtn, listenLocalRematchBtn } from "./listenerBtn.js";
+import { handleNextLevelB, restartLevelB } from "./level.js";
+import { renderPageGame } from "../pong/myHistory.js";
 
 export function manageCollisionB()
 {
@@ -45,62 +47,15 @@ export function manageCollisionB()
 	}
 }
 
-export function chechOpponent()
+export function manageMoveB()
 {
-	let display = false;
-	if (gameVar.localGame)
+	if (brickVar.leftPressed && brickVar.paddleX > 0)
 	{
-		const waiting = setInterval(() =>
-		{
-			if (brickVar2.startTime === true)
-			{
-				if (!display)
-				{
-					display = true;
-					brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
-					drawScoreBoardB();
-					brickVar.ctx.font = 'bold 24px fontScore';
-					brickVar.ctx.fillStyle = '#66a5e8';
-					brickVar.ctx.textAlign = 'left';
-					brickVar.ctx.fillText("Waiting for opponent to finish...", brickVar.canvasW / 4, brickVar.canvasH / 2 - 100);
-					brickVar.ctx.fillText("Your final score :", brickVar.canvasW / 4, (brickVar.canvasH / 2));
-					brickVar.ctx.fillText(brickVar.finalScore, brickVar.canvasW / 4 + 250, (brickVar.canvasH / 2));
-				}
-			}
-			else
-			{
-				clearInterval(waiting);
-				compareScore();
-			}
-		},1000);
-	}
-}
-
-function compareScore()
-{
-	console.log("compare1");
-	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
-	brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
-	displayScore();
-	if (brickVar.finalScore > brickVar2.finalScore)
+		brickVar.paddleX -= brickVar.paddleSpeed;
+	} 
+	else if (brickVar.rightPressed && brickVar.paddleX < brickVar.canvasW - brickVar.paddleWidth)
 	{
-		brickVar.ctx.font = 'bold 24px fontScore';
-		brickVar.ctx.fillStyle = '#66a5e8';
-		brickVar.ctx.textAlign = 'left';
-		brickVar.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar.canvasW/ 4 - 100, (brickVar.canvasH / 2) - 100);
-		brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
-		brickVar.ctx.fillText(brickVar.finalScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2)
-
-		brickVar.ctx.fillText("Your opponent has score only : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
-		brickVar.ctx.fillText(brickVar2.finalScore, brickVar.canvasW / 4 + 420, brickVar.canvasH / 2 + 50);
-
-		brickVar2.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4, (brickVar.canvasH / 2) - 100);
-		brickVar2.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
-		brickVar2.ctx.fillText(brickVar2.finalScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
-
-		brickVar2.ctx.fillText("Your opponent has score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
-		brickVar2.ctx.fillText(brickVar.finalScore, brickVar2.canvasW / 4 + 380, brickVar2.canvasH / 2 + 50)
-
+		brickVar.paddleX += brickVar.paddleSpeed;
 	}
 }
 
@@ -120,34 +75,47 @@ export function loseLives()
 		resetBallB();
 }
 
-export function manageMoveB()
+export function addBtnB()
 {
-	if (brickVar.leftPressed && brickVar.paddleX > 0)
+	if (!gameVar.localGame)
 	{
-		brickVar.paddleX -= brickVar.paddleSpeed;
-	} 
-	else if (brickVar.rightPressed && brickVar.paddleX < brickVar.canvasW - brickVar.paddleWidth)
-	{
-		brickVar.paddleX += brickVar.paddleSpeed;
+		if (!brickVar.finish)
+			displayNextLevel();
+		else
+			displayFinish();
 	}
+	else
+		displayLocalRematch();
 }
 
-function saveScoreB()
+export function checkBtnB(status)
 {
-	var levelScore = 0;
-	if (brickVar.currLevel === 'classic')
-		levelScore = 0;
-	if (brickVar.currLevel === 'castle')
-		levelScore = 104;
-	else if (brickVar.currLevel === 'x')
-		levelScore = 104 + 169;
-	else if (brickVar.currLevel === 'invader')
-		levelScore = 104 + 169 + 169;
-	brickVar.finalScore = brickVar.score + levelScore;
-	sendScoreB();
+	if (status === 'nextLevel')
+		listenNextLevelBtn();
+	else if (status === 'finish')
+		listenFinishBtn();
+	else if (status === 'localRematch')
+		listenLocalRematchBtn();
 }
 
-export function sendScoreB()
+export function clearBtnB()
 {
-	console.log("finalScroe : ", brickVar.finalScore);
+	const nextLevel = document.getElementById("nextLevel");
+    try
+	{
+        const nextLevelBtn = document.getElementById("nextLevelBtn");
+		const quitBtn = document.getElementById("quitBtn");
+        const restartLevelBtn = document.getElementById("restartLevelBtn");
+        if (nextLevelBtn)
+            nextLevelBtn.removeEventListener("click", handleNextLevelB);
+    	if (restartLevelBtn)
+            restartLevelBtn.removeEventListener("click", restartLevelB);
+		if (quitBtn)
+			quitBtn.addEventListener('click', () => renderPageGame("home"), true);
+        nextLevel.parentNode.remove();
+    }
+	catch (error)
+	{
+        console.error("Error removing buttons:", error);
+    }
 }

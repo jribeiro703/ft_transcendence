@@ -1,6 +1,7 @@
 import gameVar from "./var.js";
-import { updateDifficultySelection, updateLevelSelection } from "./update.js";
+import { updateDifficultySelection, updateImageUrl, updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
+import { displaySetting } from "./display.js";
 
 export function checkSetting()
 {
@@ -11,6 +12,7 @@ export function checkSetting()
 		updateLevelSelection("tableTennis");
 	}
 }
+
 export function checkSettingLive()
 {
 	if (gameVar.settingsChanged === false)
@@ -22,7 +24,6 @@ export function checkSettingLive()
 
 export function updateSetting()
 {
-	// gameVar.settingsChanged = true;
 	var difficulty = null;	
 	var level = null;
 	var powerUp = null;
@@ -35,12 +36,12 @@ export function updateSetting()
 		updateDifficultySelection('medium');
 	}
 
-	if (gameVar.football)
+	if (gameVar.currentLevel === 'football')
 		level = 'Football';
-	else if (gameVar.tennisTable)
-		level = 'Table Tennis';
-	else if (gameVar.tennis)
+	else if (gameVar.currentLevel === 'tennis')
 		level = 'Tennis';
+	else if (gameVar.currentLevel === 'tableTennis')
+		level = 'Table Tennis';
 	else 
 	{
 		level = 'Table Tennis';
@@ -54,25 +55,8 @@ export function updateSetting()
 		updatePowerUpSelection(false);
 	}
 
+	updateImageUrl();
 	displaySetting(difficulty, powerUp, level);
-}
-
-export function displaySetting(difficulty, powerUp, level)
-{
-	console.log("displaySetting");
-	const settingContain = document.getElementById('settings-column');
-	if (!settingContain)
-		console.log("error on settingContain");
-	settingContain.innerHTML = '';
-
-	const settingItem = document.createElement('div');
-
-	settingItem.innerHTML = `
-	<p>Difficulty: <span id="difficultyChoice">${difficulty}</span></p>
-	<p>Power-Up: <span id="powerupChoice">${powerUp}</span></p>
-	<p>Level: <span id="levelSelected">${level}</span></p>`;
-
-	settingContain.appendChild(settingItem);
 }
 
 export function updateLiveSetting()
@@ -90,47 +74,28 @@ export function updateLiveSetting()
 		level = gameVar.currentLevel;
 
 	const settingContain = document.getElementById('setting-container');
-
 	settingContain.innerHTML = '';
-
 	const settingItem = document.createElement('div');
-
 	settingItem.innerHTML = `
 	Difficulty: 
 	<span id="difficultyChoice">${difficulty}</span><br>
 	Level:
 	<span id="levelSelected">${level}</span>
 	`;
-
 	settingContain.appendChild(settingItem);
-
 }
 
-export function getBtnById()
+export function addPuBtn(info)
 {
-	gameVar.powerUpSelection = document.getElementById('powerUpSelection');
-	gameVar.btnPowerUp = document.getElementById('btnPowerUp');
-	gameVar.withPowerUp = document.getElementById('withPowerUps');
-	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');
-	gameVar.easy = document.getElementById('easy');
-	gameVar.medium = document.getElementById('medium');
-	gameVar.hard = document.getElementById('hard');
-	gameVar.tableTennis = document.getElementById('tableTennis');
-	gameVar.footLevel = document.getElementById('footLevel');
-	gameVar.tennisLevel = document.getElementById('tennisLevel');
-	gameVar.saveBtn = document.getElementById('saveBtn');
-}
-
-export function addPuBtn(live)
-{
-	if(live === false)
-	{
-		gameVar.powerUpSelection.style.display = 'block';
-		gameVar.btnPowerUp.style.display = 'block';
-	}
-	else
+	if(info === 'live')
 	{
 		gameVar.powerUpSelection.style.display = 'none';
 		gameVar.btnPowerUp.style.display = 'none';
+	}
+	else
+	{
+		gameVar.powerUpSelection.style.display = 'block';
+		gameVar.btnPowerUp.style.display = 'block';
+
 	}		
 }

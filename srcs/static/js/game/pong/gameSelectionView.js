@@ -1,6 +1,8 @@
 import gameVar from "./var.js";
 import { listenSettingBtn, listenPlayBtn } from "./listenerSetting.js";
 import { updateImageUrl } from "./update.js";
+import { updateSetting } from "./setting.js";
+import { updateSettingB } from "../brickout/update.js";
 
 export function showGameSelectionView()
 {
@@ -71,10 +73,8 @@ export function showGameSelectionView()
 	gameVar.playBtn = document.getElementById('playBtn');
 	gameVar.playBtn2 = document.getElementById('playBtn2');
 
-	// if (gameVar.settingsChanged)
-		// updateSetting();
-	// if (brickVar.settingChanged)
-	// 	updateSettingB();
+	updateSetting();
+	updateSettingB();
 	listenSettingBtn();
 	listenPlayBtn();
 }

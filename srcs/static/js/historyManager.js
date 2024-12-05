@@ -9,7 +9,6 @@ import { renderSettingsPage } from "./user/js/renderSettingPage.js";
 import { isAuthenticated } from "./user/token.js";
 import { updateUserAvatar } from "./user/tools.js";
 
-
 const authPages = {
 	// home: renderHomePage,
 	auth: renderAuthPage,

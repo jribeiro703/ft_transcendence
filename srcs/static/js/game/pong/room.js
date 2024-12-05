@@ -1,9 +1,10 @@
 import gameVar from './var.js';
 import { sendPlayerData, sendSettingData } from './network.js';
-import { drawLive, initializeBall } from './draw.js';
+import { drawLive } from './draw.js';
+import { initializeBall } from './ball.js';
 import { updateCanvasColor } from './update.js';
 import { showGameRoom } from './gameView.js';
-import { drawScoreBoard } from './draw.js';
+import { drawScoreBoard } from './score.js';
 
 export function createNewRoom(joinRoomCallback)
 {
@@ -190,11 +191,8 @@ export function addRoom(index, roomName, status, nbplayer, difficulty = null, le
 
 export function updateRoomList()
 {
-	// gameVar.noRoomsMessage.style.display = 'none';
 	gameVar.roomsContainer.style.display = 'block';
-
 	gameVar.roomsContainer.innerHTML = '';
-
 	gameVar.rooms.forEach(room =>
 	{
 		if (room.idx === null || room.idx === undefined)

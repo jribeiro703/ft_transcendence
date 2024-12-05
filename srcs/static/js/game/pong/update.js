@@ -28,7 +28,6 @@ export function updateDifficultySelection(level)
 		console.log('hard mode');
 		gameVar.difficulty = 'hard';
 	}
-
 }
 
 export function updateLevelSelection(level)
@@ -59,17 +58,17 @@ export function updateLevelSelection(level)
 export function updateImageUrl()
 {
 	gameVar.pongUrl = "static/css/images/ttLevel.png";
-	if (gameVar.football)
+	if (gameVar.currentLevel === 'football')
 		gameVar.pongUrl = "static/css/images/footballLevel.png";
-	else if (gameVar.tennis)
+	else if (gameVar.currentLevel === 'tennis')
 		gameVar.pongUrl = "static/css/images/tennisLevel.png";
 
 	gameVar.brickUrl = "static/css/images/brickout.png";
-	if (brickVar.castle)
+	if (brickVar.currLevel === 'castle')
 		gameVar.brickUrl = "static/css/images/castleLevel.png";
-	else if (brickVar.x)
+	else if (brickVar.currLevel === 'x')
 		gameVar.brickUrl = "static/css/images/xLevel.png";
-	else if (brickVar.invader)
+	else if (brickVar.currLevel === 'invader')
 		gameVar.brickUrl = 'static/css/images/invadersLevel.png';
 }
 export function updateCanvasColor()

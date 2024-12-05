@@ -64,7 +64,6 @@ export function RandomPowerUpB()
 	brickVar.currentPowerUp = brickVar.powerUps[randomIndex];
 }
 
-
 export function drawPowerUpB()
 {
 	if (brickVar.powerUpEnable)

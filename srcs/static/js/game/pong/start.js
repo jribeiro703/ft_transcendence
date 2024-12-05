@@ -1,10 +1,9 @@
 import gameVar from "./var.js";
-import { initializeBall } from "./draw.js";
+import { initializeBall } from "./ball.js";
 import { newPowerUp } from "./powerUp.js";
 import { draw } from "./draw.js";
 import { manageAi } from "./ai.js";
-import { drawScoreBoard } from "./draw.js";
-
+import { drawScoreBoard } from "./score.js";
 
 export function startGame()
 {

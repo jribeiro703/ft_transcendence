@@ -12,30 +12,6 @@ img.onload = function()
 	drawPowerUpB();
 };
 
-export function updatePowerUpSelectionB(selected)
-{
-	brickVar2.powerUpEnable = selected;
-
-	if (selected)
-		console.log("Power-Ups activés B !");
-	else 
-		console.log("Power-Ups désactivés B !");
-}
-
-export function updatePowerUpB()
-{
-	if (brickVar2.powerUpEnable)
-    {
-		if (!brickVar2.powerUpActive)
-		{
-			brickVar2.powerUpY += brickVar2.powerUpSpeed;
-			
-			if (brickVar2.powerUpY > brickVar2.canvasH)
-				createPowerUpB();
-		}
-	}
-}
-
 export function resetPowerUpB()
 {
     brickVar2.powerUpActive = false;

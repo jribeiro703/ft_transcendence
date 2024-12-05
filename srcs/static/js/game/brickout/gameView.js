@@ -2,7 +2,7 @@ import gameVar from '../pong/var.js';
 import brickVar from './var.js';
 import brickVar2 from './secondBrickout/var.js';
 import { checkSettingB } from './settings.js';
-import { initListenerB } from './init.js';
+import { initListenerB, initListenerMultiB } from './init.js';
 
 export function showGameBrickView()
 {
@@ -18,19 +18,10 @@ export function showGameBrickView()
 	`;
 	mainContent.appendChild(insertTo);
     
-	// var canvas = document.getElementById("brickoutCanvas");
-	// brickVar.canvas = canvas;
-	// brickVar.ctx = canvas.getContext("2d");
-	// canvas.width = brickVar.canvasW;
-	// canvas.height = brickVar.canvasH;
-	// canvas.style.width = `${brickVar.canvasW}px`;
-    // canvas.style.height = `${brickVar.canvasH}px`;
 	loadFirstCanvas();
-
 	loadScoreCanvas();
-
-	brickVar.initialize = true;
 	initListenerB();
+	brickVar.initialize = true;
 }
 
 export function loadScoreCanvas()
@@ -48,7 +39,6 @@ export function loadScoreCanvas()
             brickVar.gameTime++;
         }
     }, 1000);
-
     scoreCanvas.style.marginBottom = '10px';
 }
 export function showGameBrickMultiView()
@@ -69,11 +59,10 @@ export function showGameBrickMultiView()
     
 	loadFirstCanvas();
 	loadSecondCanvas();
-
 	load2pScoreCanvas();
+	initListenerMultiB();
 	brickVar.initialize = true;
 	brickVar2.initialize = true;
-
 }
 export function loadFirstCanvas()
 {

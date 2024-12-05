@@ -1,10 +1,10 @@
 import gameVar from "./var.js";
 import { keyDownHandler, keyUpHandler, startBallLive, startBall } from "./input.js";
-import { showGameMultiView } from './gameViewMulti.js'
-import { showSettingView } from './settingsView.js'
 import { initControlLive } from "./control.js";
 import { showLobbyView } from "./gameViewMulti.js";
 import { roomNetwork } from "./room.js";
+import { renderPageGame } from "./myHistory.js";
+import { updateLiveSetting } from "./setting.js";
 
 
 export function removeEventListeners()
@@ -18,26 +18,32 @@ export function removeEventListeners()
 export function initEventListenerRoom()
 {
 	removeEventListeners();
-	document.addEventListener("keydown", (e) => keyDownHandler(e), false);
-	document.addEventListener("keyup", (e) => keyUpHandler(e), false);
-	document.addEventListener("keydown", startBall, false);
+	// document.addEventListener("keydown", (e) => keyDownHandler(e), false);
+	// document.addEventListener("keyup", (e) => keyUpHandler(e), false);
+	// document.addEventListener("keydown", startBallLive, false);
 
 	gameVar.createRoomBtn.addEventListener('click', () => 
 	{
-		showGameMultiView();
+		renderPageGame("playPongRemote", true, 'live');
+		// showGameMultiView();
 	});
 
 	gameVar.settingBtn.addEventListener('click', () =>
 	{
-		showSettingView(true);
+		renderPageGame("pongSetting", true, 'live');
+		// showSettingView(true);
 	});
+
+	initControlLive();
 }
 
 export function initLobbyView()
 {
+	console.log("update 2");
 	showLobbyView();
+	updateLiveSetting();
 	initEventListenerRoom();
-	initControlLive();
+	// initControlLive();
 	roomNetwork();
 }
 

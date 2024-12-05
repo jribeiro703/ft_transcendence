@@ -1,15 +1,14 @@
 import brickVar from "./var.js";
-import brickVar2 from "./secondBrickout/var.js";
 import { updatePowerUpSelectionB as updatePowerUpSelectionFirst} from "./powerUp.js";
-import { updatePowerUpSelectionB as updatePowerUpSelectionSecond } from "./secondBrickout/powerUp.js";
-import { updateLevelSelectionB as updateLevelSelectionFirst} from "./level.js";
-import { updateLevelSelectionB as updateLevelSelectionSecond} from "./secondBrickout/level.js";
-import { updateDifficultySelectionSB  } from "./secondBrickout/settings.js";
-import { showGameSelectionView } from "../pong/gameSelectionView.js";
-import { showGameSelectionMultiView } from "../pong/gameViewMulti.js";
-import { renderPageGame } from "../pong/myHistory.js";
+import { updateLevelSelectionB as updateLevelSelectionFirst} from "./update.js";
+import { updateDifficultySelectionB } from "./update.js";
+import { listenSettingPUB } from "./listenerSetting.js";
+import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
+import { listenSettingDifficultyB } from "./listenerSetting.js";
+import { listenSettingLevelB } from "./listenerSetting.js";
+import { listenSaveBtnB } from "./save.js";
 
-export function showSettingViewB(live)
+export function showSettingViewB(info)
 {
 	brickVar.settingChanged = false;
 	brickVar.checkDiff = false;
@@ -18,146 +17,23 @@ export function showSettingViewB(live)
 	displaySettingB();
 	getSettingBtn();
 
-	if(live === false)
-	{
-		brickVar.powerUpSelection.style.display = 'block';
-		brickVar.btnPowerUp.style.display = 'block';
-	}
-	else
+	if(info === 'live')
 	{
 		brickVar.powerUpSelection.style.display = 'none';
 		brickVar.btnPowerUp.style.display = 'none';
+	}
+	else
+	{
+		brickVar.powerUpSelection.style.display = 'block';
+		brickVar.btnPowerUp.style.display = 'block';
 	}		
 
 	listenSettingPUB();
 	listenSettingDifficultyB();
 	listenSettingLevelB();
 
-	brickVar.saveBtn.addEventListener('click', () =>
-	{
-		if (live === true)
-		{
-			// roomMultiView();
-			// updateLiveSetting();
-		}
-		else
-		{
-			// renderPage("gameSelectionSoloPage");
-			renderPageGame("gameSelectionSoloPage")
-			// showGameSelectionView();
-			// updateSettingB();
-		}
-	});
-}
+	listenSaveBtnB(info);
 
-export function showSettingMultiViewB(live)
-{
-	history.pushState({ view: 'game'}, '', `?view=solo/settings`);
-
-	displaySettingB();
-	getSettingBtn();
-
-	brickVar.powerUpSelection.style.display = 'block';
-	brickVar.btnPowerUp.style.display = 'block';
-
-	listenSettingPUB();
-	listenSettingDifficultyB();
-	listenSettingLevelB();
-
-	brickVar.saveBtn.addEventListener('click', () =>
-	{
-		// showGameBrickMultiView();
-		showGameSelectionMultiView();
-		updateSettingB();
-		brickVar.settingChanged = true;
-	});
-}
-export function updateSettingB()
-{
-	brickVar.settingChanged = true;
-	var difficulty = null;	
-	var level = null;
-	var powerUp = null;
-
-	if (brickVar.difficulty)
-		difficulty = brickVar.difficulty;
-	else
-	{
-		difficulty = 'medium';
-		updateDifficultySelectionB('medium');
-	}
-
-	if (brickVar.castle)
-	{
-		level = 'the Castle';
-		brickVar.currLevel = 'castle';
-	}
-	else if (brickVar.x)
-	{
-		level = 'X Level';
-		brickVar.currLevel = 'x';
-	}
-	else if (brickVar.invader)
-	{
-		level = 'Space Invader';
-		brickVar.currLevel = 'invader';
-	}
-	else 
-	{
-		level = 'Classic';
-		brickVar.currLevel = 'classic';
-		updateLevelSelectionFirst('clasic');
-	}
-
-	if (brickVar.powerUpEnable)
-		powerUp = "✅";
-	else
-	{
-		powerUp = "❌";
-		updatePowerUpSelectionFirst(false);
-	}
-
-	displayUpdateSetting(difficulty, powerUp, level);
-}
-
-
-export function updateDifficultySelectionB(level)
-{
-	if (level == 'easy')
-	{
-		console.log("easy mode");
-		brickVar.initDx = 2;
-		brickVar.initDy = 2;
-		brickVar.difficulty = 'easy';
-	}
-	if (level == 'medium')
-	{
-		console.log('medium mode');
-		brickVar.initDx = 5;
-		brickVar.initDy = 5;
-		brickVar.difficulty = 'medium';
-	}
-	if (level == 'hard')
-	{
-		brickVar.initDx = 8;
-		brickVar.initDy = 8;
-		console.log('hard mode');
-		brickVar.difficulty = 'hard';
-	}
-	brickVar.checkDiff = true;
-}
-
-
-export function updateSettingSelectionForSecond()
-{
-	brickVar2.initDx = brickVar.initDx;
-	brickVar2.initDy = brickVar.initDy;
-	brickVar2.currLevel = brickVar.currLevel;
-	brickVar2.powerUpEnable = brickVar.powerUpEnable;
-	brickVar2.difficulty = brickVar.difficulty;
-	updateDifficultySelectionSB(brickVar2.difficulty);
-	updatePowerUpSelectionSecond(brickVar2.powerUpEnable);
-	updateLevelSelectionSecond(brickVar2.currLevel);
 }
 export function displaySettingB()
 {
@@ -218,108 +94,6 @@ export function displaySettingB()
 	maincontent.appendChild(insertTo);
 }
 
-export function listenSettingPUB()
-{
-	brickVar.withPowerUp.addEventListener('click', () =>
-	{
-		brickVar.withPowerUp.classList.add('selected');
-		brickVar.withoutPowerUp.classList.remove('selected');
-		updatePowerUpSelectionFirst(true);
-		checkSaveBtn();
-	});
-
-	brickVar.withoutPowerUp.addEventListener('click', () => 
-	{
-		brickVar.withoutPowerUp.classList.add('selected');
-		brickVar.withPowerUp.classList.remove('selected');
-		updatePowerUpSelectionFirst(false); 
-		checkSaveBtn();
-	});
-}
-
-export function listenSettingDifficultyB()
-{
-	brickVar.easy.addEventListener('click', () => 
-	{
-		brickVar.easy.classList.add('selected');
-		brickVar.medium.classList.remove('selected');
-		brickVar.hard.classList.remove('selected');
-		updateDifficultySelectionB('easy');
-		checkSaveBtn();
-	});
-	
-	brickVar.medium.addEventListener('click', () => 
-	{
-		brickVar.easy.classList.remove('selected');
-		brickVar.medium.classList.add('selected');
-		brickVar.hard.classList.remove('selected');
-		updateDifficultySelectionB('medium');
-		checkSaveBtn();
-	});
-
-	brickVar.hard.addEventListener('click', () => 
-	{
-		brickVar.easy.classList.remove('selected');
-		brickVar.medium.classList.remove('selected');
-		brickVar.hard.classList.add('selected');
-		updateDifficultySelectionB('hard');
-		checkSaveBtn();
-	});
-}
-
-export function listenSettingLevelB()
-{
-	brickVar.classicLevel.addEventListener('click', () =>
-	{
-		brickVar.classicLevel.classList.add('selected');
-		brickVar.castleLevel.classList.remove('selected');
-		brickVar.xLevel.classList.remove('selected');
-		brickVar.invaderLevel.classList.remove('selected');
-		updateLevelSelectionFirst('classic');
-		checkSaveBtn();
-	});
-
-	brickVar.castleLevel.addEventListener('click', () =>
-	{
-		brickVar.classicLevel.classList.remove('selected');
-		brickVar.castleLevel.classList.add('selected');
-		brickVar.xLevel.classList.remove('selected');
-		brickVar.invaderLevel.classList.remove('selected');
-		updateLevelSelectionFirst('castle');
-		checkSaveBtn();
-	});
-
-	brickVar.xLevel.addEventListener('click', () =>
-	{
-		brickVar.classicLevel.classList.remove('selected');
-		brickVar.castleLevel.classList.remove('selected');
-		brickVar.xLevel.classList.add('selected');
-		brickVar.invaderLevel.classList.remove('selected');
-		updateLevelSelectionFirst('x');
-		checkSaveBtn();
-	});
-
-	brickVar.invaderLevel.addEventListener('click', () =>
-	{
-		brickVar.classicLevel.classList.remove('selected');
-		brickVar.castleLevel.classList.remove('selected');
-		brickVar.xLevel.classList.remove('selected');
-		brickVar.invaderLevel.classList.add('selected');
-		updateLevelSelectionFirst('invader');
-		checkSaveBtn();
-	});
-}
-
-export function checkSaveBtn()
-{
-	console.log("check btn");
-	if (brickVar.checkPu && brickVar.checkLevel && brickVar.checkDiff)
-	{
-		const btn = document.getElementById('saveBtn');
-		btn.disabled = false;
-		brickVar.settingChanged = true;
-	}
-}
 export function checkSettingB()
 {
 	if (brickVar.settingChanged === false)
@@ -363,3 +137,26 @@ export function displayUpdateSetting(difficulty, powerUp, level)
 
 	settingContain.appendChild(settingItem);
 }
+
+
+// export function showSettingMultiViewB(live)
+// {
+
+// 	displaySettingB();
+// 	getSettingBtn();
+
+// 	brickVar.powerUpSelection.style.display = 'block';
+// 	brickVar.btnPowerUp.style.display = 'block';
+
+// 	listenSettingPUB();
+// 	listenSettingDifficultyB();
+// 	listenSettingLevelB();
+
+// 	brickVar.saveBtn.addEventListener('click', () =>
+// 	{
+// 		// showGameBrickMultiView();
+// 		showGameSelectionMultiView();
+// 		updateSettingB();
+// 		brickVar.settingChanged = true;
+// 	});
+// }

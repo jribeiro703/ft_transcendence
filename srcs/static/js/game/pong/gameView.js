@@ -1,6 +1,5 @@
 import gameVar from "./var.js";
-import brickVar from "../brickout/var.js"
-import { initializeBall } from "./draw.js";
+import { initializeBall } from "./ball.js";
 import { draw } from "./draw.js";
 import { resetMatch } from "./reset.js";
 import { manageAi } from "./ai.js";
@@ -10,38 +9,26 @@ import { saveScore } from "./score.js";
 import { createPowerUp1, createPowerUp2 } from "./powerUp.js";
 import { checkServer } from "./manage.js";
 import { initControl } from "./control.js";
-import { checkSetting } from "./setting.js";
-
+import { displayGameView, displayCanvas } from "./display.js";
 
 export function showGameView()
 {
-	const mainContent = document.getElementById('mainContent');
-	mainContent.innerHTML = ``;
-	const gameView = document.createElement('div');
-	gameView.innerHTML=`
-	<div id="gameView" style="display: none;">
-		<div id="scoreboard">
-			<canvas id="scoreCanvas"></canvas>
-		</div>
-		<canvas id="myCanvas"></canvas>
-		<br><br>
-		<div class="button-container">
-			<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
-			<button id="quitGameBtn" style="display: none;">Return Home</button>
-		</div>
-	</div>
-	`;
-
-	mainContent.appendChild(gameView);
-
+	displayGameView();
 	updateCanvasColor();
 
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
 	gameVar.gameView = document.getElementById('gameView');
-
 	gameVar.gameView.style.display = 'block';
 
+	loadCanvasAndScore();
+
+	initControl(gameVar.localGame)
+	startGame();
+}
+
+export function loadCanvasAndScore()
+{
 	var canvas = document.getElementById('myCanvas');
 	gameVar.ctx = canvas.getContext('2d');
 	canvas.width = gameVar.canvasW;
@@ -62,10 +49,6 @@ export function showGameView()
     }, 1000);
 
     scoreCanvas.style.marginBottom = '10px';
-
-	checkSetting();
-	initControl(gameVar.localGame)
-	startGame();
 }
 
 export function showGameRoom()
@@ -100,7 +83,6 @@ export function getCanvasInfo()
 	canvas.width = gameVar.canvasW;
 	canvas.height = gameVar.canvasH;
 
-
 	var scoreCanvas = document.getElementById('scoreCanvas');
 	gameVar.scoreCtx = scoreCanvas.getContext('2d');
 	scoreCanvas.width = gameVar.scoreCanvW;
@@ -108,46 +90,10 @@ export function getCanvasInfo()
 
     scoreCanvas.style.marginBottom = '10px';
 }
-export function displayCanvas()
-{
-	const mainContent = document.getElementById('mainContent');
 
-	mainContent.innerHTML = '';
-
-	const insertTo = document.createElement('div');
-
-	insertTo.innerHTML = `
-	<div id="gameView" style="display: none;">
-			<div id="scoreboard">
-				<canvas id="scoreCanvas"></canvas>
-			</div>
-			<canvas id="myCanvas"></canvas>
-			<br><br>
-			<div class="button-container">
-				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
-				<button id="quitGameBtn" style="display: none;">Quit Game</button>
-			</div>
-		</div>	
-	`;
-
-	mainContent.appendChild(insertTo);
-}
-
-export function cleanupTimers()
-{
-    if (brickVar.gameTimer)
-	{
-        clearInterval(brickVar.gameTimer);
-    }
-    if (brickVar2.gameTimer)
-	{
-        clearInterval(brickVar2.gameTimer);
-    }
-}
 
 export function rematchView()
 {
-	console.log("rematch");
 	gameplayView.style.display = 'none';
 	quickGameBtn.style.display = 'none';
 	startGameBtn.style.display = 'none';

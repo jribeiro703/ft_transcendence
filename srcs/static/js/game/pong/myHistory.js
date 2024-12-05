@@ -1,101 +1,98 @@
 import gameVar from "./var.js";
 import brickVar from "../brickout/var.js";
-import brickVar2 from "../brickout/secondBrickout/var.js";
 import { showGameSelectionView } from "./gameSelectionView.js";
-import { showGameSelectionMultiView } from "./gameViewMulti.js";
+import { showGameSelectionMultiView} from "./gameViewMulti.js";
 import { showSettingView } from "./settingsView.js";
 import { showGameView } from "./gameView.js";
-import { showGameBrickView } from "../brickout/gameView.js";
-import { renderPage } from "../../historyManager.js";
+import { showGameBrickMultiView, showGameBrickView } from "../brickout/gameView.js";
+import { renderHomePage } from "../../renderHomePage.js";
+import { updateDifficultySelection, updateLevelSelection } from "./update.js";
+import { updatePowerUpSelection } from "./powerUp.js";
+import { updateDifficultySelectionB, updateLevelSelectionB, updateSettingB } from "../brickout/update.js";
+import { updatePowerUpSelectionB } from "../brickout/powerUp.js";
+import { updateSetting } from "./setting.js";
+import { showSettingViewB } from "../brickout/settings.js";
+import { initLobbyView } from "./init.js";
+import { checkFrame, checkInterval } from "../brickout/score.js";
+import { showPongRemote } from "./gameViewMulti.js";
+
 
 const pongGamePages = {
 
-	gameSelectionSoloPage: showGameSelectionView,
-	gameSelectionMultiPage: showGameSelectionMultiView,
+	gameSelectionSolo: showGameSelectionView,
 
-	pongSettingSolo: (params) => showSettingView(params),
-	playPongSolo: showGameView,
+	pongSetting: (params) => showSettingView(params),
+	playPong: showGameView,
+
+	brickoutSetting: (params) => showSettingViewB(params),
+	playBrickout: showGameBrickView,
+
+	gameSelectionMulti: showGameSelectionMultiView,
 
 
-	brickoutSettingSolo: (params) => showSettingViewB(params),
-	playBrickoutSolo: showGameBrickView,
+	playPongLocal: showGameView,
+	playBrickoutLocal: showGameBrickMultiView,
 
+	pongLobby: initLobbyView,
+	brickoutLobby: initLobbyView,
 
-	// pongSettingMulti:showSettingMultiView,
-	// pongGameMultiLocal:showGameView,
-	pongLobbyMulti: showGameSelectionMultiView,
-	// pongGameMultiRemote: createRoomView
-
+	playPongRemote: showPongRemote,
+	// playBrickoutRemote: showBrickoutRemote,
 }
-
-// const brickoutGamePages = {
-// 	brickoutGameSolo: showGameBrickView,
-// 	brickoutSettingMulti: showSettingMultiViewB,
-// 	brickoutGameMultiLocal: showGameSelectionMultiView,
-// 	brickoutLobbyMulti: roomMultiViewB,
-// 	brickoutMultiRemote: createRoomView,
-
-// }
 
 export async function renderPageGame(page, updateHistory = true, params = null)
 {
-	let renderFunction;
-	// const authenticated = await isAuthenticated();
-	// await updateUserAvatar();
-	
-	// if (authenticated)
-	// 	renderFunction = userPages[page] || pongGamePages[page];
-	// else
-		renderFunction =  pongGamePages[page];
+	checkInterval();
+	checkFrame();
+    let renderFunction = pongGamePages[page];
 
-	const lastPage = sessionStorage.getItem('lastPage');
+    const lastPage = sessionStorage.getItem('lastPage');
     const isRefresh = lastPage === page;
-
-	if (params !== null)
+	console.log("page", page);
+    if (params !== null)
 	{
-        sessionStorage.setItem('pageParams', JSON.stringify(params));
+        sessionStorage.setItem('pageParams', typeof params === 'string' ? 
+            params : JSON.stringify(params));
     }
-	if (!renderFunction)
+
+    if (!renderFunction)
 	{
-		history.replaceState({ page: "home", params: params }, "home", "#home");
-		renderFunction = renderHomePage;
-	} 
+        history.replaceState({ page: "home", params: params }, "home", "#home");
+        renderFunction = renderHomePage;
+    } 
 	else
 	{
-		if (updateHistory)
+        if (updateHistory)
 		{
-			const historyMethod = isRefresh ? 'replaceState' : 'pushState';
-            history[historyMethod](
-			{ 
+            const historyMethod = isRefresh ? 'replaceState' : 'pushState';
+            history[historyMethod]({ 
                 page: page, 
-                params: params || JSON.parse(sessionStorage.getItem('pageParams'))
-
+                params: params || sessionStorage.getItem('pageParams')
             }, page, `#${page}`);
-		}
-	}
-	sessionStorage.setItem('lastPage', page);
-	if (params === null && history.state && history.state.params !== undefined) 
+        }
+    }
+
+    sessionStorage.setItem('lastPage', page);
+    
+    if (params === null && history.state && history.state.params !== undefined)
 	{
         params = history.state.params;
     }
-	
-	await renderFunction(params);
-}
 
+    await renderFunction(params);
+}
 
 window.addEventListener('popstate', async (event) =>
 {
 	if (event.state)
 	{
 		const storedParams = event.state.params || JSON.parse(sessionStorage.getItem('pageParams'));
-		await renderPage(event.state.page, false, storedParams);
+		await renderPageGame(event.state.page, false, storedParams);
 	}
 });
 
-// juste before refresh page
 window.addEventListener('beforeunload', () =>
 {
-	console.log("before save refresh: ", gameVar.saveSetting);
     sessionStorage.setItem('gameState', JSON.stringify(
 	{
 		save: gameVar.saveSetting,
@@ -128,7 +125,8 @@ window.addEventListener('load', () =>
     const currentState = history.state || {};
 	sessionStorage.setItem('lastPage', currentHash);
 
-	if (currentHash === 'gameSelectionSoloPage')
+	console.log("currHash", currentHash);
+	if (currentHash === 'gameSelectionSolo' || currentHash === 'gameSelectionMulti')
 	{
 		if (gameVar.saveSetting)
 		{
@@ -142,14 +140,20 @@ window.addEventListener('load', () =>
 			updateSettingB();
 		}
 	}
-	if (currentHash === 'playPongSolo') 
-		renderPage("home");
-	else if (currentHash === 'playBrickoutSolo')
-		renderPage('home');
+	if (currentHash === 'playPong' || currentHash === 'playBrickout'
+		|| currentHash === 'playPongLocal' || currentHash === 'playBrickoutLocal') 
+	{
+		console.log("load home, currenHas", currentHash);
+		renderPageGame("home");
+	}
 	else
-		renderPage(currentHash, false, currentState.params || false);
+		renderPageGame(currentHash, false, currentState.params || false);
 });
-
+export function isGamePage(page) 
+{
+    return ['#gameSelectionSolo', '#pongSetting', '#brickoutSetting', '#playPong', '#playBrickout',
+		'#gameSelectionMulti', '#pongLobby', '#brickoutLobby', '#playPongLocal', '#playBrickoutLocal'].includes(page);
+}
 function loadSetting(gameState)
 {	
 	gameVar.saveSetting = gameState.save,

@@ -1,10 +1,10 @@
 import gameVar from "./var.js";
 import { checkball } from "./check.js";
 import { resetBall } from "./reset.js";
+import { renderPageGame } from "./myHistory.js";
 
 export function manageServer()
 {
-	console.log("manageServer, curr : ", gameVar.currentServer);
 	if (gameVar.currentServer == 'player')
 	{
 		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius;
@@ -21,9 +21,7 @@ export function manageServer()
 		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2;
 	}
 	if (gameVar.liveMatch)
-	{
 		checkball();
-	}
 }
 export function checkServer()
 {
@@ -39,4 +37,23 @@ export function checkServer()
 		gameVar.aiServe = true;
 		resetBall('ai');
 	}
+}
+export function addBtn()
+{
+	const mainContent = document.getElementById("mainContent");
+	const btn = document.createElement('div');
+	btn.innerHTML = `
+	<div class="finish id="finish">
+		<button id="returnLobbyBtn" class="">Return Lobby</button> 
+		<button id="quitBtn">Return Home</button>
+	</div>
+	`;
+	mainContent.appendChild(btn);
+	const returnLobbtyBtn = document.getElementById("returnLobbyBtn");
+	const quitBtn = document.getElementById("quitBtn");
+		if (returnLobbtyBtn)
+			returnLobbtyBtn.addEventListener("click", renderPageGame("pongLobby"), true);
+		if (quitBtn)
+			quitBtn.addEventListener('click', () => renderPageGame("home"), true);
+
 }

@@ -1,6 +1,5 @@
 import brickVar from "./var.js";
 import { resetPowerUpB } from "./powerUp.js";
-import { displayBallB } from "../pong/displayVar.js";
 
 export function startBallB(e)
 {
@@ -12,7 +11,6 @@ export function startBallB(e)
 			brickVar.startTime = true;
             brickVar.dx = brickVar.initDx;
             brickVar.dy = -brickVar.initDy;
-			displayBallB();
         }
 		else
 		{

@@ -1,18 +1,7 @@
 import brickVar2 from './var.js';
-import gameVar from '../../pong/var.js';
-import { collisionDetectionB, drawBricksB, initBricksB } from './brick.js'
-import { drawBallB, drawPaddleB } from './draw.js';
-import { keyDownHandlerB, keyUpHandlerB, mouseMoveHandlerB} from './control.js';
-import { initBallB, updateBallPositionB, startBallB, handleBallB } from './ball.js';
-import { manageCollisionB, manageMoveB } from './manage.js';
-import { collectPowerUpB, createPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
-import { drawScoreBoardB } from '../draw.js';
-import { startGameB } from './control.js';
 
 export function showGameBrickView()
 {
-	console.log("brickview");
-	// history.pushState({ view: 'game'}, '', `?view=solo/brickout`);
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = '';
 	const insertTo = document.createElement('div');
@@ -57,9 +46,6 @@ export function showGameBrickView()
 }
 export function showGameBrickMultiView()
 {
-	console.log("brickMultiview");
-
-	// history.pushState({ view: 'game'}, '', `?view=solo/brickout`);
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = '';
 	const insertTo = document.createElement('div');
@@ -105,82 +91,3 @@ export function showGameBrickMultiView()
 
 	brickVar2.initialize = true;
 }
-export function initListenerB()
-{
-	removeEventListenersB();
-	document.addEventListener("keydown", (e) => {
-        if (e.code === "Space") {
-            startBallB(e);
-        }
-    });
-
-    document.addEventListener("keydown", (e) => {
-        if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
-            keyDownHandlerB(e);
-        }
-    });
-
-    document.addEventListener("keyup", (e) => {
-        if (e.code === "ArrowRight" || e.code === "ArrowLeft") {
-            keyUpHandlerB(e);
-        }
-    });
-
-	if (brickVar2.classic)
-		startGameB("classic");
-	else if (brickVar2.castle)
-		startGameB("castle");
-	else if (brickVar2.x)
-		startGameB('x');
-	else if (brickVar2.invader)
-		startGameB('invader');
-	else
-		startGameB('classic');
-}
-
-function removeEventListenersB()
-{
-    document.removeEventListener("keydown", keyDownHandlerB);
-    document.removeEventListener("keyup", keyUpHandlerB);
-    document.removeEventListener("keydown", startBallB);
-}
-
-function baseDrawB()
-{
-	brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
-	// drawScoreBoardB();
-	if (gameVar.localGame && gameVar.game == 'brickout2p')
-		drawScoreBoardB();
-	drawBricksB();
-	drawBallB();
-	drawPaddleB();
-}
-
-export function drawB()
-{
-	if (brickVar2.finishLevel == false)
-	{
-		baseDrawB();
-		if (brickVar2.gameStart)
-		{
-			drawPowerUpB();
-			collectPowerUpB();
-			collisionDetectionB();
-			manageCollisionB();
-			updatePowerUpB();
-		}
-		else
-		{
-			handleBallB();
-		}
-		manageMoveB();
-		updateBallPositionB();
-		if (brickVar2.anim)
-			cancelAnimationFrame(brickVar2.anim); 
-		brickVar2.anim = requestAnimationFrame(drawB);
-	}
-
-}
-
-
-

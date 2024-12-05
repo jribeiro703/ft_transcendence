@@ -1,22 +1,9 @@
 import gameVar from "./var.js";
-import { updateSetting, updateLiveSetting, displaySetting } from "./setting.js";
+import { updateSetting, updateLiveSetting} from "./setting.js";
 import { updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { updateDifficultySelection } from "./update.js";
-import { checkSetting } from "./setting.js";
-import { showGameView } from "./gameView.js";
-import { checkSettingB } from "../brickout/settings.js";
-import { initListenerB } from "../brickout/init.js";
-import { showSettingViewB } from "../brickout/settings.js";
-import { showGameBrickView } from "../brickout/gameView.js";
-import { showSettingMultiViewB } from "../brickout/settings.js";
-import { initListenerMultiB } from "../brickout/init.js";
-import { initLobbyView } from "./init.js";
-import { showGameSelectionView } from './gameSelectionView.js'
-import { showGameSelectionMultiView } from "./gameViewMulti.js";
-import { showSettingView, showSettingMultiView, checkSaveBtn } from "./settingsView.js";
-import { initControl } from "./control.js";
-import { renderPage } from "../../historyManager.js";
+import { checkSaveBtn } from "./settingsView.js";
 import { renderPageGame } from "./myHistory.js";
 
 
@@ -100,41 +87,44 @@ export function listenSettingLevel()
 }
 
 
-export function listenSettingSave(live)
+export function listenSettingSave(info)
 {
 	gameVar.saveBtn.addEventListener('click', () =>
 	{
-		if (live === true)
+		if (info === 'live')
 		{
-			initLobbyView();
+			renderPageGame("pongLobby", true);
+			console.log("update 1");
 			updateLiveSetting();
 		}
-		else
+		else if (info === 'local')
 		{
 			gameVar.saveSetting = true;
-			console.log("listenSave :", gameVar.saveSetting)
-			renderPageGame("gameSelectionSoloPage", true);
-			// renderPage("gameSelectionSoloPage", true);
-			// showGameSelectionView();
-			// updateSetting();
-			// displaySetting();
+			renderPageGame("gameSelectionMulti", true);
+			updateSetting();
+		}
+		else
+		{	
+			renderPageGame("gameSelectionSolo", true);
+			updateSetting();
 		}
 	});
 }
 
 export function listenSettingMultiSave(live)
 {
-	
 	gameVar.saveBtn.addEventListener('click', () =>
 	{
 		if (live === true)
 		{
-			initLobbyView();
-			updateLiveSetting();
+			renderPageGame("pongLobby", true)
+			// initLobbyView();
+			// updateLiveSetting();
 		}
 		else
 		{
-			showGameSelectionMultiView();
+			console.log("to dooo");
+			// showGameSelectionMultiView();
 			updateSetting();
 		}
 	});
@@ -144,14 +134,12 @@ export function listenSettingBtn()
 {
 	gameVar.settingBtn1.addEventListener('click', () =>
 	{
-		renderPageGame("pongSettingSolo", true, false);
-		// showSettingView(false);
+		renderPageGame("pongSetting", true);
 	});
 
 	gameVar.settingBtn2.addEventListener('click', () =>
 	{
-		renderPageGame("brickoutSettingSolo", true, false);
-		// showSettingViewB(false);
+		renderPageGame("brickoutSetting", true);
 	});
 }
 
@@ -159,12 +147,14 @@ export function listenSettingMultiBtn()
 {
 	gameVar.settingBtn1.addEventListener('click', () =>
 	{
-		showSettingMultiView(false);
+		gameVar.saveSetting = true;
+		renderPageGame("pongSetting", true, 'local');
 	});
 
 	gameVar.settingBtn2.addEventListener('click', () =>
 	{
-		showSettingMultiViewB();
+		gameVar.saveSetting = true;
+		renderPageGame("brickoutSetting", true, 'local');
 	});
 }
 
@@ -175,18 +165,14 @@ export function listenPlayBtn()
 	{
 		gameVar.game = "pong";
 		gameVar.localGame = false;
-		checkSetting();
-		renderPageGame("playPongSolo", true);
-		//showGameView()
+		renderPageGame("playPong", true);
 	});
 
 	gameVar.playBtn2.addEventListener('click', () =>
 	{
-
 		gameVar.game = "brickout";
 		gameVar.localGame = false;
-		renderPageGame("playBrickoutSolo", true); 
-		// showGameBrickView();
+		renderPageGame("playBrickout", true); 
 	});
 }
 
@@ -197,32 +183,27 @@ export function listenPlayMultiBtn()
 	{
 		gameVar.game = "pong2p";
 		gameVar.localGame = true;
-		initControl(gameVar.localGame)
-		checkSetting();
-		showGameView();
+		renderPageGame("playPongLocal", true);
 	});
 
 	gameVar.playBtn2.addEventListener('click', () =>
 	{
 		gameVar.game = "brickout2p";
 		gameVar.localGame = true;
-		showGameBrickMultiView();
-		initListenerMultiB();
+		renderPageGame("playBrickoutLocal", true);
 	});
 
 	gameVar.playBtn3.addEventListener('click', () =>
 	{
 		gameVar.game = 'pong';
 		gameVar.liveMatch = true;
-		initLobbyView();
+		renderPageGame("pongLobby", true);
 	});
 
 	gameVar.playBtn4.addEventListener('click', () =>
 	{
 		gameVar.game = "brickout";
 		gameVar.liveMatch = true;
-		initLobbyView();
-		// showGameBrickMultiView();
-		// initListenerMultiB();
+		renderPageGame("brickoutLobby");
 	});
 }

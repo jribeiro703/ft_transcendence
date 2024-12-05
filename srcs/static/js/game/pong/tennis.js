@@ -23,7 +23,6 @@ export function collisionTennis()
 			return (true);
 		}
     }
-    
 }
 export function drawTennisCourt()
 {
@@ -84,4 +83,24 @@ export function drawTennisCourt()
     gameVar.ctx.fillRect(gameVar.canvasW - wallThickness, 0, wallThickness, (gameVar.canvasH - goalHeight - 60) / 3);
     gameVar.ctx.fillRect(gameVar.canvasW - wallThickness, (gameVar.canvasH + goalHeight + 120) / 2, wallThickness, (gameVar.canvasH - goalHeight) / 2);
 
+}
+export function drawLines() 
+{
+	gameVar.ctx.strokeStyle = 'white';
+	gameVar.ctx.lineWidth = 4;
+	gameVar.ctx.setLineDash([12, 12]);
+	gameVar.ctx.beginPath();
+	gameVar.ctx.moveTo(gameVar.canvasW / 2, 0);
+	gameVar.ctx.lineTo(gameVar.canvasW / 2, gameVar.canvasH);
+	gameVar.ctx.stroke();
+	gameVar.ctx.setLineDash([]); 
+
+	gameVar.ctx.lineWidth = 2;
+	gameVar.ctx.strokeRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+
+	gameVar.ctx.lineWidth = 2;
+	gameVar.ctx.beginPath();
+	gameVar.ctx.moveTo(0, gameVar.canvasH / 2); 
+	gameVar.ctx.lineTo(gameVar.canvasW, gameVar.canvasH / 2);
+	gameVar.ctx.stroke();
 }

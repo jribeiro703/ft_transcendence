@@ -26,7 +26,7 @@ async function renderHomePage() {
 	createHomeContent();
 	
 	document.getElementById('playsoloGameBtn').addEventListener('click', () => {
-		renderPageGame("gameSelectionSoloPage");
+		renderPageGame("gameSelectionSolo");
 	});
 
 	const authenticated = await isAuthenticated();
@@ -34,7 +34,7 @@ async function renderHomePage() {
 	const authButtons = [
 		{
 			id: 'playmultiGameBtn',
-			handler: () => renderPage('pongLobbyMulti')
+			handler: () => renderPageGame('gameSelectionMulti')
 		},
 		{
 			id: 'btn-Leaderboard',
