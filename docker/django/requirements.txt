@@ -12,3 +12,4 @@ twisted[tls,http2]
 pyopenssl
 pyotp
 django-admin-interface
+requests==2.31.0
