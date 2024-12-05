@@ -7,12 +7,17 @@ import { SCORE_CANVAS_HEIGHT } from "./const.js";
 import { updateSettingB } from "../brickout/update.js";
 import { displayGameSelectionMulti, displayLobbyView, displayPongRemote } from "./display.js";
 import { getElementGameSelection, getElementLobby } from "./getElement.js";
+import { initializeCanvas } from "./canvas.js";
 
 
-export function showGameSelectionMultiView()
+export async function showGameSelectionMultiView()
 {
+	console.log("init game selection multi");
 	displayGameSelectionMulti();
 	getElementGameSelection();
+
+	await initializeCanvas();
+
 	listenSettingMultiBtn();
 	updateSetting();
 	updateSettingB();

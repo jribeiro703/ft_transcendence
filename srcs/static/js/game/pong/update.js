@@ -19,6 +19,7 @@ export function updateDifficultySelection(level)
 		gameVar.init_dy = 5;
 		gameVar.aiLevel = 10;
 		gameVar.difficulty = 'medium';
+		console.log("medium select");
 	}
 	if (level == 'hard')
 	{
