@@ -7,7 +7,7 @@ import { updateSettingB } from "./update.js";
 
 export function showSettingViewB(live)
 {
-	history.pushState({ view: 'game'}, '', `?view=solo/settings`);
+	// history.pushState({ view: 'game'}, '', `?view=solo/settings`);
 
 	displaySettingB();
 	getSettingBtn();

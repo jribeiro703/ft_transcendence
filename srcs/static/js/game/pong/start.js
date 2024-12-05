@@ -4,6 +4,7 @@ import { newPowerUp } from "./powerUp.js";
 import { draw } from "./draw.js";
 import { manageAi } from "./ai.js";
 import { drawScoreBoard } from "./score.js";
+import { displayGameData } from "./displayVar.js";
 
 export function startGame()
 {
@@ -14,6 +15,7 @@ export function startGame()
 		newPowerUp(true, 1000);
 		newPowerUp(false, 1000);
 	}
+	displayGameData();
 	draw();
 	if (!gameVar.localGame)
 		manageAi();

@@ -39,6 +39,14 @@ const pongGamePages = {
 	playPongRemote: showPongRemote,
 	// playBrickoutRemote: showBrickoutRemote,
 }
+// window.addEventListener('popstate', async (event) =>
+// {
+// 	if (event.state)
+// 	{
+// 		const storedParams = event.state.params || JSON.parse(sessionStorage.getItem('pageParams'));
+// 		await renderPageGame(event.state.page, false, storedParams);
+// 	}
+// });
 
 export async function renderPageGame(page, updateHistory = true, params = null)
 {
@@ -48,7 +56,6 @@ export async function renderPageGame(page, updateHistory = true, params = null)
 
     const lastPage = sessionStorage.getItem('lastPage');
     const isRefresh = lastPage === page;
-	// console.log("page", page);
     if (params !== null)
 	{
         sessionStorage.setItem('pageParams', typeof params === 'string' ? 
@@ -78,18 +85,9 @@ export async function renderPageGame(page, updateHistory = true, params = null)
 	{
         params = history.state.params;
     }
-
     await renderFunction(params);
 }
 
-window.addEventListener('popstate', async (event) =>
-{
-	if (event.state)
-	{
-		const storedParams = event.state.params || JSON.parse(sessionStorage.getItem('pageParams'));
-		await renderPageGame(event.state.page, false, storedParams);
-	}
-});
 
 window.addEventListener('beforeunload', () =>
 {
@@ -103,12 +101,6 @@ window.addEventListener('beforeunload', () =>
 
         difficultyB: brickVar.difficulty,
         levelB: brickVar.currLevel,
-        puEnableB: brickVar.powerUpEnable,
-
-        puEnableB: brickVar.powerUpEnable,
-        puEnableB: brickVar.powerUpEnable,
-        puEnableB: brickVar.powerUpEnable,
-		
         puEnableB: brickVar.powerUpEnable,
     }));
 });
@@ -125,7 +117,6 @@ window.addEventListener('load', () =>
     const currentState = history.state || {};
 	sessionStorage.setItem('lastPage', currentHash);
 
-	// console.log("currHash", currentHash);
 	if (currentHash === 'gameSelectionSolo' || currentHash === 'gameSelectionMulti')
 	{
 		if (gameVar.saveSetting)
@@ -136,6 +127,7 @@ window.addEventListener('load', () =>
 			updateDifficultySelectionB(brickVar.difficulty);
 			updateLevelSelectionB(brickVar.currLevel);
 			updatePowerUpSelectionB(brickVar.powerUpEnable);
+			console.log("update setting in refresh");
 			updateSetting();
 			updateSettingB();
 		}
@@ -143,11 +135,12 @@ window.addEventListener('load', () =>
 	if (currentHash === 'playPong' || currentHash === 'playBrickout'
 		|| currentHash === 'playPongLocal' || currentHash === 'playBrickoutLocal') 
 	{
-		// console.log("load home, currenHas", currentHash);
 		renderPageGame("home");
 	}
 	else
+	{
 		renderPageGame(currentHash, false, currentState.params || false);
+	}
 });
 export function isGamePage(page) 
 {

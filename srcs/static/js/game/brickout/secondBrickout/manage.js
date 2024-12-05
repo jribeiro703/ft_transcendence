@@ -6,7 +6,7 @@ import { handleNextLevelB, restartLevelB } from "./level.js";
 import { displayFinish, displayNextLevel } from "./display.js";
 import { listenFinishBtn, listenNextLevelBtn} from "./listenBtn.js";
 import { renderPageGame } from "../../pong/myHistory.js";
-
+import { chechOpponent } from "./score.js";
 
 export function manageCollisionB()
 {
