@@ -29,7 +29,6 @@ services:
       - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD:-}
       - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL:-noreply@localhost}
 
-
   migration:
     platform: ${DOCKER_PLATFORM}
     build:
@@ -44,13 +43,19 @@ services:
       - db
     networks:
       - transcendence
+    environment:
+      - EMAIL_HOST=${EMAIL_HOST:-mailhog}  # Default to mailhog for dev
+      - EMAIL_PORT=${EMAIL_PORT:-1025}
+      - EMAIL_USE_TLS=${EMAIL_USE_TLS:-False}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER:-}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD:-}
+      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL:-noreply@localhost}
     command: >
       sh -c "
-      python manage.py makemigrations &&
+      python manage.py makemigrations --noinput &&
       python manage.py migrate --noinput &&
       python manage.py testusers &&
-      python manage.py create_superuser &&
-      python manage.py collectstatic --noinput
+      python manage.py collectstatic --clear --noinput
       "
 
   db:
@@ -64,6 +69,8 @@ services:
     networks:
       - transcendence
     restart: on-failure
+    environment:
+      - TZ=Europe/Paris
 
   redis:
     platform: ${DOCKER_PLATFORM}
@@ -85,6 +92,7 @@ services:
     volumes:
       - ${DOCKER_SOCK}:/tmp/docker.sock:ro
       - ./nginx/certs:/etc/nginx/certs:ro
+      - ./nginx/htpasswd:/etc/nginx/htpasswd:ro
     environment:
       - HTTPS_METHOD=redirect
       - DEFAULT_SSL_CERT=/etc/nginx/certs/localhost.crt
@@ -95,7 +103,7 @@ services:
 
   mailhog:
     platform: ${DOCKER_PLATFORM}
-    image: mailhog/mailhog:latest
+    image: richarvey/mailhog:latest
     container_name: mailhog
     ports:
       - "1025:1025"

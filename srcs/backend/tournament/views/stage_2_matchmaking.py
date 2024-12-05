@@ -71,3 +71,42 @@ class PerformMatchmakingView(APIView):
 		except Exception as e:
 			logger.error(f"Error performing matchmaking: {e}")
 			return Response({'error': f'Failed to perform matchmaking: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class TournamentBracketView(APIView):
+	def get(self, request, tournament_id):
+		try:
+			Tournament = apps.get_model('tournament', 'Tournament')
+			Game = apps.get_model('game', 'Game')
+			User = apps.get_model('user', 'User')
+
+			tournament = Tournament.objects.get(id=tournament_id)
+			games = tournament.games.all()
+
+			bracket = []
+			for game in games:
+				player1 = User.objects.get(id=game.player_one.id)
+				player2 = User.objects.get(id=game.player_two.id) if game.player_two else 'BYE'
+				bracket.append({
+					"player1": player1.username,
+					"player2": player2.username if player2 != 'BYE' else player2
+				})
+
+			return Response({'bracket': bracket}, status=status.HTTP_200_OK)
+		except Tournament.DoesNotExist:
+			return Response({'error': 'Tournament not found.'}, status=status.HTTP_404_NOT_FOUND)
+		except Exception as e:
+			logger.error(f"Error fetching tournament bracket: {e}")
+			return Response({'error': f'Failed to fetch tournament bracket: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class CurrentPlayersView(APIView):
+	def get(self, request, tournament_id):
+		try:
+			Tournament = apps.get_model('tournament', 'Tournament')
+
+			tournament = Tournament.objects.get(id=tournament_id)
+			players = tournament.players.all()
+			player_list = [{'id': player.id, 'username': player.username} for player in players]
+			return Response({'players': player_list}, status=status.HTTP_200_OK)
+		except Tournament.DoesNotExist:
+			return Response({'error': 'Tournament not found.'}, status=status.HTTP_404_NOT_FOUND)
