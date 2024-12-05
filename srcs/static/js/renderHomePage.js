@@ -1,7 +1,6 @@
 import { PONG_CARD, showToast } from "./user/tools.js"
 import { isAuthenticated } from "./user/isAuthenticated.js";
-import { renderPage } from "./user/historyManager.js";
-import { showGameSelectionMultiView, showGameView } from "./game/gameView.js";
+import { renderPageGame } from './game/pong/myHistory.js';
 
 function createHomeContent() {
 	const box = document.getElementById('mainContent');
@@ -26,13 +25,13 @@ async function renderHomePage() {
 	createHomeContent();
 	
 	document.getElementById('playsoloGameBtn').addEventListener('click', () => {
-		showGameView();
+		renderPageGame("gameSelectionSolo");
 	});
 
 	const authButtons = [
 		{
 			id: 'playmultiGameBtn',
-			handler: () => showGameSelectionMultiView()
+			handler: () => renderPageGame('gameSelectionMulti')
 		},
 		{
 			id: 'btn-Leaderboard',

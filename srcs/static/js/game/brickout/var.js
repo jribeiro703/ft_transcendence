@@ -11,9 +11,6 @@ const brickVar = {
 	scoreCanvW: 420,
 	scoreCanvH: 100,
 
-	gameTime: 0,
-	gameTimer: null,
-
 
 // -------------------------------------Ball-----------------
 
@@ -73,7 +70,6 @@ const brickVar = {
 	
 	powerUpSpeed: 3,
 
-
 	powerUps: 
 	[
 		{ type: 'speed', image: '/static/css/images/fast.png'},
@@ -90,20 +86,32 @@ const brickVar = {
 	initialize: false,
 	initGame: false,
 	startBtn: null,
-	score: 0,
-	lives: 5,
 	gameStart: false,
+
+	score: 0,
+	lives: 2,
+
 	anim: null,
 	startBtn: null,
-	currLevel: null,
+
 	finish: false,
 	finalScore: 0,
 
+	gameTime: 0,
+	gameTimer: null,
+	startTime: false,
+
+	checkPu: false,
+	checkDiff: false,
+	checkLevel: false,
+
+	currLevel: null,
 	difficulty: null,
 	classic: false,
 	castle: false,
 	x: false,
 	invader: false,
+
 	settingChanged: false,
 
 	// -------------------------------------Button---------------------------

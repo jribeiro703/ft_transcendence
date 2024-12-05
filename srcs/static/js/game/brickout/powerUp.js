@@ -1,5 +1,3 @@
-import { showGameSelectionView } from "../gameView.js";
-import gameVar from "../var.js";
 import brickVar from "./var.js";
 
 const img = new Image();
@@ -17,6 +15,7 @@ img.onload = function()
 export function updatePowerUpSelectionB(selected)
 {
 	brickVar.powerUpEnable = selected;
+	brickVar.checkPu = true;
 
 	if (selected)
 		console.log("Power-Ups activés B !");
@@ -64,7 +63,6 @@ export function RandomPowerUpB()
 	const randomIndex = Math.floor(Math.random() * brickVar.powerUps.length);
 	brickVar.currentPowerUp = brickVar.powerUps[randomIndex];
 }
-
 
 export function drawPowerUpB()
 {
@@ -151,17 +149,15 @@ export function checkPowerUpB()
 		puSizeMB();
 	else if (brickVar.currentPowerUp?.type === "invincible")
 		puInvicibleB();
-	else if (brickVar.currentPowerUp?.type === 'extraLife')
+	else if (brickVar.currentPowerUp?.type === "extraLife")
 		puExtraLife();
 }
 
 function puExtraLife()
 {
-
 	brickVar.lives++;
 	brickVar.powerUpActive = false;
 	newPowerUpB();
-	
 }
 
 function puSpeedB()

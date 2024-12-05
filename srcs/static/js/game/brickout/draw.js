@@ -1,6 +1,43 @@
-import gameVar from "../var.js";
 import brickVar from "./var.js";
+import { collisionDetectionB, drawBricksB} from './brick.js'
+import { updateBallPositionB, handleBallB } from './ball.js';
+import { manageCollisionB, manageMoveB } from './manage.js';
+import { collectPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
+import { drawScoreBoardB } from "./score.js";
 
+function baseDrawB()
+{
+	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
+	drawScoreBoardB();
+	drawBricksB();
+	drawBallB();
+	drawPaddleB();
+}
+
+export function drawB()
+{
+	if (brickVar.finishLevel == false)
+	{
+		baseDrawB();
+		if (brickVar.gameStart)
+		{
+			drawPowerUpB();
+			collectPowerUpB();
+			collisionDetectionB();
+			manageCollisionB();
+			updatePowerUpB();
+		}
+		else
+		{
+			handleBallB();
+		}
+		manageMoveB();
+		updateBallPositionB();
+		if (brickVar.anim)
+			cancelAnimationFrame(brickVar.anim); 
+		brickVar.anim = requestAnimationFrame(drawB);
+	}
+}
 export function drawBallB()
 {
 	const x = brickVar.x - brickVar.ballRadius;
@@ -41,57 +78,3 @@ export function drawPaddleB()
     brickVar.ctx.closePath();
 }
 
-// export function drawScoreB()
-// {
-//     brickVar.ctx.font = "16px Arial";
-//     brickVar.ctx.fillStyle = "grey";
-//     brickVar.ctx.fillText("Score: "+brickVar.score, 8, 20);
-// }
-
-// export function drawLivesB()
-// {
-//     brickVar.ctx.font = "16px Arial";
-//     brickVar.ctx.fillStyle = "grey";
-//     brickVar.ctx.fillText("Lives: "+brickVar.lives, brickVar.canvasW - 65, 20);
-// }
-
-function loadCustomFont()
-{
-    return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');
-}
-
-
-export function drawScoreBoardB()
-{
-
-    loadCustomFont().load().then(function(font) 
-	{
-        document.fonts.add(font);
-		const ctx = brickVar.scoreCtx;
-		ctx.clearRect(0, 0, brickVar.scoreCanvW, brickVar.scoreCanvH);
-		
-		ctx.font = '24px fontScore';
-		ctx.fillStyle = '#FFFFFF';
-		ctx.textAlign = 'center';
-		
-		const centerX = brickVar.scoreCanvW / 2;
-		const leftX = brickVar.scoreCanvW * 0.25;
-		const rightX = brickVar.scoreCanvW * 0.75;
-		const y = 35;
-
-		ctx.fillText('Score', leftX, y);
-		ctx.fillText('Lives', rightX, y);
-
-		ctx.font = '32px fontScore';
-		ctx.fillText(brickVar.score, leftX, y + brickVar.scoreCanvH / 2);
-		ctx.fillText(brickVar.lives, rightX, y + brickVar.scoreCanvH / 2);
-		const minutes = Math.floor(brickVar.gameTime / 60);
-		const seconds = brickVar.gameTime % 60;
-		const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-		ctx.font = '20px fontScore';
-		ctx.fillText(time, centerX, y + brickVar.scoreCanvH / 2);
-	}).catch(function(error)
-	{
-		console.error("Error on font load", error);
-	});
-}
