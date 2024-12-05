@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Activation</title>
+	<style>		
+		* {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+	<h1>Account Activation</h1>
+	<p id="activation-status">
+		Processing your activation...
+	</p>
+    <script type="module">
+		import { getCSRFToken } from "./js/user/js/settingsPageTools.js";
+		import { fetchData } from "./js/user/js/settingsPageTools.js";
+
+        async function activateAccount() {
+            const url = window.location.href;
+            const box = document.getElementById("activation-status");
+			const responseObject = await fetchData(url, "GET", null, false, "simple");
+			if (responseObject.data.message)
+				box.innerHTML = responseObject.data.message;
+			else
+				box.innerHTML = "Activation failed";
+        }
+		
+        activateAccount();
+    </script>
+</body>
+</html>
