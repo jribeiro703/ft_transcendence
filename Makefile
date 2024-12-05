@@ -49,6 +49,9 @@ logs-%:  ## View logs for a specific service (e.g., `make logs-django`)
 # Shell Access
 shell-%:  ## Access shell of a specific service (e.g., `make shell-django`)
 	$(DOCKER_COMPOSE) exec $* /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/sh"
+# zsh
+zsh-%:  ## Access shell of a specific service (e.g., `make shell-django`)
+	$(DOCKER_COMPOSE) exec $* /bin/zsh -c "trap 'echo Session ended' EXIT; exec /bin/zsh"
 
 # Remove containers and volumes if running
 clean:  
