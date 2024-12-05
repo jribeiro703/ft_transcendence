@@ -53,6 +53,10 @@ shell-%:  ## Access shell of a specific service (e.g., `make shell-django`)
 zsh-%:  ## Access shell of a specific service (e.g., `make shell-django`)
 	$(DOCKER_COMPOSE) exec $* /bin/zsh -c "trap 'echo Session ended' EXIT; exec /bin/zsh"
 
+# Shell Access
+zsh-%:  ## Access shell of a specific service (e.g., `make shell-django`)
+	$(DOCKER_COMPOSE) exec $* /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/zsh"
+
 # Remove containers and volumes if running
 clean:  
 	@$(DOCKER_COMPOSE) down -v || echo "No running Docker services to clean."
