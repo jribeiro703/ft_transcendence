@@ -6,7 +6,6 @@ import { showSettingView } from "./setting.js";
 import { checkSettingLive } from "./setting.js";
 import { SCORE_CANVAS_HEIGHT } from "./const.js";
 import { showGameSelectionMultiView } from "./gameView.js";
-import { renderPage } from "../historyManager.js";
 
 export function initGameVar()
 {
@@ -25,10 +24,9 @@ function removeEventListeners()
 export function initEventListener()
 {
 	removeEventListeners();
-	// gameVar.playsoloGameBtn.addEventListener('click', showGameSelectionView);
-	gameVar.playsoloGameBtn.addEventListener('click', () => renderPage("pongGameSolo"));
+	gameVar.playsoloGameBtn.addEventListener('click', showGameSelectionView);
 	gameVar.playmultiGameBtn.addEventListener('click', roomMultiView);
-	// gameVar.playmultiGameBtn.addEventListener('click', showGameSelectionMultiView);
+	gameVar.playmultiGameBtn.addEventListener('click', showGameSelectionMultiView);
 }
 
 export function initControlLive()
@@ -94,8 +92,7 @@ export function initEventListenerRoom()
 	gameVar.settingBtn.addEventListener('click', () =>
 	{
 		console.log("setting");
-		// showSettingView(true);
-		renderPage("pongSettingSolo", true, true);
+		showSettingView(true);
 	});
 }
 

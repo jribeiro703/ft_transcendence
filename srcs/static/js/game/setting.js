@@ -7,7 +7,7 @@ import { displayGameData } from "./room.js";
 
 export function showSettingMultiView(live)
 {
-	history.pushState({ view: 'game'}, '', `?view=solo/settings`);
+	// history.pushState({ view: 'game'}, '', `?view=solo/settings`);
 	const pongUrl = "static/css/images/ttLevel.png";
 	const footUrl = "static/css/images/footballLevel.png";
 	const tennisUrl = "static/css/images/tennisLevel.png";
