@@ -1,4 +1,4 @@
-import { setupTournamentFlow, createTournament, fetchParticipants, performMatchmaking } from "./services/tournamentAPIService.js";
+import { setupTournamentFlow, createTournament, fetchEligiblePlayers, performMatchmaking } from "./services/tournamentAPIService.js";
 import { generateTournamentName, validateTournamentName } from "./services/tournamentAPIService.js";
 import { fetchTournamentBracket, fetchCurrentPlayers } from "./services/tournamentAPIService.js";
 

@@ -37,7 +37,7 @@ export const createTournament = async (name) => {
 	}
 };
 
-export const fetchParticipants = async () => {
+export const fetchEligiblePlayers = async () => {
 	try {
 		const response = await fetch('https://localhost:8081/tournament/players/', {
 			method: 'GET',
@@ -177,7 +177,7 @@ export const fetchCurrentPlayers = async (tournamentId) => {
 };
 
 function renderBracket(bracket) {
-	const bracketContainer = document.getElementById('current-players');
+	const bracketContainer = document.getElementById('tournament_bracket');
 	bracketContainer.innerHTML = ''; // Clear existing content
 
 	bracket.forEach((match, index) => {
@@ -191,7 +191,7 @@ function renderBracket(bracket) {
 			<div class="player text-success d-flex align-items-center gap-2">
 				🎉 <span class="fw-bold">${match.player1}</span>
 			</div>
-			<div class="vs text-muted fw-bold text-center">vs</div>
+			<div class="vs text-muted fw-bold text-center"> vs </div>
 			<div class="player text-danger d-flex align-items-center gap-2">
 				<span class="fw-bold">${match.player2}</span> 🔥
 			</div>
@@ -217,7 +217,7 @@ export const setupTournamentFlow = async (name) => {
 		if (!tournamentId) return;
 
 		// Step 2: Fetch eligible players
-		const eligiblePlayers = await fetchParticipants();
+		const eligiblePlayers = await fetchEligiblePlayers();
 		if (!eligiblePlayers || eligiblePlayers.length < 2) {
 			console.error('Not enough players to proceed.');
 			return;
@@ -236,7 +236,7 @@ export const setupTournamentFlow = async (name) => {
 
 		// Fetch and render the current players
 		//const players = await fetchCurrentPlayers(tournamentId);
-		//const playersContainer = document.getElementById('current-players');
+		//const playersContainer = document.getElementById('tournament_bracket');
 		//playersContainer.innerHTML = players.map(player => `<div>${player.username}</div>`).join('');
 
 		console.log("just before the friends list call");
