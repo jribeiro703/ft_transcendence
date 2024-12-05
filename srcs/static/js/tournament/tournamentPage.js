@@ -32,7 +32,6 @@ export async function showTournamentView(tournamentName)
 	box.innerHTML = createTournamentLayoutHTML(tournamentName);
 	// Trigger the setup flow on button click
 	setupTournamentFlow(tournamentName);
-	//getFriendsList();
-	//document.getElementById('startGameBtn').addEventListener('click', <>);
+
 }
 

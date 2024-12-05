@@ -58,20 +58,21 @@ export function getPlayerList() {
 	});
 }
 
-export function getFriendsList() {
+export function getFriendsList(tournamentId) {
 	// Establish WebSocket connection
 	const friendsSocket = new WebSocket(
 		"wss://" + window.location.host + "/ws/friends/"
 	);
-
+	
 	// Handle WebSocket events
 	friendsSocket.onopen = function () {
 		console.log("WebSocket connection established");
-
+		
 		// Send the `get_friends` action to the backend
 		friendsSocket.send(JSON.stringify({ action: "get_friends" }));
 	};
-
+	
+	console.log("inside gfl");
 	friendsSocket.onmessage = function (event) {
 		console.log("Message received from server:", event.data);
 
@@ -94,7 +95,7 @@ export function getFriendsList() {
 						friendItem.innerHTML = `
 							<img src="${friend.avatar}" alt="${friend.username}" class="avatar me-2" style="width: 40px; height: 40px; border-radius: 50%;">
 							<span>${friend.username}</span>
-							<button class="btn btn-primary ms-auto" onclick="inviteFriend(${friend.id})">Invite</button>
+							<button class="btn btn-primary ms-auto" onclick="inviteFriend(${friend.id}, ${tournamentId})">Invite</button>
 						`;
 						inviteBox.appendChild(friendItem);
 					});
@@ -116,28 +117,28 @@ export function getFriendsList() {
 	friendsSocket.onclose = function () {
 		console.log("WebSocket connection closed");
 	};
-
-	// Function to invite a friend
-	window.inviteFriend = async (friendId) => {
-		try {
-			const response = await fetch('https://localhost:8081/tournament/preregister/', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					tournament_id: tournamentId,
-					player_ids: [friendId],
-				}),
-			});
-
-			if (response.ok) {
-				const data = await response.json();
-				console.log('Player invited:', data);
-			} else {
-				const errorData = await response.json();
-				console.error('Failed to invite player:', errorData);
-			}
-		} catch (error) {
-			console.error('Error inviting player:', error);
-		}
-	};
 }
+
+// Function to invite a friend
+window.inviteFriend = async (friendId, tournamentId) => {
+	try {
+		const response = await fetch('https://localhost:8081/tournament/preregister/', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				tournament_id: tournamentId,
+				player_ids: [friendId],
+			}),
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			console.log('Player invited:', data);
+		} else {
+			const errorData = await response.json();
+			console.error('Failed to invite player:', errorData);
+		}
+	} catch (error) {
+		console.error('Error inviting player:', error);
+	}
+};

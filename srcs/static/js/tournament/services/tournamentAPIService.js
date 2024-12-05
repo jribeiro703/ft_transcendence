@@ -234,9 +234,15 @@ export const setupTournamentFlow = async (name) => {
 		const bracket = await fetchTournamentBracket(tournamentId);
 		renderBracket(bracket);
 
-		// Step 6: Fetch and render the friends list
-		getFriendsList();
+		// Fetch and render the current players
+		//const players = await fetchCurrentPlayers(tournamentId);
+		//const playersContainer = document.getElementById('current-players');
+		//playersContainer.innerHTML = players.map(player => `<div>${player.username}</div>`).join('');
+
 		console.log("just before the friends list call");
+		// Step 6: Fetch and render the friends list
+		getFriendsList(tournamentId);
+		console.log("just after the friends list call");
 		console.log('Tournament setup completed successfully.');
 	} catch (error) {
 		console.error('Error during tournament setup flow:', error);

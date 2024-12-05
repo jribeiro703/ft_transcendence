@@ -117,9 +117,6 @@ class FriendConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
 		logger.info("WebSocket connection established")
 		self.user = self.scope["user"]
-		# if self.user == AnonymousUser():
-		#    await self.close()
-		# else:
 		await self.accept()
 
 	async def disconnect(self, close_code):
@@ -134,10 +131,10 @@ class FriendConsumer(AsyncWebsocketConsumer):
 
 	async def send_friends_list(self):
 		User = apps.get_model('user', 'User')
-		default_user = User.objects.first()
+		default_user = await sync_to_async(User.objects.first)()
 		logger.info(f"Default user: {default_user}")
-		# friends = self.user.friends.all() # TODO: Later change it with user auth
-		friends = default_user.friends.all()
+		friends = await sync_to_async(list)(default_user.friends.all())
+		logger.info(f"Email: {default_user.email}")
 		logger.info(f"Friends list: {friends}")
 		friend_list = [{'id': friend.id, 'username': friend.username, 'avatar': friend.avatar.url} for friend in friends]
 		logger.info(f"Friend list to send: {friend_list}")
