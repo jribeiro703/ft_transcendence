@@ -49,6 +49,13 @@ logs-%:  ## View logs for a specific service (e.g., `make logs-django`)
 # Shell Access
 shell-%:  ## Access shell of a specific service (e.g., `make shell-django`)
 	$(DOCKER_COMPOSE) exec $* /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/sh"
+# zsh
+zsh-%:  ## Access shell of a specific service (e.g., `make shell-django`)
+	$(DOCKER_COMPOSE) exec $* /bin/zsh -c "trap 'echo Session ended' EXIT; exec /bin/zsh"
+
+# Shell Access
+zsh-%:  ## Access shell of a specific service (e.g., `make shell-django`)
+	$(DOCKER_COMPOSE) exec $* /bin/sh -c "trap 'echo Session ended' EXIT; exec /bin/zsh"
 
 # Remove containers and volumes if running
 clean:  
@@ -111,10 +118,7 @@ rootless-docker:
 
 open:
 	@xdg-open https://$$(hostname):8081
-	@xdg-open https://grafana.localhost:8081
-	@xdg-open https://prometheus.localhost:8081
-	@xdg-open https://node-exporter.localhost:8081/metrics
-	@xdg-open https://postgres-exporter.localhost:8081/metrics
+	@xdg-open https://$$(hostname):8081/admin
 
 generate-env:
 	@echo "Generating docker/.env file..."
