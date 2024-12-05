@@ -77,6 +77,7 @@ class CreateUserView(CreateAPIView):
 			}, status=status.HTTP_201_CREATED)
 		
 		except serializers.ValidationError as e:
+			print("create user view error: ", e)
 			return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 		except exceptions.APIException as e:
 			return Response(e.detail, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -351,6 +352,7 @@ def login42(request):
 		token_data = response.json()
 
 		if "access_token" not in token_data:
+			print("login42 view :error while getting access token")
 			response = redirect("https:localhost:8081/#home")
 			return response
 		
@@ -358,19 +360,20 @@ def login42(request):
 			headers={'Authorization': f"Bearer {token_data['access_token']}"})
 		user_data = user_info.json()
 
-		# avatar_url = requests.get(user_data['image']['versions']['small'])
-		# if (avatar_url.status_code == 200):
-			# filename = f"avatar_{user_data['login']}.jpg"
-			# user.avatar.save(filename, ContentFile(avatar_url.content), save=True)
-
 		user, created = User.objects.get_or_create(
+			username=user_data['login'],
 			email=user_data['email'],
 			defaults={
 				'username': user_data['login'],
-				# 'avatar_url': user_data['image']['versions']['micro'],
+				'email': user_data['email'],
 				'is_active': True,
 			}
 		)
+		avatar_url = requests.get(user_data['image']['versions']['small'])
+		if (avatar_url.status_code == 200):
+			filename = f"avatar_{user_data['login']}.jpg"
+			user.avatar.save(filename, ContentFile(avatar_url.content), save=True)
+
 		response = redirect("https://localhost:8081/#user")
 		access_token, refresh_token = generate_tokens_for_user(user)
 		set_refresh_token_in_cookies(response, refresh_token)
