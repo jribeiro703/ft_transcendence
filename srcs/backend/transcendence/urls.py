@@ -8,6 +8,7 @@ urlpatterns = [
 	path('', TemplateView.as_view(template_name="index.html")),	# Home page
     path('admin/', admin.site.urls),
 	path('user/', include('user.urls')),
+	path('livechat/', include('livechat.urls')),
 	path('game/', include('game.urls')),
 	path('tournament/', include('tournament.urls')),
 	path('prometheus/', include('django_prometheus.urls')),
