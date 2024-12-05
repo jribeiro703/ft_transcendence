@@ -9,11 +9,6 @@ import { renderRegisterForm } from "./pages/renderRegisterForm.js";
 import { renderSettingsPage } from "./pages/renderSettingPage.js";
 import { isAuthenticated } from "./isAuthenticated.js";
 import { updateUserAvatar } from "./tools.js";
-// import { showGameSelectionView, showGameSelectionMultiView, showGameView,  } from "./game/gameView.js"
-// import { showSettingMultiView, showSettingView } from "./game/setting.js";
-// import { showGameBrickView } from "./game/brickout/game.js";
-// import { showSettingMultiViewB } from "./game/brickout/settings.js";
-// import { roomMultiView } from "./game/init.js";
 
 const authPages = {
 	auth: renderAuthPage,
@@ -29,26 +24,6 @@ const userPages = {
 	profile: renderProfilePage,
 }
 
-// const pongGamePages = {
-	// pongGameSolo: showGameSelectionView,
-	// pongGameMulti: showGameSelectionMultiView,
-	// pongSettingSolo: (params) => showSettingView(params),
-	// pongSettingMulti:showSettingMultiView,
-	// pongGameMultiLocal:showGameView,
-	// pongLobbyMulti: roomMultiView,
-	// pongGameMultiRemote: createRoomView
-
-// }
-
-// const brickoutGamePages = {
-// 	brickoutGameSolo: showGameBrickView,
-// 	brickoutSettingMulti: showSettingMultiViewB,
-// 	brickoutGameMultiLocal: showGameSelectionMultiView,
-// 	brickoutLobbyMulti: roomMultiViewB,
-// 	brickoutMultiRemote: createRoomView,
-
-// }
-
 async function renderPage(page, updateHistory = true) {
 	
 	let renderFunction;
@@ -56,9 +31,9 @@ async function renderPage(page, updateHistory = true) {
 	await updateUserAvatar(authenticated);
 	
 	if (authenticated)
-		renderFunction = userPages[page];// || pongGamePages[page];
+		renderFunction = userPages[page];
 	else
-		renderFunction = authPages[page];// || pongGamePages[page];
+		renderFunction = authPages[page];
 
 	if (!renderFunction) {
 		history.replaceState({ page: "home" }, "home", "#home");
