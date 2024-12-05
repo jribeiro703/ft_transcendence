@@ -12,6 +12,7 @@
 
 </head>
 <body>
+	<!-- ------------NAVBAR------------------------ -->
 	<nav class="navbar rounded-5 px-5">
 		<div class="container-fluid d-flex flex-column align-items-center">
 			<a id="me" class="navbar-brand text-center mb-2 fs-1">Ft_Transcendence</a>
@@ -27,80 +28,49 @@
 			</div>
 		</div>
 	</nav>
-	<br><br><br>
-	<div id="mainContent">
+	<!-- ----------------------------------------FIN NAV BAR--------------------------------- -->
+	 <!-- ------------------------------------MAIN CONTENT------------------------------ -->
+	<div id="mainContent"> <!-- INjection js dans le bloc main  -->
 		<div id="defaultView">
 			<div class="container">
 				<div class="mx-auto">
+					<br>
 					<img class="img-fluid" src="{% static 'css/images/pong-game-card.png' %}" alt="Pong Game">
 					<br><br><br>
+				</div>
 			</div>
-		</div>
 			<div class="container py-2 d-flex flex-column align-items-centercontainer py-2">
-				<button id="playGameBtn" class="btn custom-btn mb-4">Play Game</button>
-				<button id="btn1" class="btn custom-btn mb-4">Live Chat</button><br><br>
-				<button id="btn2" class="btn custom-btn mb-4">Quit</button>
+				<button id="playsoloGameBtn" class="btn custom-btn mb-5">Single Player</button>
+				<button id="playmultiGameBtn" class="btn custom-btn mb-4">Multiplayer</button>
 			</div>
 		</div>
-		<div id="gameplayView" style="display: none;">
-			<h1>Gameplay Mode</h1>
-			<div class="container">
-				<div class="left-column">
-					<p class="gpMode">Level Difficulty:</p>
-					<p class="gpMode">Power-Up Activation:</p>
-					<p class="gpMode">Map Selection:</p>
-				</div>
-				<div class="right-column">
-					<div>
-						<button id="easy" class="level">Easy</button>
-						<button id="medium" class="level">Medium</button>
-						<button id="hard" class="level">Hard</button>
-					</div>
-					<div>
-						<button id="withPowerUps" class="powerUpBtn">Yes</button>
-						<button id="withoutPowerUps" class="powerUpBtn">No</button>
-					</div>
-					<div class="map-selection">
-						<div id="map1" class="mapOption" data-map-name="classicMap">
-							<img src="{% static 'css/images/classic.png' %}" alt="classicMap" class="map-image">
-							<button id="tableTennis" class="level">Table Tennis</button>
-						</div>
-						<div id="map2" class="mapOption" data-map-name="customMap1">
-							<img src="{% static 'css/images/brick.png' %}" alt="customMap1" class="map-image">
-							<button id="bricksLevel" class="level">Brick Level</button>
-						</div>
-					</div>
-				</div>
+		<!-- Tournament View starts here -->
+		<div id="tournamentView" style="display: none;">
+			<h1 class="tournament-title">Tournament</h1>
+			<p class="tournament-description">Win to Advance, Lose and You're Out!</p>
+			<div class="container participants-container">
+				<h4>Participants</h4>
+				<ul id="playersList" class="list-group">
+					<!-- Dynamically insert participants here -->
+					<!-- <li class="list-group-item">Player 1</li> -->
+					<!-- Add more players as needed -->
+				</ul>
 			</div>
-		</div>
-			<br><br>
 			<div class="button-container">
-				<button id="quickGameBtn" style="display: none;">Quick Game (AI)</button>
-				<button id="startGameBtn" style="display: none;">Start Game</button>
-				<button id="tournamentGameBtn" style="display: none;">Tournament</button>
+				<button id="createTournamentBtn" style="display: none;">Start Tournament</button>
+				<button id="quitTournamentBtn" style="display: none;">Quit Tournament</button>
 			</div>
 		</div>
-		<div id="gameView" style="display: none;">
-			<div id="scoreboard">SCORE</div>
-			<div id="scoreRow">
-				<span id="player">Player </span>
-				<span id="playerScore">0</span>
-				<span id="vs">VS</span>
-				<span id="aiScore">0</span>
-				<span id="ai">CPU</span>
-			</div>
-			<canvas id="myCanvas"></canvas>
-			<br><br>
-			<div class="button-container">
-				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
-				<button id="quitGameBtn" style="display: none;">Quit Game</button>
-			</div>
-		</div>
+		<!-- Tournament View ends here -->
 	</div>
-	<script type="module" src="{% static 'js/main.js' %}?v=1.1"></script>
+	<!-- -------------------------------------------------FIN MAIN CONTENT---------------------------------- -->
+	<!-- -----------------------------------------------------SCRIPT JAVA SCRIPT BOTYYYYYY------------------- -->
+	<script type="module" src="{% static 'js/game/main.js' %}?v=1.1"></script>
+	<!-- -----------------------------------------------------FIN SCRIPT JAVA SCRIPT BOTYYYYYY------------------- -->
 	<div class="footer-text">
-		Project directed by Yachen, Lucravoi, Dlacuey, and Tmaillar
+		Project directed by Yachen, Lannur-s, Lucravoi, Dlacuey, and Tmaillar
 	</div>
+	<!-- ----------------------------------------------APEL BOOTSTRAP SCRIPT------------------------------------------- -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
