@@ -1,3 +1,5 @@
+// tournament/templates/createTournamentFormTemplate.js
+
 export function createTournamentFormHTML(tournamentName) {
 	return `
 	<div class="container-fluid p-3 p-sm-5">
