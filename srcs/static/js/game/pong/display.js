@@ -318,4 +318,3 @@ export function displaySetting(difficulty, powerUp, level) {
 
   settingContain.appendChild(settingItem);
 }
-
