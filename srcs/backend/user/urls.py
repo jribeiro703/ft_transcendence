@@ -33,6 +33,4 @@ urlpatterns = [
 
 	path('logout/', views.LogoutView.as_view(), name="logout"),
 	
-	path('login/token-refresh/', views.CookieTokenRefreshView.as_view(), name="cookie_token_refresh"),
-
 ]

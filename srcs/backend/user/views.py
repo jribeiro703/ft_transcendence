@@ -398,6 +398,8 @@ def login42(request):
 			defaults={
 				'username': user_data['login'],
 				'email': user_data['email'],
+				'avatar': None,
+				'is_42_user': True,
 				'is_active': True,
 			}
 		)
@@ -406,9 +408,8 @@ def login42(request):
 		avatar_response = requests.get(avatar_url)
 		if (avatar_response.status_code == 200):
 			filename = f"avatar_{user_data['login']}.jpg"
-			if user.avatar:
-				user.avatar.delete(save=False)
-			user.avatar.save(filename, ContentFile(avatar_response.content), save=True)
+			if not user.avatar:
+				user.avatar.save(filename, ContentFile(avatar_response.content), save=True)
 
 		response = redirect("https://localhost:8081/#user")
 		access_token, refresh_token = generate_tokens_for_user(user)
