@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
 from datetime import timedelta
@@ -61,6 +61,43 @@ def GetUserPublicInfos(request, pk):
 def GetUserPrivateInfos(request):
 	serializer = UserPrivateInfosSerializer(request.user)
 	return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserFriends(request):
+    """Get list of friends for the logged-in user"""
+    try:
+        # Ensure user is a proper User instance
+        if not isinstance(request.user, User):
+            return Response(
+                {"message": "Invalid user type"}, 
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+            
+        friends = request.user.friends.all()
+        serializer = UserPublicInfosSerializer(friends, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        return Response(
+            {"message": f"Error fetching friends list: {str(e)}"}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getOnlineUsers(request):
+    """Get list of all online users"""
+    try:
+        online_users = User.objects.filter(is_online=True).exclude(id=request.user.id)
+        serializer = UserPublicInfosSerializer(online_users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        return Response(
+            {"message": f"Error fetching online users: {str(e)}"}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 # ------------------------------REGISTER USER ENDPOINTS--------------------------------	
 
@@ -286,6 +323,10 @@ class UserLoginView(APIView):
 		except exceptions.APIException as e:
 			return Response(e.detail, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 		
+		user.is_online = True
+		user.last_activity = timezone.now()
+		user.save()
+		
 		return Response({
 			"message": "A verification code is sent to your email",
 			"otp_verification_url": reverse('otp_verification', args=[user.id])
@@ -393,6 +434,9 @@ class LogoutView(APIView):
 	permission_classes = [AllowAny]
 
 	def post(self, request):
+		if request.user.is_authenticated:
+			request.user.is_online = False
+			request.user.save()
 		try:
 			refresh_token = request.COOKIES.get('refresh_token')
 			token = RefreshToken(refresh_token)
