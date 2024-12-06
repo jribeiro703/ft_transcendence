@@ -9,6 +9,7 @@ import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
 
 export function updateSettingB()
 {
+	console.log("updateSettingB");
 	brickVar.settingChanged = true;
 	var difficulty = null;	
 	var level = null;
@@ -96,35 +97,11 @@ export function updateLevelSelectionB(level)
 {
 	brickVar.checkLevel = true;
 	if (level === "classic")
-	{
-		brickVar.classic = true;
-		brickVar.castle = false;
-		brickVar.x = false;
-		brickVar.invader = false;
 		brickVar.currLevel = "classic";
-	}
 	else if (level === "castle")
-	{
-		brickVar.classic = false;
-		brickVar.castle = true;
-		brickVar.x = false;
-		brickVar.invader = false;
 		brickVar.currLevel = "castle";
-	}
 	else if (level === "x")
-	{
-		brickVar.classic = false;
-		brickVar.castle = false;
-		brickVar.x = true;
-		brickVar.invader = false;
 		brickVar.currLevel = "x";
-	}
 	else if (level === "invader")
-	{
-		brickVar.classic = false;
-		brickVar.castle = false;
-		brickVar.x = false;
-		brickVar.invader = true;
 		brickVar.currLevel = "invader";
-	}
 }
