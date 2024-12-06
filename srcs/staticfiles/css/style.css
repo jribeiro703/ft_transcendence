@@ -415,106 +415,19 @@ p {
   }
 }
 
-/* #liveChatBtn, */
-/* #playsoloGameBtn, */
-/* #playmultiGameBtn, */
-/* #createRoomBtn, */
-/* #settingBtn, */
-/* #joinRoomBtn, */
-/* #refreshBtn, */
-/* #btn1, */
-/* #btn2, */
-/* #btn3 { */
-/*   background-color: var(--background-color); */
-/*   color: var(--text-color); */
-/**/
-/*   border: 2px solid; */
-/*   border-color: var(--border-btn-color); */
-/**/
-/*   max-width: 1000px; */
-/*   width: 460px; */
-/*   min-width: 200px; */
-/**/
-/*   align-self: center; */
-/**/
-/*   transition: color 0.3s ease-in-out; */
-/*   transition: border-color 0.3s ease-in-out; */
-/* } */
-/**/
-/* #liveChatBtn:focus, */
-/* #playsoloGameBtn:focus, */
-/* #playmultiGameBtn:focus, */
-/* #createRoomBtn:focus, */
-/* #settingBtn:focus, */
-/* #refreshBtn:focus, */
-/* #joinRoomBtn:focus, */
-/* #btn1:focus, */
-/* #btn2:focus, */
-/* #btn3:focus { */
-/*   border-color: var(--highlight-color); */
-/*   color: var(--highlight-color); */
-/* } */
-/**/
-/* #liveChatBtn:hover, */
-/* #playsoloGameBtn:hover, */
-/* #playmultiGameBtn:hover, */
-/* #createRoomBtn:hover, */
-/* #settingBtn:hover, */
-/* #refreshBtn:hover, */
-/* #joinRoomBtn:hover, */
-/* #btn1:hover, */
-/* #btn2:hover, */
-/* #btn3:hover { */
-/*   border-color: var(--highlight-color); */
-/*   color: var(--highlight-color); */
-/* } */
-/**/
-/* #liveChatBtn:active, */
-/* #playGameBtn:active, */
-/* #playmultiGameBtn:active, */
-/* #createRoomBtn:active, */
-/* #settingBtn:active, */
-/* #refreshBtn:active, */
-/* #joinRoomBtn:active, */
-/* #btn1:active, */
-/* #btn2:active, */
-/* #btn3:active { */
-/*   color: #0a1730; */
-/*   background-color: var(--quartiary-color); */
-/*   border-color: var(--primary-color); */
-/* } */
-
-/* @media (max-width: 768px) { */
-/*   #liveChatBtn, */
-/*   #playsoloGameBtn, */
-/*   #playmultiGameBtn, */
-/*   #createRoomBtn, */
-/*   #settingBtn, */
-/*   #joinRoomBtn, */
-/*   #refreshBtn, */
-/*   #btn1, */
-/*   #btn2, */
-/*   #btn3 { */
-/*     width: 90%; */
-/*     max-width: 90%; */
-/*     min-width: 90%; */
-/*   } */
-/* } */
-
-/* -------------------------- Setting View ------------------------ */
 /* -------------------------- Setting View ------------------------ */
 
 #settingView {
   padding: 42px;
   font-size: 70px;
-  /* margin-bottom: 20px; */
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  gap: 100px;
   text-align: center;
   width: 100%;
   height: 100%;
+  position: relative;
+  overflow: auto;
 }
 
 .left-column {
@@ -676,14 +589,14 @@ p {
 .container-game {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 78px;
   padding: 20px;
   background: var(--background-color);
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  max-width: 1600px;
-  margin: 0 auto;
 }
 
 .game-row {
@@ -691,10 +604,22 @@ p {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 3%;
+  width: 100%;
+  gap: 30px;
   padding: 10px;
   background: var(--background-color);
-  border-radius: 10px;
+}
+
+@media (max-width: 1000px) {
+  .game-row {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .settings-inline {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .game-title {
@@ -716,23 +641,33 @@ p {
 
 .map-image,
 .game-image {
-  width: 20%;
+  width: 250px;
   height: auto;
   border-radius: 5px;
-  overflow: hidden;
+  display: block;
+  object-fit: cover; /* ou 'cover' selon vos besoins */
 }
 
 .game-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 3px;
+  width: 230px;
+  height: auto;
+  border-radius: 5px;
+  display: block;
 }
 
 .game-settings {
-  width: 40%;
+  width: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   color: var(--secondary-color);
+}
+
+@media (max-width: 1000px) {
+  .game-settings {
+    width: 100%;
+  }
 }
 
 .game-play {
