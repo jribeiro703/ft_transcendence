@@ -269,10 +269,37 @@ document
   .querySelector("[data-chat-icon]")
   .addEventListener("click", toggleChat);
 
-document.addEventListener("keydown", function (event) {
+// can click with enter
+document.addEventListener("DOMContentLoaded", function () {
+  const homeIcon = document.querySelector("[data-home-icon]");
+  const profileIcon = document.querySelector("[data-profile-icon]");
   const chatIcon = document.querySelector("[data-chat-icon]");
-  if (event.key === "Enter" && document.activeElement === chatIcon) {
-    toggleChat();
+
+  if (homeIcon) {
+    homeIcon.setAttribute("tabindex", "0");
+    homeIcon.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        homeIcon.click();
+      }
+    });
+  }
+
+  if (profileIcon) {
+    profileIcon.setAttribute("tabindex", "0");
+    profileIcon.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        profileIcon.click();
+      }
+    });
+  }
+
+  if (chatIcon) {
+    chatIcon.setAttribute("tabindex", "0");
+    chatIcon.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        toggleChat();
+      }
+    });
   }
 });
 
