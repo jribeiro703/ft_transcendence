@@ -183,7 +183,7 @@ REST_FRAMEWORK = {
 # JWT settings
 from datetime import timedelta
 SIMPLE_JWT = {
-	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
 	"REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 	"ROTATE_REFRESH_TOKENS": True,
 	"BLACKLIST_AFTER_ROTATION": True,
@@ -199,10 +199,6 @@ EMAIL_USE_TLS = os.environ['EMAIL_USE_TLS'].lower() == 'true'
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')  # Optional for prod
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')  # Optional for prod
 DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
-
-# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-# EMAIL_FILE_PATH = "../../email-messages"
-# DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
 
 # CSRF settings
 CSRF_COOKIE_SECURE = True

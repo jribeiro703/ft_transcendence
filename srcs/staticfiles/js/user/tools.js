@@ -1,4 +1,4 @@
-import { API_BASE_URL, fetchData } from "./fetchData.js";
+import { API_BASE_URL, fetchAuthData } from "./fetchData.js";
 
 const PONG_CARD = `${API_BASE_URL}/static/images/pong-game-card.png`;
 const DEFAULT_AVATAR = `${API_BASE_URL}/static/images/default-avatar.jpg`;
@@ -38,7 +38,7 @@ async function updateUserAvatar(isAuthenticated) {
 		avatar.src = DEFAULT_AVATAR;
 		return;
 	}
-	const userData = await fetchData("/user/private/", "GET", null, false, "authenticated");
+	const userData = await fetchAuthData("/user/private/", "GET", null, false);
 	if (userData.status === 200) {
 		const userAvatar = userData.data.avatar;
 		const src = userAvatar.substring(userAvatar.indexOf('/media'));
@@ -61,4 +61,17 @@ function showErrorMessages(responseObject) {
 	showToast(errorMessages.join('\n'), "error");
 }
 
-export { escapeHTML, PONG_CARD, DEFAULT_AVATAR, showToast, updateUserAvatar, showErrorMessages };
+async function logout() {	
+	try {
+		const response = await fetchAuthData('/user/logout/', 'POST', null, false);
+		if (response.status === 205) {
+			sessionStorage.clear();
+			return true;
+		}
+		return false;
+	} catch (error) {
+		console.error('logout(): Error during logout:', error);
+		throw error;
+	}
+}
+export { escapeHTML, PONG_CARD, DEFAULT_AVATAR, showToast, updateUserAvatar, showErrorMessages, logout };

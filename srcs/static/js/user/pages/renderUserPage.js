@@ -1,4 +1,4 @@
-import { fetchData } from "../fetchData.js";
+import { fetchData, fetchAuthData } from "../fetchData.js";
 import { showToast, PONG_CARD, showErrorMessages } from "../tools.js";
 import { renderPage } from "../historyManager.js";
 
@@ -34,8 +34,10 @@ export function renderUserPage() {
 		renderPage("settings")
 	})
 
-	document.getElementById('btn-Inbox').addEventListener('click', () => {
+	document.getElementById('btn-Inbox').addEventListener('click', async () => {
 		console.log('Inbox button clicked');
+		const responseObject = await fetchAuthData("/user/online/", "GET", null, false);
+		console.log(responseObject);
 	})
 
 	document.getElementById('btn-Logout').addEventListener('click', async(e) => {
@@ -45,7 +47,7 @@ export function renderUserPage() {
 		if (!confirmation)
 			return;
 
-		const responseObject = await fetchData('/user/logout/', 'POST', null, false, "simple");
+		const responseObject = await fetchData('/user/logout/', 'POST', null, false);
 
 		if (responseObject.status == 205) {
 			showToast(responseObject.data.message, "success");

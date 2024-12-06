@@ -4,7 +4,7 @@ import { renderPage } from "../historyManager.js";
 
 async function renderLogin42Page() {
 
-    let responseObject = await fetchData(`/user/login42/auth_url/`, "GET", null, false, "simple");
+    let responseObject = await fetchData(`/user/login42/auth_url/`, "GET", null, false);
     if (responseObject.status === 200 && responseObject.data.auth_url) {
 		sessionStorage.setItem("access_token", "");
 		window.location.href = responseObject.data.auth_url;
