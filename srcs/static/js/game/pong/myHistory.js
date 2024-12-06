@@ -15,7 +15,8 @@ import { showSettingViewB } from "../brickout/settings.js";
 import { initLobbyView } from "./init.js";
 import { checkFrame, checkInterval } from "../brickout/score.js";
 import { showPongRemote } from "./gameViewMulti.js";
-
+import { logout } from "../../user/tools.js";
+import { API_BASE_URL } from "../../user/fetchData.js";
 
 const pongGamePages = {
 
@@ -95,6 +96,8 @@ window.addEventListener('beforeunload', () =>
         levelB: brickVar.currLevel,
         puEnableB: brickVar.powerUpEnable,
     }));
+
+	navigator.sendBeacon(`${API_BASE_URL}/user/logout/`);
 });
 
 window.addEventListener('load', () =>

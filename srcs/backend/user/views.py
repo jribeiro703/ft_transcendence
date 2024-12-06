@@ -28,16 +28,42 @@ from .utils import send_2FA_mail, generate_tokens_for_user, set_refresh_token_in
 # -----------------------------------GET USER INFOS ENDPOINTS--------------------------------
 
 @api_view(['GET'])
-def getUserPk(request):
-	user = request.user
-	return Response({"pk": user.id}, status=status.HTTP_200_OK)
-
-@api_view(['GET'])
 @permission_classes([AllowAny])
 def getListOfUsers(request):
 	users = User.objects.all()
 	serializer = UserPublicInfosSerializer(users, many=True)
 	return Response(serializer.data, status=status.HTTP_200_OK)	
+
+@api_view(['GET'])
+def getUserFriends(request):
+	"""Get list of friends for the logged-in user"""
+	try:
+		# Ensure user is a proper User instance
+		if not isinstance(request.user, User):
+			return Response(
+				{"message": "Invalid user type"}, 
+				status=status.HTTP_401_UNAUTHORIZED
+			)
+
+		friends = request.user.friends.all()
+		serializer = UserPublicInfosSerializer(friends, many=True)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+
+	except Exception as e:
+		return Response(
+			{"message": "Error fetching friends list"}, 
+			status=status.HTTP_500_INTERNAL_SERVER_ERROR
+		)
+
+@api_view(['GET'])
+def getOnlineUsers(request):
+	try:
+		online_users = User.objects.filter(is_online=True).exclude(id=request.user.id)
+		serializer = UserPublicInfosSerializer(online_users, many=True)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+
+	except Exception as e:
+		return Response({"message": "Error fetching online users"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -61,6 +87,12 @@ def GetUserPublicInfos(request, pk):
 def GetUserPrivateInfos(request):
 	serializer = UserPrivateInfosSerializer(request.user)
 	return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def getUserPk(request):
+	user = request.user
+	return Response({"pk": user.id}, status=status.HTTP_200_OK)
+
 
 # ------------------------------REGISTER USER ENDPOINTS--------------------------------	
 
@@ -369,10 +401,14 @@ def login42(request):
 				'is_active': True,
 			}
 		)
-		avatar_url = requests.get(user_data['image']['versions']['small'])
-		if (avatar_url.status_code == 200):
+		
+		avatar_url = user_data['image']['versions']['small']
+		avatar_response = requests.get(avatar_url)
+		if (avatar_response.status_code == 200):
 			filename = f"avatar_{user_data['login']}.jpg"
-			user.avatar.save(filename, ContentFile(avatar_url.content), save=True)
+			if user.avatar:
+				user.avatar.delete(save=False)
+			user.avatar.save(filename, ContentFile(avatar_response.content), save=True)
 
 		response = redirect("https://localhost:8081/#user")
 		access_token, refresh_token = generate_tokens_for_user(user)
@@ -393,18 +429,27 @@ class LogoutView(APIView):
 	def post(self, request):
 		try:
 			refresh_token = request.COOKIES.get('refresh_token')
+			if not refresh_token:
+				response = Response({"message": "Logout successfully"}, status=status.HTTP_205_RESET_CONTENT)
+				response.delete_cookie('refresh_token', path='/', samesite='Lax')
+				response.delete_cookie('csrftoken', path='/')
+				return response
 			token = RefreshToken(refresh_token)
+
+			try:
+				user = User.objects.get(id=token.payload.get('user_id'))
+				user.is_online = False
+				user.save()
+			except User.DoesNotExist:
+				pass
+
 			token.blacklist()
-			response = Response({
-				"message": "Logout successfully !",
-				}, status=status.HTTP_205_RESET_CONTENT)
-			response.delete_cookie('refresh_token')
+			response = Response({"message": "Logout successfully !"}, status=status.HTTP_205_RESET_CONTENT)
+			response.delete_cookie('refresh_token', path='/', samesite='Lax')
+			response.delete_cookie('csrftoken', path='/')
+
 			return response
 
-		except exceptions.AuthenticationFailed:
-			return Response({"message": "Authentication failed."}, status=status.HTTP_401_UNAUTHORIZED)
-		except exceptions.PermissionDenied:
-			return Response({"message": "Permission denied."}, status=status.HTTP_403_FORBIDDEN)
 		except Exception as e:
 			print("logout failed: ", e)
 			return Response({"message": "Logout failed."}, status=status.HTTP_400_BAD_REQUEST)

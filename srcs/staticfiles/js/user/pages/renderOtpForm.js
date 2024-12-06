@@ -1,5 +1,5 @@
 import { fetchData } from "../fetchData.js";
-import { showToast } from "../tools.js"
+import { showToast, showErrorMessages } from "../tools.js"
 import { renderPage } from "../historyManager.js";
 
 export function renderOtpForm(url, msg) {
@@ -19,10 +19,10 @@ export function renderOtpForm(url, msg) {
     document.getElementById('otpForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const otpCode = document.getElementById('otpCode').value;
-        const responseObject = await fetchData(url, 'POST', { otp_code: otpCode }, false, "simple");
+        const responseObject = await fetchData(url, 'POST', { otp_code: otpCode }, false);
         
         if (responseObject.status === 200) {
-            sessionStorage.setItem('access_token', responseObject.data.access_token);
+			sessionStorage.setItem('access_token', responseObject.data.access_token);
 			renderPage("user");
 		} else
             showErrorMessages(responseObject);

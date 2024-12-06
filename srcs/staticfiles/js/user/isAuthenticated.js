@@ -1,7 +1,7 @@
 import { fetchData, getCookie } from "./fetchData.js";
 
 async function refreshAccessToken() {
-	const responseObject = await fetchData("/user/check-auth/token-refresh/", "GET", null, false, "simple");
+	const responseObject = await fetchData("/user/check-auth/token-refresh/", "GET", null, false);
 	if (responseObject.status === 200) {
 		sessionStorage.setItem('access_token', responseObject.data.access_token);
 		return true;

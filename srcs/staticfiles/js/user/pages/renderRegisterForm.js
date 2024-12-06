@@ -24,7 +24,7 @@ export function renderRegisterForm() {
 		const username = document.getElementById('username').value;
 		const email = document.getElementById('email').value;
 		const password = document.getElementById('password').value;
-		const responseObject = await fetchData('/user/register/', 'POST', { username, email, password }, false, "simple");
+		const responseObject = await fetchData('/user/register/', 'POST', { username, email, password }, false);
 		
 		if (responseObject.status === 201) {
 			showToast(responseObject.data.message, "success");	
