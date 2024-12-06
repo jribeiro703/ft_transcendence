@@ -43,7 +43,6 @@ p
 	position: relative;
 }
 
-
 .navbar.expanded
 {
 	height: 150px;
@@ -315,9 +314,7 @@ p
 #saveBtn
 {
 	position: absolute;
-	/* top: 50%; */
 	left: 45%;
-	/* transform: translate(-50%, -50%); */
 	width: 200px;
     height: 60px;
     font-size: 20px;
@@ -392,7 +389,6 @@ p
 .game-column 
 {
     flex: 1;
-    /* padding: 10px; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -427,7 +423,6 @@ p
     margin: 5px 0;
 	color: #6DC1C1;
     font-size: 20px;
-	/* margin-bottom: 50px; */
 }
 .settings-inline
 {
@@ -941,7 +936,7 @@ button:disabled
 	align-items: center;
 }
 
-/* -------------------- End Page --------------------------- */
+
 
 /* ----------------------- Score Board ------------------------- */
 #tournamentView {
@@ -1038,6 +1033,7 @@ button:disabled
 }
 /* -------------------- End - Tournament View ---------------------- */
 
+/* -------------------- End Page --------------------------- */
 .footer-text
 {
 	position: absolute;
