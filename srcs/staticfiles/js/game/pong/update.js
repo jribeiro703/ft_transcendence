@@ -81,6 +81,8 @@ export function updateCanvasColor()
 		color = '#006400';
 	else if (gameVar.currentLevel === 'tennis')
 		color = '#D2691E';
+	else if (gameVar.currentLevel === 'classic')
+		color = 'black';
    
     const canvas = document.getElementById('myCanvas');
     if (canvas)
