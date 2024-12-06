@@ -269,6 +269,7 @@ document
   .querySelector("[data-chat-icon]")
   .addEventListener("click", toggleChat);
 
+// can click with enter
 document.addEventListener("DOMContentLoaded", function () {
   const homeIcon = document.querySelector("[data-home-icon]");
   const profileIcon = document.querySelector("[data-profile-icon]");
