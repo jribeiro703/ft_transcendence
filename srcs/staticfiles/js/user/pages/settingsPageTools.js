@@ -10,11 +10,15 @@ async function createDialog(mainContent, dialogConfig) {
 	const inputType = isPasswordDialog ? "password" : "text";
 	const readonlyAttr = isPasswordDialog ? "" : "readonly";
 
+	const currentValue = dialogConfig.currentInputValue || "";
+	const placeholder = !isPasswordDialog && currentValue === "" ? "No value defined" : "";
+	const emptyClass = !isPasswordDialog && currentValue === "" ? 'empty-field' : '';
+
 	dialogElement.innerHTML = `
 		<form method="dialog">
 			<p>
 				<label>${dialogConfig.currentLabel}</label>
-				<input type=${inputType} id="${dialogConfig.currentInputId}" ${readonlyAttr}>
+				<input type=${inputType} id="${dialogConfig.currentInputId}" ${readonlyAttr} placeholder="${placeholder}" class="${emptyClass}">
 			</p>
 			<p>
 				<label>${dialogConfig.newLabel}</label>
