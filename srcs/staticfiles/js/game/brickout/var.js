@@ -107,10 +107,6 @@ const brickVar = {
 
 	currLevel: null,
 	difficulty: null,
-	classic: false,
-	castle: false,
-	x: false,
-	invader: false,
 
 	settingChanged: false,
 

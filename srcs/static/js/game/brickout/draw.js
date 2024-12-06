@@ -16,7 +16,7 @@ function baseDrawB()
 
 export function drawB()
 {
-	if (brickVar.finishLevel == false)
+	if (!brickVar.finishLevel && brickVar.initialize)
 	{
 		baseDrawB();
 		if (brickVar.gameStart)

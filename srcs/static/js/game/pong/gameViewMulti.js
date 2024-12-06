@@ -1,28 +1,11 @@
 import gameVar from "./var.js";
-import { listenSettingMultiBtn } from "./listenerSetting.js";
-import { listenPlayMultiBtn } from "./listenerSetting.js";
 import { checkSettingLive, updateSetting } from "./setting.js";
 import { createNewRoom } from "./room.js";
 import { SCORE_CANVAS_HEIGHT } from "./const.js";
-import { updateSettingB } from "../brickout/update.js";
-import { displayGameSelectionMulti, displayLobbyView, displayPongRemote } from "./display.js";
+import { displayGameSelectionMulti, displayGameView, displayLobbyView, displayPongRemote } from "./display.js";
 import { getElementGameSelection, getElementLobby } from "./getElement.js";
-import { initializeCanvas } from "./canvas.js";
+import { initializeCanvasPong } from "./canvas.js";
 
-
-export async function showGameSelectionMultiView()
-{
-	console.log("init game selection multi");
-	displayGameSelectionMulti();
-	getElementGameSelection();
-
-	await initializeCanvas();
-
-	listenSettingMultiBtn();
-	updateSetting();
-	updateSettingB();
-	listenPlayMultiBtn();
-}
 
 export function showLobbyView()
 {
@@ -37,39 +20,41 @@ export function showLobbyView()
 	getElementLobby();
 }
 
-export function showPongRemote(room = null)
+export async function showPongRemote(room = null)
 {
 	checkSettingLive();
-	displayPongRemote();
+	// displayPongRemote();
+	displayGameView();
+	await initializeCanvasPong();
 
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
 	gameVar.gameView.style.display = 'block';
 	
-	loadCanvasAndScoreRemote();
+	// loadCanvasAndScoreRemote();
 	createNewRoom();
 }
-export function loadCanvasAndScoreRemote()
-{
-	var canvas = document.getElementById('myCanvas');
-	gameVar.ctx = canvas.getContext('2d');
-	canvas.width = gameVar.canvasW;
-	canvas.height = gameVar.canvasH;	
+// export function loadCanvasAndScoreRemote()
+// {
+// 	var canvas = document.getElementById('myCanvas');
+// 	gameVar.ctx = canvas.getContext('2d');
+// 	canvas.width = gameVar.canvasW;
+// 	canvas.height = gameVar.canvasH;	
 
-	var scoreCanvas = document.getElementById('scoreCanvas');
-	gameVar.scoreCtx = scoreCanvas.getContext('2d');
-	scoreCanvas.width = gameVar.scoreCanvW;
-	scoreCanvas.height = SCORE_CANVAS_HEIGHT;
+// 	var scoreCanvas = document.getElementById('scoreCanvas');
+// 	gameVar.scoreCtx = scoreCanvas.getContext('2d');
+// 	scoreCanvas.width = gameVar.scoreCanvW;
+// 	scoreCanvas.height = SCORE_CANVAS_HEIGHT;
 
-	gameVar.gameTime = 0;
-    gameVar.gameTimer = setInterval(() =>
-	{
-        if (gameVar.startTime)
-		{
-            gameVar.gameTime++;
-        }
-    }, 1000);
+// 	gameVar.gameTime = 0;
+//     gameVar.gameTimer = setInterval(() =>
+// 	{
+//         if (gameVar.startTime)
+// 		{
+//             gameVar.gameTime++;
+//         }
+//     }, 1000);
 
-    scoreCanvas.style.marginBottom = '10px';
-}
+//     scoreCanvas.style.marginBottom = '10px';
+// }

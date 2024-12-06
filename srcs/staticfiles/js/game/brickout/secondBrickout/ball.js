@@ -1,7 +1,7 @@
 import brickVar2 from "./var.js";
 import { resetPowerUpB } from "./powerUp.js";
 import { displayBallB } from "../../pong/displayVar.js";
-
+import { updateDifficultySelectionSB } from "./update.js";
 export function startBallB(e)
 {
 	if (e.code === 'Enter' && !brickVar2.gameStart)
@@ -9,8 +9,11 @@ export function startBallB(e)
 		if (!brickVar2.finishLevel)
 		{
             console.log("Starting ball2");
+			console.log("diff2: ", brickVar2.difficulty)
             brickVar2.gameStart = true;
 			brickVar2.startTime = true;
+			if (!brickVar2.initDx || !brickVar2.initDy)
+				updateDifficultySelectionSB(brickVar2.difficulty);
             brickVar2.dx = brickVar2.initDx;
             brickVar2.dy = -brickVar2.initDy;
 			displayBallB();

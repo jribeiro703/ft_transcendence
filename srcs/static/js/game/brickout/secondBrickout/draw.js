@@ -23,7 +23,7 @@ function baseDrawB()
 
 export function drawB()
 {
-	if (brickVar2.finishLevel == false)
+	if (!brickVar2.finishLevel && brickVar2.initialize)
 	{
 		baseDrawB();
 		if (brickVar2.gameStart)

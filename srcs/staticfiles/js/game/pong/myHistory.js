@@ -1,10 +1,10 @@
 import gameVar from "./var.js";
 import brickVar from "../brickout/var.js";
 import { showGameSelectionView } from "./gameSelectionView.js";
-import { showGameSelectionMultiView} from "./gameViewMulti.js";
+import { showGameSelectionMultiView } from "./gameSelectionView.js";
 import { showSettingView } from "./settingsView.js";
 import { showGameView } from "./gameView.js";
-import { showGameBrickMultiView, showGameBrickView } from "../brickout/gameView.js";
+import { showGameBrickLocalView, showGameBrickView } from "../brickout/gameView.js";
 import { renderHomePage } from "../../renderHomePage.js";
 import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
@@ -31,7 +31,7 @@ const pongGamePages = {
 
 
 	playPongLocal: showGameView,
-	playBrickoutLocal: showGameBrickMultiView,
+	playBrickoutLocal: showGameBrickLocalView,
 
 	pongLobby: initLobbyView,
 	brickoutLobby: initLobbyView,
@@ -39,19 +39,11 @@ const pongGamePages = {
 	playPongRemote: showPongRemote,
 	// playBrickoutRemote: showBrickoutRemote,
 }
-// window.addEventListener('popstate', async (event) =>
-// {
-// 	if (event.state)
-// 	{
-// 		const storedParams = event.state.params || JSON.parse(sessionStorage.getItem('pageParams'));
-// 		await renderPageGame(event.state.page, false, storedParams);
-// 	}
-// });
 
 export async function renderPageGame(page, updateHistory = true, params = null)
 {
-	checkInterval();
-	checkFrame();
+	// checkInterval();
+	// checkFrame();
     let renderFunction = pongGamePages[page];
 
     const lastPage = sessionStorage.getItem('lastPage');

@@ -1,14 +1,12 @@
 import brickVar2 from "./var.js";
 import { updatePowerUpSelectionB, updateDifficultySelectionSB, updateLevelSelectionB } from "./update.js";
 import { showGameSelectionView } from "../../pong/gameSelectionView.js";
-import { showGameSelectionMultiView } from "../../pong/gameViewMulti.js";
+import { showGameSelectionMultiView } from "../../pong/gameSelectionView.js";
 import { listenSettingPUB, listenSettingDifficultyB, listenSettingLevelB } from "./listenerSetting.js";
 import { updateSettingB } from "./update.js";
 
 export function showSettingViewB(live)
 {
-	// history.pushState({ view: 'game'}, '', `?view=solo/settings`);
-
 	displaySettingB();
 	getSettingBtn();
 

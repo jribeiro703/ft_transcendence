@@ -166,7 +166,7 @@ export function displayGameView()
 	mainContent.innerHTML = ``;
 	const gameView = document.createElement('div');
 	gameView.innerHTML=`
-	<div id="gameView" style="display: none;">
+	<div id="gameView" style="display: block;">
 		<div id="scoreboard">
 			<canvas id="scoreCanvas"></canvas>
 		</div>
@@ -191,16 +191,16 @@ export function displayCanvas()
 
 	insertTo.innerHTML = `
 	<div id="gameView" style="display: none;">
-			<div id="scoreboard">
-				<canvas id="scoreCanvas"></canvas>
-			</div>
-			<canvas id="myCanvas"></canvas>
-			<br><br>
-			<div class="button-container">
-				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
-				<button id="quitGameBtn" style="display: none;">Quit Game</button>
-			</div>
-		</div>	
+		<div id="scoreboard">
+			<canvas id="scoreCanvas"></canvas>
+		</div>
+		<canvas id="myCanvas"></canvas>
+		<br><br>
+		<div class="button-container">
+			<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+			<button id="quitGameBtn" style="display: none;">Quit Game</button>
+		</div>
+	</div>	
 	`;
 
 	mainContent.appendChild(insertTo);
@@ -327,4 +327,96 @@ export function displaySetting(difficulty, powerUp, level)
 	<p>Level: <span id="levelSelected">${level}</span></p>`;
 
 	settingContain.appendChild(settingItem);
+}
+
+export function displayGameSelectionSolo()
+{
+	const maincontent = document.getElementById('mainContent');
+	maincontent.innerHTML = '';
+	const gameSelection = document.createElement('div');
+
+
+	gameSelection.innerHTML =  `
+	<div id="settingView" class="game-selection">
+		<h1>Game Selection</h1>
+		<div class="container-game">
+			<div class="game-row">
+				<div class="game-title">
+					<h2 id="gameTitle">PONG</h2>
+				</div>
+				<div class="game-image">
+					<img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
+				</div>
+				<div class="game-settings">
+					<div id="settingsContainer" class="settings-info">
+						<div class="settings-inline">
+							<button id="settingBtn1" class="settingsSelect-button">Settings</button>
+							<div class="settings-column" id="settings-column">
+								<p>Difficulty: <span id="difficultyChoice">Medium</span></p>
+								<p>Power-Up: <span id="powerupChoice">❌</span></p>
+								<p>Level: <span id="levelSelected">Table Tennis</span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="game-play">
+					<button id="playBtn" class="startSelect-button">Play</button>
+				</div>
+			</div>
+			<div class="game-row">
+				<div class="game-title2">
+					<h2 id="gameTitle2">BRICKOUT</h2>
+				</div>
+				<div class="game-image">
+					<img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
+				</div>
+				<div class="game-settings">
+					<div id="settingsContainer" class="settings-info">
+						<div class="settings-inline">
+							<button id="settingBtn2" class="settingsSelect-button2">Settings</button>
+							<div class="settings-column2" id="settings-column2">
+								<p>Difficulty: <span id="difficultyChoice2">Medium</span></p>
+								<p>Power-Up: <span id="powerupChoice2">❌</span></p>
+								<p>Level: <span id="levelSelected2">Classic</span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="game-play">
+					<button id="playBtn2" class="startSelect-button">Play</button>
+				</div>
+			</div>
+		</div>
+	</div>`;
+
+	maincontent.appendChild(gameSelection);
+}
+export function displayGameBrickView()
+{
+	const mainContent = document.getElementById('mainContent');
+	mainContent.innerHTML = '';
+	const insertTo = document.createElement('div');
+	insertTo.innerHTML = `
+	<div id="scoreboard">
+		<canvas id="scoreCanvas"></canvas>
+	</div>
+	<canvas id="brickoutCanvas"></canvas>
+	`;
+	mainContent.appendChild(insertTo);
+}
+export function displayGameBrick2pView()
+{
+	const mainContent = document.getElementById('mainContent');
+	mainContent.innerHTML = '';
+	const insertTo = document.createElement('div');
+	insertTo.innerHTML = `
+	<div id="scoreboard">
+		<canvas id="scoreCanvas"></canvas>
+	</div>
+	<div id="twoPlayerBrick">
+		<canvas id="brickoutCanvas"></canvas>
+		<canvas id="brickoutCanvas2"></canvas>
+	</div>
+	`;
+	mainContent.appendChild(insertTo);
 }

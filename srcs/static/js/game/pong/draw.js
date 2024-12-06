@@ -9,18 +9,26 @@ import { manageMoveLive, manageMove } from './movement.js';
 import { drawBall } from "./ball.js";
 import { checkPaddles } from "./paddle.js";
 import { drawScoreBoard } from "./score.js";
+import { updateCanvasColor } from "./update.js";
 
 export function initDraw()
 {
 	drawBall();
 	checkPaddles();
 	drawScoreBoard();
+	// gameVar.currentLevel = 'classic';
 	if (gameVar.currentLevel === 'tableTennis')
 		drawLines();	
 	else if (gameVar.currentLevel === 'football')
 		drawFootball();
 	else if (gameVar.currentLevel === 'tennis')
 		drawTennisCourt();
+	else if (gameVar.currentLevel === 'classic')
+	{
+		drawClassicPong();
+		updateCanvasColor()
+	}
+
 }
 
 export function draw()
@@ -71,3 +79,22 @@ export function kickOut()
 	addBtn();
 }
 
+function drawClassicPong()
+{
+    // Style pour la ligne centrale pointillée
+    gameVar.ctx.setLineDash([10, 15]); // Crée une ligne pointillée [longueur_trait, espace]
+    gameVar.ctx.strokeStyle = "white";
+    gameVar.ctx.lineWidth = 10;
+    
+    // Dessine la ligne centrale verticale
+    gameVar.ctx.beginPath();
+    gameVar.ctx.moveTo(gameVar.canvasW / 2, 0);
+    gameVar.ctx.lineTo(gameVar.canvasW / 2, gameVar.canvasH);
+    gameVar.ctx.stroke();
+    
+    // Réinitialise le style pour les bordures (ligne pleine)
+    gameVar.ctx.setLineDash([]); 
+    
+    // Dessine les bordures
+    gameVar.ctx.strokeRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+}

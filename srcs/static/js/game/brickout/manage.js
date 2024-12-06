@@ -98,12 +98,14 @@ export function checkBtnB(status)
 		listenLocalRematchBtn();
 }
 
-export function clearBtnB()
+export function clearBtnB(nextLevel)
 {
-	const nextLevel = document.getElementById("nextLevel");
+	const finish = document.getElementById("finish");
     try
 	{
-        const nextLevelBtn = document.getElementById("nextLevelBtn");
+		const nextLevelBtn = null;
+		if (nextLevel)
+        	nextLevelBtn = document.getElementById("nextLevelBtn");
 		const quitBtn = document.getElementById("quitBtn");
         const restartLevelBtn = document.getElementById("restartLevelBtn");
         if (nextLevelBtn)
@@ -112,7 +114,7 @@ export function clearBtnB()
             restartLevelBtn.removeEventListener("click", restartLevelB);
 		if (quitBtn)
 			quitBtn.addEventListener('click', () => renderPageGame("home"), true);
-        nextLevel.parentNode.remove();
+        finish.parentNode.remove();
     }
 	catch (error)
 	{

@@ -1,5 +1,6 @@
 import brickVar from "./var.js";
 import { resetPowerUpB } from "./powerUp.js";
+import { updateDifficultySelectionB } from "./update.js";
 
 export function startBallB(e)
 {
@@ -7,8 +8,12 @@ export function startBallB(e)
 	{
 		if (!brickVar.finishLevel)
 		{
+            console.log("Starting ball1");
+			console.log("diff1: ", brickVar.difficulty)
             brickVar.gameStart = true;
 			brickVar.startTime = true;
+			if (!brickVar.initDx || !brickVar.initDy)
+				updateDifficultySelectionB(brickVar.difficulty);
             brickVar.dx = brickVar.initDx;
             brickVar.dy = -brickVar.initDy;
         }

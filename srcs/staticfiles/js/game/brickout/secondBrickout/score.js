@@ -1,5 +1,6 @@
 import brickVar from "../var.js";
 import brickVar2 from "./var.js";
+import gameVar from "../../pong/var.js";
 import { displayScore } from "../../pong/displayVar.js";
 import { levelDisplayB } from "./level.js";
 import { addBtnB } from "./manage.js";
@@ -123,13 +124,13 @@ export function chechOpponent()
 					brickVar2.ctx.textAlign = 'left';
 					brickVar2.ctx.fillText("Waiting for opponent to finish...", brickVar2.canvasW / 4, brickVar2.canvasH / 2 - 100);
 					brickVar2.ctx.fillText("Your final score :" , brickVar2.canvasW / 4, brickVar2.canvasH / 2);
-					brickVar2.ctx.fillText(brickVar2.finalScore, brickVar2.canvasW / 4 + 250, (brickVar2.canvasH / 2));
+					brickVar2.ctx.fillText(brickVar2.score, brickVar2.canvasW / 4 + 250, (brickVar2.canvasH / 2));
 				}
 			}
 			else
 			{
 				clearInterval(waiting)
-				compareScore();
+				// compareScore();
 			}
 		}, 1000);
 	}
