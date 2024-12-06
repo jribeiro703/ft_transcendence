@@ -92,7 +92,7 @@ class ActivateLinkView(View):
 			user = get_object_or_404(User, pk=uid)
 		except (TypeError, ValueError, OverflowError, User.DoesNotExist):
 			return render(request, 'activation_failed.html', {
-			    'message': "Activation link is invalid."
+				'message': "Activation link is invalid."
 			})
 
 		if not default_token_generator.check_token(user, token):
@@ -153,9 +153,9 @@ class UserProfileView(APIView):
 		match_history = []
 		for match in last_matches:
 			match_info = {
-			    "date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-			    "score": f"{match.score_one} - {match.score_two}",
-			    "winner": match.winner.username
+				"date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+				"score": f"{match.score_one} - {match.score_two}",
+				"winner": match.winner.username
 			}
 			match_history.append(match_info)
 
@@ -198,12 +198,12 @@ class UserSettingsView(RetrieveUpdateDestroyAPIView):
 			super().delete(request, *args, **kwargs)
 			return response
 		except Exception as e:
-		    return Response({"message": "An unknown error occured, failed to delete account."}, status=status.HTTP_400_BAD_REQUEST)
+			return Response({"message": "An unknown error occured, failed to delete account."}, status=status.HTTP_400_BAD_REQUEST)
 
 # ------------------------------FRIENDS ENDPOINTS--------------------------------	
 
 class AcceptFriendRequestView(APIView):
-    
+	
 	def post(self, request, *args, **kwargs):
 		request_id = kwargs.get('request_id')
 		try:
@@ -228,8 +228,8 @@ class ListFriendRequestView(APIView):
 		sent_requests = user.sent_requests.filter(is_accepted=False)
 
 		return Response({
-		    "received_requests": [{"id": req.id, "sender": req.sender.username} for req in received_requests],
-		    "sent_requests": [{"id": req.id, "receiver": req.receiver.username} for req in sent_requests],
+			"received_requests": [{"id": req.id, "sender": req.sender.username} for req in received_requests],
+			"sent_requests": [{"id": req.id, "receiver": req.receiver.username} for req in sent_requests],
 		})
 
 
@@ -265,16 +265,18 @@ class CookieTokenRefreshView(APIView):
 class UserLoginView(APIView):
 	model = User
 	permission_classes = [AllowAny]
-      
+
 	def post(self, request, *args, **kwargs):
 		username = request.data.get('username')
 		password = request.data.get('password')
 
 		if not username or not password:
 			return Response({"message": "Username and password are required"}, status=status.HTTP_400_BAD_REQUEST)
+		
 		user = User.objects.filter(username=username).first()
-		if not user or user.is_staff:
+		if not user:
 			return Response({"message": "User with this username doesn't exist"}, status=status.HTTP_401_UNAUTHORIZED)
+		
 		is_authenticated = authenticate(username=username, password=password)
 		if is_authenticated is None:
 			return Response({"message": "Invalid Password"}, status=status.HTTP_401_UNAUTHORIZED)
@@ -285,9 +287,9 @@ class UserLoginView(APIView):
 			return Response(e.detail, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 		
 		return Response({
-			    "message": "A verification code is sent to your email",
-			    "otp_verification_url": reverse('otp_verification', args=[user.id])
-			}, status=status.HTTP_200_OK)
+			"message": "A verification code is sent to your email",
+			"otp_verification_url": reverse('otp_verification', args=[user.id])
+		}, status=status.HTTP_200_OK)
 
 class OtpVerificationView(APIView):
 	model = User
