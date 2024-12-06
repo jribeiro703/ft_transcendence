@@ -48,21 +48,7 @@ p {
   height: 50px;
 }
 
-.chat-btn {
-  color: var(--text-color);
-  /*taille du texte*/
-  transition: color 0.3s ease-in-out;
-}
 
-.chat-btn:hover {
-  background-color: var(--chat-btn-highlight);
-  color: var(--highlight-color);
-}
-
-.chat-btn:focus {
-  background-color: var(--chat-btn-highlight);
-  color: var(--highlight-color);
-}
 
 /* ---------------------- Nav Bar ---------------------- */
 
@@ -1077,7 +1063,7 @@ button:disabled {
   color: #fefcff;
 }
 
-#chat-log {
+#chat-log, #friendlist {
   outline: none;
   flex: 1;
   /* height: calc(100% - 56px); */
@@ -1088,7 +1074,8 @@ button:disabled {
   border-radius: 5px;
   background-color: var(--chat-bg);
   color: var(--chat-msg);
-  padding: 10px;
+  /* padding: 10px; */
+  padding-right: 65px !important;
 }
 
 /* live chat qui slide */
@@ -1323,7 +1310,7 @@ emoji-picker {
   border-radius: 5px;
 }
 
-#emojiButton {
+.chat-btn {
   z-index: 1001;
   /* border-color: #dee2e6; */
   border-color: var(--chat-border) !important;
@@ -1334,24 +1321,30 @@ emoji-picker {
     inset 0 0 3px transparent,
     inset 0 0 4px transparent;
   transition: box-shadow 0.3s ease-in-out;
+  color: var(--text-color);
+  transition: color 0.3s ease-in-out;
 }
 
-#emojiButton:hover {
+.chat-btn:hover {
   box-shadow:
     inset 0 0 0px var(--highlight-color),
     inset 0 0 1px var(--highlight-color),
     inset 0 0 2px var(--highlight-color),
     inset 0 0 3px var(--highlight-color),
     inset 0 0 4px var(--highlight-color);
+  background-color: var(--chat-btn-highlight);
+  color: var(--highlight-color);
 }
 
-#emojiButton:focus {
+.chat-btn:focus {
   box-shadow:
     inset 0 0 0px var(--highlight-color),
     inset 0 0 1px var(--highlight-color),
     inset 0 0 2px var(--highlight-color),
     inset 0 0 3px var(--highlight-color),
     inset 0 0 4px var(--highlight-color);
+  background-color: var(--chat-btn-highlight);
+  color: var(--highlight-color);
 }
 
 @media (max-width: 576px) {
@@ -1359,4 +1352,30 @@ emoji-picker {
   .min-height-sm {
     min-height: 300px; /* Adjust the height as needed */
   }
+}
+
+.channel-container::-webkit-scrollbar {
+  display: none;
+}
+
+.friend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid;
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.friend-item:last-child {
+  margin-bottom: 0;
+}
+
+.channel-container {
+	z-index: 9999 !important;
+}
+
+.channel-btn {
+	z-index: 9999 !important;
 }

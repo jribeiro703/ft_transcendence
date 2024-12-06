@@ -87,7 +87,7 @@ document.querySelector("#chat-message-submit").onclick = function () {
   const messageInputDom = document.querySelector("#chat-message-input");
   let message = messageInputDom.value.trim();
   if (message.toLowerCase().includes("david")) {
-    message = message.replace(/david/gi, "Maitre David");
+    message = message.replace(/david/gi, "Connard de David");
   }
   if (message === "") {
     return;
@@ -381,3 +381,155 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+// Initialize all tooltips
+document.addEventListener('DOMContentLoaded', function() {
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+});
+
+//GENERAL
+document.addEventListener('DOMContentLoaded', function() {
+  const bubbleButton = document.getElementById('bubbleButton');
+  const chatLog = document.getElementById('chat-log');
+  const friendList = document.getElementById('friendlist');
+
+  bubbleButton.addEventListener('click', function() {
+    // Show chat log, hide friend list
+    // chatLog.style.display = 'flex';
+    // friendList.style.display = 'none';
+	document.getElementById('chat-log').classList.remove('d-none');
+	document.getElementById('friendlist').classList.add('d-none');
+
+    // Reset chat log view state if needed
+    // chatLog.className = 'w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto position-relative';
+  });
+});
+//GENERAL
+
+// FRIENDS
+document.addEventListener('DOMContentLoaded', function() {
+  const friendsButton = document.getElementById('friendsButton');
+  const chatLog = document.getElementById('friendlist');
+
+  friendsButton.addEventListener('click', async function() {
+    // chatLog.innerHTML = '';
+	document.getElementById('friendlist').classList.remove('d-none');
+	document.getElementById('chat-log').classList.add('d-none');
+    // chatLog.style.display = 'flex';
+    // friendList.style.display = 'none';
+    
+    const loadingDiv = document.createElement('div');
+    loadingDiv.textContent = 'Loading friends...';
+    chatLog.appendChild(loadingDiv);
+
+    try {
+      let response = await fetch('/user/friends/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        },
+        credentials: 'include'
+      });
+
+      // Handle unauthorized response
+      if (response.status === 401) {
+        const newToken = await refreshAccessToken();
+        response = await fetch('/user/friends/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${newToken}`
+          },
+          credentials: 'include'
+        });
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const friends = await response.json();
+      chatLog.innerHTML = '';
+
+      const friendsListContainer = document.createElement('div');
+      friendsListContainer.className = 'friends-list';
+
+      if (friends.length === 0) {
+        friendsListContainer.innerHTML = '<div class="text-muted">No friends yet</div>';
+      } else {
+        friends.forEach(friend => {
+          const friendDiv = document.createElement('div');
+          friendDiv.className = 'friend-item d-flex align-items-center gap-2 p-2 border rounded';
+          
+          const statusDot = document.createElement('span');
+          statusDot.className = 'status-dot';
+          statusDot.innerHTML = friend.is_online ? '🟢' : '⚫';
+          
+          const nameSpan = document.createElement('span');
+          nameSpan.textContent = friend.username;
+          
+          friendDiv.appendChild(statusDot);
+          friendDiv.appendChild(nameSpan);
+          friendsListContainer.appendChild(friendDiv);
+        });
+      }
+
+      chatLog.appendChild(friendsListContainer);
+    } catch (error) {
+      console.error('Error fetching friends:', error);
+      chatLog.innerHTML = '<div class="text-danger p-3">Error loading friends list. Please try again.</div>';
+    }
+  });
+});
+// FRIENDS
+
+// Add token refresh function at the top
+async function refreshAccessToken() {
+  try {
+    const response = await fetch('/user/check-auth/token-refresh/', {
+      method: 'GET',
+      credentials: 'include'
+    });
+    
+    if (!response.ok) {
+      throw new Error('Token refresh failed');
+    }
+    
+    const data = await response.json();
+    localStorage.setItem('access_token', data.access_token);
+    return data.access_token;
+  } catch (error) {
+    console.error('Token refresh failed:', error);
+    window.location.href = '/#login';
+    throw error;
+  }
+}
+
+// Add CSS styles
+const styles = `
+.friends-list {
+  width: 100%;
+}
+
+.friend-item {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.friend-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.status-dot {
+  font-size: 0.8em;
+}
+`;
+
+// Add styles to document
+const styleSheet = document.createElement("style");
+styleSheet.textContent = styles;
+document.head.appendChild(styleSheet);

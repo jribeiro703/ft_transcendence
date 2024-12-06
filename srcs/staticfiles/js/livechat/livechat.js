@@ -381,3 +381,132 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+// Initialize all tooltips
+document.addEventListener('DOMContentLoaded', function() {
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+});
+
+// Add to livechat.js
+document.addEventListener('DOMContentLoaded', function() {
+  const friendsButton = document.getElementById('friendsButton');
+  const chatLog = document.getElementById('chat-log');
+
+  friendsButton.addEventListener('click', async function() {
+    chatLog.innerHTML = '';
+    
+    const loadingDiv = document.createElement('div');
+    loadingDiv.textContent = 'Loading friends...';
+    chatLog.appendChild(loadingDiv);
+
+    try {
+      let response = await fetch('/user/friends/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        },
+        credentials: 'include'
+      });
+
+      // Handle unauthorized response
+      if (response.status === 401) {
+        const newToken = await refreshAccessToken();
+        response = await fetch('/user/friends/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${newToken}`
+          },
+          credentials: 'include'
+        });
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const friends = await response.json();
+      chatLog.innerHTML = '';
+
+      const friendsListContainer = document.createElement('div');
+      friendsListContainer.className = 'friends-list p-3';
+
+      if (friends.length === 0) {
+        friendsListContainer.innerHTML = '<div class="text-muted">No friends yet</div>';
+      } else {
+        friends.forEach(friend => {
+          const friendDiv = document.createElement('div');
+          friendDiv.className = 'friend-item d-flex align-items-center gap-2 mb-2 p-2 border rounded';
+          
+          const statusDot = document.createElement('span');
+          statusDot.className = 'status-dot';
+          statusDot.innerHTML = friend.is_online ? '🟢' : '⚫';
+          
+          const nameSpan = document.createElement('span');
+          nameSpan.textContent = friend.username;
+          
+          friendDiv.appendChild(statusDot);
+          friendDiv.appendChild(nameSpan);
+          friendsListContainer.appendChild(friendDiv);
+        });
+      }
+
+      chatLog.appendChild(friendsListContainer);
+    } catch (error) {
+      console.error('Error fetching friends:', error);
+      chatLog.innerHTML = '<div class="text-danger p-3">Error loading friends list. Please try again.</div>';
+    }
+  });
+});
+
+// Add token refresh function at the top
+async function refreshAccessToken() {
+  try {
+    const response = await fetch('/user/check-auth/token-refresh/', {
+      method: 'GET',
+      credentials: 'include'
+    });
+    
+    if (!response.ok) {
+      throw new Error('Token refresh failed');
+    }
+    
+    const data = await response.json();
+    localStorage.setItem('access_token', data.access_token);
+    return data.access_token;
+  } catch (error) {
+    console.error('Token refresh failed:', error);
+    window.location.href = '/#login';
+    throw error;
+  }
+}
+
+// Add CSS styles
+const styles = `
+.friends-list {
+  width: 100%;
+  padding-right: 80px;
+}
+
+.friend-item {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.friend-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.status-dot {
+  font-size: 0.8em;
+}
+`;
+
+// Add styles to document
+const styleSheet = document.createElement("style");
+styleSheet.textContent = styles;
+document.head.appendChild(styleSheet);
