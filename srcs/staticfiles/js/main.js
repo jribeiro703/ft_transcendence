@@ -3,14 +3,16 @@ import { renderPage } from "./user/historyManager.js";
 import { isGamePage } from "./game/pong/myHistory.js";
 import { renderPageGame } from "./game/pong/myHistory.js";
 
-document.getElementById("user-avatar").addEventListener("click", async () => {
-  const authenticated = await isAuthenticated();
-  if (authenticated) {
-    renderPage("user");
-  } else {
-    renderPage("auth");
-  }
-});
+document
+  .querySelector("[data-profile-icon]")
+  .addEventListener("click", async () => {
+    const authenticated = await isAuthenticated();
+    if (authenticated) {
+      renderPage("user");
+    } else {
+      renderPage("auth");
+    }
+  });
 
 document
   .querySelector("[data-home-icon]")
