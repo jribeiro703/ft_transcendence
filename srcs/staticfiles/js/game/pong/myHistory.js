@@ -82,7 +82,7 @@ export async function renderPageGame(page, updateHistory = true, params = null)
 }
 
 
-window.addEventListener('beforeunload', async () =>
+window.addEventListener('beforeunload', () =>
 {
     sessionStorage.setItem('gameState', JSON.stringify(
 	{
@@ -98,7 +98,6 @@ window.addEventListener('beforeunload', async () =>
     }));
 
 	navigator.sendBeacon(`${API_BASE_URL}/user/logout/`);
-	sessionStorage.removeItem("access_token");
 });
 
 window.addEventListener('load', () =>

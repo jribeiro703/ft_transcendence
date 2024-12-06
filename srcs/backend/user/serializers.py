@@ -86,13 +86,18 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = User
-		fields = ('id', 'is_online', 'username', 'alias', 'avatar', 'email', 'new_email', 'password', 'new_password', 'friends', 'new_friend')
-		read_only_fields = ('id', 'username', 'is_online', 'avatar', 'email', 'friends')
+		fields = ('id', 'is_online', 'is_42_user', 'username', 'alias', 'avatar', 'email', 'new_email', 'password', 'new_password', 'friends', 'new_friend')
+		read_only_fields = ('id', 'username', 'is_online', 'is_42_user', 'avatar', 'email', 'friends')
 		extra_kwargs = {'password': {'write_only': True}, 'new_password': {'write_only': True}, 'new_email': {'write_only': True}, 'new_friend': {'write_only': True}}
 
 	def update(self, instance, validated_data):
 
 		# print("validated_data", validated_data)
+		if instance.is_42_user:
+			if 'new_password' in validated_data or 'new_email' in validated_data:
+				raise serializers.ValidationError({
+					"message": "42 users cannot modify their email or password."
+				})
 
 		# for password changing
 		if 'new_password' in validated_data:
