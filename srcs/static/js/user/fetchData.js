@@ -34,7 +34,7 @@ async function fetchData(endpoint, method = 'GET', body = null, isFormData = fal
     const url = `${API_BASE_URL}${endpoint}`;
 	const options = await makeOptions(method, body, isFormData, mode);
 
-	console.log("fetchData(): options = ", options);
+	// console.log("fetchData(): options = ", options);
 
 	const responseObject = {
 		data: { message: "An unknown error occurred while fetching data" },
@@ -42,12 +42,12 @@ async function fetchData(endpoint, method = 'GET', body = null, isFormData = fal
 	};
 	try {
 		const response = await fetch(url, options);
-		console.log("fetchData(): RESPONSE OF FETCH =  ", response);
+		// console.log("fetchData(): RESPONSE OF FETCH =  ", response);
 		
 		responseObject.status = response.status;
 		responseObject.data = await response.json();
 
-		console.log("fetchData(): RESPONSE OBJECT = ", responseObject);
+		// console.log("fetchData(): RESPONSE OBJECT = ", responseObject);
 		return responseObject;
 	}
 	catch (error) {
