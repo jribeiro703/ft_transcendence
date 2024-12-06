@@ -25,6 +25,6 @@ export function renderOtpForm(url, msg) {
             sessionStorage.setItem('access_token', responseObject.data.access_token);
 			renderPage("user");
 		} else
-            showToast(responseObject.data.message, "error");
+            showErrorMessages(responseObject);
     });
 }

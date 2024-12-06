@@ -1,6 +1,6 @@
 import { renderPage } from "../historyManager.js";
 import { fetchData } from "../fetchData.js";
-import { showToast } from "../tools.js";
+import { showToast, showErrorMessages } from "../tools.js";
 
 export function renderRegisterForm() {
 	const mainContent = document.getElementById('mainContent');
@@ -29,7 +29,8 @@ export function renderRegisterForm() {
 		if (responseObject.status === 201) {
 			showToast(responseObject.data.message, "success");	
 			renderPage("auth");
-		} else
-			showToast(responseObject.data.message, "error");
+		} else {
+			showErrorMessages(responseObject);
+		}
     });
 }

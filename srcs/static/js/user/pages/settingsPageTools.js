@@ -1,5 +1,5 @@
 import { fetchData } from "../fetchData.js";
-import { showToast } from "../tools.js";
+import { showToast, showErrorMessages } from "../tools.js";
 import { renderPage } from "../historyManager.js";
 
 async function createDialog(mainContent, dialogConfig) {
@@ -61,7 +61,7 @@ async function listenForDialog(mainContent, dialogElement, pk, newInputId, key) 
 				renderPage("settings", false);
 			showToast(responseObject.data.message, "success");
 		} else
-			showToast(responseObject.data.message, "error");
+			showErrorMessages(responseObject);
 		dialogElement.close();
 		mainContent.removeChild(dialogElement);
 	})
@@ -103,7 +103,7 @@ async function uploadAvatar(pk) {
 			showToast(responseObject.data.message, "success");
 			renderPage("settings", false);
 		} else {
-			showToast(responseObject.data.message, "error");
+			showErrorMessages(responseObject);
 		}
 	});
 	
@@ -121,7 +121,7 @@ async function deleteAccount(pk) {
 		localStorage.setItem('access_token', "");
 		renderPage("home")
 	} else
-		showToast(responseObject.data.message, "error");
+		showErrorMessages(responseObject);
 }
 
 async function addNewFriend(pk) {
@@ -141,7 +141,7 @@ async function addNewFriend(pk) {
 	if (responseObject.status === 200)
 		showToast(responseObject.data.message, "success");
 	else
-		showToast(responseObject.data.message, "error");
+		showErrorMessages(responseObject);
 }
 
 export { createDialog, listenForDialog, deleteAccount, addNewFriend, uploadAvatar };
