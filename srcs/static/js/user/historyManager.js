@@ -43,7 +43,6 @@ async function renderPage(page, updateHistory = true) {
 		if (updateHistory)
 			history.pushState({ page: page }, page, `#${page}`);
 	}
-	
 	renderFunction();
 }
 
