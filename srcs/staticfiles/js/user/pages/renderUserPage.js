@@ -1,5 +1,5 @@
 import { fetchData } from "../fetchData.js";
-import { showToast, PONG_CARD } from "../tools.js";
+import { showToast, PONG_CARD, showErrorMessages } from "../tools.js";
 import { renderPage } from "../historyManager.js";
 
 function createUserContent() {
@@ -52,7 +52,7 @@ export function renderUserPage() {
 			sessionStorage.clear();
 			renderPage("home");
 		} else
-			showToast(responseObject.data.message, "error");
+			showErrorMessages(responseObject);
 	});
 
 }

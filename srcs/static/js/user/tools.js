@@ -48,4 +48,17 @@ async function updateUserAvatar(isAuthenticated) {
 	}
 }
 
-export { escapeHTML, PONG_CARD, DEFAULT_AVATAR, showToast, updateUserAvatar };
+function showErrorMessages(responseObject) {
+	const errorMessages = [];
+	for (const field in responseObject.data) {
+		if (Array.isArray(responseObject.data[field])) {
+			errorMessages.push(`${field}: ${responseObject.data[field].join(', ')}`);
+		}
+		else {
+			errorMessages.push(responseObject.data[field]);
+		}
+	}
+	showToast(errorMessages.join('\n'), "error");
+}
+
+export { escapeHTML, PONG_CARD, DEFAULT_AVATAR, showToast, updateUserAvatar, showErrorMessages };
