@@ -15,22 +15,6 @@ function createHomeContent() {
               <button id="btn-Leaderboard" class="btn custom-btn height-btn">Leaderboard</button>
             </div>
             `;
-  // box.innerHTML = `
-  //   <div id="defaultView">
-  //     <div class="container">
-  //       <div class="mx-auto">
-  //         <img class="img-fluid" src="${PONG_CARD}" alt="Pong Game">
-  //         <br><br><br>
-  //       </div>
-  //     </div>
-  //   </div>
-  //   <div class="container py-2 d-flex flex-column align-items-centercontainer py-2">
-  //       <button id="playsoloGameBtn" class="btn custom-btn mb-5">Single Player</button>
-  //       <button id="playmultiGameBtn" class="btn custom-btn mb-4">Multiplayer</button>
-  //       <button id="btn-Tournament" class="btn custom-btn mb-4">Tournament</button>
-  //     <button id="btn-Leaderboard" class="btn custom-btn mb-4">Leaderboard</button>
-  //   </div>
-  // `;
 }
 
 async function renderHomePage() {
@@ -68,4 +52,3 @@ async function renderHomePage() {
 }
 
 export { renderHomePage };
-
