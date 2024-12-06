@@ -8,9 +8,9 @@ function createAuthContent() {
             <div id="defaultView"
                  class="d-flex flex-column justify-content-center align-items-center gap-5 h-100">
               <img class="img-fluid neon-white main-img" src="${PONG_CARD}" alt="Pong Game">
-			<button id="btn-Login" class="btn custom-btn mb-4">Login</button>
-			<button id="btn-Register" class="btn custom-btn mb-4">Register</button>
-			<button id="btn-Login42" class="btn custom-btn mb-4">42 Login</button>
+			<button id="btn-Login" class="main-btn btn custom-btn height-btn">Login</button>
+			<button id="btn-Register" class="main-btn btn custom-btn height-btn">Register</button>
+			<button id="btn-Login42" class="main-btn btn custom-btn height-btn">42 Login</button>
             </div>
 	`;
 }
@@ -30,4 +30,3 @@ export function renderAuthPage() {
     renderPage("login42");
   });
 }
-
