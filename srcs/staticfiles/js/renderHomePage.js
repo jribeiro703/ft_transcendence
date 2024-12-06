@@ -42,10 +42,10 @@ async function renderHomePage() {
   authButtons.forEach(({ id, handler }) => {
     document.getElementById(id).addEventListener("click", async () => {
       const authenticated = await isAuthenticated();
-      if (!authenticated) {
-        showToast("You must be logged in to use this feature.", "warning");
-        return;
-      }
+      // if (!authenticated) {
+      //   showToast("You must be logged in to use this feature.", "warning");
+      //   return;
+      // }
       handler();
     });
   });

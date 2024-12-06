@@ -15,12 +15,9 @@ export function showGameSelectionView() {
 
   gameSelection.innerHTML = `
 	<div id="settingView" class="d-flex">
-		<h1 class="custom-h1">Game Selection</h1>
+		<!-- <h1 class="custom-h1">Game Selection</h1> -->
 		<div class="container-game">
 			<div class="game-row">
-				<div class="game-title">
-					<h2 id="gameTitle">PONG</h2>
-				</div>
 				<div class="game-image">
 					<img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
 				</div>
@@ -41,9 +38,6 @@ export function showGameSelectionView() {
 				</div>
 			</div>
 			<div class="game-row">
-				<div class="game-title">
-					<h2 id="gameTitle2">BRICKOUT</h2>
-				</div>
 				<div class="game-image">
 					<img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
 				</div>
@@ -77,4 +71,3 @@ export function showGameSelectionView() {
   listenSettingBtn();
   listenPlayBtn();
 }
-
