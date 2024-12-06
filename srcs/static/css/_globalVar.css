@@ -1,0 +1,15 @@
+:root {
+  --background-color: #000000;
+  --text-color: #3e3f4a;
+  --border-btn-color: #000000;
+  --highlight-color: #ffffff;
+  /* icon color */
+  --icon-color: #3e3f4a;
+  /* placeholder color */
+  --placeholder-color: #3e3f4a;
+  /* chat */
+  --chat-btn-highlight: #000000;
+  --chat-bg: #000000;
+  --chat-msg: #3e3f4a;
+  --chat-border: #ffffff;
+}
