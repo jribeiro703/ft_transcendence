@@ -12,8 +12,7 @@ export function createTournamentLayoutHTML(tournamentName) {
 					</div>
 					<div class="vr my-3 w-100"></div>
 					<div class="d-flex flex-nowrap gap-3 flex-grow-1" style="overflow-x: auto; white-space: nowrap" id="tournament-matches"></div>
-					<div class="fw-bold mb-2">🟢 Players online</div>
-					<div id="current-players"></div>
+					<div id="playersList" class="fw-bold mb-2"></div>
 				</div>
 			</div>
 			<div class="row flex-grow-1">
@@ -41,7 +40,7 @@ export function createTournamentLayoutHTML(tournamentName) {
 				<div class="col-lg-4 col-md-5 col-sm-12 d-flex flex-column">
 					<div class="bg-body border rounded p-2 mb-3 overflow-auto" style="height: 250px; overflow-y: auto">
 						<div class="fw-bold mb-2">🏓Tournament Bracket🏓</div>
-						<div id="tournament_bracket"></div>
+						<div id="tournament-bracket"></div>
 					</div>
 					<div class="bg-body border rounded p-2 mb-3 overflow-auto" style="height: 150px; overflow-y: auto">
 						<div class="fw-bold mb-2">Invite Players</div>
