@@ -1,12 +1,11 @@
 import gameVar from "./var.js";
 import { updateImageUrl } from "./update.js";
 
-export function displayLobbyView(level)
-{
-	const mainContent = document.getElementById("mainContent");
-	mainContent.innerHTML = '';
-	const roomView = document.createElement('div');
-	roomView.innerHTML = `
+export function displayLobbyView(level) {
+  const mainContent = document.getElementById("mainContent");
+  mainContent.innerHTML = "";
+  const roomView = document.createElement("div");
+  roomView.innerHTML = `
 	<div id="roomView" style="display: none;">
 			<div class="container-room">
 				<div class="server-list">
@@ -16,34 +15,33 @@ export function displayLobbyView(level)
 					</div>
 					<div id="roomsContainer"></div>
 					<div class="refresh"></div>
-					<button id="refreshBtn" class="refresh-button">Refresh</button>
+					<button id="refreshBtn" class="main-btn refresh-button">Refresh</button>
 				</div>
 				<div class="host-server">
 					<h2>Host A Room</h2>
 					<h3>Playing as: <strong>Login</strong></h3>
 					<div class="settings">
-						<button id="settingBtn">Settings</button>
+						<button id="settingBtn" classe="main-btn">Settings</button>
 						<div id="setting-container">
 							Difficulty: <span id="difficultyChoice">Medium</span><br>
 							Level: <span id="levelSelected">${level}</span>
 						</div>
 					</div>
-					<button id="createRoomBtn" class="start-button">Create Room</button>
+					<button id="createRoomBtn" class="main-btn start-button">Create Room</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	`;
-	mainContent.appendChild(roomView);
+  mainContent.appendChild(roomView);
 }
 
-export function displayPongRemote()
-{
-	const mainContent = document.getElementById('mainContent');
-	mainContent.innerHTML = '';
-	const insertTo = document.createElement('div');
+export function displayPongRemote() {
+  const mainContent = document.getElementById("mainContent");
+  mainContent.innerHTML = "";
+  const insertTo = document.createElement("div");
 
-	insertTo.innerHTML = `
+  insertTo.innerHTML = `
 	<div id="gameView" style="display: none;">
 			<div id="scoreboard">
 				<canvas id="scoreCanvas"></canvas>
@@ -57,21 +55,19 @@ export function displayPongRemote()
 		</div>	
 	`;
 
-	mainContent.appendChild(insertTo);
+  mainContent.appendChild(insertTo);
 }
 
+export function displayGameSelectionMulti() {
+  const maincontent = document.getElementById("mainContent");
+  maincontent.innerHTML = "";
+  const gameSelection = document.createElement("div");
+  const pongUrl = "/static/css/images/ttLevel.png";
+  const brickUrl = "/static/css/images/brickout.png";
 
-export function displayGameSelectionMulti()
-{
-	const maincontent = document.getElementById('mainContent');
-	maincontent.innerHTML = '';
-	const gameSelection = document.createElement('div');
-	const pongUrl = "/static/css/images/ttLevel.png";
-	const brickUrl = "/static/css/images/brickout.png";
+  updateImageUrl();
 
-	updateImageUrl();
-
-	gameSelection.innerHTML = `
+  gameSelection.innerHTML = `
     <div id="settingView" class="game-selection">
         <h1>Multiplayer</h1>
         <h1>Local Play</h1>
@@ -157,15 +153,14 @@ export function displayGameSelectionMulti()
             </div>
         </div>
     </div>`;
- 
-	maincontent.appendChild(gameSelection);
+
+  maincontent.appendChild(gameSelection);
 }
-export function displayGameView()
-{
-	const mainContent = document.getElementById('mainContent');
-	mainContent.innerHTML = ``;
-	const gameView = document.createElement('div');
-	gameView.innerHTML=`
+export function displayGameView() {
+  const mainContent = document.getElementById("mainContent");
+  mainContent.innerHTML = ``;
+  const gameView = document.createElement("div");
+  gameView.innerHTML = `
 	<div id="gameView" style="display: none;">
 		<div id="scoreboard">
 			<canvas id="scoreCanvas"></canvas>
@@ -178,18 +173,17 @@ export function displayGameView()
 		</div>
 	</div>
 	`;
-	mainContent.appendChild(gameView);
+  mainContent.appendChild(gameView);
 }
 
-export function displayCanvas()
-{
-	const mainContent = document.getElementById('mainContent');
+export function displayCanvas() {
+  const mainContent = document.getElementById("mainContent");
 
-	mainContent.innerHTML = '';
+  mainContent.innerHTML = "";
 
-	const insertTo = document.createElement('div');
+  const insertTo = document.createElement("div");
 
-	insertTo.innerHTML = `
+  insertTo.innerHTML = `
 	<div id="gameView" style="display: none;">
 			<div id="scoreboard">
 				<canvas id="scoreCanvas"></canvas>
@@ -203,20 +197,19 @@ export function displayCanvas()
 		</div>	
 	`;
 
-	mainContent.appendChild(insertTo);
+  mainContent.appendChild(insertTo);
 }
-export function displaySettingMultiView()
-{
-	const pongUrl = "static/css/images/ttLevel.png";
-	const footUrl = "static/css/images/footballLevel.png";
-	const tennisUrl = "static/css/images/tennisLevel.png";
-	const maincontent = document.getElementById('mainContent');
+export function displaySettingMultiView() {
+  const pongUrl = "static/css/images/ttLevel.png";
+  const footUrl = "static/css/images/footballLevel.png";
+  const tennisUrl = "static/css/images/tennisLevel.png";
+  const maincontent = document.getElementById("mainContent");
 
-	maincontent.innerHTML = '';
+  maincontent.innerHTML = "";
 
-	const insertTo = document.createElement('div');
+  const insertTo = document.createElement("div");
 
-	insertTo.innerHTML = `
+  insertTo.innerHTML = `
 	<div id="settingView" style="display: block;">
 		<Settings
 		<div class="container">
@@ -254,22 +247,21 @@ export function displaySettingMultiView()
 		<div>
 			<button id="saveBtn">Save and Return</button>
 		</div>
-	</div>`
+	</div>`;
 
-	maincontent.appendChild(insertTo);
+  maincontent.appendChild(insertTo);
 }
-export function displaySettingView()
-{
-	const pongUrl = "static/css/images/ttLevel.png";
-	const footUrl = "static/css/images/footballLevel.png";
-	const tennisUrl = "static/css/images/tennisLevel.png";
-	const maincontent = document.getElementById('mainContent');
+export function displaySettingView() {
+  const pongUrl = "static/css/images/ttLevel.png";
+  const footUrl = "static/css/images/footballLevel.png";
+  const tennisUrl = "static/css/images/tennisLevel.png";
+  const maincontent = document.getElementById("mainContent");
 
-	maincontent.innerHTML = '';
+  maincontent.innerHTML = "";
 
-	const insertTo = document.createElement('div');
+  const insertTo = document.createElement("div");
 
-	insertTo.innerHTML = `
+  insertTo.innerHTML = `
 	<div id="settingView" style="display: block;">
 		<Settings
 		<div class="container">
@@ -307,24 +299,23 @@ export function displaySettingView()
 		<div>
 			<button id="saveBtn" disabled="true">Save and Return</button>
 		</div>
-	</div>`
+	</div>`;
 
-	maincontent.appendChild(insertTo);
+  maincontent.appendChild(insertTo);
 }
 
-export function displaySetting(difficulty, powerUp, level)
-{
-	const settingContain = document.getElementById('settings-column');
-	if (!settingContain)
-		console.log("error on settingContain");
-	settingContain.innerHTML = '';
+export function displaySetting(difficulty, powerUp, level) {
+  const settingContain = document.getElementById("settings-column");
+  if (!settingContain) console.log("error on settingContain");
+  settingContain.innerHTML = "";
 
-	const settingItem = document.createElement('div');
+  const settingItem = document.createElement("div");
 
-	settingItem.innerHTML = `
+  settingItem.innerHTML = `
 	<p>Difficulty: <span id="difficultyChoice">${difficulty}</span></p>
 	<p>Power-Up: <span id="powerupChoice">${powerUp}</span></p>
 	<p>Level: <span id="levelSelected">${level}</span></p>`;
 
-	settingContain.appendChild(settingItem);
+  settingContain.appendChild(settingItem);
 }
+

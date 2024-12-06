@@ -390,91 +390,124 @@ p {
 
 /* ------------------------ Main Button ---------------------------- */
 
-#liveChatBtn,
-#playsoloGameBtn,
-#playmultiGameBtn,
-#createRoomBtn,
-#settingBtn,
-#joinRoomBtn,
-#refreshBtn,
-#btn1,
-#btn2,
-#btn3 {
+.main-btn {
   background-color: var(--background-color);
   color: var(--text-color);
-
   border: 2px solid;
   border-color: var(--border-btn-color);
-
   max-width: 1000px;
   width: 460px;
   min-width: 200px;
-
   align-self: center;
-
   transition: color 0.3s ease-in-out;
   transition: border-color 0.3s ease-in-out;
 }
 
-#liveChatBtn:focus,
-#playsoloGameBtn:focus,
-#playmultiGameBtn:focus,
-#createRoomBtn:focus,
-#settingBtn:focus,
-#refreshBtn:focus,
-#joinRoomBtn:focus,
-#btn1:focus,
-#btn2:focus,
-#btn3:focus {
+.main-btn:focus,
+.main-btn:hover {
   border-color: var(--highlight-color);
   color: var(--highlight-color);
 }
 
-#liveChatBtn:hover,
-#playsoloGameBtn:hover,
-#playmultiGameBtn:hover,
-#createRoomBtn:hover,
-#settingBtn:hover,
-#refreshBtn:hover,
-#joinRoomBtn:hover,
-#btn1:hover,
-#btn2:hover,
-#btn3:hover {
-  border-color: var(--highlight-color);
-  color: var(--highlight-color);
-}
-
-#liveChatBtn:active,
-#playGameBtn:active,
-#playmultiGameBtn:active,
-#createRoomBtn:active,
-#settingBtn:active,
-#refreshBtn:active,
-#joinRoomBtn:active,
-#btn1:active,
-#btn2:active,
-#btn3:active {
+.main-btn:active {
   color: #0a1730;
   background-color: var(--quartiary-color);
   border-color: var(--primary-color);
 }
 
 @media (max-width: 768px) {
-  #liveChatBtn,
-  #playsoloGameBtn,
-  #playmultiGameBtn,
-  #createRoomBtn,
-  #settingBtn,
-  #joinRoomBtn,
-  #refreshBtn,
-  #btn1,
-  #btn2,
-  #btn3 {
+  .main-btn {
     width: 90%;
     max-width: 90%;
     min-width: 90%;
   }
 }
+
+/* #liveChatBtn, */
+/* #playsoloGameBtn, */
+/* #playmultiGameBtn, */
+/* #createRoomBtn, */
+/* #settingBtn, */
+/* #joinRoomBtn, */
+/* #refreshBtn, */
+/* #btn1, */
+/* #btn2, */
+/* #btn3 { */
+/*   background-color: var(--background-color); */
+/*   color: var(--text-color); */
+/**/
+/*   border: 2px solid; */
+/*   border-color: var(--border-btn-color); */
+/**/
+/*   max-width: 1000px; */
+/*   width: 460px; */
+/*   min-width: 200px; */
+/**/
+/*   align-self: center; */
+/**/
+/*   transition: color 0.3s ease-in-out; */
+/*   transition: border-color 0.3s ease-in-out; */
+/* } */
+/**/
+/* #liveChatBtn:focus, */
+/* #playsoloGameBtn:focus, */
+/* #playmultiGameBtn:focus, */
+/* #createRoomBtn:focus, */
+/* #settingBtn:focus, */
+/* #refreshBtn:focus, */
+/* #joinRoomBtn:focus, */
+/* #btn1:focus, */
+/* #btn2:focus, */
+/* #btn3:focus { */
+/*   border-color: var(--highlight-color); */
+/*   color: var(--highlight-color); */
+/* } */
+/**/
+/* #liveChatBtn:hover, */
+/* #playsoloGameBtn:hover, */
+/* #playmultiGameBtn:hover, */
+/* #createRoomBtn:hover, */
+/* #settingBtn:hover, */
+/* #refreshBtn:hover, */
+/* #joinRoomBtn:hover, */
+/* #btn1:hover, */
+/* #btn2:hover, */
+/* #btn3:hover { */
+/*   border-color: var(--highlight-color); */
+/*   color: var(--highlight-color); */
+/* } */
+/**/
+/* #liveChatBtn:active, */
+/* #playGameBtn:active, */
+/* #playmultiGameBtn:active, */
+/* #createRoomBtn:active, */
+/* #settingBtn:active, */
+/* #refreshBtn:active, */
+/* #joinRoomBtn:active, */
+/* #btn1:active, */
+/* #btn2:active, */
+/* #btn3:active { */
+/*   color: #0a1730; */
+/*   background-color: var(--quartiary-color); */
+/*   border-color: var(--primary-color); */
+/* } */
+
+/* @media (max-width: 768px) { */
+/*   #liveChatBtn, */
+/*   #playsoloGameBtn, */
+/*   #playmultiGameBtn, */
+/*   #createRoomBtn, */
+/*   #settingBtn, */
+/*   #joinRoomBtn, */
+/*   #refreshBtn, */
+/*   #btn1, */
+/*   #btn2, */
+/*   #btn3 { */
+/*     width: 90%; */
+/*     max-width: 90%; */
+/*     min-width: 90%; */
+/*   } */
+/* } */
 
 /* -------------------------- Setting View ------------------------ */
 /* -------------------------- Setting View ------------------------ */
