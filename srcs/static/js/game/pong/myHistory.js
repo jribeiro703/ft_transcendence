@@ -115,10 +115,10 @@ window.addEventListener('load', () =>
 		{
 			updateDifficultySelection(gameVar.difficulty);
 			updateLevelSelection(gameVar.currentLevel);
-			updatePowerUpSelection(gameVar.powerUpEnable);
-			updateDifficultySelectionB(brickVar.difficulty);
-			updateLevelSelectionB(brickVar.currLevel);
-			updatePowerUpSelectionB(brickVar.powerUpEnable);
+			updatePowerUpSelection(gameVar.powerUpEnable, true);
+			updateDifficultySelectionB(brickVar.difficulty, true);
+			updateLevelSelectionB(brickVar.currLevel, true);
+			updatePowerUpSelectionB(brickVar.powerUpEnable, true);
 			console.log("update setting in refresh");
 			updateSetting();
 			updateSettingB();
