@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         User = get_user_model()
-        num_users = 10
+        num_users = 20
         created_users = []
 
         for i in range(num_users):

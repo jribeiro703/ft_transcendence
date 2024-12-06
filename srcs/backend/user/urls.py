@@ -18,6 +18,7 @@ urlpatterns = [
 
 	path('friend-requests/<int:pk>/', views.ListFriendRequestView.as_view(), name='list_friend_request'),
 	path('friend-requests/accept/<int:request_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),
+	path('friends/', views.getUserFriends, name="user_friends"),
 
 	# authentication endpoints
 	path('check-auth/', views.check_auth, name="check_auth"),
@@ -33,4 +34,5 @@ urlpatterns = [
 	
 	path('login/token-refresh/', views.CookieTokenRefreshView.as_view(), name="cookie_token_refresh"),
 
+	path('online/', views.getOnlineUsers, name="online_users"),
 ]
