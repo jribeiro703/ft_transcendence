@@ -2,14 +2,15 @@ import gameVar from "./var.js";
 import { updateDifficultySelection, updateImageUrl, updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { displaySetting } from "./display.js";
+import { displayGameDataBrick, displayGameDataPong } from "./displayVar.js";
 
 export function checkSetting()
 {
 	if (gameVar.settingsChanged === false)
 	{
-		updatePowerUpSelection(false); 
-		updateDifficultySelection('medium');
-		updateLevelSelection("tableTennis");
+		updatePowerUpSelection(false, true); 
+		updateDifficultySelection('medium', true);
+		updateLevelSelection("calssicPong", true);
 	}
 }
 
@@ -25,6 +26,7 @@ export function checkSettingLive()
 export function updateSetting()
 {
 	console.log("updateSetting");
+	// displayGameDataPong();
 	var difficulty = null;	
 	var level = null;
 	var powerUp = null;
@@ -34,30 +36,34 @@ export function updateSetting()
 	else
 	{
 		difficulty = 'medium';
-		updateDifficultySelection('medium');
+		updateDifficultySelection('medium', true);
 	}
 
-	if (gameVar.currentLevel === 'football')
+	if (gameVar.currentLevel === 'classicPong')
+		level = 'Classic Pong';
+	else if (gameVar.currentLevel === 'tableTennis')
+		level = 'Table Tennis';
+	else if (gameVar.currentLevel === 'football')
 		level = 'Football';
 	else if (gameVar.currentLevel === 'tennis')
 		level = 'Tennis';
-	else if (gameVar.currentLevel === 'tableTennis')
-		level = 'Table Tennis';
 	else 
 	{
-		level = 'Table Tennis';
-		updateLevelSelection('tableTennis');
+		level = 'Classic Pong';
+		updateLevelSelection('classicPong', true);
 	}
 	if (gameVar.powerUpEnable)
 		powerUp = "✅";
 	else
 	{
 		powerUp = "❌";
-		updatePowerUpSelection(false);
+		updatePowerUpSelection(false, true);
 	}
 
 	updateImageUrl();
 	displaySetting(difficulty, powerUp, level);
+	console.log("end update setting dsiplay = ");
+	displayGameDataPong();
 }
 
 export function updateLiveSetting()

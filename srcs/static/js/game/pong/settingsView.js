@@ -19,6 +19,7 @@ export function showSettingMultiView(live)
 
 export function showSettingView(info)
 {
+	console.log('on passs setting change a false');
 	gameVar.settingsChanged = false;
 	gameVar.checkDiff = false;
 	gameVar.checkLevel = false;
@@ -40,5 +41,6 @@ export function checkSaveBtn()
 		const btn = document.getElementById('saveBtn');
 		btn.disabled = false;
 		gameVar.settingsChanged = true;
+		console.log("on passe setting change a true");
 	}
 }
