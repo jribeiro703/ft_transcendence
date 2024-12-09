@@ -426,7 +426,6 @@ p {
   text-align: center;
   width: 100%;
   height: 100%;
-  position: relative;
   overflow: auto;
 }
 
@@ -590,13 +589,15 @@ p {
   display: flex;
   flex-direction: column;
   gap: 78px;
-  padding: 20px;
   background: var(--background-color);
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .game-row {
@@ -604,21 +605,31 @@ p {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  min-width: 600px;
   width: 100%;
-  gap: 30px;
   padding: 10px;
   background: var(--background-color);
 }
 
+
 @media (max-width: 1000px) {
+  .container-game {
+    justify-content: flex-start;
+  }
+  #settingView {
+    padding: 0;
+  }
   .game-row {
     flex-direction: column;
     align-items: center;
-    justify-content: center;
   }
   .settings-inline {
     flex-direction: column;
     align-items: center;
+  }
+  .game-play
+  {
+    width: 100% !important;
   }
 }
 
@@ -644,8 +655,9 @@ p {
   width: 250px;
   height: auto;
   border-radius: 5px;
-  display: block;
+  display: flex;
   object-fit: cover; /* ou 'cover' selon vos besoins */
+  justify-content: center;
 }
 
 .game-image img {
@@ -656,7 +668,7 @@ p {
 }
 
 .game-settings {
-  width: 70%;
+  width: 250px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -671,8 +683,12 @@ p {
 }
 
 .game-play {
-  width: 20%;
+  width: 100px;
   display: flex;
+  justify-content: center;
+}
+
+.settings-info {
   justify-content: center;
   align-items: center;
 }
@@ -684,7 +700,9 @@ p {
 .settings-inline {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 15px;
+  flex-direction: column;
 }
 
 .settings-column {
