@@ -1,5 +1,5 @@
-import { fetchData } from "../fetchData.js";
-import { showToast, PONG_CARD } from "../tools.js";
+import { fetchData, fetchAuthData } from "../fetchData.js";
+import { showToast, PONG_CARD, showErrorMessages } from "../tools.js";
 import { renderPage } from "../historyManager.js";
 
 function createUserContent() {
@@ -34,8 +34,10 @@ export function renderUserPage() {
 		renderPage("settings")
 	})
 
-	document.getElementById('btn-Inbox').addEventListener('click', () => {
+	document.getElementById('btn-Inbox').addEventListener('click', async () => {
 		console.log('Inbox button clicked');
+		const responseObject = await fetchAuthData("/user/online/", "GET", null, false);
+		console.log(responseObject);
 	})
 
 	document.getElementById('btn-Logout').addEventListener('click', async(e) => {
@@ -45,14 +47,14 @@ export function renderUserPage() {
 		if (!confirmation)
 			return;
 
-		const responseObject = await fetchData('/user/logout/', 'POST', null, false, "simple");
+		const responseObject = await fetchAuthData('/user/logout/', 'POST', null, false);
 
 		if (responseObject.status == 205) {
 			showToast(responseObject.data.message, "success");
 			sessionStorage.clear();
 			renderPage("home");
 		} else
-			showToast(responseObject.data.message, "error");
+			showErrorMessages(responseObject);
 	});
 
 }

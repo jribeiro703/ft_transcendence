@@ -1,4 +1,4 @@
-import { escapeHTML, showToast } from "../tools.js";
+import { escapeHTML, showErrorMessages } from "../tools.js";
 import { renderOtpForm } from "./renderOtpForm.js"
 import { fetchData } from "../fetchData.js";
 
@@ -20,11 +20,11 @@ export function renderLoginForm() {
         e.preventDefault();
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-        const responseObject = await fetchData('/user/login/', 'POST', { username, password }, false, "simple");
+        const responseObject = await fetchData('/user/login/', 'POST', { username, password }, false);
 
         if (responseObject.data.otp_verification_url)
             renderOtpForm(escapeHTML(responseObject.data.otp_verification_url), responseObject.data.message);
         else
-            showToast(responseObject.data.message, "error")
+            showErrorMessages(responseObject);
     });
 }

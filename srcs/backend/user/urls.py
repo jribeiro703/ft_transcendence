@@ -5,6 +5,8 @@ urlpatterns = [
 
 	# user endpoints
 	path('list/', views.getListOfUsers, name="list_users"),
+	path('friends/', views.getUserFriends, name="user_friends"),
+	path('online/', views.getOnlineUsers, name='online_users'),
 	path('search/', views.searchUser, name="search_user"),
 	path('public/<int:pk>/', views.GetUserPublicInfos, name="user_public_infos"),
 	path('private/', views.GetUserPrivateInfos, name="user_private_infos"),
@@ -31,6 +33,4 @@ urlpatterns = [
 
 	path('logout/', views.LogoutView.as_view(), name="logout"),
 	
-	path('login/token-refresh/', views.CookieTokenRefreshView.as_view(), name="cookie_token_refresh"),
-
 ]
