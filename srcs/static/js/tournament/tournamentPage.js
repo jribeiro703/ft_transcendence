@@ -54,17 +54,12 @@ export async function showTournamentView(tournamentName) {
 	// Add event listener for the start game button
 	document.getElementById('startTournamentGameBtn').addEventListener('click', () => {
 		initializeCanvasAndScore();
-		startGameWithPlayers([1, 3]); // Replace with actual player IDs
+		startGameWithPlayers([1, 2]); // Replace with actual player IDs
 	});
 }
 
 // Call this function to start the periodic fetching
 setupEligiblePlayersRefresh();
-
-// Join the Room and Start the Game
-// startGameWithPlayers - create new room with player 1, wait, join with player 1
-// export function createNewRoom(joinRoomCallback)
-// export function joinRoom(roomName)
 
 // Function to start the game with two player IDs
 function startGameWithPlayers(playerIds) {
@@ -73,7 +68,7 @@ function startGameWithPlayers(playerIds) {
 		// Step 2: Join the room with the first player
 		joinRoomWithPlayer(roomName, playerIds[0], () => {
 			// Step 3: Wait for the second player to join
-			waitingPlayer();
+			//waitingPlayer();
 
 			// Step 4: Join the room with the second player
 			joinRoomWithPlayer(roomName, playerIds[1], () => {
