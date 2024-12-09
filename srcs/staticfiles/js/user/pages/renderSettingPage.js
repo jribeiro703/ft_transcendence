@@ -18,15 +18,14 @@ async function createSettingsPage(mainContent, pk) {
 					</div>
 					<p>Username: <span id="username">${data.username}</span></p>
 					<p>
-						Alias: <span id="alias">${data.alias}</span>
+						Alias: <span id="alias">${data.alias ? data.alias : ""}</span>
 						<button id="change-alias-btn" class="change-btn">Change</button>
 					</p>
 					<p>Email: <span id="email">${data.email}</span>
 						${!data.is_42_user ? '<button id="change-email-btn" class="change-btn">Change</button>' : ''}
 					</p>
-					<p>Password: <span id="password"></span>
-						${!data.is_42_user ? '<button id="change-password-btn" class="change-btn">Change</button>' : ''}
-					</p>
+					${!data.is_42_user ? '<p>Password: <span id="password"></span>' : ''}
+					${!data.is_42_user ? '<button id="change-password-btn" class="change-btn">Change</button>' : ''}
 				</div>
 
 				<div id="friend-request">

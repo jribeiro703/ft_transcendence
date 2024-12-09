@@ -179,11 +179,10 @@ REST_FRAMEWORK = {
 	)
 }
 
-
 # JWT settings
 from datetime import timedelta
 SIMPLE_JWT = {
-	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
 	"REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 	"ROTATE_REFRESH_TOKENS": True,
 	"BLACKLIST_AFTER_ROTATION": True,
@@ -191,7 +190,7 @@ SIMPLE_JWT = {
 	"AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
 
-# # email settings
+# email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.environ['EMAIL_HOST']
 EMAIL_PORT = int(os.environ['EMAIL_PORT'])
@@ -206,6 +205,7 @@ CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = [
 	'https://localhost:8081',
+	'https://mailhog.localhost:8081',
 ]
 
 CHANNEL_LAYERS = {

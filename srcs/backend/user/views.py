@@ -284,7 +284,9 @@ class CookieTokenRefreshView(APIView):
 		try:
 			refresh = RefreshToken(refresh_token)
 			new_access_token = str(refresh.access_token)
-			return Response({'access_token': new_access_token}, status=status.HTTP_200_OK)
+			response = Response({'access_token': new_access_token}, status=status.HTTP_200_OK)
+			set_refresh_token_in_cookies(response, refresh_token)
+			return response
 
 		except TokenError as e:
 			return Response({'message': 'Invalid refresh token.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -425,15 +427,14 @@ def login42(request):
 # ------------------------------LOGOUT ENDPOINTS--------------------------------	
 
 class LogoutView(APIView):
-	permission_classes = [AllowAny]
 
 	def post(self, request):
 		try:
 			refresh_token = request.COOKIES.get('refresh_token')
 			if not refresh_token:
 				response = Response({"message": "Logout successfully"}, status=status.HTTP_205_RESET_CONTENT)
-				response.delete_cookie('refresh_token', path='/', samesite='Lax')
-				response.delete_cookie('csrftoken', path='/')
+				response.delete_cookie('refresh_token')
+				response.delete_cookie('csrftoken')
 				return response
 			token = RefreshToken(refresh_token)
 
@@ -446,8 +447,8 @@ class LogoutView(APIView):
 
 			token.blacklist()
 			response = Response({"message": "Logout successfully !"}, status=status.HTTP_205_RESET_CONTENT)
-			response.delete_cookie('refresh_token', path='/', samesite='Lax')
-			response.delete_cookie('csrftoken', path='/')
+			response.delete_cookie('refresh_token')
+			response.delete_cookie('csrftoken')
 
 			return response
 
