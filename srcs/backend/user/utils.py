@@ -59,13 +59,14 @@ def generate_tokens_for_user(user):
 
 	return access_token, refresh_token
 
-def set_refresh_token_in_cookies(response, refresh_token, cookie_max_age=3600*24):
+def set_refresh_token_in_cookies(response, refresh_token):
 	response.set_cookie(
 		'refresh_token',
 		refresh_token,
-		max_age=cookie_max_age,
+		# max_age=cookie_max_age,
 		httponly=True,
 		secure=True,
-		samesite='Lax'
+		samesite='Lax',
+		# path='/'
 	)
 	return response

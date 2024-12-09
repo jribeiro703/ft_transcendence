@@ -174,12 +174,10 @@ REST_FRAMEWORK = {
 		'rest_framework_simplejwt.authentication.JWTAuthentication',
 	),
 	'DEFAULT_PERMISSION_CLASSES': (
-		# 'rest_framework.permissions.IsAuthenticated',
-		'rest_framework.permissions.AllowAny',
-
+		'rest_framework.permissions.IsAuthenticated',
+		# 'rest_framework.permissions.AllowAny',
 	)
 }
-
 
 # JWT settings
 from datetime import timedelta
@@ -192,7 +190,7 @@ SIMPLE_JWT = {
 	"AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
 
-# # email settings
+# email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.environ['EMAIL_HOST']
 EMAIL_PORT = int(os.environ['EMAIL_PORT'])
@@ -201,16 +199,13 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')  # Optional for prod
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')  # Optional for prod
 DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
 
-# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-# EMAIL_FILE_PATH = "../../email-messages"
-# DEFAULT_FROM_EMAIL = 'fttrans0@gmail.com'
-
 # CSRF settings
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = [
 	'https://localhost:8081',
+	'https://mailhog.localhost:8081',
 ]
 
 CHANNEL_LAYERS = {
