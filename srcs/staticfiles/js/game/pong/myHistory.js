@@ -15,8 +15,9 @@ import { showSettingViewB } from "../brickout/settings.js";
 import { initLobbyView } from "./init.js";
 import { checkFrame, checkInterval } from "../brickout/score.js";
 import { showPongRemote } from "./gameViewMulti.js";
-import { logout } from "../../user/tools.js";
+import { updateUserAvatar } from "../../user/tools.js";
 import { API_BASE_URL } from "../../user/fetchData.js";
+import { isAuthenticated } from "../../user/isAuthenticated.js";
 
 const pongGamePages = {
 
@@ -45,6 +46,7 @@ export async function renderPageGame(page, updateHistory = true, params = null)
 {
 	// checkInterval();
 	// checkFrame();
+
     let renderFunction = pongGamePages[page];
 
     const lastPage = sessionStorage.getItem('lastPage');
@@ -97,7 +99,7 @@ window.addEventListener('beforeunload', () =>
         puEnableB: brickVar.powerUpEnable,
     }));
 
-	navigator.sendBeacon(`${API_BASE_URL}/user/logout/`);
+	// navigator.sendBeacon(`${API_BASE_URL}/user/logout/`);	// logout user if window is closed
 });
 
 window.addEventListener('load', () =>
