@@ -1,10 +1,12 @@
-// tournamentPage.js
+// tournament/tournamentPage.js
 
 import { setupTournamentFlow } from './utils/tournamentFlow.js';
 import { generateTournamentName, validateTournamentName } from './services/apiService.js';
 import { createTournamentFormHTML } from './templates/createTournamentFormTemplate.js';
 import { createTournamentLayoutHTML } from './templates/createTournamentLayoutTemplate.js';
 import { setupEligiblePlayersRefresh } from './services/periodicService.js';
+import { createNewRoom, joinRoom, waitingPlayer } from "../game/pong/room.js";
+import { initializeCanvasAndScore,  initializeLobbySocket, initializeGameVariables } from './initializeTournamentGame.js';
 
 let currentTournamentId;
 
@@ -39,10 +41,57 @@ export async function showTournamentView(tournamentName) {
 		console.error("playersList element is not found in the DOM");
 		return;
 	}
-	
+
+	// Initialize lobby socket
+	initializeLobbySocket();
+
+	// Initialize game variables
+	initializeGameVariables('medium', 1); // Set default difficulty and level
+
 	// Start periodic fetching of eligible players
 	setupEligiblePlayersRefresh();
+
+	// Add event listener for the start game button
+	document.getElementById('startTournamentGameBtn').addEventListener('click', () => {
+		initializeCanvasAndScore();
+		startGameWithPlayers([1, 3]); // Replace with actual player IDs
+	});
 }
 
 // Call this function to start the periodic fetching
 setupEligiblePlayersRefresh();
+
+// Join the Room and Start the Game
+// startGameWithPlayers - create new room with player 1, wait, join with player 1
+// export function createNewRoom(joinRoomCallback)
+// export function joinRoom(roomName)
+
+// Function to start the game with two player IDs
+function startGameWithPlayers(playerIds) {
+	// Step 1: Create a new room
+	createNewRoom((roomName) => {
+		// Step 2: Join the room with the first player
+		joinRoomWithPlayer(roomName, playerIds[0], () => {
+			// Step 3: Wait for the second player to join
+			waitingPlayer();
+
+			// Step 4: Join the room with the second player
+			joinRoomWithPlayer(roomName, playerIds[1], () => {
+				// Both players are now in the room, the game will start automatically
+				console.log('Game started with players:', playerIds);
+			});
+		});
+	});
+}
+
+// Function to join the room with a specific player
+function joinRoomWithPlayer(roomName, playerId, callback) {
+	// Set the player ID in gameVar (assuming gameVar is a global object)
+	gameVar.playerIdx = playerId;
+
+	// Join the room
+	joinRoom(roomName);
+
+	// Call the callback function once the room is joined
+	callback();
+}
