@@ -1,4 +1,4 @@
-// utils/websocketUtils.js
+// tournament/utils/websocketUtils.js
 
 export function createWebSocketConnection(url, action, onMessageCallback, onErrorCallback, onCloseCallback) {
 	const socket = new WebSocket(url);

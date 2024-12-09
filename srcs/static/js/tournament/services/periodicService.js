@@ -1,4 +1,4 @@
-// services/periodicService.js
+// tournament/services/periodicService.js
 
 import { fetchEligiblePlayers } from './apiService.js';
 import { fetchTournamentBracketPeriodically } from './realtimeService.js';
