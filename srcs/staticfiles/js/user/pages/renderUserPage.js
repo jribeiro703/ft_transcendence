@@ -47,7 +47,7 @@ export function renderUserPage() {
 		if (!confirmation)
 			return;
 
-		const responseObject = await fetchData('/user/logout/', 'POST', null, false);
+		const responseObject = await fetchAuthData('/user/logout/', 'POST', null, false);
 
 		if (responseObject.status == 205) {
 			showToast(responseObject.data.message, "success");

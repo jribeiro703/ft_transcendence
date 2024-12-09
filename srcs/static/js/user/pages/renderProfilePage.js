@@ -34,7 +34,7 @@ export async function renderProfilePage() {
 		return;
 	}
 
-	responseObject = await fetchData(`/user/profile/${responseObject.data.pk}`, "GET", null, false);
+	responseObject = await fetchAuthData(`/user/profile/${responseObject.data.pk}`, "GET", null, false);
 	if (responseObject.status === 200) {
 		createProfileContent();
 		const data = responseObject.data;

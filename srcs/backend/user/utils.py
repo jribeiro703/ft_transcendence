@@ -67,6 +67,6 @@ def set_refresh_token_in_cookies(response, refresh_token, cookie_max_age=3600*24
 		httponly=True,
 		secure=True,
 		samesite='Lax',
-		path='/'
+		# path='/'
 	)
 	return response
