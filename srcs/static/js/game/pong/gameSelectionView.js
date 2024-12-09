@@ -11,11 +11,13 @@ export function showGameSelectionView() {
   maincontent.innerHTML = "";
   const gameSelection = document.createElement("div");
 
+  gameSelection.style.width = "100%";
+  gameSelection.style.flex = "1 0 0";
+
   updateImageUrl();
 
   gameSelection.innerHTML = `
 	<div id="settingView" class="d-flex">
-		<!-- <h1 class="custom-h1">Game Selection</h1> -->
 		<div class="container-game">
 			<div class="game-row">
 				<div class="game-image">
