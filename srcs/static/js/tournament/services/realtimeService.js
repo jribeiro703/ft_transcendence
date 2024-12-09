@@ -1,4 +1,4 @@
-// services/realtimeService.js
+// tournament/services/realtimeService.js
 
 import { createWebSocketConnection } from '../utils/websocketUtils.js';
 import { fetchTournamentBracket } from './apiService.js';

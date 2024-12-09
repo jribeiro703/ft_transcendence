@@ -1,4 +1,4 @@
-// utils/tournamentFlow.js
+// tournament/utils/tournamentFlow.js
 
 import { createTournament, fetchEligiblePlayers, performMatchmaking, preRegisterPlayers, fetchTournamentBracket, fetchCurrentPlayers } from '../services/apiService.js';
 import { setupTournamentBracketRefresh, createRealtimeConnection } from '../services/realtimeService.js';
