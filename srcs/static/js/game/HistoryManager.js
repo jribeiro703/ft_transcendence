@@ -71,11 +71,11 @@ export function isGamePage(page)
 
 export async function renderPageGame(page, updateHistory = true, params = null)
 {	
-	const authenticated = await isAuthenticated();
-	await updateUserAvatar(authenticated);
+	// const authenticated = await isAuthenticated();
+	// await updateUserAvatar(authenticated);
 
-	if (!authenticated && isMultiplayerPage(page))
-		renderPageGame('home', true);
+	// if (!authenticated && isMultiplayerPage(page))
+	// 	renderPageGame('home', true);
 
 	let renderFunction = pongGamePages[page];
 
