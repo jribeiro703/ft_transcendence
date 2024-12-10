@@ -66,7 +66,7 @@ export function drawScoreBoard()
 				ctx.fillText(gameVar.userName, leftX, y);
 				ctx.fillText('Player 2', rightX, y);
 			}
-			else 
+			else if (gameVar.liveMatch)
 			{
 				ctx.fillText(gameVar.userName, leftX, y);
 				ctx.fillText('AI', rightX, y);

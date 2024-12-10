@@ -221,6 +221,7 @@ export function updateRoomList()
 		joinBtn.addEventListener('click', () =>
 		{
 			gameVar.playerIdx = 2;
+			gameVar.playerReady = true;
 			renderPageGame('playPongRemoteSecondP', true);
 			joinRoom(room.name); 
 		});
