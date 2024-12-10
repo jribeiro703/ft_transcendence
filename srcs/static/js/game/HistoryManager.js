@@ -1,26 +1,25 @@
-import gameVar from "./var.js";
-import brickVar from "../brickout/var.js";
-import { showGameSelectionView } from "./gameSelectionView.js";
-import { showGameSelectionMultiView } from "./gameSelectionView.js";
-import { showSettingView } from "./settingsView.js";
-import { showGameRoom, showGameView } from "./gameView.js";
-import { showGameBrickLocalView, showGameBrickView } from "../brickout/gameView.js";
-import { renderHomePage } from "../../renderHomePage.js";
-import { updateDifficultySelection, updateLevelSelection } from "./update.js";
-import { updatePowerUpSelection } from "./powerUp.js";
-import { updateDifficultySelectionB, updateLevelSelectionB, updateSettingB } from "../brickout/update.js";
-import { updatePowerUpSelectionB } from "../brickout/powerUp.js";
-import { updateSetting } from "./setting.js";
-import { showSettingViewB } from "../brickout/settings.js";
-import { initLobbyView } from "./init.js";
-import { checkFrame, checkInterval } from "../brickout/score.js";
-import { showPongRemote } from "./gameViewMulti.js";
-import { renderPage } from "../../user/historyManager.js";
-import { clearAllpongStates } from "./reset.js";
-import { clearAllBrickStates } from "../brickout/manage.js";
-import { sendGameData, sendPlayerData } from "./network.js";
-import { isAuthenticated } from "../../user/isAuthenticated.js";
-import { updateUserAvatar } from "../../user/tools.js";
+import gameVar from "./pong/var.js";
+import brickVar from "./brickout/var.js";
+import { showGameSelectionView } from "./pong/gameSelectionView.js";
+import { showGameSelectionMultiView } from "./pong/gameSelectionView.js";
+import { showSettingView } from "./pong/settingsView.js";
+import { showGameRoom, showGameView } from "./pong/gameView.js";
+import { renderHomePage } from "../renderHomePage.js";
+import { updateDifficultySelection, updateLevelSelection } from "./pong/update.js";
+import { updatePowerUpSelection } from "./pong/powerUp.js";
+import { updateDifficultySelectionB, updateLevelSelectionB, updateSettingB } from "./brickout/update.js";
+import { updatePowerUpSelectionB } from "./brickout/powerUp.js";
+import { updateSetting } from "./pong/setting.js";
+import { showSettingViewB } from "./brickout/settings.js";
+import { clearAllBrickStates } from "./brickout/manage.js";
+import { sendGameData, sendPlayerData } from "./pong/network.js";
+import { isAuthenticated } from "../user/isAuthenticated.js";
+import { updateUserAvatar } from "../user/tools.js";
+import { showGameBrickView } from "./brickout/gameView.js";
+import { showGameBrickLocalView } from "./brickout/gameView.js";
+import { initLobbyView } from "./pong/init.js";
+import { showPongRemote } from "./pong/gameViewMulti.js";
+import { clearAllpongStates } from "./pong/reset.js";
 
 const pongGamePages = {
 

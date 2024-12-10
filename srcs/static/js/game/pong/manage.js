@@ -1,7 +1,7 @@
 import gameVar from "./var.js";
 import { checkball } from "./check.js";
 import { clearAllpongStates, resetBall } from "./reset.js";
-import { renderPageGame } from "./myHistory.js";
+import { renderPageGame } from "../HistoryManager.js";
 
 export function manageServer()
 {

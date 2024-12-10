@@ -5,7 +5,7 @@ import { initializeBall } from './ball.js';
 import { updateCanvasColor } from './update.js';
 import { showGameRoom } from './gameView.js';
 import { drawScoreBoard } from './score.js';
-import { renderPageGame } from './myHistory.js';
+import { renderPageGame } from '../HistoryManager.js';
 
 export function createNewRoom(joinRoomCallback) {
   const roomName = `room_${Math.floor(Math.random() * 10000)}`;

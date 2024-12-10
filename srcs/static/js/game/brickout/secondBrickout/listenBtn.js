@@ -1,5 +1,5 @@
-import { renderPageGame } from "../../pong/myHistory.js";
 import { handleNextLevelB, restartLevelB } from "./level.js";
+import { renderPageGame } from "../../HistoryManager.js";
 
 export function listenNextLevelBtn()
 {
