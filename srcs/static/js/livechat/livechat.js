@@ -81,7 +81,7 @@ chatSocket.onmessage = function (e) {
 	  try {
 		const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${clientId}`);
 
-		if (nicknameResponse.data === 401) {
+		if (nicknameResponse.status === 401) {
 			throw new Error('Authentication required');
 		}
 
@@ -94,7 +94,13 @@ chatSocket.onmessage = function (e) {
 		tooltip.setContent({ '.tooltip-inner': content });
 	} catch (error) {
 		console.error('Error fetching user data:', error);
-		tooltip.setContent({ '.tooltip-inner': 'Error loading user data' });
+		if (error.message === 'Authentication required') {
+			tooltip.setContent({ '.tooltip-inner': 'You must be logged in to see user data' });
+		}
+		else
+		{
+			tooltip.setContent({ '.tooltip-inner': 'Error loading user data' });
+		}
 	}
 	});
   
@@ -502,8 +508,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	  const responseObject = await fetchAuthData('/user/friends/');
 	  
 	  if (responseObject.status === 401) {
-		showToast("You must be logged in to see friends.", "warning");
-		loadingDiv.textContent = 'You must be logged in to see your friends.';
+		showToast("You must be logged in to see friends", "warning");
+		loadingDiv.textContent = 'You must be logged in to see your friends';
 		loadingDiv.classList.add('text-danger');
 		window.location.href = '/#login';
 		return;
@@ -552,8 +558,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	  const responseObject = await fetchAuthData('/user/online/');
 	  
 	  if (responseObject.status === 401) {
-		showToast("You must be logged in to see online users.", "warning");
-		loadingDiv.textContent = 'You must be logged in to see online users.';
+		showToast("You must be logged in to see online users", "warning");
+		loadingDiv.textContent = 'You must be logged in to see online users';
 		loadingDiv.classList.add('text-danger');
 		window.location.href = '/#login';
 		return;
