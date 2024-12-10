@@ -63,7 +63,7 @@ export function sendPlayerData(socket, playerReady)
 		console.log("Error websocket");
 }
 
-export function sendGameData(socket, gameStart, currentServer, startTime)
+export function sendGameData(socket, gameStart, currentServer, startTime, clientLeft)
 {
 	if (socket && socket.readyState == WebSocket.OPEN)
 	{
@@ -73,6 +73,7 @@ export function sendGameData(socket, gameStart, currentServer, startTime)
 			gameStart: gameStart,
 			currentServer: currentServer,
 			startTime: startTime,
+			clientLeft: clientLeft,
 		};
 		socket.send(JSON.stringify(data));
 	}

@@ -5,6 +5,7 @@ import { initializeBall } from './ball.js';
 import { updateCanvasColor } from './update.js';
 import { showGameRoom } from './gameView.js';
 import { drawScoreBoard } from './score.js';
+import { renderPageGame } from '../HistoryManager.js';
 
 export function createNewRoom(joinRoomCallback)
 {
@@ -133,6 +134,7 @@ export function joinRoom(roomName)
 				gameVar.gameStart = data.game_data.gameStart;
 				gameVar.currentServer = data.game_data.currentServer;
 				gameVar.startTime = data.game_data.startTime;
+				gameVar.clientLeft = data.game_data.clientLeft;
 			}
 			else if (data.type == 'setting_data')
 			{
@@ -191,7 +193,7 @@ export function addRoom(index, roomName, status, nbplayer, difficulty = null, le
 
 export function updateRoomList()
 {
-	gameVar.roomsContainer.style.display = 'block';
+	// gameVar.roomsContainer.style.display = 'block';
 	gameVar.roomsContainer.innerHTML = '';
 	gameVar.rooms.forEach(room =>
 	{
@@ -218,7 +220,7 @@ export function updateRoomList()
 		const joinBtn = roomItem.querySelector('.joinRoomBtn');
 		joinBtn.addEventListener('click', () =>
 		{
-			showGameRoom();
+			renderPageGame('playPongRemoteSecondP', true);
 			joinRoom(room.name); 
 		});
 
@@ -228,7 +230,7 @@ export function updateRoomList()
 
 export function updateSettingLive()
 {
-	const waitingINterval = setInterval(() =>
+	const waitingInterval = setInterval(() =>
 	{
 		if(gameVar.currentLevel === null || gameVar.difficulty === null)
 		{
@@ -240,7 +242,7 @@ export function updateSettingLive()
 			drawScoreBoard();
 			initializeBall();
 			drawLive();
-			clearInterval(waitingINterval);
+			clearInterval(waitingInterval);
 		}
 	}, 2000);
 }

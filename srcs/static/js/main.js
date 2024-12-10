@@ -1,7 +1,7 @@
 import { isAuthenticated } from "./user/isAuthenticated.js";
 import { renderPage } from "./user/historyManager.js";
-import { isGamePage } from "./game/pong/myHistory.js";
-import { renderPageGame } from "./game/pong/myHistory.js";
+import { isGamePage } from "./game/HistoryManager.js";
+import { renderPageGame } from "./game/HistoryManager.js";
 
 document.getElementById('user-avatar').addEventListener('click', async () => {
 	

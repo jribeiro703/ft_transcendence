@@ -3,8 +3,8 @@ import { keyDownHandler, keyUpHandler, startBallLive, startBall } from "./input.
 import { initControlLive } from "./control.js";
 import { showLobbyView } from "./gameViewMulti.js";
 import { roomNetwork } from "./room.js";
-import { renderPageGame } from "./myHistory.js";
 import { updateLiveSetting } from "./setting.js";
+import { renderPageGame } from "../HistoryManager.js";
 
 
 export function removeEventListeners()
@@ -24,7 +24,7 @@ export function initEventListenerRoom()
 
 	gameVar.createRoomBtn.addEventListener('click', () => 
 	{
-		renderPageGame("playPongRemote", true, 'live');
+		renderPageGame("playPongRemote", true);
 		// showGameMultiView();
 	});
 

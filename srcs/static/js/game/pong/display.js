@@ -263,6 +263,7 @@ export function displaySettingView()
 	const pongUrl = "static/css/images/ttLevel.png";
 	const footUrl = "static/css/images/footballLevel.png";
 	const tennisUrl = "static/css/images/tennisLevel.png";
+	const classicUrl = "static/css/images/classicPong.png";
 	const maincontent = document.getElementById('mainContent');
 
 	maincontent.innerHTML = '';
@@ -290,14 +291,18 @@ export function displaySettingView()
 				</div>
 				<div class="map-selection">
 					<div id="map1" class="mapOption" data-map-name="classicMap">
-						<img src="${pongUrl}" alt="classicMap" class="map-image">
-						<button id="tableTennis" class="level">Table Tennis</button>
+						<img src="${classicUrl}" alt="classicMap" class="map-image">
+						<button id="classicPong" class="level">Classic Pong</button>
 					</div>
 					<div id="map2" class="mapOption" data-map-name="classicMap">
-						<img src="${footUrl}" alt="footMap1" class="map-image">
-						<button id="footLevel" class="level">FootBall</button>
+						<img src="${pongUrl}" alt="footMap1" class="map-image">
+						<button id="tableTennis" class="level">Table Tennis</button>
 					</div>
 					<div id="map3" class="mapOption" data-map-name="clasicMap">
+						<img src="${footUrl}" alt="customMap1" class="map-image">
+						<button id="footLevel" class="level">Football</button>
+					</div>
+					<div id="map4" class="mapOption" data-map-name="clasicMap">
 						<img src="${tennisUrl}" alt="customMap1" class="map-image">
 						<button id="tennisLevel" class="level">Tennis</button>
 					</div>

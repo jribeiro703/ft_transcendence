@@ -1,6 +1,6 @@
 import brickVar from "./var.js";
-import { renderPageGame } from "../pong/myHistory.js";
-import { updateSettingB } from "./update.js";
+import { updateSettingB } from "./update.js"
+import { renderPageGame } from "../HistoryManager.js";
 
 export function listenSaveBtnB(info)
 {
