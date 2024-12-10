@@ -10,6 +10,9 @@ import { renderSettingsPage } from "./pages/renderSettingPage.js";
 import { isAuthenticated } from "./isAuthenticated.js";
 import { updateUserAvatar } from "./tools.js";
 import { isGamePage, renderPageGame } from "../game/HistoryManager.js";
+import gameVar from "../game/pong/var.js";
+import { sendGameData } from "../game/pong/network.js";
+import { clearAllpongStates } from "../game/pong/reset.js";
 
 const authPages = {
 	auth: renderAuthPage,
@@ -27,6 +30,12 @@ const userPages = {
 
 async function renderPage(page, updateHistory = true) {
 	
+	if (gameVar.gameSocket)
+	{
+		gameVar.clientLeft = true;
+		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
+	}
+
 	let renderFunction;
 	const authenticated = await isAuthenticated();
 	await updateUserAvatar(authenticated);

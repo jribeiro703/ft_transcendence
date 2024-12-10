@@ -83,6 +83,8 @@ const gameVar =
 	playerIdx: null,
 	currentServer: 'player',
 	playerReady: false,
+	userName: null,
+	avatarUrl: null,
 
 // ---------------------------------Game Data-------------------------
 

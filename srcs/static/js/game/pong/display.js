@@ -63,6 +63,7 @@ export function displayPongRemote()
 
 export function displayGameSelectionMulti()
 {
+	console.log("displayGSMV");
 	const maincontent = document.getElementById('mainContent');
 	maincontent.innerHTML = '';
 	const gameSelection = document.createElement('div');

@@ -15,25 +15,28 @@ import { delRooms } from "./room.js";
 
 export function initDraw()
 {
-	if (gameVar.currentLevel === 'tableTennis')
-		drawLines();	
-	else if (gameVar.currentLevel === 'football')
-		drawFootball();
-	else if (gameVar.currentLevel === 'tennis')
-		drawTennisCourt();
-	else if (gameVar.currentLevel === 'classicPong')
+	if (gameVar.ctx)
 	{
-		drawClassicPong();
-		updateCanvasColor();
+		gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+		if (gameVar.currentLevel === 'tableTennis')
+			drawLines();	
+		else if (gameVar.currentLevel === 'football')
+			drawFootball();
+		else if (gameVar.currentLevel === 'tennis')
+			drawTennisCourt();
+		else if (gameVar.currentLevel === 'classicPong')
+		{
+			drawClassicPong();
+			updateCanvasColor();
+		}
+		drawBall();
+		checkPaddles();
+		drawScoreBoard();
 	}
-	drawBall();
-	checkPaddles();
-	drawScoreBoard();
 }
 
 export function draw()
 {
-	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
 	if (gameVar.gameStart)
 	{
