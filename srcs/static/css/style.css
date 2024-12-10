@@ -1490,6 +1490,7 @@ emoji-picker {
   --category-font-color: var(--text-color);
   --button-active-background: var(--secondary-color);
   --button-hover-background: var(--highlight-color);
+  --z-index: 9999;
 }
 
 .emoji-picker-container {
@@ -1498,6 +1499,7 @@ emoji-picker {
   bottom: 55px;
   transform: translateX(0%);
   border-radius: 5px;
+  z-index: 9999;
 }
 
 .chat-btn {
@@ -1563,11 +1565,16 @@ emoji-picker {
 }
 
 .channel-container {
-	z-index: 9999 !important;
+	z-index: 9998 !important;
 }
 
 .channel-btn {
-	z-index: 9999 !important;
+	z-index: 9998 !important;
+}
+
+/* Add to CSS */
+.tooltip .tooltip-arrow {
+  display: none !important;
 }
 
 /* -------------------- End Page --------------------------- */
