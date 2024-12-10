@@ -37,4 +37,6 @@ urlpatterns = [
 	path('login/token-refresh/', views.CookieTokenRefreshView.as_view(), name="cookie_token_refresh"),
 
 	path('online/', views.getOnlineUsers, name="online_users"),
+
+	path('get-id/', views.getUserIdByNickname, name="get_user_id"),
 ]

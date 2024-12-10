@@ -130,6 +130,32 @@ def getUserPk(request):
 	user = request.user
 	return Response({"pk": user.id}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserIdByNickname(request):
+    """Get user ID from nickname"""
+    try:
+        nickname = request.query_params.get('nickname')
+        if not nickname:
+            return Response(
+                {"message": "Nickname parameter is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user = User.objects.filter(username=nickname).first()
+        if not user:
+            return Response(
+                {"message": "User not found"}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        return Response({"id": user.id}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response(
+            {"message": f"Error fetching user ID: {str(e)}"}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 # ------------------------------REGISTER USER ENDPOINTS--------------------------------	
 
