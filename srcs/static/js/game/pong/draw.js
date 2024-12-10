@@ -10,6 +10,8 @@ import { drawBall } from "./ball.js";
 import { checkPaddles } from "./paddle.js";
 import { drawScoreBoard } from "./score.js";
 import { updateCanvasColor } from "./update.js";
+import { addBtn } from "./manage.js";
+import { delRooms } from "./room.js";
 
 export function initDraw()
 {
@@ -51,6 +53,7 @@ export function draw()
 
 export function drawLive()
 {
+
 	if (gameVar.clientLeft)
 	{
 		kickOut();
@@ -73,7 +76,8 @@ export function kickOut()
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	gameVar.ctx.font = "35px Arial";
 	gameVar.ctx.fillStyle = "red";	
-	gameVar.ctx.fillText("Opponent has rage quit" , gameVar.canvasW / 4, gameVar.canvasH / 6);
+	gameVar.ctx.fillText("Opponent has rage quit..." , gameVar.canvasW / 4, gameVar.canvasH / 3);
+	delRooms();
 	addBtn();
 }
 

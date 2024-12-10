@@ -64,7 +64,7 @@ export function listenSettingLevel()
 		gameVar.tableTennis.classList.remove('selected');
 		gameVar.footLevel.classList.remove('selected');
 		gameVar.tennisLevel.classList.remove('selected');
-		updateLevelSelection('classicPong');
+		updateLevelSelection('classicPong', false);
 		checkSaveBtn();
 	});
 	gameVar.tableTennis.addEventListener('click', () =>
@@ -73,7 +73,7 @@ export function listenSettingLevel()
 		gameVar.tableTennis.classList.add('selected');
 		gameVar.footLevel.classList.remove('selected');
 		gameVar.tennisLevel.classList.remove('selected');
-		updateLevelSelection('tableTennis');
+		updateLevelSelection('tableTennis', false);
 		checkSaveBtn();
 	});
 
@@ -83,7 +83,7 @@ export function listenSettingLevel()
 		gameVar.tableTennis.classList.remove('selected');
 		gameVar.footLevel.classList.add('selected');
 		gameVar.tennisLevel.classList.remove('selected');
-		updateLevelSelection('football');
+		updateLevelSelection('football', false);
 		checkSaveBtn();
 	});
 
@@ -93,7 +93,7 @@ export function listenSettingLevel()
 		gameVar.tableTennis.classList.remove('selected');
 		gameVar.footLevel.classList.remove('selected');
 		gameVar.tennisLevel.classList.add('selected');
-		updateLevelSelection('tennis');
+		updateLevelSelection('tennis', false);
 		checkSaveBtn();
 	});
 }

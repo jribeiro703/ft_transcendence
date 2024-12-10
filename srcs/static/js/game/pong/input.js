@@ -73,8 +73,8 @@ export function keyUpHandler(e, local)
 
 export function startBall(e)
 {
-	displayGameDataPong();
-	displayBall();
+	// displayGameDataPong();
+	// displayBall();
 	if (e.code == "Space" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart && gameVar.currentServer == 'player'
 		|| e.code == "Enter" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart && gameVar.currentServer == 'player2')
 	{
@@ -107,7 +107,7 @@ export function startBallLive(e)
             sendDirectionData(gameVar.dx, gameVar.dy, gameVar.init_dx, gameVar.init_dy, gameVar.gameSocket);
             gameVar.gameStart = true;
 			gameVar.startTime = true;
-            sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime);
+            sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
 		}
 	}
 }

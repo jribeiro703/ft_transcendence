@@ -46,7 +46,7 @@ export function updateSettingB()
 	}
 	updateImageUrl();
 	displaySettingB(difficulty, powerUp, level);
-	displayGameDataBrick();
+	// displayGameDataBrick();
 }
 
 export function updateDifficultySelectionB(level, def)

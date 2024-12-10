@@ -47,15 +47,15 @@ async function renderPage(page, updateHistory = true) {
 }
 
 // listen to precedent or next page event but don't push state to history
-window.addEventListener('popstate', (event) => {
+// window.addEventListener('popstate', (event) => {
 	
-	console.log("event state:", event.state);
-	if (event.state) {
-		if (isGamePage("#" + event.state.page))
-			renderPageGame(event.state.page, false);
-		else
-			renderPage(event.state.page, false);
-	}
-});
+// 	console.log("event state:", event.state);
+// 	if (event.state) {
+// 		if (isGamePage("#" + event.state.page))
+// 			renderPageGame(event.state.page, false);
+// 		else
+// 			renderPage(event.state.page, false);
+// 	}
+// });
 
 export { renderPage };

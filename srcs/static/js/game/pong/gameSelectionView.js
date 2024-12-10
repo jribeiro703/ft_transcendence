@@ -14,8 +14,8 @@ import { displaySettingB } from "../brickout/settings.js";
 export function showGameSelectionView()
 {
 	console.log("gameSelection");
-	displayGameDataPong();
-	displayGameDataBrick();
+	// displayGameDataPong();
+	// displayGameDataBrick();
 	gameVar.liveMatch = false;
 	gameVar.localGame = false;
 

@@ -4,17 +4,18 @@ import { getBtnById } from "./getElement.js";
 import { listenSettingPU, listenSettingDifficulty, listenSettingLevel, listenSettingMultiSave, listenSettingSave } from "./listenerSetting.js";
 import { displaySettingView, displaySettingMultiView } from "./display.js";
 
-export function showSettingMultiView(live)
+export function showSettingMultiView(info)
 {
-	displaySettingMultiView();
+	// displaySettingMultiView();
+	displaySettingView();
 
 	getBtnById();
-	addPuBtn(live);
+	addPuBtn(info);
 
 	listenSettingPU();
 	listenSettingDifficulty();
 	listenSettingLevel();
-	listenSettingMultiSave(live);
+	listenSettingMultiSave(info);
 }
 
 export function showSettingView(info)
@@ -36,11 +37,24 @@ export function showSettingView(info)
 
 export function checkSaveBtn()
 {
-	if (gameVar.checkPu && gameVar.checkLevel && gameVar.checkDiff)
+	if (!gameVar.liveMatch)
 	{
-		const btn = document.getElementById('saveBtn');
-		btn.disabled = false;
-		gameVar.settingsChanged = true;
-		console.log("on passe setting change a true");
+		if (gameVar.checkPu && gameVar.checkLevel && gameVar.checkDiff)
+		{
+			const btn = document.getElementById('saveBtn');
+			btn.disabled = false;
+			gameVar.settingsChanged = true;
+			console.log("on passe setting change a true");
+		}
+	}
+	else
+	{
+		if (gameVar.checkLevel && gameVar.checkDiff)
+		{
+			const btn = document.getElementById('saveBtn');
+			btn.disabled = false;
+			gameVar.settingsChanged = true;
+		}
+	
 	}
 }

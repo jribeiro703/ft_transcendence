@@ -26,7 +26,6 @@ export function checkSettingLive()
 export function updateSetting()
 {
 	console.log("updateSetting");
-	// displayGameDataPong();
 	var difficulty = null;	
 	var level = null;
 	var powerUp = null;
@@ -63,7 +62,7 @@ export function updateSetting()
 	updateImageUrl();
 	displaySetting(difficulty, powerUp, level);
 	console.log("end update setting dsiplay = ");
-	displayGameDataPong();
+	// displayGameDataPong();
 }
 
 export function updateLiveSetting()
