@@ -7,8 +7,7 @@ import { saveScoreB } from "./score.js";
 import { displayNextLevel, displayFinish, displayLocalRematch } from "./display.js";
 import { listenFinishBtn, listenNextLevelBtn, listenLocalRematchBtn } from "./listenerBtn.js";
 import { handleNextLevelB, restartLevelB } from "./level.js";
-import { renderPageGame } from "../pong/myHistory.js";
-
+import { renderPageGame } from "../HistoryManager.js";
 export function manageCollisionB()
 {
 	if (brickVar.x + brickVar.dx > brickVar.canvasW - brickVar.ballRadius || brickVar.x + brickVar.dx < brickVar.ballRadius)

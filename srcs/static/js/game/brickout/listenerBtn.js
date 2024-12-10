@@ -2,7 +2,7 @@ import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 import { handleNextLevelB, restartLevelB } from "./level.js";
 import { clearAllBrickStates } from "./manage.js";
-import { renderPageGame } from "../pong/myHistory.js";
+import { renderPageGame } from "../HistoryManager.js";
 import { clearBtnB } from "./manage.js";
 
 
