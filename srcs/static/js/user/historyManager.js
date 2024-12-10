@@ -9,7 +9,7 @@ import { renderRegisterForm } from "./pages/renderRegisterForm.js";
 import { renderSettingsPage } from "./pages/renderSettingPage.js";
 import { isAuthenticated } from "./isAuthenticated.js";
 import { updateUserAvatar } from "./tools.js";
-import { isGamePage, renderPageGame } from "../game/pong/myHistory.js";
+import { isGamePage, renderPageGame } from "../game/HistoryManager.js";
 
 const authPages = {
 	auth: renderAuthPage,

@@ -4,8 +4,7 @@ import { updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { updateDifficultySelection } from "./update.js";
 import { checkSaveBtn } from "./settingsView.js";
-import { renderPageGame } from "./myHistory.js";
-
+import { renderPageGame } from "../HistoryManager.js";
 
 export function listenSettingPU()
 {
