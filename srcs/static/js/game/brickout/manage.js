@@ -1,4 +1,5 @@
 import brickVar from "./var.js";
+import brickVar2 from "./secondBrickout/var.js";
 import gameVar from "../pong/var.js";
 import { resetBallB } from "./ball.js";
 import { chechOpponent } from "./score.js"
@@ -6,8 +7,7 @@ import { saveScoreB } from "./score.js";
 import { displayNextLevel, displayFinish, displayLocalRematch } from "./display.js";
 import { listenFinishBtn, listenNextLevelBtn, listenLocalRematchBtn } from "./listenerBtn.js";
 import { handleNextLevelB, restartLevelB } from "./level.js";
-import { renderPageGame } from "../pong/myHistory.js";
-
+import { renderPageGame } from "../HistoryManager.js";
 export function manageCollisionB()
 {
 	if (brickVar.x + brickVar.dx > brickVar.canvasW - brickVar.ballRadius || brickVar.x + brickVar.dx < brickVar.ballRadius)
@@ -120,4 +120,41 @@ export function clearBtnB(nextLevel)
 	{
         console.error("Error removing buttons:", error);
     }
+}
+export function clearAllBrickStates()
+{
+    if (brickVar.anim)
+	{
+        cancelAnimationFrame(brickVar.anim);
+        brickVar.anim = null;
+	}
+    if (brickVar2.anim)
+	{
+        cancelAnimationFrame(brickVar2.anim);
+        brickVar2.anim = null;
+    }
+
+    if (brickVar.gameTimer)
+	{
+        clearInterval(brickVar.gameTimer);
+        brickVar.gameTimer = null;
+    }
+    if (brickVar2.gameTimer)
+	{
+        clearInterval(brickVar2.gameTimer);
+        brickVar2.gameTimer = null;
+    }
+
+    brickVar.initialize = false;
+    brickVar2.initialize = false;
+    brickVar.finishLevel = false;
+    brickVar2.finishLevel = false;
+    brickVar.gameStart = false;
+    brickVar2.gameStart = false;
+    brickVar.startTime = false;
+    brickVar2.startTime = false;
+	brickVar.score = 0;
+	brickVar2.score = 0;
+	brickVar.lives = 2;
+	brickVar2.lives = 2
 }

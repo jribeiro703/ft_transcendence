@@ -70,10 +70,7 @@ export function updateLevelSelectionB(level)
 {
 	if (level === "classic")
 	{
-		brickVar2.classic = true;
-		brickVar2.castle = false;
-		brickVar2.x = false;
-		brickVar2.invader = false;
+		brickVar2
 	}
 	else if (level === "castle")
 	{

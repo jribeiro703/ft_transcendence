@@ -56,6 +56,13 @@ class PongConsumer(WebsocketConsumer):
 				else:
 					logger.info(f'Client {self.channel_name} disconnected, room {self.room_name} still has clients: {self.rooms[self.room_name]}')
 			self.log_all_rooms()
+			async_to_sync(self.channel_layer.group_send)(
+				self.room_group_name,
+				{
+					'type': 'client_left',
+					'message': f'Client {self.channel_name} has left the room.'
+				}
+			)
 
 	def start_pinging(self):
 		"""Démarrer l'envoi de messages de ping pour vérifier la connexion."""
@@ -91,7 +98,7 @@ class PongConsumer(WebsocketConsumer):
 		self.last_active[self.channel_name] = time.time()
 		if data['type'] == 'pong':
 			logger.info(f'pong recu de {self.channel_name}')
-		if data['type'] == 'join_room':
+		elif data['type'] == 'join_room':
 			self.join_room()
 		elif data['type'] == 'ball_data':
 			self.broadcast_ball_data(data)
@@ -108,8 +115,10 @@ class PongConsumer(WebsocketConsumer):
 		elif data['type'] == 'lobbyView':
 			self.lobby()
 		elif data['type'] == 'room_deleted':
-			if 'room_name' in data:
-				self.room_deleted(data)
+			self.room_name = data['room_name']
+			if self.room_name in self.rooms:
+				del self.rooms[self.room_name]
+				logger.info(f"Room {self.room_name} has been deleted")
 
 	def join_room(self):
 		if self.room_name not in self.rooms:
@@ -164,7 +173,7 @@ class PongConsumer(WebsocketConsumer):
 		logger.info(f"Room deleted event sent for room: {event['room_name']}")
 		self.send(text_data=json.dumps({
         'type': 'room_deleted',
-        'room_name': event['room_name']  # Room name as a separate field
+        'room_name': event['room_name']
     }))	
 
 	def ball_data(self, event):
@@ -211,6 +220,7 @@ class PongConsumer(WebsocketConsumer):
 				'gameStart': event['gameStart'],
 				'currentServer': event['currentServer'],
 				'startTime': event['startTime'],
+				'clientLeft': event['clientLeft'],
 			}
 		}))
 
@@ -273,6 +283,7 @@ class PongConsumer(WebsocketConsumer):
 				'gameStart': data['gameStart'],
 				'currentServer': data['currentServer'],
 				'startTime': data['startTime'],
+				'clientLeft': data['clientLeft'],
 			}
 		)
 

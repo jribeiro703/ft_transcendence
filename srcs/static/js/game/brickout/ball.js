@@ -13,7 +13,7 @@ export function startBallB(e)
             brickVar.gameStart = true;
 			brickVar.startTime = true;
 			if (!brickVar.initDx || !brickVar.initDy)
-				updateDifficultySelectionB(brickVar.difficulty);
+				updateDifficultySelectionB(brickVar.difficulty, true);
             brickVar.dx = brickVar.initDx;
             brickVar.dy = -brickVar.initDy;
         }

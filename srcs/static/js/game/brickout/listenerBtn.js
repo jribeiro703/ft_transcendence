@@ -1,8 +1,8 @@
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 import { handleNextLevelB, restartLevelB } from "./level.js";
-
-import { renderPageGame } from "../pong/myHistory.js";
+import { clearAllBrickStates } from "./manage.js";
+import { renderPageGame } from "../HistoryManager.js";
 import { clearBtnB } from "./manage.js";
 
 
@@ -65,6 +65,7 @@ export function clearAllGameStates()
 	brickVar2.lives = 2
 }
 
+
 export function listenLocalRematchBtn()
 {
 	const rematchBtn = document.getElementById('rematchBtn');
@@ -73,9 +74,7 @@ export function listenLocalRematchBtn()
 	{
 		rematchBtn.addEventListener('click', async () => 
 		{
-			// resetBrickoutState();
-			clearAllGameStates();
-			// clearBtnB(false);
+			clearAllBrickStates();
 			await renderPageGame("playBrickoutLocal", true);
 		});
 	}
@@ -83,24 +82,9 @@ export function listenLocalRematchBtn()
 	{
 		quitBtn.addEventListener('click', async () =>
 		{
-			// resetBrickoutState();
-			clearAllGameStates();
-			// clearBtnB(false);
+			clearAllBrickStates();
 			await renderPageGame("home", true);
 		});
 	}
 }
 
-export function resetBrickoutState()
-{
-    brickVar.initialize = false;
-    brickVar2.initialize = false;
-    if (brickVar.gameTimer)
-	{
-        clearInterval(brickVar.gameTimer);
-    }
-    if (brickVar2.gameTimer)
-	{
-        clearInterval(brickVar2.gameTimer);
-    }
-}

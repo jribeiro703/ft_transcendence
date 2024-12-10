@@ -39,7 +39,9 @@ function drawPlayerPaddle()
     const radius = gameVar.playerPaddleWidth / 2 + 3;
 	let color = null;
 
-	if (gameVar.currentLevel === 'tableTennis')
+	if (gameVar.currentLevel === 'classic')
+		color = 'white';
+	else if (gameVar.currentLevel === 'tableTennis')
 		color = "#FF414D";
 	else if (gameVar.currentLevel === 'football')
 		color = "#FF414D";
@@ -77,7 +79,9 @@ function drawOtherPaddle(player)
 		paddleWidth = gameVar.player2PaddleWidth;
 		x = gameVar.canvasW - gameVar.player2PaddleWidth;
 		radius = gameVar.player2PaddleWidth / 2 + 3;
-		if (gameVar.currentLevel === 'tableTennis')
+		if (gameVar.currentLevel === 'classicPong')
+			color = 'white';
+		else if (gameVar.currentLevel === 'tableTennis')
 			color = "#0095DD";
 		else if (gameVar.currentLevel === 'football')
 			color = "#FF8C00";
@@ -91,6 +95,8 @@ function drawOtherPaddle(player)
 		paddleWidth = gameVar.aiPaddleWidth;
 		x = gameVar.canvasW - gameVar.aiPaddleWidth;
 		radius = gameVar.aiPaddleWidth / 2 + 3;
+		if (gameVar.currentLevel === 'classicPong')
+			color = 'white';
 		if (gameVar.currentLevel === 'tableTennis')
 			color = "#0095DD";
 		else if (gameVar.currentLevel === 'football')

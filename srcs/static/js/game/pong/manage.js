@@ -1,7 +1,7 @@
 import gameVar from "./var.js";
 import { checkball } from "./check.js";
-import { resetBall } from "./reset.js";
-import { renderPageGame } from "./myHistory.js";
+import { clearAllpongStates, resetBall } from "./reset.js";
+import { renderPageGame } from "../HistoryManager.js";
 
 export function manageServer()
 {
@@ -52,8 +52,24 @@ export function addBtn()
 	const returnLobbtyBtn = document.getElementById("returnLobbyBtn");
 	const quitBtn = document.getElementById("quitBtn");
 		if (returnLobbtyBtn)
-			returnLobbtyBtn.addEventListener("click", renderPageGame("pongLobby"), true);
+		{
+			returnLobbtyBtn.addEventListener("click", () =>
+			{
+				gameVar.liveMatch = true;
+				gameVar.game = 'pong';
+				clearAllpongStates();
+				renderPageGame("pongLobby", true);
+			});
+		}
 		if (quitBtn)
-			quitBtn.addEventListener('click', () => renderPageGame("home"), true);
+		{
+			quitBtn.addEventListener('click', () => 
+			{
+				gameVar.liveMatch = false;
+				clearAllpongStates();
+				renderPageGame("home", true);
+			});
+
+		}
 
 }
