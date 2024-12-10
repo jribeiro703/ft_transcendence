@@ -94,14 +94,15 @@ def getUserPk(request):
 	return Response({"pk": user.id}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getLeaderboard(request):
 	try:
 		leaderboard = {}
-		users = User.objects.all()
+		users = User.objects.all(is_staff=False)
 		for user in users:
-			matchs = get_user_matchs_infos
+			matchs = get_user_matchs_infos(user)
 			username = user.username
-			avatar = user.avatar
+			avatar = user.avatar.url
 			leaderboard[username] = {"avatar": avatar, "matchs": matchs}
 		return Response(leaderboard, status=status.HTTP_200_OK)
 	except Exception as e:
