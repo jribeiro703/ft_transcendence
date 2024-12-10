@@ -1,5 +1,5 @@
-import { fetchData } from "../fetchData.js";
-import { showToast } from "../tools.js";
+import { fetchData, fetchAuthData } from "../fetchData.js";
+import { showToast, showErrorMessages } from "../tools.js";
 import { renderPage } from "../historyManager.js";
 
 async function createDialog(mainContent, dialogConfig) {
@@ -39,8 +39,6 @@ async function listenForDialog(mainContent, dialogElement, pk, newInputId, key) 
 		const isPasswordDialog = dialogElement.id === "password-dialog";
 		let body;
 
-		// console.log("isPasswordDialog", isPasswordDialog);
-
 		if (isPasswordDialog) {
 			const oldPassword = document.getElementById("current-password").value;
 			const newPassword = document.getElementById("new-password").value;
@@ -53,15 +51,13 @@ async function listenForDialog(mainContent, dialogElement, pk, newInputId, key) 
 			body = { [key]: newValue };
 		}
 
-		// console.log("body", body);
-
-		const responseObject = await fetchData(`/user/settings/${pk}/`, "PATCH", body, false, "authenticated");
+		const responseObject = await fetchAuthData(`/user/settings/${pk}/`, "PATCH", body, false);
 		if (responseObject.status === 200) {
 			if (!isPasswordDialog)
 				renderPage("settings", false);
 			showToast(responseObject.data.message, "success");
 		} else
-			showToast(responseObject.data.message, "error");
+			showErrorMessages(responseObject);
 		dialogElement.close();
 		mainContent.removeChild(dialogElement);
 	})
@@ -98,12 +94,12 @@ async function uploadAvatar(pk) {
 		const formData = new FormData();
 		formData.append('avatar', file);
 		
-		const responseObject = await fetchData(`/user/settings/${pk}/`, 'PATCH', formData, true, "authenticated");
+		const responseObject = await fetchAuthData(`/user/settings/${pk}/`, 'PATCH', formData, true);
 		if (responseObject.status === 200) {
 			showToast(responseObject.data.message, "success");
 			renderPage("settings", false);
 		} else {
-			showToast(responseObject.data.message, "error");
+			showErrorMessages(responseObject);
 		}
 	});
 	
@@ -115,13 +111,13 @@ async function deleteAccount(pk) {
 	if (!confirmation) {
 		return;
 	}
-	const responseObject = await fetchData(`/user/settings/${pk}/`, 'DELETE', null, false, "authenticated");
+	const responseObject = await fetchAuthData(`/user/settings/${pk}/`, 'DELETE', null, false);
 	if (responseObject.status === 205) {
 		showToast(responseObject.data.message, "success");
-		localStorage.setItem('access_token', "");
+		sessionStorage.clear();
 		renderPage("home")
 	} else
-		showToast(responseObject.data.message, "error");
+		showErrorMessages(responseObject);
 }
 
 async function addNewFriend(pk) {
@@ -131,17 +127,16 @@ async function addNewFriend(pk) {
         showToast("Please enter a username to add as a friend.", "error");
         return;
     }
-    const responseObject = await fetchData(
+    const responseObject = await fetchAuthData(
 		`/user/settings/${pk}/`, 
 		'PATCH', 
 		{new_friend: `${newFriendUsername}`}, 
-		false, 
-		"authenticated"
+		false
 	);
 	if (responseObject.status === 200)
 		showToast(responseObject.data.message, "success");
 	else
-		showToast(responseObject.data.message, "error");
+		showErrorMessages(responseObject);
 }
 
 export { createDialog, listenForDialog, deleteAccount, addNewFriend, uploadAvatar };

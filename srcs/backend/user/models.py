@@ -7,6 +7,8 @@ from datetime import timedelta
 from .validators import alphanumeric
 
 class User(AbstractUser):
+	is_42_user = models.BooleanField(default=False)
+
 	username = models.CharField("username", max_length=30, unique=True, blank=False, validators=[MinLengthValidator(3), alphanumeric])
 	email = models.EmailField("email", unique=False, blank=False)
 	new_email = models.EmailField("new_email", null=True, blank=True)

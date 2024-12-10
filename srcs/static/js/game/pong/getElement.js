@@ -4,8 +4,6 @@ export function getElementGameSelection()
 {
 	gameVar.settingBtn1 = document.getElementById('settingBtn1');
 	gameVar.settingBtn2 = document.getElementById('settingBtn2');
-	gameVar.settingBtn3 = document.getElementById('settingBtn3');
-	gameVar.settingBtn4 = document.getElementById('settingBtn4');
 	gameVar.playBtn = document.getElementById('playBtn');
 	gameVar.playBtn2 = document.getElementById('playBtn2');
 	gameVar.playBtn3 = document.getElementById('playBtn3');
@@ -34,6 +32,7 @@ export function getBtnById()
 	gameVar.easy = document.getElementById('easy');
 	gameVar.medium = document.getElementById('medium');
 	gameVar.hard = document.getElementById('hard');
+	gameVar.classicPong = document.getElementById('classicPong');
 	gameVar.tableTennis = document.getElementById('tableTennis');
 	gameVar.footLevel = document.getElementById('footLevel');
 	gameVar.tennisLevel = document.getElementById('tennisLevel');

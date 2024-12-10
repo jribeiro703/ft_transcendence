@@ -1,10 +1,11 @@
-import gameVar from "./var.js";
-import { sendPlayerData, sendSettingData } from "./network.js";
-import { drawLive } from "./draw.js";
-import { initializeBall } from "./ball.js";
-import { updateCanvasColor } from "./update.js";
-import { showGameRoom } from "./gameView.js";
-import { drawScoreBoard } from "./score.js";
+import gameVar from './var.js';
+import { sendPlayerData, sendSettingData } from './network.js';
+import { drawLive } from './draw.js';
+import { initializeBall } from './ball.js';
+import { updateCanvasColor } from './update.js';
+import { showGameRoom } from './gameView.js';
+import { drawScoreBoard } from './score.js';
+import { renderPageGame } from './myHistory.js';
 
 export function createNewRoom(joinRoomCallback) {
   const roomName = `room_${Math.floor(Math.random() * 10000)}`;
@@ -81,56 +82,77 @@ export function joinRoom(roomName) {
     }
   };
 
-  gameSocket.onmessage = function (e) {
-    try {
-      const data = JSON.parse(e.data);
-      // if (data.type !== 'ball_data' && data.type !== 'paddle_data')
-      console.log("data: ", data);
-      if (data.type === "ping") {
-        gameSocket.send(JSON.stringify({ type: "pong" }));
-      } else if (data.type == "client_left") {
-        console.log("left before: ", gameVar.clientLeft);
-        console.log("client Left !");
-        gameVar.clientLeft = true;
-        console.log("left after: ", gameVar.clientLeft);
-        if (gameSocket && gameSocket.readyState === WebSocket.OPEN) {
-          gameSocket.send(
-            JSON.stringify({
-              type: "room_deleted",
-              room_name: roomName,
-            }),
-          );
-        }
-      } else if (data.type == "ball_data") {
-        gameVar.x = data.ball_data.x;
-        gameVar.y = data.ball_data.y;
-      } else if (data.type == "direction_data") {
-        gameVar.dx = data.direction_data.dx;
-        gameVar.dy = data.direction_data.dy;
-        gameVar.init_dx = data.direction_data.initDx;
-        gameVar.init_dy = data.direction_data.initDy;
-      } else if (data.type == "paddle_data") {
-        if (data.paddle_data.playerIdx == 1) {
-          gameVar.playerPaddleY = data.paddle_data.paddle_y;
-        }
-        if (data.paddle_data.playerIdx == 2) {
-          gameVar.player2PaddleY = data.paddle_data.paddle_y;
-        }
-      } else if (data.type == "player_data") {
-        gameVar.playerReady = data.player_data.playerReady;
-      } else if (data.type == "game_data") {
-        gameVar.gameStart = data.game_data.gameStart;
-        gameVar.currentServer = data.game_data.currentServer;
-        gameVar.startTime = data.game_data.startTime;
-      } else if (data.type == "setting_data") {
-        gameVar.gameReady = data.setting_data.gameReady;
-        gameVar.difficulty = data.setting_data.difficulty;
-        gameVar.currentLevel = data.setting_data.currentLevel;
-      }
-    } catch (error) {
-      console.error("error process message", error);
-    }
-  };
+	gameSocket.onmessage = function(e)
+	{
+		try
+		{
+			const data = JSON.parse(e.data);
+			// if (data.type !== 'ball_data' && data.type !== 'paddle_data')
+			console.log("data: ", data);
+			if (data.type === 'ping')
+			{
+				gameSocket.send(JSON.stringify({ type: 'pong' }));
+			}
+			else if (data.type == 'client_left')
+			{
+				console.log("left before: ", gameVar.clientLeft);
+				console.log("client Left !");
+				gameVar.clientLeft = true;
+				console.log("left after: ", gameVar.clientLeft);
+				if (gameSocket && gameSocket.readyState === WebSocket.OPEN)
+				{
+					gameSocket.send(JSON.stringify({
+            		type: 'room_deleted',
+            		room_name: roomName
+        		}));
+				}
+			}
+			else if (data.type == 'ball_data')
+			{
+				gameVar.x = data.ball_data.x;
+				gameVar.y = data.ball_data.y;
+			} 
+			else if (data.type == 'direction_data')
+			{
+				gameVar.dx = data.direction_data.dx;
+				gameVar.dy = data.direction_data.dy;
+				gameVar.init_dx = data.direction_data.initDx;
+				gameVar.init_dy = data.direction_data.initDy;
+			}
+			else if (data.type == 'paddle_data') 
+			{
+				if (data.paddle_data.playerIdx == 1)
+				{
+					gameVar.playerPaddleY = data.paddle_data.paddle_y;
+				}
+				if(data.paddle_data.playerIdx == 2)
+				{
+					gameVar.player2PaddleY = data.paddle_data.paddle_y;
+				}
+			} 
+			else if (data.type == 'player_data')
+			{
+				gameVar.playerReady = data.player_data.playerReady;
+			}
+			else if (data.type == 'game_data')
+			{
+				gameVar.gameStart = data.game_data.gameStart;
+				gameVar.currentServer = data.game_data.currentServer;
+				gameVar.startTime = data.game_data.startTime;
+				gameVar.clientLeft = data.game_data.clientLeft;
+			}
+			else if (data.type == 'setting_data')
+			{
+				gameVar.gameReady = data.setting_data.gameReady;
+				gameVar.difficulty = data.setting_data.difficulty;
+				gameVar.currentLevel = data.setting_data.currentLevel;
+			}
+		}
+		catch (error)
+		{
+			console.error("error process message", error);
+		}
+	};
 
   gameSocket.onerror = function (e) {
     console.error("Game socket error:", e);
@@ -177,11 +199,14 @@ export function addRoom(
   }
 }
 
-export function updateRoomList() {
-  gameVar.roomsContainer.style.display = "block";
-  gameVar.roomsContainer.innerHTML = "";
-  gameVar.rooms.forEach((room) => {
-    if (room.idx === null || room.idx === undefined) return;
+export function updateRoomList()
+{
+	// gameVar.roomsContainer.style.display = 'block';
+	gameVar.roomsContainer.innerHTML = '';
+	gameVar.rooms.forEach(room =>
+	{
+		if (room.idx === null || room.idx === undefined)
+			return ;
 
     gameVar.noRoomsMessage.style.display = "none";
     const roomItem = document.createElement("div");
@@ -200,28 +225,34 @@ export function updateRoomList() {
             </div>
         `;
 
-    const joinBtn = roomItem.querySelector(".joinRoomBtn");
-    joinBtn.addEventListener("click", () => {
-      showGameRoom();
-      joinRoom(room.name);
-    });
+		const joinBtn = roomItem.querySelector('.joinRoomBtn');
+		joinBtn.addEventListener('click', () =>
+		{
+			renderPageGame('playPongRemoteSecondP', true);
+			joinRoom(room.name); 
+		});
 
     gameVar.roomsContainer.appendChild(roomItem);
   });
 }
 
-export function updateSettingLive() {
-  const waitingINterval = setInterval(() => {
-    if (gameVar.currentLevel === null || gameVar.difficulty === null) {
-      console.log("waiting for setting");
-    } else {
-      updateCanvasColor();
-      drawScoreBoard();
-      initializeBall();
-      drawLive();
-      clearInterval(waitingINterval);
-    }
-  }, 2000);
+export function updateSettingLive()
+{
+	const waitingInterval = setInterval(() =>
+	{
+		if(gameVar.currentLevel === null || gameVar.difficulty === null)
+		{
+			console.log("waiting for setting");
+		}
+		else
+		{
+			updateCanvasColor();
+			drawScoreBoard();
+			initializeBall();
+			drawLive();
+			clearInterval(waitingInterval);
+		}
+	}, 2000);
 }
 export function checkRoom(rooms) {
   console.log("checkRoom");
