@@ -2,13 +2,21 @@ import gameVar from "./var.js";
 import brickVar from "../brickout/var.js";
 import brickVar2 from "../brickout/secondBrickout/var.js";
 
-export function displayGameData(idx)
+export function displayGameDataPong(idx)
 {
-	console.log(idx);
-	console.log("gamestart: ", gameVar.gameStart);
-	console.log("gameReady: ", gameVar.gameReady);
-	console.log("diff: ", gameVar.difficulty);
-	console.log("level: ", gameVar.currentLevel);
+	// console.log(idx);
+	// console.log("gamestart: ", gameVar.gameStart);
+	// console.log("gameReady: ", gameVar.gameReady);
+	console.log("pong diff: ", gameVar.difficulty);
+	console.log("pong level: ", gameVar.currentLevel);
+	console.log("pong pu enable: ", gameVar.powerUpEnable);
+}
+
+export function displayGameDataBrick()
+{
+	console.log("brick diff: ", brickVar.difficulty);
+	console.log("brick level: ", brickVar.currLevel);
+	console.log("brick pu enbale: ", brickVar.powerUpEnable);
 }
 
 export function displayPlayerData(idx)

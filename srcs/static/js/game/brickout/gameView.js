@@ -6,8 +6,8 @@ import { initListenerB, initListenerMultiB, startBrickGame2p } from './init.js';
 import { displayGameBrickView } from '../pong/display.js';
 import { initializeCanvasBrick, initializeCanvasBrick2p } from '../pong/canvas.js';
 import { displayGameBrick2pView } from '../pong/display.js';
-import { clearAllGameStates } from './listenerBtn.js';
 import { updateSettingSelectionForSecond } from './update.js';
+import { clearAllBrickStates } from './manage.js';
 import { drawB as drawFirst} from './draw.js';
 import { drawB as drawSecond} from './secondBrickout/draw.js';
 
@@ -24,7 +24,7 @@ export async function showGameBrickView()
 
 export async function showGameBrickLocalView()
 {
-	clearAllGameStates();
+	clearAllBrickStates();
 
 	displayGameBrick2pView();
  

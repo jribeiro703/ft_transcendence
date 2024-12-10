@@ -24,7 +24,7 @@ export function initEventListenerRoom()
 
 	gameVar.createRoomBtn.addEventListener('click', () => 
 	{
-		renderPageGame("playPongRemote", true, 'live');
+		renderPageGame("playPongRemote", true);
 		// showGameMultiView();
 	});
 

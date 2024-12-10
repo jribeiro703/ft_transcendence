@@ -3,6 +3,8 @@ import { checkball } from "./check.js";
 
 export function initializeBall()
 {
+	if (gameVar.currentLevel === 'classicPong')
+		gameVar.ballRadius = 4;
 	console.log("init ball, curr : ", gameVar.currentServer);
 	if (gameVar.currentServer === 'player')
 	{
@@ -32,13 +34,17 @@ export function initializeBall()
 
 export function drawBall()
 {
-	if (gameVar.currentLevel === 'classic')
+	if (gameVar.currentLevel === 'classicPong')
 	{
-		gameVar.ctx.beginPath();
-		gameVar.ctx.rect(gameVar.x, gameVar.y, 15, 15);
-		gameVar.ctx.fillStyle = 'white';
-		gameVar.ctx.fill();
-		gameVar.ctx.closePath();
+		const squareSize = 13;
+        const squareX = gameVar.x - (squareSize / 2) + 4;
+        const squareY = gameVar.y - (squareSize / 2);
+
+        gameVar.ctx.beginPath();
+        gameVar.ctx.rect(squareX, squareY, squareSize, squareSize);
+        gameVar.ctx.fillStyle = 'white';
+        gameVar.ctx.fill();
+        gameVar.ctx.closePath();
 	}
 	else
 	{

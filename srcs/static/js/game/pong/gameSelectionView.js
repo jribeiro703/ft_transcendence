@@ -1,16 +1,21 @@
 import gameVar from "./var.js";
 import { listenSettingBtn, listenPlayBtn } from "./listenerSetting.js";
 import { updateImageUrl } from "./update.js";
-import { displayGameSelectionSolo, displayGameSelectionMulti } from "./display.js";
+import { displayGameSelectionSolo, displayGameSelectionMulti, displaySetting } from "./display.js";
 import { getElementGameSelection } from "./getElement.js";
-import { initializeCanvas } from "./canvas.js";
 import { listenSettingMultiBtn } from "./listenerSetting.js";
 import { updateSetting } from "./setting.js";
 import { updateSettingB } from "../brickout/update.js";
 import { listenPlayMultiBtn } from "./listenerSetting.js";
+import { displayGameDataPong, displayGameDataBrick } from "./displayVar.js";
+import brickVar from "../brickout/var.js";
+import { displaySettingB } from "../brickout/settings.js";
 
 export function showGameSelectionView()
 {
+	console.log("gameSelection");
+	// displayGameDataPong();
+	// displayGameDataBrick();
 	gameVar.liveMatch = false;
 	gameVar.localGame = false;
 
@@ -22,10 +27,10 @@ export function showGameSelectionView()
 	gameVar.playBtn = document.getElementById('playBtn');
 	gameVar.playBtn2 = document.getElementById('playBtn2');
 
-	updateSetting();
-	updateSettingB();
 	listenSettingBtn();
 	listenPlayBtn();
+	updateSetting();
+	updateSettingB();
 }
 
 export function showGameSelectionMultiView()
