@@ -7,6 +7,25 @@ const clientIdColors = {};
 
 // Function to generate a random, visible color
 function getRandomColor() {
+    const hue = Math.floor(Math.random() * 360); // Random hue
+    const saturation = 100; // Full saturation
+    const lightness = 50; // 50% lightness for good contrast
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
+// Function to get or assign a color for a clientId
+function getColorForClientId(clientId) {
+    if (!clientIdColors[clientId]) {
+        clientIdColors[clientId] = getRandomColor();
+    }
+    return clientIdColors[clientId];
+}
+
+// Object to store clientId-color mappings
+const clientIdColors = {};
+
+// Function to generate a random, visible color
+function getRandomColor() {
   const hue = Math.floor(Math.random() * 360); // Random hue
   const saturation = 100; // Full saturation
   const lightness = 50; // 50% lightness for good contrast

@@ -11,7 +11,7 @@ export function listenNextLevelBtn()
 	if (restartLevelBtn)
 		restartLevelBtn.addEventListener("click", restartLevelB);
 	if (quitBtn)
-		quitBtn.addEventListener('click', () => renderPageGame("hone"), true);
+		quitBtn.addEventListener('click', () => renderPageGame("home", true));
 }
 
 export function listenFinishBtn()

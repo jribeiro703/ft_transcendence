@@ -1,5 +1,5 @@
 import { showToast, DEFAULT_AVATAR} from "../tools.js";
-import { fetchData } from "../fetchData.js";
+import { fetchData, fetchAuthData } from "../fetchData.js";
 
 function createProfileContent() {
 	const mainContent = document.getElementById('mainContent');
@@ -28,13 +28,13 @@ function createProfileContent() {
 }
 
 export async function renderProfilePage() {
-	let responseObject = await fetchData("/user/private/pk/", "GET", null, false, "authenticated");
+	let responseObject = await fetchAuthData("/user/private/pk/", "GET", null, false);
 	if (responseObject.status !== 200) {
 		showToast("An error occurred while getting your profile data.", "error");
 		return;
 	}
 
-	responseObject = await fetchData(`/user/profile/${responseObject.data.pk}`, "GET", null, false, "simple");
+	responseObject = await fetchAuthData(`/user/profile/${responseObject.data.pk}`, "GET", null, false);
 	if (responseObject.status === 200) {
 		createProfileContent();
 		const data = responseObject.data;

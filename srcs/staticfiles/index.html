@@ -1,82 +1,49 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Transcendance</title>
-    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Indie+Flower&family=Dancing+Script&display=swap"
-          rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-          crossorigin="anonymous">
-    <link rel="stylesheet"
-          type="text/css"
-          href="{% static 'css/style.css' %}?v=1.0">
-    <link rel="shortcut icon"
-          type="image/svg"
-          href="{% static 'css/images/favicon-pong.svg' %}">
-  </head>
-  <body class="vw-100 vh-100 mh-100 mw-100">
-    <div class="d-flex flex-column mw-100 mh-100 w-100 h-100">
-      <div class="navbar-parent px-4">
-        <nav class="navbar px-5">
-          <div class="container-fluid d-flex justify-content-between">
-            <div data-home-icon class="homeIcon"></div>
-            <div data-profile-icon class="profileIcon"></div>
-          </div>
-        </nav>
-      </div>
-      <div class="w-100 h-100" style="max-height: calc(100vh - 100px);">
-        <div class="w-100 h-100 flex-grow-1 d-flex justify-content-center align-items-center px-5 pb-5">
-          <div id="mainContent"
-               class="slideWithLiveChat flex-grow-1 d-flex h-100 align-item-center justify-content-center"></div>
-          <div id="livechat"
-               class="slidingDiv hide-children neon-purple d-flex flex-column gap-3 ">
-            <div class="flex-grow-1 w-100 h-100 overflow-auto">
-              <div id="chat-log"
-                   class="w-100 h-100 d-flex flex-column-reverse text-break overflow-auto"
-                   aria-label="Chat log"></div>
-            </div>
-            <div class="input-group d-flex gap-3">
-              <div class="emoji-picker-container" id="emojiPickerContainer">
-                <emoji-picker id="emoji-picker" aria-label="Emoji picker"></emoji-picker>
-              </div>
-              <button class="chat-btn btn rounded border"
-                      type="button"
-                      id="emojiButton"
-                      aria-label="Emoji picker">😊</button>
-              <input id="chat-message-input"
-                     type="text"
-                     class="border rounded form-control"
-                     placeholder="Type here..."
-                     aria-label="Chat message input">
-              <button id="chat-message-submit"
-                      class="btn  border rounded chat-btn"
-                      aria-label="Send message">Send</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div data-chat-icon class="chat-close-icon" />
-    <script>const staticImageURL = "{% static 'css/images/pong-game-card.png' %}";</script>
-    <script type="module"
-            src="{% static 'js/tournament/services/tournamentAPIService.js' %}?v=1.0"></script>
-    <script type="module" src="{% static 'js/main.js' %}?v=1.1"></script>
-    <script type="module"
-            src="{% static 'js/tournament/services/tournamentAPIService.js' %}?v=1.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
-    <script type="module"
-            src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-    <script type="module" src="{% static 'js/livechat/livechat.js' %}?v=1.1"></script>
-  </body>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Transcendance</title>
+	<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Indie+Flower&family=Dancing+Script&display=swap" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}?v=1.0">
+</head>
+<body>
+	<nav class="navbar rounded-5 px-5">
+		<div class="container-fluid d-flex flex-column align-items-center">
+			<a id="me" class="navbar-brand text-center mb-2 fs-1">Ft_Transcendence</a>
+			<div class="w-100 d-flex justify-content-between align-items-center">
+				<div class="d-flex">
+					<button id="btn-Home" class="btn custom-home" type="button">Home</button>
+				</div>
+				<div class="d-flex">
+					<img 
+						id="user-avatar" 
+						src="{% static 'images/default-avatar.jpg' %}"
+						alt="User Avatar"
+						class="rounded-circle"
+						style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #ccc;"
+					>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<br><br><br>
+	<div id="mainContent">
+		<!-- dynamix content here -->
+  </div>
+  <script>
+	const staticImageURL = "{% static 'css/images/pong-game-card.png' %}";
+  </script>
+	<script type="module" src="{% static 'js/tournament/services/tournamentAPIService.js' %}?v=1.0"></script>
+	<script type="module" src="{% static 'js/main.js' %}?v=1.1"></script>
+	<script type="module" src="{% static 'js/tournament/services/tournamentAPIService.js' %}?v=1.0"></script>
+	<div class="footer-text">
+		Project directed by Yachen, Lucravoi, Dlacuey, and Tmaillar
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	{% csrf_token %}
+</body>
 </html>

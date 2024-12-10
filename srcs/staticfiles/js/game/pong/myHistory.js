@@ -1,10 +1,10 @@
 import gameVar from "./var.js";
 import brickVar from "../brickout/var.js";
 import { showGameSelectionView } from "./gameSelectionView.js";
-import { showGameSelectionMultiView} from "./gameViewMulti.js";
+import { showGameSelectionMultiView } from "./gameSelectionView.js";
 import { showSettingView } from "./settingsView.js";
 import { showGameView } from "./gameView.js";
-import { showGameBrickMultiView, showGameBrickView } from "../brickout/gameView.js";
+import { showGameBrickLocalView, showGameBrickView } from "../brickout/gameView.js";
 import { renderHomePage } from "../../renderHomePage.js";
 import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
@@ -15,7 +15,9 @@ import { showSettingViewB } from "../brickout/settings.js";
 import { initLobbyView } from "./init.js";
 import { checkFrame, checkInterval } from "../brickout/score.js";
 import { showPongRemote } from "./gameViewMulti.js";
-
+import { updateUserAvatar } from "../../user/tools.js";
+import { API_BASE_URL } from "../../user/fetchData.js";
+import { isAuthenticated } from "../../user/isAuthenticated.js";
 
 const pongGamePages = {
 
@@ -31,7 +33,7 @@ const pongGamePages = {
 
 
 	playPongLocal: showGameView,
-	playBrickoutLocal: showGameBrickMultiView,
+	playBrickoutLocal: showGameBrickLocalView,
 
 	pongLobby: initLobbyView,
 	brickoutLobby: initLobbyView,
@@ -39,19 +41,12 @@ const pongGamePages = {
 	playPongRemote: showPongRemote,
 	// playBrickoutRemote: showBrickoutRemote,
 }
-// window.addEventListener('popstate', async (event) =>
-// {
-// 	if (event.state)
-// 	{
-// 		const storedParams = event.state.params || JSON.parse(sessionStorage.getItem('pageParams'));
-// 		await renderPageGame(event.state.page, false, storedParams);
-// 	}
-// });
 
 export async function renderPageGame(page, updateHistory = true, params = null)
 {
-	checkInterval();
-	checkFrame();
+	// checkInterval();
+	// checkFrame();
+
     let renderFunction = pongGamePages[page];
 
     const lastPage = sessionStorage.getItem('lastPage');
@@ -103,6 +98,8 @@ window.addEventListener('beforeunload', () =>
         levelB: brickVar.currLevel,
         puEnableB: brickVar.powerUpEnable,
     }));
+
+	// navigator.sendBeacon(`${API_BASE_URL}/user/logout/`);	// logout user if window is closed
 });
 
 window.addEventListener('load', () =>
