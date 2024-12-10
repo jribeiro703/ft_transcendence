@@ -402,6 +402,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // friendList.style.display = 'none';
 	document.getElementById('chat-log').classList.remove('d-none');
 	document.getElementById('friendlist').classList.add('d-none');
+	document.getElementById('onlinelist').classList.add('d-none');
 
     // Reset chat log view state if needed
     // chatLog.className = 'w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto position-relative';
@@ -417,6 +418,7 @@ document.addEventListener('DOMContentLoaded', function() {
   friendsButton.addEventListener('click', async function() {
     // chatLog.innerHTML = '';
 	document.getElementById('friendlist').classList.remove('d-none');
+	document.getElementById('onlinelist').classList.add('d-none');
 	document.getElementById('chat-log').classList.add('d-none');
     // chatLog.style.display = 'flex';
     // friendList.style.display = 'none';
@@ -487,6 +489,80 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 // FRIENDS
 
+// ONLINE
+document.addEventListener('DOMContentLoaded', function() {
+  const onlineButton = document.getElementById('onlineButton');
+  const chatLog = document.getElementById('onlinelist');
+
+  onlineButton.addEventListener('click', async function() {
+    // chatLog.innerHTML = '';
+	document.getElementById('onlinelist').classList.remove('d-none');
+	document.getElementById('chat-log').classList.add('d-none');
+	document.getElementById('friendlist').classList.add('d-none');
+    // chatLog.style.display = 'flex';
+    // friendList.style.display = 'none';
+    
+    const loadingDiv = document.createElement('div');
+    loadingDiv.textContent = 'Loading online...';
+    chatLog.appendChild(loadingDiv);
+
+    try {
+      let response = await fetch('/user/online/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        },
+        credentials: 'include'
+      });
+
+      // Handle unauthorized response
+      if (response.status === 401) {
+        const newToken = await refreshAccessToken();
+        response = await fetch('/user/online/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${newToken}`
+          },
+          credentials: 'include'
+        });
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const online = await response.json();
+      chatLog.innerHTML = '';
+
+      const onlineListContainer = document.createElement('div');
+      onlineListContainer.className = 'online-list';
+
+      if (online.length === 0) {
+        onlineListContainer.innerHTML = '<div class="text-muted">No online player</div>';
+      } else {
+        online.forEach(online => {
+          const onlineDiv = document.createElement('div');
+          onlineDiv.className = 'online-item d-flex align-items-center gap-2 p-2 border rounded';
+          
+          const nameSpan = document.createElement('span');
+          nameSpan.textContent = online.username;
+          
+          onlineDiv.appendChild(nameSpan);
+          onlineListContainer.appendChild(onlineDiv);
+        });
+      }
+
+      chatLog.appendChild(onlineListContainer);
+    } catch (error) {
+      console.error('Error fetching online:', error);
+      chatLog.innerHTML = '<div class="text-danger p-3">Error loading online list. Please try again.</div>';
+    }
+  });
+});
+// online
+
 // Add token refresh function at the top
 async function refreshAccessToken() {
   try {
@@ -511,16 +587,16 @@ async function refreshAccessToken() {
 
 // Add CSS styles
 const styles = `
-.friends-list {
+.friends-list, .online-list {
   width: 100%;
 }
 
-.friend-item {
+.friend-item, .online-item {
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
-.friend-item:hover {
+.friend-item:hover, .online-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 

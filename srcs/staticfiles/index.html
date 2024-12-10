@@ -25,7 +25,7 @@
         <nav class="navbar px-5">
           <div class="container-fluid d-flex justify-content-between">
             <div data-home-icon class="homeIcon"></div>
-            <div data-profile-icon class="profileIcon"></div>
+            <div data-profile-icon id="user-avatar" class="profileIcon"></div>
           </div>
         </nav>
       </div>
@@ -50,16 +50,23 @@
                    style="z-index: 2;"
                    aria-label="Friend list">
               </div>
+
+              <!-- online list with absolute positioning -->
+              <div id="onlinelist" 
+                   class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none" 
+                   style="z-index: 2;"
+                   aria-label="Online list">
+              </div>
             </div>
 
               <div class="position-absolute top-0 end-0 h-100">
-                <div class="channel-container d-flex flex-column h-100 p-2" 
+                <div class="channel-container d-flex flex-column h-100 p-2 m-4" 
                      style="max-height: 100%; 
                             position: absolute; 
                             top: 0; 
                             right: 0; 
                             bottom: 0;
-                            width: 65px;
+                            /* width: 65px; */
                             overflow-y: auto;
                             scrollbar-width: none;  /* Firefox */
                             -ms-overflow-style: none;  /* IE and Edge */
