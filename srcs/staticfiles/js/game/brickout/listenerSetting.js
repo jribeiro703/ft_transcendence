@@ -10,7 +10,7 @@ export function listenSettingPUB()
 	{
 		brickVar.withPowerUp.classList.add('selected');
 		brickVar.withoutPowerUp.classList.remove('selected');
-		updatePowerUpSelectionFirst(true);
+		updatePowerUpSelectionFirst(true, false);
 		checkSaveBtn();
 	});
 
@@ -18,7 +18,7 @@ export function listenSettingPUB()
 	{
 		brickVar.withoutPowerUp.classList.add('selected');
 		brickVar.withPowerUp.classList.remove('selected');
-		updatePowerUpSelectionFirst(false); 
+		updatePowerUpSelectionFirst(false, false); 
 		checkSaveBtn();
 	});
 }
@@ -30,7 +30,7 @@ export function listenSettingDifficultyB()
 		brickVar.easy.classList.add('selected');
 		brickVar.medium.classList.remove('selected');
 		brickVar.hard.classList.remove('selected');
-		updateDifficultySelectionB('easy');
+		updateDifficultySelectionB('easy', false);
 		checkSaveBtn();
 	});
 	
@@ -39,7 +39,7 @@ export function listenSettingDifficultyB()
 		brickVar.easy.classList.remove('selected');
 		brickVar.medium.classList.add('selected');
 		brickVar.hard.classList.remove('selected');
-		updateDifficultySelectionB('medium');
+		updateDifficultySelectionB('medium', false);
 		checkSaveBtn();
 	});
 
@@ -48,7 +48,7 @@ export function listenSettingDifficultyB()
 		brickVar.easy.classList.remove('selected');
 		brickVar.medium.classList.remove('selected');
 		brickVar.hard.classList.add('selected');
-		updateDifficultySelectionB('hard');
+		updateDifficultySelectionB('hard', false);
 		checkSaveBtn();
 	});
 }
@@ -61,7 +61,7 @@ export function listenSettingLevelB()
 		brickVar.castleLevel.classList.remove('selected');
 		brickVar.xLevel.classList.remove('selected');
 		brickVar.invaderLevel.classList.remove('selected');
-		updateLevelSelectionFirst('classic');
+		updateLevelSelectionFirst('classic', false);
 		checkSaveBtn();
 	});
 
@@ -71,7 +71,7 @@ export function listenSettingLevelB()
 		brickVar.castleLevel.classList.add('selected');
 		brickVar.xLevel.classList.remove('selected');
 		brickVar.invaderLevel.classList.remove('selected');
-		updateLevelSelectionFirst('castle');
+		updateLevelSelectionFirst('castle', false);
 		checkSaveBtn();
 	});
 
@@ -81,7 +81,7 @@ export function listenSettingLevelB()
 		brickVar.castleLevel.classList.remove('selected');
 		brickVar.xLevel.classList.add('selected');
 		brickVar.invaderLevel.classList.remove('selected');
-		updateLevelSelectionFirst('x');
+		updateLevelSelectionFirst('x', false);
 		checkSaveBtn();
 	});
 
@@ -91,7 +91,7 @@ export function listenSettingLevelB()
 		brickVar.castleLevel.classList.remove('selected');
 		brickVar.xLevel.classList.remove('selected');
 		brickVar.invaderLevel.classList.add('selected');
-		updateLevelSelectionFirst('invader');
+		updateLevelSelectionFirst('invader', false);
 		checkSaveBtn();
 	});
 }

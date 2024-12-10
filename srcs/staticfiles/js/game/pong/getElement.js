@@ -32,6 +32,7 @@ export function getBtnById()
 	gameVar.easy = document.getElementById('easy');
 	gameVar.medium = document.getElementById('medium');
 	gameVar.hard = document.getElementById('hard');
+	gameVar.classicPong = document.getElementById('classicPong');
 	gameVar.tableTennis = document.getElementById('tableTennis');
 	gameVar.footLevel = document.getElementById('footLevel');
 	gameVar.tennisLevel = document.getElementById('tennisLevel');

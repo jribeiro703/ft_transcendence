@@ -138,19 +138,15 @@ export function createPowerUp2()
     }
 }
 
-export function updatePowerUpSelection(selected)
+export function updatePowerUpSelection(selected, def)
 {
 	gameVar.powerUpEnable = selected;
-	gameVar.checkPu = true;
+	if (!def)
+		gameVar.checkPu = true;
 	if (selected)
 	{
-		console.log("Power-Ups activés !");
 		createPowerUp1();
 		createPowerUp2();
-	}
-	else 
-	{
-		console.log("Power-Ups désactivés !");
 	}
 }
 

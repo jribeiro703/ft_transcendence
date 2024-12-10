@@ -2,15 +2,16 @@ import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 import { updatePowerUpSelectionB as updatePowerUpSelectionFirst} from "./powerUp.js";
 import { updatePowerUpSelectionB as updatePowerUpSelectionSecond } from './secondBrickout/update.js'
-import { updateLevelSelectionB as updateLevelSelectionFirst} from "./secondBrickout/update.js";
+import { updateLevelSelectionB as updateLevelSelectionFirst} from "./update.js";
 import { updateLevelSelectionB as updateLevelSelectionSecond} from "./secondBrickout/update.js";
-import { displayUpdateSetting } from "./settings.js";
 import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
+import { displayGameDataBrick } from "../pong/displayVar.js";
+import { updateImageUrl } from "../pong/update.js";
+import { displaySettingB } from "./settings.js";
 
 export function updateSettingB()
 {
 	console.log("updateSettingB");
-	brickVar.settingChanged = true;
 	var difficulty = null;	
 	var level = null;
 	var powerUp = null;
@@ -20,29 +21,20 @@ export function updateSettingB()
 	else
 	{
 		difficulty = 'medium';
-		updateDifficultySelectionB('medium');
+		updateDifficultySelectionB('medium', true);
 	}
-
-	if (brickVar.castle)
-	{
-		level = 'the Castle';
-		brickVar.currLevel = 'castle';
-	}
-	else if (brickVar.x)
-	{
+	if (brickVar.currLevel === 'classic')
+		level = 'Classic'
+	else if (brickVar.currLevel === 'castle')
+		level = 'The Castle';
+	else if (brickVar.currLevel === 'x')
 		level = 'X Level';
-		brickVar.currLevel = 'x';
-	}
-	else if (brickVar.invader)
-	{
+	else if (brickVar.currLevel === 'invader')
 		level = 'Space Invader';
-		brickVar.currLevel = 'invader';
-	}
 	else 
 	{
 		level = 'Classic';
-		brickVar.currLevel = 'classic';
-		updateLevelSelectionFirst('clasic');
+		updateLevelSelectionFirst('classic', true);
 	}
 
 	if (brickVar.powerUpEnable)
@@ -50,24 +42,23 @@ export function updateSettingB()
 	else
 	{
 		powerUp = "❌";
-		updatePowerUpSelectionFirst(false);
+		updatePowerUpSelectionFirst(false, true);
 	}
-
-	displayUpdateSetting(difficulty, powerUp, level);
+	updateImageUrl();
+	displaySettingB(difficulty, powerUp, level);
+	// displayGameDataBrick();
 }
 
-export function updateDifficultySelectionB(level)
+export function updateDifficultySelectionB(level, def)
 {
 	if (level == 'easy')
 	{
-		console.log("easy mode");
 		brickVar.initDx = 2;
 		brickVar.initDy = 2;
 		brickVar.difficulty = 'easy';
 	}
 	if (level == 'medium')
 	{
-		console.log('medium mode');
 		brickVar.initDx = 5;
 		brickVar.initDy = 5;
 		brickVar.difficulty = 'medium';
@@ -76,10 +67,10 @@ export function updateDifficultySelectionB(level)
 	{
 		brickVar.initDx = 8;
 		brickVar.initDy = 8;
-		console.log('hard mode');
 		brickVar.difficulty = 'hard';
 	}
-	brickVar.checkDiff = true;
+	if (!def)
+		brickVar.checkDiff = true;
 }
 
 export function updateSettingSelectionForSecond()
@@ -93,9 +84,10 @@ export function updateSettingSelectionForSecond()
 	updatePowerUpSelectionSecond(brickVar2.powerUpEnable);
 	updateLevelSelectionSecond(brickVar2.currLevel);
 }
-export function updateLevelSelectionB(level)
+export function updateLevelSelectionB(level, def)
 {
-	brickVar.checkLevel = true;
+	if (!def)
+		brickVar.checkLevel = true;
 	if (level === "classic")
 		brickVar.currLevel = "classic";
 	else if (level === "castle")
