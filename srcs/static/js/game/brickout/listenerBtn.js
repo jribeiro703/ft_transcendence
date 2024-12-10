@@ -1,9 +1,6 @@
-import brickVar from "./var.js";
-import brickVar2 from "./secondBrickout/var.js";
 import { handleNextLevelB, restartLevelB } from "./level.js";
-
+import { clearAllBrickStates } from "./manage.js";
 import { renderPageGame } from "../pong/myHistory.js";
-import { clearBtnB } from "./manage.js";
 
 
 export function listenNextLevelBtn()
@@ -28,42 +25,7 @@ export function listenFinishBtn()
 	if (quitBtn)
 		quitBtn.addEventListener('click', () => renderPageGame("home"), true);
 }
-export function clearAllGameStates()
-{
-    // Annuler les animations en cours
-    if (brickVar.anim) {
-        cancelAnimationFrame(brickVar.anim);
-        brickVar.anim = null;
-    }
-    if (brickVar2.anim) {
-        cancelAnimationFrame(brickVar2.anim);
-        brickVar2.anim = null;
-    }
 
-    // Nettoyer les intervalles
-    if (brickVar.gameTimer) {
-        clearInterval(brickVar.gameTimer);
-        brickVar.gameTimer = null;
-    }
-    if (brickVar2.gameTimer) {
-        clearInterval(brickVar2.gameTimer);
-        brickVar2.gameTimer = null;
-    }
-
-    // Réinitialiser les états
-    brickVar.initialize = false;
-    brickVar2.initialize = false;
-    brickVar.finishLevel = false;
-    brickVar2.finishLevel = false;
-    brickVar.gameStart = false;
-    brickVar2.gameStart = false;
-    brickVar.startTime = false;
-    brickVar2.startTime = false;
-	brickVar.score = 0;
-	brickVar2.score = 0;
-	brickVar.lives = 2;
-	brickVar2.lives = 2
-}
 
 export function listenLocalRematchBtn()
 {
@@ -73,9 +35,7 @@ export function listenLocalRematchBtn()
 	{
 		rematchBtn.addEventListener('click', async () => 
 		{
-			// resetBrickoutState();
-			clearAllGameStates();
-			// clearBtnB(false);
+			clearAllBrickStates();
 			await renderPageGame("playBrickoutLocal", true);
 		});
 	}
@@ -83,24 +43,10 @@ export function listenLocalRematchBtn()
 	{
 		quitBtn.addEventListener('click', async () =>
 		{
-			// resetBrickoutState();
-			clearAllGameStates();
-			// clearBtnB(false);
+			clearAllBrickStates();
 			await renderPageGame("home", true);
 		});
 	}
 }
 
-export function resetBrickoutState()
-{
-    brickVar.initialize = false;
-    brickVar2.initialize = false;
-    if (brickVar.gameTimer)
-	{
-        clearInterval(brickVar.gameTimer);
-    }
-    if (brickVar2.gameTimer)
-	{
-        clearInterval(brickVar2.gameTimer);
-    }
-}
+

@@ -15,7 +15,7 @@ export function startGame()
 		newPowerUp(true, 1000);
 		newPowerUp(false, 1000);
 	}
-	displayGameDataPong();
+	// displayGameDataPong();
 	draw();
 	if (!gameVar.localGame)
 		manageAi();
