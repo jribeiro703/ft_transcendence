@@ -11,6 +11,7 @@ import { checkServer } from "./manage.js";
 import { initControl } from "./control.js";
 import { displayGameView, displayCanvas } from "./display.js";
 import { initializeCanvasPong } from "./canvas.js";
+import { displayGameDataPong } from "./displayVar.js";
 
 export async function showGameView()
 {
@@ -30,10 +31,11 @@ export async function showGameView()
 
 export async function showGameRoom()
 {
+	console.log("showPongremote2p");
+	displayGameDataPong();
 	gameVar.playerIdx = 2;
 	gameVar.playerReady = true;
 
-	// displayCanvas();
 	displayGameView();
 	await initializeCanvasPong();
 

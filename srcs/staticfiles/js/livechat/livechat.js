@@ -7,25 +7,6 @@ const clientIdColors = {};
 
 // Function to generate a random, visible color
 function getRandomColor() {
-    const hue = Math.floor(Math.random() * 360); // Random hue
-    const saturation = 100; // Full saturation
-    const lightness = 50; // 50% lightness for good contrast
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-}
-
-// Function to get or assign a color for a clientId
-function getColorForClientId(clientId) {
-    if (!clientIdColors[clientId]) {
-        clientIdColors[clientId] = getRandomColor();
-    }
-    return clientIdColors[clientId];
-}
-
-// Object to store clientId-color mappings
-const clientIdColors = {};
-
-// Function to generate a random, visible color
-function getRandomColor() {
   const hue = Math.floor(Math.random() * 360); // Random hue
   const saturation = 100; // Full saturation
   const lightness = 50; // 50% lightness for good contrast
@@ -106,7 +87,7 @@ document.querySelector("#chat-message-submit").onclick = function () {
   const messageInputDom = document.querySelector("#chat-message-input");
   let message = messageInputDom.value.trim();
   if (message.toLowerCase().includes("david")) {
-    message = message.replace(/david/gi, "Maitre David");
+    message = message.replace(/david/gi, "Connard de David");
   }
   if (message === "") {
     return;
@@ -409,13 +390,36 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-// Add to livechat.js
+//GENERAL
+document.addEventListener('DOMContentLoaded', function() {
+  const bubbleButton = document.getElementById('bubbleButton');
+  const chatLog = document.getElementById('chat-log');
+  const friendList = document.getElementById('friendlist');
+
+  bubbleButton.addEventListener('click', function() {
+    // Show chat log, hide friend list
+    // chatLog.style.display = 'flex';
+    // friendList.style.display = 'none';
+	document.getElementById('chat-log').classList.remove('d-none');
+	document.getElementById('friendlist').classList.add('d-none');
+
+    // Reset chat log view state if needed
+    // chatLog.className = 'w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto position-relative';
+  });
+});
+//GENERAL
+
+// FRIENDS
 document.addEventListener('DOMContentLoaded', function() {
   const friendsButton = document.getElementById('friendsButton');
-  const chatLog = document.getElementById('chat-log');
+  const chatLog = document.getElementById('friendlist');
 
   friendsButton.addEventListener('click', async function() {
-    chatLog.innerHTML = '';
+    // chatLog.innerHTML = '';
+	document.getElementById('friendlist').classList.remove('d-none');
+	document.getElementById('chat-log').classList.add('d-none');
+    // chatLog.style.display = 'flex';
+    // friendList.style.display = 'none';
     
     const loadingDiv = document.createElement('div');
     loadingDiv.textContent = 'Loading friends...';
@@ -452,14 +456,14 @@ document.addEventListener('DOMContentLoaded', function() {
       chatLog.innerHTML = '';
 
       const friendsListContainer = document.createElement('div');
-      friendsListContainer.className = 'friends-list p-3';
+      friendsListContainer.className = 'friends-list';
 
       if (friends.length === 0) {
         friendsListContainer.innerHTML = '<div class="text-muted">No friends yet</div>';
       } else {
         friends.forEach(friend => {
           const friendDiv = document.createElement('div');
-          friendDiv.className = 'friend-item d-flex align-items-center gap-2 mb-2 p-2 border rounded';
+          friendDiv.className = 'friend-item d-flex align-items-center gap-2 p-2 border rounded';
           
           const statusDot = document.createElement('span');
           statusDot.className = 'status-dot';
@@ -481,6 +485,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+// FRIENDS
 
 // Add token refresh function at the top
 async function refreshAccessToken() {
@@ -508,7 +513,6 @@ async function refreshAccessToken() {
 const styles = `
 .friends-list {
   width: 100%;
-  padding-right: 80px;
 }
 
 .friend-item {

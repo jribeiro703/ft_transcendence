@@ -40,7 +40,7 @@ export function compareScore()
 {
 	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
 	brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
-	displayScore();
+	// displayScore();
 	if (brickVar.score < brickVar2.score)
 	{
 		brickVar2.ctx.font = 'bold 24px fontScore';

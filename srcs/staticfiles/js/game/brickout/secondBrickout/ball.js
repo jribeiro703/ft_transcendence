@@ -16,7 +16,7 @@ export function startBallB(e)
 				updateDifficultySelectionSB(brickVar2.difficulty);
             brickVar2.dx = brickVar2.initDx;
             brickVar2.dy = -brickVar2.initDy;
-			displayBallB();
+			// displayBallB();
 			console.log("New dx, dy:", brickVar2.dx, brickVar2.dy);
 		}
 	else
