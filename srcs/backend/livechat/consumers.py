@@ -2,18 +2,25 @@ import json
 import random
 import string
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.contrib.auth import get_user_model
+from jwt import decode, InvalidTokenError
+from django.conf import settings
+from urllib.parse import parse_qs
 from django.apps import apps
 from asgiref.sync import sync_to_async
 from django.utils import timezone
+import logging
 
-def generate_nickname():
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=5))
+logger = logging.getLogger('websocket')
+
+# def generate_nickname():
+#     return ''.join(random.choices(string.ascii_letters + string.digits, k=5))
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = 'livechat'
         self.room_group_name = 'chat_%s' % self.room_name
-        self.nickname = generate_nickname()
+        # self.nickname = generate_nickname()
 
         # Join room group
         await self.channel_layer.group_add(
@@ -42,24 +49,34 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-        client_id = self.nickname
-
-        # Generate timestamp on the server side in UTC
-        timestamp = timezone.now().isoformat()
-
-        # Save message to the database
-        await self.save_message(client_id, message, timestamp)
-
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message,
-                'client_id': client_id,
-                'timestamp': timestamp
-            }
-        )
+        token = text_data_json['token']
+        
+        try:
+            # Validate token and get user info
+            decoded_token = decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            User = get_user_model()
+            user = await sync_to_async(User.objects.get)(id=decoded_token['user_id'])
+            self.nickname = user.username
+            logger.info(f"Valid token for user: {self.nickname}")
+            
+            # Continue with message handling
+            timestamp = timezone.now().isoformat()
+            await self.save_message(self.nickname, message, timestamp)
+            
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message,
+                    'client_id': self.nickname,
+                    'timestamp': timestamp
+                }
+            )
+        except (InvalidTokenError, User.DoesNotExist) as e:
+            logger.error(f"Invalid token: {str(e)}")
+            await self.send(text_data=json.dumps({
+                'error': 'Invalid authentication'
+            }))
 
     async def chat_message(self, event):
         message = event['message']
