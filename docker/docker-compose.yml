@@ -41,6 +41,8 @@ services:
       - .env
     depends_on:
       - db
+      # db:
+        # condition: service_healthy
     networks:
       - transcendence
     environment:
@@ -72,6 +74,12 @@ services:
     restart: on-failure
     environment:
       - TZ=Europe/Paris
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   redis:
     platform: ${DOCKER_PLATFORM}
