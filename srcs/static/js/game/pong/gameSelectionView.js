@@ -13,9 +13,6 @@ import { displaySettingB } from "../brickout/settings.js";
 
 export function showGameSelectionView()
 {
-	console.log("gameSelection");
-	// displayGameDataPong();
-	// displayGameDataBrick();
 	gameVar.liveMatch = false;
 	gameVar.localGame = false;
 
@@ -36,6 +33,7 @@ export function showGameSelectionView()
 export function showGameSelectionMultiView()
 {
 	console.log("init game selection multi");
+	
 	displayGameSelectionMulti();
 	getElementGameSelection();
 

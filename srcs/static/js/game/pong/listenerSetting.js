@@ -100,23 +100,23 @@ export function listenSettingLevel()
 
 export function listenSettingSave(info)
 {
-	gameVar.saveBtn.addEventListener('click', () =>
+	gameVar.saveBtn.addEventListener('click', async () =>
 	{
 		if (info === 'live')
 		{
-			renderPageGame("pongLobby", true);
+			await renderPageGame("pongLobby", true);
 			console.log("update 1");
 			updateLiveSetting();
 		}
 		else if (info === 'local')
 		{
 			gameVar.saveSetting = true;
-			renderPageGame("gameSelectionMulti", true);
+			await renderPageGame("gameSelectionMulti", true);
 			updateSetting();
 		}
 		else
 		{	
-			renderPageGame("gameSelectionSolo", true);
+			await renderPageGame("gameSelectionSolo", true);
 			console.log("on update apres changement");
 			updateSetting();
 		}

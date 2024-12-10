@@ -5,9 +5,12 @@ import { draw } from "./draw.js";
 import { manageAi } from "./ai.js";
 import { drawScoreBoard } from "./score.js";
 import { displayGameDataPong } from "./displayVar.js";
+import { displayUsers, getUserInfos} from "../getUser.js";
 
 export function startGame()
 {
+	// updateScoreboard();
+	getUserInfos();
 	drawScoreBoard();
 	initializeBall();
 	if (gameVar.powerUpEnable)
