@@ -107,6 +107,8 @@ const gameVar =
 	game: null,
 	startTime: false,
 	clientLeft: false,
+	tournament: false,
+	roomTour1: null,
 
 // --------------------------------------AI-----------------------------
 

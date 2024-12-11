@@ -161,23 +161,46 @@ export function displayGameSelectionMulti()
 }
 export function displayGameView()
 {
-	const mainContent = document.getElementById('mainContent');
-	mainContent.innerHTML = ``;
-	const gameView = document.createElement('div');
-	gameView.innerHTML=`
-	<div id="gameView" style="display: block;">
-		<div id="scoreboard">
-			<canvas id="scoreCanvas"></canvas>
+	if(!gameVar.tournament)
+	{
+		const mainContent = document.getElementById('mainContent');
+		mainContent.innerHTML = ``;
+		const gameView = document.createElement('div');
+		gameView.innerHTML=`
+		<div id="gameView" style="display: block;">
+			<div id="scoreboard">
+				<canvas id="scoreCanvas"></canvas>
+			</div>
+			<canvas id="myCanvas"></canvas>
+			<br><br>
+			<div class="button-container">
+				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+				<button id="quitGameBtn" style="display: none;">Return Home</button>
+			</div>
 		</div>
-		<canvas id="myCanvas"></canvas>
-		<br><br>
-		<div class="button-container">
-			<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
-			<button id="quitGameBtn" style="display: none;">Return Home</button>
+		`;
+		mainContent.appendChild(gameView);
+	}
+	else
+	{
+		const mainContent = document.getElementById('tournamentdiv');
+		mainContent.innerHTML = ``;
+		const gameView = document.createElement('div');
+		gameView.innerHTML=`
+		<div id="gameView" style="display: block;">
+			<div id="scoreboard">
+				<canvas id="scoreCanvas"></canvas>
+			</div>
+			<canvas id="myCanvas"></canvas>
+			<br><br>
+			<div class="button-container">
+				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+				<button id="quitGameBtn" style="display: none;">Return Home</button>
+			</div>
 		</div>
-	</div>
-	`;
-	mainContent.appendChild(gameView);
+		`;
+		mainContent.appendChild(gameView);
+	}
 }
 
 export function displayCanvas()

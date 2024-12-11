@@ -15,7 +15,7 @@ export const createTournament = async (name) => {
 			max_score: 100,
 			status: 'UPCOMING',
 		};
-		console.log('Payload:', payload);
+		// console.log('Payload:', payload);
 
 		const response = await fetch('https://localhost:8081/tournament/', {
 			method: 'POST',
@@ -25,12 +25,12 @@ export const createTournament = async (name) => {
 
 		if (response.ok) {
 			const tournament = await response.json();
-			console.log('Tournament created:', tournament);
+			// console.log('Tournament created:', tournament);
 			return tournament.tournament_id; // Return the tournament ID
 		} else {
 			console.error('Failed to create tournament:', response.status);
 			const errorData = await response.json();
-			console.error('Error details:', errorData);
+			// console.error('Error details:', errorData);
 		}
 	} catch (error) {
 		console.error('Error creating tournament:', error);
@@ -46,7 +46,7 @@ export const fetchEligiblePlayers = async () => {
 
 		if (response.ok) {
 			const data = await response.json();
-			console.log('Eligible players:', data);
+			// console.log('Eligible players:', data);
 			return data.eligible_players; // Return the list of eligible players
 		} else {
 			console.error('Failed to fetch participants:', response.status);
@@ -66,7 +66,7 @@ export const performMatchmaking = async (tournamentId) => {
 
 		if (response.ok) {
 			const data = await response.json();
-			console.log('Matchmaking successful:', data);
+			// console.log('Matchmaking successful:', data);
 		} else {
 			console.error('Failed to perform matchmaking:', response.status);
 		}
@@ -88,7 +88,7 @@ export const preRegisterPlayers = async (tournamentId, playerIds) => {
 
 		if (response.ok) {
 			const data = await response.json();
-			console.log('Players pre-registered:', data);
+			// console.log('Players pre-registered:', data);
 			return data;
 		} else {
 			const errorData = await response.json();

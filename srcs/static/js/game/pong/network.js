@@ -150,3 +150,18 @@ export function sendScoreInfo(socket, idx, name1, name2, score1, score2)
 	else
 		console.log("Error websocket");
 }
+
+export function sendRoomNameData(socket, roomName)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data =
+		{
+			type: 'room_data',
+			roomName: roomName,
+		};
+		socket.send(JSON.stringify(data));
+	}
+	else
+		console.log("Error websocket");
+}

@@ -55,7 +55,7 @@ export function renderBracket(bracket, tournamentId) {
 			}
 		});
 	} else {
-		console.error("Bracket container is null");
+		// console.error("Bracket container is null");
 	}
 }
 
@@ -64,7 +64,7 @@ export function createRealtimeConnection(url, action, onMessageCallback, onError
 		if (data.action === 'update_bracket') {
 			onMessageCallback(data);
 		} else {
-			console.error('Invalid action received:', data.action);
+			// console.error('Invalid action received:', data.action);
 		}
 	}, onErrorCallback, onCloseCallback);
 }

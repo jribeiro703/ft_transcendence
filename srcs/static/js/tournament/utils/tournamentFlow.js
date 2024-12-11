@@ -67,7 +67,7 @@ export async function setupTournamentFlow(name) {
 		// Step 9: Start periodic fetching of the tournament bracket
 		setupTournamentBracketRefresh(tournamentId);
 
-		console.log('Tournament setup completed successfully.');
+		// console.log('Tournament setup completed successfully.');
 		return tournamentId; // Return the tournament ID
 	} catch (error) {
 		console.error('Error during tournament setup flow:', error);
