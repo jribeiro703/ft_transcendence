@@ -611,6 +611,8 @@ p {
   background: var(--background-color);
 }
 
+/* test */
+
 
 @media (max-width: 1000px) {
   .container-game {
