@@ -64,7 +64,7 @@ export async function joinRoom(roomName) {
             if (responseObject.status === 200) {
                 const userData = responseObject.data;
                 const userid = userData.id;
-                sendPlayerRoomData(gameSocket, userid);
+                // sendPlayerRoomData(gameSocket, userid);
             } else {
                 console.log("Error fetching user data:", responseObject.status);
             }
