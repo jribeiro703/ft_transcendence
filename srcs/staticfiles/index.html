@@ -35,13 +35,19 @@
                class="slideWithLiveChat flex-grow-1 d-flex h-100 align-item-center justify-content-center"></div>
 
 
-
           <div id="livechat" class="slidingDiv hide-children neon-purple d-flex flex-column gap-3">
             <div class="flex-grow-1 w-100 h-100 overflow-auto position-relative">
               <!-- Chat log -->
               <div id="chat-log" 
                    class="w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto" 
                    aria-label="Chat log">
+              </div>
+
+              <!-- Notification list with absolute positioning -->
+              <div id="notificationlist" 
+                   class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none" 
+                   style="z-index: 2;"
+                   aria-label="Notification list">
               </div>
 
               <!-- Friend list with absolute positioning -->

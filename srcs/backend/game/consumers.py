@@ -2,8 +2,11 @@ import json
 import logging
 import time
 from threading import Timer
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
+from channels.db import database_sync_to_async
+from game.models import Game, GamePlayer
+from django.utils import timezone
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -115,7 +118,6 @@ class PongConsumer(WebsocketConsumer):
 		elif data['type'] == 'lobbyView':
 			self.lobby()
 		elif data['type'] == 'player_room_data':
-
 			logger.info(f'player room data receive : ')
 			logger.info(f'Player room data received:')
 			logger.info(f'Full data: {data}')
@@ -305,3 +307,47 @@ class PongConsumer(WebsocketConsumer):
 				'currentLevel': data['currentLevel'],
 			}
 			)
+
+class GameConsumer(AsyncWebsocketConsumer):
+    @database_sync_to_async
+    def create_game(self, player_one_id):
+        try:
+            # Create new game with player one
+            game = Game.objects.create(
+                status='NOT_STARTED',
+                difficulty='EASY',  # Default settings
+                level='CLASSIC',
+                player_one_id=player_one_id,
+                start_time=timezone.now()
+            )
+            
+            # Create GamePlayer entry for player one
+            GamePlayer.objects.create(
+                game=game,
+                user_id=player_one_id,
+                status='READY'
+            )
+            
+            logger.info(f'Game created with ID: {game.id}')
+            return game.id
+        except Exception as e:
+            logger.error(f'Error creating game: {str(e)}')
+            return None
+
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        self.last_active[self.channel_name] = time.time()
+        
+        if data['type'] == 'player_room_data':
+            logger.info(f'Player room data received:')
+            logger.info(f'Full data: {data}')
+            
+            # Create game when receiving player data
+            if 'userid' in data:
+                game_id = await self.create_game(data['userid'])
+                if game_id:
+                    logger.info(f'Game {game_id} created successfully')
+                    # Store game_id in consumer instance for later use
+                    self.game_id = game_id
+                else:
+                    logger.error('Failed to create game')
