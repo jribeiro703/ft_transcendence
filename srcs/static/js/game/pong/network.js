@@ -130,3 +130,23 @@ export function sendPlayerRoomData(socket, userid)
 	else
 		console.log("Error websocket");
 }
+
+
+export function sendScoreInfo(socket, idx, name1, name2, score1, score2)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data =
+		{
+			type: 'score_info_data',
+			idx: idx,
+			name1: name1,
+			name2: name2,
+			score1: score1,
+			score2: score2,
+		};
+		socket.send(JSON.stringify(data));
+	}
+	else
+		console.log("Error websocket");
+}

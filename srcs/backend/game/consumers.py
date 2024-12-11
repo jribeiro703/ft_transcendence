@@ -116,6 +116,8 @@ class PongConsumer(WebsocketConsumer):
 			self.lobby()
 		elif data['type'] == 'player_room_data':
 			logger.info(f'player room data receive : ')
+		elif data['type'] == 'score_info_data':
+			self.broadcast_score_info_data(data)
 		elif data['type'] == 'room_deleted':
 			self.room_name = data['room_name']
 			if self.room_name in self.rooms:
@@ -236,6 +238,18 @@ class PongConsumer(WebsocketConsumer):
 			}
 		}))
 
+	def score_info_data(self, event):
+		self.send(text_data=json.dumps({
+			'type': 'score_info_data',
+			'score_info_data': {
+				'idx': event['idx'],
+				'name1': event['name1'],
+				'name2': event['name2'],
+				'score1': event['score1'],
+				'score2': event['score2'],
+			}
+		}))
+
 	def broadcast_ball_data(self, data):
 		async_to_sync(self.channel_layer.group_send)(
 			self.room_group_name,
@@ -300,3 +314,15 @@ class PongConsumer(WebsocketConsumer):
 			}
 		)
 		
+	def broadcast_score_info_data(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'score_info_data',
+				'idx': data['idx'],
+				'name1': data['name1'],
+				'name2': data['name2'],
+				'score1': data['score1'],
+				'score2': data['score2'],
+			}
+		)

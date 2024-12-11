@@ -9,9 +9,12 @@ export async function getUserInfos()
 		{
 			gameVar.userName = response.data.username;
 			gameVar.avatarUrl = response.data.avatar;
+			console.log("userName", gameVar.userName);
 		}
 		else
-			showErrorMessages(response.data.message, "error")
+		{
+			showErrorMessages(response.data.message, "error");
+		}
 }
 
 

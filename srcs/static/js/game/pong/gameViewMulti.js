@@ -21,7 +21,6 @@ export function showLobbyView()
 
 export async function showPongRemote(room = null)
 {
-	displayGameDataPong();
 	checkSettingLive();
 	displayGameView();
 	await initializeCanvasPong();

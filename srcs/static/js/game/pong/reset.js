@@ -2,7 +2,7 @@ import gameVar from "./var.js";
 import { initializeBall } from "./ball.js";
 import { aiServeBall } from "./ai.js";
 import { checkball } from "./check.js";
-import { sendGameData } from "./network.js";
+import { sendGameData, sendScoreInfo, sendSettingData } from "./network.js";
 import { startGame } from "./start.js";
 import { checkScore } from "./score.js";
 
@@ -74,6 +74,7 @@ export function resetBall(winner)
 		gameVar.playerScore++;
 	else
 		gameVar.aiScore++;
+	sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.opponentName, gameVar.playerScore, gameVar.aiScore);
 	checkScore();
 	gameVar.serveCount++;
 	if (gameVar.serveCount >= 2)
