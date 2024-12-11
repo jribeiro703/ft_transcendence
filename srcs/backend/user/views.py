@@ -56,6 +56,7 @@ def getUserFriends(request):
 		)
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getOnlineUsers(request):
 	try:
 		online_users = User.objects.filter(is_online=True).exclude(id=request.user.id)
@@ -454,6 +455,8 @@ def login42(request):
 # ------------------------------LOGOUT ENDPOINTS--------------------------------	
 
 class LogoutView(APIView):
+
+	permission_classes = [AllowAny]
 
 	def post(self, request):
 		try:
