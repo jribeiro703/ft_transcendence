@@ -14,9 +14,12 @@ document
     }
   });
 
-document.getElementById('btn-Home').addEventListener('click', async () => {
-	renderPage("home")
-});
+document
+  .querySelector("[data-home-icon]")
+  .addEventListener("click", async () => {
+    renderPage("home");
+  });
+
 
 // Execute as soon as the structure of the initial page is ready for interaction
 document.addEventListener('DOMContentLoaded', () => {

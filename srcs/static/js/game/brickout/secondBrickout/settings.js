@@ -3,26 +3,26 @@ import { updatePowerUpSelectionB, updateDifficultySelectionSB, updateLevelSelect
 import { showGameSelectionMultiView } from "../../pong/gameSelectionView.js";
 import { listenSettingPUB, listenSettingDifficultyB, listenSettingLevelB } from "./listenerSetting.js";
 import { updateSettingB } from "./update.js";
-import { displaySettingViewB } from "./display.js";
+// import { displaySettingViewB } from "./display.js";
 
-export function showSettingMultiViewB(live)
-{
-	displaySettingViewB();
-	getSettingBtn();
-
-	brickVar2.powerUpSelection.style.display = 'block';
-	brickVar2.btnPowerUp.style.display = 'block';
-
-	listenSettingPUB();
-	listenSettingDifficultyB();
-	listenSettingLevelB();
-
-	brickVar2.saveBtn.addEventListener('click', () =>
-	{
-		showGameSelectionMultiView();
-		updateSettingB();
-	});
-}
+// export function showSettingMultiViewB(live)
+// {
+// 	displaySettingViewB();
+// 	getSettingBtn();
+//
+// 	brickVar2.powerUpSelection.style.display = 'block';
+// 	brickVar2.btnPowerUp.style.display = 'block';
+//
+// 	listenSettingPUB();
+// 	listenSettingDifficultyB();
+// 	listenSettingLevelB();
+//
+// 	brickVar2.saveBtn.addEventListener('click', () =>
+// 	{
+// 		showGameSelectionMultiView();
+// 		updateSettingB();
+// 	});
+// }
 
 export function checkSettingB()
 {
