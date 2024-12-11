@@ -22,7 +22,7 @@ export async function showCreateTournamentForm() {
 		if (isValid) {
 			await showTournamentView(tournamentName);
 		} else {
-			alert('Tournament name must be between 3 and 30 characters.');
+			alert('Error: Tournament cannot be created.');
 		}
 	});
 }
@@ -51,8 +51,31 @@ export async function showTournamentView(tournamentName) {
 	// Start periodic fetching of eligible players
 	setupEligiblePlayersRefresh();
 
+	 // Add event listener for the render bracket button
+	 document.getElementById('renderBracketBtn').addEventListener('click', async () => {
+		const players = await fetchCurrentPlayers(currentTournamentId);
+		if (players.length >= 4) {
+			renderTournamentBracket(currentTournamentId);
+		} else {
+			alert('Not enough players to render the bracket. Minimum 4 players required.');
+		}
+	});
+
+ // Add event listener for the match players button
+	document.getElementById('matchPlayersBtn').addEventListener('click', async () => {
+		// Implement match players logic here
+		const players = await fetchCurrentPlayers(currentTournamentId);
+		if (players.length >= 4) {
+			// Perform matchmaking logic here
+			console.log('Players matched.');
+		} else {
+			alert('Not enough players to match. Minimum 4 players required.');
+		}
+
+	});
+
 	// Add event listener for the start game button
-	document.getElementById('startTournamentGameBtn').addEventListener('click', () => {
+	document.getElementById('startTournamentBtn').addEventListener('click', () => {
 		initializeCanvasAndScore();
 		startGameWithPlayers([1, 2]); // Replace with actual player IDs
 	});
@@ -61,32 +84,26 @@ export async function showTournamentView(tournamentName) {
 // Call this function to start the periodic fetching
 setupEligiblePlayersRefresh();
 
+
 // Function to start the game with two player IDs
 function startGameWithPlayers(playerIds) {
-	// Step 1: Create a new room
-	createNewRoom((roomName) => {
-		// Step 2: Join the room with the first player
-		joinRoomWithPlayer(roomName, playerIds[0], () => {
-			// Step 3: Wait for the second player to join
-			//waitingPlayer();
-
-			// Step 4: Join the room with the second player
-			joinRoomWithPlayer(roomName, playerIds[1], () => {
-				// Both players are now in the room, the game will start automatically
-				console.log('Game started with players:', playerIds);
-			});
-		});
+	// Simulate creating a room and joining the first player
+	createNewRoom((name) => {
+		roomName = name;
+		console.log(`Room created and Player 1 joined: ${roomName}`);
+		// Now, wait for the second player to join
 	});
 }
 
-// Function to join the room with a specific player
-function joinRoomWithPlayer(roomName, playerId, callback) {
-	// Set the player ID in gameVar (assuming gameVar is a global object)
-	gameVar.playerIdx = playerId;
-
-	// Join the room
-	joinRoom(roomName);
-
-	// Call the callback function once the room is joined
-	callback();
+// Simulate the second player joining the room
+function joinAsSecondPlayer(roomName) {
+	gameVar.playerIdx = 2; // Set the player index to 2 for the second player
+	joinRoom(roomName, () => {
+		console.log(`Player 2 joined room: ${roomName}`);
+		// Update player ready state
+		sendPlayerData(gameVar.gameSocket, true);
+		console.log('Player 2 ready state sent.');
+		// Simulate starting the game
+		startLiveGame();
+	});
 }

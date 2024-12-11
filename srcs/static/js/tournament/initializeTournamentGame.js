@@ -4,32 +4,32 @@ import gameVar from "../game/pong/var.js";
 import { SCORE_CANVAS_HEIGHT } from "../game/pong/const.js";
 
 export function initializeCanvasAndScore() {
-    var canvas = document.getElementById('game-board');
-    if (!canvas) {
-        console.error("Canvas element 'game-board' not found.");
-        return;
-    }
-    gameVar.ctx = canvas.getContext('2d');
-    canvas.width = gameVar.canvasW;
-    canvas.height = gameVar.canvasH;
+	var canvas = document.getElementById('game-board');
+	if (!canvas) {
+		console.error("Canvas element 'game-board' not found.");
+		return;
+	}
+	gameVar.ctx = canvas.getContext('2d');
+	canvas.width = gameVar.canvasW;
+	canvas.height = gameVar.canvasH;
 
-    var scoreCanvas = document.getElementById('scoreCanvas');
-    if (!scoreCanvas) {
-        console.error("Canvas element 'scoreCanvas' not found.");
-        return;
-    }
-    gameVar.scoreCtx = scoreCanvas.getContext('2d');
-    scoreCanvas.width = gameVar.scoreCanvW;
-    scoreCanvas.height = SCORE_CANVAS_HEIGHT;
+	var scoreCanvas = document.getElementById('scoreCanvas');
+	if (!scoreCanvas) {
+		console.error("Canvas element 'scoreCanvas' not found.");
+		return;
+	}
+	gameVar.scoreCtx = scoreCanvas.getContext('2d');
+	scoreCanvas.width = gameVar.scoreCanvW;
+	scoreCanvas.height = SCORE_CANVAS_HEIGHT;
 
-    gameVar.gameTime = 0;
-    gameVar.gameTimer = setInterval(() => {
-        if (gameVar.startTime) {
-            gameVar.gameTime++;
-        }
-    }, 1000);
+	gameVar.gameTime = 0;
+	gameVar.gameTimer = setInterval(() => {
+		if (gameVar.startTime) {
+			gameVar.gameTime++;
+		}
+	}, 1000);
 
-    scoreCanvas.style.marginBottom = '10px';
+	scoreCanvas.style.marginBottom = '10px';
 }
 
 export function initializeLobbySocket() {
