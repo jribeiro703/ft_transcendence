@@ -81,26 +81,3 @@ export function displaySettingB(difficulty, powerUp, level)
 
 	settingContain.appendChild(settingItem);
 }
-
-
-// export function showSettingMultiViewB(live)
-// {
-
-// 	displaySettingB();
-// 	getSettingBtn();
-
-// 	brickVar.powerUpSelection.style.display = 'block';
-// 	brickVar.btnPowerUp.style.display = 'block';
-
-// 	listenSettingPUB();
-// 	listenSettingDifficultyB();
-// 	listenSettingLevelB();
-
-// 	brickVar.saveBtn.addEventListener('click', () =>
-// 	{
-// 		// showGameBrickMultiView();
-// 		showGameSelectionMultiView();
-// 		updateSettingB();
-// 		brickVar.settingChanged = true;
-// 	});
-// }

@@ -58,14 +58,13 @@ export function displayPongRemote() {
   mainContent.appendChild(insertTo);
 }
 
-export function displayGameSelectionMulti() {
-  const maincontent = document.getElementById("mainContent");
-  maincontent.innerHTML = "";
-  const gameSelection = document.createElement("div");
-  const pongUrl = "/static/css/images/ttLevel.png";
-  const brickUrl = "/static/css/images/brickout.png";
-
-  updateImageUrl();
+export function displayGameSelectionMulti()
+{
+	const maincontent = document.getElementById('mainContent');
+	maincontent.innerHTML = '';
+	const gameSelection = document.createElement('div');
+	const pongUrl = "/static/css/images/ttLevel.png";
+	const brickUrl = "/static/css/images/brickout.png";
 
   gameSelection.innerHTML = `
     <div id="settingView" class="game-selection">

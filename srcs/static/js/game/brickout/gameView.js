@@ -1,4 +1,3 @@
-import gameVar from '../pong/var.js';
 import brickVar from './var.js';
 import brickVar2 from './secondBrickout/var.js';
 import { checkSettingB } from './settings.js';
