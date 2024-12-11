@@ -250,7 +250,7 @@ class UserProfileView(APIView):
 			match_info = {
 				"date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
 				"score": f"{match.score_one} - {match.score_two}",
-				"winner": match.winner.username
+				"winner": match.winner.username if match.winner else "No Winner"
 			}
 			match_history.append(match_info)
 

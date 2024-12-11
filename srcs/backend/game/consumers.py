@@ -2,11 +2,11 @@ import json
 import logging
 import time
 from threading import Timer
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
-# from channels.db import database_sync_to_async
-# from game.models import Game, GamePlayer
-# from django.utils import timezone
+from channels.db import database_sync_to_async
+from django.apps import apps
+from django.utils import timezone
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -312,10 +312,14 @@ class PongConsumer(WebsocketConsumer):
 #     @database_sync_to_async
 #     def create_game(self, player_one_id):
 #         try:
+#             # Get models dynamically
+#             Game = apps.get_model('game', 'Game')
+#             GamePlayer = apps.get_model('game', 'GamePlayer')
+            
 #             # Create new game with player one
 #             game = Game.objects.create(
 #                 status='NOT_STARTED',
-#                 difficulty='EASY',  # Default settings
+#                 difficulty='EASY',
 #                 level='CLASSIC',
 #                 player_one_id=player_one_id,
 #                 start_time=timezone.now()
@@ -330,6 +334,7 @@ class PongConsumer(WebsocketConsumer):
             
 #             logger.info(f'Game created with ID: {game.id}')
 #             return game.id
+            
 #         except Exception as e:
 #             logger.error(f'Error creating game: {str(e)}')
 #             return None
@@ -351,3 +356,50 @@ class PongConsumer(WebsocketConsumer):
 #                     self.game_id = game_id
 #                 else:
 #                     logger.error('Failed to create game')
+
+class GameChatConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_group_name = f'game_chat_{self.room_name}'
+
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+        message = data['message']
+        token = data.get('token')
+
+        try:
+            # Validate token
+            decoded_token = decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            User = get_user_model()
+            user = await sync_to_async(User.objects.get)(id=decoded_token['user_id'])
+            
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message,
+                    'client_id': user.username,
+                    'timestamp': timezone.now().isoformat()
+                }
+            )
+        except Exception as e:
+            logger.error(f"Error in game chat: {str(e)}")
+
+    async def chat_message(self, event):
+        await self.send(text_data=json.dumps({
+            'message': event['message'],
+            'client_id': event['client_id'],
+            'timestamp': event['timestamp']
+        }))

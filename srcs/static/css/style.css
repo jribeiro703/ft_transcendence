@@ -1253,7 +1253,7 @@ button:disabled {
   color: #fefcff;
 }
 
-#chat-log, #friendlist, #onlinelist, #notificationlist {
+#chat-log, #friendlist, #onlinelist, #notificationlist, #gamechat {
   outline: none;
   flex: 1;
   /* height: calc(100% - 56px); */

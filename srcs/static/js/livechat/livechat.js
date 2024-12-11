@@ -490,6 +490,27 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 //GENERAL
 
+//GAME
+document.addEventListener('DOMContentLoaded', function() {
+  const swordsButton = document.getElementById('swordsButton');
+  const chatLog = document.getElementById('chat-log');
+
+  swordsButton.addEventListener('click', function() {
+	// Show chat log, hide friend list
+	// chatLog.style.display = 'flex';
+	// friendList.style.display = 'none';
+	document.getElementById('gamechat').classList.remove('d-none');
+	document.getElementById('chat-log').classList.add('d-none');
+	document.getElementById('friendlist').classList.add('d-none');
+	document.getElementById('onlinelist').classList.add('d-none');
+	document.getElementById('notificationlist').classList.add('d-none');
+
+	// Reset chat log view state if needed
+	// chatLog.className = 'w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto position-relative';
+  });
+});
+//GAME
+
 //NOTIFICATIONS
 
 document.addEventListener('DOMContentLoaded', function() {
