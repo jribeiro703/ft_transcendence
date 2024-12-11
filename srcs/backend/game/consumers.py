@@ -115,7 +115,13 @@ class PongConsumer(WebsocketConsumer):
 		elif data['type'] == 'lobbyView':
 			self.lobby()
 		elif data['type'] == 'player_room_data':
+
 			logger.info(f'player room data receive : ')
+			logger.info(f'Player room data received:')
+			logger.info(f'Full data: {data}')
+			logger.info(f'User ID: {data.get("userid")}')
+			logger.info(f'Room name: {self.room_name}')
+			logger.info(f'Channel name: {self.channel_name}')
 		elif data['type'] == 'room_deleted':
 			self.room_name = data['room_name']
 			if self.room_name in self.rooms:
@@ -298,5 +304,4 @@ class PongConsumer(WebsocketConsumer):
 				'difficulty': data['difficulty'],
 				'currentLevel': data['currentLevel'],
 			}
-		)
-		
+			)

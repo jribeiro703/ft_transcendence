@@ -7,7 +7,7 @@ import { drawScoreBoard } from './score.js';
 import { renderPageGame } from '../HistoryManager.js';
 import { fetchAuthData } from '../../user/fetchData.js';
 
-export async function createNewRoom(joinRoomCallback)
+export function createNewRoom(joinRoomCallback)
 {
 	const roomName = `room_${Math.floor(Math.random() * 10000)}`;
 	gameVar.playerIdx = 1;
@@ -49,45 +49,48 @@ export function startLiveGame()
 	drawLive();
 }
 
-export async function joinRoom(roomName)
-{
-	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-	const gameSocket = new WebSocket(protocol + '//' + window.location.host + `/ws/pong/${roomName}/`);
+export async function joinRoom(roomName) {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const gameSocket = new WebSocket(protocol + '//' + window.location.host + `/ws/pong/${roomName}/`);
 
-	const response = await fetchAuthData('/user/private/')
-	if (response.status == 200)
-	{
-		const userid = response.data.id;
-		sendPlayerRoomData(gameSocket, userid);
-	}
-	else
-	{
-		console.log("error on fetch");
-	}
-	gameSocket.onopen = function(e)
-	{
-		console.log('Game socket opened');
-		try
-		{
-			gameSocket.send(JSON.stringify({ type: 'join_room' }));
-			gameVar.gameSocket = gameSocket;
-			if (gameVar.playerIdx == 1)
-			{
-				waitingPlayer();
-			}
-			if (gameVar.playerIdx == 2)
-			{
-				sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
-				updateSettingLive();
-			}
-		}
-		catch (error)
-		{
-			console.error("error on send message: ", error);
-		}
-	};
+    // Auth check before socket operations
+    fetchAuthData('/user/private/')
+        .then(responseObject => {
+            if (responseObject.status === 401) {
+                console.log("Authentication required");
+                return;
+            }
 
-	gameSocket.onmessage = function(e)
+            if (responseObject.status === 200) {
+                const userData = responseObject.data;
+                const userid = userData.id;
+                sendPlayerRoomData(gameSocket, userid);
+            } else {
+                console.log("Error fetching user data:", responseObject.status);
+            }
+        })
+        .catch(error => {
+            console.log("Error on fetch:", error);
+        });
+
+    gameSocket.onopen = function(e) {
+        console.log('Game socket opened');
+        try {
+            gameSocket.send(JSON.stringify({ type: 'join_room' }));
+            gameVar.gameSocket = gameSocket;
+            if (gameVar.playerIdx == 1) {
+                waitingPlayer();
+            }
+            if (gameVar.playerIdx == 2) {
+                sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
+                updateSettingLive();
+            }
+        } catch (error) {
+            console.log("Error in onopen:", error);
+        }
+    };
+
+    gameSocket.onmessage = function(e)
 	{
 		try
 		{
@@ -165,6 +168,8 @@ export async function joinRoom(roomName)
 	{
 		console.error('Game socket closed unexpectedly code : ', e.code, 'reason', e.reason);
 	};
+
+    return gameSocket;
 }
 
 export function delRooms()
