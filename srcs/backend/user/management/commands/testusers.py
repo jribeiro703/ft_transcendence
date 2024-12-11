@@ -17,7 +17,8 @@ class Command(BaseCommand):
                 'username': username,
                 'email': f'{username}@example.com',
                 'password': '88888888',
-                'otp_secret': pyotp.random_base32()  # Generate base32 OTP secret
+                'otp_secret': pyotp.random_base32(),  # Generate base32 OTP secret
+                'is_online': True if i % 2 == 0 else False  # Alternate online status
             }
             
             if not User.objects.filter(username=user_data['username']).exists():
