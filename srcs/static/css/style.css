@@ -388,11 +388,11 @@ p
 
 .game-column 
 {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
 }
 
 .container-game2
@@ -422,7 +422,7 @@ p
 {
 	margin: 5px 0;
 	color: #6DC1C1;
-    font-size: 20px;
+	font-size: 20px;
 }
 .settings-inline
 {
@@ -808,46 +808,46 @@ button:disabled
 
 
 .room-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #455F78;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #455F78;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 .room-name {
-    color: white;
-    font-size: 1.2em;
-    font-weight: bold;
+	color: white;
+	font-size: 1.2em;
+	font-weight: bold;
 }
 
 .room-info {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    color: #ccc;
-    padding-top: 5px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 8px;
+	color: #ccc;
+	padding-top: 5px;
 }
 
 .room-players, .room-difficulty, .room-level, .room-status {
-    font-size: 0.9em;
+	font-size: 0.9em;
 }
 
 .joinRoomBtn {
-    /* Keep your existing button styles */
-    background-color: #455F78;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
+	/* Keep your existing button styles */
+	background-color: #455F78;
+	border: none;
+	color: white;
+	padding: 5px 10px;
+	border-radius: 5px;
+	cursor: pointer;
 }
 .server-item {
-    background-color: #1F2E4D;
-    border-radius: 5px;
-    padding: 15px;
-    margin: 10px 0;
+	background-color: #1F2E4D;
+	border-radius: 5px;
+	padding: 15px;
+	margin: 10px 0;
 }
 /* .server-item 
 {
@@ -1059,6 +1059,34 @@ button:disabled
 #playersList .list-group-item:hover {
 	transform: scale(1.02);
 	background-color: #3A4C6B;
+}
+
+.player-item {
+	display: flex;
+	align-items: center;
+	padding: 5px;
+	border-bottom: 1px solid #ccc;
+}
+
+.player-avatar {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.player-info {
+	display: flex;
+	flex-direction: column;
+}
+
+.player-username {
+	font-weight: bold;
+}
+
+.player-status {
+	font-size: 12px;
+	color: #555;
 }
 
 #createTournamentBtn {
