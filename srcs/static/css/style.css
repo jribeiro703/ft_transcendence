@@ -106,7 +106,7 @@ p {
 
 /* fin ajouts david */
 
-@media (max-height: 1000px) {
+@media (max-height: 1050px) {
   #defaultView {
     gap: 5% !important;
   }
@@ -389,7 +389,6 @@ p {
   border-color: var(--border-btn-color);
   max-width: 1000px;
   width: 460px;
-  min-width: 200px;
   align-self: center;
   transition: color 0.3s ease-in-out;
   transition: border-color 0.3s ease-in-out;
@@ -411,7 +410,6 @@ p {
   .main-btn {
     width: 90%;
     max-width: 90%;
-    min-width: 90%;
   }
 }
 
@@ -587,6 +585,7 @@ p {
 
 .container-game {
   display: flex;
+  container: testContainerGame / inline-size;
   flex-direction: column;
   gap: 78px;
   background: var(--background-color);
@@ -614,7 +613,13 @@ p {
 /* test */
 
 
-@media (max-width: 1000px) {
+@media (max-height: 700px) {
+  .container-game {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 1050px) {
   .container-game {
     justify-content: flex-start;
   }
@@ -624,6 +629,7 @@ p {
   .game-row {
     flex-direction: column;
     align-items: center;
+    gap: 20px;
   }
   .settings-inline {
     flex-direction: column;
@@ -678,7 +684,7 @@ p {
   color: var(--secondary-color);
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1050px) {
   .game-settings {
     width: 100%;
   }
@@ -721,7 +727,7 @@ p {
   font-size: 28px;
   border-radius: 5px;
   cursor: pointer;
-  width: 20%;
+  width: 150px;
 }
 
 /* .settingsSelect-button2 { */
@@ -1072,7 +1078,7 @@ button:disabled {
   padding: 20px;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1050px) {
   .slidingDiv {
     width: 0;
     height: 0;
