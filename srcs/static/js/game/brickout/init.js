@@ -1,12 +1,10 @@
 import brickVar from "./var.js";
+import brickVar2 from "./secondBrickout/var.js";
 import { keyDownHandlerB, keyUpHandlerB } from "./control.js";
 import { startBallB as startBallFirst } from './ball.js';
 import { startBallB as startBallSecond } from './secondBrickout/ball.js'
 import { startGameB as startGameFirst} from './control.js';
 import { startGameB as startGameSecond } from './secondBrickout/control.js';
-import { updateSettingSelectionForSecond } from "./update.js";
-import { checkSettingB } from "./settings.js";
-import brickVar2 from "./secondBrickout/var.js";
 import { initBricksB as initBricksFirst } from "./brick.js";
 import { initBricksB as initBricksSecond } from "./secondBrickout/brick.js";
 

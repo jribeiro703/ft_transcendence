@@ -3,7 +3,6 @@ import brickVar2 from "./secondBrickout/var.js";
 import { handleNextLevelB, restartLevelB } from "./level.js";
 import { clearAllBrickStates } from "./manage.js";
 import { renderPageGame } from "../HistoryManager.js";
-import { clearBtnB } from "./manage.js";
 
 
 export function listenNextLevelBtn()
@@ -30,7 +29,6 @@ export function listenFinishBtn()
 }
 export function clearAllGameStates()
 {
-    // Annuler les animations en cours
     if (brickVar.anim) {
         cancelAnimationFrame(brickVar.anim);
         brickVar.anim = null;
@@ -39,9 +37,8 @@ export function clearAllGameStates()
         cancelAnimationFrame(brickVar2.anim);
         brickVar2.anim = null;
     }
-
-    // Nettoyer les intervalles
-    if (brickVar.gameTimer) {
+    if (brickVar.gameTimer)
+	{
         clearInterval(brickVar.gameTimer);
         brickVar.gameTimer = null;
     }
@@ -50,7 +47,6 @@ export function clearAllGameStates()
         brickVar2.gameTimer = null;
     }
 
-    // Réinitialiser les états
     brickVar.initialize = false;
     brickVar2.initialize = false;
     brickVar.finishLevel = false;

@@ -7,11 +7,14 @@ import { drawScoreBoardB } from "./score.js";
 
 function baseDrawB()
 {
-	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
-	drawScoreBoardB();
-	drawBricksB();
-	drawBallB();
-	drawPaddleB();
+	if (brickVar.ctx)
+	{
+		brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
+		drawScoreBoardB();
+		drawBricksB();
+		drawBallB();
+		drawPaddleB();
+	}
 }
 
 export function drawB()

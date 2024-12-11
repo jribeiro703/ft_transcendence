@@ -13,12 +13,15 @@ import { updatePowerUpB } from "./update.js";
 
 function baseDrawB()
 {
-	brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
-	if (!gameVar.localGame && gameVar.game != 'brickout2p')
-		drawScoreBoardB();
-	drawBricksB();
-	drawBallB();
-	drawPaddleB();
+	if (brickVar2.ctx)
+	{
+		brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
+		if (!gameVar.localGame && gameVar.game != 'brickout2p')
+			drawScoreBoardB();
+		drawBricksB();
+		drawBallB();
+		drawPaddleB();
+	}
 }
 
 export function drawB()

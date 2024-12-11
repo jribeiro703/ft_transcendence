@@ -7,15 +7,9 @@ import { listenSettingMultiBtn } from "./listenerSetting.js";
 import { updateSetting } from "./setting.js";
 import { updateSettingB } from "../brickout/update.js";
 import { listenPlayMultiBtn } from "./listenerSetting.js";
-import { displayGameDataPong, displayGameDataBrick } from "./displayVar.js";
-import brickVar from "../brickout/var.js";
-import { displaySettingB } from "../brickout/settings.js";
 
 export function showGameSelectionView()
 {
-	console.log("gameSelection");
-	// displayGameDataPong();
-	// displayGameDataBrick();
 	gameVar.liveMatch = false;
 	gameVar.localGame = false;
 
@@ -35,7 +29,6 @@ export function showGameSelectionView()
 
 export function showGameSelectionMultiView()
 {
-	console.log("init game selection multi");
 	displayGameSelectionMulti();
 	getElementGameSelection();
 
