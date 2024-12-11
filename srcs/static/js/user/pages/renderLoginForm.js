@@ -7,11 +7,23 @@ export function renderLoginForm() {
     box.innerHTML = `
 	<div class="custom-form">
         <form id="loginForm">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">Submit</button>
+			<div class="form-group">
+            	<div class="custom-label">
+					<label for="username">Username:</label>
+				</div>
+            	<div class="custom-input">
+					<input type="text" id="username" name="username" required>
+				</div>
+			</div>
+			<div class="form-group">
+            	<div class="custom-label">
+					<label class="custom-label" for="password">Password:</label>
+				</div>
+            	<div class="custom-input">
+            		<input class="custom-input" type="password" id="password" name="password" required>
+				</div>
+            </div>
+			<button class="custom-submit-btn" type="submit">Submit</button>
         </form>
     </div>
     `;
