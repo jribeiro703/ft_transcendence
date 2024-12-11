@@ -699,15 +699,15 @@ p {
 	cursor: pointer;
 	margin-top: 150px;
 }
-.game-play
-{
-	margin-top: -50px;
-}
-.game-play2
-{
-	margin-top: -20px;
-}
-.container-game
+/* .game-play */
+/* { */
+/* 	margin-top: -50px; */
+/* } */
+/* .game-play2 */
+/* { */
+/* 	margin-top: -20px; */
+/* } */
+/* .container-game
 {
 	display: flex;
 	flex-direction: column; 
@@ -720,7 +720,7 @@ p {
 	max-width: 1600px;
 	margin: 0 auto; 
 	margin-top: 40px;
-}
+} */
 
 /* .game-row
 {
@@ -815,11 +815,11 @@ p {
   }
 }
 
-.game-play {
-  width: 100px;
-  display: flex;
-  justify-content: center;
-}
+/* .game-play { */
+/*   width: 100px; */
+/*   display: flex; */
+/*   justify-content: center; */
+/* } */
 
 .settings-info {
   justify-content: center;
