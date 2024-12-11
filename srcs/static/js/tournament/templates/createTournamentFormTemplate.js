@@ -13,7 +13,7 @@ export function createTournamentFormHTML(tournamentName) {
 								<label for="tournamentName" class="form-label">Tournament Name</label>
 								<input type="text" class="form-control" id="tournamentName" placeholder="Enter tournament name" value="${tournamentName}">
 							</div>
-							<button type="submit" class="btn btn-primary">Create Tournament</button>
+							<button class="btn btn-primary" id="createTournament">Create Tournament</button>
 						</form>
 					</div>
 				</div>

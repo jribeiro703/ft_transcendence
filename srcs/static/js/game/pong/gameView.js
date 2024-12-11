@@ -30,7 +30,7 @@ export async function showGameView()
 
 export async function showGameRoom()
 {
-	displayGameDataPong();
+	// displayGameDataPong();
 	gameVar.playerIdx = 2;
 	gameVar.playerReady = true;
 

@@ -4,12 +4,12 @@ export function createWebSocketConnection(url, action, onMessageCallback, onErro
 	const socket = new WebSocket(url);
 
 	socket.onopen = function () {
-		console.log("WebSocket connection established");
+		// console.log("WebSocket connection established");
 		socket.send(JSON.stringify({ action: action }));
 	};
 
 	socket.onmessage = function (event) {
-		console.log("Message received from server:", event.data);
+		// console.log("Message received from server:", event.data);
 
 		try {
 			const data = JSON.parse(event.data);

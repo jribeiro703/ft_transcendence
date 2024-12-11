@@ -1,5 +1,5 @@
 import gameVar from './var.js';
-import { sendPlayerData, sendPlayerRoomData, sendScoreInfo, sendSettingData } from './network.js';
+import { sendPlayerData, sendPlayerRoomData, sendRoomNameData, sendScoreInfo, sendSettingData } from './network.js';
 import { initializeBall } from './ball.js';
 import { updateCanvasColor } from './update.js';
 import { drawScoreBoard, drawScoreBoardLive } from './score.js';
@@ -10,6 +10,17 @@ import { getUserInfos } from '../getUser.js';
 export function createNewRoom(joinRoomCallback)
 {
 	const roomName = `room_${Math.floor(Math.random() * 10000)}`;
+	const inter = setInterval(() =>
+	{
+		if (gameVar.tournament)
+		{
+			sendRoomNameData(gameVar.lobbySocket, roomName);
+			sendSettingData(gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
+		}
+
+	}, 1000)
+
+	console.log("roomname: ", gameVar.roomTour1);
 	gameVar.playerIdx = 1;
 	gameVar.isFirstPlayer = true;
 	console.log("createRoom");

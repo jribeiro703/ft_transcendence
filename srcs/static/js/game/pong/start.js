@@ -12,19 +12,19 @@ import { displayScoreInfo } from "./displayVar.js";
 
 export function startLiveGame()
 {
-	getUserInfos();
+	// getUserInfos();
 	initializeBall();
 	updateCanvasColor();
 	displayScoreInfo();
-	if (gameVar.playerIdx === 1)
-		sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.opponentName, gameVar.playerScore, gameVar.aiScore);
-	if (gameVar.playerIdx === 2)
-		sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.opponentName, gameVar.playerScore, gameVar.aiScore);
+	// if (gameVar.playerIdx === 1)
+	// 	sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.opponentName, gameVar.playerScore, gameVar.aiScore);
+	// if (gameVar.playerIdx === 2)
+	// 	sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.opponentName, gameVar.playerScore, gameVar.aiScore);
 	drawLive();
 }
 export function startGame()
 {
-	getUserInfos();
+	// getUserInfos();
 	drawScoreBoard();
 	initializeBall();
 	if (gameVar.powerUpEnable)
