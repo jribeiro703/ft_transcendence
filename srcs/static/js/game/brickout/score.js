@@ -2,6 +2,10 @@ import gameVar from "../pong/var.js";
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 
+function loadCustomFont()
+{
+    return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');
+}
 export function chechOpponent()
 {
 	let display = false;
@@ -14,15 +18,17 @@ export function chechOpponent()
 				if (!display)
 				{
 					display = true;
-					brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
 					drawScoreBoardB();
+					brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
 					brickVar.ctx.font = 'bold 24px fontScore';
 					brickVar.ctx.fillStyle = '#66a5e8';
 					brickVar.ctx.textAlign = 'left';
 					brickVar.ctx.fillText("Waiting for opponent to finish...", brickVar.canvasW / 4, brickVar.canvasH / 2 - 100);
 					brickVar.ctx.fillText("Your final score :", brickVar.canvasW / 4, (brickVar.canvasH / 2));
-					brickVar.ctx.fillText(brickVar.finalScore, brickVar.canvasW / 4 + 250, (brickVar.canvasH / 2));
+					brickVar.ctx.fillText(brickVar.score, brickVar.canvasW / 4 + 250, (brickVar.canvasH / 2));
 				}
+				else
+					drawScoreBoardB();
 			}
 			else
 			{
@@ -37,26 +43,52 @@ export function compareScore()
 {
 	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
 	brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
-	if (brickVar.score > brickVar2.score)
+	loadCustomFont().load().then(function(font) 
 	{
-		brickVar.ctx.font = 'bold 24px fontScore';
-		brickVar.ctx.fillStyle = '#66a5e8';
-		brickVar.ctx.textAlign = 'left';
-		brickVar.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar.canvasW/ 4 - 100, (brickVar.canvasH / 2) - 100);
-		brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
-		brickVar.ctx.fillText(brickVar.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2)
+        document.fonts.add(font);
+		if (brickVar.score > brickVar2.score)
+		{
+			brickVar.ctx.font = 'bold 24px fontScore';
+			brickVar.ctx.fillStyle = '#66a5e8';
+			brickVar.ctx.textAlign = 'left';
+			brickVar.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar.canvasW/ 4 - 100, (brickVar.canvasH / 2) - 100);
+			brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
+			brickVar.ctx.fillText(brickVar.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2)
 
-		brickVar.ctx.fillText("Your opponent has score only : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
-		brickVar.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 420, brickVar.canvasH / 2 + 50);
+			brickVar.ctx.fillText("Your opponent has score only : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
+			brickVar.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 420, brickVar.canvasH / 2 + 50);
 
-		brickVar2.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4, (brickVar.canvasH / 2) - 100);
-		brickVar2.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
-		brickVar2.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
+			brickVar2.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4, (brickVar.canvasH / 2) - 100);
+			brickVar2.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
+			brickVar2.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
 
-		brickVar2.ctx.fillText("Your opponent has score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
-		brickVar2.ctx.fillText(brickVar.score, brickVar2.canvasW / 4 + 380, brickVar2.canvasH / 2 + 50)
+			brickVar2.ctx.fillText("Your opponent has score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
+			brickVar2.ctx.fillText(brickVar.score, brickVar2.canvasW / 4 + 380, brickVar2.canvasH / 2 + 50)
 
-	}
+		}
+		if (brickVar.score < brickVar2.score)
+		{
+			brickVar2.ctx.font = 'bold 24px fontScore';
+			brickVar2.ctx.fillStyle = '#66a5e8';
+			brickVar2.ctx.textAlign = 'left';
+			brickVar2.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar2.canvasW/ 4 - 100, (brickVar2.canvasH / 2) - 100);
+			brickVar2.ctx.fillText("Your score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2);
+			brickVar2.ctx.fillText(brickVar2.score, brickVar2.canvasW / 4 + 200, brickVar2.canvasH / 2)
+
+			brickVar2.ctx.fillText("Your opponent has score only : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
+			brickVar2.ctx.fillText(brickVar.score, brickVar2.canvasW / 4 + 420, brickVar2.canvasH / 2 + 50);
+
+			brickVar.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4 , (brickVar.canvasH / 2) - 100);
+			brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
+			brickVar.ctx.fillText(brickVar.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
+
+			brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
+			brickVar.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50)
+		}
+	}).catch(function(error)
+	{
+		console.error("Error on font load", error);
+	});	
 }
 export function checkInterval()
 {
@@ -86,10 +118,7 @@ export function checkFrame()
 	}
 }
 
-function loadCustomFont()
-{
-    return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');
-}
+
 
 export function drawScoreBoardB()
 {
@@ -115,10 +144,23 @@ export function drawScoreBoardB()
 
 		if (gameVar.game == 'brickout2p')
 		{
-			ctx.fillText("Player 1", leftX - 5, y);
+			if (gameVar.localGame)
+			{
+				ctx.fillText(gameVar.userName, leftX - 5, y);
+				ctx.fillText("Player 2", rightX + 15, y);
+			}
+			if (gameVar.liveMatch)
+			{
+				ctx.fillText(gameVar.userName, leftX - 5, y);
+				ctx.fillText(gameVar.opponentName, rightX + 15, y);
+			}
+			else
+			{
+				ctx.fillText("Player 1", leftX - 5, y);
+				ctx.fillText("Player 2", rightX + 15, y);
+			}
 			ctx.fillText("Score" , leftX - 15, y + 60);
 			ctx.fillText("Lives", leftX - 15, y + 100);
-			ctx.fillText("Player 2", rightX + 15, y)
 			ctx.fillText("Score" , rightX, y + 60);
 			ctx.fillText("Lives", rightX, y + 100);
 			ctx.fillText(brickVar.score, leftX + 45, y + 60);

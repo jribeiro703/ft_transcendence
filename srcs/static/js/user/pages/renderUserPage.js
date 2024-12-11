@@ -1,5 +1,5 @@
-import { fetchData } from "../fetchData.js";
-import { showToast, PONG_CARD } from "../tools.js";
+import { fetchData, fetchAuthData } from "../fetchData.js";
+import { showToast, PONG_CARD, showErrorMessages } from "../tools.js";
 import { renderPage } from "../historyManager.js";
 
 function createUserContent() {

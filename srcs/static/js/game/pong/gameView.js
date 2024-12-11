@@ -10,57 +10,32 @@ import { createPowerUp1, createPowerUp2 } from "./powerUp.js";
 import { checkServer } from "./manage.js";
 import { initControl } from "./control.js";
 import { displayGameView, displayCanvas } from "./display.js";
-import { initializeCanvas } from "./canvas.js";
+import { initializeCanvasPong } from "./canvas.js";
+import { displayGameDataPong } from "./displayVar.js";
 
 export async function showGameView()
 {
 	displayGameView();
 	updateCanvasColor();
 
-	await initializeCanvas();
+	await initializeCanvasPong();
 
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
 	gameVar.gameView = document.getElementById('gameView');
-	gameVar.gameView.style.display = 'block';
 
-	// loadCanvasAndScore();
-
-	console.log("local: ", gameVar.localGame);
 	initControl(gameVar.localGame)
 	startGame();
 }
 
-export function loadCanvasAndScore()
+export async function showGameRoom()
 {
-	var canvas = document.getElementById('myCanvas');
-	gameVar.ctx = canvas.getContext('2d');
-	canvas.width = gameVar.canvasW;
-	canvas.height = gameVar.canvasH;
-
-	var scoreCanvas = document.getElementById('scoreCanvas');
-	gameVar.scoreCtx = scoreCanvas.getContext('2d');
-	scoreCanvas.width = gameVar.scoreCanvW;
-	scoreCanvas.height = gameVar.scoreCanvH;
-
-	gameVar.gameTime = 0;
-    gameVar.gameTimer = setInterval(() =>
-	{
-        if (gameVar.startTime)
-		{
-            gameVar.gameTime++;
-        }
-    }, 1000);
-
-    scoreCanvas.style.marginBottom = '10px';
-}
-
-export function showGameRoom()
-{
+	displayGameDataPong();
 	gameVar.playerIdx = 2;
 	gameVar.playerReady = true;
 
-	displayCanvas();
+	displayGameView();
+	await initializeCanvasPong();
 
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
@@ -68,33 +43,7 @@ export function showGameRoom()
 
 	gameVar.gameView.style.display = 'block';
 	
-	getCanvasInfo();
-
-	gameVar.gameTime = 0;
-    gameVar.gameTimer = setInterval(() =>
-	{
-        if (gameVar.startTime)
-		{
-            gameVar.gameTime++;
-        }
-    }, 1000);
 }
-
-export function getCanvasInfo()
-{
-	var canvas = document.getElementById('myCanvas');
-	gameVar.ctx = canvas.getContext('2d');
-	canvas.width = gameVar.canvasW;
-	canvas.height = gameVar.canvasH;
-
-	var scoreCanvas = document.getElementById('scoreCanvas');
-	gameVar.scoreCtx = scoreCanvas.getContext('2d');
-	scoreCanvas.width = gameVar.scoreCanvW;
-	scoreCanvas.height = gameVar.scoreCanvH;
-
-    scoreCanvas.style.marginBottom = '10px';
-}
-
 
 export function rematchView()
 {

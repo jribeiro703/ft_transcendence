@@ -1,9 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinLengthValidator
+from django.conf import settings
+from django.utils import timezone
+from datetime import timedelta
 from .validators import alphanumeric
 
 class User(AbstractUser):
+	is_42_user = models.BooleanField(default=False)
+
 	username = models.CharField("username", max_length=30, unique=True, blank=False, validators=[MinLengthValidator(3), alphanumeric])
 	email = models.EmailField("email", unique=False, blank=False)
 	new_email = models.EmailField("new_email", null=True, blank=True)
@@ -15,6 +20,7 @@ class User(AbstractUser):
 	avatar = models.ImageField("avatar", upload_to='avatars/', default='default-avatar.jpg')
 	friends = models.ManyToManyField('self', related_name='friendship', symmetrical=False, blank=True, verbose_name="friends")
 	is_online = models.BooleanField(default=False)
+	last_activity = models.DateTimeField(null=True)
 	
 	# related_name : tournaments, game_as_player_one, game_as_player_two
 	# ex: user_instance.tournaments.all() to have access to alls tournaments
@@ -24,6 +30,13 @@ class User(AbstractUser):
 
 	def __str__(self):
 		return self.username
+
+	def update_online_status(self):
+		inactive_time = getattr(settings, 'USER_INACTIVE_TIME', 300)
+		if self.last_activity:
+			time_since_activity = timezone.now() - self.last_activity
+			self.is_online = time_since_activity <= timedelta(seconds=inactive_time)
+			self.save()
 
 class FriendRequest(models.Model):
     sender = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)

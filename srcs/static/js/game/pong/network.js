@@ -63,7 +63,7 @@ export function sendPlayerData(socket, playerReady)
 		console.log("Error websocket");
 }
 
-export function sendGameData(socket, gameStart, currentServer, startTime)
+export function sendGameData(socket, gameStart, currentServer, startTime, clientLeft)
 {
 	if (socket && socket.readyState == WebSocket.OPEN)
 	{
@@ -73,6 +73,7 @@ export function sendGameData(socket, gameStart, currentServer, startTime)
 			gameStart: gameStart,
 			currentServer: currentServer,
 			startTime: startTime,
+			clientLeft: clientLeft,
 		};
 		socket.send(JSON.stringify(data));
 	}
@@ -108,6 +109,21 @@ export function sendRoomData(socket, idx, name, nbPlayer, status)
 			name: name,
 			nbPlayer: nbPlayer,
 			status: status,
+		};
+		socket.send(JSON.stringify(data));
+	}
+	else
+		console.log("Error websocket");
+}
+
+export function sendPlayerRoomData(socket, userid)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data =
+		{
+			type: 'player_room_data',
+			userid: userid,
 		};
 		socket.send(JSON.stringify(data));
 	}

@@ -12,15 +12,11 @@ img.onload = function()
 	drawPowerUpB();
 };
 
-export function updatePowerUpSelectionB(selected)
+export function updatePowerUpSelectionB(selected, def)
 {
 	brickVar.powerUpEnable = selected;
-	brickVar.checkPu = true;
-
-	if (selected)
-		console.log("Power-Ups activés B !");
-	else 
-		console.log("Power-Ups désactivés B !");
+	if (!def)
+		brickVar.checkPu = true;
 }
 
 export function updatePowerUpB()
@@ -119,7 +115,6 @@ export function collectPowerUpB()
 				powerUpCenterY >= paddleTop - tolerance &&
 				powerUpCenterY <= paddleBottom + tolerance)
 			{
-				console.log("PowerUp collected!");
 				brickVar.powerUpOnscreen = false;
 				brickVar.powerUpX = -100;
 				checkPowerUpB();
@@ -162,7 +157,6 @@ function puExtraLife()
 
 function puSpeedB()
 {
-	console.log("on accelere");
 	const originSpeed = Math.sqrt(brickVar.dx * brickVar.dx + brickVar.dy * brickVar.dy);
 
 	brickVar.dx *= 2;

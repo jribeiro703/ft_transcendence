@@ -1,7 +1,7 @@
 from django.db import models
 
 class Message(models.Model):
-    nickname = models.CharField(max_length=5)
+    nickname = models.CharField()
     content = models.TextField()
     timestamp = models.DateTimeField()
 

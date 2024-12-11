@@ -25,21 +25,114 @@
         <nav class="navbar px-5">
           <div class="container-fluid d-flex justify-content-between">
             <div data-home-icon class="homeIcon"></div>
-            <div data-profile-icon class="profileIcon"></div>
+            <div data-profile-icon id="user-avatar" class="profileIcon"></div>
           </div>
         </nav>
       </div>
       <div class="w-100 h-100" style="max-height: calc(100vh - 100px);">
         <div class="w-100 h-100 flex-grow-1 d-flex justify-content-center align-items-center px-5 pb-5">
           <div id="mainContent"
-               class="slideWithLiveChat flex-grow-1 d-flex w-100 h-100 align-item-center justify-content-center"></div>
-          <div id="livechat"
-               class="slidingDiv hide-children neon-purple d-flex flex-column gap-3 ">
-            <div class="flex-grow-1 w-100 h-100 overflow-auto">
-              <div id="chat-log"
-                   class="w-100 h-100 d-flex flex-column-reverse text-break overflow-auto"
-                   aria-label="Chat log"></div>
+               class="slideWithLiveChat flex-grow-1 d-flex h-100 align-item-center justify-content-center"></div>
+
+
+          <div id="livechat" class="slidingDiv hide-children neon-purple d-flex flex-column gap-3">
+            <div class="flex-grow-1 w-100 h-100 overflow-auto position-relative">
+              <!-- Chat log -->
+              <div id="chat-log" 
+                   class="w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto" 
+                   aria-label="Chat log">
+              </div>
+
+              <!-- Notification list with absolute positioning -->
+              <div id="notificationlist" 
+                   class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none" 
+                   style="z-index: 2;"
+                   aria-label="Notification list">
+              </div>
+
+              <!-- Friend list with absolute positioning -->
+              <div id="friendlist" 
+                   class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none" 
+                   style="z-index: 2;"
+                   aria-label="Friend list">
+              </div>
+
+              <!-- online list with absolute positioning -->
+              <div id="onlinelist" 
+                   class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none" 
+                   style="z-index: 2;"
+                   aria-label="Online list">
+              </div>
             </div>
+
+              <div class="position-absolute top-0 end-0 h-100">
+                <div class="channel-container d-flex flex-column h-100 p-2 m-4" 
+                     style="max-height: 100%; 
+                            position: absolute; 
+                            top: 0; 
+                            right: 0; 
+                            bottom: 0;
+                            /* width: 65px; */
+                            overflow-y: auto;
+                            scrollbar-width: none;  /* Firefox */
+                            -ms-overflow-style: none;  /* IE and Edge */
+                            &::-webkit-scrollbar { 
+                              display: none;  /* Chrome, Safari, Opera */
+                            }">
+                  <div class="channel-btn d-flex flex-column gap-2">
+                    <button class="channel-btn chat-btn btn border rounded" 
+                            type="button" 
+                            id="notificationButton" 
+                            aria-label="NotificationsChat"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="left"
+                            title="Notifications">🔔</button>
+
+                    <button class="channel-btn chat-btn btn border rounded" 
+                            type="button" 
+                            id="bubbleButton" 
+                            aria-label="GeneralChat"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="left"
+                            title="General Chat">️💬</button>
+
+                    <button class="channel-btn chat-btn btn border rounded" 
+                            type="button" 
+                            id="swordsButton" 
+                            aria-label="GameChat"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="left"
+                            title="Game Chat">⚔️</button>
+
+                    <button class="channel-btn chat-btn btn border rounded" 
+                            type="button" 
+                            id="trophyButton" 
+                            aria-label="TournamentChat"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="left"
+                            title="Tournament Chat">🏆</button>
+
+                    <button class="channel-btn chat-btn btn border rounded" 
+                            type="button" 
+                            id="friendsButton" 
+                            aria-label="FriendsChat"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="left"
+                            title="Friends">🤝 </button>
+
+                    <button class="channel-btn chat-btn btn border rounded" 
+                            type="button" 
+                            id="onlineButton" 
+                            aria-label="OnlinePlayers"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="left"
+                            title="Online Players">👤</button>
+
+                  </div>
+                </div>
+              </div>
+
+
             <div class="input-group d-flex gap-3">
               <div class="emoji-picker-container" id="emojiPickerContainer">
                 <emoji-picker id="emoji-picker" aria-label="Emoji picker"></emoji-picker>
@@ -58,6 +151,10 @@
                       aria-label="Send message">Send</button>
             </div>
           </div>
+
+
+
+
         </div>
       </div>
     </div>
