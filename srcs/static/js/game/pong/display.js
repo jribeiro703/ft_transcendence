@@ -262,25 +262,19 @@ export function displaySettingView()
   maincontent.innerHTML = "";
 
   const insertTo = document.createElement("div");
+  insertTo.style.width = "100%";
+  insertTo.style.flex = "1 0 0";
 
   insertTo.innerHTML = `
-  <div id="settingView" style="display: block;">
-    <Settings
-    <div class="container">
-      <div class="left-column">
-        <p class="gpMode">Difficulty:</p>
-        <p id="powerUpSelection" style="display: none;" class="gpMode">Power-Up Activation:</p>
-        <p class="gpMode">Level Selection:</p>
-      </div>
-      <div class="right-column">
-        <div>
-          <button id="easy" class="level">Easy</button>
-          <button id="medium" class="level">Medium</button>
-          <button id="hard" class="level">Hard</button>
+  <div id="settingView" class="d-flex justify-content-center flex-column align-items-center gap-5" style="display: block;">
+        <div class="d-flex justify-content-center align-items-center gap-5">
+          <button id="easy" class="settingsBtn btn custom-btn height-btn">Easy</button>
+          <button id="medium" class="settingsBtn btn custom-btn height-btn">Medium</button>
+          <button id="hard" class="settingsBtn btn custom-btn height-btn">Hard</button>
         </div>
-        <div id="btnPowerUp" style="display: none;" class="pu">
-          <button id="withPowerUps" class="powerUpBtn">Yes</button>
-          <button id="withoutPowerUps" class="powerUpBtn">No</button>
+        <div id="btnPowerUp" style="display: block;" class="d-flex justify-content-center align-items-center gap-5">
+          <button id="withPowerUps" class="settingsBtn btn custom-btn height-btn">Yes</button>
+          <button id="withoutPowerUps" class="settingsBtn btn custom-btn height-btn">No</button>
         </div>
         <div class="map-selection">
           <div id="map1" class="mapOption" data-map-name="classicMap">
@@ -300,8 +294,6 @@ export function displaySettingView()
             <button id="tennisLevel" class="level">Tennis</button>
           </div>
         </div>
-      </div>
-    </div>
     <div>
       <button id="saveBtn" disabled="true">Save and Return</button>
     </div>
