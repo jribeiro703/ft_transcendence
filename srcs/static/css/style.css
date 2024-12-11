@@ -815,11 +815,11 @@ p {
   }
 }
 
-/* .game-play { */
-/*   width: 100px; */
-/*   display: flex; */
-/*   justify-content: center; */
-/* } */
+.game-play {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+}
 
 .settings-info {
   justify-content: center;
