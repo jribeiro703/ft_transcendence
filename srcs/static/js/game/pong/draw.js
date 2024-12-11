@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { drawPowerUp, collectPowerUp, updatePowerUp, newPowerUp } from "./powerUp.js";
+import { drawPowerUp, collectPowerUp, updatePowerUp } from "./powerUp.js";
 import { manageServer } from "./manage.js";
 import { manageCollisionLive, manageRealCollision } from "./collision.js";
 import { aiMove} from "./ai.js";
@@ -9,23 +9,34 @@ import { manageMoveLive, manageMove } from './movement.js';
 import { drawBall } from "./ball.js";
 import { checkPaddles } from "./paddle.js";
 import { drawScoreBoard } from "./score.js";
+import { updateCanvasColor } from "./update.js";
+import { addBtn } from "./manage.js";
+import { delRooms } from "./room.js";
 
 export function initDraw()
 {
-	drawBall();
-	checkPaddles();
-	drawScoreBoard();
-	if (gameVar.currentLevel === 'tableTennis')
-		drawLines();	
-	else if (gameVar.currentLevel === 'football')
-		drawFootball();
-	else if (gameVar.currentLevel === 'tennis')
-		drawTennisCourt();
+	if (gameVar.ctx)
+	{
+		gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+		if (gameVar.currentLevel === 'tableTennis')
+			drawLines();	
+		else if (gameVar.currentLevel === 'football')
+			drawFootball();
+		else if (gameVar.currentLevel === 'tennis')
+			drawTennisCourt();
+		else if (gameVar.currentLevel === 'classicPong')
+		{
+			drawClassicPong();
+			updateCanvasColor();
+		}
+		drawBall();
+		checkPaddles();
+		drawScoreBoard();
+	}
 }
 
 export function draw()
 {
-	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
 	if (gameVar.gameStart)
 	{
@@ -50,7 +61,6 @@ export function drawLive()
 		kickOut();
 		return ;
 	}
-	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
 	if (gameVar.gameStart)
 		manageCollisionLive();
@@ -67,7 +77,34 @@ export function kickOut()
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	gameVar.ctx.font = "35px Arial";
 	gameVar.ctx.fillStyle = "red";	
-	gameVar.ctx.fillText("Opponent has rage quit" , gameVar.canvasW / 4, gameVar.canvasH / 6);
+	gameVar.ctx.fillText("Opponent has rage quit..." , gameVar.canvasW / 4, gameVar.canvasH / 3);
+	delRooms();
 	addBtn();
 }
 
+function drawClassicPong()
+{
+    gameVar.ctx.setLineDash([10, 11]);
+	gameVar.ctx.strokeStyle = "white";
+    gameVar.ctx.lineWidth = 10;
+    
+    gameVar.ctx.beginPath();
+    gameVar.ctx.moveTo(gameVar.canvasW / 2, 0 + 5);
+    gameVar.ctx.lineTo(gameVar.canvasW / 2, gameVar.canvasH);
+    gameVar.ctx.stroke();
+    
+    gameVar.ctx.setLineDash([]); 
+    
+	gameVar.ctx.beginPath();
+	gameVar.ctx.lineWidth = 15;
+	gameVar.ctx.moveTo(0, 0);
+	gameVar.ctx.lineTo(gameVar.canvasW, 0);
+	gameVar.ctx.stroke();
+
+	gameVar.ctx.beginPath();
+	gameVar.ctx.lineWidth = 15;
+	gameVar.ctx.moveTo(0, gameVar.canvasH);
+	gameVar.ctx.lineTo(gameVar.canvasW, gameVar.canvasH);
+	gameVar.ctx.stroke();
+
+}

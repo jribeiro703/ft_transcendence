@@ -17,6 +17,31 @@ export function listenBtn()
 	gameVar.quitGameBtn.addEventListener('click', () => document.location.reload());
 }
 
+export function clearAllpongStates()
+{
+	if (gameVar.animationFrame)
+	{
+		cancelAnimationFrame(gameVar.animationFrame);
+		gameVar.animationFrame = null;
+	}
+	if(gameVar.gameTimer)
+	{
+		clearInterval(gameVar.gameTimer);
+		gameVar.gameTimer = null;
+	}
+	gameVar.startTime = false;
+	gameVar.gameTime = 0;
+	gameVar.gameStart = false;
+	gameVar.playerScore = 0;
+	gameVar.aiScore = 0;
+	gameVar.matchOver = false;
+	gameVar.serveCount = 0;
+	gameVar.finishGame = false;
+	gameVar.clientLeft = false;
+	gameVar.playerReady = false;
+	gameVar.currentServer = 'player';
+}
+
 export function resetMatch()
 {
 	gameVar.playerScore = 0;
@@ -58,11 +83,9 @@ export function resetBall(winner)
 			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'ai' : 'player';
 		else
 		{
-			console.log("in if curr server before: ", gameVar.currentServer);
 			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'player2' : 'player';
-			console.log("in if curr server after: ", gameVar.currentServer);
 			if (gameVar.liveMatch)
-				sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime);
+				sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
 		}
 	}
 	initializeBall();
@@ -72,8 +95,7 @@ export function resetBall(winner)
 		checkball();
 	gameVar.gameStart = false;
 	if (gameVar.liveMatch)
-		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime);
-	console.log("server current in reset: ", gameVar.currentServer);
+		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
 	if (gameVar.currentServer == 'ai')
 	{
 		gameVar.aiServe = true;

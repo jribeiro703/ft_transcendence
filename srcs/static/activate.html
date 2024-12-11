@@ -23,7 +23,7 @@
         async function activateAccount() {
             const url = window.location.href;
             const box = document.getElementById("activation-status");
-			const responseObject = await fetchData(url, "GET", null, false, "simple");
+			const responseObject = await fetchData(url, "GET", null, false);
 			if (responseObject.data.message)
 				box.innerHTML = responseObject.data.message;
 			else
