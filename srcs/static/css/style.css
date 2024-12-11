@@ -1253,7 +1253,7 @@ button:disabled {
   color: #fefcff;
 }
 
-#chat-log, #friendlist, #onlinelist {
+#chat-log, #friendlist, #onlinelist, #notificationlist {
   outline: none;
   flex: 1;
   /* height: calc(100% - 56px); */
@@ -1550,7 +1550,7 @@ emoji-picker {
   display: none;
 }
 
-.friend-item, .online-item {
+.friend-item, .online-item, .notification-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -1560,7 +1560,7 @@ emoji-picker {
   margin-bottom: 0.5rem;
 }
 
-.friend-item:last-child, .online-item:last-child {
+.friend-item:last-child, .online-item:last-child, .notification-item:last-child {
   margin-bottom: 0;
 }
 

@@ -11,6 +11,7 @@ urlpatterns = [
 	path('public/<int:pk>/', views.GetUserPublicInfos, name="user_public_infos"),
 	path('private/', views.GetUserPrivateInfos, name="user_private_infos"),
 	path('private/pk/', views.getUserPk, name="user_pk"),
+	path('get-id/', views.getUserIdByNickname, name="get_user_id"),
 
 	path('register/', views.CreateUserView.as_view(), name="register"),
 	path('activate/<uidb64>/<token>/<action>/', views.ActivateLinkView.as_view(), name="activate_link"),
@@ -38,5 +39,4 @@ urlpatterns = [
 
 	path('online/', views.getOnlineUsers, name="online_users"),
 
-	path('get-id/', views.getUserIdByNickname, name="get_user_id"),
 ]
