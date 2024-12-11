@@ -84,7 +84,9 @@ const gameVar =
 	currentServer: 'player',
 	playerReady: false,
 	userName: null,
-	avatarUrl: null,
+	userAvatar: null,
+	opponentName: null,
+	opponentAvatar: null,	
 
 // ---------------------------------Game Data-------------------------
 
@@ -105,6 +107,7 @@ const gameVar =
 	game: null,
 	startTime: false,
 	clientLeft: false,
+
 // --------------------------------------AI-----------------------------
 
 	aiServe: false,

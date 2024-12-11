@@ -1,6 +1,5 @@
 import gameVar from "./var.js";
 import { sendDirectionData, sendGameData } from "./network.js";
-import { displayBall, displayGameDataPong } from "./displayVar.js";
 import { updateDifficultySelection } from "./update.js";
 
 export function keyDownHandler(e, local)
@@ -73,8 +72,6 @@ export function keyUpHandler(e, local)
 
 export function startBall(e)
 {
-	// displayGameDataPong();
-	// displayBall();
 	if (e.code == "Space" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart && gameVar.currentServer == 'player'
 		|| e.code == "Enter" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart && gameVar.currentServer == 'player2')
 	{

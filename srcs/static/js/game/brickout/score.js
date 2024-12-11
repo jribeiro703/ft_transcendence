@@ -144,10 +144,23 @@ export function drawScoreBoardB()
 
 		if (gameVar.game == 'brickout2p')
 		{
-			ctx.fillText("Player 1", leftX - 5, y);
+			if (gameVar.localGame)
+			{
+				ctx.fillText(gameVar.userName, leftX - 5, y);
+				ctx.fillText("Player 2", rightX + 15, y);
+			}
+			if (gameVar.liveMatch)
+			{
+				ctx.fillText(gameVar.userName, leftX - 5, y);
+				ctx.fillText(gameVar.opponentName, rightX + 15, y);
+			}
+			else
+			{
+				ctx.fillText("Player 1", leftX - 5, y);
+				ctx.fillText("Player 2", rightX + 15, y);
+			}
 			ctx.fillText("Score" , leftX - 15, y + 60);
 			ctx.fillText("Lives", leftX - 15, y + 100);
-			ctx.fillText("Player 2", rightX + 15, y)
 			ctx.fillText("Score" , rightX, y + 60);
 			ctx.fillText("Lives", rightX, y + 100);
 			ctx.fillText(brickVar.score, leftX + 45, y + 60);

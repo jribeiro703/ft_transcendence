@@ -2,7 +2,6 @@ import gameVar from "./var.js";
 import { updateDifficultySelection, updateImageUrl, updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { displaySetting } from "./display.js";
-import { displayGameDataBrick, displayGameDataPong } from "./displayVar.js";
 
 export function checkSetting()
 {
@@ -25,7 +24,6 @@ export function checkSettingLive()
 
 export function updateSetting()
 {
-	console.log("updateSetting");
 	var difficulty = null;	
 	var level = null;
 	var powerUp = null;
@@ -61,8 +59,6 @@ export function updateSetting()
 
 	updateImageUrl();
 	displaySetting(difficulty, powerUp, level);
-	console.log("end update setting dsiplay = ");
-	// displayGameDataPong();
 }
 
 export function updateLiveSetting()
