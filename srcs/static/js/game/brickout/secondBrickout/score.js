@@ -40,7 +40,6 @@ export function compareScore()
 {
 	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
 	brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
-	// displayScore();
 	if (brickVar.score < brickVar2.score)
 	{
 		brickVar2.ctx.font = 'bold 24px fontScore';
@@ -117,7 +116,6 @@ export function chechOpponent()
 				if (!display)
 				{
 					display = true;
-					// drawScoreBoardB();
 					brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
 					brickVar2.ctx.font = 'bold 24px fontScore';
 					brickVar2.ctx.fillStyle = '#66a5e8';
@@ -129,8 +127,7 @@ export function chechOpponent()
 			}
 			else
 			{
-				clearInterval(waiting)
-				// compareScore();
+				clearInterval(waiting);
 			}
 		}, 1000);
 	}

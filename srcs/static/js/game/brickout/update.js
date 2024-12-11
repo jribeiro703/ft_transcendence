@@ -5,13 +5,11 @@ import { updatePowerUpSelectionB as updatePowerUpSelectionSecond } from './secon
 import { updateLevelSelectionB as updateLevelSelectionFirst} from "./update.js";
 import { updateLevelSelectionB as updateLevelSelectionSecond} from "./secondBrickout/update.js";
 import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
-import { displayGameDataBrick } from "../pong/displayVar.js";
 import { updateImageUrl } from "../pong/update.js";
 import { displaySettingB } from "./settings.js";
 
 export function updateSettingB()
 {
-	console.log("updateSettingB");
 	var difficulty = null;	
 	var level = null;
 	var powerUp = null;
@@ -46,7 +44,6 @@ export function updateSettingB()
 	}
 	updateImageUrl();
 	displaySettingB(difficulty, powerUp, level);
-	// displayGameDataBrick();
 }
 
 export function updateDifficultySelectionB(level, def)

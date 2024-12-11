@@ -83,9 +83,7 @@ export function resetBall(winner)
 			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'ai' : 'player';
 		else
 		{
-			console.log("in if curr server before: ", gameVar.currentServer);
 			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'player2' : 'player';
-			console.log("in if curr server after: ", gameVar.currentServer);
 			if (gameVar.liveMatch)
 				sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
 		}
@@ -98,7 +96,6 @@ export function resetBall(winner)
 	gameVar.gameStart = false;
 	if (gameVar.liveMatch)
 		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
-	console.log("server current in reset: ", gameVar.currentServer);
 	if (gameVar.currentServer == 'ai')
 	{
 		gameVar.aiServe = true;

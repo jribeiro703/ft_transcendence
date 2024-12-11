@@ -115,3 +115,18 @@ export function sendRoomData(socket, idx, name, nbPlayer, status)
 	else
 		console.log("Error websocket");
 }
+
+export function sendPlayerRoomData(socket, userid)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data =
+		{
+			type: 'player_room_data',
+			userid: userid,
+		};
+		socket.send(JSON.stringify(data));
+	}
+	else
+		console.log("Error websocket");
+}

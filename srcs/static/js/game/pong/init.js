@@ -23,13 +23,11 @@ export function initEventListenerRoom()
 	gameVar.createRoomBtn.addEventListener('click', () => 
 	{
 		renderPageGame("playPongRemote", true);
-		// showGameMultiView();
 	});
 
 	gameVar.settingBtn.addEventListener('click', () =>
 	{
 		renderPageGame("pongSetting", true, 'live');
-		// showSettingView(true);
 	});
 
 	initControlLive();

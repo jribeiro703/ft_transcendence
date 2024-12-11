@@ -60,10 +60,8 @@ export function displayPongRemote()
 	mainContent.appendChild(insertTo);
 }
 
-
 export function displayGameSelectionMulti()
 {
-	console.log("displayGSMV");
 	const maincontent = document.getElementById('mainContent');
 	maincontent.innerHTML = '';
 	const gameSelection = document.createElement('div');

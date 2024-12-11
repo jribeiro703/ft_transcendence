@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { drawPowerUp, collectPowerUp, updatePowerUp, newPowerUp } from "./powerUp.js";
+import { drawPowerUp, collectPowerUp, updatePowerUp } from "./powerUp.js";
 import { manageServer } from "./manage.js";
 import { manageCollisionLive, manageRealCollision } from "./collision.js";
 import { aiMove} from "./ai.js";
@@ -56,13 +56,11 @@ export function draw()
 
 export function drawLive()
 {
-
 	if (gameVar.clientLeft)
 	{
 		kickOut();
 		return ;
 	}
-	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
 	if (gameVar.gameStart)
 		manageCollisionLive();

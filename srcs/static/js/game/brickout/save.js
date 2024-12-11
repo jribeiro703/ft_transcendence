@@ -24,7 +24,6 @@ export function listenSaveBtnB(info)
 }
 export function checkSaveBtn()
 {
-	console.log("check btn");
 	if (brickVar.checkPu && brickVar.checkLevel && brickVar.checkDiff)
 	{
 		const btn = document.getElementById('saveBtn');

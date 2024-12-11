@@ -69,6 +69,11 @@ export function drawScoreBoard()
 			else if (gameVar.liveMatch)
 			{
 				ctx.fillText(gameVar.userName, leftX, y);
+				ctx.fillText(gameVar.opponentName, rightX, y);
+			}
+			else
+			{
+				ctx.fillText('Player 1', leftX, y);
 				ctx.fillText('AI', rightX, y);
 			}
 			ctx.font = '32px fontScore';

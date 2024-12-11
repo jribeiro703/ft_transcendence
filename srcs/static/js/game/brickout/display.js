@@ -1,4 +1,3 @@
-import brickVar from "./var.js";
 import { checkBtnB } from "./manage.js";
 
 export function displayNextLevel()

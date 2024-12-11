@@ -114,6 +114,8 @@ class PongConsumer(WebsocketConsumer):
 			self.broadcast_setting_data(data)
 		elif data['type'] == 'lobbyView':
 			self.lobby()
+		elif data['type'] == 'player_room_data':
+			logger.info(f'player room data receive : ')
 		elif data['type'] == 'room_deleted':
 			self.room_name = data['room_name']
 			if self.room_name in self.rooms:

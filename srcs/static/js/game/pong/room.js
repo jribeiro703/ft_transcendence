@@ -1,18 +1,19 @@
 import gameVar from './var.js';
-import { sendPlayerData, sendSettingData } from './network.js';
+import { sendPlayerData, sendPlayerRoomData, sendSettingData } from './network.js';
 import { drawLive } from './draw.js';
 import { initializeBall } from './ball.js';
 import { updateCanvasColor } from './update.js';
-import { showGameRoom } from './gameView.js';
 import { drawScoreBoard } from './score.js';
 import { renderPageGame } from '../HistoryManager.js';
+import { fetchAuthData } from '../../user/fetchData.js';
 
-export function createNewRoom(joinRoomCallback)
+export async function createNewRoom(joinRoomCallback)
 {
 	const roomName = `room_${Math.floor(Math.random() * 10000)}`;
 	gameVar.playerIdx = 1;
 	gameVar.isFirstPlayer = true;
 	joinRoom(roomName);
+
 }
 
 export function waitingPlayer()
@@ -48,11 +49,21 @@ export function startLiveGame()
 	drawLive();
 }
 
-export function joinRoom(roomName)
+export async function joinRoom(roomName)
 {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 	const gameSocket = new WebSocket(protocol + '//' + window.location.host + `/ws/pong/${roomName}/`);
 
+	const response = await fetchAuthData('/user/private/')
+	if (response.status == 200)
+	{
+		const userid = response.data.id;
+		sendPlayerRoomData(gameSocket, userid);
+	}
+	else
+	{
+		console.log("error on fetch");
+	}
 	gameSocket.onopen = function(e)
 	{
 		console.log('Game socket opened');
@@ -60,7 +71,6 @@ export function joinRoom(roomName)
 		{
 			gameSocket.send(JSON.stringify({ type: 'join_room' }));
 			gameVar.gameSocket = gameSocket;
-			// history.pushState({ view: 'game', room: roomName }, '', `?view=multi&room=${roomName}`);
 			if (gameVar.playerIdx == 1)
 			{
 				waitingPlayer();
@@ -82,18 +92,15 @@ export function joinRoom(roomName)
 		try
 		{
 			const data = JSON.parse(e.data);
-			// if (data.type !== 'ball_data' && data.type !== 'paddle_data')
-			console.log("data: ", data);
+			if (data.type !== 'ball_data' && data.type !== 'paddle_data' && data.type !== 'direction_data')
+				console.log("data: ", data);
 			if (data.type === 'ping')
 			{
 				gameSocket.send(JSON.stringify({ type: 'pong' }));
 			}
 			else if (data.type == 'client_left')
 			{
-				console.log("left before: ", gameVar.clientLeft);
-				console.log("client Left !");
 				gameVar.clientLeft = true;
-				console.log("left after: ", gameVar.clientLeft);
 				if (gameSocket && gameSocket.readyState === WebSocket.OPEN)
 				{
 					gameSocket.send(JSON.stringify({
@@ -193,7 +200,6 @@ export function addRoom(index, roomName, status, nbplayer, difficulty = null, le
 
 export function updateRoomList()
 {
-	// gameVar.roomsContainer.style.display = 'block';
 	gameVar.roomsContainer.innerHTML = '';
 	gameVar.rooms.forEach(room =>
 	{
@@ -250,7 +256,6 @@ export function updateSettingLive()
 }
 export function checkRoom(rooms)
 {
-	console.log("checkRoom");
     if (rooms && Array.isArray(rooms)) 
 	{
         gameVar.rooms = gameVar.rooms.filter(room => rooms.includes(room.name));
@@ -271,15 +276,12 @@ export function roomNetwork()
 
 	tempSocket.onopen = function(e)
 	{
-		console.log('Temporary socket opened');
-		console.log("on send lobbyView :");
 		tempSocket.send(JSON.stringify({type: 'lobbyView'}));
 	};
 
 	tempSocket.onmessage = function(e)
 	{
 		const data = JSON.parse(e.data);
-		console.log("data: ", data);
 		if (data.type === 'looks_rooms')
 		{
 			if (data.rooms)

@@ -8,8 +8,6 @@ export function startBallB(e)
 	{
 		if (!brickVar.finishLevel)
 		{
-            console.log("Starting ball1");
-			console.log("diff1: ", brickVar.difficulty)
             brickVar.gameStart = true;
 			brickVar.startTime = true;
 			if (!brickVar.initDx || !brickVar.initDy)

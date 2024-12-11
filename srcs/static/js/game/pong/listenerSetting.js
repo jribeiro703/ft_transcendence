@@ -105,7 +105,6 @@ export function listenSettingSave(info)
 		if (info === 'live')
 		{
 			await renderPageGame("pongLobby", true);
-			console.log("update 1");
 			updateLiveSetting();
 		}
 		else if (info === 'local')
@@ -117,26 +116,6 @@ export function listenSettingSave(info)
 		else
 		{	
 			await renderPageGame("gameSelectionSolo", true);
-			console.log("on update apres changement");
-			updateSetting();
-		}
-	});
-}
-
-export function listenSettingMultiSave(live)
-{
-	gameVar.saveBtn.addEventListener('click', () =>
-	{
-		if (live === true)
-		{
-			renderPageGame("pongLobby", true)
-			// initLobbyView();
-			// updateLiveSetting();
-		}
-		else
-		{
-			console.log("to dooo");
-			// showGameSelectionMultiView();
 			updateSetting();
 		}
 	});
