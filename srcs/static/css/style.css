@@ -40,6 +40,14 @@ p {
   height: 50px;
 }
 
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
 
 
 /* ---------------------- Nav Bar ---------------------- */
@@ -372,28 +380,64 @@ p {
 
 /* ----------------------- settingsviewbtn ---------------------------- */
 
+.mapClic {
+  transition: transform 0.3s ease-in-out, box-shadow 0.1s ease-in-out;
+}
+
+.mapClic:hover {
+  transform: scale(1.05);
+  /* box-shadow: var(--box-shadow); */
+}
+
+.mapClic:active {
+  transform: scale(0.95);
+  box-shadow: var(--box-shadow);
+}
+
+
 .settingsBtn {
   background-color: var(--background-color);
   color: var(--text-color);
-  border: 2px solid;
-  border-color: var(--border-btn-color);
-  width: 150px;
+  width: 170px;
   align-self: center;
-  transition: color 0.3s ease-in-out;
-  transition: border-color 0.3s ease-in-out;
+  border: 2px solid var(--text-color);
+  transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out transform 0.3s;
 }
 
 .settingsBtn:focus,
 .settingsBtn:hover {
-  border-color: var(--highlight-color);
+  transform: scale(1.05);
   color: var(--highlight-color);
+  box-shadow: var(--box-shadow), var(--box-shadow-inset);
+  border: 2px solid var(--text-color);
 }
 
 .settingsBtn:active {
-  color: #0a1730;
-  background-color: var(--quartiary-color);
-  border-color: var(--primary-color);
+  transform: scale(0.95);
+  color: var(--highlight-color);
+  box-shadow: var(--box-shadow-highlight);
+  border: 2px solid var(--text-color);
 }
+
+.level-btn
+{
+  /* box-shadow: var(--box-shadow); */
+  background-color: var(--background-color);
+  width: 100%;
+  height: 42px;
+  color: var(--text-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.5s;
+}
+
+.level-btn:hover
+{
+  color: var(--highlight-color);
+}
+
 
 /* ------------------------ Main Button ---------------------------- */
 
@@ -481,8 +525,6 @@ p {
 .powerUpBtn.selected,
 .level.selected {
   background-color: #6dc7c1;
-  color: var(--primary-color);
-  transform: scale(1.1);
 }
 
 .powerUpBtn:hover,
@@ -515,6 +557,7 @@ p {
 }
 
 .mapOption {
+  border-radius: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -527,34 +570,34 @@ p {
   border-radius: 5px;
 }
 
-#saveBtn
-{
-	position: absolute;
-	left: 45%;
-	width: 200px;
-	height: 60px;
-	font-size: 20px;
-	background-color: #0A1730;
-	color: #FEFCFF; 
-	border: none;
-	border-radius: 10px;
-	cursor: pointer;
-	transition: background-color 0.3s, transform 0.4s;
-	text-align: center;
-	line-height: 60px; 
-}
-
-#saveBtn:hover {
-  color: var(--primary-color);
-  background-color: #6dc7c1;
-  border-color: var(--primary-color);
-}
-
-#saveBtn:active {
-  color: var(--primary-color);
-  background-color: #6dc7c1;
-  border-color: var(--primary-color);
-}
+/* #saveBtn */
+/* { */
+/* 	position: absolute; */
+/* 	left: 45%; */
+/* 	width: 200px; */
+/* 	height: 60px; */
+/* 	font-size: 20px; */
+/* 	background-color: #0A1730; */
+/* 	color: #FEFCFF;  */
+/* 	border: none; */
+/* 	border-radius: 10px; */
+/* 	cursor: pointer; */
+/* 	transition: background-color 0.3s, transform 0.4s; */
+/* 	text-align: center; */
+/* 	line-height: 60px;  */
+/* } */
+/**/
+/* #saveBtn:hover { */
+/*   color: var(--primary-color); */
+/*   background-color: #6dc7c1; */
+/*   border-color: var(--primary-color); */
+/* } */
+/**/
+/* #saveBtn:active { */
+/*   color: var(--primary-color); */
+/*   background-color: #6dc7c1; */
+/*   border-color: var(--primary-color); */
+/* } */
 
 #startGameBtn,
 #quickGameBtn,
@@ -763,6 +806,9 @@ p {
 }
 
 @media (max-width: 1050px) {
+  .settingsViewOverflow {
+    justify-content: start !important;
+  }
   .container-game {
     justify-content: flex-start;
   }
@@ -1328,15 +1374,15 @@ button:disabled {
 
 /* new ajouts */
 .homeIcon {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   color: var(--highlight-color);
 }
 
 .profileIcon {
-  width: 30px;
-  height: 30px;
+  width: 50px;
+  height: 50px;
   cursor: pointer;
   color: var(--highlight-color);
 }
