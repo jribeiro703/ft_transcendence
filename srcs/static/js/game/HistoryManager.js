@@ -164,6 +164,7 @@ window.addEventListener('beforeunload', () =>
         puEnableB: brickVar.powerUpEnable,
     }));
 
+	navigator.sendBeacon('https://localhost:8081/user/logout/'); // set user as offline
 });
 
 window.addEventListener('load', () =>
