@@ -79,7 +79,6 @@ export function initializeCanvasBrick()
     });
 }
 
-
 export function initializeCanvasBrick2p()
 {
     return new Promise((resolve) =>

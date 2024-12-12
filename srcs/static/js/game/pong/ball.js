@@ -5,24 +5,18 @@ export function initializeBall()
 {
 	if (gameVar.currentLevel === 'classicPong')
 		gameVar.ballRadius = 4;
-	console.log("init ball, curr : ", gameVar.currentServer);
 	if (gameVar.currentServer === 'player')
 	{
-		console.log("init player");
 		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius; 
 		gameVar.y = gameVar.playerPaddleY + gameVar.playerPaddleHeight / 2;
 	}
 	else if (gameVar.currentServer === 'player2') 
 	{
-
-		console.log("init player2");
 		gameVar.x = gameVar.canvasW - gameVar.player2PaddleWidth - gameVar.ballRadius;
 		gameVar.y = gameVar.player2PaddleY + gameVar.player2PaddleHeight / 2;
 	}
 	else if (gameVar.currentServer === 'ai')
 	{	
-
-		console.log("init ai");
 		gameVar.x = gameVar.canvasW - gameVar.aiPaddleWidth - gameVar.ballRadius;
 		gameVar.y = gameVar.aiPaddleY + gameVar.aiPaddleHeight / 2		
 	}

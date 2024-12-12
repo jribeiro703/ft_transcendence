@@ -116,3 +116,52 @@ export function sendRoomData(socket, idx, name, nbPlayer, status)
 	else
 		console.log("Error websocket");
 }
+
+export function sendPlayerRoomData(socket, userid)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data =
+		{
+			type: 'player_room_data',
+			userid: userid,
+		};
+		socket.send(JSON.stringify(data));
+	}
+	else
+		console.log("Error websocket");
+}
+
+
+export function sendScoreInfo(socket, idx, name,  score1, score2)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data =
+		{
+			type: 'score_info_data',
+			idx: idx,
+			name: name,
+			score1: score1,
+			score2: score2,
+		};
+		socket.send(JSON.stringify(data));
+	}
+	else
+		console.log("Error websocket");
+}
+
+export function sendRoomNameData(socket, roomName)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data =
+		{
+			type: 'room_data',
+			roomName: roomName,
+		};
+		socket.send(JSON.stringify(data));
+	}
+	else
+		console.log("Error websocket");
+}

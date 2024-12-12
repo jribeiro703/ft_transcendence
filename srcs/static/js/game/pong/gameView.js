@@ -24,15 +24,13 @@ export async function showGameView()
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
 	gameVar.gameView = document.getElementById('gameView');
 
-	console.log("local: ", gameVar.localGame);
 	initControl(gameVar.localGame)
 	startGame();
 }
 
 export async function showGameRoom()
 {
-	console.log("showPongremote2p");
-	displayGameDataPong();
+	// displayGameDataPong();
 	gameVar.playerIdx = 2;
 	gameVar.playerReady = true;
 

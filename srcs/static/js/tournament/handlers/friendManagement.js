@@ -9,7 +9,7 @@ export function getFriendsList(tournamentId) {
 
 	const onMessageCallback = function (data) {
 		if (data.action === "get_friends") {
-			console.log("Friends list received:", data.friends);
+			// console.log("Friends list received:", data.friends);
 
 			// Update the DOM for friends list
 			const inviteBox = document.getElementById("invite-box");

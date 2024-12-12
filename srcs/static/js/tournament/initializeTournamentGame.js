@@ -1,36 +1,7 @@
 // initializeTournamentGame.js
 
 import gameVar from "../game/pong/var.js";
-import { SCORE_CANVAS_HEIGHT } from "../game/pong/const.js";
-
-export function initializeCanvasAndScore() {
-	var canvas = document.getElementById('game-board');
-	if (!canvas) {
-		console.error("Canvas element 'game-board' not found.");
-		return;
-	}
-	gameVar.ctx = canvas.getContext('2d');
-	canvas.width = gameVar.canvasW;
-	canvas.height = gameVar.canvasH;
-
-	var scoreCanvas = document.getElementById('scoreCanvas');
-	if (!scoreCanvas) {
-		console.error("Canvas element 'scoreCanvas' not found.");
-		return;
-	}
-	gameVar.scoreCtx = scoreCanvas.getContext('2d');
-	scoreCanvas.width = gameVar.scoreCanvW;
-	scoreCanvas.height = SCORE_CANVAS_HEIGHT;
-
-	gameVar.gameTime = 0;
-	gameVar.gameTimer = setInterval(() => {
-		if (gameVar.startTime) {
-			gameVar.gameTime++;
-		}
-	}, 1000);
-
-	scoreCanvas.style.marginBottom = '10px';
-}
+import { sendPlayerData, sendRoomData } from "../game/pong/network.js";
 
 export function initializeLobbySocket() {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -43,8 +14,8 @@ export function initializeLobbySocket() {
 
 	lobbySocket.onmessage = function(e) {
 		const data = JSON.parse(e.data);
-		console.log("Lobby data: ", data);
-		// Handle lobby messages
+		if (data.type === 'room_data')
+			gameVar.roomTour1 = data.room_data.roomName;
 	};
 
 	lobbySocket.onerror = function(e) {
@@ -56,9 +27,76 @@ export function initializeLobbySocket() {
 	};
 }
 
-export function initializeGameVariables(difficulty, currentLevel) {
-	gameVar.gameReady = false;
-	gameVar.difficulty = difficulty;
-	gameVar.currentLevel = currentLevel;
-	gameVar.playerReady = false;
+export function initializeJoinSocket()
+{
+	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+	const tournamentSocket = new WebSocket(protocol + '//' + window.location.host + '/ws/pong/check_rooms/');
+
+	tournamentSocket.onopen = function(e)
+	{
+		console.log('Tournemant socket opened');
+		gameVar.tournamenetSocket = tournamentSocket;
+
+		tournamentSocket.send(JSON.stringify({
+            type: 'get_tournaments'
+        }));
+	};
+
+	tournamentSocket.onmessage = function(e)
+	{
+		const data = JSON.parse(e.data);
+		if (data.type === 'tournament_list' || data.type === 'tournament_update')
+		{
+			updateTournamentsList(data.tournaments)
+		}
+	};
+
+	tournamentSocket.onerror = function(e)
+	{
+		console.error('Lobby socket error:', e);
+	};
+
+	tournamentSocket.onclose = function(e)
+	{
+		console.error('Lobby socket closed unexpectedly code : ', e.code, 'reason', e.reason);
+	};
+}
+
+
+
+function updateTournamentsList(tournaments)
+{
+    gameVar.tournamentArray = tournaments;
+    
+    const tournamentList = document.getElementById('tournament-list');
+    if (!tournamentList) return;
+
+    tournamentList.innerHTML = '';
+    
+    tournaments.forEach(tournament =>
+	{
+        const tournamentElement = document.createElement('div');
+        tournamentElement.className = 'tournament-item';
+        tournamentElement.innerHTML = `
+            <div class="tournament-name">${tournament.name}</div>
+            <div class="tournament-status">${tournament.status}</div>
+            <button class="join-tournament-btn" 
+                    ${tournament.status !== 'waiting' ? 'disabled' : ''}
+                    onclick="joinTournament('${tournament.name}')">
+                Join Tournament
+            </button>
+        `;
+        tournamentList.appendChild(tournamentElement);
+    });
+}
+export function createTournament(name)
+{
+    if (!gameVar.tournamentSocket) return;
+    
+    gameVar.tournamentSocket.send(JSON.stringify(
+	{
+        type: 'create_tournament',
+        tournament_name: name,
+        creator: gameVar.userName
+    }));
 }

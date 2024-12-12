@@ -388,11 +388,11 @@ p
 
 .game-column 
 {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
 .container-game2
@@ -422,7 +422,7 @@ p
 {
 	margin: 5px 0;
 	color: #6DC1C1;
-	font-size: 20px;
+    font-size: 20px;
 }
 .settings-inline
 {
