@@ -1362,7 +1362,7 @@ button:disabled {
   padding: 20px;
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1300px) {
   .slidingDiv {
 	width: 0;
 	height: 0;
