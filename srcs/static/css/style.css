@@ -338,7 +338,32 @@ p {
 	inset 0 0 8px #3788d4;
 }
 
+
+.neon-blue {
+  transition: box-shadow 0.5s ease !important;
+  box-shadow:
+	0 0 0px transparent,
+	0 0 2px transparent,
+	0 0 4px transparent,
+	0 0 6px transparent,
+	0 0 8px transparent,
+	0 0 14px transparent;
+}
+
+.neon-blue:hover {
+  box-shadow: var(--box-shadow-mainContent1), var(--box-shadow-mainContent2), var(--box-shadow-mainContent3);
+}
+
+.neon-blue:focus {
+  box-shadow: var(--box-shadow-mainContent1), var(--box-shadow-mainContent2), var(--box-shadow-mainContent3);
+}
+
+.max-height-90 {
+  max-height: 90%;
+}
+
 .neon-purple {
+  transition: box-shadow 0.5s ease !important;
   box-shadow:
 	0 0 0px transparent,
 	0 0 2px transparent,
@@ -349,33 +374,24 @@ p {
 }
 
 .livechat-neon-focus {
-  box-shadow:
-	0 0 0px #682a87,
-	0 0 2px #682a87,
-	0 0 4px #682a87,
-	0 0 6px #682a87,
-	0 0 8px #8937b3,
-	0 0 14px #ab45de;
+  box-shadow: var(--box-shadow-neonChat1), var(--box-shadow-neonChat2), var(--box-shadow-neonChat3);
 }
 
 .neon-purple:hover {
-  box-shadow:
-	0 0 0px #682a87,
-	0 0 2px #682a87,
-	0 0 4px #682a87,
-	0 0 6px #682a87,
-	0 0 8px #8937b3,
-	0 0 14px #ab45de;
+  box-shadow: var(--box-shadow-neonChat1), var(--box-shadow-neonChat2), var(--box-shadow-neonChat3);
 }
 
 .neon-purple:focus {
-  box-shadow:
-	0 0 0px #682a87,
-	0 0 2px #682a87,
-	0 0 4px #682a87,
-	0 0 6px #682a87,
-	0 0 8px #8937b3,
-	0 0 14px #ab45de;
+  box-shadow: var(--box-shadow-neonChat1), var(--box-shadow-neonChat2), var(--box-shadow-neonChat3);
+}
+
+.gap-dynamic {
+  gap: 0px;
+  transition: gap 0.1s ease-in-out; /* Ajoute une transition smooth sur la propriété gap */
+}
+
+.gap-dynamic.has-visible-livechat {
+  gap: 50px;
 }
 
 /* ----------------------- settingsviewbtn ---------------------------- */
@@ -798,10 +814,18 @@ p {
 
 /* test */
 
+.card {
+  border: none;
+}
 
-@media (max-height: 700px) {
+
+
+@media (max-height: 900px) {
   .container-game {
     justify-content: flex-start;
+  }
+  .settingsViewOverflow {
+    justify-content: start !important;
   }
 }
 
@@ -1324,7 +1348,7 @@ button:disabled {
   max-width: 33%;
   transition:
 	width 0.5s ease,
-	box-shadow 0.5s ease;
+	box-shadow 0.5s ease !important;
   visibility: hidden;
   pointer-events: none;
   padding: 0;
