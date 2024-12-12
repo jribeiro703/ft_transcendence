@@ -16,8 +16,6 @@ export function initializeLobbySocket() {
 		const data = JSON.parse(e.data);
 		if (data.type === 'room_data')
 			gameVar.roomTour1 = data.room_data.roomName;
-		// console.log("Lobby data: ", data);
-		// Handle lobby messages
 	};
 
 	lobbySocket.onerror = function(e) {
@@ -27,5 +25,78 @@ export function initializeLobbySocket() {
 	lobbySocket.onclose = function(e) {
 		console.error('Lobby socket closed unexpectedly code : ', e.code, 'reason', e.reason);
 	};
-	// sendRoomData(lobbySocket, gameVar.roomTour1);
+}
+
+export function initializeJoinSocket()
+{
+	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+	const tournamentSocket = new WebSocket(protocol + '//' + window.location.host + '/ws/pong/check_rooms/');
+
+	tournamentSocket.onopen = function(e)
+	{
+		console.log('Tournemant socket opened');
+		gameVar.tournamenetSocket = tournamentSocket;
+
+		tournamentSocket.send(JSON.stringify({
+            type: 'get_tournaments'
+        }));
+	};
+
+	tournamentSocket.onmessage = function(e)
+	{
+		const data = JSON.parse(e.data);
+		if (data.type === 'tournament_list' || data.type === 'tournament_update')
+		{
+			updateTournamentsList(data.tournaments)
+		}
+	};
+
+	tournamentSocket.onerror = function(e)
+	{
+		console.error('Lobby socket error:', e);
+	};
+
+	tournamentSocket.onclose = function(e)
+	{
+		console.error('Lobby socket closed unexpectedly code : ', e.code, 'reason', e.reason);
+	};
+}
+
+
+
+function updateTournamentsList(tournaments)
+{
+    gameVar.tournamentArray = tournaments;
+    
+    const tournamentList = document.getElementById('tournament-list');
+    if (!tournamentList) return;
+
+    tournamentList.innerHTML = '';
+    
+    tournaments.forEach(tournament =>
+	{
+        const tournamentElement = document.createElement('div');
+        tournamentElement.className = 'tournament-item';
+        tournamentElement.innerHTML = `
+            <div class="tournament-name">${tournament.name}</div>
+            <div class="tournament-status">${tournament.status}</div>
+            <button class="join-tournament-btn" 
+                    ${tournament.status !== 'waiting' ? 'disabled' : ''}
+                    onclick="joinTournament('${tournament.name}')">
+                Join Tournament
+            </button>
+        `;
+        tournamentList.appendChild(tournamentElement);
+    });
+}
+export function createTournament(name)
+{
+    if (!gameVar.tournamentSocket) return;
+    
+    gameVar.tournamentSocket.send(JSON.stringify(
+	{
+        type: 'create_tournament',
+        tournament_name: name,
+        creator: gameVar.userName
+    }));
 }

@@ -245,8 +245,7 @@ class PongConsumer(WebsocketConsumer):
 			'type': 'score_info_data',
 			'score_info_data': {
 				'idx': event['idx'],
-				'name1': event['name1'],
-				'name2': event['name2'],
+				'name': event['name'],
 				'score1': event['score1'],
 				'score2': event['score2'],
 			}
@@ -330,8 +329,7 @@ class PongConsumer(WebsocketConsumer):
 			{
 				'type': 'score_info_data',
 				'idx': data['idx'],
-				'name1': data['name1'],
-				'name2': data['name2'],
+				'name': data['name'],
 				'score1': data['score1'],
 				'score2': data['score2'],
 			}

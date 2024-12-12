@@ -5,6 +5,7 @@ import { displayGameView, displayLobbyView } from "./display.js";
 import { getElementLobby } from "./getElement.js";
 import { initializeCanvasPong } from "./canvas.js";
 import { displayGameDataPong } from "./displayVar.js";
+import { getUserInfos } from "../getUser.js";
 
 
 export function showLobbyView()
@@ -15,6 +16,8 @@ export function showLobbyView()
 	else if (gameVar.game == 'brickout')
 		level = 'Classic';
 
+	// getUserInfos();
+	
 	displayLobbyView(level);
 	getElementLobby();
 }

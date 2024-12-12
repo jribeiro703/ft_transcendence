@@ -5,6 +5,8 @@ import { checkball } from "./check.js";
 import { sendGameData, sendScoreInfo, sendSettingData } from "./network.js";
 import { startGame } from "./start.js";
 import { checkScore } from "./score.js";
+import { updateDifficultySelection, updateLevelSelection } from "./update.js";
+import { updatePowerUpSelection } from "./powerUp.js";
 
 export function listenBtn()
 {
@@ -29,6 +31,9 @@ export function clearAllpongStates()
 		clearInterval(gameVar.gameTimer);
 		gameVar.gameTimer = null;
 	}
+	updateDifficultySelection('medium', true);
+	updateLevelSelection('classicPong', true);
+	updatePowerUpSelection(false, true);
 	gameVar.startTime = false;
 	gameVar.gameTime = 0;
 	gameVar.gameStart = false;
@@ -74,7 +79,7 @@ export function resetBall(winner)
 		gameVar.playerScore++;
 	else
 		gameVar.aiScore++;
-	sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.opponentName, gameVar.playerScore, gameVar.aiScore);
+	sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.playerScore, gameVar.aiScore);
 	checkScore();
 	gameVar.serveCount++;
 	if (gameVar.serveCount >= 2)

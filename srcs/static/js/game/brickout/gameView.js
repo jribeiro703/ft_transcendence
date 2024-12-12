@@ -12,7 +12,7 @@ import { drawB as drawSecond} from './secondBrickout/draw.js';
 
 export async function showGameBrickView()
 {
-	checkSettingB();
+	// checkSettingB();
 	displayGameBrickView();
 
 	await initializeCanvasBrick();
@@ -33,7 +33,7 @@ export async function showGameBrickLocalView()
 	brickVar.initialize = true;
 	brickVar2.initialize = true;
 	updateSettingSelectionForSecond();
-	checkSettingB();
+	// checkSettingB();
 
 	startBrickGame2p();
 

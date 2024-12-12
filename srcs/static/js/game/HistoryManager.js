@@ -71,11 +71,11 @@ export function isGamePage(page)
 
 export async function renderPageGame(page, updateHistory = true, params = null)
 {	
-	// const authenticated = await isAuthenticated();
-	// await updateUserAvatar(authenticated);
+	const authenticated = await isAuthenticated();
+	await updateUserAvatar(authenticated);
 
-	// if (!authenticated && isMultiplayerPage(page))
-	// 	renderPageGame('home', true);
+	if (!authenticated && isMultiplayerPage(page))
+		renderPageGame('home', true);
 
 	let renderFunction = pongGamePages[page];
 
@@ -169,7 +169,7 @@ window.addEventListener('load', () =>
     const currentHash = window.location.hash.slice(1) || 'home';
     const currentState = history.state || {};
 	sessionStorage.setItem('lastPage', currentHash);
-
+	console.log("hash : ", currentHash);
 	if (currentHash === 'gameSelectionSolo' || currentHash === 'gameSelectionMulti')
 	{
 		if (gameVar.saveSetting)
@@ -189,6 +189,8 @@ window.addEventListener('load', () =>
 		|| currentHash === 'playPongLocal' || currentHash === 'playBrickoutLocal'
 		|| currentHash === 'playPongRemote' || currentHash === 'playPongRemoteSecondp') 
 	{
+		clearAllpongStates();
+		clearAllBrickStates();
 		renderPage("home");
 	}
 	else

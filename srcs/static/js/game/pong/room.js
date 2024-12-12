@@ -1,8 +1,5 @@
 import gameVar from './var.js';
 import { sendPlayerData, sendPlayerRoomData, sendRoomNameData, sendScoreInfo, sendSettingData } from './network.js';
-import { initializeBall } from './ball.js';
-import { updateCanvasColor } from './update.js';
-import { drawScoreBoard, drawScoreBoardLive } from './score.js';
 import { renderPageGame } from '../HistoryManager.js';
 import { startLiveGame } from './start.js';
 import { getUserInfos } from '../getUser.js';
@@ -20,10 +17,8 @@ export function createNewRoom(joinRoomCallback)
 
 	}, 1000)
 
-	console.log("roomname: ", gameVar.roomTour1);
 	gameVar.playerIdx = 1;
 	gameVar.isFirstPlayer = true;
-	console.log("createRoom");
 	joinRoom(roomName);
 }
 
@@ -47,6 +42,7 @@ export function waitingPlayer()
 			gameVar.gameReady = true;
 			clearInterval(waitingINterval);
 			sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
+			sendScoreInfo(gameVar.gameSocket, 1, gameVar.userName, 0, 0);
 			startLiveGame();
 		}
 	}, 2000);
@@ -61,16 +57,6 @@ export async function joinRoom(roomName)
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 	const gameSocket = new WebSocket(protocol + '//' + window.location.host + `/ws/pong/${roomName}/`);
 
-	// const response = await fetchAuthData('/user/private/');
-	// if (response.status == 200)
-	// {
-	// 	const userid = response.data.id;
-	// 	sendPlayerRoomData(gameSocket, userid);
-	// }
-	// else
-	// {
-	// 	console.log("error on fetch");
-	// }
 	gameSocket.onopen = function(e)
 	{
 		console.log('Game socket opened');
@@ -81,13 +67,15 @@ export async function joinRoom(roomName)
 			if (gameVar.playerIdx == 1)
 			{
 				console.log("if player 1");
+				getUserInfos();
 				waitingPlayer();
 			}
 			if (gameVar.playerIdx == 2)
 			{
 				console.log("if player 2");
+				getUserInfos();
 				sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
-				updateSettingLive();
+				waitingForSettingLive();
 			}
 		}
 		catch (error)
@@ -160,19 +148,18 @@ export async function joinRoom(roomName)
 			}
 			else if (data.type == 'score_info_data')
 			{
+				gameVar.playerScore = data.score_info_data.score1;
+				gameVar.aiScore = data.score_info_data.score2;
+
 				if (data.score_info_data.idx === 1)
 				{
-					gameVar.playerScore = data.score_info_data.score1;
-					gameVar.aiScore = data.score_info_data.score2;
-					gameVar.userName = data.score_info_data.name1;
-					gameVar.opponentName = data.score_info_data.name2;
+					console.log("recept 1 :", data.score_info_data.name);
+					gameVar.userName = data.score_info_data.name;
 				}
 				if (data.score_info_data.idx === 2)
 				{
-					gameVar.playerScore = data.score_info_data.score1;
-					gameVar.aiScore = data.score_info_data.score2;
-					gameVar.userName = data.score_info_data.name1;
-					gameVar.opponentName = data.score_info_data.name2;
+					console.log("recept 2 :", data.score_info_data.name);
+					gameVar.opponentName = data.score_info_data.name;
 				}
 			}
 		}
@@ -262,7 +249,7 @@ export function updateRoomList()
 	})
 }
 
-export function updateSettingLive()
+export function waitingForSettingLive()
 {
 	const waitingInterval = setInterval(() =>
 	{
@@ -272,9 +259,7 @@ export function updateSettingLive()
 		}
 		else
 		{
-			updateCanvasColor();
-			// drawScoreBoardLive();
-			initializeBall();
+			// sendScoreInfo(gameVar.gameSocket, 2, gameVar.userName, gameVar.opponentName, 0, 0);
 			startLiveGame();
 			clearInterval(waitingInterval);
 		}
