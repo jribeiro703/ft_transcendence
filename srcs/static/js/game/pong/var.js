@@ -108,6 +108,8 @@ const gameVar =
 	startTime: false,
 	clientLeft: false,
 	tournament: false,
+	currTournament: null,
+	tournamentSocket: null,
 	roomTour1: null,
 
 // --------------------------------------AI-----------------------------

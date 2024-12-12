@@ -30,7 +30,6 @@ export function initEventListenerRoom()
 		renderPageGame("pongSetting", true, 'live');
 	});
 
-	initControlLive();
 }
 
 export function initLobbyView()
@@ -39,6 +38,7 @@ export function initLobbyView()
 	showLobbyView();
 	updateLiveSetting();
 	initEventListenerRoom();
+	initControlLive();
 	roomNetwork();
 }
 

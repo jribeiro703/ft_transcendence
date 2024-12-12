@@ -1,5 +1,6 @@
 import { fetchAuthData } from '../user/fetchData.js';
 import { showErrorMessages } from '../user/tools.js';
+import { sendScoreInfo } from './pong/network.js';
 import gameVar from './pong/var.js';
 
 export async function getUserInfos()
@@ -7,9 +8,17 @@ export async function getUserInfos()
         const response = await fetchAuthData('/user/private/')
 		if (response.status == 200)
 		{
-			gameVar.userName = response.data.username;
-			gameVar.avatarUrl = response.data.avatar;
-			console.log("userName", gameVar.userName);
+			if (gameVar.playerIdx === 1)
+			{
+				gameVar.userName = response.data.username;
+				gameVar.userAvatar = response.data.avatar;
+			}
+			if (gameVar.playerIdx === 2)
+			{
+				gameVar.opponentName = response.data.username;
+				gameVar.opponentAvatar = response.data.avatar;
+				sendScoreInfo(gameVar.gameSocket, 2, gameVar.opponentName, 0, 0);
+			}
 		}
 		else
 		{
@@ -17,7 +26,19 @@ export async function getUserInfos()
 		}
 }
 
-
+export async function getUserInfos2()
+{
+        const response = await fetchAuthData('/user/private/')
+		if (response.status == 200)
+		{
+				gameVar.userName = response.data.username;
+				gameVar.userAvatar = response.data.avatar;
+		}
+		else
+		{
+			showErrorMessages(response.data.message, "error");
+		}
+}
 
 export function displayUsers(users)
 {

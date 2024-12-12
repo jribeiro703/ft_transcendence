@@ -22,3 +22,24 @@ export function createTournamentFormHTML(tournamentName) {
 	</div>
 	`;
 }
+
+
+export function createTournamentLayoutHTML(tournamentName) {
+    return `
+        <div class="tournament-container">
+            <h2>Tournament: ${tournamentName}</h2>
+            <div class="tournament-lists">
+                <div class="available-tournaments">
+                    <h3>Available Tournaments</h3>
+                    <div id="tournament-list" class="tournament-list">
+                        <!-- Les tournois seront injectés ici -->
+                    </div>
+                </div>
+                <div class="current-tournament">
+                    <h3>Current Tournament</h3>
+                    <div id="tournament-bracket"></div>
+                </div>
+            </div>
+        </div>
+    `;
+}

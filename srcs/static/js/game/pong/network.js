@@ -132,7 +132,7 @@ export function sendPlayerRoomData(socket, userid)
 }
 
 
-export function sendScoreInfo(socket, idx, name1, name2, score1, score2)
+export function sendScoreInfo(socket, idx, name,  score1, score2)
 {
 	if (socket && socket.readyState == WebSocket.OPEN)
 	{
@@ -140,8 +140,7 @@ export function sendScoreInfo(socket, idx, name1, name2, score1, score2)
 		{
 			type: 'score_info_data',
 			idx: idx,
-			name1: name1,
-			name2: name2,
+			name: name,
 			score1: score1,
 			score2: score2,
 		};
