@@ -83,6 +83,10 @@ const gameVar =
 	playerIdx: null,
 	currentServer: 'player',
 	playerReady: false,
+	userName: null,
+	userAvatar: null,
+	opponentName: null,
+	opponentAvatar: null,	
 
 // ---------------------------------Game Data-------------------------
 
@@ -103,6 +107,11 @@ const gameVar =
 	game: null,
 	startTime: false,
 	clientLeft: false,
+	tournament: false,
+	currTournament: null,
+	tournamentSocket: null,
+	roomTour1: null,
+
 // --------------------------------------AI-----------------------------
 
 	aiServe: false,

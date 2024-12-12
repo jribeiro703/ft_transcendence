@@ -42,42 +42,81 @@ function loadCustomFont()
 {
     return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');
 }
+export function drawScoreBoardLive()
+{
+	loadCustomFont().load().then(function(font) 
+	{
+		document.fonts.add(font);
+		const ctx = gameVar.scoreCtx;
+		if (ctx)
+		{
+			ctx.clearRect(0, 0, gameVar.scoreCanvW, gameVar.scoreCanvH);
+		
+			ctx.font = '24px fontScore';
+			ctx.fillStyle = '#FFFFFF';
+			ctx.textAlign = 'center';
+			
+			const centerX = gameVar.scoreCanvW / 2;
+			const leftX = gameVar.scoreCanvW * 0.25;
+			const rightX = gameVar.scoreCanvW * 0.75;
+			const y = 35;
+			
+			ctx.fillText(gameVar.userName, leftX, y);
+			ctx.fillText(gameVar.opponentName, rightX, y);
 
+			ctx.font = '32px fontScore';
+			ctx.fillText(gameVar.playerScore, leftX, y + gameVar.scoreCanvH / 2);
+			ctx.fillText(gameVar.aiScore, rightX, y + gameVar.scoreCanvH / 2);
+			ctx.fillText('VS', centerX, y);
+			const minutes = Math.floor(gameVar.gameTime / 60);
+			const seconds = gameVar.gameTime % 60;
+			const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+			ctx.font = '20px fontScore';
+			ctx.fillText(time, centerX, y + gameVar.scoreCanvH / 2);
+		}
+	}).catch(function(error)
+	{
+		console.error("Error on font load", error);
+	});
+}
 export function drawScoreBoard()
 {
     loadCustomFont().load().then(function(font) 
 	{
         document.fonts.add(font);
 		const ctx = gameVar.scoreCtx;
-		ctx.clearRect(0, 0, gameVar.scoreCanvW, gameVar.scoreCanvH);
-		
-		ctx.font = '24px fontScore';
-		ctx.fillStyle = '#FFFFFF';
-		ctx.textAlign = 'center';
-		
-		const centerX = gameVar.scoreCanvW / 2;
-		const leftX = gameVar.scoreCanvW * 0.25;
-		const rightX = gameVar.scoreCanvW * 0.75;
-		const y = 35;
-		if (gameVar.localGame)
+		if (ctx)
 		{
-			ctx.fillText('Player 1', leftX, y);
-			ctx.fillText('Player 2', rightX, y);
+			ctx.clearRect(0, 0, gameVar.scoreCanvW, gameVar.scoreCanvH);
+		
+			ctx.font = '24px fontScore';
+			ctx.fillStyle = '#FFFFFF';
+			ctx.textAlign = 'center';
+			
+			const centerX = gameVar.scoreCanvW / 2;
+			const leftX = gameVar.scoreCanvW * 0.25;
+			const rightX = gameVar.scoreCanvW * 0.75;
+			const y = 35;
+			if (gameVar.localGame)
+			{
+				ctx.fillText(gameVar.userName, leftX, y);
+				ctx.fillText('Player 2', rightX, y);
+			}
+			else
+			{
+				ctx.fillText('Player 1', leftX, y);
+				ctx.fillText('AI', rightX, y);
+			}
+			ctx.font = '32px fontScore';
+			ctx.fillText(gameVar.playerScore, leftX, y + gameVar.scoreCanvH / 2);
+			ctx.fillText(gameVar.aiScore, rightX, y + gameVar.scoreCanvH / 2);
+			ctx.fillText('VS', centerX, y);
+			const minutes = Math.floor(gameVar.gameTime / 60);
+			const seconds = gameVar.gameTime % 60;
+			const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+			ctx.font = '20px fontScore';
+			ctx.fillText(time, centerX, y + gameVar.scoreCanvH / 2);
 		}
-		else 
-		{
-			ctx.fillText('Player', leftX, y);
-			ctx.fillText('AI', rightX, y);
-		}
-		ctx.font = '32px fontScore';
-		ctx.fillText(gameVar.playerScore, leftX, y + gameVar.scoreCanvH / 2);
-		ctx.fillText(gameVar.aiScore, rightX, y + gameVar.scoreCanvH / 2);
-		ctx.fillText('VS', centerX, y);
-		const minutes = Math.floor(gameVar.gameTime / 60);
-		const seconds = gameVar.gameTime % 60;
-		const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-		ctx.font = '20px fontScore';
-		ctx.fillText(time, centerX, y + gameVar.scoreCanvH / 2);
 	}).catch(function(error)
 	{
 		console.error("Error on font load", error);

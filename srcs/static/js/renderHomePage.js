@@ -2,6 +2,7 @@ import { PONG_CARD, showToast } from "./user/tools.js"
 import { isAuthenticated } from "./user/isAuthenticated.js";
 import { renderPageGame } from "./game/HistoryManager.js";
 import { showCreateTournamentForm } from "./tournament/tournamentPage.js";
+import { showCreateTournamentForm2 } from "./tournament/tournamentPage.js";
 
 
 function createHomeContent() {
@@ -42,7 +43,7 @@ async function renderHomePage() {
 		},
 		{
 			id: 'btn-Tournament',
-			handler: () => showCreateTournamentForm()
+			handler: () => showCreateTournamentForm2()
 		}
 	];
 	

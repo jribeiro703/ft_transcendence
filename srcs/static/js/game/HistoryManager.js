@@ -20,6 +20,7 @@ import { showGameBrickLocalView } from "./brickout/gameView.js";
 import { initLobbyView } from "./pong/init.js";
 import { showPongRemote } from "./pong/gameViewMulti.js";
 import { clearAllpongStates } from "./pong/reset.js";
+import { renderPage } from "../user/historyManager.js";
 
 const pongGamePages = {
 
@@ -55,7 +56,6 @@ const multiplayerPages = new Map(
     ['playPongRemoteSecondP', showGameRoom]
 ]);
 
-// Fonction de vérification
 export function isMultiplayerPage(pageKey)
 {
     const exist = multiplayerPages.has(pageKey);
@@ -115,19 +115,13 @@ export async function renderPageGame(page, updateHistory = true, params = null)
 
 window.addEventListener('popstate', async (event) =>
 {
-	console.log("popstate");
-	console.log("event.state = ", event.state);
     if (event.state)
 	{
         const page = event.state.page;
-		console.log("page = ", page);
         const params = event.state.params;
-		console.log("params = ", params);
         
-		console.log("on quitte, window location : ", window.location.hash);
         if (isGamePage(window.location.hash))
 		{
-			console.log("on reset");
 			gameVar.clientLeft = true;
 			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentLevel, gameVar.startTime, gameVar.clientLeft);
             clearAllpongStates();
@@ -136,14 +130,12 @@ window.addEventListener('popstate', async (event) =>
    
         if (isGamePage("#" + page))
 		{
-			console.log("on revient sur page : ", page);
             clearAllpongStates();
 			clearAllBrickStates();
             await renderPageGame(page, false, params);
         }
 		else
 		{
-			console.log("else render:", page);
             await renderPage(page, false);
         }
     }
@@ -178,7 +170,7 @@ window.addEventListener('load', () =>
     const currentHash = window.location.hash.slice(1) || 'home';
     const currentState = history.state || {};
 	sessionStorage.setItem('lastPage', currentHash);
-
+	console.log("hash : ", currentHash);
 	if (currentHash === 'gameSelectionSolo' || currentHash === 'gameSelectionMulti')
 	{
 		if (gameVar.saveSetting)
@@ -198,7 +190,9 @@ window.addEventListener('load', () =>
 		|| currentHash === 'playPongLocal' || currentHash === 'playBrickoutLocal'
 		|| currentHash === 'playPongRemote' || currentHash === 'playPongRemoteSecondp') 
 	{
-		renderPageGame("home");
+		clearAllpongStates();
+		clearAllBrickStates();
+		renderPage("home");
 	}
 	else
 	{

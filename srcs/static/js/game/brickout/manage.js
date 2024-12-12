@@ -8,6 +8,13 @@ import { displayNextLevel, displayFinish, displayLocalRematch } from "./display.
 import { listenFinishBtn, listenNextLevelBtn, listenLocalRematchBtn } from "./listenerBtn.js";
 import { handleNextLevelB, restartLevelB } from "./level.js";
 import { renderPageGame } from "../HistoryManager.js";
+import { updateDifficultySelectionB, updateSettingB } from "./update.js";
+import { updateLevelSelectionB as updateLevelSelectionBFirst } from "./update.js";
+import { updateLevelSelectionB as updateLevelSelectionBSecond } from "./secondBrickout/update.js";
+import { updatePowerUpSelectionB as updatePowerUpSelectionBFirst } from "./powerUp.js";
+import { updatePowerUpSelectionB as updatePowerUpSelectionBSecond } from "./secondBrickout/update.js";
+import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
+import { updateImageUrl } from "../pong/update.js";
 export function manageCollisionB()
 {
 	if (brickVar.x + brickVar.dx > brickVar.canvasW - brickVar.ballRadius || brickVar.x + brickVar.dx < brickVar.ballRadius)
@@ -133,7 +140,6 @@ export function clearAllBrickStates()
         cancelAnimationFrame(brickVar2.anim);
         brickVar2.anim = null;
     }
-
     if (brickVar.gameTimer)
 	{
         clearInterval(brickVar.gameTimer);
@@ -145,6 +151,14 @@ export function clearAllBrickStates()
         brickVar2.gameTimer = null;
     }
 
+	updateDifficultySelectionB('medium', true);
+	updateLevelSelectionBFirst('classic', true);
+	updatePowerUpSelectionBFirst(false, true);
+	updateDifficultySelectionSB('medium');
+	updateLevelSelectionBSecond('classic');
+	updatePowerUpSelectionBSecond(false);
+	// updateSettingB();
+	// updateImageUrl();
     brickVar.initialize = false;
     brickVar2.initialize = false;
     brickVar.finishLevel = false;

@@ -13,7 +13,7 @@ export function createTournamentFormHTML(tournamentName) {
 								<label for="tournamentName" class="form-label">Tournament Name</label>
 								<input type="text" class="form-control" id="tournamentName" placeholder="Enter tournament name" value="${tournamentName}">
 							</div>
-							<button type="submit" class="btn btn-primary">Create Tournament</button>
+							<button class="btn btn-primary" id="createTournament">Create Tournament</button>
 						</form>
 					</div>
 				</div>
@@ -21,4 +21,25 @@ export function createTournamentFormHTML(tournamentName) {
 		</div>
 	</div>
 	`;
+}
+
+
+export function createTournamentLayoutHTML(tournamentName) {
+    return `
+        <div class="tournament-container">
+            <h2>Tournament: ${tournamentName}</h2>
+            <div class="tournament-lists">
+                <div class="available-tournaments">
+                    <h3>Available Tournaments</h3>
+                    <div id="tournament-list" class="tournament-list">
+                        <!-- Les tournois seront injectés ici -->
+                    </div>
+                </div>
+                <div class="current-tournament">
+                    <h3>Current Tournament</h3>
+                    <div id="tournament-bracket"></div>
+                </div>
+            </div>
+        </div>
+    `;
 }
