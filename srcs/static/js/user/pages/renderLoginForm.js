@@ -5,25 +5,17 @@ import { fetchData } from "../fetchData.js";
 export function renderLoginForm() {
     const box = document.getElementById('mainContent');
     box.innerHTML = `
-	<div class="custom-form">
-        <form id="loginForm">
-			<div class="form-group">
-            	<div class="custom-label">
-					<label for="username">Username:</label>
-				</div>
-            	<div class="custom-input">
-					<input type="text" id="username" name="username" required>
-				</div>
+	<div id="defaultView" class="d-flex flex-column justify-content-center align-items-center gap-5 h-100">
+        <form id="loginForm" class="custom-form">
+			<div class="custom-form-group">
+				<label class="custom-label" for="username">Username:</label>
+				<input class="custom-input" type="text" id="username" name="username" required>
 			</div>
-			<div class="form-group">
-            	<div class="custom-label">
-					<label class="custom-label" for="password">Password:</label>
-				</div>
-            	<div class="custom-input">
-            		<input class="custom-input" type="password" id="password" name="password" required>
-				</div>
-            </div>
-			<button class="custom-submit-btn" type="submit">Submit</button>
+			<div class="custom-form-group">
+				<label class="custom-label" for="password">Password:</label>
+            	<input class="custom-input" type="password" id="password" name="password" required>
+			</div>
+			<button class="main-btn submit-btn height-btn" type="submit">Submit</button>
         </form>
     </div>
     `;
