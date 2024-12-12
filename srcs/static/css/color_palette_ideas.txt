@@ -32,6 +32,10 @@ idée de palette de couleurs 1 (crepuscule) :
   --chat-bg: #1b1833;
   --chat-msg: #f29f58;
   --chat-border: #f29f58;
+  --box-shadow: 0px 0px 7px rgba(242, 159, 88, 0.9);
+  --box-shadow-inset: inset 0px 0px 3px rgba(242, 159, 88, 0.9);
+  --box-shadow-highlight: 0px 0px 3px rgba(255, 255, 255, 1);
+  --box-shadow-highlight-inset: inset 0px 0px 1px rgba(255, 255, 255, 1);
 }
 
 lune de sang :

@@ -266,37 +266,31 @@ export function displaySettingView()
   insertTo.style.flex = "1 0 0";
 
   insertTo.innerHTML = `
-  <div id="settingView" class="d-flex justify-content-center flex-column align-items-center gap-5" style="display: block;">
-        <div class="d-flex justify-content-center align-items-center gap-5">
-          <button id="easy" class="settingsBtn btn custom-btn height-btn">Easy</button>
-          <button id="medium" class="settingsBtn btn custom-btn height-btn">Medium</button>
-          <button id="hard" class="settingsBtn btn custom-btn height-btn">Hard</button>
+  <div id="settingView" class="no-scrollbar d-flex justify-content-center settingsViewOverflow overflow-auto flex-column align-items-center gap-5" style="display: block;">
+        <div class="d-flex justify-content-center align-items-center gap-5 flex-wrap">
+          <button id="easy" class="settingsBtn btn height-btn">Easy</button>
+          <button id="medium" class="settingsBtn btn height-btn">Medium</button>
+          <button id="hard" class="settingsBtn btn height-btn">Hard</button>
         </div>
-        <div id="btnPowerUp" style="display: block;" class="d-flex justify-content-center align-items-center gap-5">
-          <button id="withPowerUps" class="settingsBtn btn custom-btn height-btn">Yes</button>
-          <button id="withoutPowerUps" class="settingsBtn btn custom-btn height-btn">No</button>
+        <div id="btnPowerUp" style="display: block;" class="d-flex justify-content-center align-items-center gap-5 flex-wrap ">
+          <button id="withPowerUps" class="settingsBtn btn custom-btn height-btn">Power UP</button>
+          <button id="withoutPowerUps" class="settingsBtn btn custom-btn height-btn">No Power UP</button>
         </div>
-        <div class="map-selection">
-          <div id="map1" class="mapOption" data-map-name="classicMap">
+        <div class="map-selection flex-wrap justify-content-center">
+          <div id="map1" class="mapOption mapClic" data-map-name="classicMap">
             <img src="${classicUrl}" alt="classicMap" class="map-image">
-            <button id="classicPong" class="level">Classic Pong</button>
           </div>
-          <div id="map2" class="mapOption" data-map-name="classicMap">
+          <div id="map2" class="mapOption mapClic" data-map-name="classicMap">
             <img src="${pongUrl}" alt="footMap1" class="map-image">
-            <button id="tableTennis" class="level">Table Tennis</button>
           </div>
-          <div id="map3" class="mapOption" data-map-name="clasicMap">
+          <div id="map3" class="mapOption mapClic" data-map-name="clasicMap">
             <img src="${footUrl}" alt="customMap1" class="map-image">
-            <button id="footLevel" class="level">Football</button>
           </div>
-          <div id="map4" class="mapOption" data-map-name="clasicMap">
+          <div id="map4" class="mapOption mapClic" data-map-name="clasicMap">
             <img src="${tennisUrl}" alt="customMap1" class="map-image">
-            <button id="tennisLevel" class="level">Tennis</button>
           </div>
         </div>
-    <div>
-      <button id="saveBtn" disabled="true">Save and Return</button>
-    </div>
+      <button id="saveBtn" class="settingsBtn btn custom-btn height-btn" disabled="true">Save and Return</button>
   </div>`;
 
   maincontent.appendChild(insertTo);
@@ -388,7 +382,7 @@ export function displayGameSelectionSolo()
 
   gameSelection.innerHTML = `
   <div id="settingView" class="d-flex">
-    <div class="container-game">
+    <div class="container-game no-scrollbar">
       <div class="game-row">
         <div class="game-image">
           <img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">

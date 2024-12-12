@@ -1,3 +1,4 @@
+
 :root {
   --background-color: #000000;
   --text-color: #3e3f4a;
@@ -12,4 +13,14 @@
   --chat-bg: #000000;
   --chat-msg: #3e3f4a;
   --chat-border: #ffffff;
+  --box-shadow: 0px 0px 7px rgba(255, 255, 255, 0.9);
+  --box-shadow-inset: inset 0px 0px 3px rgba(255, 255, 255, 0.9);
+  --box-shadow-highlight: 0px 0px 3px rgba(255, 255, 255, 1);
+  --box-shadow-highlight-inset: inset 0px 0px 1px rgba(255, 255, 255, 1);
 }
+
+scrollbar-width: none;  /* Firefox /
+-ms-overflow-style: none;  / IE and Edge /
+&::-webkit-scrollbar { 
+display: none;  / Chrome, Safari, Opera */
+                            }">
