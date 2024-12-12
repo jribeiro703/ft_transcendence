@@ -31,8 +31,8 @@ export async function getUserInfos2()
         const response = await fetchAuthData('/user/private/')
 		if (response.status == 200)
 		{
-				gameVar.userName = response.data.username;
-				gameVar.userAvatar = response.data.avatar;
+			gameVar.userName = response.data.username;
+			gameVar.userAvatar = response.data.avatar;
 		}
 		else
 		{

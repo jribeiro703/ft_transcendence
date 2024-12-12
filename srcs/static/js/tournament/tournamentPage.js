@@ -13,14 +13,15 @@ import { initializeCanvasPong } from '../game/pong/canvas.js';
 import { updateDifficultySelection, updateLevelSelection } from '../game/pong/update.js';
 import { initControlLive } from '../game/pong/control.js';
 import { getUserInfos } from '../game/getUser.js';
-import { sendScoreInfo } from '../game/pong/network.js';
+import { sendScoreInfo, sendTournamentInfo } from '../game/pong/network.js';
 import { getUserInfos2 } from '../game/getUser.js';
+import { initializeTournamentSocket } from '../tournament/initializeTournamentGame.js'
 
 let currentTournamentId;
 
 export async function showCreateTournamentForm2()
 {
-	// initializeJoinSocket();
+	initializeTournamentSocket();
 	const box = document.getElementById('mainContent');
 	const randomName = await generateTournamentName();
 	box.innerHTML = createTournamentFormHTML(randomName);
@@ -28,6 +29,7 @@ export async function showCreateTournamentForm2()
 
 	document.getElementById('createTournament').addEventListener('click', () =>
 	{
+		createTournament(randomName, gameVar.userName);
 		showTournamentView2(randomName);
 	}); 
 
@@ -45,6 +47,10 @@ export async function showTournamentView2(tournamentName)
 	const box = document.getElementById('mainContent');
 	box.innerHTML = createTournamentLayoutHTML(tournamentName);
 
+	if (gameVar.tournamentArray)
+	{
+		updateTournamentsList(gameVar.tournamentArray);
+	}
 	currentTournamentId = await setupTournamentFlow(tournamentName);
 	
 	const playersList = document.getElementById('playersList');
@@ -59,10 +65,48 @@ export async function showTournamentView2(tournamentName)
 
 	setupEligiblePlayersRefresh();
 
-
-
 	// joinTournament();
 }
+function updateTournamentsList(tournaments)
+{
+    gameVar.tournamentArray = tournaments;
+    
+    const tournamentList = document.getElementById('tournament-list');
+    if (!tournamentList) return;
+
+    tournamentList.innerHTML = '';
+    
+    tournaments.forEach(tournament =>
+	{
+        const tournamentElement = document.createElement('div');
+        tournamentElement.className = 'tournament-item';
+        tournamentElement.innerHTML = `
+            <div class="tournament-name">${tournament.name}</div>
+            <div class="tournament-status">${tournament.status}</div>
+            <button class="join-tournament-btn" 
+                    ${tournament.status !== 'waiting' ? 'disabled' : ''}
+                    onclick="joinTournament('${tournament.name}')">
+                Join Tournament
+            </button>
+        `;
+        tournamentList.appendChild(tournamentElement);
+    });
+}
+
+export function createTournament(name)
+{
+    if (!gameVar.tournamentSocket)
+		return;
+
+	const newTournament =
+	{
+		name: name,
+		creator: gameVar.userName,
+	}
+
+	sendTournamentInfo(gameVar.tournamentSocket, newTournament.name, newTournament.creator);
+}
+
 // export function joinTournament()
 // {
 // 	// const joinTournament = document.getElementById('joinTournament');

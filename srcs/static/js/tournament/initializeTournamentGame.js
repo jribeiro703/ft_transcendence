@@ -27,7 +27,9 @@ export function initializeLobbySocket() {
 	};
 }
 
-export function initializeJoinSocket()
+
+
+export function initializeTournamentSocket()
 {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 	const tournamentSocket = new WebSocket(protocol + '//' + window.location.host + '/ws/pong/check_rooms/');
@@ -35,19 +37,18 @@ export function initializeJoinSocket()
 	tournamentSocket.onopen = function(e)
 	{
 		console.log('Tournemant socket opened');
-		gameVar.tournamenetSocket = tournamentSocket;
+		gameVar.tournamentSocket = tournamentSocket;
+		askForTournamentList();
 
-		tournamentSocket.send(JSON.stringify({
-            type: 'get_tournaments'
-        }));
 	};
 
 	tournamentSocket.onmessage = function(e)
 	{
 		const data = JSON.parse(e.data);
-		if (data.type === 'tournament_list' || data.type === 'tournament_update')
+		if (data.type === 'tournament_info')
 		{
-			updateTournamentsList(data.tournaments)
+			console.log("recept tournament info");
+			updateTournamentsList(data.tournament_info.name, data.tournament_info.creator);
 		}
 	};
 
@@ -62,26 +63,36 @@ export function initializeJoinSocket()
 	};
 }
 
-
-
-function updateTournamentsList(tournaments)
+function updateTournamentsList(name, creator)
 {
-    gameVar.tournamentArray = tournaments;
+    // Initialiser le tableau s'il n'existe pas
+    if (!gameVar.tournamentArray)
+	{
+        gameVar.tournamentArray = [];
+    }
+
+    // Ajouter le nouveau tournoi à l'array
+    const newTournament = {
+        name: name,
+        creator: creator,
+    };
+    gameVar.tournamentArray.push(newTournament);
     
+    // Mettre à jour l'affichage
     const tournamentList = document.getElementById('tournament-list');
-    if (!tournamentList) return;
+    if (!tournamentList)
+		return;
 
     tournamentList.innerHTML = '';
     
-    tournaments.forEach(tournament =>
+    // Afficher tous les tournois
+    gameVar.tournamentArray.forEach(tournament =>
 	{
         const tournamentElement = document.createElement('div');
         tournamentElement.className = 'tournament-item';
         tournamentElement.innerHTML = `
-            <div class="tournament-name">${tournament.name}</div>
-            <div class="tournament-status">${tournament.status}</div>
+            <div class="tournament-name">${tournament.name} created by ${tournament.creator}</div>
             <button class="join-tournament-btn" 
-                    ${tournament.status !== 'waiting' ? 'disabled' : ''}
                     onclick="joinTournament('${tournament.name}')">
                 Join Tournament
             </button>
@@ -89,7 +100,30 @@ function updateTournamentsList(tournaments)
         tournamentList.appendChild(tournamentElement);
     });
 }
-export function createTournament(name)
+
+// function updateTournamentsList(name, creator)
+// {
+    
+//     const tournamentList = document.getElementById('tournament-list');
+//     if (!tournamentList) return;
+
+//     tournamentList.innerHTML = '';
+    
+//     tournaments.forEach(tournament =>
+// 	{
+//         const tournamentElement = document.createElement('div');
+//         tournamentElement.className = 'tournament-item';
+//         tournamentElement.innerHTML = `
+//             <div class="tournament-name">${name} created by ${creator}</div>
+//             <button class="join-tournament-btn" 
+//                     onclick="joinTournament('${name}')">
+//                 Join Tournament
+//             </button>
+//         `;
+//         tournamentList.appendChild(tournamentElement);
+//     });
+// }
+export function createTournament(name, creator)
 {
     if (!gameVar.tournamentSocket) return;
     
@@ -97,6 +131,27 @@ export function createTournament(name)
 	{
         type: 'create_tournament',
         tournament_name: name,
-        creator: gameVar.userName
+        creator: creator,
     }));
+}
+
+// createTournamentLayoutTemplate.js
+export function createTournamentLayoutHTML(tournamentName) {
+    return `
+        <div class="tournament-container">
+            <h2>Tournament: ${tournamentName}</h2>
+            <div class="tournament-lists">
+                <div class="available-tournaments">
+                    <h3>Available Tournaments</h3>
+                    <div id="tournament-list" class="tournament-list">
+                        <!-- Les tournois seront injectés ici -->
+                    </div>
+                </div>
+                <div class="current-tournament">
+                    <h3>Current Tournament</h3>
+                    <div id="tournament-bracket"></div>
+                </div>
+            </div>
+        </div>
+    `;
 }

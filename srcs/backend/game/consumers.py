@@ -112,6 +112,8 @@ class PongConsumer(WebsocketConsumer):
 			self.broadcast_game_data(data)
 		elif data['type'] == 'setting_data':
 			self.broadcast_setting_data(data)
+		elif data['type'] == 'tournament_info':
+			self.broadcast_tournaments_info(data)
 		elif data['type'] == 'lobbyView':
 			self.lobby()
 		elif data['type'] == 'player_room_data':
@@ -259,6 +261,15 @@ class PongConsumer(WebsocketConsumer):
 			}
 		}))
 
+	def tournament_info(self, event):
+		self.send(text_data=json.dumps({
+			'type': 'tournament_info',
+			'tournament_info': {
+				'name': event['name'],
+				'creator': event['creator'],
+			}
+		}))
+
 	def broadcast_ball_data(self, data):
 		async_to_sync(self.channel_layer.group_send)(
 			self.room_group_name,
@@ -341,5 +352,15 @@ class PongConsumer(WebsocketConsumer):
 			{
 				'type': 'room_data',
 				'roomName': data['roomName'],
+			}
+		)
+
+	def broadcast_tournaments_info(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'tournament_info',
+				'name': data['name'],
+				'creator': data['creator'],
 			}
 		)
