@@ -355,18 +355,41 @@ emojiPicker.addEventListener("emoji-click", (event) => {
 const emojiButton = document.querySelector("#emojiButton");
 const emojiPickerContainer = document.querySelector("#emojiPickerContainer");
 
+function getFocusedWindow() {
+	if (!document.querySelector("#chat-log").classList.contains('d-none')) {
+		return document.querySelector("#chat-log");
+	};
+	if (!document.querySelector("#gamechat").classList.contains('d-none')) {
+		return document.querySelector("#gamechat");
+	};
+	if (!document.querySelector("#notificationlist").classList.contains('d-none')) {
+		return document.querySelector("#notificationlist");
+	};
+	if (!document.querySelector("#friendlist").classList.contains('d-none')) {
+		return document.querySelector("#friendlist");
+	};
+	if (!document.querySelector("#onlinelist").classList.contains('d-none')) {
+		return document.querySelector("#onlinelist");
+	};
+	return null;
+}
+
 function adjustEmojiPickerHeight() {
-  const chatLog = document.querySelector("#chat-log");
-  const chatLogHeight = chatLog.clientHeight;
-  const emojiPickerHeight = Math.min(chatLogHeight, 250); // Set max height to 300px
-  emojiPicker.style.height = `${emojiPickerHeight}px`;
+	const FocusedWindow = getFocusedWindow();
+	if (FocusedWindow) {
+		const FocusedWindowHeight = FocusedWindow.clientHeight;
+		const emojiPickerHeight = Math.min(FocusedWindowHeight, 250); // Set max height to 300px
+		emojiPicker.style.height = `${emojiPickerHeight}px`;
+	}
 }
 
 function adjustEmojiPickerWidth() {
-  const chatLog = document.querySelector("#chat-log");
-  const chatLogWidth = chatLog.clientWidth;
-  const emojiPickerWidth = Math.min(chatLogWidth, 250); // Set max width to 300px
-  emojiPicker.style.height = `${emojiPickerWidth}px`;
+	const FocusedWindow = getFocusedWindow();
+	if (FocusedWindow) {
+		const FocusedWindowWidth = FocusedWindow.clientWidth;
+		const emojiPickerWidth = Math.min(FocusedWindowWidth, 250); // Set max width to 300px
+		emojiPicker.style.height = `${emojiPickerWidth}px`;
+	}
 }
 
 // Show emojiPickerContainer

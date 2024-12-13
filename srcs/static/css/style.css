@@ -1474,6 +1474,10 @@ button:disabled {
   border-color: var(--chat-border) !important;
 }
 
+emoji-menu {
+	z-index: 9999;
+}
+
 emoji-picker {
   --emoji-padding: 0.25rem;
   height: 250px;
