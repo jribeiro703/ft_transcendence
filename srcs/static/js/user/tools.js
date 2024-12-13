@@ -65,7 +65,8 @@ async function logout() {
 	try {
 		const response = await fetchAuthData('/user/logout/', 'POST', null, false);
 		if (response.status === 205) {
-			sessionStorage.clear();
+			// sessionStorage.clear();
+			localStorage.clear();
 			return true;
 		}
 		return false;
