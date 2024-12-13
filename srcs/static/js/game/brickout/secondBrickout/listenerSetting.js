@@ -23,7 +23,13 @@ export function listenSettingPUB()
 
 export function listenSettingDifficultyB()
 {
-
+// debug
+if (brickVar2.withPowerUp) {
+    console.log("Element with ID 'withPowerUps' found");
+} else {
+    console.log("Element with ID 'withPowerUps' not found");
+}
+// end debug
 	brickVar2.easy.addEventListener('click', () => 
 	{
 		brickVar2.easy.classList.add('selected');

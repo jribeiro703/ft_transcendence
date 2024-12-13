@@ -83,10 +83,5 @@ class GamePlayer(models.Model):
 	def __str__(self):
 		return f"GamePlayer {self.user.username} in Game {self.game.id}"
 
-class Message(models.Model):
-	nickname = models.CharField(max_length=30)  # Match User model max_length
-	content = models.TextField()
-	timestamp = models.DateTimeField(auto_now_add=True)
-
-	def __str__(self):
-		return f'{self.nickname}: {self.content}'
+# 	def __str__(self):
+# 		return f'{self.nickname}: {self.content}'

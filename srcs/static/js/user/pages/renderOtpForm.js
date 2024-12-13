@@ -6,11 +6,13 @@ export function renderOtpForm(url, msg) {
     showToast(msg, "success");
     const box = document.getElementById('mainContent');
     box.innerHTML = `
-    <div class="custom-form">
-        <form id="otpForm">
-            <label for="otpCode">OTP Code:</label>
-            <input type="text" id="otpCode" name="otpCode" required>
-            <button type="submit">Submit</button>
+	<div id="defaultView" class="d-flex flex-column justify-content-center align-items-center gap-5 h-100">
+        <form id="otpForm" class="custom-form">
+			<div class="custom-form-group">
+                <label class="custom-label" for="otpCode">OTP Code:</label>
+                <input class="custom-input" type="text" id="otpCode" name="otpCode" required>
+            </div>
+            <button class="submit-btn" type="submit">Submit</button>
         </form>
     </div>
     `;

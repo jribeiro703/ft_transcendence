@@ -1,0 +1,26 @@
+
+:root {
+  --background-color: #000000;
+  --text-color: #3e3f4a;
+  --border-btn-color: #000000;
+  --highlight-color: #ffffff;
+  /* icon color */
+  --icon-color: #3e3f4a;
+  /* placeholder color */
+  --placeholder-color: #3e3f4a;
+  /* chat */
+  --chat-btn-highlight: #000000;
+  --chat-bg: #000000;
+  --chat-msg: #3e3f4a;
+  --chat-border: #ffffff;
+  --box-shadow: 0px 0px 7px rgba(255, 255, 255, 0.9);
+  --box-shadow-inset: inset 0px 0px 3px rgba(255, 255, 255, 0.9);
+  --box-shadow-highlight: 0px 0px 3px rgba(255, 255, 255, 1);
+  --box-shadow-highlight-inset: inset 0px 0px 1px rgba(255, 255, 255, 1);
+  --box-shadow-neonChat1: 0 0 0px #682a87, 0 0 2px #682a87, 0 0 4px #682a87, 0 0 6px #682a87;
+  --box-shadow-neonChat2: 0 0 8px #8937b3;
+  --box-shadow-neonChat3: 0 0 14px #ab45de;
+  --box-shadow-mainContent1: 0 0 0px #225585, 0 0 2px #225585, 0 0 4px #225585, 0 0 6px #225585;
+  --box-shadow-mainContent2: 0 0 8px #28649c;
+  --box-shadow-mainContent3: 0 0 14px #3076b8;
+}

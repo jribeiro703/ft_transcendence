@@ -3,7 +3,7 @@ export function createTournamentFormHTML(tournamentName) {
 	<div class="container-fluid p-3 p-sm-5">
 		<div class="row h-100">
 			<div class="col-sm-12 col-lg-6 mx-auto">
-				<div class="card h-100">
+				<div class="card h-100 rounded">
 					<div class="card-body">
 						<h1 class="tournament-title">Create Tournament</h1>
 						<form id="createTournamentForm">
