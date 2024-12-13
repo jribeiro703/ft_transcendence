@@ -24,6 +24,11 @@ export function renderOtpForm(url, msg) {
         if (responseObject.status === 200) {
 			// sessionStorage.setItem('access_token', responseObject.data.access_token);
 			localStorage.setItem('access_token', responseObject.data.access_token);
+			document.dispatchEvent(new CustomEvent('otpVerificationSuccess', {
+				detail: {
+					reload_chat: true
+				}
+			}));
 			renderPage("user");
 		} else
             showErrorMessages(responseObject);
