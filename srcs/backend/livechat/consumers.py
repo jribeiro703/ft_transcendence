@@ -172,14 +172,17 @@ class GameChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-        # Send last 100 messages for this specific room
-        messages = await self.get_last_100_messages()
-        for message in messages:
-            await self.send(text_data=json.dumps({
-                'message': message.content,
-                'client_id': message.nickname,
-                'timestamp': message.timestamp.isoformat()
-            }))
+        try:
+            # Send last 100 messages for this specific room
+            messages = await self.get_last_100_messages()
+            for message in await sync_to_async(list)(messages):
+                await self.send(text_data=json.dumps({
+                    'message': message.content,
+                    'client_id': message.nickname,
+                    'timestamp': message.timestamp.isoformat()
+                }))
+        except Exception as e:
+            logger.error(f"Error sending messages: {str(e)}")
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
@@ -247,7 +250,7 @@ class GameChatConsumer(AsyncWebsocketConsumer):
     @sync_to_async
     def get_last_100_messages(self):
         Message = apps.get_model('livechat', 'Message')
-        return Message.objects.filter(
+        return list(Message.objects.filter(
             room=self.room_name,
             is_game_chat=True
-        ).order_by('-timestamp')
+        ).order_by('-timestamp'))
