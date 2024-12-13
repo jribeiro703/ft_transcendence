@@ -51,7 +51,7 @@ export function renderUserPage() {
 
 		if (responseObject.status == 205) {
 			showToast(responseObject.data.message, "success");
-			sessionStorage.clear();
+			localStorage.clear();
 			renderPage("home");
 		} else
 			showErrorMessages(responseObject);
