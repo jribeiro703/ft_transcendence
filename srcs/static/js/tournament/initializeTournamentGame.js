@@ -1,7 +1,6 @@
 // initializeTournamentGame.js
 
 import gameVar from "../game/pong/var.js";
-import { sendPlayerData, sendRoomData } from "../game/pong/network.js";
 
 export function initializeLobbySocket() {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -27,6 +26,7 @@ export function initializeLobbySocket() {
 	};
 }
 
+//TODO: Ask boty if he uses this function
 export function initializeJoinSocket()
 {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -38,8 +38,8 @@ export function initializeJoinSocket()
 		gameVar.tournamenetSocket = tournamentSocket;
 
 		tournamentSocket.send(JSON.stringify({
-            type: 'get_tournaments'
-        }));
+			type: 'get_tournaments'
+		}));
 	};
 
 	tournamentSocket.onmessage = function(e)
@@ -62,41 +62,42 @@ export function initializeJoinSocket()
 	};
 }
 
-
-
+//TODO: Ask boty if he uses this function
 function updateTournamentsList(tournaments)
 {
-    gameVar.tournamentArray = tournaments;
-    
-    const tournamentList = document.getElementById('tournament-list');
-    if (!tournamentList) return;
+	gameVar.tournamentArray = tournaments;
+	
+	const tournamentList = document.getElementById('tournament-list');
+	if (!tournamentList) return;
 
-    tournamentList.innerHTML = '';
-    
-    tournaments.forEach(tournament =>
+	tournamentList.innerHTML = '';
+	
+	tournaments.forEach(tournament =>
 	{
-        const tournamentElement = document.createElement('div');
-        tournamentElement.className = 'tournament-item';
-        tournamentElement.innerHTML = `
-            <div class="tournament-name">${tournament.name}</div>
-            <div class="tournament-status">${tournament.status}</div>
-            <button class="join-tournament-btn" 
-                    ${tournament.status !== 'waiting' ? 'disabled' : ''}
-                    onclick="joinTournament('${tournament.name}')">
-                Join Tournament
-            </button>
-        `;
-        tournamentList.appendChild(tournamentElement);
-    });
+		const tournamentElement = document.createElement('div');
+		tournamentElement.className = 'tournament-item';
+		tournamentElement.innerHTML = `
+			<div class="tournament-name">${tournament.name}</div>
+			<div class="tournament-status">${tournament.status}</div>
+			<button class="join-tournament-btn" 
+					${tournament.status !== 'waiting' ? 'disabled' : ''}
+					onclick="joinTournament('${tournament.name}')">
+				Join Tournament
+			</button>
+		`;
+		tournamentList.appendChild(tournamentElement);
+	});
 }
+
+//TODO: Ask boty if he uses this function
 export function createTournament(name)
 {
-    if (!gameVar.tournamentSocket) return;
-    
-    gameVar.tournamentSocket.send(JSON.stringify(
+	if (!gameVar.tournamentSocket) return;
+	
+	gameVar.tournamentSocket.send(JSON.stringify(
 	{
-        type: 'create_tournament',
-        tournament_name: name,
-        creator: gameVar.userName
-    }));
+		type: 'create_tournament',
+		tournament_name: name,
+		creator: gameVar.userName
+	}));
 }
