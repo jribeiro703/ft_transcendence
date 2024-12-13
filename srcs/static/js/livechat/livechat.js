@@ -155,7 +155,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-
 chatSocket.onmessage = function (e) {
 	const data = JSON.parse(e.data);
 	const message = data.message;
@@ -239,7 +238,7 @@ chatSocket.onopen = async function () {
             return;
         }
 
-        const token = sessionStorage.getItem('access_token');
+        const token = localStorage.getItem('access_token');
         chatSocket.send(JSON.stringify({
             type: 'authenticate',
             token: token
@@ -326,7 +325,7 @@ async function sendChatMessage(socket, inputId, logId) {
 	socket.send(
 	  JSON.stringify({
 		message: message,
-		token: sessionStorage.getItem('access_token'),
+		token: localStorage.getItem('access_token'),
 		room: room
 	  })
 	);
