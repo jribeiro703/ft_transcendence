@@ -18,6 +18,9 @@
     <link rel="shortcut icon"
           type="image/svg"
           href="{% static 'css/images/favicon-pong.svg' %}">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Noto+Emoji:wght@300..700&display=swap" rel="stylesheet">
   </head>
   <body class="vw-100 vh-100 mh-100 mw-100">
     <div class="d-flex flex-column mw-100 mh-100 w-100 h-100">
@@ -133,7 +136,7 @@
               </div>
             <div class="input-group d-flex gap-3">
               <div class="emoji-picker-container" id="emojiPickerContainer">
-                <emoji-picker id="emoji-picker" aria-label="Emoji picker"></emoji-picker>
+                <emoji-picker emoji-version="15.1" id="emoji-picker" aria-label="Emoji picker"></emoji-picker>
               </div>
               <button class="chat-btn btn rounded border"
                       type="button"

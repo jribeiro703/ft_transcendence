@@ -140,10 +140,19 @@ function reloadChatSocket() {
 	initializeChatSocket(chatSocket);
 };
 
-// Add listener for OTP verification success
 document.addEventListener('otpVerificationSuccess', function(e) {
 	if (e.detail.reload_chat) {
 		reloadChatSocket();
+	}
+});
+
+document.addEventListener('multiplayerGame', function(e) {
+	if (e.detail.multiplayer_game) {
+		// if (document.querySelector('.chat-icon-fill')) {
+		if (document.querySelector("[data-chat-icon]").innerHTML.includes("chat-icon-fill")) {
+			toggleChat();
+		}
+		document.getElementById('swordsButton').click();
 	}
 });
 
@@ -290,9 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-
-
-document.querySelector("#chat-message-input").focus();
+// document.querySelector("#chat-message-input").focus();
 document.querySelector("#chat-message-input").onkeyup = async function (e) {
 	if (e.keyCode === 13) {
 	// Enter key
