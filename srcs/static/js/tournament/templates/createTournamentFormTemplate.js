@@ -13,13 +13,5 @@ export function createTournamentFormHTML(tournamentName = '') {
 				<button class="btn" id="createTournament">Create Tournament</button>
 			</form>
 		</div>
-
-		<div class="section" id="tournamentsSection">
-			<h2>Available Tournaments & Invitations</h2>
-			<div id="tournamentsList">
-				<p>No tournaments or invitations available.</p>
-			</div>
-		</div>
-	</div>
 	`;
 }
