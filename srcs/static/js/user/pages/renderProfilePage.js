@@ -40,7 +40,7 @@ export async function renderProfilePage() {
 		const data = responseObject.data;
 
 		console.log("avatar = ", data.avatar);
-		console.log("user name = ", data.usrname);
+		console.log("user name = ", data.username);
 
 		document.getElementById('username').textContent = data.username;
 		document.getElementById('avatar').src = data.avatar;
