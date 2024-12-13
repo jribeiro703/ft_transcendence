@@ -6,20 +6,18 @@ function createProfileContent() {
 	mainContent.innerHTML = `
 		<div class="profile-container">
 			<div class="profile-header">
-				<div class="avatar-container">
-					<img id="avatar" src="${DEFAULT_AVATAR}" alt="User Avatar" class="avatar" />
-					<h4 id="username">Username</h4>
-					<p id="alias" class="alias"></p>
-					<p id="isOnline" class="isOnline"></p>
-				</div>
-				<div class="stats">
+				<img id="avatar" class="profile-avatar" src="${DEFAULT_AVATAR}" alt="User Avatar" class="avatar" />
+				<h4 id="username" class="profile-username">Username</h4>
+				<p id="alias" class="profile-alias"></p>
+				<p id="isOnline" class="profile-isOnline"></p>
+				<div class="profile-stats">
 					<strong>Total: </strong> <span id="totalMatches">0</span>
 				</div>
-				<div class="stats">
+				<div class="profile-stats">
 					<strong>Won: </strong> <span id="wonMatches">0</span>
 				</div>
 			</div>
-			<div class="match-history">
+			<div class="profile-match-history">
 				<h2>Match History</h2>
 				<ul id="matchHistory"></ul>
 			</div>
