@@ -9,7 +9,10 @@ function createProfileContent() {
 				<img id="avatar" class="profile-avatar" src="${DEFAULT_AVATAR}" alt="User Avatar" class="avatar" />
 				<h4 id="username" class="profile-username">Username</h4>
 				<p id="alias" class="profile-alias"></p>
-				<p id="isOnline" class="profile-isOnline"></p>
+				<div id="isOnline" class="status-container">
+                    <span class="status-indicator"></span>
+                    <span class="status-text"></span>
+            	</div>
 				<div class="profile-stats">
 					<strong>Total: </strong> <span id="totalMatches">0</span>
 				</div>
@@ -37,12 +40,19 @@ export async function renderProfilePage() {
 		createProfileContent();
 		const data = responseObject.data;
 
-		console.log("avatar = ", data.avatar);
-		console.log("user name = ", data.usrname);
+		const statusIndicator = document.querySelector('#isOnline .status-indicator');
+        const statusText = document.querySelector('#isOnline .status-text');
+        
+        if (data.is_online) {
+            statusIndicator.classList.add('status-online');
+            statusText.textContent = 'Online';
+        } else {
+            statusIndicator.classList.add('status-offline');
+            statusText.textContent = 'Offline';
+        }
 
 		document.getElementById('username').textContent = data.username;
 		document.getElementById('avatar').src = data.avatar;
-		document.getElementById('isOnline').textContent = data.is_online ? "Online" : "Offline";
 		if (data.alias)
 			document.getElementById('alias').textContent = `(${data.alias})`;
 		document.getElementById('totalMatches').textContent = data.total_matches;
