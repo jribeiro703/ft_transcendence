@@ -188,7 +188,7 @@ class CreateUserView(CreateAPIView):
 			}, status=status.HTTP_201_CREATED)
 		
 		except serializers.ValidationError as e:
-			print("create user view error: ", e)
+			# print("create user view error: ", e)
 			return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 		except exceptions.APIException as e:
 			return Response(e.detail, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -490,7 +490,7 @@ def login42(request):
 		token_data = response.json()
 
 		if "access_token" not in token_data:
-			print("login42 view :error while getting access token")
+			# print("login42 view :error while getting access token")
 			response = redirect("https:localhost:8081/#home")
 			return response
 		
@@ -520,11 +520,11 @@ def login42(request):
 		response = redirect("https://localhost:8081/#user")
 		access_token, refresh_token = generate_tokens_for_user(user)
 		set_refresh_token_in_cookies(response, refresh_token)
-		print("set tokens in cookies and redirect to user page")
+		# print("set tokens in cookies and redirect to user page")
 		return response
 	
 	except Exception as e:
-		print("login42 exception error: ", e)
+		# print("login42 exception error: ", e)
 		response = redirect("https://localhost:8081/#home")
 		return response
 
@@ -541,12 +541,12 @@ class LogoutView(APIView):
 		try:
 			refresh_token = request.COOKIES.get('refresh_token')
 			if not refresh_token:
-				response = Response({"message": "Logout successfully"}, status=status.HTTP_205_RESET_CONTENT)
-				response.delete_cookie('refresh_token')
+				response = Response({"message": "Logout successfully"}, status=status.HTTP_200_OK)
 				response.delete_cookie('csrftoken')
-				return response
-			token = RefreshToken(refresh_token)
 
+				return response
+			
+			token = RefreshToken(refresh_token)
 			try:
 				user = User.objects.get(id=token.payload.get('user_id'))
 				user.is_online = False
@@ -555,13 +555,12 @@ class LogoutView(APIView):
 				pass
 
 			token.blacklist()
-			response = Response({"message": "Logout successfully !"}, status=status.HTTP_205_RESET_CONTENT)
+			response = Response({"message": "Logout successfully"}, status=status.HTTP_200_OK)
 			response.delete_cookie('refresh_token')
 			response.delete_cookie('csrftoken')
 
 			return response
 
 		except Exception as e:
-			print("logout failed: ", e)
 			return Response({"message": "Logout failed."}, status=status.HTTP_400_BAD_REQUEST)
 
