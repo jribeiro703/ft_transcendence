@@ -50,12 +50,16 @@ export function renderUserPage() {
 		const responseObject = await fetchAuthData('/user/logout/', 'POST', null, false);
 
 		if (responseObject.status == 205) {
+			console.log(responseObject);
 			showToast(responseObject.data.message, "success");
 			// sessionStorage.clear();
 			localStorage.clear();
 			renderPage("home");
 		} else
+		{
+			console.log(responseObject);
 			showErrorMessages(responseObject);
+		}
 	});
 
 }
