@@ -20,6 +20,10 @@ function createHomeContent() {
 async function renderHomePage() {
   createHomeContent();
 
+	document.getElementById('playsoloGameBtn').addEventListener('click', () => {
+		renderPageGame("gameSelectionSolo");
+	});
+
 	const authButtons = [
 		{
 			id: 'playmultiGameBtn',
