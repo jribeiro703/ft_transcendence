@@ -9,6 +9,9 @@ from django.template.loader import render_to_string
 from datetime import datetime, timezone
 from transcendence import settings
 from rest_framework_simplejwt.tokens import RefreshToken
+from game.models import Game
+from django.db.models import Q
+
 
 def generate_activation_link(user, view_name, action):
 	uid = urlsafe_base64_encode(force_bytes(user.pk))
@@ -70,3 +73,21 @@ def set_refresh_token_in_cookies(response, refresh_token):
 		# path='/'
 	)
 	return response
+
+def get_user_matchs_infos(user):
+	matchs = {}
+
+	matchs["total_matches"] = Game.objects.filter(
+			Q(player_one=user) | Q(player_two=user)
+		).count()
+	matchs["won_matches"] = Game.objects.filter(winner=user).count()
+	matchs["lost_matches"] = matchs["total_matches"] - matchs["won_matches"]
+
+	if matchs["total_matches"] > 0:
+		win_ratio = matchs["won_matches"] / matchs["total_matches"]
+	else:
+		win_ratio = 0
+	matchs["win_ratio"] = win_ratio
+	
+	return matchs
+
