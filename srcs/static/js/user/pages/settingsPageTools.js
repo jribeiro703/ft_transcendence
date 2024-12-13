@@ -114,7 +114,8 @@ async function deleteAccount(pk) {
 	const responseObject = await fetchAuthData(`/user/settings/${pk}/`, 'DELETE', null, false);
 	if (responseObject.status === 205) {
 		showToast(responseObject.data.message, "success");
-		sessionStorage.clear();
+		// sessionStorage.clear();
+		localStorage.clear();
 		renderPage("home")
 	} else
 		showErrorMessages(responseObject);
