@@ -6,11 +6,146 @@ import gameVar from '../game/pong/var.js';
 let messageInCooldown = false;
 const COOLDOWN_MS = 200;
 
-const chatSocket = new WebSocket(
+// chatSocket.onmessage = function (e) {
+const socketHandlers = {
+	onMessage: function(e) {
+	const data = JSON.parse(e.data);
+	const message = data.message;
+	const clientId = data.client_id;
+	const timestamp = data.timestamp;
+	const chatLog = document.querySelector("#chat-log");
+	const formattedTime = formatTimestamp(timestamp);
+	const clientIdColor = getColorForClientId(clientId);
+
+	// Create message components
+	const messageElement = document.createElement("div");
+	const timeSpan = document.createElement("span");
+	timeSpan.textContent = `[${formattedTime}] `;
+	timeSpan.style.color = clientIdColor;
+  
+	// Create nickname span with tooltip
+	const nicknameSpan = document.createElement("span");
+	nicknameSpan.textContent = `${clientId}: `;
+	nicknameSpan.style.color = clientIdColor;
+	nicknameSpan.style.cursor = 'pointer';
+
+	// Initialize tooltip
+	new bootstrap.Tooltip(nicknameSpan, {
+	  html: true,
+	  placement: 'right',
+	  trigger: 'hover',
+	  title: 'Loading...',
+	  delay: { show: 500, hide: 100 },
+	  template: '<div class="tooltip" role="tooltip"><div class="tooltip-inner"></div></div>'
+	});
+  
+	// Add hover handler for tooltip content
+	nicknameSpan.addEventListener('mouseenter', async function() {
+	  const tooltip = bootstrap.Tooltip.getInstance(this);
+
+	  try {
+		const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${clientId}`);
+
+		if (nicknameResponse.status === 401) {
+			throw new Error('Authentication required');
+		}
+
+		if (!nicknameResponse.data || !nicknameResponse.data.id) {
+			throw new Error('User not found');
+		}
+
+		const userId = nicknameResponse.data.id;
+		const content = await getUserTooltipContent(userId);
+		tooltip.setContent({ '.tooltip-inner': content });
+	} catch (error) {
+		console.error('Error fetching user data:', error);
+		if (error.message === 'Authentication required') {
+			tooltip.setContent({ '.tooltip-inner': 'You must be logged in to see user data' });
+		}
+		else
+		{
+			tooltip.setContent({ '.tooltip-inner': 'Error loading user data' });
+		}
+	}
+	});
+  
+	// Assemble message
+	const messageText = document.createElement("span");
+	messageText.textContent = message;
+  
+	messageElement.appendChild(timeSpan);
+	messageElement.appendChild(nicknameSpan);
+	messageElement.appendChild(messageText);
+	
+	chatLog.prepend(messageElement);
+	chatLog.scrollTop = chatLog.scrollHeight;
+},
+
+// chatSocket.onopen = async function () {
+onOpen: async function() {
+	try {
+		const response = await fetchAuthData('/user/check-auth/');
+		
+		if (response.status === 401) {
+			console.error('Authentication required');
+			window.location.href = '/#login';
+			return;
+		}
+
+		const token = localStorage.getItem('access_token');
+		chatSocket.send(JSON.stringify({
+			type: 'authenticate',
+			token: token
+		}));
+
+		console.log('Chat socket connected and authenticated');
+	} catch (error) {
+		console.error('Error authenticating chat socket:', error);
+		showToast("Error connecting to chat", "error");
+	}
+},
+
+// chatSocket.onclose = function () {
+onClose: function() {
+  console.error("Chat socket closed unexpectedly");
+}
+};
+
+// Initialize socket with handlers
+function initializeChatSocket(socket) {
+  socket.onmessage = socketHandlers.onMessage;
+  socket.onopen = socketHandlers.onOpen;
+  socket.onclose = socketHandlers.onClose;
+  socket.onerror = socketHandlers.onError;
+  return socket;
+};
+
+let chatSocket = new WebSocket(
   "wss://" + window.location.host + "/ws/livechat/",
 );
 
+initializeChatSocket(chatSocket);
+
 export let gameChatSocket = null;
+
+function reloadChatSocket() {
+	if (chatSocket) {
+		chatSocket.close();
+	}
+
+	chatSocket = new WebSocket(
+		"wss://" + window.location.host + "/ws/livechat/",
+	);
+
+	initializeChatSocket(chatSocket);
+};
+
+// Add listener for OTP verification success
+document.addEventListener('otpVerificationSuccess', function(e) {
+	if (e.detail.reload_chat) {
+		reloadChatSocket();
+	}
+});
 
 export function initializeGameChatSocket(roomNumber) {
 	if (gameChatSocket) {
@@ -155,105 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-chatSocket.onmessage = function (e) {
-	const data = JSON.parse(e.data);
-	const message = data.message;
-	const clientId = data.client_id;
-	const timestamp = data.timestamp;
-	const chatLog = document.querySelector("#chat-log");
-	const formattedTime = formatTimestamp(timestamp);
-	const clientIdColor = getColorForClientId(clientId);
 
-	// Create message components
-	const messageElement = document.createElement("div");
-	const timeSpan = document.createElement("span");
-	timeSpan.textContent = `[${formattedTime}] `;
-	timeSpan.style.color = clientIdColor;
-  
-	// Create nickname span with tooltip
-	const nicknameSpan = document.createElement("span");
-	nicknameSpan.textContent = `${clientId}: `;
-	nicknameSpan.style.color = clientIdColor;
-	nicknameSpan.style.cursor = 'pointer';
-
-	// Initialize tooltip
-	new bootstrap.Tooltip(nicknameSpan, {
-	  html: true,
-	  placement: 'right',
-	  trigger: 'hover',
-	  title: 'Loading...',
-	  delay: { show: 500, hide: 100 },
-	  template: '<div class="tooltip" role="tooltip"><div class="tooltip-inner"></div></div>'
-	});
-  
-	// Add hover handler for tooltip content
-	nicknameSpan.addEventListener('mouseenter', async function() {
-	  const tooltip = bootstrap.Tooltip.getInstance(this);
-
-	  try {
-		const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${clientId}`);
-
-		if (nicknameResponse.status === 401) {
-			throw new Error('Authentication required');
-		}
-
-		if (!nicknameResponse.data || !nicknameResponse.data.id) {
-			throw new Error('User not found');
-		}
-
-		const userId = nicknameResponse.data.id;
-		const content = await getUserTooltipContent(userId);
-		tooltip.setContent({ '.tooltip-inner': content });
-	} catch (error) {
-		console.error('Error fetching user data:', error);
-		if (error.message === 'Authentication required') {
-			tooltip.setContent({ '.tooltip-inner': 'You must be logged in to see user data' });
-		}
-		else
-		{
-			tooltip.setContent({ '.tooltip-inner': 'Error loading user data' });
-		}
-	}
-	});
-  
-	// Assemble message
-	const messageText = document.createElement("span");
-	messageText.textContent = message;
-  
-	messageElement.appendChild(timeSpan);
-	messageElement.appendChild(nicknameSpan);
-	messageElement.appendChild(messageText);
-	
-	chatLog.prepend(messageElement);
-	chatLog.scrollTop = chatLog.scrollHeight;
-};
-
-chatSocket.onopen = async function () {
-    try {
-        const response = await fetchAuthData('/user/check-auth/');
-        
-        if (response.status === 401) {
-            console.error('Authentication required');
-            window.location.href = '/#login';
-            return;
-        }
-
-        const token = localStorage.getItem('access_token');
-        chatSocket.send(JSON.stringify({
-            type: 'authenticate',
-            token: token
-        }));
-
-        console.log('Chat socket connected and authenticated');
-    } catch (error) {
-        console.error('Error authenticating chat socket:', error);
-        showToast("Error connecting to chat", "error");
-    }
-};
-
-chatSocket.onclose = function () {
-  console.error("Chat socket closed unexpectedly");
-};
 
 document.querySelector("#chat-message-input").focus();
 document.querySelector("#chat-message-input").onkeyup = async function (e) {
