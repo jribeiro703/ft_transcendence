@@ -360,7 +360,6 @@ class ListFriendRequestView(APIView):
 # -----------------------------------CHECK AUTHENTICATION ENDPOINTS--------------------------------
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def check_auth(request):
 	return Response({
 		"message": "User is authenticated"
