@@ -163,7 +163,12 @@ button#createTournament:hover {
 }
 
 /* List Items */
-.invite-item, .tournament-item {
+.invite-item {
+	width: auto;
+	margin: 5px;
+}
+
+.tournament-item {
 	border: 1px solid #ddd;
 	padding-top: 15px;
 	padding-left: 15px;
@@ -184,3 +189,167 @@ p strong {
 	font-size: 1.1rem;
 	color: #0056b3;
 }
+
+/* ----------------------- Tournament Styles ------------------------- */
+#tournamentView {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.tournament-title {
+	color: #FEFCFF;
+	font-size: 2.5rem;
+	margin-bottom: 10px;
+}
+
+.tournament-description {
+	margin-left: 0px;
+	text-align: center;
+	font-size: 1.2rem;
+	color: #FEFCFF;
+}
+
+.participants-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px; /* Add spacing between the h4 and ul */
+	width: 100%; /* Ensure the container spans the full width */
+}
+
+.participants-container h4 {
+	text-align: center;
+	margin: 0; /* Remove any default margins */
+	padding: 0;
+	font-size: 1.5rem; /* Adjust size as needed */
+	color: #FEFCFF; /* Match the color scheme */
+}
+
+.participants-container ul {
+	width: 100%; /* Ensure the list takes up the full width of the container */
+	padding: 0; /* Remove default list padding */
+	list-style: none; /* Remove bullets */
+}
+
+
+#playersList {
+	list-style-type: none;
+	padding: 0;
+	max-width: 600px;
+	margin: 20px auto;
+}
+
+#playersList .list-group-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: #1A1A40;
+	padding: 15px 20px;
+	border: 2px solid #6DC7C1;
+	border-radius: 8px;
+	margin: 10px 0;
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.player-name {
+	color: #FEFCFF;
+	font-size: 1.3rem;
+	font-weight: bold;
+	display: block;
+}
+
+.player-box {
+	flex: 1;
+	text-align: center;
+}	
+
+#playersList .list-group-item:hover {
+	transform: scale(1.02);
+	background-color: #3A4C6B;
+}
+
+.player-item {
+	display: flex;
+	align-items: center;
+	padding: 5px;
+	border-bottom: 1px solid #ccc;
+}
+
+.player-avatar {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.player-info {
+	display: flex;
+	flex-direction: column;
+}
+
+.player-username {
+	font-weight: bold;
+}
+
+.player-status {
+	font-size: 12px;
+	color: #555;
+}
+
+#createTournamentBtn {
+	width: 200px;
+	height: 60px;
+	font-size: 20px;
+	background-color: #0A1730;
+	color: #FEFCFF;
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.3s, transform 0.4s;
+}
+
+#createTournamentBtn:hover {
+	background-color: #6DC7C1;
+	transform: scale(1.05);
+}
+
+/* styles.css */
+
+.online-players {
+	color: green;
+	font-weight: bold;
+}
+
+.match {
+	background-color: #f8f9fa;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+
+.match .player {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.match .player.highlighted-user {
+	background-color: #ffeb3b;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.match .vs {
+	font-size: 1.2em;
+}
+
+.connector {
+	margin: 10px 0;
+}
+
+.connector .line {
+	width: 100%;
+	height: 2px;
+	background-color: #ddd;
+}
+
+/* -------------------- End - Tournament View ---------------------- */
