@@ -15,7 +15,7 @@ export function renderLoginForm() {
 				<label class="custom-label" for="password">Password:</label>
             	<input class="custom-input" type="password" id="password" name="password" required>
 			</div>
-			<button class="main-btn submit-btn height-btn" type="submit">Submit</button>
+			<button class="submit-btn" type="submit">Submit</button>
         </form>
     </div>
     `;

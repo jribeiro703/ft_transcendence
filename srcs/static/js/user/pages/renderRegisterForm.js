@@ -19,7 +19,7 @@ export function renderRegisterForm() {
 			<label class="custom-label" for="email">Email:</label>
 			<input class="custom-input" type="email" id="email" name="email" required>
 		</div>
-			<button type="submit" class="main-btn submit-btn height-btn">Submit</button>
+			<button type="submit" class="submit-btn">Submit</button>
 		</form>
 	</div>
 	`;

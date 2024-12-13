@@ -12,7 +12,7 @@ export function renderOtpForm(url, msg) {
                 <label class="custom-label" for="otpCode">OTP Code:</label>
                 <input class="custom-input" type="text" id="otpCode" name="otpCode" required>
             </div>
-            <button class="main-btn submit-btn height-btn" type="submit">Submit</button>
+            <button class="submit-btn" type="submit">Submit</button>
         </form>
     </div>
     `;
