@@ -1,0 +1,186 @@
+/* General Container */
+#container {
+	padding: 30px;
+	font-family: Arial, sans-serif;
+	background-color: #f0f4f8;
+	color: #333;
+	max-width: 800px;
+	margin: auto;
+	border-radius: 10px;
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Section Headers */
+#container h2 {
+	font-size: 1.8rem;
+	margin-bottom: 15px;
+	color: #0056b3;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 5px;
+}
+
+/* Style for each section */
+.section {
+	padding: 20px;
+	margin-bottom: 20px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	background-color: #f9f9f9;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Header styling for each section */
+.section h2 {
+	font-size: 1.8rem;
+	margin-bottom: 15px;
+	color: #333;
+	border-bottom: 2px solid #ddd;
+	padding-bottom: 5px;
+}
+
+/* Text within sections */
+.section p {
+	font-size: 1rem;
+	color: #555;
+}
+
+/* General spacing for child elements inside sections */
+.section .formGroup, .section .actions, .section div {
+	margin-bottom: 15px;
+}
+
+/* Buttons within sections */
+.section .btn {
+	padding: 10px 15px;
+	font-size: 1rem;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.section .btn:hover {
+	opacity: 0.9;
+}
+
+.section .btn.acceptInvite {
+	background-color: #28a745;
+}
+
+.section .btn.rejectInvite {
+	background-color: #dc3545;
+}
+
+.section .btn.joinTournament {
+	background-color: #007bff;
+}
+
+/* Form Group */
+#formGroup {
+	margin-bottom: 20px;
+}
+
+#formGroup label {
+	font-weight: bold;
+	margin-bottom: 8px;
+	display: block;
+}
+
+#formGroup input {
+	width: 100%;
+	padding: 10px;
+	font-size: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: #fff;
+}
+
+/* Tournament row styling */
+.tournament-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+	background-color: #fff;
+}
+
+/* Tournament name styling */
+.tournament-name {
+	flex: 3;
+	font-size: 1rem;
+	color: #333;
+}
+
+/* Action buttons container */
+.tournament-actions {
+	flex: 1;
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+
+/* Buttons */
+button {
+	width: 100%;
+	padding: 12px;
+	font-size: 1rem;
+	font-weight: bold;
+	cursor: pointer;
+	border: none;
+	border-radius: 5px;
+	transition: background-color 0.3s;
+}
+
+button#createTournament {
+	background-color: #007bff;
+	color: #fff;
+}
+
+button#createTournament:hover {
+	background-color: #0056b3;
+}
+
+.actions button {
+	width: auto;
+	margin: 5px;
+}
+
+.actions .acceptInvite {
+	background-color: #28a745;
+	color: #fff;
+}
+
+.actions .rejectInvite {
+	background-color: #dc3545;
+	color: #fff;
+}
+
+.actions .joinTournament {
+	background-color: #007bff;
+	color: #fff;
+}
+
+/* List Items */
+.invite-item, .tournament-item {
+	border: 1px solid #ddd;
+	padding-top: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
+	margin-bottom: 15px;
+	border-radius: 5px;
+	background-color: #fff;
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Text Styling */
+p {
+	font-size: 1rem;
+	line-height: 1.5;
+}
+
+p strong {
+	font-size: 1.1rem;
+	color: #0056b3;
+}
