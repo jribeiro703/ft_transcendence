@@ -26,6 +26,23 @@
           <div class="container-fluid d-flex justify-content-between">
             <div data-home-icon id="btn-Home" class="homeIcon"></div>
             <div data-profile-icon id="user-avatar" class="profileIcon"></div>
+			<div class="container mt-5"> 
+    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="<button class='btn btn-primary'>Click Me!</button>"> 
+      Hover me 
+    </button> 
+</div> 
+ 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script> 
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+<script> 
+  $(document).ready(function(){ 
+    $('[data-toggle="tooltip"]').tooltip({ 
+      trigger: 'hover', 
+      html: true 
+    }); 
+  }); 
+</script> 
           </div>
         </nav>
       </div>
@@ -73,8 +90,11 @@
             </div>
 
               <div class="position-absolute top-0 end-0 h-100">
-                <div class="channel-container d-flex flex-column h-100 p-2 m-4" 
-                     style="max-height: 100%; 
+                <div class="channel-container d-flex flex-column" 
+                     style="max-height: 100%;
+					 		height: calc(100% - 74px);
+					 		padding-right: 29px;
+							padding-top: 29px;
                             position: absolute; 
                             top: 0; 
                             right: 0; 
@@ -87,7 +107,7 @@
                               display: none;  /* Chrome, Safari, Opera */
                             }">
                   <div class="channel-btn d-flex flex-column gap-2">
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="notificationButton" 
                             aria-label="NotificationsChat"
@@ -95,7 +115,7 @@
                             data-bs-placement="left"
                             title="Notifications">🔔</button>
 
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="bubbleButton" 
                             aria-label="GeneralChat"
@@ -103,7 +123,7 @@
                             data-bs-placement="left"
                             title="General Chat">️💬</button>
 
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="swordsButton" 
                             aria-label="GameChat"
@@ -111,7 +131,7 @@
                             data-bs-placement="left"
                             title="Game Chat">⚔️</button>
 
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="trophyButton" 
                             aria-label="TournamentChat"
@@ -119,7 +139,7 @@
                             data-bs-placement="left"
                             title="Tournament Chat">🏆</button>
 
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="friendsButton" 
                             aria-label="FriendsChat"
@@ -127,7 +147,7 @@
                             data-bs-placement="left"
                             title="Friends">🤝 </button>
 
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="onlineButton" 
                             aria-label="OnlinePlayers"

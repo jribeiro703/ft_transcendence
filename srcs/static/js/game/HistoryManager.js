@@ -71,7 +71,7 @@ export function isGamePage(page)
 
 export function isGamePageChat(page) 
 {
-	return [ '#playBrickout', '#playPongRemote', 'playPongRemoteSecondP'].includes(page);
+	return [ '#playBrickout', '#playPongRemote', '#playPongRemoteSecondP'].includes(page);
 }
 
 export async function renderPageGame(page, updateHistory = true, params = null)

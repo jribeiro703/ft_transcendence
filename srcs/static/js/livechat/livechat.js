@@ -3,6 +3,9 @@ import { showToast } from '../user/tools.js';
 import { isGamePageChat } from '../game/HistoryManager.js'
 import gameVar from '../game/pong/var.js';
 
+let messageInCooldown = false;
+const COOLDOWN_MS = 200;
+
 const chatSocket = new WebSocket(
   "wss://" + window.location.host + "/ws/livechat/",
 );
@@ -17,6 +20,92 @@ export function initializeGameChatSocket(roomNumber) {
 	gameChatSocket = new WebSocket(
 		`wss://${window.location.host}/ws/livechat/room_${roomNumber}/`
 	);
+
+	gameChatSocket.onmessage = function(e) {
+		const data = JSON.parse(e.data);
+		const message = data.message;
+		const clientId = data.client_id;
+		const timestamp = data.timestamp;
+		const gameChat = document.querySelector("#gamechat");
+		const formattedTime = formatTimestamp(timestamp);
+		const clientIdColor = getColorForClientId(clientId);
+
+		// Create message components
+		const messageElement = document.createElement("div");
+		const timeSpan = document.createElement("span");
+		timeSpan.textContent = `[${formattedTime}] `;
+		timeSpan.style.color = clientIdColor;
+
+		// Create nickname span with tooltip
+		const nicknameSpan = document.createElement("span");
+		nicknameSpan.textContent = `${clientId}: `;
+		nicknameSpan.style.color = clientIdColor;
+		nicknameSpan.style.cursor = 'pointer';
+
+		// Initialize tooltip
+		new bootstrap.Tooltip(nicknameSpan, {
+			html: true,
+			placement: 'right',
+			trigger: 'hover',
+			title: 'Loading...',
+			delay: { show: 500, hide: 100 },
+			template: '<div class="tooltip" role="tooltip"><div class="tooltip-inner"></div></div>'
+		});
+
+		// Add hover handler for tooltip content
+		nicknameSpan.addEventListener('mouseenter', async function() {
+			const tooltip = bootstrap.Tooltip.getInstance(this);
+
+			try {
+				const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${clientId}`);
+
+				if (nicknameResponse.status === 401) {
+					throw new Error('Authentication required');
+				}
+
+				if (!nicknameResponse.data || !nicknameResponse.data.id) {
+					throw new Error('User not found');
+				}
+
+				const userId = nicknameResponse.data.id;
+				const content = await getUserTooltipContent(userId);
+				tooltip.setContent({ '.tooltip-inner': content });
+			}
+			catch (error) {
+				console.error('Error fetching user data:', error);
+				if (error.message === 'Authentication required') {
+					tooltip.setContent({ '.tooltip-inner': 'You must be logged in to see user data' });
+				}
+				else
+				{
+					tooltip.setContent({ '.tooltip-inner': 'Error loading user data' });
+				}
+			}
+		});
+		// Create message text
+		const messageText = document.createElement('span');
+		messageText.textContent = message;
+
+		// Assemble message
+		messageElement.appendChild(timeSpan);
+		messageElement.appendChild(nicknameSpan);
+		messageElement.appendChild(messageText);
+
+		gameChat.prepend(messageElement);
+		gameChat.scrollTop = gameChat.scrollHeight;
+	};
+
+	gameChatSocket.onopen = function() {
+		console.log('Game chat socket connected for room:', roomNumber);
+	};
+	
+	gameChatSocket.onerror = function(error) {
+		console.error('Game chat socket error:', error);
+	};
+	
+	gameChatSocket.onclose = function() {
+		console.error("Game chat socket closed unexpectedly");
+	};
 
 	return gameChatSocket;
 }
@@ -140,6 +229,29 @@ chatSocket.onmessage = function (e) {
 	chatLog.scrollTop = chatLog.scrollHeight;
 };
 
+chatSocket.onopen = async function () {
+    try {
+        const response = await fetchAuthData('/user/check-auth/');
+        
+        if (response.status === 401) {
+            console.error('Authentication required');
+            window.location.href = '/#login';
+            return;
+        }
+
+        const token = sessionStorage.getItem('access_token');
+        chatSocket.send(JSON.stringify({
+            type: 'authenticate',
+            token: token
+        }));
+
+        console.log('Chat socket connected and authenticated');
+    } catch (error) {
+        console.error('Error authenticating chat socket:', error);
+        showToast("Error connecting to chat", "error");
+    }
+};
+
 chatSocket.onclose = function () {
   console.error("Chat socket closed unexpectedly");
 };
@@ -187,11 +299,13 @@ async function sendChatMessage(socket, inputId, logId) {
   const messageInput = document.querySelector(inputId);
   let message = messageInput.value.trim();
   
-  if (message === "") {
+  if (message === "" || messageInCooldown) {
 	return;
   }
 
   try {
+	messageInCooldown = true;
+
 	const response = await fetchAuthData('/user/check-auth/');
 	
 	if (response.status === 401) {
@@ -221,9 +335,13 @@ async function sendChatMessage(socket, inputId, logId) {
 	const chatLog = document.querySelector(logId);
 	chatLog.scrollTop = chatLog.scrollHeight;
 
+	setTimeout(() => {
+		messageInCooldown = false;
+	}, COOLDOWN_MS);
   } catch (error) {
 	console.error('Error sending message:', error);
 	alert('Error sending message. Please try again.');
+	messageInCooldown = false;
   }
 }
 
@@ -295,7 +413,6 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
 	const swordsButton = document.getElementById('swordsButton');
 	const gameChat = document.getElementById('gamechat');
-	let roomName = 'default';
 
 	swordsButton.addEventListener('click', function() {
 		const currentPage = window.location.hash || '';
@@ -328,99 +445,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	})
 });
 
-if (gameChatSocket) {
-	gameChatSocket.onmessage = function(e) {
-		const data = JSON.parse(e.data);
-		const message = data.message;
-		const clientId = data.client_id;
-		const timestamp = data.timestamp;
-		const gameChat = document.querySelector("#gamechat");
-		const formattedTime = formatTimestamp(timestamp);
-		const clientIdColor = getColorForClientId(clientId);
 
-		// Create message components
-		const messageElement = document.createElement("div");
-		const timeSpan = document.createElement("span");
-		timeSpan.textContent = `[${formattedTime}] `;
-		timeSpan.style.color = clientIdColor;
-
-		// Create nickname span with tooltip
-		const nicknameSpan = document.createElement("span");
-		nicknameSpan.textContent = `${clientId}: `;
-		nicknameSpan.style.color = clientIdColor;
-		nicknameSpan.style.cursor = 'pointer';
-
-		// Initialize tooltip
-		new bootstrap.Tooltip(nicknameSpan, {
-			html: true,
-			placement: 'right',
-			trigger: 'hover',
-			title: 'Loading...',
-			delay: { show: 500, hide: 100 },
-			template: '<div class="tooltip" role="tooltip"><div class="tooltip-inner"></div></div>'
-		});
-
-		// Add hover handler for tooltip content
-		nicknameSpan.addEventListener('mouseenter', async function() {
-			const tooltip = bootstrap.Tooltip.getInstance(this);
-
-			try {
-				const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${clientId}`);
-
-				if (nicknameResponse.status === 401) {
-					throw new Error('Authentication required');
-				}
-
-				if (!nicknameResponse.data || !nicknameResponse.data.id) {
-					throw new Error('User not found');
-				}
-
-				const userId = nicknameResponse.data.id;
-				const content = await getUserTooltipContent(userId);
-				tooltip.setContent({ '.tooltip-inner': content });
-			}
-			catch (error) {
-				console.error('Error fetching user data:', error);
-				if (error.message === 'Authentication required') {
-					tooltip.setContent({ '.tooltip-inner': 'You must be logged in to see user data' });
-				}
-				else
-				{
-					tooltip.setContent({ '.tooltip-inner': 'Error loading user data' });
-				}
-			}
-		});
-		// Create message text
-		const messageText = document.createElement('span');
-		messageText.textContent = message;
-
-		// Assemble message
-		messageElement.appendChild(timeSpan);
-		messageElement.appendChild(nicknameSpan);
-		messageElement.appendChild(messageText);
-
-		gameChat.prepend(messageElement);
-		gameChat.scrollTop = gameChat.scrollHeight;
-	}
-};
-
-if (gameChatSocket) {
-	gameChatSocket.onopen = function() {
-		console.log('Game chat socket connected for room:', roomNumber);
-	}
-};
-	
-if (gameChatSocket) {
-	gameChatSocket.onerror = function(error) {
-		console.error('Game chat socket error:', error);
-	}
-};
-	
-if (gameChatSocket) {
-	gameChatSocket.onclose = function() {
-		console.error("Game chat socket closed unexpectedly");
-	}
-};
 
 // document.querySelector("#chat-message-submit").onclick = async function () {
 // 	if (!document.querySelector("#gamechat").classList.contains('d-none')) {
@@ -641,8 +666,6 @@ const styles = `
 const styleSheet = document.createElement("style");
 styleSheet.textContent = styles;
 document.head.appendChild(styleSheet);
-
-// Add function to create tooltip content
 
 async function getUserTooltipContent(userId) {
   try {
