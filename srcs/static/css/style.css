@@ -1265,7 +1265,7 @@ button:disabled {
   background-color: var(--chat-bg);
   color: var(--chat-msg);
   /* padding: 10px; */
-  padding-right: 65px !important;
+  padding-right: 62px !important;
 }
 
 /* live chat qui slide */

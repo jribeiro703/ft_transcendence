@@ -73,8 +73,11 @@
             </div>
 
               <div class="position-absolute top-0 end-0 h-100">
-                <div class="channel-container d-flex flex-column h-100 p-2 m-4" 
-                     style="max-height: 100%; 
+                <div class="channel-container d-flex flex-column" 
+                     style="max-height: 100%;
+					 		height: calc(100% - 100px);
+					 		padding-right: 29px;
+							padding-top: 29px;
                             position: absolute; 
                             top: 0; 
                             right: 0; 
@@ -87,59 +90,51 @@
                               display: none;  /* Chrome, Safari, Opera */
                             }">
                   <div class="channel-btn d-flex flex-column gap-2">
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="notificationButton" 
                             aria-label="NotificationsChat"
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
                             title="Notifications">🔔</button>
-
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="bubbleButton" 
                             aria-label="GeneralChat"
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
                             title="General Chat">️💬</button>
-
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="swordsButton" 
                             aria-label="GameChat"
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
                             title="Game Chat">⚔️</button>
-
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="trophyButton" 
                             aria-label="TournamentChat"
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
                             title="Tournament Chat">🏆</button>
-
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="friendsButton" 
                             aria-label="FriendsChat"
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
                             title="Friends">🤝 </button>
-
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="onlineButton" 
                             aria-label="OnlinePlayers"
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
                             title="Online Players">👤</button>
-
                   </div>
                 </div>
               </div>
-
-
             <div class="input-group d-flex gap-3">
               <div class="emoji-picker-container" id="emojiPickerContainer">
                 <emoji-picker id="emoji-picker" aria-label="Emoji picker"></emoji-picker>
@@ -158,10 +153,6 @@
                       aria-label="Send message">Send</button>
             </div>
           </div>
-
-
-
-
         </div>
       </div>
     </div>
