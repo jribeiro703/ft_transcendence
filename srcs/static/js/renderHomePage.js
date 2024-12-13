@@ -1,9 +1,7 @@
 import { PONG_CARD, showToast } from "./user/tools.js"
 import { isAuthenticated } from "./user/isAuthenticated.js";
 import { renderPageGame } from "./game/HistoryManager.js";
-import { showCreateTournamentForm } from "./tournament/tournamentPage.js";
-import { showCreateTournamentForm2 } from "./tournament/tournamentPage.js";
-
+import { setupTournamentPage } from "./tournament/tournamentPage.js";
 
 function createHomeContent() {
 	const box = document.getElementById('mainContent');
@@ -43,17 +41,17 @@ async function renderHomePage() {
 		},
 		{
 			id: 'btn-Tournament',
-			handler: () => showCreateTournamentForm2()
+			handler: () => setupTournamentPage()
 		}
 	];
 	
 	authButtons.forEach(({ id, handler }) => {
 		document.getElementById(id).addEventListener('click', async () => {
-			/* const authenticated = await isAuthenticated();
+			const authenticated = await isAuthenticated();
 			if (!authenticated) {
 				showToast("You must be logged in to use this feature.", "warning");
 				return;
-			} */
+			}
 			handler();
 		});
 	});
