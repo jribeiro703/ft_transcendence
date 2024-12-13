@@ -22,7 +22,8 @@ export function renderOtpForm(url, msg) {
         const responseObject = await fetchData(url, 'POST', { otp_code: otpCode }, false);
         
         if (responseObject.status === 200) {
-			sessionStorage.setItem('access_token', responseObject.data.access_token);
+			// sessionStorage.setItem('access_token', responseObject.data.access_token);
+			localStorage.setItem('access_token', responseObject.data.access_token);
 			renderPage("user");
 		} else
             showErrorMessages(responseObject);
