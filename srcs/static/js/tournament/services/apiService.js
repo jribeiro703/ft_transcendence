@@ -8,9 +8,9 @@ function sanitizeTournamentName(name) {
 // Create a new tournament dynamically via the API
 export const createTournament = async (name) => {
 	try {
-		const sanitizedName = sanitizeTournamentName(name);
+		//const sanitizedName = sanitizeTournamentName(name);
 		const payload = {
-			name: sanitizedName,
+			name: name,
 			start_date: new Date().toISOString(),
 			max_score: 100,
 			status: 'UPCOMING',

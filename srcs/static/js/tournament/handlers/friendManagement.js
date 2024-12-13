@@ -25,7 +25,7 @@ export function getFriendsList(tournamentId) {
 					friendItem.innerHTML = `
 						<img src="${friend.avatar}" alt="${friend.username}" class="avatar me-2" style="width: 40px; height: 40px; border-radius: 50%;">
 						<span>${friend.username}</span>
-						<button class="btn btn-primary ms-auto" onclick="inviteFriend(${friend.id}, ${tournamentId})">Invite</button>
+						<button class="invite-item btn btn-primary ms-auto" onclick="inviteFriend(${friend.id}, ${tournamentId})">Invite</button>
 					`;
 					inviteBox.appendChild(friendItem);
 				});
