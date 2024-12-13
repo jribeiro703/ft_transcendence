@@ -50,47 +50,52 @@ export function startLiveGame()
 }
 
 export async function joinRoom(roomName) {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const gameSocket = new WebSocket(protocol + '//' + window.location.host + `/ws/pong/${roomName}/`);
+	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+	const gameSocket = new WebSocket(protocol + '//' + window.location.host + `/ws/pong/${roomName}/`);
 
-    // Auth check before socket operations
-    fetchAuthData('/user/private/')
-        .then(responseObject => {
-            if (responseObject.status === 401) {
-                console.log("Authentication required");
-                return;
-            }
+	// Auth check before socket operations
+	fetchAuthData('/user/private/')
+		.then(responseObject => {
+			if (responseObject.status === 401) {
+				console.log("Authentication required");
+				return;
+			}
 
-            if (responseObject.status === 200) {
-                const userData = responseObject.data;
-                const userid = userData.id;
-                // sendPlayerRoomData(gameSocket, userid);
-            } else {
-                console.log("Error fetching user data:", responseObject.status);
-            }
-        })
-        .catch(error => {
-            console.log("Error on fetch:", error);
-        });
+			if (responseObject.status === 200) {
+				const userData = responseObject.data;
+				const userid = userData.id;
+				// sendPlayerRoomData(gameSocket, userid);
+			} else {
+				console.log("Error fetching user data:", responseObject.status);
+			}
+		})
+		.catch(error => {
+			console.log("Error on fetch:", error);
+		});
 
-    gameSocket.onopen = function(e) {
-        console.log('Game socket opened');
-        try {
-            gameSocket.send(JSON.stringify({ type: 'join_room' }));
-            gameVar.gameSocket = gameSocket;
-            if (gameVar.playerIdx == 1) {
-                waitingPlayer();
-            }
-            if (gameVar.playerIdx == 2) {
-                sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
-                updateSettingLive();
-            }
-        } catch (error) {
-            console.log("Error in onopen:", error);
-        }
-    };
+	gameSocket.onopen = function(e) {
+		console.log('Game socket opened');
+		try {
+			gameSocket.send(JSON.stringify({ type: 'join_room' }));
+			gameVar.gameSocket = gameSocket;
+			if (gameVar.playerIdx == 1) {
+				waitingPlayer();
+			}
+			if (gameVar.playerIdx == 2) {
+				sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
+				updateSettingLive();
+			}
+			document.dispatchEvent(new CustomEvent('multiplayerGame', {
+				detail: {
+					multiplayer_game: true
+				}
+			}));
+		} catch (error) {
+			console.log("Error in onopen:", error);
+		}
+	};
 
-    gameSocket.onmessage = function(e)
+	gameSocket.onmessage = function(e)
 	{
 		try
 		{
@@ -107,9 +112,9 @@ export async function joinRoom(roomName) {
 				if (gameSocket && gameSocket.readyState === WebSocket.OPEN)
 				{
 					gameSocket.send(JSON.stringify({
-            		type: 'room_deleted',
-            		room_name: roomName
-        		}));
+					type: 'room_deleted',
+					room_name: roomName
+				}));
 				}
 			}
 			else if (data.type == 'ball_data')
@@ -169,7 +174,7 @@ export async function joinRoom(roomName) {
 		console.error('Game socket closed unexpectedly code : ', e.code, 'reason', e.reason);
 	};
 
-    return gameSocket;
+	return gameSocket;
 }
 
 export function delRooms()
@@ -179,28 +184,28 @@ export function delRooms()
 }
 export function updateRoomInfo(index, difficulty, level)
 {
-    const room = gameVar.rooms.find(room => room.idx === index);
+	const room = gameVar.rooms.find(room => room.idx === index);
 
-    if (room)
+	if (room)
 	{
 		room.difficulty = difficulty;
 		room.level = level;
-    } 
+	} 
 }
 export function addRoom(index, roomName, status, nbplayer, difficulty = null, level = null)
 {
-    if (!gameVar.rooms.some(room => room.name === roomName))
+	if (!gameVar.rooms.some(room => room.name === roomName))
 	{
-        gameVar.rooms.push(
+		gameVar.rooms.push(
 		{
-            idx: index,      
-            name: roomName,
+			idx: index,      
+			name: roomName,
 			players: nbplayer,
 			difficulty: difficulty,
 			level: level,
-            status: status
-        });
-    }
+			status: status
+		});
+	}
 }
 
 export function updateRoomList()
@@ -216,17 +221,17 @@ export function updateRoomList()
 		roomItem.className = 'server-item';
 
 		roomItem.innerHTML = `
-            <div class="room-header">
-                <span class="room-name">${room.name}</span>
-                <button class="joinRoomBtn" ${room.status === 'Started' ? 'disabled' : ''}>Join</button>
-            </div>
-            <div class="room-info">
-                <span class="room-players">Players: ${room.players}/2</span>
-                <span class="room-difficulty">Difficulty: ${room.difficulty}</span>
-                <span class="room-level">Level: ${room.level}</span>
-                <span class="room-status">Status: ${room.status}</span>
-            </div>
-        `;
+			<div class="room-header">
+				<span class="room-name">${room.name}</span>
+				<button class="joinRoomBtn" ${room.status === 'Started' ? 'disabled' : ''}>Join</button>
+			</div>
+			<div class="room-info">
+				<span class="room-players">Players: ${room.players}/2</span>
+				<span class="room-difficulty">Difficulty: ${room.difficulty}</span>
+				<span class="room-level">Level: ${room.level}</span>
+				<span class="room-status">Status: ${room.status}</span>
+			</div>
+		`;
 
 		const joinBtn = roomItem.querySelector('.joinRoomBtn');
 		joinBtn.addEventListener('click', () =>
@@ -261,11 +266,11 @@ export function updateSettingLive()
 }
 export function checkRoom(rooms)
 {
-    if (rooms && Array.isArray(rooms)) 
+	if (rooms && Array.isArray(rooms)) 
 	{
-        gameVar.rooms = gameVar.rooms.filter(room => rooms.includes(room.name));
-        updateRoomList();
-    }
+		gameVar.rooms = gameVar.rooms.filter(room => rooms.includes(room.name));
+		updateRoomList();
+	}
 }
 export function roomNetwork()
 {
@@ -303,7 +308,7 @@ export function roomNetwork()
 						addRoom(idx, roomName, 'Waiting for opponent', 1);
 						idx++;
 					}
-    			});
+				});
 			}
 		}
 		if (data.type == 'norooms')
@@ -325,12 +330,12 @@ export function roomNetwork()
 	}
 	tempSocket.onerror = function(event)
 	{
-    	console.error("WebSocket error observed:", event);
+		console.error("WebSocket error observed:", event);
 	};
 
 	tempSocket.onclose = function(event)
 	{
-    	console.log("WebSocket closed:", event);
+		console.log("WebSocket closed:", event);
 	};
 }
 
