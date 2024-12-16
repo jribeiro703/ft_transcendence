@@ -7,6 +7,7 @@ import { joinRoomB } from '../brickout/room.js';
 import brickVar from '../brickout/var.js';
 import { startGameB } from '../brickout/control.js';
 import { initGame, initListenerB } from '../brickout/init.js';
+import { initializeScoreCanvas2P } from './canvas.js';
 
 export function createNewRoom(joinRoomCallback)
 {
@@ -231,6 +232,19 @@ export async function joinRoom(roomName)
 					gameVar.opponentName = data.score_info_data.name;
 				}
 			}
+			else if (data.type === 'scoreB_info_data')
+			{
+				if (data.scoreB_info_data.idx === 1)
+				{
+					brickVar.playerScore = data.scoreB_info_data.score;
+					brickVar.playerLives = data.scoreB_info_data.lives;
+				}
+				if (data.scoreB_info_data.idx === 2)
+				{
+					brickVar.opponentScore = data.scoreB_info_data.score;
+					brickVar.opponentLives = data.scoreB_info_data.lives;
+				}
+			}
 		}
 		catch (error)
 		{
@@ -249,6 +263,21 @@ export async function joinRoom(roomName)
 	};
 }
 
+export function findGameScore()
+{
+	if (gameVar.game === 'brickout')
+	{
+		if (data.score_info_data.idx === 1)
+		{
+			brickVar.playerScore = data.score_info_data.score1;
+			brickVar.opponentScore = data.score_info_data.score2;
+		}
+		if (data.score_info_data.idx === 2)
+		{
+			brickVar.playerScore = data.score_info_data.sco
+		}
+	}
+}
 export function delRooms()
 {
 	while (gameVar.rooms.length > 0)
@@ -322,7 +351,6 @@ export function updateRoomList()
 				joinRoom(room.name);
 			}
 		});
-
 		gameVar.roomsContainer.appendChild(roomItem);
 	})
 }

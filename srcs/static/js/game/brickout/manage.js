@@ -14,7 +14,8 @@ import { updateLevelSelectionB as updateLevelSelectionBSecond } from "./secondBr
 import { updatePowerUpSelectionB as updatePowerUpSelectionBFirst } from "./powerUp.js";
 import { updatePowerUpSelectionB as updatePowerUpSelectionBSecond } from "./secondBrickout/update.js";
 import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
-import { updateImageUrl } from "../pong/update.js";
+import { sendScoreInfoB } from "../pong/network.js";
+
 export function manageCollisionB()
 {
 	if (brickVar.x + brickVar.dx > brickVar.canvasW - brickVar.ballRadius || brickVar.x + brickVar.dx < brickVar.ballRadius)
@@ -68,18 +69,45 @@ export function manageMoveB()
 
 export function loseLives()
 {
-	brickVar.lives--;
-	if(!brickVar.lives )
+	if (gameVar.liveMatch)
 	{
-		brickVar.finish = true;
-		brickVar.startTime = false;
-		brickVar.finishLevel = true;
-		saveScoreB();
-		chechOpponent();
-		addBtnB();
+		if (gameVar.playerIdx === 1)
+		{
+			brickVar.playerLives--;
+			sendScoreInfoB(gameVar.gameSocket, 1, brickVar.playerScore, brickVar.playerLives);
+		}
+		if (gameVar.playerIdx === 2)
+		{
+			brickVar.opponentLives--;
+			sendScoreInfoB(gameVar.gameSocket, 2, brickVar.opponentScore,  brickVar.opponentLives);
+		}
+		if (!brickVar.playerLives && !brickVar.opponentLives)
+		{
+			brickVar.finish = true;
+			brickVar.startTime = false;
+			brickVar.finishLevel = true;
+			saveScoreB();
+			chechOpponent();
+			addBtnB();
+		}
+		else
+			resetBallB();
 	}
 	else
-		resetBallB();
+	{
+		brickVar.lives--;
+		if(!brickVar.lives)
+		{
+			brickVar.finish = true;
+			brickVar.startTime = false;
+			brickVar.finishLevel = true;
+			saveScoreB();
+			chechOpponent();
+			addBtnB();
+		}
+		else
+			resetBallB();
+	}
 }
 
 export function addBtnB()

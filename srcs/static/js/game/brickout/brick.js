@@ -1,6 +1,8 @@
 import brickVar from './var.js';
 import { youWinB } from './level.js';
 import { createCastlePattern, createInvaderPattern, createXPattern, createClassicPattern } from './brickPattern.js';
+import { sendScoreInfo, sendScoreInfoB } from '../pong/network.js';
+import gameVar from '../pong/var.js';
 
 for(var c = 0; c < brickVar.brickColumnCount; c++)
 {
@@ -25,6 +27,7 @@ export function collisionDetectionB()
 					brickVar.dy = -brickVar.dy;
 					b.status = 0;
 					brickVar.score++;
+					manageRemoteScore();
 					if(brickVar.score == brickVar.totalBrick)
 					{
 						brickVar.finishLevel = true;
@@ -38,6 +41,25 @@ export function collisionDetectionB()
 		}
 	}
 }   
+
+export function manageRemoteScore()
+{
+	if (gameVar.game === 'brickout' && gameVar.liveMatch === true)
+	{
+		if (gameVar.playerIdx === 1)
+		{
+			brickVar.playerScore = brickVar.score;
+			brickVar.playerLives = brickVar.lives;
+			sendScoreInfoB(gameVar.gameSocket, 1, brickVar.playerScore, brickVar.playerLives);
+		}
+		if (gameVar.playerIdx === 2)
+		{
+			brickVar.opponentScore = brickVar.score;
+			brickVar.opponentLives = brickVar.lives;
+			sendScoreInfoB(gameVar.gameSocket, 2, brickVar.opponentScore, brickVar.opponentLives);
+		}
+	}
+}
 
 export function initBricksB(pattern)
 {

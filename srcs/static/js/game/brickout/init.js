@@ -26,8 +26,6 @@ export function initListenerB()
             keyUpHandlerB(e);
         }
     });
-
-	// initGame();	
 }
 
 export function initGame()

@@ -57,7 +57,6 @@ export async function showBrickoutRemote(room = null)
 	// checkSettingLive();
 	// displayGameView();
 	displayGameBrickView();
-	// await initializeCanvasPong();
 	await initializeCanvasBrick();
 	await initializeScoreCanvas2P();
 	initListenerB();

@@ -10,7 +10,7 @@ import { createPowerUp1, createPowerUp2 } from "./powerUp.js";
 import { checkServer } from "./manage.js";
 import { initControl } from "./control.js";
 import { displayGameView, displayCanvas, displayGameBrickView } from "./display.js";
-import { initializeCanvasBrick, initializeCanvasPong } from "./canvas.js";
+import { initializeCanvasBrick, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
 import { displayGameDataPong } from "./displayVar.js";
 
 export async function showGameView()
@@ -34,12 +34,10 @@ export async function showGameRoomB()
 
 	displayGameBrickView();
 	await initializeCanvasBrick();
+	await initializeScoreCanvas2P();
 
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	// gameVar.gameView = document.getElementById('gameView');
-
-	// gameVar.gameView.style.display = 'block';
 	
 }
 export async function showGameRoom()
@@ -52,10 +50,6 @@ export async function showGameRoom()
 
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	// gameVar.gameView = document.getElementById('gameView');
-
-	// gameVar.gameView.style.display = 'block';
-	
 }
 
 export function rematchView()
