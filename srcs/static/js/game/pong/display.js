@@ -67,14 +67,17 @@ export function displayGameSelectionMulti()
   const brickUrl = "/static/css/images/brickout.png";
 
   gameSelection.innerHTML = `
-    <div id="settingView" class="game-selection">
-        <h1>Multiplayer</h1>
+  <div id="settingView" class="d-flex">
+    <div class="container-game no-scrollbar">
+
         <h1>Local Play</h1>
-                <div class="game-column">
-            <div class="align-items-center justify-content-center">
-              <img id="gameImage" src="${gameVar.pongUrl}" class="game-image h-25" alt="pongGame">
-                          <h2 id="gameTitle">PONG GAME</h2>
-            </div>
+
+      <div class="game-row">
+        <div class="game-image">
+          <img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
+        </div>
+        <div class="game-settings">
+          <div id="settingsContainer" class="settings-info">
             <div class="settings-inline">
               <button id="settingBtn1" class="main-btn settingsSelect-button">Settings</button>
               <div class="settings-column" id="settings-column">
@@ -82,68 +85,51 @@ export function displayGameSelectionMulti()
                 <p>Power-Up: <span id="powerupChoice">❌</span></p>
                 <p>Level: <span id="levelSelected">Table Tennis</span></p>
               </div>
-                            </div>
+            </div>
+          </div>
+        </div>
         <div class="game-play">
           <button id="playBtn" class="main-btn settingsSelect-button">Play</button>
         </div>
-                </div>
+      </div>
 
-
-
-
-                <!-- BRICKOUT Column -->
-                <div class="game-column">
-                    <div class="game-title3">
-            <div class="title-image-container">
-              <img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
-                          <h2 id="gameTitle">BRICKOUT GAME</h2>
-            </div>
-                    </div>
-                    <div class="game-settings3">
-                        <div id="settingsContainer" class="settings-info2">
-                            <div class="settings-inline">
-                                <button id="settingBtn2" class="settingsSelect-button2">Settings</button>
-                                <div class="settings-column2" id="settings-column2">
-                                    <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
-                                    <p>Power-Up: <span id="powerupChoice">❌</span></p>
-                                    <p>Level: <span id="levelSelected">Classic</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="game-play">
-                        <button id="playBtn2" class="startSelect-button">Play</button>
-                    </div>
-                </div>
-    <h1>Online Play</h1>
-        <div class="container-game2">
-            <div class="games-row2">
-                <!-- PONG Column -->
-                <div class="game-column">
-                    <div class="game-title3">
-            <div class="title-image-container">
-              <img id="gameImage" src="${pongUrl}" alt="pongGame">
-                          <h2 id="gameTitle">PONG GAME</h2>
-            </div>
-                    </div>
-                   <div class="game-play2">
-                        <button id="playBtn3" class="startSelect-button">Join Lobby</button>
-                    </div>
-                </div>
-                <!-- BRICKOUT Column -->
-                <div class="game-column">
-                    <div class="game-title3">
-            <div class="title-image-container">
-              <img id="gameImage" src="${brickUrl}" alt="brickGame">
-                          <h2 id="gameTitle">BRICKOUT GAME</h2>
-            </div>
-                    </div>
-                    <div class="game-play2">
-                        <button id="playBtn4" class="startSelect-button">Join Lobby</button>
-                    </div>
-                </div>
-            </div>
+      <div class="game-row">
+        <div class="game-image">
+          <img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
         </div>
+        <div class="game-settings">
+          <div id="settingsContainer" class="settings-info">
+            <div class="settings-inline">
+              <button id="settingBtn2" class="main-btn settingsSelect-button">Settings</button>
+              <div class="settings-column2" id="settings-column2">
+                <p>Difficulty: <span id="difficultyChoice2">Medium</span></p>
+                <p>Power-Up: <span id="powerupChoice2">❌</span></p>
+                <p>Level: <span id="levelSelected2">Classic</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="game-play">
+          <button id="playBtn2" class="main-btn settingsSelect-button">Play</button>
+        </div>
+      </div>
+
+    <h1>Online Play</h1>
+
+      <div class="game-row">
+        <div class="game-image">
+              <img id="gameImage" src="${pongUrl}" alt="pongGame">
+            </div>
+                        <button id="playBtn3" class="main-btn settingsSelect-button">Join Lobby</button>
+                </div>
+
+      <div class="game-row">
+        <div class="game-image">
+              <img id="gameImage" src="${brickUrl}" alt="brickGame">
+            </div>
+                        <button id="playBtn4" class="main-btn settingsSelect-button">Join Lobby</button>
+                </div>
+    </div>
     </div>`;
 
   maincontent.appendChild(gameSelection);
