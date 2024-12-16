@@ -1320,7 +1320,7 @@ button:disabled {
   color: #fefcff;
 }
 
-#chat-log, #friendlist, #onlinelist, #notificationlist {
+#chat-log, #friendlist, #onlinelist, #notificationlist, #gamechat {
   outline: none;
   flex: 1;
   /* height: calc(100% - 56px); */
@@ -1332,7 +1332,7 @@ button:disabled {
   background-color: var(--chat-bg);
   color: var(--chat-msg);
   /* padding: 10px; */
-  padding-right: 65px !important;
+  padding-right: 62px !important;
 }
 
 /* live chat qui slide */
@@ -1541,10 +1541,21 @@ button:disabled {
   border-color: var(--chat-border) !important;
 }
 
+emoji-menu {
+	z-index: 9999;
+}
+
+.noto-color-emoji-regular {
+  font-family: "Noto Color Emoji", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
 emoji-picker {
   --emoji-padding: 0.25rem;
   height: 250px;
-  width: 256px;
+  width: 270px;
   --border-radius: 5px;
   --border-color: var(--highlight-color);
   --background: var(--background-color);
@@ -1558,6 +1569,7 @@ emoji-picker {
   --button-active-background: var(--secondary-color);
   --button-hover-background: var(--highlight-color);
   --z-index: 9999;
+  --emoji-font-family: "Noto Color Emoji", sans-serif !important; 
 }
 
 .emoji-picker-container {

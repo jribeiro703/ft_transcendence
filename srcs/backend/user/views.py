@@ -24,6 +24,7 @@ from transcendence import settings
 from .serializers import UserCreateSerializer, OtpCodeSerializer, UserSettingsSerializer, UserPrivateInfosSerializer, UserPublicInfosSerializer
 from .models import User, FriendRequest
 from .utils import send_2FA_mail, generate_tokens_for_user, set_refresh_token_in_cookies, get_user_matchs_infos
+import json
 
 # -----------------------------------GET USER INFOS ENDPOINTS--------------------------------
 
@@ -278,7 +279,7 @@ class UserProfileView(APIView):
 			match_info = {
 				"date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
 				"score": f"{match.score_one} - {match.score_two}",
-				"winner": match.winner.username
+				"winner": match.winner.username if match.winner else "No Winner"
 			}
 			match_history.append(match_info)
 
@@ -443,6 +444,11 @@ class OtpVerificationView(APIView):
 			},
 			status=status.HTTP_200_OK
 		)
+		response['HX-Trigger'] = json.dumps({
+			'otpVerificationSuccess': {
+				'reload_chat': True
+			}
+		})
 		set_refresh_token_in_cookies(response, refresh_token)
 		user.is_online = True
 		user.save()

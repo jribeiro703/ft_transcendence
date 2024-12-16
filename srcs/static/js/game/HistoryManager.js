@@ -70,6 +70,11 @@ export function isGamePage(page)
 		'#playPongRemote', 'playPongRemoteSecondP'].includes(page);
 }
 
+export function isGamePageChat(page) 
+{
+	return [ '#playBrickoutRemote', '#playBrickoutRemoteSecondP', '#playPongRemote', '#playPongRemoteSecondP'].includes(page);
+}
+
 export async function renderPageGame(page, updateHistory = true, params = null)
 {	
 	// const authenticated = await isAuthenticated();

@@ -10,9 +10,9 @@ function createProfileContent() {
 				<h4 id="username" class="profile-username">Username</h4>
 				<p id="alias" class="profile-alias"></p>
 				<div id="isOnline" class="status-container">
-                    <span class="status-indicator"></span>
-                    <span class="status-text"></span>
-            	</div>
+					<span class="status-indicator"></span>
+					<span class="status-text"></span>
+				</div>
 				<div class="profile-stats">
 					<strong>Total: </strong> <span id="totalMatches">0</span>
 				</div>
@@ -41,15 +41,15 @@ export async function renderProfilePage() {
 		const data = responseObject.data;
 
 		const statusIndicator = document.querySelector('#isOnline .status-indicator');
-        const statusText = document.querySelector('#isOnline .status-text');
-        
-        if (data.is_online) {
-            statusIndicator.classList.add('status-online');
-            statusText.textContent = 'Online';
-        } else {
-            statusIndicator.classList.add('status-offline');
-            statusText.textContent = 'Offline';
-        }
+		const statusText = document.querySelector('#isOnline .status-text');
+		
+		if (data.is_online) {
+			statusIndicator.classList.add('status-online');
+			statusText.textContent = 'Online';
+		} else {
+			statusIndicator.classList.add('status-offline');
+			statusText.textContent = 'Offline';
+		}
 
 		document.getElementById('username').textContent = data.username;
 		document.getElementById('avatar').src = data.avatar;
