@@ -70,32 +70,27 @@ export function displayGameSelectionMulti()
     <div id="settingView" class="game-selection">
         <h1>Multiplayer</h1>
         <h1>Local Play</h1>
-        <div class="container-game2">
-            <div class="games-row2">
-                <!-- PONG Column -->
                 <div class="game-column">
-                    <div class="game-title3">
-            <div class="title-image-container">
-              <img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
+            <div class="align-items-center justify-content-center">
+              <img id="gameImage" src="${gameVar.pongUrl}" class="game-image h-25" alt="pongGame">
                           <h2 id="gameTitle">PONG GAME</h2>
             </div>
-                    </div>
-                    <div class="game-settings3">
-                        <div id="settingsContainer" class="settings-info2">
-                            <div class="settings-inline">
-                                <button id="settingBtn1" class="settingsSelect-button2">Settings</button>
-                                <div class="settings-column2" id="settings-column">
-                                    <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
-                                    <p>Power-Up: <span id="powerupChoice">❌</span></p>
-                                    <p>Level: <span id="levelSelected">Table Tennis</span></p>
-                                </div>
+            <div class="settings-inline">
+              <button id="settingBtn1" class="main-btn settingsSelect-button">Settings</button>
+              <div class="settings-column" id="settings-column">
+                <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
+                <p>Power-Up: <span id="powerupChoice">❌</span></p>
+                <p>Level: <span id="levelSelected">Table Tennis</span></p>
+              </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="game-play">
-                        <button id="playBtn" class="startSelect-button">Play</button>
-                    </div>
+        <div class="game-play">
+          <button id="playBtn" class="main-btn settingsSelect-button">Play</button>
+        </div>
                 </div>
+
+
+
+
                 <!-- BRICKOUT Column -->
                 <div class="game-column">
                     <div class="game-title3">
@@ -120,8 +115,6 @@ export function displayGameSelectionMulti()
                         <button id="playBtn2" class="startSelect-button">Play</button>
                     </div>
                 </div>
-            </div>
-        </div><br>
     <h1>Online Play</h1>
         <div class="container-game2">
             <div class="games-row2">
@@ -279,15 +272,19 @@ export function displaySettingView()
         <div class="map-selection flex-wrap justify-content-center">
           <div id="map1" class="mapOption mapClic" data-map-name="classicMap">
             <img src="${classicUrl}" alt="classicMap" class="map-image">
+            <p class="level">Table Tennis</p>
           </div>
           <div id="map2" class="mapOption mapClic" data-map-name="classicMap">
             <img src="${pongUrl}" alt="footMap1" class="map-image">
+            <p class="level">FootBall</p>
           </div>
           <div id="map3" class="mapOption mapClic" data-map-name="clasicMap">
             <img src="${footUrl}" alt="customMap1" class="map-image">
+            <p class="level">Tennis</p>
           </div>
-          <div id="map4" class="mapOption mapClic" data-map-name="clasicMap">
+          <div id="map4" class="mapOption align-items-center mapClic" data-map-name="clasicMap">
             <img src="${tennisUrl}" alt="customMap1" class="map-image">
+            <p class="level">Classic</p>
           </div>
         </div>
       <button id="saveBtn" class="settingsBtn btn custom-btn height-btn" disabled="true">Save and Return</button>
