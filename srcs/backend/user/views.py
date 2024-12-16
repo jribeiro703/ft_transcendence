@@ -23,7 +23,7 @@ from game.models import Game
 from transcendence import settings
 from .serializers import UserCreateSerializer, OtpCodeSerializer, UserSettingsSerializer, UserPrivateInfosSerializer, UserPublicInfosSerializer
 from .models import User, FriendRequest
-from .utils import send_2FA_mail, generate_tokens_for_user, set_refresh_token_in_cookies
+from .utils import send_2FA_mail, generate_tokens_for_user, set_refresh_token_in_cookies, get_user_matchs_infos
 
 # -----------------------------------GET USER INFOS ENDPOINTS--------------------------------
 
@@ -56,6 +56,7 @@ def getUserFriends(request):
 		)
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def getOnlineUsers(request):
 	try:
 		online_users = User.objects.filter(is_online=True).exclude(id=request.user.id)
@@ -93,6 +94,20 @@ def getUserPk(request):
 	user = request.user
 	return Response({"pk": user.id}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getLeaderboard(request):
+	try:
+		leaderboard = {}
+		users = User.objects.all(is_staff=False)
+		for user in users:
+			matchs = get_user_matchs_infos(user)
+			username = user.username
+			avatar = user.avatar.url
+			leaderboard[username] = {"avatar": avatar, "matchs": matchs}
+		return Response(leaderboard, status=status.HTTP_200_OK)
+	except Exception as e:
+		return Response({"message": "Error fetching leaderboard"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # ------------------------------REGISTER USER ENDPOINTS--------------------------------	
 
@@ -109,7 +124,7 @@ class CreateUserView(CreateAPIView):
 			}, status=status.HTTP_201_CREATED)
 		
 		except serializers.ValidationError as e:
-			print("create user view error: ", e)
+			# print("create user view error: ", e)
 			return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
 		except exceptions.APIException as e:
 			return Response(e.detail, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -184,6 +199,19 @@ class UserProfileView(APIView):
 
 		match_history = []
 		for match in last_matches:
+
+			# match_info = {
+			    # "date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+				# "game_type"
+				# "difficulty"
+				# "powerup"
+				# "level"
+				# "player_one"
+			    # "score": f"{match.score_one} - {match.score_two}",
+				# "player_two"
+			    # "winner": match.winner.username
+			# }
+
 			match_info = {
 			    "date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
 			    "score": f"{match.score_one} - {match.score_two}",
@@ -386,7 +414,7 @@ def login42(request):
 		token_data = response.json()
 
 		if "access_token" not in token_data:
-			print("login42 view :error while getting access token")
+			# print("login42 view :error while getting access token")
 			response = redirect("https:localhost:8081/#home")
 			return response
 		
@@ -416,11 +444,11 @@ def login42(request):
 		response = redirect("https://localhost:8081/#user")
 		access_token, refresh_token = generate_tokens_for_user(user)
 		set_refresh_token_in_cookies(response, refresh_token)
-		print("set tokens in cookies and redirect to user page")
+		# print("set tokens in cookies and redirect to user page")
 		return response
 	
 	except Exception as e:
-		print("login42 exception error: ", e)
+		# print("login42 exception error: ", e)
 		response = redirect("https://localhost:8081/#home")
 		return response
 
@@ -428,16 +456,18 @@ def login42(request):
 
 class LogoutView(APIView):
 
+	permission_classes = [AllowAny]
+
 	def post(self, request):
 		try:
 			refresh_token = request.COOKIES.get('refresh_token')
 			if not refresh_token:
-				response = Response({"message": "Logout successfully"}, status=status.HTTP_205_RESET_CONTENT)
-				response.delete_cookie('refresh_token')
+				response = Response({"message": "Logout successfully"}, status=status.HTTP_200_OK)
 				response.delete_cookie('csrftoken')
-				return response
-			token = RefreshToken(refresh_token)
 
+				return response
+			
+			token = RefreshToken(refresh_token)
 			try:
 				user = User.objects.get(id=token.payload.get('user_id'))
 				user.is_online = False
@@ -446,13 +476,12 @@ class LogoutView(APIView):
 				pass
 
 			token.blacklist()
-			response = Response({"message": "Logout successfully !"}, status=status.HTTP_205_RESET_CONTENT)
+			response = Response({"message": "Logout successfully"}, status=status.HTTP_200_OK)
 			response.delete_cookie('refresh_token')
 			response.delete_cookie('csrftoken')
 
 			return response
 
 		except Exception as e:
-			print("logout failed: ", e)
 			return Response({"message": "Logout failed."}, status=status.HTTP_400_BAD_REQUEST)
 
