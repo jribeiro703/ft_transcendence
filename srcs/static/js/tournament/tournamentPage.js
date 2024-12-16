@@ -17,6 +17,7 @@ import { initializeCanvasPong } from '../game/pong/canvas.js';
 import { updateDifficultySelection, updateLevelSelection } from '../game/pong/update.js';
 import { initControlLive } from '../game/pong/control.js';
 import { getUserInfos2 } from '../game/getUser.js';
+import { fetchAuthData } from '../user/fetchData.js';
 
 let currentTournamentId;
 
@@ -28,7 +29,7 @@ export async function setupTournamentPage()
 	box.innerHTML = createTournamentFormHTML(randomName);
 	getUserInfos2();
 
-	document.getElementById('createTournament').addEventListener('click', () =>
+	document.getElementById('createTournamentBtn').addEventListener('click', () =>
 	{
 		const tournamentName = document.getElementById('tournamentName').value;
 		const isValid = validateTournamentName(tournamentName);
@@ -36,6 +37,56 @@ export async function setupTournamentPage()
 			showTournamentView2(tournamentName);
 		} else {
 			alert('Error: Tournament cannot be created.');
+		}
+	});
+
+	// TODO: JOIN is a simulation of the invitation. 
+	// 🤔 Not sure if we need this here, because if Invitations are dealt in the livechat, we may not need it here
+	document.getElementById('joinTournamentBtn').addEventListener('click', async () => {
+		const tournamentId = document.getElementById('joinTournamentId').value;
+	
+		if (!tournamentId) {
+			alert("Tournament ID is required!");
+			return;
+		}
+	
+		try {
+			// Fetch user details
+			const userResponse = await fetchAuthData('/user/private/');
+			if (userResponse.status !== 200) {
+				throw new Error("Failed to fetch user details");
+			}
+	
+			const userData = userResponse.data;
+			const userId = userData.id;
+	
+			// Attempt to join the tournament
+			const data = await joinTournament(tournamentId, userId);
+	
+			if (data.already_in_tournament) {
+				alert(`Welcome back to Tournament: ${data.tournament_name}`);
+			} else {
+				alert(`Successfully joined Tournament: ${data.tournament_name}`);
+			}
+	
+			// Call showTournamentView2 to render the layout
+			showTournamentView2(data.tournament_name);
+	
+			// Update the players list dynamically
+			updatePlayersList(data.players);
+	
+			// Optionally hide buttons for regular players if needed
+			const lockButton = document.getElementById('lockTournamentBtn');
+			const generateMatchesButton = document.getElementById('generateMatches');
+			const startButton = document.getElementById('startTournamentBtn');
+	
+			if (lockButton) lockButton.style.display = 'none';
+			if (generateMatchesButton) generateMatchesButton.style.display = 'none';
+			if (startButton) startButton.style.display = 'none';
+	
+		} catch (error) {
+			console.error("Error joining tournament:", error);
+			alert(`Error: ${error.message}`);
 		}
 	});
 }
@@ -100,4 +151,37 @@ export async function createTournamentGame()
 	displayGameView();
 	await initializeCanvasPong();
 	createNewRoom();
+}
+
+//------------------------------------------------------------------//
+// TODO: JOIN is a simulation of the invitation. 
+// 🤔 Not sure if we need this here, because if Invitations are dealt in the livechat, we may not need it here
+export async function joinTournament(tournamentId, userId) {
+	const response = await fetch("/tournament/join/", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			tournament_id: tournamentId,
+			user_id: userId
+		}),
+	});
+
+	const data = await response.json();
+	console.log("after join tournament ", data);
+	if (!response.ok) {
+		throw new Error(data.error || "Unable to join the tournament.");
+	}
+
+	return data;
+}
+
+function updatePlayersList(players) {
+	const playersList = document.getElementById("playersList");
+	if (playersList) {
+		playersList.innerHTML = players
+			.map(player => `<span class="online-players">✅ ${player.username}</span>`)
+			.join('');
+	}
 }

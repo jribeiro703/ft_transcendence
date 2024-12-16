@@ -133,14 +133,16 @@ button {
 	transition: background-color 0.3s;
 }
 
-button#createTournament {
+button#createTournamentBtn {
 	background-color: #007bff;
 	color: #fff;
 }
 
-button#createTournament:hover {
-	background-color: #0056b3;
+button#joinTournamentBtn {
+	background-color: #007bff;
+	color: #fff;
 }
+
 
 .actions button {
 	width: auto;
@@ -295,7 +297,7 @@ p strong {
 	color: #555;
 }
 
-#createTournamentBtn {
+createTournamentBtn, joinTournamentBtn {
 	width: 200px;
 	height: 60px;
 	font-size: 20px;
@@ -307,7 +309,7 @@ p strong {
 	transition: background-color 0.3s, transform 0.4s;
 }
 
-#createTournamentBtn:hover {
+createTournamentBtn:hover, joinTournamentBtn:hover {
 	background-color: #6DC7C1;
 	transform: scale(1.05);
 }
