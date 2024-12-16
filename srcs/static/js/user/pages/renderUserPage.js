@@ -49,7 +49,7 @@ export function renderUserPage() {
 
 		const responseObject = await fetchAuthData('/user/logout/', 'POST', null, false);
 
-		if (responseObject.status == 205) {
+		if (responseObject.status == 200) {
 			console.log(responseObject);
 			showToast(responseObject.data.message, "success");
 			// sessionStorage.clear();
