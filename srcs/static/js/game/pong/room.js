@@ -314,7 +314,7 @@ export function roomNetwork()
 		if (data.type == 'norooms')
 		{
 			delRooms();
-			gameVar.noRoomsMessage.style.display = 'block';
+			gameVar.noRoomsMessage.style.display = 'flex';
 			updateRoomList();
 		}
 		if (data.type === 'ping')

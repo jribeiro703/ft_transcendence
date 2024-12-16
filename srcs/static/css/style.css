@@ -579,12 +579,12 @@ p {
   align-items: center;
 }
 
-.map-image,
-.game-image {
-  width: 200px;
-  height: auto;
-  border-radius: 5px;
-}
+/* .map-image, */
+/* .game-image { */
+/*   width: 200px; */
+/*   height: auto; */
+/*   border-radius: 5px; */
+/* } */
 
 /* #saveBtn */
 /* { */
@@ -936,6 +936,17 @@ p {
   margin: 0;
 }
 
+.w-40 {
+  width: 40%;
+}
+
+.createRoom-button{
+  font-size: 28px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 250px;
+}
+
 .settingsSelect-button {
   font-size: 28px;
   border-radius: 5px;
@@ -1048,7 +1059,7 @@ p {
   margin: 0 auto;
   border: 2px solid var(--secondary-color);
   border-radius: 8px;
-  background-color: #1a1a40;
+  background-color: var(--background-color);
 }
 
 #rematchBtn,
@@ -1093,11 +1104,12 @@ button:disabled {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 200px;
   padding: 20px;
-  background: #0a1730;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.max-h-350px {
+  max-height: 350px;
 }
 
 .server-list,
@@ -1105,7 +1117,6 @@ button:disabled {
   background: var(--quartiary-color);
   border-radius: 10px;
   padding: 20px;
-  width: 500px;
   color: white;
 }
 
@@ -1240,20 +1251,6 @@ button:disabled {
   width: 100%;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px;
-}
-
-#refreshBtn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--primary-color);
-  border: none;
-  color: #6dc7c1;
-  padding: 8px;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: center;
   margin-top: 10px;
 }
 
