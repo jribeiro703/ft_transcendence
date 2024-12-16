@@ -769,25 +769,13 @@ async function getUserTooltipContent(userId) {
 // Update friend/online item creation
 function createUserListItem(user, itemClass) {
   const itemDiv = document.createElement('div');
-  itemDiv.className = `${itemClass} d-flex align-items-center gap-2 p-2 border rounded`;
+  itemDiv.className = `${itemClass} d-flex align-items-center justify-content-between gap-2 p-2 border rounded`;
   itemDiv.dataset.userId = user.id;
   
-  // Initialize Bootstrap tooltip
-  const tooltip = new bootstrap.Tooltip(itemDiv, {
-	html: true,
-	placement: 'right',
-	trigger: 'hover',
-	title: 'Loading...',
-	delay: { show: 500, hide: 100 },
-	template: '<div class="tooltip" role="tooltip"><div class="tooltip-inner"></div></div>'
-  });
-
-  // Update tooltip content on hover
-  itemDiv.addEventListener('mouseenter', async function() {
-	const content = await getUserTooltipContent(user.id);
-	tooltip.setContent({ '.tooltip-inner': content });
-  });
-
+  // Left side with user info
+  const userInfoDiv = document.createElement('div');
+  userInfoDiv.className = 'd-flex align-items-center gap-2';
+  
   const statusDot = document.createElement('span');
   statusDot.className = 'status-dot';
   statusDot.innerHTML = user.is_online ? '🟢' : '⚫';
@@ -795,11 +783,121 @@ function createUserListItem(user, itemClass) {
   const nameSpan = document.createElement('span');
   nameSpan.textContent = user.username;
   
-  itemDiv.appendChild(statusDot);
-  itemDiv.appendChild(nameSpan);
+  userInfoDiv.appendChild(statusDot);
+  userInfoDiv.appendChild(nameSpan);
+  
+  // Right side with action buttons
+  const buttonsDiv = document.createElement('div');
+  buttonsDiv.className = 'd-flex gap-2';
+  
+  // Friend button
+  const friendButton = document.createElement('button');
+  friendButton.className = 'btn btn-sm btn-outline-primary';
+  friendButton.innerHTML = user.is_friend ? '👥 ❌' : '👥 ➕';
+  friendButton.title = user.is_friend ? 'Remove friend' : 'Add friend';
+  friendButton.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    try {
+      const action = user.is_friend ? 'remove' : 'add';
+      const response = await fetchAuthData(`/user/friends/${action}/${user.id}/`, 'POST');
+      if (response.status === 200) {
+        user.is_friend = !user.is_friend;
+        friendButton.innerHTML = user.is_friend ? '👥 ❌' : '👥 ➕';
+        friendButton.title = user.is_friend ? 'Remove friend' : 'Add friend';
+        showToast(response.data.message, 'success');
+      }
+    } catch (error) {
+      console.error('Error updating friend status:', error);
+      showToast('Error updating friend status', 'error');
+    }
+  });
+
+  // Block button
+  const blockButton = document.createElement('button');
+  blockButton.className = 'btn btn-sm btn-outline-danger';
+  blockButton.innerHTML = user.is_blocked ? '🚫 ✓' : '🚫';
+  blockButton.title = user.is_blocked ? 'Unblock user' : 'Block user';
+  blockButton.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    try {
+      const action = user.is_blocked ? 'unblock' : 'block';
+      const response = await fetchAuthData(`/user/block/${action}/${user.id}/`, 'POST');
+      if (response.status === 200) {
+        user.is_blocked = !user.is_blocked;
+        blockButton.innerHTML = user.is_blocked ? '🚫 ✓' : '🚫';
+        blockButton.title = user.is_blocked ? 'Unblock user' : 'Block user';
+        showToast(response.data.message, 'success');
+      }
+    } catch (error) {
+      console.error('Error updating block status:', error);
+      showToast('Error updating block status', 'error');
+    }
+  });
+
+  // Game invite button
+  const inviteButton = document.createElement('button');
+  inviteButton.className = 'btn btn-sm btn-outline-success';
+  inviteButton.innerHTML = '🎮';
+  inviteButton.title = 'Invite to game';
+  inviteButton.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    try {
+      const response = await fetchAuthData(`/user/game/invite/${user.id}/`, 'POST');
+      if (response.status === 200) {
+        showToast('Game invitation sent!', 'success');
+      }
+    } catch (error) {
+      console.error('Error sending game invitation:', error);
+      showToast('Error sending game invitation', 'error');
+    }
+  });
+
+  // Add buttons to container
+  buttonsDiv.appendChild(friendButton);
+  buttonsDiv.appendChild(blockButton);
+  buttonsDiv.appendChild(inviteButton);
+
+  // Initialize Bootstrap tooltip
+  const tooltip = new bootstrap.Tooltip(itemDiv, {
+    html: true,
+    placement: 'right',
+    trigger: 'hover',
+    title: 'Loading...',
+    delay: { show: 500, hide: 100 },
+    template: '<div class="tooltip" role="tooltip"><div class="tooltip-inner"></div></div>'
+  });
+
+  // Update tooltip content on hover
+  itemDiv.addEventListener('mouseenter', async function() {
+    const content = await getUserTooltipContent(user.id);
+    tooltip.setContent({ '.tooltip-inner': content });
+  });
+
+  itemDiv.appendChild(userInfoDiv);
+  itemDiv.appendChild(buttonsDiv);
   
   return itemDiv;
 }
+
+// Add styles
+const actionButtonStyles = `
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.btn-outline-primary, .btn-outline-danger, .btn-outline-success {
+  border-color: var(--highlight-color);
+  color: var(--highlight-color);
+}
+
+.btn-outline-primary:hover, .btn-outline-danger:hover, .btn-outline-success:hover {
+  background-color: var(--highlight-color);
+  color: var(--chat-bg);
+}
+`;
+
+styleSheet.textContent += actionButtonStyles;
 
 // Add tooltip styles
 const tooltipStyles = `
