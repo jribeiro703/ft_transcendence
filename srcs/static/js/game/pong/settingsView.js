@@ -1,26 +1,11 @@
 import gameVar from "./var.js";
 import { addPuBtn } from "./setting.js";
 import { getBtnById } from "./getElement.js";
-import { listenSettingPU, listenSettingDifficulty, listenSettingLevel, listenSettingMultiSave, listenSettingSave } from "./listenerSetting.js";
-import { displaySettingView, displaySettingMultiView } from "./display.js";
-
-export function showSettingMultiView(info)
-{
-	// displaySettingMultiView();
-	displaySettingView();
-
-	getBtnById();
-	addPuBtn(info);
-
-	listenSettingPU();
-	listenSettingDifficulty();
-	listenSettingLevel();
-	listenSettingMultiSave(info);
-}
+import { listenSettingPU, listenSettingDifficulty, listenSettingLevel, listenSettingSave } from "./listenerSetting.js";
+import { displaySettingView } from "./display.js";
 
 export function showSettingView(info)
 {
-	console.log('on passs setting change a false');
 	gameVar.settingsChanged = false;
 	gameVar.checkDiff = false;
 	gameVar.checkLevel = false;
@@ -44,7 +29,6 @@ export function checkSaveBtn()
 			const btn = document.getElementById('saveBtn');
 			btn.disabled = false;
 			gameVar.settingsChanged = true;
-			console.log("on passe setting change a true");
 		}
 	}
 	else

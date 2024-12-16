@@ -16,11 +16,11 @@ export function listenSettingPU()
 		checkSaveBtn();
 	});
 
-	gameVar.withoutPowerUp.addEventListener('click', () => 
+	gameVar.withoutPowerUp.addEventListener('click', () =>
 	{
 		gameVar.withoutPowerUp.classList.add('selected');
 		gameVar.withPowerUp.classList.remove('selected');
-		updatePowerUpSelection(false, false); 
+		updatePowerUpSelection(false, false);
 		checkSaveBtn();
 	});
 }
@@ -100,43 +100,22 @@ export function listenSettingLevel()
 
 export function listenSettingSave(info)
 {
-	gameVar.saveBtn.addEventListener('click', () =>
+	gameVar.saveBtn.addEventListener('click', async () =>
 	{
 		if (info === 'live')
 		{
-			renderPageGame("pongLobby", true);
-			console.log("update 1");
+			await renderPageGame("pongLobby", true);
 			updateLiveSetting();
 		}
 		else if (info === 'local')
 		{
 			gameVar.saveSetting = true;
-			renderPageGame("gameSelectionMulti", true);
+			await renderPageGame("gameSelectionMulti", true);
 			updateSetting();
 		}
 		else
 		{	
-			renderPageGame("gameSelectionSolo", true);
-			console.log("on update apres changement");
-			updateSetting();
-		}
-	});
-}
-
-export function listenSettingMultiSave(live)
-{
-	gameVar.saveBtn.addEventListener('click', () =>
-	{
-		if (live === true)
-		{
-			renderPageGame("pongLobby", true)
-			// initLobbyView();
-			// updateLiveSetting();
-		}
-		else
-		{
-			console.log("to dooo");
-			// showGameSelectionMultiView();
+			await renderPageGame("gameSelectionSolo", true);
 			updateSetting();
 		}
 	});

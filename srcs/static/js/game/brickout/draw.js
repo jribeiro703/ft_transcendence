@@ -3,19 +3,32 @@ import { collisionDetectionB, drawBricksB} from './brick.js'
 import { updateBallPositionB, handleBallB } from './ball.js';
 import { manageCollisionB, manageMoveB } from './manage.js';
 import { collectPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
-import { drawScoreBoardB } from "./score.js";
+import { drawScoreBoardB, drawScoreBoardBRemote } from "./score.js";
+import gameVar from "../pong/var.js";
+import { kickOut } from "../pong/draw.js";
 
 function baseDrawB()
 {
-	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
-	drawScoreBoardB();
-	drawBricksB();
-	drawBallB();
-	drawPaddleB();
+	if (brickVar.ctx)
+	{
+		brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
+		if (gameVar.game === 'brickout' && gameVar.liveMatch)
+			drawScoreBoardBRemote()
+		else
+			drawScoreBoardB();
+		drawBricksB();
+		drawBallB();
+		drawPaddleB();
+	}
 }
 
 export function drawB()
 {
+	if (gameVar.clientLeft)
+	{
+		kickOut();
+		return;
+	}
 	if (!brickVar.finishLevel && brickVar.initialize)
 	{
 		baseDrawB();

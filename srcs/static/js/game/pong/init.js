@@ -5,6 +5,9 @@ import { showLobbyView } from "./gameViewMulti.js";
 import { roomNetwork } from "./room.js";
 import { updateLiveSetting } from "./setting.js";
 import { renderPageGame } from "../HistoryManager.js";
+import { clearAllpongStates } from "./reset.js";
+import { clearAllBrickStates } from "../brickout/manage.js";
+import { updateLiveSettingB } from "../brickout/settings.js";
 
 
 export function removeEventListeners()
@@ -18,32 +21,52 @@ export function removeEventListeners()
 export function initEventListenerRoom()
 {
 	removeEventListeners();
-	// document.addEventListener("keydown", (e) => keyDownHandler(e), false);
-	// document.addEventListener("keyup", (e) => keyUpHandler(e), false);
-	// document.addEventListener("keydown", startBallLive, false);
 
 	gameVar.createRoomBtn.addEventListener('click', () => 
 	{
 		renderPageGame("playPongRemote", true);
-		// showGameMultiView();
 	});
 
 	gameVar.settingBtn.addEventListener('click', () =>
 	{
 		renderPageGame("pongSetting", true, 'live');
-		// showSettingView(true);
 	});
 
-	initControlLive();
 }
 
-export function initLobbyView()
+export function initLobbyPongView()
 {
-	console.log("update 2");
+	// clearAllpongStates();
 	showLobbyView();
 	updateLiveSetting();
 	initEventListenerRoom();
+	initControlLive();
+	roomNetwork();
+}
+export function initLobbyBrickoutView()
+{
+	// clearAllpongStates();
+	// clearAllBrickStates();
+	showLobbyView();
+	updateLiveSettingB();
+	initEventListenerRoomB();
 	// initControlLive();
 	roomNetwork();
 }
 
+
+export function initEventListenerRoomB()
+{
+	removeEventListeners();
+
+	gameVar.createRoomBtn.addEventListener('click', () => 
+	{
+		renderPageGame("playBrickoutRemote", true);
+	});
+
+	gameVar.settingBtn.addEventListener('click', () =>
+	{
+		renderPageGame("brickoutSetting", true, 'live');
+	});
+
+}

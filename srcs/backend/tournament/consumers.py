@@ -139,3 +139,19 @@ class FriendConsumer(AsyncWebsocketConsumer):
 		friend_list = [{'id': friend.id, 'username': friend.username, 'avatar': friend.avatar.url} for friend in friends]
 		logger.info(f"Friend list to send: {friend_list}")
 		await self.send(text_data=json.dumps({'action': 'get_friends', 'friends': friend_list}))
+
+
+class UserStatusConsumer(AsyncWebsocketConsumer):
+	async def connect(self):
+		await self.accept()
+
+	async def disconnect(self, close_code):
+		pass
+
+	async def receive(self, text_data):
+		text_data_json = json.loads(text_data)
+		message = text_data_json['message']
+
+		await self.send(text_data=json.dumps({
+			'message': message
+		}))

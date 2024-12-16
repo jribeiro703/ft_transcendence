@@ -5,15 +5,21 @@ import { showToast, showErrorMessages } from "../tools.js";
 export function renderRegisterForm() {
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = `
-	<div class="custom-form">
-		<form id="registerForm">
-			<label for="username">Username:</label>
-			<input type="text" id="username" name="username" required>
-			<label for="email">Email:</label>
-			<input type="email" id="email" name="email" required>
-			<label for="password">Password:</label>
-			<input type="password" id="password" name="password" required>
-			<button type="submit">Submit</button>
+	<div id="defaultView" class="d-flex flex-column justify-content-center align-items-center gap-5 h-100">
+		<form id="registerForm" class="custom-form">
+		<div class="custom-form-group">
+			<label class="custom-label" for="username">Username:</label>
+			<input class="custom-input" type="text" id="username" name="username" required>
+		</div>
+		<div class="custom-form-group">
+			<label class="custom-label" for="password">Password:</label>
+			<input class="custom-input" type="password" id="password" name="password" required>
+		</div>
+		<div class="custom-form-group">
+			<label class="custom-label" for="email">Email:</label>
+			<input class="custom-input" type="email" id="email" name="email" required>
+		</div>
+			<button type="submit" class="submit-btn">Submit</button>
 		</form>
 	</div>
 	`;

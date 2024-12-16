@@ -1,32 +1,26 @@
-import { PONG_CARD, showToast } from "./user/tools.js"
+import { PONG_CARD, showToast } from "./user/tools.js";
 import { isAuthenticated } from "./user/isAuthenticated.js";
 import { renderPageGame } from "./game/HistoryManager.js";
 import { showCreateTournamentForm } from "./tournament/tournamentPage.js";
-
+import { showCreateTournamentForm2 } from "./tournament/tournamentPage.js";
 
 function createHomeContent() {
-	const box = document.getElementById('mainContent');
-	box.innerHTML = `
-		<div id="defaultView">
-			<div class="container">
-				<div class="mx-auto">
-					<img class="img-fluid" src="${PONG_CARD}" alt="Pong Game">
-					<br><br><br>
-				</div>
-			</div>
-		</div>
-		<div class="container py-2 d-flex flex-column align-items-centercontainer py-2">
-				<button id="playsoloGameBtn" class="btn custom-btn mb-5">Single Player</button>
-				<button id="playmultiGameBtn" class="btn custom-btn mb-4">Multiplayer</button>
-				<button id="btn-Tournament" class="btn custom-btn mb-4">Tournament</button>
-			<button id="btn-Leaderboard" class="btn custom-btn mb-4">Leaderboard</button>
-		</div>		
-	`;
+  const box = document.getElementById("mainContent");
+  box.innerHTML = `
+            <div id="defaultView"
+                 class="d-flex flex-column justify-content-center align-items-center gap-5 h-100">
+              <img class="img-fluid neon-white main-img" src="${PONG_CARD}" alt="Pong Game">
+              <button id="playsoloGameBtn" class="main-btn btn custom-btn height-btn ">Single Player</button>
+              <button id="playmultiGameBtn" class="main-btn btn custom-btn height-btn ">Multiplayer</button>
+              <button id="btn-Tournament" class="main-btn btn custom-btn height-btn">Tournament</button>
+              <button id="btn-Leaderboard" class="main-btn btn custom-btn height-btn">Leaderboard</button>
+            </div>
+            `;
 }
 
 async function renderHomePage() {
-	createHomeContent();
-	
+  createHomeContent();
+
 	document.getElementById('playsoloGameBtn').addEventListener('click', () => {
 		renderPageGame("gameSelectionSolo");
 	});
@@ -42,7 +36,7 @@ async function renderHomePage() {
 		},
 		{
 			id: 'btn-Tournament',
-			handler: () => showCreateTournamentForm()
+			handler: () => showCreateTournamentForm2()
 		}
 	];
 	
