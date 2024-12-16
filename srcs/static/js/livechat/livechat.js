@@ -8,120 +8,119 @@ const COOLDOWN_MS = 200;
 
 // chatSocket.onmessage = function (e) {
 const socketHandlers = {
-	onMessage: function(e) {
-	const data = JSON.parse(e.data);
-	const message = data.message;
-	const clientId = data.client_id;
-	const timestamp = data.timestamp;
-	const chatLog = document.querySelector("#chat-log");
-	const formattedTime = formatTimestamp(timestamp);
-	const clientIdColor = getColorForClientId(clientId);
+	onMessage: function (e) {
+		const data = JSON.parse(e.data);
+		const message = data.message;
+		const clientId = data.client_id;
+		const timestamp = data.timestamp;
+		const chatLog = document.querySelector("#chat-log");
+		const formattedTime = formatTimestamp(timestamp);
+		const clientIdColor = getColorForClientId(clientId);
 
-	// Create message components
-	const messageElement = document.createElement("div");
-	const timeSpan = document.createElement("span");
-	timeSpan.textContent = `[${formattedTime}] `;
-	timeSpan.style.color = clientIdColor;
-  
-	// Create nickname span with tooltip
-	const nicknameSpan = document.createElement("span");
-	nicknameSpan.textContent = `${clientId}: `;
-	nicknameSpan.style.color = clientIdColor;
-	nicknameSpan.style.cursor = 'pointer';
+		// Create message components
+		const messageElement = document.createElement("div");
+		const timeSpan = document.createElement("span");
+		timeSpan.textContent = `[${formattedTime}] `;
+		timeSpan.style.color = clientIdColor;
 
-	// Initialize tooltip
-	new bootstrap.Tooltip(nicknameSpan, {
-	  html: true,
-	  placement: 'right',
-	  trigger: 'hover',
-	  title: 'Loading...',
-	  delay: { show: 500, hide: 100 },
-	  template: '<div class="tooltip" role="tooltip"><div class="tooltip-inner"></div></div>'
-	});
-  
-	// Add hover handler for tooltip content
-	nicknameSpan.addEventListener('mouseenter', async function() {
-	  const tooltip = bootstrap.Tooltip.getInstance(this);
+		// Create nickname span with tooltip
+		const nicknameSpan = document.createElement("span");
+		nicknameSpan.textContent = `${clientId}: `;
+		nicknameSpan.style.color = clientIdColor;
+		nicknameSpan.style.cursor = 'pointer';
 
-	  try {
-		const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${clientId}`);
+		// Initialize tooltip
+		new bootstrap.Tooltip(nicknameSpan, {
+			html: true,
+			placement: 'right',
+			trigger: 'hover',
+			title: 'Loading...',
+			delay: { show: 500, hide: 100 },
+			template: '<div class="tooltip" role="tooltip"><div class="tooltip-inner"></div></div>'
+		});
 
-		if (nicknameResponse.status === 401) {
-			throw new Error('Authentication required');
+		// Add hover handler for tooltip content
+		nicknameSpan.addEventListener('mouseenter', async function () {
+			const tooltip = bootstrap.Tooltip.getInstance(this);
+
+			try {
+				const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${clientId}`);
+
+				if (nicknameResponse.status === 401) {
+					throw new Error('Authentication required');
+				}
+
+				if (!nicknameResponse.data || !nicknameResponse.data.id) {
+					throw new Error('User not found');
+				}
+
+				const userId = nicknameResponse.data.id;
+				const content = await getUserTooltipContent(userId);
+				tooltip.setContent({ '.tooltip-inner': content });
+			} catch (error) {
+				console.error('Error fetching user data:', error);
+				if (error.message === 'Authentication required') {
+					tooltip.setContent({ '.tooltip-inner': 'You must be logged in to see user data' });
+				}
+				else {
+					tooltip.setContent({ '.tooltip-inner': 'Error loading user data' });
+				}
+			}
+		});
+
+		// Assemble message
+		const messageText = document.createElement("span");
+		messageText.textContent = message;
+
+		messageElement.appendChild(timeSpan);
+		messageElement.appendChild(nicknameSpan);
+		messageElement.appendChild(messageText);
+
+		chatLog.prepend(messageElement);
+		chatLog.scrollTop = chatLog.scrollHeight;
+	},
+
+	// chatSocket.onopen = async function () {
+	onOpen: async function () {
+		try {
+			const response = await fetchAuthData('/user/check-auth/');
+
+			if (response.status === 401) {
+				console.error('Authentication required');
+				window.location.href = '/#login';
+				return;
+			}
+
+			const token = localStorage.getItem('access_token');
+			chatSocket.send(JSON.stringify({
+				type: 'authenticate',
+				token: token
+			}));
+
+			console.log('Chat socket connected and authenticated');
+		} catch (error) {
+			console.error('Error authenticating chat socket:', error);
+			showToast("Error connecting to chat", "error");
 		}
+	},
 
-		if (!nicknameResponse.data || !nicknameResponse.data.id) {
-			throw new Error('User not found');
-		}
-
-		const userId = nicknameResponse.data.id;
-		const content = await getUserTooltipContent(userId);
-		tooltip.setContent({ '.tooltip-inner': content });
-	} catch (error) {
-		console.error('Error fetching user data:', error);
-		if (error.message === 'Authentication required') {
-			tooltip.setContent({ '.tooltip-inner': 'You must be logged in to see user data' });
-		}
-		else
-		{
-			tooltip.setContent({ '.tooltip-inner': 'Error loading user data' });
-		}
+	// chatSocket.onclose = function () {
+	onClose: function () {
+		console.error("Chat socket closed unexpectedly");
 	}
-	});
-  
-	// Assemble message
-	const messageText = document.createElement("span");
-	messageText.textContent = message;
-  
-	messageElement.appendChild(timeSpan);
-	messageElement.appendChild(nicknameSpan);
-	messageElement.appendChild(messageText);
-	
-	chatLog.prepend(messageElement);
-	chatLog.scrollTop = chatLog.scrollHeight;
-},
-
-// chatSocket.onopen = async function () {
-onOpen: async function() {
-	try {
-		const response = await fetchAuthData('/user/check-auth/');
-		
-		if (response.status === 401) {
-			console.error('Authentication required');
-			window.location.href = '/#login';
-			return;
-		}
-
-		const token = localStorage.getItem('access_token');
-		chatSocket.send(JSON.stringify({
-			type: 'authenticate',
-			token: token
-		}));
-
-		console.log('Chat socket connected and authenticated');
-	} catch (error) {
-		console.error('Error authenticating chat socket:', error);
-		showToast("Error connecting to chat", "error");
-	}
-},
-
-// chatSocket.onclose = function () {
-onClose: function() {
-  console.error("Chat socket closed unexpectedly");
-}
 };
 
 // Initialize socket with handlers
 function initializeChatSocket(socket) {
-  socket.onmessage = socketHandlers.onMessage;
-  socket.onopen = socketHandlers.onOpen;
-  socket.onclose = socketHandlers.onClose;
-  socket.onerror = socketHandlers.onError;
-  return socket;
+	socket.onmessage = socketHandlers.onMessage;
+	socket.onopen = socketHandlers.onOpen;
+	socket.onclose = socketHandlers.onClose;
+	socket.onerror = socketHandlers.onError;
+	return socket;
 };
 
 let chatSocket = new WebSocket(
-  "wss://" + window.location.host + "/ws/livechat/",
+	"wss://" + window.location.host + "/ws/livechat/",
 );
 
 initializeChatSocket(chatSocket);
@@ -140,13 +139,13 @@ function reloadChatSocket() {
 	initializeChatSocket(chatSocket);
 };
 
-document.addEventListener('otpVerificationSuccess', function(e) {
+document.addEventListener('otpVerificationSuccess', function (e) {
 	if (e.detail.reload_chat) {
 		reloadChatSocket();
 	}
 });
 
-document.addEventListener('multiplayerGame', function(e) {
+document.addEventListener('multiplayerGame', function (e) {
 	if (e.detail.multiplayer_game) {
 		// if (document.querySelector('.chat-icon-fill')) {
 		if (document.querySelector("[data-chat-icon]").innerHTML.includes("chat-icon-fill")) {
@@ -160,12 +159,12 @@ export function initializeGameChatSocket(roomNumber) {
 	if (gameChatSocket) {
 		gameChatSocket.close();
 	}
-	
+
 	gameChatSocket = new WebSocket(
 		`wss://${window.location.host}/ws/livechat/room_${roomNumber}/`
 	);
 
-	gameChatSocket.onmessage = function(e) {
+	gameChatSocket.onmessage = function (e) {
 		const data = JSON.parse(e.data);
 		const message = data.message;
 		const clientId = data.client_id;
@@ -197,7 +196,7 @@ export function initializeGameChatSocket(roomNumber) {
 		});
 
 		// Add hover handler for tooltip content
-		nicknameSpan.addEventListener('mouseenter', async function() {
+		nicknameSpan.addEventListener('mouseenter', async function () {
 			const tooltip = bootstrap.Tooltip.getInstance(this);
 
 			try {
@@ -220,8 +219,7 @@ export function initializeGameChatSocket(roomNumber) {
 				if (error.message === 'Authentication required') {
 					tooltip.setContent({ '.tooltip-inner': 'You must be logged in to see user data' });
 				}
-				else
-				{
+				else {
 					tooltip.setContent({ '.tooltip-inner': 'Error loading user data' });
 				}
 			}
@@ -239,15 +237,15 @@ export function initializeGameChatSocket(roomNumber) {
 		gameChat.scrollTop = gameChat.scrollHeight;
 	};
 
-	gameChatSocket.onopen = function() {
+	gameChatSocket.onopen = function () {
 		console.log('Game chat socket connected for room:', roomNumber);
 	};
-	
-	gameChatSocket.onerror = function(error) {
+
+	gameChatSocket.onerror = function (error) {
 		console.error('Game chat socket error:', error);
 	};
-	
-	gameChatSocket.onclose = function() {
+
+	gameChatSocket.onclose = function () {
 		console.error("Game chat socket closed unexpectedly");
 	};
 
@@ -259,18 +257,18 @@ const clientIdColors = {};
 
 // Function to generate a random, visible color
 function getRandomColor() {
-  const hue = Math.floor(Math.random() * 360); // Random hue
-  const saturation = 100; // Full saturation
-  const lightness = 50; // 50% lightness for good contrast
-  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+	const hue = Math.floor(Math.random() * 360); // Random hue
+	const saturation = 100; // Full saturation
+	const lightness = 50; // 50% lightness for good contrast
+	return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
 // Function to get or assign a color for a clientId
 function getColorForClientId(clientId) {
-  if (!clientIdColors[clientId]) {
-	clientIdColors[clientId] = getRandomColor();
-  }
-  return clientIdColors[clientId];
+	if (!clientIdColors[clientId]) {
+		clientIdColors[clientId] = getRandomColor();
+	}
+	return clientIdColors[clientId];
 }
 
 export function formatTimestamp(timestamp) {
@@ -292,17 +290,17 @@ export function formatTimestamp(timestamp) {
 }
 
 // Initialize all tooltips
-document.addEventListener('DOMContentLoaded', function() {
-  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-  const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-	return new bootstrap.Tooltip(tooltipTriggerEl);
-  });
+document.addEventListener('DOMContentLoaded', function () {
+	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+	const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+		return new bootstrap.Tooltip(tooltipTriggerEl);
+	});
 });
 
 // document.querySelector("#chat-message-input").focus();
 document.querySelector("#chat-message-input").onkeyup = async function (e) {
 	if (e.keyCode === 13) {
-	// Enter key
+		// Enter key
 		if (!document.querySelector("#chat-log").classList.contains('d-none')) {
 			await sendChatMessage(chatSocket, "#chat-message-input", "#chat-log");
 		}
@@ -314,19 +312,19 @@ document.querySelector("#chat-message-input").onkeyup = async function (e) {
 
 // Add an event listener on the focus of the chat message input and then listen to keyboard keypress and send submit when 'Enter' key is pressed
 document.addEventListener("DOMContentLoaded", function () {
-  const messageInput = document.querySelector("#chat-message-input");
-  const messageSubmit = document.querySelector("#chat-message-submit");
+	const messageInput = document.querySelector("#chat-message-input");
+	const messageSubmit = document.querySelector("#chat-message-submit");
 
-  if (messageInput && messageSubmit) {
-	messageInput.addEventListener("keypress", function (e) {
-	  if (e.key === "Enter") {
-		e.preventDefault(); // Empêche le comportement par défaut de la touche Entrée
-		messageSubmit.click();
-	  }
-	});
-  } else {
-	console.error("Message input or submit button not found");
-  }
+	if (messageInput && messageSubmit) {
+		messageInput.addEventListener("keypress", function (e) {
+			if (e.key === "Enter") {
+				e.preventDefault(); // Empêche le comportement par défaut de la touche Entrée
+				messageSubmit.click();
+			}
+		});
+	} else {
+		console.error("Message input or submit button not found");
+	}
 });
 
 document.querySelector("#chat-message-submit").onclick = async function () {
@@ -339,61 +337,61 @@ document.querySelector("#chat-message-submit").onclick = async function () {
 };
 
 async function sendChatMessage(socket, inputId, logId) {
-  const messageInput = document.querySelector(inputId);
-  let message = messageInput.value.trim();
-  
-  if (message === "" || messageInCooldown) {
-	return;
-  }
+	const messageInput = document.querySelector(inputId);
+	let message = messageInput.value.trim();
 
-  try {
-	messageInCooldown = true;
-
-	const response = await fetchAuthData('/user/check-auth/');
-	
-	if (response.status === 401) {
-	  console.error('User not authenticated');
-	  showToast("You must be logged in to use this feature.", "warning");
-	  window.location.href = '/#login';
-	  return;
+	if (message === "" || messageInCooldown) {
+		return;
 	}
 
-	let room = null;
-	if (logId === "#gamechat" && gameChatSocket) {
-		const roomMatch = gameChatSocket.url.match(/room_(\d+)/);
-		if (roomMatch) {
-			room = `room_${roomMatch[1]}`;
+	try {
+		messageInCooldown = true;
+
+		const response = await fetchAuthData('/user/check-auth/');
+
+		if (response.status === 401) {
+			console.error('User not authenticated');
+			showToast("You must be logged in to use this feature.", "warning");
+			window.location.href = '/#login';
+			return;
 		}
-	}
 
-	socket.send(
-	  JSON.stringify({
-		message: message,
-		token: localStorage.getItem('access_token'),
-		room: room
-	  })
-	);
-	
-	messageInput.value = "";
-	const chatLog = document.querySelector(logId);
-	chatLog.scrollTop = chatLog.scrollHeight;
+		let room = null;
+		if (logId === "#gamechat" && gameChatSocket) {
+			const roomMatch = gameChatSocket.url.match(/room_(\d+)/);
+			if (roomMatch) {
+				room = `room_${roomMatch[1]}`;
+			}
+		}
 
-	setTimeout(() => {
+		socket.send(
+			JSON.stringify({
+				message: message,
+				token: localStorage.getItem('access_token'),
+				room: room
+			})
+		);
+
+		messageInput.value = "";
+		const chatLog = document.querySelector(logId);
+		chatLog.scrollTop = chatLog.scrollHeight;
+
+		setTimeout(() => {
+			messageInCooldown = false;
+		}, COOLDOWN_MS);
+	} catch (error) {
+		console.error('Error sending message:', error);
+		alert('Error sending message. Please try again.');
 		messageInCooldown = false;
-	}, COOLDOWN_MS);
-  } catch (error) {
-	console.error('Error sending message:', error);
-	alert('Error sending message. Please try again.');
-	messageInCooldown = false;
-  }
+	}
 }
 
 // Handle emoji selection
 const emojiPicker = document.querySelector("#emoji-picker");
 emojiPicker.addEventListener("emoji-click", (event) => {
-  const messageInputDom = document.querySelector("#chat-message-input");
-  messageInputDom.value += event.detail.unicode;
-  messageInputDom.focus();
+	const messageInputDom = document.querySelector("#chat-message-input");
+	messageInputDom.value += event.detail.unicode;
+	messageInputDom.focus();
 });
 
 const emojiButton = document.querySelector("#emojiButton");
@@ -438,49 +436,49 @@ function adjustEmojiPickerWidth() {
 
 // Show emojiPickerContainer
 emojiButton.addEventListener("click", () => {
-  adjustEmojiPickerHeight();
-  adjustEmojiPickerWidth();
-  emojiPickerContainer.style.display =
-	emojiPickerContainer.style.display == "block" ? "none" : "block";
+	adjustEmojiPickerHeight();
+	adjustEmojiPickerWidth();
+	emojiPickerContainer.style.display =
+		emojiPickerContainer.style.display == "block" ? "none" : "block";
 });
 
 // Hide emojiPickerContainer when clicking outside of it
 document.addEventListener("click", (event) => {
-  if (
-	!emojiPickerContainer.contains(event.target) &&
-	!emojiButton.contains(event.target)
-  ) {
-	emojiPickerContainer.style.display = "none";
-  }
+	if (
+		!emojiPickerContainer.contains(event.target) &&
+		!emojiButton.contains(event.target)
+	) {
+		emojiPickerContainer.style.display = "none";
+	}
 });
 
 // Hide emojiPickerContainer when resizing the window
 window.addEventListener("resize", () => {
-  emojiPickerContainer.style.display = "none";
+	emojiPickerContainer.style.display = "none";
 });
 
 
 
 //GENERAL
-document.addEventListener('DOMContentLoaded', function() {
-  const bubbleButton = document.getElementById('bubbleButton');
+document.addEventListener('DOMContentLoaded', function () {
+	const bubbleButton = document.getElementById('bubbleButton');
 
-  bubbleButton.addEventListener('click', function() {
-	document.getElementById('chat-log').classList.remove('d-none');
-	document.getElementById('friendlist').classList.add('d-none');
-	document.getElementById('onlinelist').classList.add('d-none');
-	document.getElementById('notificationlist').classList.add('d-none');
-	document.getElementById('gamechat').classList.add('d-none');
-  });
+	bubbleButton.addEventListener('click', function () {
+		document.getElementById('chat-log').classList.remove('d-none');
+		document.getElementById('friendlist').classList.add('d-none');
+		document.getElementById('onlinelist').classList.add('d-none');
+		document.getElementById('notificationlist').classList.add('d-none');
+		document.getElementById('gamechat').classList.add('d-none');
+	});
 });
 //GENERAL
 
 //GAME
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 	const swordsButton = document.getElementById('swordsButton');
 	const gameChat = document.getElementById('gamechat');
 
-	swordsButton.addEventListener('click', function() {
+	swordsButton.addEventListener('click', function () {
 		const currentPage = window.location.hash || '';
 		if (isGamePageChat(currentPage)) {
 			document.getElementById('gamechat').classList.remove('d-none');
@@ -499,7 +497,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					gameChatSocket = initializeGameChatSocket(roomNumber);
 				}
 			}
-		} 
+		}
 		else {
 			// Regular chat view
 			document.getElementById('chat-log').classList.remove('d-none');
@@ -531,180 +529,180 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //NOTIFICATIONS
 
-document.addEventListener('DOMContentLoaded', function() {
-  const notificationButton = document.getElementById('notificationButton');
-  const chatLog = document.getElementById('notificationlist');
+document.addEventListener('DOMContentLoaded', function () {
+	const notificationButton = document.getElementById('notificationButton');
+	const chatLog = document.getElementById('notificationlist');
 
-  notificationButton.addEventListener('click', async function() {
-	document.getElementById('notificationlist').classList.remove('d-none');
-	document.getElementById('friendlist').classList.add('d-none');
-	document.getElementById('onlinelist').classList.add('d-none');
-	document.getElementById('chat-log').classList.add('d-none');
-	
-	chatLog.innerHTML = '';
-	const loadingDiv = document.createElement('div');
-	loadingDiv.textContent = 'Loading notifications...';
-	chatLog.appendChild(loadingDiv);
+	notificationButton.addEventListener('click', async function () {
+		document.getElementById('notificationlist').classList.remove('d-none');
+		document.getElementById('friendlist').classList.add('d-none');
+		document.getElementById('onlinelist').classList.add('d-none');
+		document.getElementById('chat-log').classList.add('d-none');
 
-	// Mock notifications
-	const notifications = [
-	  {
-		id: 1,
-		type: 'friend_request',
-		from: 'user1',
-		message: 'sent you a friend request',
-		timestamp: '2h ago'
-	  },
-	  {
-		id: 2,
-		type: 'game_invite',
-		from: 'user2',
-		message: 'invited you to play Pong',
-		timestamp: '5h ago'
-	  },
-	  {
-		id: 3,
-		type: 'tournament',
-		from: 'System',
-		message: 'Tournament starting in 10 minutes',
-		timestamp: '1d ago'
-	  }
-	];
+		chatLog.innerHTML = '';
+		const loadingDiv = document.createElement('div');
+		loadingDiv.textContent = 'Loading notifications...';
+		chatLog.appendChild(loadingDiv);
 
-	const notificationListContainer = document.createElement('div');
-	notificationListContainer.className = 'notification-list';
+		// Mock notifications
+		const notifications = [
+			{
+				id: 1,
+				type: 'friend_request',
+				from: 'user1',
+				message: 'sent you a friend request',
+				timestamp: '2h ago'
+			},
+			{
+				id: 2,
+				type: 'game_invite',
+				from: 'user2',
+				message: 'invited you to play Pong',
+				timestamp: '5h ago'
+			},
+			{
+				id: 3,
+				type: 'tournament',
+				from: 'System',
+				message: 'Tournament starting in 10 minutes',
+				timestamp: '1d ago'
+			}
+		];
 
-	if (notifications.length === 0) {
-	  notificationListContainer.innerHTML = '<div class="text-muted">No notifications yet</div>';
-	} else {
-	  notifications.forEach(notification => {
-		const notificationDiv = document.createElement('div');
-		notificationDiv.className = 'notification-item d-flex align-items-center gap-2 p-2 border rounded mb-2';
-		
-		const iconSpan = document.createElement('span');
-		iconSpan.className = 'notification-icon';
-		iconSpan.innerHTML = notification.type === 'friend_request' ? '👥' : 
-							notification.type === 'game_invite' ? '🎮' : '🏆';
-		
-		const contentDiv = document.createElement('div');
-		contentDiv.className = 'flex-grow-1';
-		contentDiv.innerHTML = `
+		const notificationListContainer = document.createElement('div');
+		notificationListContainer.className = 'notification-list';
+
+		if (notifications.length === 0) {
+			notificationListContainer.innerHTML = '<div class="text-muted">No notifications yet</div>';
+		} else {
+			notifications.forEach(notification => {
+				const notificationDiv = document.createElement('div');
+				notificationDiv.className = 'notification-item d-flex align-items-center gap-2 p-2 border rounded mb-2';
+
+				const iconSpan = document.createElement('span');
+				iconSpan.className = 'notification-icon';
+				iconSpan.innerHTML = notification.type === 'friend_request' ? '👥' :
+					notification.type === 'game_invite' ? '🎮' : '🏆';
+
+				const contentDiv = document.createElement('div');
+				contentDiv.className = 'flex-grow-1';
+				contentDiv.innerHTML = `
 		  <div><strong>${notification.from}</strong> ${notification.message}</div>
 		  <small class="text-muted">${notification.timestamp}</small>
 		`;
-		
-		notificationDiv.appendChild(iconSpan);
-		notificationDiv.appendChild(contentDiv);
-		notificationListContainer.appendChild(notificationDiv);
-	  });
-	}
 
-	chatLog.innerHTML = '';
-	chatLog.appendChild(notificationListContainer);
-  });
+				notificationDiv.appendChild(iconSpan);
+				notificationDiv.appendChild(contentDiv);
+				notificationListContainer.appendChild(notificationDiv);
+			});
+		}
+
+		chatLog.innerHTML = '';
+		chatLog.appendChild(notificationListContainer);
+	});
 });
 //NOTIFICATIONS
 
 // FRIENDS
-document.addEventListener('DOMContentLoaded', function() {
-  const friendsButton = document.getElementById('friendsButton');
-  const chatLog = document.getElementById('friendlist');
+document.addEventListener('DOMContentLoaded', function () {
+	const friendsButton = document.getElementById('friendsButton');
+	const chatLog = document.getElementById('friendlist');
 
-  friendsButton.addEventListener('click', async function() {
-	document.getElementById('friendlist').classList.remove('d-none');
-	document.getElementById('onlinelist').classList.add('d-none');
-	document.getElementById('chat-log').classList.add('d-none');
-	document.getElementById('notificationlist').classList.add('d-none');
-	
-	chatLog.innerHTML = '';
-	const loadingDiv = document.createElement('div');
-	loadingDiv.textContent = 'Loading friends...';
-	chatLog.appendChild(loadingDiv);
+	friendsButton.addEventListener('click', async function () {
+		document.getElementById('friendlist').classList.remove('d-none');
+		document.getElementById('onlinelist').classList.add('d-none');
+		document.getElementById('chat-log').classList.add('d-none');
+		document.getElementById('notificationlist').classList.add('d-none');
 
-	try {
-	  const responseObject = await fetchAuthData('/user/friends/');
-	  
-	  if (responseObject.status === 401) {
-		showToast("You must be logged in to see friends", "warning");
-		loadingDiv.textContent = 'You must be logged in to see your friends';
-		loadingDiv.classList.add('text-danger');
-		window.location.href = '/#login';
-		return;
-	  }
+		chatLog.innerHTML = '';
+		const loadingDiv = document.createElement('div');
+		loadingDiv.textContent = 'Loading friends...';
+		chatLog.appendChild(loadingDiv);
 
-	  const friends = responseObject.data;
-	  chatLog.innerHTML = '';
+		try {
+			const responseObject = await fetchAuthData('/user/friends/');
 
-	  const friendsListContainer = document.createElement('div');
-	  friendsListContainer.className = 'friends-list';
+			if (responseObject.status === 401) {
+				showToast("You must be logged in to see friends", "warning");
+				loadingDiv.textContent = 'You must be logged in to see your friends';
+				loadingDiv.classList.add('text-danger');
+				window.location.href = '/#login';
+				return;
+			}
 
-	  if (friends.length === 0) {
-		friendsListContainer.innerHTML = '<div class="text-muted">No friends yet</div>';
-	  } else {
-		friends.forEach(friend => {
-		  const friendDiv = createUserListItem(friend, 'friend-item');
-		  friendsListContainer.appendChild(friendDiv);
-		});
-	  }
+			const friends = responseObject.data;
+			chatLog.innerHTML = '';
 
-	  chatLog.appendChild(friendsListContainer);
-	} catch (error) {
-	  console.error('Error fetching friends:', error);
-	  showToast("Error loading friends list", "error");
-	  chatLog.innerHTML = '<div class="text-danger p-3">Error loading friends list. Please try again.</div>';
-	}
-  });
+			const friendsListContainer = document.createElement('div');
+			friendsListContainer.className = 'friends-list';
+
+			if (friends.length === 0) {
+				friendsListContainer.innerHTML = '<div class="text-muted">No friends yet</div>';
+			} else {
+				friends.forEach(friend => {
+					const friendDiv = createUserListItem(friend, 'friend-item');
+					friendsListContainer.appendChild(friendDiv);
+				});
+			}
+
+			chatLog.appendChild(friendsListContainer);
+		} catch (error) {
+			console.error('Error fetching friends:', error);
+			showToast("Error loading friends list", "error");
+			chatLog.innerHTML = '<div class="text-danger p-3">Error loading friends list. Please try again.</div>';
+		}
+	});
 });
 
 // ONLINE
-document.addEventListener('DOMContentLoaded', function() {
-  const onlineButton = document.getElementById('onlineButton');
-  const chatLog = document.getElementById('onlinelist');
+document.addEventListener('DOMContentLoaded', function () {
+	const onlineButton = document.getElementById('onlineButton');
+	const chatLog = document.getElementById('onlinelist');
 
-  onlineButton.addEventListener('click', async function() {
-	document.getElementById('onlinelist').classList.remove('d-none');
-	document.getElementById('chat-log').classList.add('d-none');
-	document.getElementById('friendlist').classList.add('d-none');
-	document.getElementById('notificationlist').classList.add('d-none');
-	
-	chatLog.innerHTML = '';
-	const loadingDiv = document.createElement('div');
-	loadingDiv.textContent = 'Loading online users...';
-	chatLog.appendChild(loadingDiv);
+	onlineButton.addEventListener('click', async function () {
+		document.getElementById('onlinelist').classList.remove('d-none');
+		document.getElementById('chat-log').classList.add('d-none');
+		document.getElementById('friendlist').classList.add('d-none');
+		document.getElementById('notificationlist').classList.add('d-none');
 
-	try {
-	  const responseObject = await fetchAuthData('/user/online/');
-	  
-	  if (responseObject.status === 401) {
-		showToast("You must be logged in to see online users", "warning");
-		loadingDiv.textContent = 'You must be logged in to see online users';
-		loadingDiv.classList.add('text-danger');
-		window.location.href = '/#login';
-		return;
-	  }
+		chatLog.innerHTML = '';
+		const loadingDiv = document.createElement('div');
+		loadingDiv.textContent = 'Loading online users...';
+		chatLog.appendChild(loadingDiv);
 
-	  const online = responseObject.data;
-	  chatLog.innerHTML = '';
+		try {
+			const responseObject = await fetchAuthData('/user/online/');
 
-	  const onlineListContainer = document.createElement('div');
-	  onlineListContainer.className = 'online-list';
+			if (responseObject.status === 401) {
+				showToast("You must be logged in to see online users", "warning");
+				loadingDiv.textContent = 'You must be logged in to see online users';
+				loadingDiv.classList.add('text-danger');
+				window.location.href = '/#login';
+				return;
+			}
 
-	  if (online.length === 0) {
-		onlineListContainer.innerHTML = '<div class="text-muted">No online players</div>';
-	  } else {
-		online.forEach(user => {
-		  const onlineDiv = createUserListItem(user, 'online-item');
-		  onlineListContainer.appendChild(onlineDiv);
-		});
-	  }
+			const online = responseObject.data;
+			chatLog.innerHTML = '';
 
-	  chatLog.appendChild(onlineListContainer);
-	} catch (error) {
-	  console.error('Error fetching online users:', error);
-	  showToast("Error loading online users list", "error");
-	  chatLog.innerHTML = '<div class="text-danger p-3">Error loading online users. Please try again.</div>';
-	}
-  });
+			const onlineListContainer = document.createElement('div');
+			onlineListContainer.className = 'online-list';
+
+			if (online.length === 0) {
+				onlineListContainer.innerHTML = '<div class="text-muted">No online players</div>';
+			} else {
+				online.forEach(user => {
+					const onlineDiv = createUserListItem(user, 'online-item');
+					onlineListContainer.appendChild(onlineDiv);
+				});
+			}
+
+			chatLog.appendChild(onlineListContainer);
+		} catch (error) {
+			console.error('Error fetching online users:', error);
+			showToast("Error loading online users list", "error");
+			chatLog.innerHTML = '<div class="text-danger p-3">Error loading online users. Please try again.</div>';
+		}
+	});
 });
 
 
@@ -734,15 +732,15 @@ styleSheet.textContent = styles;
 document.head.appendChild(styleSheet);
 
 async function getUserTooltipContent(userId) {
-  try {
-	const responseObject = await fetchAuthData(`/user/profile/${userId}/`);
+	try {
+		const responseObject = await fetchAuthData(`/user/profile/${userId}/`);
 
-	if (!responseObject.status === 401) {
-	  throw new Error('Authentication required');
-	}
+		if (!responseObject.status === 401) {
+			throw new Error('Authentication required');
+		}
 
-	const userData = responseObject.data;
-	return `
+		const userData = responseObject.data;
+		return `
 	  <div class="user-tooltip p-2">
 		<div class="d-flex align-items-center gap-2 mb-2">
 		  <img src="${userData?.avatar || '/static/default-avatar.jpg'}" alt="avatar" width="32" height="32" class="rounded-circle">
@@ -760,123 +758,129 @@ async function getUserTooltipContent(userId) {
 		` : ''}
 	  </div>
 	`;
-  } catch (error) {
-	console.error('Error fetching user data:', error);
-	return 'Error loading user data';
-  }
+	} catch (error) {
+		console.error('Error fetching user data:', error);
+		return 'Error loading user data';
+	}
 }
 
 // Update friend/online item creation
 function createUserListItem(user, itemClass) {
-  const itemDiv = document.createElement('div');
-  itemDiv.className = `${itemClass} d-flex align-items-center justify-content-between gap-2 p-2 border rounded`;
-  itemDiv.dataset.userId = user.id;
-  
-  // Left side with user info
-  const userInfoDiv = document.createElement('div');
-  userInfoDiv.className = 'd-flex align-items-center gap-2';
-  
-  const statusDot = document.createElement('span');
-  statusDot.className = 'status-dot';
-  statusDot.innerHTML = user.is_online ? '🟢' : '⚫';
-  
-  const nameSpan = document.createElement('span');
-  nameSpan.textContent = user.username;
-  
-  userInfoDiv.appendChild(statusDot);
-  userInfoDiv.appendChild(nameSpan);
-  
-  // Right side with action buttons
-  const buttonsDiv = document.createElement('div');
-  buttonsDiv.className = 'd-flex gap-2';
-  
-  // Friend button
-  const friendButton = document.createElement('button');
-  friendButton.className = 'btn btn-sm btn-outline-primary';
-  friendButton.innerHTML = user.is_friend ? '👥 ❌' : '👥 ➕';
-  friendButton.title = user.is_friend ? 'Remove friend' : 'Add friend';
-  friendButton.addEventListener('click', async (e) => {
-    e.stopPropagation();
-    try {
-      const action = user.is_friend ? 'remove' : 'add';
-      const response = await fetchAuthData(`/user/friends/${action}/${user.id}/`, 'POST');
-      if (response.status === 200) {
-        user.is_friend = !user.is_friend;
-        friendButton.innerHTML = user.is_friend ? '👥 ❌' : '👥 ➕';
-        friendButton.title = user.is_friend ? 'Remove friend' : 'Add friend';
-        showToast(response.data.message, 'success');
-      }
-    } catch (error) {
-      console.error('Error updating friend status:', error);
-      showToast('Error updating friend status', 'error');
-    }
-  });
+	const itemDiv = document.createElement('div');
+	itemDiv.className = `${itemClass} d-flex align-items-center justify-content-between gap-2 p-2 border rounded`;
+	itemDiv.dataset.userId = user.id;
 
-  // Block button
-  const blockButton = document.createElement('button');
-  blockButton.className = 'btn btn-sm btn-outline-danger';
-  blockButton.innerHTML = user.is_blocked ? '🚫 ✓' : '🚫';
-  blockButton.title = user.is_blocked ? 'Unblock user' : 'Block user';
-  blockButton.addEventListener('click', async (e) => {
-    e.stopPropagation();
-    try {
-      const action = user.is_blocked ? 'unblock' : 'block';
-      const response = await fetchAuthData(`/user/block/${action}/${user.id}/`, 'POST');
-      if (response.status === 200) {
-        user.is_blocked = !user.is_blocked;
-        blockButton.innerHTML = user.is_blocked ? '🚫 ✓' : '🚫';
-        blockButton.title = user.is_blocked ? 'Unblock user' : 'Block user';
-        showToast(response.data.message, 'success');
-      }
-    } catch (error) {
-      console.error('Error updating block status:', error);
-      showToast('Error updating block status', 'error');
-    }
-  });
+	// Left side with user info
+	const userInfoDiv = document.createElement('div');
+	userInfoDiv.className = 'd-flex align-items-center gap-2';
 
-  // Game invite button
-  const inviteButton = document.createElement('button');
-  inviteButton.className = 'btn btn-sm btn-outline-success';
-  inviteButton.innerHTML = '🎮';
-  inviteButton.title = 'Invite to game';
-  inviteButton.addEventListener('click', async (e) => {
-    e.stopPropagation();
-    try {
-      const response = await fetchAuthData(`/user/game/invite/${user.id}/`, 'POST');
-      if (response.status === 200) {
-        showToast('Game invitation sent!', 'success');
-      }
-    } catch (error) {
-      console.error('Error sending game invitation:', error);
-      showToast('Error sending game invitation', 'error');
-    }
-  });
+	const statusDot = document.createElement('span');
+	statusDot.className = 'status-dot';
+	statusDot.innerHTML = user.is_online ? '🟢' : '⚫';
 
-  // Add buttons to container
-  buttonsDiv.appendChild(friendButton);
-  buttonsDiv.appendChild(blockButton);
-  buttonsDiv.appendChild(inviteButton);
+	const nameSpan = document.createElement('span');
+	nameSpan.textContent = user.username;
 
-  // Initialize Bootstrap tooltip
-  const tooltip = new bootstrap.Tooltip(itemDiv, {
-    html: true,
-    placement: 'right',
-    trigger: 'hover',
-    title: 'Loading...',
-    delay: { show: 500, hide: 100 },
-    template: '<div class="tooltip" role="tooltip"><div class="tooltip-inner"></div></div>'
-  });
+	userInfoDiv.appendChild(statusDot);
+	userInfoDiv.appendChild(nameSpan);
 
-  // Update tooltip content on hover
-  itemDiv.addEventListener('mouseenter', async function() {
-    const content = await getUserTooltipContent(user.id);
-    tooltip.setContent({ '.tooltip-inner': content });
-  });
+	// Right side with action buttons
+	const buttonsDiv = document.createElement('div');
+	buttonsDiv.className = 'd-flex gap-2';
 
-  itemDiv.appendChild(userInfoDiv);
-  itemDiv.appendChild(buttonsDiv);
-  
-  return itemDiv;
+	// Friend button
+	const friendButton = document.createElement('button');
+	friendButton.className = 'btn btn-xs btn-outline-primary';
+	friendButton.innerHTML = user.is_friend ? '👥 ❌' : '👥 ➕';
+	friendButton.title = user.is_friend ? 'Remove friend' : 'Add friend';
+	friendButton.style.padding = '0.1rem 0.1rem';
+	friendButton.style.fontSize = '0.8rem';
+	friendButton.addEventListener('click', async (e) => {
+		e.stopPropagation();
+		try {
+			const action = user.is_friend ? 'remove' : 'add';
+			const response = await fetchAuthData(`/user/friends/${action}/${user.id}/`, 'POST');
+			if (response.status === 200) {
+				user.is_friend = !user.is_friend;
+				friendButton.innerHTML = user.is_friend ? '👥 ❌' : '👥 ➕';
+				friendButton.title = user.is_friend ? 'Remove friend' : 'Add friend';
+				showToast(response.data.message, 'success');
+			}
+		} catch (error) {
+			console.error('Error updating friend status:', error);
+			showToast('Error updating friend status', 'error');
+		}
+	});
+
+	// Block button
+	const blockButton = document.createElement('button');
+	blockButton.className = 'btn btn-xs btn-outline-danger';
+	blockButton.innerHTML = user.is_blocked ? '🚫 ✓' : '🚫';
+	blockButton.title = user.is_blocked ? 'Unblock user' : 'Block user';
+	blockButton.style.padding = '0.1rem 0.1rem';
+	blockButton.style.fontSize = '0.8rem';
+	blockButton.addEventListener('click', async (e) => {
+		e.stopPropagation();
+		try {
+			const action = user.is_blocked ? 'unblock' : 'block';
+			const response = await fetchAuthData(`/user/block/${action}/${user.id}/`, 'POST');
+			if (response.status === 200) {
+				user.is_blocked = !user.is_blocked;
+				blockButton.innerHTML = user.is_blocked ? '🚫 ✓' : '🚫';
+				blockButton.title = user.is_blocked ? 'Unblock user' : 'Block user';
+				showToast(response.data.message, 'success');
+			}
+		} catch (error) {
+			console.error('Error updating block status:', error);
+			showToast('Error updating block status', 'error');
+		}
+	});
+
+	// Game invite button
+	const inviteButton = document.createElement('button');
+	inviteButton.className = 'btn btn-xs btn-outline-success';
+	inviteButton.innerHTML = '🎮';
+	inviteButton.title = 'Invite to game';
+	inviteButton.style.padding = '0.1rem 0.1rem';
+	inviteButton.style.fontSize = '0.8rem';
+	inviteButton.addEventListener('click', async (e) => {
+		e.stopPropagation();
+		try {
+			const response = await fetchAuthData(`/user/game/invite/${user.id}/`, 'POST');
+			if (response.status === 200) {
+				showToast('Game invitation sent!', 'success');
+			}
+		} catch (error) {
+			console.error('Error sending game invitation:', error);
+			showToast('Error sending game invitation', 'error');
+		}
+	});
+
+	// Add buttons to container
+	buttonsDiv.appendChild(friendButton);
+	buttonsDiv.appendChild(blockButton);
+	buttonsDiv.appendChild(inviteButton);
+
+	// Initialize Bootstrap tooltip
+	const tooltip = new bootstrap.Tooltip(itemDiv, {
+		html: true,
+		placement: 'right',
+		trigger: 'hover',
+		title: 'Loading...',
+		delay: { show: 500, hide: 100 },
+		template: '<div class="tooltip" role="tooltip"><div class="tooltip-inner"></div></div>'
+	});
+
+	// Update tooltip content on hover
+	itemDiv.addEventListener('mouseenter', async function () {
+		const content = await getUserTooltipContent(user.id);
+		tooltip.setContent({ '.tooltip-inner': content });
+	});
+
+	itemDiv.appendChild(userInfoDiv);
+	itemDiv.appendChild(buttonsDiv);
+
+	return itemDiv;
 }
 
 // Add styles
@@ -950,42 +954,42 @@ styleSheet.textContent += tooltipStyles;
 //////////////////////////////// David add ////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 document.addEventListener("DOMContentLoaded", function () {
-  const grandparent = document.getElementById("livechat");
-  const focusableElements = [
-	"emojiButton",
-	"chat-message-input",
-	"chat-message-submit",
-  ];
+	const grandparent = document.getElementById("livechat");
+	const focusableElements = [
+		"emojiButton",
+		"chat-message-input",
+		"chat-message-submit",
+	];
 
-  focusableElements.forEach((id) => {
-	const element = document.getElementById(id);
-	if (element) {
-	  element.addEventListener("focus", function () {
-		grandparent.classList.add("livechat-neon-focus");
-	  });
+	focusableElements.forEach((id) => {
+		const element = document.getElementById(id);
+		if (element) {
+			element.addEventListener("focus", function () {
+				grandparent.classList.add("livechat-neon-focus");
+			});
 
-	  element.addEventListener("blur", function () {
-		grandparent.classList.remove("livechat-neon-focus");
-	  });
-	}
-  });
+			element.addEventListener("blur", function () {
+				grandparent.classList.remove("livechat-neon-focus");
+			});
+		}
+	});
 });
 
 // test qui disparait dans le focus de lindex ou on ecrit
 document.addEventListener("DOMContentLoaded", function () {
-  const messageInput = document.querySelector("#chat-message-input");
+	const messageInput = document.querySelector("#chat-message-input");
 
-  if (messageInput) {
-	messageInput.addEventListener("focus", function () {
-	  messageInput.placeholder = "";
-	});
+	if (messageInput) {
+		messageInput.addEventListener("focus", function () {
+			messageInput.placeholder = "";
+		});
 
-	messageInput.addEventListener("blur", function () {
-	  messageInput.placeholder = "Type here...";
-	});
-  } else {
-	console.error("Message input not found");
-  }
+		messageInput.addEventListener("blur", function () {
+			messageInput.placeholder = "Type here...";
+		});
+	} else {
+		console.error("Message input not found");
+	}
 });
 
 // liste des icons SVG
@@ -1021,158 +1025,158 @@ const chatIconFill = `
 
 // ajoute les icons dans le html
 document.addEventListener("DOMContentLoaded", function () {
-  const chatIcon = document.querySelector("[data-chat-icon]");
-  chatIcon.innerHTML = chatIconFill;
-  chatIcon.setAttribute("tabindex", "0");
+	const chatIcon = document.querySelector("[data-chat-icon]");
+	chatIcon.innerHTML = chatIconFill;
+	chatIcon.setAttribute("tabindex", "0");
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("consol log homeiconsvg", homeIconSvg);
-  const homeIcon = document.querySelector("[data-home-icon]");
-  homeIcon.innerHTML = homeIconSvg;
-  homeIcon.setAttribute("tabindex", "0");
+	console.log("consol log homeiconsvg", homeIconSvg);
+	const homeIcon = document.querySelector("[data-home-icon]");
+	homeIcon.innerHTML = homeIconSvg;
+	homeIcon.setAttribute("tabindex", "0");
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  const profileIcon = document.querySelector("[data-profile-icon]");
-  profileIcon.innerHTML = profileIconSvg;
-  profileIcon.setAttribute("tabindex", "0");
+	const profileIcon = document.querySelector("[data-profile-icon]");
+	profileIcon.innerHTML = profileIconSvg;
+	profileIcon.setAttribute("tabindex", "0");
 });
 
 // slide le livechat avec focus touche entrer + clic souris
 function toggleChat() {
-  const slidingDiv = document.getElementById("livechat");
-  const chatIcon = document.querySelector("[data-chat-icon]");
-  const messageInput = document.querySelector("#chat-message-input");
+	const slidingDiv = document.getElementById("livechat");
+	const chatIcon = document.querySelector("[data-chat-icon]");
+	const messageInput = document.querySelector("#chat-message-input");
 
-  slidingDiv.classList.toggle("visible");
-  slidingDiv.classList.toggle("hide-children");
-  slidingDiv.classList.toggle("disable-neon");
+	slidingDiv.classList.toggle("visible");
+	slidingDiv.classList.toggle("hide-children");
+	slidingDiv.classList.toggle("disable-neon");
 
-  chatIcon.innerHTML = slidingDiv.classList.contains("visible")
-	? chatIconDots
-	: chatIconFill;
+	chatIcon.innerHTML = slidingDiv.classList.contains("visible")
+		? chatIconDots
+		: chatIconFill;
 
-  if (slidingDiv.classList.contains("visible")) {
-	setTimeout(() => {
-	  messageInput.focus();
-	}, 100);
-  }
+	if (slidingDiv.classList.contains("visible")) {
+		setTimeout(() => {
+			messageInput.focus();
+		}, 100);
+	}
 }
 
 document
-  .querySelector("[data-chat-icon]")
-  .addEventListener("click", toggleChat);
+	.querySelector("[data-chat-icon]")
+	.addEventListener("click", toggleChat);
 
 // can click with enter
 document.addEventListener("DOMContentLoaded", function () {
-  const homeIcon = document.querySelector("[data-home-icon]");
-  const profileIcon = document.querySelector("[data-profile-icon]");
-  const chatIcon = document.querySelector("[data-chat-icon]");
+	const homeIcon = document.querySelector("[data-home-icon]");
+	const profileIcon = document.querySelector("[data-profile-icon]");
+	const chatIcon = document.querySelector("[data-chat-icon]");
 
-  if (homeIcon) {
-	homeIcon.setAttribute("tabindex", "0");
-	homeIcon.addEventListener("keydown", function (event) {
-	  if (event.key === "Enter") {
-		homeIcon.click();
-	  }
-	});
-  }
+	if (homeIcon) {
+		homeIcon.setAttribute("tabindex", "0");
+		homeIcon.addEventListener("keydown", function (event) {
+			if (event.key === "Enter") {
+				homeIcon.click();
+			}
+		});
+	}
 
-  if (profileIcon) {
-	profileIcon.setAttribute("tabindex", "0");
-	profileIcon.addEventListener("keydown", function (event) {
-	  if (event.key === "Enter") {
-		profileIcon.click();
-	  }
-	});
-  }
+	if (profileIcon) {
+		profileIcon.setAttribute("tabindex", "0");
+		profileIcon.addEventListener("keydown", function (event) {
+			if (event.key === "Enter") {
+				profileIcon.click();
+			}
+		});
+	}
 
-  if (chatIcon) {
-	chatIcon.setAttribute("tabindex", "0");
-	chatIcon.addEventListener("keydown", function (event) {
-	  if (event.key === "Enter") {
-		toggleChat();
-	  }
-	});
-  }
+	if (chatIcon) {
+		chatIcon.setAttribute("tabindex", "0");
+		chatIcon.addEventListener("keydown", function (event) {
+			if (event.key === "Enter") {
+				toggleChat();
+			}
+		});
+	}
 });
 
 // rend jolie apres avoir cliqué a la souris
 document.addEventListener("mousedown", function (event) {
-  const focusableSelectors = [
-	"button",
-	"[data-chat-icon]",
-	"[data-home-icon]",
-	"[data-profile-icon]",
-	"#chat-message-submit",
-	"#emojiButton",
-  ];
+	const focusableSelectors = [
+		"button",
+		"[data-chat-icon]",
+		"[data-home-icon]",
+		"[data-profile-icon]",
+		"#chat-message-submit",
+		"#emojiButton",
+	];
 
-  const target = event.target;
+	const target = event.target;
 
-  if (
-	target.matches(focusableSelectors) ||
-	target.closest(focusableSelectors)
-  ) {
-	requestAnimationFrame(() => {
-	  if (document.activeElement) {
-		document.activeElement.blur();
-	  }
-	});
-  }
+	if (
+		target.matches(focusableSelectors) ||
+		target.closest(focusableSelectors)
+	) {
+		requestAnimationFrame(() => {
+			if (document.activeElement) {
+				document.activeElement.blur();
+			}
+		});
+	}
 });
 
 // tab trap
 document.addEventListener("DOMContentLoaded", function () {
-  const focusableSelectors = [
-	"button",
-	"[href]",
-	"input",
-	"select",
-	"textarea",
-	'[tabindex]:not([tabindex="-1"])',
-	"[data-chat-icon]",
-	"[data-home-icon]",
-	"[data-profile-icon]",
-	"#chat-message-input",
-	"#chat-message-submit",
-	"#emojiButton",
-  ].join(", ");
+	const focusableSelectors = [
+		"button",
+		"[href]",
+		"input",
+		"select",
+		"textarea",
+		'[tabindex]:not([tabindex="-1"])',
+		"[data-chat-icon]",
+		"[data-home-icon]",
+		"[data-profile-icon]",
+		"#chat-message-input",
+		"#chat-message-submit",
+		"#emojiButton",
+	].join(", ");
 
-  const getFocusableElements = () => {
-	return Array.from(document.querySelectorAll(focusableSelectors)).filter(
-	  (element) => {
-		return (
-		  element.offsetParent !== null &&
-		  !element.disabled &&
-		  getComputedStyle(element).display !== "none"
+	const getFocusableElements = () => {
+		return Array.from(document.querySelectorAll(focusableSelectors)).filter(
+			(element) => {
+				return (
+					element.offsetParent !== null &&
+					!element.disabled &&
+					getComputedStyle(element).display !== "none"
+				);
+			},
 		);
-	  },
-	);
-  };
+	};
 
-  document.addEventListener("keydown", function (e) {
-	if (e.key === "Tab") {
-	  const focusableElements = getFocusableElements();
+	document.addEventListener("keydown", function (e) {
+		if (e.key === "Tab") {
+			const focusableElements = getFocusableElements();
 
-	  if (focusableElements.length === 0) return;
+			if (focusableElements.length === 0) return;
 
-	  const firstElement = focusableElements[0];
-	  const lastElement = focusableElements[focusableElements.length - 1];
-	  const activeElement = document.activeElement;
+			const firstElement = focusableElements[0];
+			const lastElement = focusableElements[focusableElements.length - 1];
+			const activeElement = document.activeElement;
 
-	  if (e.shiftKey) {
-		if (activeElement === firstElement) {
-		  e.preventDefault();
-		  lastElement.focus();
+			if (e.shiftKey) {
+				if (activeElement === firstElement) {
+					e.preventDefault();
+					lastElement.focus();
+				}
+			} else {
+				if (activeElement === lastElement) {
+					e.preventDefault();
+					firstElement.focus();
+				}
+			}
 		}
-	  } else {
-		if (activeElement === lastElement) {
-		  e.preventDefault();
-		  firstElement.focus();
-		}
-	  }
-	}
-  });
+	});
 });
