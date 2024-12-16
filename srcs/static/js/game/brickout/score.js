@@ -118,9 +118,7 @@ export function checkFrame()
 	}
 }
 
-
-
-export function drawScoreBoardB()
+export function drawScoreBoardBRemote()
 {
 	if (!brickVar.scoreCtx || !brickVar.ctx)
 	{
@@ -146,16 +144,107 @@ export function drawScoreBoardB()
 		{
 			if (gameVar.localGame)
 			{
+				console.log("brickout2p local");
 				ctx.fillText(gameVar.userName, leftX - 5, y);
 				ctx.fillText("Player 2", rightX + 15, y);
 			}
 			if (gameVar.liveMatch)
 			{
+				console.log("brickout2p live");
 				ctx.fillText(gameVar.userName, leftX - 5, y);
 				ctx.fillText(gameVar.opponentName, rightX + 15, y);
 			}
 			else
 			{
+				console.log("else");
+				ctx.fillText("Player 1", leftX - 5, y);
+				ctx.fillText("Player 2", rightX + 15, y);
+			}
+			ctx.fillText("Score" , leftX - 15, y + 60);
+			ctx.fillText("Lives", leftX - 15, y + 100);
+			ctx.fillText("Score" , rightX, y + 60);
+			ctx.fillText("Lives", rightX, y + 100);
+			ctx.fillText(brickVar.score, leftX + 45, y + 60);
+			ctx.fillText(brickVar.lives, leftX + 45, y + 100);
+			ctx.fillText(brickVar2.score, rightX + 60, y + 60);
+			ctx.fillText(brickVar2.lives, rightX + 60, y + 100);
+
+			ctx.font = '32px fontScore';
+			ctx.fillText("VS", centerX, (brickVar.scoreCanvH) / 2);
+
+			const minutes = Math.floor(brickVar.gameTime / 60);
+			const seconds = brickVar.gameTime % 60;
+			const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+			ctx.font = '20px fontScore';
+			ctx.fillText(time, leftX - 10, y + brickVar.scoreCanvH + 45);
+		
+			const minutes2 = Math.floor(brickVar2.gameTime / 60);
+			const seconds2 = brickVar2.gameTime % 60;
+			const time2 = `${minutes2}:${seconds2 < 10 ? '0' : ''}${seconds2}`;
+			ctx.font = '20px fontScore';
+			ctx.fillText(time2, rightX + 10, y + brickVar.scoreCanvH + 45);
+
+		}
+		else
+		{
+			ctx.font = '32px fontScore';
+			ctx.fillText('Score', leftX, y);
+			ctx.fillText('Lives', rightX, y);
+			ctx.fillText(brickVar.score, leftX, y + brickVar.scoreCanvH / 2);
+			ctx.fillText(brickVar.lives, rightX, y + brickVar.scoreCanvH / 2);	
+			ctx.fillText(brickVar.score, leftX, y + brickVar.scoreCanvH / 2);
+			ctx.fillText(brickVar.lives, rightX, y + brickVar.scoreCanvH / 2);
+			const minutes = Math.floor(brickVar.gameTime / 60);
+			const seconds = brickVar.gameTime % 60;
+			const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+			ctx.font = '20px fontScore';
+			ctx.fillText(time, centerX, y + brickVar.scoreCanvH / 2);
+		}
+	}).catch(function(error)
+	{
+		console.error("Error on font load", error);
+	});
+}
+
+export function drawScoreBoardB()
+{
+	if (!brickVar.scoreCtx || !brickVar.ctx)
+	{
+		console.log("Error on ctx");
+		return;
+	}
+    loadCustomFont().load().then(function(font) 
+	{
+        document.fonts.add(font);
+		const ctx = brickVar.scoreCtx;
+		ctx.clearRect(0, 0, brickVar.scoreCanvW, brickVar.scoreCanvH + 100);
+		
+		ctx.font = '24px fontScore';
+		ctx.fillStyle = '#FFFFFF';
+		ctx.textAlign = 'center';
+		
+		const centerX = brickVar.scoreCanvW / 2;
+		const leftX = brickVar.scoreCanvW * 0.25;
+		const rightX = brickVar.scoreCanvW * 0.75;
+		const y = 35;
+
+		if (gameVar.game == 'brickout2p' || gameVar.game === 'brickout')
+		{
+			if (gameVar.localGame)
+			{
+				console.log("brickout2p local");
+				ctx.fillText(gameVar.userName, leftX - 5, y);
+				ctx.fillText("Player 2", rightX + 15, y);
+			}
+			else if (gameVar.liveMatch)
+			{
+				console.log("brickout2p live");
+				ctx.fillText(gameVar.userName, leftX - 5, y);
+				ctx.fillText(gameVar.opponentName, rightX + 15, y);
+			}
+			else
+			{
+				console.log("else");
 				ctx.fillText("Player 1", leftX - 5, y);
 				ctx.fillText("Player 2", rightX + 15, y);
 			}

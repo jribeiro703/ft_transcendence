@@ -1,5 +1,5 @@
 import brickVar from "./var.js";
-import { initListenerB } from "./init.js";
+import { initGame, initListenerB } from "./init.js";
 import { initBricksB } from "./brick.js";
 import { sendScoreB } from "./score.js";
 import { startGameB } from "./control.js";
@@ -87,6 +87,7 @@ export function handleNextLevelB()
 {
 	clearBtnB();
 	initListenerB();
+	initGame();
 	const nextLevelBtn = document.getElementById("nextLevelBtn");
     if (nextLevelBtn)
 	{
@@ -111,7 +112,7 @@ export function restartLevelB()
 {
 	clearBtnB();
 	initListenerB();
-	
+	initGame();	
 	brickVar.initGame = false;
 	brickVar.gameStart = false;
 	brickVar.finishLevel = false;
