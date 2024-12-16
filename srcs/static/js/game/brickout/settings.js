@@ -26,7 +26,7 @@ export function showSettingViewB(info)
 	// }
 	// else
 	// {
-		brickVar.powerUpSelection.style.display = 'block';
+		// brickVar.powerUpSelection.style.display = 'block';
 		brickVar.btnPowerUp.style.display = 'block';
 	// }		
 
@@ -53,7 +53,7 @@ export function checkSettingB()
 
 export function getSettingBtn()
 {
-	brickVar.powerUpSelection = document.getElementById('powerUpSelection');
+	// brickVar.powerUpSelection = document.getElementById('powerUpSelection');
 	brickVar.btnPowerUp = document.getElementById('btnPowerUp');
 	brickVar.withPowerUp = document.getElementById('withPowerUps');
 	brickVar.withoutPowerUp = document.getElementById('withoutPowerUps');

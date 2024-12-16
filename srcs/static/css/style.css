@@ -543,18 +543,21 @@ p {
 
 .powerUpBtn.selected,
 .level.selected {
-	background-color: #6dc7c1;
+	background-color: #4e0a0a;
+	color :#000000;
+	transform: scale(1.1);
+	box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .powerUpBtn:hover,
 .level:hover {
-	background-color: #6dc7c1;
+	background-color: var(--background-color);
 	transform: scale(1.08);
 }
 
 .powerUpBtn {
-	background-color: #0a1730;
-	color: white;
+	background-color: var(--background-color);
+	color: var(--text-color);
 	border: none;
 	margin-top: 15px;
 	border-radius: 5px;
@@ -580,6 +583,20 @@ p {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+}
+
+
+.map-image.selected
+{
+	box-shadow:
+		0 0 0px #225585,
+		0 0 1px #225585,
+		0 0 2px #225585,
+		0 0 3px #225585,
+		0 0 4px #28649c,
+		0 0 7px #3076b8,
+		0 0 8px #3788d4;
+	transform: scale(1.1);
 }
 
 .map-image,
