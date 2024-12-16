@@ -5,24 +5,6 @@ import { createWebSocketConnection } from '../utils/websocketUtils.js';
 import { fetchTournamentBracket } from './apiService.js';
 import { startGameWithPlayers2 } from '../tournamentPage.js';
 
-let bracketInterval;
-let bracketSocket;
-
-export function setupTournamentBracketRefresh(tournamentId) {
-	fetchTournamentBracketPeriodically(tournamentId); // Initial fetch
-	if (bracketInterval) clearInterval(bracketInterval); // Clear any existing interval
-		bracketInterval = setInterval(() => fetchTournamentBracketPeriodically(tournamentId), 10000); // Fetch every 10 seconds
-}
-
-export async function fetchTournamentBracketPeriodically(tournamentId) {
-	try {
-		const bracket = await fetchTournamentBracket(tournamentId);
-		renderBracket(bracket, tournamentId);
-	} catch (error) {
-		console.error('Error fetching tournament bracket:', error);
-	}
-}
-
 export function renderBracket(bracket, tournamentId)
 {
 	const bracketContainer = document.getElementById('tournament-bracket');
