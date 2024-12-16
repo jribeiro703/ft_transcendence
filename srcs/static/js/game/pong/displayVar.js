@@ -11,6 +11,25 @@ export function displayGameDataPong(idx)
 	console.log("pong level: ", gameVar.currentLevel);
 	console.log("pong pu enable: ", gameVar.powerUpEnable);
 }
+export function displayScoreInfo()
+{
+	if (gameVar.playerIdx === 1);
+	{
+		console.log("player1");
+		console.log("name1: ", gameVar.userName);
+		console.log("name2: ", gameVar.opponentName);
+		console.log("score1: ", gameVar.playerScore);
+		console.log("score2: ", gameVar.aiScore);
+	}
+	if (gameVar.playerIdx === 2)
+	{
+		console.log("player2");
+		console.log("name1: ", gameVar.userName);
+		console.log("name2: ", gameVar.opponentName);
+		console.log("score1: ", gameVar.playerScore);
+		console.log("score2: ", gameVar.aiScore);
+	}
+}
 
 export function displayGameDataBrick()
 {
