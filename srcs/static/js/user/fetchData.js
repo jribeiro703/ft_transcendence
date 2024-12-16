@@ -31,7 +31,8 @@ async function makeAuthOptions(method, body, isFormData) {
 	const options = await makeOptions(method, body, isFormData);
 	
 	if (await isAuthenticated()) {
-		const accessToken = sessionStorage.getItem('access_token');
+		// const accessToken = sessionStorage.getItem('access_token');
+		const accessToken = localStorage.getItem('access_token');
 		if (accessToken) {
 			options.headers['Authorization'] = `Bearer ${accessToken}`;
 		}
