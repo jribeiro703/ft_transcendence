@@ -96,6 +96,8 @@ const brickVar = {
 	opponentName: null,
 	playerScore: 0,
 	opponentScore: 0,
+	playerLives: 2,
+	opponentLives: 2,
 
 	anim: null,
 	startBtn: null,
