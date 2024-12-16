@@ -10,6 +10,7 @@ class FetchEligiblePlayersView(APIView):
 	def get(self, request):
 		try:
 			logger.debug("Attempting to fetch eligible players.")
+			# TODO: Eligible players - now it picks all the users who are online, later it has to be invited users (Tournament-LiveChat-User model)
 			eligible_players = User.objects.filter(is_online=True)
 			# eligible_players = User.objects.all()
 			logger.debug(f"Found players: {eligible_players}")

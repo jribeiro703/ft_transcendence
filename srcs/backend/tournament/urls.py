@@ -8,6 +8,8 @@ from .views.stage_1_generate_tournament_name import (
 from .views.stage_1_create_tournament import (
 	CreateTournamentView,
 	PreRegisterPlayersView,
+	GetTournamentView,
+	JoinTournamentView,
 )
 
 from .views.stage_1_fetch_eligible_players import (
@@ -32,6 +34,9 @@ urlpatterns = [
 	path('validate-name/', ValidateTournamentNameView.as_view(), name='validate-name'),
 	path('players/', FetchEligiblePlayersView.as_view(), name='fetch_eligible_players'),
 	path('preregister/', PreRegisterPlayersView.as_view(), name='preregister_players'),
+	path('preregister/', PreRegisterPlayersView.as_view(), name='preregister_players'), 
+	path('<int:tournament_id>/', GetTournamentView.as_view(), name='get-tournament'),
+	path('join/', JoinTournamentView.as_view(), name='join-tournament'),
 	path('matchmaking/', PerformMatchmakingView.as_view(), name='perform_matchmaking'),
 	path('<int:tournament_id>/bracket/', TournamentBracketView.as_view(), name='tournament-bracket'),
 	path('<int:tournament_id>/players/', CurrentPlayersView.as_view(), name='current-players'),
