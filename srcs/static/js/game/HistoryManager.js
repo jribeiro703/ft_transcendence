@@ -21,6 +21,7 @@ import { initLobbyView } from "./pong/init.js";
 import { showPongRemote } from "./pong/gameViewMulti.js";
 import { clearAllpongStates } from "./pong/reset.js";
 import { renderPage } from "../user/historyManager.js";
+import { API_BASE_URL } from "../user/fetchData.js";
 
 const pongGamePages = {
 
@@ -47,24 +48,24 @@ const pongGamePages = {
 }
 const multiplayerPages = new Map(
 [
-    ['gameSelectionMulti', showGameSelectionMultiView],
-    ['playPongLocal', showGameView],
-    ['playBrickoutLocal', showGameBrickLocalView],
-    ['pongLobby', initLobbyView],
-    ['brickoutLobby', initLobbyView], 
-    ['playPongRemote', showPongRemote],
-    ['playPongRemoteSecondP', showGameRoom]
+	['gameSelectionMulti', showGameSelectionMultiView],
+	['playPongLocal', showGameView],
+	['playBrickoutLocal', showGameBrickLocalView],
+	['pongLobby', initLobbyView],
+	['brickoutLobby', initLobbyView], 
+	['playPongRemote', showPongRemote],
+	['playPongRemoteSecondP', showGameRoom]
 ]);
 
 export function isMultiplayerPage(pageKey)
 {
-    const exist = multiplayerPages.has(pageKey);
+	const exist = multiplayerPages.has(pageKey);
 	return exist ? true : false;
 }
 
 export function isGamePage(page) 
 {
-    return ['#gameSelectionSolo', '#pongSetting', '#brickoutSetting', '#playPong', '#playBrickout',
+	return ['#gameSelectionSolo', '#pongSetting', '#brickoutSetting', '#playPong', '#playBrickout',
 		'#gameSelectionMulti', '#pongLobby', '#brickoutLobby', '#playPongLocal', '#playBrickoutLocal',
 		'#playPongRemote', 'playPongRemoteSecondP'].includes(page);
 }
@@ -79,95 +80,96 @@ export async function renderPageGame(page, updateHistory = true, params = null)
 
 	let renderFunction = pongGamePages[page];
 
-    const lastPage = sessionStorage.getItem('lastPage');
-    const isRefresh = lastPage === page;
-    if (params !== null)
+	const lastPage = sessionStorage.getItem('lastPage');
+	const isRefresh = lastPage === page;
+	if (params !== null)
 	{
-        sessionStorage.setItem('pageParams', typeof params === 'string' ? 
-            params : JSON.stringify(params));
-    }
+		sessionStorage.setItem('pageParams', typeof params === 'string' ? 
+			params : JSON.stringify(params));
+	}
 
-    if (!renderFunction)
+	if (!renderFunction)
 	{
-        history.replaceState({ page: "home", params: params }, "home", "#home");
-        renderFunction = renderHomePage;
-    } 
+		history.replaceState({ page: "home", params: params }, "home", "#home");
+		renderFunction = renderHomePage;
+	} 
 	else
 	{
-        if (updateHistory)
+		if (updateHistory)
 		{
-            const historyMethod = isRefresh ? 'replaceState' : 'pushState';
-            history[historyMethod]({ 
-                page: page, 
-                params: params || sessionStorage.getItem('pageParams')
-            }, page, `#${page}`);
-        }
-    }
+			const historyMethod = isRefresh ? 'replaceState' : 'pushState';
+			history[historyMethod]({ 
+				page: page, 
+				params: params || sessionStorage.getItem('pageParams')
+			}, page, `#${page}`);
+		}
+	}
 
-    sessionStorage.setItem('lastPage', page);
-    
-    if (params === null && history.state && history.state.params !== undefined)
+	sessionStorage.setItem('lastPage', page);
+	
+	if (params === null && history.state && history.state.params !== undefined)
 	{
-        params = history.state.params;
-    }
-    await renderFunction(params);
+		params = history.state.params;
+	}
+	await renderFunction(params);
 }
 
 window.addEventListener('popstate', async (event) =>
 {
-    if (event.state)
+	if (event.state)
 	{
-        const page = event.state.page;
-        const params = event.state.params;
-        
-        if (isGamePage(window.location.hash))
+		const page = event.state.page;
+		const params = event.state.params;
+		
+		if (isGamePage(window.location.hash))
 		{
 			gameVar.clientLeft = true;
 			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentLevel, gameVar.startTime, gameVar.clientLeft);
-            clearAllpongStates();
+			clearAllpongStates();
 			clearAllBrickStates();
-        }
+		}
    
-        if (isGamePage("#" + page))
+		if (isGamePage("#" + page))
 		{
-            clearAllpongStates();
+			clearAllpongStates();
 			clearAllBrickStates();
-            await renderPageGame(page, false, params);
-        }
+			await renderPageGame(page, false, params);
+		}
 		else
 		{
-            await renderPage(page, false);
-        }
-    }
+			await renderPage(page, false);
+		}
+	}
 });
 
 window.addEventListener('beforeunload', () =>
 {
-    sessionStorage.setItem('gameState', JSON.stringify(
+	sessionStorage.setItem('gameState', JSON.stringify(
 	{
 		save: gameVar.saveSetting,
 
-        difficulty: gameVar.difficulty,
-        level: gameVar.currentLevel,
-        puEnable: gameVar.powerUpEnable,
+		difficulty: gameVar.difficulty,
+		level: gameVar.currentLevel,
+		puEnable: gameVar.powerUpEnable,
 
-        difficultyB: brickVar.difficulty,
-        levelB: brickVar.currLevel,
-        puEnableB: brickVar.powerUpEnable,
-    }));
-
+		difficultyB: brickVar.difficulty,
+		levelB: brickVar.currLevel,
+		puEnableB: brickVar.powerUpEnable,
+	}));
+	// localStorage.clear()
+	// navigator.sendBeacon(API_BASE_URL + "/user/logout/"); // set user as offline
 });
 
 window.addEventListener('load', () =>
 {
 	const savedState = sessionStorage.getItem('gameState');
-    if (savedState)
+	if (savedState)
 	{
-        const gameState = JSON.parse(savedState);
+		const gameState = JSON.parse(savedState);
 		loadSetting(gameState);
-    }
-    const currentHash = window.location.hash.slice(1) || 'home';
-    const currentState = history.state || {};
+	}
+	const currentHash = window.location.hash.slice(1) || 'home';
+	const currentState = history.state || {};
 	sessionStorage.setItem('lastPage', currentHash);
 
 	if (currentHash === 'gameSelectionSolo' || currentHash === 'gameSelectionMulti')
