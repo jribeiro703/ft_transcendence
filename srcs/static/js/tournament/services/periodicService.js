@@ -20,11 +20,6 @@ export function fetchEligiblePlayersPeriodically() {
 		} else {
 			//console.error("playersList is null");
 		}
-
-		// Fetch and update the tournament bracket
-		if (currentTournamentId) {
-			fetchTournamentBracketPeriodically(currentTournamentId);
-		}
 	}).catch(error => console.error('Error fetching eligible players:', error));
 }
 
@@ -42,8 +37,5 @@ statusSocket.onmessage = function(event) {
 	const data = JSON.parse(event.data);
 	if (data.action === 'update_status') {
 		fetchEligiblePlayersPeriodically(); // Refresh the list of online players
-		if (currentTournamentId) {
-			fetchTournamentBracketPeriodically(currentTournamentId); // Refresh the tournament bracket
-		}
 	}
 };
