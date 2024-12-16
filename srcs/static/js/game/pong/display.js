@@ -5,33 +5,33 @@ export function displayLobbyView(level) {
   const mainContent = document.getElementById("mainContent");
   mainContent.innerHTML = "";
   const roomView = document.createElement("div");
+
   roomView.innerHTML = `
-  <div id="roomView" style="display: none;">
-      <div class="container-room">
-        <div class="server-list">
+  <div id="roomView" style="display: none;" class="h-100 d-flex justify-content-center">
+      <div class="container-room gap-5">
+        <div class="server-list overflow-auto w-75 d-flex align-items-center justify-content-center flex-column">
           <h2>Room List</h2>
-          <div id="noRoomsMessage" style="display: block;">
+          <div id="noRoomsMessage" style="display: flex;" class="justify-content-center">
             No room available for now. Create one !
           </div>
-          <div id="roomsContainer"></div>
+          <div id="roomsContainer" class="flex-column overflow-auto max-h-350px d-flex justify-content-start"></div>
           <div class="refresh"></div>
-          <button id="refreshBtn" class="main-btn refresh-button">Refresh</button>
+          <button id="refreshBtn" class="main-btn settingsSelect-button">Refresh</button>
         </div>
-        <div class="host-server">
+        <div class="host-server w-40 d-flex justify-content-spa align-items-center flex-column">
           <h2>Host A Room</h2>
-          <h3>Playing as: <strong>Login</strong></h3>
-          <div class="settings">
+          <h3 class="d-flex gap-4">Playing as: <strong>Login</strong></h3>
+          <div class="settings d-flex justify-content-center w-100 gap-4">
             <button id="settingBtn" classe="main-btn">Settings</button>
             <div id="setting-container">
               Difficulty: <span id="difficultyChoice">Medium</span><br>
               Level: <span id="levelSelected">${level}</span>
             </div>
           </div>
-          <button id="createRoomBtn" class="main-btn start-button">Create Room</button>
+          <button id="createRoomBtn" class="main-btn createRoom-button">Create Room</button>
         </div>
       </div>
     </div>
-  </div>
   `;
   mainContent.appendChild(roomView);
 }
@@ -47,7 +47,6 @@ export function displayPongRemote() {
         <canvas id="scoreCanvas"></canvas>
       </div>
       <canvas id="myCanvas"></canvas>
-      <br><br>
       <div class="button-container">
         <button id="rematchBtn" style="display: none;" disabled>Rematch</button>
         <button id="quitGameBtn" style="display: none;">Quit Game</button>
@@ -145,7 +144,6 @@ export function displayGameView()
       <canvas id="scoreCanvas"></canvas>
     </div>
     <canvas id="myCanvas"></canvas>
-    <br><br>
     <div class="button-container">
       <button id="rematchBtn" style="display: none;" disabled>Rematch</button>
       <button id="quitGameBtn" style="display: none;">Return Home</button>
@@ -162,13 +160,13 @@ export function displayCanvas() {
 
   const insertTo = document.createElement("div");
 
+  // TODO : modifier les style block en flex et bien mettre les flexbox
   insertTo.innerHTML = `
-  <div id="gameView" style="display: none;">
+  <div id="gameView" style="display: none;" class="h-100">
     <div id="scoreboard">
       <canvas id="scoreCanvas"></canvas>
     </div>
     <canvas id="myCanvas"></canvas>
-    <br><br>
     <div class="button-container">
       <button id="rematchBtn" style="display: none;" disabled>Rematch</button>
       <button id="quitGameBtn" style="display: none;">Quit Game</button>

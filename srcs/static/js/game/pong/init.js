@@ -16,6 +16,7 @@ export function removeEventListeners()
     document.removeEventListener("keydown", startBall);
 }
 
+// BUG TOFIX TODO : ca open le livechat quand on clic sur le bouton create room
 export function initEventListenerRoom()
 {
 	removeEventListeners();
