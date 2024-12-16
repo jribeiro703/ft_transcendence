@@ -20,35 +20,35 @@ function createHomeContent() {
 async function renderHomePage() {
   createHomeContent();
 
-  document.getElementById("playsoloGameBtn").addEventListener("click", () => {
-    renderPageGame("gameSelectionSolo");
-  });
+	document.getElementById('playsoloGameBtn').addEventListener('click', () => {
+		renderPageGame("gameSelectionSolo");
+	});
 
-  const authButtons = [
-    {
-      id: "playmultiGameBtn",
-      handler: () => renderPageGame("gameSelectionMulti"),
-    },
-    {
-      id: "btn-Leaderboard",
-      handler: () => console.log("Leaderboard handler"),
-    },
-    {
-      id: "btn-Tournament",
-      handler: () => showCreateTournamentForm(),
-    },
-  ];
-
-  authButtons.forEach(({ id, handler }) => {
-    document.getElementById(id).addEventListener("click", async () => {
-      // const authenticated = await isAuthenticated();
-      // if (!authenticated) {
-      //   showToast("You must be logged in to use this feature.", "warning");
-      //   return;
-      // }
-      handler();
-    });
-  });
+	const authButtons = [
+		{
+			id: 'playmultiGameBtn',
+			handler: () => renderPageGame('gameSelectionMulti')
+		},
+		{
+			id: 'btn-Leaderboard',
+			handler: () => console.log('Leaderboard handler')
+		},
+		{
+			id: 'btn-Tournament',
+			handler: () => showCreateTournamentForm()
+		}
+	];
+	
+	authButtons.forEach(({ id, handler }) => {
+		document.getElementById(id).addEventListener('click', async () => {
+			// const authenticated = await isAuthenticated();
+			// if (!authenticated) {
+			// 	showToast("You must be logged in to use this feature.", "warning");
+			// 	return;
+			// }
+			handler();
+		});
+	});
 }
 
 export { renderHomePage };

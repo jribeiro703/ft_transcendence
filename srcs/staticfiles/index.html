@@ -18,13 +18,16 @@
     <link rel="shortcut icon"
           type="image/svg"
           href="{% static 'css/images/favicon-pong.svg' %}">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Noto+Emoji:wght@300..700&display=swap" rel="stylesheet">
   </head>
   <body class="vw-100 vh-100 mh-100 mw-100">
     <div class="d-flex flex-column mw-100 mh-100 w-100 h-100">
       <div class="navbar-parent px-4">
         <nav class="navbar px-5">
           <div class="container-fluid d-flex justify-content-between">
-            <div data-home-icon class="homeIcon"></div>
+            <div data-home-icon id="btn-Home" class="homeIcon"></div>
             <div data-profile-icon id="user-avatar" class="profileIcon"></div>
           </div>
         </nav>
@@ -44,31 +47,37 @@
                    aria-label="Chat log">
               </div>
 
+              <!-- game chat with absolute positioning -->
+              <div id="gamechat" 
+                   class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none" 
+                   aria-label="Game chat">
+              </div>
+
               <!-- Notification list with absolute positioning -->
               <div id="notificationlist" 
                    class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none" 
-                   style="z-index: 2;"
                    aria-label="Notification list">
               </div>
 
               <!-- Friend list with absolute positioning -->
               <div id="friendlist" 
                    class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none" 
-                   style="z-index: 2;"
                    aria-label="Friend list">
               </div>
 
               <!-- online list with absolute positioning -->
               <div id="onlinelist" 
                    class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none" 
-                   style="z-index: 2;"
                    aria-label="Online list">
               </div>
             </div>
 
               <div class="position-absolute top-0 end-0 h-100">
-                <div class="channel-container d-flex flex-column h-100 p-2 m-4" 
-                     style="max-height: 100%; 
+                <div class="channel-container d-flex flex-column" 
+                     style="max-height: 100%;
+					 		height: calc(100% - 100px);
+					 		padding-right: 29px;
+							padding-top: 29px;
                             position: absolute; 
                             top: 0; 
                             right: 0; 
@@ -81,62 +90,54 @@
                               display: none;  /* Chrome, Safari, Opera */
                             }">
                   <div class="channel-btn d-flex flex-column gap-2">
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="notificationButton" 
                             aria-label="NotificationsChat"
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
                             title="Notifications">🔔</button>
-
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="bubbleButton" 
                             aria-label="GeneralChat"
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
                             title="General Chat">️💬</button>
-
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="swordsButton" 
                             aria-label="GameChat"
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
                             title="Game Chat">⚔️</button>
-
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="trophyButton" 
                             aria-label="TournamentChat"
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
                             title="Tournament Chat">🏆</button>
-
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="friendsButton" 
                             aria-label="FriendsChat"
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
                             title="Friends">🤝 </button>
-
-                    <button class="channel-btn chat-btn btn border rounded" 
+                    <button class="channel-btn chat-btn btn border rounded py-2" 
                             type="button" 
                             id="onlineButton" 
                             aria-label="OnlinePlayers"
                             data-bs-toggle="tooltip"
                             data-bs-placement="left"
                             title="Online Players">👤</button>
-
                   </div>
                 </div>
               </div>
-
-
             <div class="input-group d-flex gap-3">
               <div class="emoji-picker-container" id="emojiPickerContainer">
-                <emoji-picker id="emoji-picker" aria-label="Emoji picker"></emoji-picker>
+                <emoji-picker emoji-version="15.1" id="emoji-picker" aria-label="Emoji picker"></emoji-picker>
               </div>
               <button class="chat-btn btn rounded border"
                       type="button"
@@ -152,10 +153,6 @@
                       aria-label="Send message">Send</button>
             </div>
           </div>
-
-
-
-
         </div>
       </div>
     </div>

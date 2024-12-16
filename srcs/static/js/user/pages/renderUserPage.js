@@ -19,43 +19,37 @@ function createUserContent() {
 export function renderUserPage() {
 	createUserContent();
 
-document.getElementById("btn-Profile").addEventListener("click", () => {
-	renderPage("profile");
-});
-
-document.getElementById("btn-Settings").addEventListener("click", () => {
-	renderPage("settings");
-});
-
-document.getElementById("btn-Inbox").addEventListener("click", () => {
-	console.log("Inbox button clicked");
-});
-
-document.getElementById("btn-Logout").addEventListener("click", async (e) => {
-	e.preventDefault();
-
-	const confirmation = confirm("Are you sure to logout ?");
-	if (!confirmation)
-		return;
-
-	const responseObject = await fetchAuthData('/user/logout/', 'POST', null, false);
-
-	if (responseObject.status == 200) {
-		console.log(responseObject);
-		showToast(responseObject.data.message, "success");
-		// sessionStorage.clear();
-		localStorage.clear();
-		renderPage("home");
-	} else
-	{
-		console.log(responseObject);
-		showErrorMessages(responseObject);
-	}
+	document.getElementById("btn-Profile").addEventListener("click", () => {
+		renderPage("profile");
 	});
 
-	if (responseObject.status == 205) {
-		showToast(responseObject.data.message, "success");
-		sessionStorage.clear();
-		renderPage("home");
-	} else showToast(responseObject.data.message, "error");
+	document.getElementById("btn-Settings").addEventListener("click", () => {
+		renderPage("settings");
+	});
+
+	document.getElementById("btn-Inbox").addEventListener("click", () => {
+		console.log("Inbox button clicked");
+	});
+
+	document.getElementById("btn-Logout").addEventListener("click", async (e) => {
+		e.preventDefault();
+
+		const confirmation = confirm("Are you sure to logout ?");
+		if (!confirmation)
+			return;
+
+		const responseObject = await fetchAuthData('/user/logout/', 'POST', null, false);
+
+		if (responseObject.status == 200) {
+			console.log(responseObject);
+			showToast(responseObject.data.message, "success");
+			// sessionStorage.clear();
+			localStorage.clear();
+			renderPage("home");
+		} else
+		{
+			console.log(responseObject);
+			showErrorMessages(responseObject);
+		}
+		});
 }
