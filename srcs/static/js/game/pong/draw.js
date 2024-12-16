@@ -55,8 +55,13 @@ export function draw()
 	aiMove(gameVar.targetY);
 	if (gameVar.animationFrame)
 		cancelAnimationFrame(gameVar.animationFrame);
+	// if (gameVar.animationFrame > 60)
+		// cancelAnimationFrame(gameVar.animationFrame)
 	gameVar.animationFrame = requestAnimationFrame(draw);
+	// setInterval(draw, 10);
 }
+
+// setInterval(draw, 50);
 
 export function drawLive()
 {

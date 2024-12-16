@@ -276,7 +276,7 @@ export function displayCanvas() {
 // }
 export function displaySettingView()
 {
-  const pongUrl = "static/css/images/ttLevel.png";
+  const ttUrl = "static/css/images/ttLevel.png";
   const footUrl = "static/css/images/footballLevel.png";
   const tennisUrl = "static/css/images/tennisLevel.png";
   const classicUrl = "static/css/images/classicPong.png";
@@ -291,26 +291,26 @@ export function displaySettingView()
   insertTo.innerHTML = `
   <div id="settingView" class="no-scrollbar d-flex justify-content-center settingsViewOverflow overflow-auto flex-column align-items-center gap-5" style="display: block;">
         <div class="d-flex justify-content-center align-items-center gap-5 flex-wrap">
-          <button id="easy" class="settingsBtn btn height-btn">Easy</button>
-          <button id="medium" class="settingsBtn btn height-btn">Medium</button>
-          <button id="hard" class="settingsBtn btn height-btn">Hard</button>
+          <button id="easy" class="settingsBtn btn height-btn level">Easy</button>
+          <button id="medium" class="settingsBtn btn height-btn level">Medium</button>
+          <button id="hard" class="settingsBtn btn height-btn level">Hard</button>
         </div>
-        <div id="btnPowerUp" style="display: block;" class="d-flex justify-content-center align-items-center gap-5 flex-wrap ">
-          <button id="withPowerUps" class="settingsBtn btn custom-btn height-btn">Power UP</button>
-          <button id="withoutPowerUps" class="settingsBtn btn custom-btn height-btn">No Power UP</button>
+        <div id="btnPowerUp" style="display: block;" class="d-flex justify-content-center align-items-center gap-5 flex-wrap pu">
+          <button id="withPowerUps" class="settingsBtn btn custom-btn height-btn powerUpBtn">Power UP</button>
+          <button id="withoutPowerUps" class="settingsBtn btn custom-btn height-btn powerUpBtn">No Power UP</button>
         </div>
         <div class="map-selection flex-wrap justify-content-center">
           <div id="map1" class="mapOption mapClic" data-map-name="classicMap">
-            <img src="${classicUrl}" alt="classicMap" class="map-image">
+            <img src="${classicUrl}" id="classicPong" alt="classicMap" class="map-image">
           </div>
           <div id="map2" class="mapOption mapClic" data-map-name="classicMap">
-            <img src="${pongUrl}" alt="footMap1" class="map-image">
+            <img src="${ttUrl}" id="tableTennis" alt="footMap1" class="map-image">
           </div>
           <div id="map3" class="mapOption mapClic" data-map-name="clasicMap">
-            <img src="${footUrl}" alt="customMap1" class="map-image">
+            <img src="${footUrl}" id="footLevel" alt="customMap1" class="map-image">
           </div>
           <div id="map4" class="mapOption mapClic" data-map-name="clasicMap">
-            <img src="${tennisUrl}" alt="customMap1" class="map-image">
+            <img src="${tennisUrl}" id="tennisLevel" alt="customMap1" class="map-image">
           </div>
         </div>
       <button id="saveBtn" class="settingsBtn btn custom-btn height-btn" disabled="true">Save and Return</button>
