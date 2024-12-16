@@ -20,6 +20,7 @@ import { showGameBrickLocalView } from "./brickout/gameView.js";
 import { initLobbyView } from "./pong/init.js";
 import { showPongRemote } from "./pong/gameViewMulti.js";
 import { clearAllpongStates } from "./pong/reset.js";
+import { API_BASE_URL } from "../user/fetchData.js";
 import { renderPage } from "../user/historyManager.js";
 
 const pongGamePages = {
@@ -155,7 +156,8 @@ window.addEventListener('beforeunload', () =>
         levelB: brickVar.currLevel,
         puEnableB: brickVar.powerUpEnable,
     }));
-
+	// localStorage.clear()
+	// navigator.sendBeacon(API_BASE_URL + "/user/logout/"); // set user as offline
 });
 
 window.addEventListener('load', () =>

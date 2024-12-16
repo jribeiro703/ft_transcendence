@@ -20,7 +20,6 @@ document.getElementById('btn-Home').addEventListener('click', async () => {
 // Execute as soon as the structure of the initial page is ready for interaction
 document.addEventListener('DOMContentLoaded', () => {
 
-
 	// listen for hash change to call right page render and push the state in history
 	const hash = window.location.hash
 	if (isGamePage(hash))
