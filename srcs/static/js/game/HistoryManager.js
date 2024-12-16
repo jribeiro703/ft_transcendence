@@ -17,11 +17,13 @@ import { isAuthenticated } from "../user/isAuthenticated.js";
 import { updateUserAvatar } from "../user/tools.js";
 import { showGameBrickView } from "./brickout/gameView.js";
 import { showGameBrickLocalView } from "./brickout/gameView.js";
-import { initLobbyView } from "./pong/init.js";
+import { initLobbyPongView, initLobbyBrickoutView } from "./pong/init.js";
 import { showPongRemote } from "./pong/gameViewMulti.js";
 import { clearAllpongStates } from "./pong/reset.js";
 import { API_BASE_URL } from "../user/fetchData.js";
 import { renderPage } from "../user/historyManager.js";
+import { showBrickoutRemote } from "./pong/gameViewMulti.js";
+import { showGameRoomB } from "./pong/gameView.js";
 
 const pongGamePages = {
 
@@ -39,22 +41,25 @@ const pongGamePages = {
 	playPongLocal: showGameView,
 	playBrickoutLocal: showGameBrickLocalView,
 
-	pongLobby: initLobbyView,
-	brickoutLobby: initLobbyView,
+	pongLobby: initLobbyPongView,
+	brickoutLobby: initLobbyBrickoutView,
 
 	playPongRemote: showPongRemote,
 	playPongRemoteSecondP: showGameRoom,
-	// playBrickoutRemote: showBrickoutRemote,
+	playBrickoutRemote: showBrickoutRemote,
+	playBrickoutRemoteSecondP: showGameRoomB,
 }
 const multiplayerPages = new Map(
 [
     ['gameSelectionMulti', showGameSelectionMultiView],
     ['playPongLocal', showGameView],
     ['playBrickoutLocal', showGameBrickLocalView],
-    ['pongLobby', initLobbyView],
-    ['brickoutLobby', initLobbyView], 
+    ['pongLobby', initLobbyPongView],
+    ['brickoutLobby', initLobbyBrickoutView], 
     ['playPongRemote', showPongRemote],
-    ['playPongRemoteSecondP', showGameRoom]
+    ['playPongRemoteSecondP', showGameRoom],
+	['playBrickoutRemote', showBrickoutRemote],
+	['playBrickoutRemoteSecondP', showGameRoomB],
 ]);
 
 export function isMultiplayerPage(pageKey)
@@ -67,7 +72,7 @@ export function isGamePage(page)
 {
     return ['#gameSelectionSolo', '#pongSetting', '#brickoutSetting', '#playPong', '#playBrickout',
 		'#gameSelectionMulti', '#pongLobby', '#brickoutLobby', '#playPongLocal', '#playBrickoutLocal',
-		'#playPongRemote', 'playPongRemoteSecondP'].includes(page);
+		'#playPongRemote', 'playPongRemoteSecondP', '#playBrickoutRemote', 'playBrickoutRemoteSecondP'].includes(page);
 }
 
 export async function renderPageGame(page, updateHistory = true, params = null)
@@ -189,7 +194,8 @@ window.addEventListener('load', () =>
 	}
 	if (currentHash === 'playPong' || currentHash === 'playBrickout'
 		|| currentHash === 'playPongLocal' || currentHash === 'playBrickoutLocal'
-		|| currentHash === 'playPongRemote' || currentHash === 'playPongRemoteSecondp') 
+		|| currentHash === 'playPongRemote' || currentHash === 'playPongRemoteSecondp'
+		|| currentHash === 'playBrickoutRemote') 
 	{
 		clearAllpongStates();
 		clearAllBrickStates();
