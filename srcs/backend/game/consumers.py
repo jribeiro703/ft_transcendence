@@ -23,9 +23,9 @@ class PongConsumer(WebsocketConsumer):
 		if self.room_name:
 			self.room_group_name = f'game_{self.room_name}'
 			async_to_sync(self.channel_layer.group_add)(
-				self.room_group_name,
-				self.channel_name
-			)
+					self.room_group_name,
+					self.channel_name
+					)
 			self.accept()
 			logger.info(f'Client {self.channel_name} connected to room {self.room_name}')
 		else:
@@ -38,31 +38,31 @@ class PongConsumer(WebsocketConsumer):
 	def disconnect(self, close_code):
 		if self.room_name:
 			async_to_sync(self.channel_layer.group_discard)(
-				self.room_group_name,
-				self.channel_name
-			)
+					self.room_group_name,
+					self.channel_name
+					)
 			if self.room_name in self.rooms:
 				self.rooms[self.room_name].remove(self.channel_name)
 				if not self.rooms[self.room_name]:
 					logger.info(f'Room {self.room_name} is empty, sending room_deleted event.')
 					del self.rooms[self.room_name]
 					async_to_sync(self.channel_layer.group_send)(
-						self.room_group_name,
-						{
-							'type': 'room_deleted',
-							'room_name': self.room_name,
-						}
-					)
+							self.room_group_name,
+							{
+								'type': 'room_deleted',
+								'room_name': self.room_name,
+								}
+							)
 				else:
 					logger.info(f'Client {self.channel_name} disconnected, room {self.room_name} still has clients: {self.rooms[self.room_name]}')
 			self.log_all_rooms()
 			async_to_sync(self.channel_layer.group_send)(
-				self.room_group_name,
-				{
-					'type': 'client_left',
-					'message': f'Client {self.channel_name} has left the room.'
-				}
-			)
+					self.room_group_name,
+					{
+						'type': 'client_left',
+						'message': f'Client {self.channel_name} has left the room.'
+						}
+					)
 
 	def start_pinging(self):
 		"""Démarrer l'envoi de messages de ping pour vérifier la connexion."""
@@ -86,12 +86,12 @@ class PongConsumer(WebsocketConsumer):
 					logger.info(f'Room {self.room_name} is empty after ping check, deleting it.')
 					del self.rooms[self.room_name]  # Supprime la room
 					async_to_sync(self.channel_layer.group_send)(
-						self.room_group_name,
-						{
-							'type': 'room_deleted',
-							'room_name': self.room_name,
-						}
-					)
+							self.room_group_name,
+							{
+								'type': 'room_deleted',
+								'room_name': self.room_name,
+								}
+							)
 
 	def receive(self, text_data):
 		data = json.loads(text_data)
@@ -112,8 +112,23 @@ class PongConsumer(WebsocketConsumer):
 			self.broadcast_game_data(data)
 		elif data['type'] == 'setting_data':
 			self.broadcast_setting_data(data)
+		elif data['type'] == 'tournament_info':
+			self.broadcast_tournaments_info(data)
 		elif data['type'] == 'lobbyView':
 			self.lobby()
+		elif data['type'] == 'player_room_data':
+			logger.info(f'player room data receive : ')
+			logger.info(f'Player room data received:')
+			logger.info(f'Full data: {data}')
+			logger.info(f'User ID: {data.get("userid")}')
+			logger.info(f'Room name: {self.room_name}')
+			logger.info(f'Channel name: {self.channel_name}')
+		elif data['type'] == 'score_info_data':
+			self.broadcast_score_info_data(data)
+		elif data['type'] == 'scoreB_info_data':
+			self.broadcast_scoreB_info_data(data)
+		elif data['type'] == 'room_data':
+			self.broadcast_room_data(data)
 		elif data['type'] == 'room_deleted':
 			self.room_name = data['room_name']
 			if self.room_name in self.rooms:
@@ -172,9 +187,9 @@ class PongConsumer(WebsocketConsumer):
 	def room_deleted(self, event):
 		logger.info(f"Room deleted event sent for room: {event['room_name']}")
 		self.send(text_data=json.dumps({
-        'type': 'room_deleted',
-        'room_name': event['room_name']
-    }))	
+		'type': 'room_deleted',
+		'room_name': event['room_name']
+	}))	
 
 	def ball_data(self, event):
 		self.send(text_data=json.dumps({
@@ -231,6 +246,44 @@ class PongConsumer(WebsocketConsumer):
 				'gameReady': event['gameReady'],
 				'difficulty': event['difficulty'],
 				'currentLevel': event['currentLevel'],
+			}
+		}))
+
+	def score_info_data(self, event):
+		self.send(text_data=json.dumps({
+			'type': 'score_info_data',
+			'score_info_data': {
+				'idx': event['idx'],
+				'name': event['name'],
+				'score1': event['score1'],
+				'score2': event['score2'],
+			}
+		}))
+
+	def scoreB_info_data(self, event):
+		self.send(text_data=json.dumps({
+			'type': 'scoreB_info_data',
+			'scoreB_info_data': {
+				'idx': event['idx'],
+				'score': event['score'],
+				'lives': event['lives'],
+			}
+		}))
+	
+	def room_data(self, event):
+		self.send(text_data=json.dumps({
+			'type': 'room_data',
+			'room_data': {
+				'roomName': event['roomName'],
+			}
+		}))
+
+	def tournament_info(self, event):
+		self.send(text_data=json.dumps({
+			'type': 'tournament_info',
+			'tournament_info': {
+				'name': event['name'],
+				'creator': event['creator'],
 			}
 		}))
 
@@ -298,3 +351,44 @@ class PongConsumer(WebsocketConsumer):
 			}
 		)
 		
+	def broadcast_score_info_data(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'score_info_data',
+				'idx': data['idx'],
+				'name': data['name'],
+				'score1': data['score1'],
+				'score2': data['score2'],
+			}
+		)
+
+	def broadcast_scoreB_info_data(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'scoreB_info_data',
+				'idx': data['idx'],
+				'score': data['score'],
+				'lives': data['lives'],
+			}
+		)	
+
+	def broadcast_room_data(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'room_data',
+				'roomName': data['roomName'],
+			}
+		)
+
+	def broadcast_tournaments_info(self, data):
+		async_to_sync(self.channel_layer.group_send)(
+			self.room_group_name,
+			{
+				'type': 'tournament_info',
+				'name': data['name'],
+				'creator': data['creator'],
+			}
+		)

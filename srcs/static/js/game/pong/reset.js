@@ -2,9 +2,11 @@ import gameVar from "./var.js";
 import { initializeBall } from "./ball.js";
 import { aiServeBall } from "./ai.js";
 import { checkball } from "./check.js";
-import { sendGameData } from "./network.js";
+import { sendGameData, sendScoreInfo, sendSettingData } from "./network.js";
 import { startGame } from "./start.js";
 import { checkScore } from "./score.js";
+import { updateDifficultySelection, updateLevelSelection } from "./update.js";
+import { updatePowerUpSelection } from "./powerUp.js";
 
 export function listenBtn()
 {
@@ -29,6 +31,9 @@ export function clearAllpongStates()
 		clearInterval(gameVar.gameTimer);
 		gameVar.gameTimer = null;
 	}
+	updateDifficultySelection('medium', true);
+	updateLevelSelection('classicPong', true);
+	updatePowerUpSelection(false, true);
 	gameVar.startTime = false;
 	gameVar.gameTime = 0;
 	gameVar.gameStart = false;
@@ -74,6 +79,7 @@ export function resetBall(winner)
 		gameVar.playerScore++;
 	else
 		gameVar.aiScore++;
+	sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.playerScore, gameVar.aiScore);
 	checkScore();
 	gameVar.serveCount++;
 	if (gameVar.serveCount >= 2)
@@ -83,9 +89,7 @@ export function resetBall(winner)
 			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'ai' : 'player';
 		else
 		{
-			console.log("in if curr server before: ", gameVar.currentServer);
 			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'player2' : 'player';
-			console.log("in if curr server after: ", gameVar.currentServer);
 			if (gameVar.liveMatch)
 				sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
 		}
@@ -98,7 +102,6 @@ export function resetBall(winner)
 	gameVar.gameStart = false;
 	if (gameVar.liveMatch)
 		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
-	console.log("server current in reset: ", gameVar.currentServer);
 	if (gameVar.currentServer == 'ai')
 	{
 		gameVar.aiServe = true;

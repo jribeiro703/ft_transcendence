@@ -1,21 +1,38 @@
 import gameVar from "./var.js";
 import { checkSettingLive, updateSetting } from "./setting.js";
 import { createNewRoom } from "./room.js";
-import { SCORE_CANVAS_HEIGHT } from "./const.js";
-import { displayGameSelectionMulti, displayGameView, displayLobbyView, displayPongRemote } from "./display.js";
-import { getElementGameSelection, getElementLobby } from "./getElement.js";
-import { initializeCanvasPong } from "./canvas.js";
+import { displayGameBrickView, displayGameView, displayLobbyView } from "./display.js";
+import { getElementLobby } from "./getElement.js";
+import { initializeCanvasBrick, initializeCanvasBrick2p, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
 import { displayGameDataPong } from "./displayVar.js";
+import { getUserInfos } from "../getUser.js";
+import brickVar from "../brickout/var.js";
+import { initListenerB } from "../brickout/init.js";
 
 
 export function showLobbyView()
 {
-	console.log("game: ", gameVar.game);
 	let level = null;
 	if (gameVar.game == 'pong')
-		level = 'TableTennis';
+	{
+		if (!gameVar.currentLevel)
+		{
+			gameVar.currentLevel = 'tableTennis'
+			level = 'TableTennis';
+		}
+		else
+			level = gameVar.currentLevel;
+	}
 	else if (gameVar.game == 'brickout')
-		level = 'Classic';
+	{
+		if (!brickVar.currLevel)
+		{
+			brickVar.currLevel = 'classic'
+			level = 'Classic';
+		}
+		else
+			level = brickVar.currLevel;
+	}
 
 	displayLobbyView(level);
 	getElementLobby();
@@ -23,18 +40,31 @@ export function showLobbyView()
 
 export async function showPongRemote(room = null)
 {
-	console.log("showPongRemote");
-	displayGameDataPong();
 	checkSettingLive();
-	// displayPongRemote();
 	displayGameView();
 	await initializeCanvasPong();
 
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	gameVar.gameView.style.display = 'block';
+	// gameVar.gameView.style.display = 'block';
 	
-	// loadCanvasAndScoreRemote();
+	createNewRoom();
+}
+
+export async function showBrickoutRemote(room = null)
+{
+	// checkSettingLive();
+	// displayGameView();
+	displayGameBrickView();
+	await initializeCanvasBrick();
+	await initializeScoreCanvas2P();
+	initListenerB();
+
+	gameVar.gameView = document.getElementById('gameView');
+	gameVar.rematchBtn = document.getElementById('rematchBtn');	
+	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+	// gameVar.gameView.style.display = 'block';
+	
 	createNewRoom();
 }

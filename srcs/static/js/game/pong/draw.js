@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { drawPowerUp, collectPowerUp, updatePowerUp, newPowerUp } from "./powerUp.js";
+import { drawPowerUp, collectPowerUp, updatePowerUp } from "./powerUp.js";
 import { manageServer } from "./manage.js";
 import { manageCollisionLive, manageRealCollision } from "./collision.js";
 import { aiMove} from "./ai.js";
@@ -8,32 +8,39 @@ import { drawTennisCourt, drawLines} from "./tennis.js";
 import { manageMoveLive, manageMove } from './movement.js';
 import { drawBall } from "./ball.js";
 import { checkPaddles } from "./paddle.js";
-import { drawScoreBoard } from "./score.js";
+import { drawScoreBoard, drawScoreBoardLive } from "./score.js";
 import { updateCanvasColor } from "./update.js";
 import { addBtn } from "./manage.js";
 import { delRooms } from "./room.js";
+import brickVar from "../brickout/var.js";
 
 export function initDraw()
 {
-	if (gameVar.currentLevel === 'tableTennis')
-		drawLines();	
-	else if (gameVar.currentLevel === 'football')
-		drawFootball();
-	else if (gameVar.currentLevel === 'tennis')
-		drawTennisCourt();
-	else if (gameVar.currentLevel === 'classicPong')
+	if (gameVar.ctx)
 	{
-		drawClassicPong();
-		updateCanvasColor();
+		gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+		if (gameVar.currentLevel === 'tableTennis')
+			drawLines();	
+		else if (gameVar.currentLevel === 'football')
+			drawFootball();
+		else if (gameVar.currentLevel === 'tennis')
+			drawTennisCourt();
+		else if (gameVar.currentLevel === 'classicPong')
+		{
+			drawClassicPong();
+			updateCanvasColor();
+		}
+		drawBall();
+		checkPaddles();
+		if (gameVar.liveMatch)
+			drawScoreBoardLive();
+		else
+			drawScoreBoard();
 	}
-	drawBall();
-	checkPaddles();
-	drawScoreBoard();
 }
 
 export function draw()
 {
-	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
 	if (gameVar.gameStart)
 	{
@@ -53,13 +60,11 @@ export function draw()
 
 export function drawLive()
 {
-
 	if (gameVar.clientLeft)
 	{
 		kickOut();
 		return ;
 	}
-	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	initDraw();
 	if (gameVar.gameStart)
 		manageCollisionLive();
@@ -72,11 +77,22 @@ export function drawLive()
 }
 export function kickOut()
 {
-	cancelAnimationFrame(gameVar.animationFrame);
-	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
-	gameVar.ctx.font = "35px Arial";
-	gameVar.ctx.fillStyle = "red";	
-	gameVar.ctx.fillText("Opponent has rage quit..." , gameVar.canvasW / 4, gameVar.canvasH / 3);
+	if (gameVar.game === 'pong')
+	{
+		cancelAnimationFrame(gameVar.animationFrame);
+		gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+		gameVar.ctx.font = "35px Arial";
+		gameVar.ctx.fillStyle = "red";	
+		gameVar.ctx.fillText("Opponent has rage quit..." , gameVar.canvasW / 4, gameVar.canvasH / 3);
+	}
+	else if (gameVar.game === 'brickout')
+	{
+		cancelAnimationFrame(brickVar.anim);
+		brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
+		brickVar.ctx.font = "35px Arial";
+		brickVar.ctx.fillStyle = "red";	
+		brickVar.ctx.fillText("Opponent has rage quit..." , brickVar.canvasW / 4, brickVar.canvasH / 3);
+	}
 	delRooms();
 	addBtn();
 }

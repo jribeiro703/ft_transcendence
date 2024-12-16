@@ -1,65 +1,28 @@
 import brickVar2 from "./var.js";
 import { updatePowerUpSelectionB, updateDifficultySelectionSB, updateLevelSelectionB } from "./update.js";
-import { showGameSelectionView } from "../../pong/gameSelectionView.js";
 import { showGameSelectionMultiView } from "../../pong/gameSelectionView.js";
 import { listenSettingPUB, listenSettingDifficultyB, listenSettingLevelB } from "./listenerSetting.js";
 import { updateSettingB } from "./update.js";
-import { displaySettingViewB } from "./display.js";
+// import { displaySettingViewB } from "./display.js";
 
-export function showSettingViewB(live)
-{
-	displaySettingViewB();
-	getSettingBtn();
-
-	if(live === false)
-	{
-		brickVar2.powerUpSelection.style.display = 'block';
-		brickVar2.btnPowerUp.style.display = 'block';
-	}
-	else
-	{
-		brickVar2.powerUpSelection.style.display = 'none';
-		brickVar2.btnPowerUp.style.display = 'none';
-	}		
-
-	listenSettingPUB();
-	listenSettingDifficultyB();
-	listenSettingLevelB();
-
-	brickVar2.saveBtn.addEventListener('click', () =>
-	{
-		if (live === true)
-		{
-			// roomMultiView();
-			// updateLiveSetting();
-		}
-		else
-		{
-			showGameSelectionView();
-			updateSettingB();
-		}
-	});
-}
-
-export function showSettingMultiViewB(live)
-{
-	displaySettingViewB();
-	getSettingBtn();
-
-	brickVar2.powerUpSelection.style.display = 'block';
-	brickVar2.btnPowerUp.style.display = 'block';
-
-	listenSettingPUB();
-	listenSettingDifficultyB();
-	listenSettingLevelB();
-
-	brickVar2.saveBtn.addEventListener('click', () =>
-	{
-		// showGameBrickMultiView();
-		showGameSelectionMultiView();
-		updateSettingB();
-	});
-}
+// export function showSettingMultiViewB(live)
+// {
+// 	displaySettingViewB();
+// 	getSettingBtn();
+//
+// 	brickVar2.powerUpSelection.style.display = 'block';
+// 	brickVar2.btnPowerUp.style.display = 'block';
+//
+// 	listenSettingPUB();
+// 	listenSettingDifficultyB();
+// 	listenSettingLevelB();
+//
+// 	brickVar2.saveBtn.addEventListener('click', () =>
+// 	{
+// 		showGameSelectionMultiView();
+// 		updateSettingB();
+// 	});
+// }
 
 export function checkSettingB()
 {

@@ -45,16 +45,16 @@ export function initializeCanvasBrick()
 	{
         const checkCanvas = setInterval(() =>
 		{
-            const scoreCanvas = document.getElementById('scoreCanvas');
+            // const scoreCanvas = document.getElementById('scoreCanvas');
             const brickoutCanvas = document.getElementById('brickoutCanvas');
 
-			if (scoreCanvas)
-			{
-                brickVar.scoreCtx = scoreCanvas.getContext('2d');
-                scoreCanvas.width = brickVar.scoreCanvW;
-                scoreCanvas.height = brickVar.scoreCanvH;
-                scoreCanvas.style.marginBottom = '10px';
-            }
+			// if (scoreCanvas)
+			// {
+            //     brickVar.scoreCtx = scoreCanvas.getContext('2d');
+            //     scoreCanvas.width = brickVar.scoreCanvW;
+            //     scoreCanvas.height = brickVar.scoreCanvH;
+            //     scoreCanvas.style.marginBottom = '10px';
+            // }
             if (brickoutCanvas)
 			{
                 brickVar.ctx = brickoutCanvas.getContext('2d');
@@ -64,7 +64,37 @@ export function initializeCanvasBrick()
                 brickoutCanvas.style.height = `${brickVar.canvasH}px`;
             }
 
-			brickVar.gameTime = 0;
+			// brickVar.gameTime = 0;
+			// brickVar.gameTimer = setInterval(() =>
+			// {
+			// 	if (brickVar.startTime)
+			// 	{
+			// 		brickVar.gameTime++;
+			// 	}
+			// }, 1000);
+
+			clearInterval(checkCanvas);
+			resolve();
+        }, 100);
+    });
+}
+
+export function initializeScoreCanvas2P()
+{
+	return new Promise((resolve) =>
+	{
+        const checkCanvas = setInterval(() =>
+		{
+            const scoreCanvas = document.getElementById('scoreCanvas');
+			if (scoreCanvas)
+			{
+                brickVar.scoreCtx = scoreCanvas.getContext('2d');
+                scoreCanvas.width = brickVar.scoreCanvW;
+                scoreCanvas.height = brickVar.scoreCanvH + 100;
+                scoreCanvas.style.marginBottom = '10px';
+            }
+
+			brickVar.gameTime = 0;				
 			brickVar.gameTimer = setInterval(() =>
 			{
 				if (brickVar.startTime)
@@ -73,12 +103,21 @@ export function initializeCanvasBrick()
 				}
 			}, 1000);
 
+			brickVar2.gameTime = 0;				
+			brickVar2.gameTimer = setInterval(() =>
+			{
+				if (brickVar2.startTime)
+				{
+					brickVar2.gameTime++;
+				}
+			}, 1000);
+
 			clearInterval(checkCanvas);
 			resolve();
+
         }, 100);
     });
 }
-
 
 export function initializeCanvasBrick2p()
 {
@@ -86,17 +125,17 @@ export function initializeCanvasBrick2p()
 	{
         const checkCanvas = setInterval(() =>
 		{
-            const scoreCanvas = document.getElementById('scoreCanvas');
+            // const scoreCanvas = document.getElementById('scoreCanvas');
             
             const brickoutCanvas = document.getElementById('brickoutCanvas');
             const brickoutCanvas2 = document.getElementById('brickoutCanvas2');
-            if (scoreCanvas)
-			{
-                brickVar.scoreCtx = scoreCanvas.getContext('2d');
-                scoreCanvas.width = brickVar.scoreCanvW;
-                scoreCanvas.height = brickVar.scoreCanvH + 100;
-                scoreCanvas.style.marginBottom = '10px';
-            }
+            // if (scoreCanvas)
+			// {
+            //     brickVar.scoreCtx = scoreCanvas.getContext('2d');
+            //     scoreCanvas.width = brickVar.scoreCanvW;
+            //     scoreCanvas.height = brickVar.scoreCanvH + 100;
+            //     scoreCanvas.style.marginBottom = '10px';
+            // }
             if (brickoutCanvas)
 			{
                 brickVar.ctx = brickoutCanvas.getContext('2d');
@@ -114,18 +153,18 @@ export function initializeCanvasBrick2p()
                 brickoutCanvas2.style.height = `${brickVar.canvasH}px`;
             }
 
-                brickVar.gameTime = 0;				
-                brickVar.gameTimer = setInterval(() => {
-                    if (brickVar.startTime) {
-                        brickVar.gameTime++;
-                    }
-                }, 1000);
-				brickVar2.gameTime = 0;				
-                brickVar2.gameTimer = setInterval(() => {
-                    if (brickVar2.startTime) {
-                        brickVar2.gameTime++;
-                    }
-                }, 1000);
+                // brickVar.gameTime = 0;				
+                // brickVar.gameTimer = setInterval(() => {
+                //     if (brickVar.startTime) {
+                //         brickVar.gameTime++;
+                //     }
+                // }, 1000);
+				// brickVar2.gameTime = 0;				
+                // brickVar2.gameTimer = setInterval(() => {
+                //     if (brickVar2.startTime) {
+                //         brickVar2.gameTime++;
+                //     }
+                // }, 1000);
 
                 clearInterval(checkCanvas);
                 resolve();
