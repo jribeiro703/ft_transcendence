@@ -17,11 +17,10 @@ export function displayNextLevel()
 
 export function displayFinish()
 {
-  const mainContent = document.getElementById("mainContent");
+  const mainContent = document.getElementById("brickoutContainer");
   const btn = document.createElement('div');
   btn.innerHTML = `
   <div class="finish id="finish">
-    <button id="restartLevelBtn">Restart Game</button> 
     <button id="quitBtn">Return Home</button>
   </div>
   `;

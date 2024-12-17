@@ -15,6 +15,13 @@ export function createTournamentFormHTML(tournamentName) {
 							</div>
 							<button class="btn btn-primary" id="createTournament">Create Tournament</button>
 						</form>
+						<h2>Tounament List</h2>
+						<div id="noTournamentMessage" style="display: block;">
+							No tournament available for now. Create one !
+						</div>
+						<div id="tournamentContainer"></div>
+						<div class="refresh"></div>
+						<button id="refreshTourBtn" class="main-btn refresh-button">Refresh</button>
 					</div>
 				</div>
 			</div>

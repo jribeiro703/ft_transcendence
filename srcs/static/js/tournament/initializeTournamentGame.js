@@ -3,9 +3,9 @@
 import gameVar from "../game/pong/var.js";
 import { sendPlayerData, sendRoomData } from "../game/pong/network.js";
 
-export function initializeLobbySocket() {
+export function initializeLobbySocket(tournamentName) {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-	const lobbySocket = new WebSocket(protocol + '//' + window.location.host + '/ws/pong/check_rooms/');
+	const lobbySocket = new WebSocket(protocol + '//' + window.location.host + `/ws/pong/${tournamentName}/`);
 
 	lobbySocket.onopen = function(e) {
 		console.log('Lobby socket opened');
@@ -27,58 +27,97 @@ export function initializeLobbySocket() {
 	};
 }
 
-
+export function askForTournamentList()
+{
+	if (!gameVar.tournamentArray)
+		console.log("No tournament available");
+	else
+	{
+		console.log("there are some tournament");
+		const tournamentList = document.getElementById("tournamentContainer");
+		gameVar.tournamentArray.forEach(tournament =>
+		{
+			const tournamentElement = document.createElement('div');
+			tournamentElement.className = 'tournament-item';
+			tournamentElement.innerHTML = `
+				<div class="tournament-name">${tournament.name} created by ${tournament.creator}</div>
+				<button class="join-tournament-btn" 
+						onclick="joinTournament('${tournament.name}')">
+					Join Tournament
+				</button>
+			`;
+			tournamentList.appendChild(tournamentElement);
+		});
+	}
+}
 
 export function initializeTournamentSocket()
 {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
 	const tournamentSocket = new WebSocket(protocol + '//' + window.location.host + '/ws/pong/check_rooms/');
+	gameVar.tournamentSocket = tournamentSocket;
+	const tourRefresh = document.getElementById('refreshTourBtn');
 
+	tourRefresh.addEventListener('click', () =>
+	{
+		tournamentSocket.send(JSON.stringify({type: 'lobbyTour'}))
+	});
 	tournamentSocket.onopen = function(e)
 	{
 		console.log('Tournemant socket opened');
-		gameVar.tournamentSocket = tournamentSocket;
-		askForTournamentList();
-
+		tournamentSocket.send(JSON.stringify({type: 'lobbyTour'}));
+		// askForTournamentList();
 	};
+
 
 	tournamentSocket.onmessage = function(e)
 	{
 		const data = JSON.parse(e.data);
+		console.log("data", data);
 		if (data.type === 'tournament_info')
 		{
 			console.log("recept tournament info");
-			updateTournamentsList(data.tournament_info.name, data.tournament_info.creator);
+			if (Array.isArray(data.tournament_info))
+			{
+				data.tournament_info.forEach(tournament => 
+				{
+					updateTournamentsList(tournament.name, tournament.creator)
+				});
+			}
+		}
+		if (data.type === 'ping')
+		{
+			tournamentSocket.send(JSON.stringify({ type: 'pong' }));
 		}
 	};
 
 	tournamentSocket.onerror = function(e)
 	{
-		console.error('Lobby socket error:', e);
+		console.error('tournament socket error:', e);
 	};
 
 	tournamentSocket.onclose = function(e)
 	{
-		console.error('Lobby socket closed unexpectedly code : ', e.code, 'reason', e.reason);
+		console.error('tournament socket closed unexpectedly code : ', e.code, 'reason', e.reason);
 	};
 }
 
 function updateTournamentsList(name, creator)
 {
-    // Initialiser le tableau s'il n'existe pas
+	console.log("update tournament list");
     if (!gameVar.tournamentArray)
 	{
         gameVar.tournamentArray = [];
     }
 
-    // Ajouter le nouveau tournoi à l'array
     const newTournament = {
         name: name,
         creator: creator,
     };
     gameVar.tournamentArray.push(newTournament);
+	console.log("new name :", newTournament.name);
+	console.log("new creat :", newTournament.creator);
     
-    // Mettre à jour l'affichage
     const tournamentList = document.getElementById('tournament-list');
     if (!tournamentList)
 		return;
@@ -123,17 +162,6 @@ function updateTournamentsList(name, creator)
 //         tournamentList.appendChild(tournamentElement);
 //     });
 // }
-export function createTournament(name, creator)
-{
-    if (!gameVar.tournamentSocket) return;
-    
-    gameVar.tournamentSocket.send(JSON.stringify(
-	{
-        type: 'create_tournament',
-        tournament_name: name,
-        creator: creator,
-    }));
-}
 
 // createTournamentLayoutTemplate.js
 export function createTournamentLayoutHTML(tournamentName) {

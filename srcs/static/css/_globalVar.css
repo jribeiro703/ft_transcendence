@@ -1,15 +1,43 @@
 
 :root {
-  --background-color: #584c4c71;
-  --text-color: #3e3f4a;
+  
+  --background-color: linear-gradient(
+    to right,
+	#0A1014 0%,
+    #0F1520 15%,
+    #141B2A 30%,
+    #1A2A35 50%,
+    #141B2A 70%,
+    #0F1520 85%,
+    #0A1014 100%
+
+  );
+  --text-color: #fccb2d;
+  --border-btn-color: #4A4A4A;
+  --highlight-color: #FFFFFF;
+  --icon-color: #808080;
+  --box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+
+   --placeholder-color: var(--text-color);
+  --chat-btn-highlight: var(--highlight-color);
+  --chat-bg: rgba(0, 0, 0, 0.7);
+  --chat-msg: var(--text-color);
+  --chat-border: var(--border-btn-color);
+  --box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+
+
+
+
+  /* --background-color: #584c4c71;
+   --text-color: #3e3f4a;
   --border-btn-color: #000000;
   --highlight-color: #ffffff;
   /* icon color */
-  --icon-color: #3e3f4a;
+  /* --icon-color: #3e3f4a; */
   /* placeholder color */
-  --placeholder-color: #3e3f4a;
+  /* --placeholder-color: #3e3f4a; */
   /* chat */
-  --chat-btn-highlight: #000000;
+  /* --chat-btn-highlight: #000000;
   --chat-bg: #000000;
   --chat-msg: #3e3f4a;
   --chat-border: #ffffff;
@@ -22,5 +50,5 @@
   --box-shadow-neonChat3: 0 0 14px #ab45de;
   --box-shadow-mainContent1: 0 0 0px #225585, 0 0 2px #225585, 0 0 4px #225585, 0 0 6px #225585;
   --box-shadow-mainContent2: 0 0 8px #28649c;
-  --box-shadow-mainContent3: 0 0 14px #3076b8;
+  --box-shadow-mainContent3: 0 0 14px #3076b8; */ 
 }

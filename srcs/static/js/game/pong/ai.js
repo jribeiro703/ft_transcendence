@@ -17,19 +17,27 @@ export function aiServeBall()
 
 export function aiMove(targetY)
 {
-	if (!gameVar.localGame)
+    if (!gameVar.localGame)
 	{
-		if (gameVar.targetY != 0)
+        if (targetY !== 0)
 		{
-			if (Math.abs(gameVar.aiPaddleY - gameVar.targetY) > PADDLE_THRESHOLD)
+            const paddleCenterTarget = targetY - (gameVar.aiPaddleHeight / 2);
+            const boundedTarget = Math.max(0, Math.min(paddleCenterTarget, gameVar.canvasH - gameVar.aiPaddleHeight));
+            
+            if (Math.abs(gameVar.aiPaddleY - boundedTarget) > 5)
 			{
-				if (gameVar.aiPaddleY < targetY && gameVar.aiPaddleY < gameVar.canvasH - gameVar.aiPaddleHeight)
-					gameVar.aiPaddleY += PADDLE_SPEED;
-				else if (gameVar.aiPaddleY > targetY && gameVar.aiPaddleY > 0)
-					gameVar.aiPaddleY -= PADDLE_SPEED;
-			}
-		}
-	}
+                if (gameVar.aiPaddleY < boundedTarget && 
+                    gameVar.aiPaddleY < gameVar.canvasH - gameVar.aiPaddleHeight)
+				{
+                    gameVar.aiPaddleY += PADDLE_SPEED;
+                }
+				else if (gameVar.aiPaddleY > boundedTarget && gameVar.aiPaddleY > 0)
+				{
+                    gameVar.aiPaddleY -= PADDLE_SPEED;
+                }
+            }
+        }
+    }
 }
 
 export function manageAi()
@@ -41,7 +49,9 @@ export function manageAi()
 		if (gameVar.dx > 0)
 		{
 			let future = predictBallPos(gameVar);
-			gameVar.targetY = future[749][1];
+
+			console.log("on predict", future);
+			gameVar.targetY = future[149][1];
 		}
 	}, AI_UPDATE_INTERVAL);	
 }
@@ -60,6 +70,36 @@ export function updateIaMove()
 		}
 	}
 }
+export function drawPredictionPath(ctx)
+{
+    if (!gameVar.showPrediction)
+		return;
+    
+    const future = predictBallPos(gameVar);
+    
+    ctx.save();
+    ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+    
+    for (let i = 0; i < future.length; i++)
+	{
+        ctx.beginPath();
+        ctx.arc(future[i][0], future[i][1], 2, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    
+    ctx.fillStyle = 'rgba(0, 255, 0, 0.5)'; 
+    ctx.beginPath();
+    ctx.arc(future[149][0], future[149][1], 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'p' || e.key === 'P') {
+        gameVar.showPrediction = !gameVar.showPrediction;
+    }
+});
+
 
 function predictBallPos(gameVar)
 {
@@ -80,7 +120,7 @@ function predictBallPos(gameVar)
 		y_min: 0,
 		y_max: gameVar.canvasH,
 	}
-	let step = 750;
+	let step = 160;
 	let futurePtsList = [];
 
 	for (let i = 0; i < step; i++)

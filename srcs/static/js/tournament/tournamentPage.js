@@ -21,15 +21,18 @@ let currentTournamentId;
 
 export async function showCreateTournamentForm2()
 {
-	initializeTournamentSocket();
+	// initializeTournamentSocket();
 	const box = document.getElementById('mainContent');
 	const randomName = await generateTournamentName();
 	box.innerHTML = createTournamentFormHTML(randomName);
+	initializeTournamentSocket();
 	getUserInfos2();
 
 	document.getElementById('createTournament').addEventListener('click', () =>
 	{
-		createTournament(randomName, gameVar.userName);
+		var name = "tournament_" + randomName;
+		console.log(name);
+		createTournament(name);
 		showTournamentView2(randomName);
 	}); 
 
@@ -60,7 +63,7 @@ export async function showTournamentView2(tournamentName)
 		return;
 	}
 
-	initializeLobbySocket();
+	initializeLobbySocket(tournamentName);
 	gameVar.liveMatch = true;
 
 	setupEligiblePlayersRefresh();
@@ -95,16 +98,7 @@ function updateTournamentsList(tournaments)
 
 export function createTournament(name)
 {
-    if (!gameVar.tournamentSocket)
-		return;
-
-	const newTournament =
-	{
-		name: name,
-		creator: gameVar.userName,
-	}
-
-	sendTournamentInfo(gameVar.tournamentSocket, newTournament.name, newTournament.creator);
+	gameVar.tournamentSocket.send(JSON.stringify({ type: 'join_room'}));
 }
 
 // export function joinTournament()

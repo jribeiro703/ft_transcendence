@@ -457,6 +457,7 @@ export function displayGameBrickView()
   const mainContent = document.getElementById('mainContent');
   mainContent.innerHTML = '';
   const insertTo = document.createElement('div');
+  insertTo.id = 'brickoutContainer';
   insertTo.innerHTML = `
   <div id="scoreboard">
     <canvas id="scoreCanvas"></canvas>

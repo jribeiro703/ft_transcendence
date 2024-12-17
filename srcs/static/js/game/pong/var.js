@@ -11,7 +11,7 @@ const gameVar =
 
 	gameTime: 0,
 	gameTimer: null,
-
+	showPrediction: false,
 // ---------------------------Paddle------------------------
 
 	playerPaddleHeight: 75,
@@ -112,7 +112,7 @@ const gameVar =
 	tournamentSocket: null,
 	roomTour1: null,
 
-	tournamentArray: [],
+	tournamentArray: null,
 
 // --------------------------------------AI-----------------------------
 

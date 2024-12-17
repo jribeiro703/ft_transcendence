@@ -2,7 +2,7 @@ import gameVar from "./var.js";
 import { drawPowerUp, collectPowerUp, updatePowerUp } from "./powerUp.js";
 import { manageServer } from "./manage.js";
 import { manageCollisionLive, manageRealCollision } from "./collision.js";
-import { aiMove} from "./ai.js";
+import { aiMove, drawPredictionPath} from "./ai.js";
 import { drawFootball } from "./foot.js";
 import { drawTennisCourt, drawLines} from "./tennis.js";
 import { manageMoveLive, manageMove } from './movement.js';
@@ -42,6 +42,7 @@ export function initDraw()
 export function draw()
 {
 	initDraw();
+	drawPredictionPath(gameVar.ctx);
 	if (gameVar.gameStart)
 	{
 		manageRealCollision();
@@ -55,13 +56,8 @@ export function draw()
 	aiMove(gameVar.targetY);
 	if (gameVar.animationFrame)
 		cancelAnimationFrame(gameVar.animationFrame);
-	// if (gameVar.animationFrame > 60)
-		// cancelAnimationFrame(gameVar.animationFrame)
 	gameVar.animationFrame = requestAnimationFrame(draw);
-	// setInterval(draw, 10);
 }
-
-// setInterval(draw, 50);
 
 export function drawLive()
 {
