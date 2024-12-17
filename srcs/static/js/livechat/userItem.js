@@ -46,7 +46,7 @@ function createFriendButton(user, itemDiv) {
 	button.innerHTML = isFriend ? '👥 ❌' : '👥 ➕';
 	button.title = isFriend ? 'Remove friend' : 'Add friend';
 	button.style.padding = '0.1rem 0.1rem';
-	button.style.fontSize = '0.8rem';
+	button.style.fontSize = '0.75rem';
 
 	button.addEventListener('click', async (e) => {
 		e.stopPropagation();
@@ -68,6 +68,28 @@ async function handleBlockAction(user, button, friendButton, isBlocked) {
 		isBlocked = !isBlocked;
 		button.innerHTML = isBlocked ? '❎️' : '🚫';
 		button.title = isBlocked ? 'Unblock user' : 'Block user';
+		if (!isBlocked) {
+			// Remove d-none class from messages in #chat-log
+			const chatLog = document.querySelector("#chat-log");
+			const messages = chatLog.querySelectorAll('div');
+			messages.forEach(message => {
+				const nicknameSpan = message.querySelector('span:nth-child(2)');
+				if (nicknameSpan && nicknameSpan.textContent.trim() === `${user.username}:`) {
+					message.classList.remove("d-none");
+				}
+			});
+		}
+		if (isBlocked) {
+			// Remove d-none class from messages in #chat-log
+			const chatLog = document.querySelector("#chat-log");
+			const messages = chatLog.querySelectorAll('div');
+			messages.forEach(message => {
+				const nicknameSpan = message.querySelector('span:nth-child(2)');
+				if (nicknameSpan && nicknameSpan.textContent.trim() === `${user.username}:`) {
+					message.classList.add("d-none");
+				}
+			});
+		}
 		showToast(response.data.message, 'success');
 		if (friendButton) {
 			friendButton.click();
@@ -84,7 +106,7 @@ function createBlockButton(user, friendButton) {
 	button.innerHTML = isBlocked ? '❎️' : '🚫';
 	button.title = isBlocked ? 'Unblock user' : 'Block user';
 	button.style.padding = '0.1rem 0.1rem';
-	button.style.fontSize = '0.8rem';
+	button.style.fontSize = '0.75rem';
 
 	button.addEventListener('click', async (e) => {
 		e.stopPropagation();
@@ -102,10 +124,10 @@ function createBlockButton(user, friendButton) {
 function createGameButton(user) {
 	const button = document.createElement('button');
 	button.className = 'btn btn-xs btn-outline-success';
-	button.innerHTML = '🎮';
+	button.innerHTML = '⚔️';
 	button.title = 'Invite to game';
 	button.style.padding = '0.1rem 0.1rem';
-	button.style.fontSize = '0.8rem';
+	button.style.fontSize = '0.75rem';
 
 	button.addEventListener('click', async (e) => {
 		e.stopPropagation();

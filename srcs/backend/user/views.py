@@ -427,7 +427,7 @@ class RemoveFriendView(APIView):
 		except User.DoesNotExist:
 			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-class IsBlockedView(APIView):
+class IsBlockedViewId(APIView):
 	permission_classes = [IsAuthenticated]
 
 	def get(self, request, *args, **kwargs):
@@ -435,6 +435,20 @@ class IsBlockedView(APIView):
 		user = request.user
 		try:
 			blocked_user = User.objects.get(id=user_id)
+			is_blocked = user.blocklist.filter(id=blocked_user.id).exists()
+			return Response({"is_blocked": is_blocked}, status=status.HTTP_200_OK)
+		except User.DoesNotExist:
+			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class IsBlockedViewNick(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def get(self, request, *args, **kwargs):
+		nickname = kwargs.get('nickname')
+		logger.info(nickname)
+		user = request.user
+		try:
+			blocked_user = User.objects.get(username=nickname)
 			is_blocked = user.blocklist.filter(id=blocked_user.id).exists()
 			return Response({"is_blocked": is_blocked}, status=status.HTTP_200_OK)
 		except User.DoesNotExist:

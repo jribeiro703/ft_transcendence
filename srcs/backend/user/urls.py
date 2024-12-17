@@ -24,7 +24,8 @@ urlpatterns = [
 	path('friends/add/<int:user_id>/', views.SendFriendRequestView.as_view(), name='send_friend_request'),
 	path('friends/remove/<int:user_id>/', views.RemoveFriendView.as_view(), name='remove_friend'),
 	path('friends/check/<int:user_id>/', views.IsFriendView.as_view(), name='is_friend'),
-	path('block/check/<int:user_id>/', views.IsBlockedView.as_view(), name='block_user'),
+	path('block/check/id/<int:user_id>/', views.IsBlockedViewId.as_view(), name='is_blocked_id'),
+	path('block/check/nickname/<str:nickname>/', views.IsBlockedViewNick.as_view(), name='is_blocked_nickname'),
 	path('block/add/<int:user_id>/', views.BlockUserView.as_view(), name='block_user'),
 	path('block/remove/<int:user_id>/', views.UnblockUserView.as_view(), name='unblock_user'),
 
