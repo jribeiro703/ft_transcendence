@@ -30,34 +30,37 @@ function createProfileContent() {
 	`;
 }
 
-// function createProfileContent() {
-// 	const mainContent = document.getElementById('mainContent');
-// 	mainContent.innerHTML = `
-// 		<div class="container" style="width: 60%">
-// 			<div id="profile-header">
-// 				<img id="avatar" src="${DEFAULT_AVATAR}" alt="User Avatar" />
-// 				<div>
-// 					<h4 id="username">Username</h4>
-// 					<p id="alias"></p>
-// 				</div>				
-// 				<div id="isOnline">
-// 					<span class="status-indicator"></span>
-// 					<span class="status-text"></span>
-// 				</div>
-// 				<div>
-// 					<strong>Total: </strong> <span id="totalMatches">0</span>
-// 				</div>
-// 				<div>
-// 					<strong>Won: </strong> <span id="wonMatches">0</span>
-// 				</div>
-// 			</div>
-// 			<div id="match-history">
-// 				<h2>Match History</h2>
-// 				<ul id="matchHistory"></ul>
-// 			</div>
-// 		</div>
-// 	`;
-// }
+function createMatchHystory(container, data) {
+	const matchesData = data.match_history
+	if (matchesData.length > 0) {
+
+		const table = document.createElement('table');
+		matchesData.forEach(match => {4
+		console.log(match);
+			const row = document.createElement('tr');
+			row.innerHTML = `
+				<td>${match.winner && match.winner.username === data.username ? 'WIN' : 'LOSS'}</td>
+				<td>
+					${data.username}
+					<img src="${data.avatar}" alt="${data.username}'s avatar"/>
+				</td>
+				<td>${match.me.score}</td>
+				<td>${match.enemy.score}</td>
+				<td>
+					<img src="${match.enemy.avatar}" alt="${match.enemy.username}'s avatar"/>
+					${match.enemy.username}
+				</td>
+				<td>${match.date}</td>
+			`;
+			table.appendChild(row);
+		});
+		
+		container.appendChild(table);
+
+	} else {
+		container.innerHTML = '<p>No match history available.</p>';
+	}
+}
 
 export async function renderProfilePage() {
 	let responseObject = await fetchAuthData("/user/private/pk/", "GET", null, false);
@@ -89,16 +92,10 @@ export async function renderProfilePage() {
 		document.getElementById('totalMatches').textContent = data.total_matches;
 		document.getElementById('wonMatches').textContent = data.won_matches;
 		
-		const matchHistoryList = document.getElementById('matchHistory');
-		if (data.match_history.length > 0) {
-			data.match_history.forEach(match => {
-				const listItem = document.createElement('li');
-				listItem.textContent = `Date: ${match.date}, Score: ${match.score}, Winner: ${match.winner}`;
-				matchHistoryList.appendChild(listItem);
-			});
-		} else {
-			matchHistoryList.innerHTML = '<li>No match history available.</li>';
-		}
+		const matchHistory = document.getElementById('matchHistory');
+		createMatchHystory(matchHistory, data);
+
+	
 	} else {
 		showToast("An error occurred while fetching profile data.", "error");
 	}
