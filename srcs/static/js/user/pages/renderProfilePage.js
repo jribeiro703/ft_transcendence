@@ -7,8 +7,10 @@ function createProfileContent() {
 		<div class="profile-container">
 			<div class="profile-header">
 				<img id="avatar" class="profile-avatar" src="${DEFAULT_AVATAR}" alt="User Avatar" class="avatar" />
-				<h4 id="username" class="profile-username">Username</h4>
-				<p id="alias" class="profile-alias"></p>
+				<div class="profile-names">
+					<h4 id="username" class="profile-username">Username</h4>
+					<p id="alias" class="profile-alias"></p>
+				</div>				
 				<div id="isOnline" class="status-container">
 					<span class="status-indicator"></span>
 					<span class="status-text"></span>
@@ -27,6 +29,35 @@ function createProfileContent() {
 		</div>
 	`;
 }
+
+// function createProfileContent() {
+// 	const mainContent = document.getElementById('mainContent');
+// 	mainContent.innerHTML = `
+// 		<div class="container" style="width: 60%">
+// 			<div id="profile-header">
+// 				<img id="avatar" src="${DEFAULT_AVATAR}" alt="User Avatar" />
+// 				<div>
+// 					<h4 id="username">Username</h4>
+// 					<p id="alias"></p>
+// 				</div>				
+// 				<div id="isOnline">
+// 					<span class="status-indicator"></span>
+// 					<span class="status-text"></span>
+// 				</div>
+// 				<div>
+// 					<strong>Total: </strong> <span id="totalMatches">0</span>
+// 				</div>
+// 				<div>
+// 					<strong>Won: </strong> <span id="wonMatches">0</span>
+// 				</div>
+// 			</div>
+// 			<div id="match-history">
+// 				<h2>Match History</h2>
+// 				<ul id="matchHistory"></ul>
+// 			</div>
+// 		</div>
+// 	`;
+// }
 
 export async function renderProfilePage() {
 	let responseObject = await fetchAuthData("/user/private/pk/", "GET", null, false);
