@@ -182,17 +182,20 @@ class JoinTournamentView(APIView):
 			tournament_id = request.data.get('tournament_id')
 			user_id = request.data.get('user_id')
 
+
 			if not tournament_id or not user_id:
 				return Response({"error": "Tournament ID and User ID are required"}, status=status.HTTP_400_BAD_REQUEST)
 
 			tournament = get_object_or_404(Tournament, id=tournament_id)
 			user = get_object_or_404(User, id=user_id)
+			is_creator = tournament.created_by.id == user.id
 
 			# Return tournament details if the user is already in the tournament
 			if user in tournament.players.all():
 				return Response({
 					"already_in_tournament": True,
 					"tournament_name": tournament.name,
+					"is_creator": is_creator,
 					"players": [
 						{"id": player.id, "username": player.username}
 						for player in tournament.players.all()
@@ -206,6 +209,7 @@ class JoinTournamentView(APIView):
 			return Response({
 				"already_in_tournament": False,
 				"tournament_name": tournament.name,
+				"is_creator": is_creator,
 				"players": [
 					{"id": player.id, "username": player.username}
 					for player in tournament.players.all()
