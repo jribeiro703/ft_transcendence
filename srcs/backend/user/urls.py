@@ -11,7 +11,6 @@ urlpatterns = [
 	path('leaderbaord/', views.getLeaderboard, name='get_leaderboard'),
 
 	# private user endpoints
-	path('friends/', views.getUserFriends, name="user_friends"),
 	path('online/', views.getOnlineUsers, name='online_users'),
 	path('private/', views.GetUserPrivateInfos, name="user_private_infos"),
 	path('private/pk/', views.getUserPk, name="user_pk"),	
@@ -19,10 +18,15 @@ urlpatterns = [
 	path('profile/<int:pk>/', views.UserProfileView.as_view(), name="user_profile"),
 	path('settings/<int:pk>/', views.UserSettingsView.as_view(), name="user_settings"),
 
-	path('friend-requests/<int:pk>/', views.ListFriendRequestView.as_view(), name='list_friend_request'),
-	path('friend-requests/accept/<int:request_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),
 	path('friends/', views.getUserFriends, name="user_friends"),
-
+	path('friends/<int:pk>/', views.ListFriendRequestView.as_view(), name='list_friend_request'),
+	path('friends/accept/<int:request_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),
+	path('friends/add/<int:user_id>/', views.SendFriendRequestView.as_view(), name='send_friend_request'),
+	path('friends/remove/<int:user_id>/', views.RemoveFriendView.as_view(), name='remove_friend'),
+	path('friends/check/<int:user_id>/', views.IsFriendView.as_view(), name='is_friend'),
+	path('block/check/<int:user_id>/', views.IsBlockedView.as_view(), name='block_user'),
+	path('block/add/<int:user_id>/', views.BlockUserView.as_view(), name='block_user'),
+	path('block/remove/<int:user_id>/', views.UnblockUserView.as_view(), name='unblock_user'),
 
 	# authentication endpoints
 	path('register/', views.CreateUserView.as_view(), name="register"),
@@ -40,7 +44,5 @@ urlpatterns = [
 	path('logout/', views.LogoutView.as_view(), name="logout"),
 	
 	path('login/token-refresh/', views.CookieTokenRefreshView.as_view(), name="cookie_token_refresh"),
-
-	path('online/', views.getOnlineUsers, name="online_users"),
 
 ]
