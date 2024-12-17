@@ -85,27 +85,57 @@
 	color: #666;
   }
   
-  /* Match history */
-  .profile-match-history {
-	margin-top: 20px;
-  }
-  
-  .match-history h2 {
-	font-size: 18px;
-	margin-bottom: 10px;
-  }
-  
-  #matchHistory {
-	list-style: none;
-	padding: 0;
-  }
-  
-  #matchHistory li {
-	padding: 10px;
-	border-bottom: 1px solid #ddd;
-  }
-  
-  #matchHistory li:last-child {
-	border-bottom: none;
-  }
-  
+  /* Match history styling */
+.profile-match-history {
+    margin-top: 20px;
+    width: 70%; /* Adjust width as needed */
+    background-color: var(--background-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+}
+
+.match-history h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: var(--highlight-color);
+    text-align: center;
+}
+
+#matchHistory {
+    list-style: none;
+    padding: 0;
+}
+
+#matchHistory li {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#matchHistory li:hover {
+    background-color: rgba(46, 204, 113, 0.1); /* Light green background on hover */
+    transform: scale(1.02); /* Slightly enlarge on hover */
+}
+
+#matchHistory li:last-child {
+    border-bottom: none;
+}
+
+.match-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #333;
+}
+
+.match-date {
+    font-weight: bold;
+}
+
+.match-winner {
+    color: #2ecc71; /* Green for winner */
+    font-weight: bold;
+}
