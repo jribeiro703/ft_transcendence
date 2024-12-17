@@ -35,7 +35,8 @@ export function initializeJoinSocket()
 	tournamentSocket.onopen = function(e)
 	{
 		console.log('Tournemant socket opened');
-		gameVar.tournamenetSocket = tournamentSocket;
+		gameVar.tournamentSocket = tournamentSocket;
+		askForTournamentList();
 
 		tournamentSocket.send(JSON.stringify({
 			type: 'get_tournaments'
@@ -45,9 +46,10 @@ export function initializeJoinSocket()
 	tournamentSocket.onmessage = function(e)
 	{
 		const data = JSON.parse(e.data);
-		if (data.type === 'tournament_list' || data.type === 'tournament_update')
+		if (data.type === 'tournament_info')
 		{
-			updateTournamentsList(data.tournaments)
+			console.log("recept tournament info");
+			updateTournamentsList(data.tournament_info.name, data.tournament_info.creator);
 		}
 	};
 
@@ -100,4 +102,25 @@ export function createTournament(name)
 		tournament_name: name,
 		creator: gameVar.userName
 	}));
+}
+
+// createTournamentLayoutTemplate.js
+export function createTournamentLayoutHTML(tournamentName) {
+    return `
+        <div class="tournament-container">
+            <h2>Tournament: ${tournamentName}</h2>
+            <div class="tournament-lists">
+                <div class="available-tournaments">
+                    <h3>Available Tournaments</h3>
+                    <div id="tournament-list" class="tournament-list">
+                        <!-- Les tournois seront injectés ici -->
+                    </div>
+                </div>
+                <div class="current-tournament">
+                    <h3>Current Tournament</h3>
+                    <div id="tournament-bracket"></div>
+                </div>
+            </div>
+        </div>
+    `;
 }

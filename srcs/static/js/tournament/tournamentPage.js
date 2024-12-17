@@ -16,6 +16,8 @@ import { displayGameView } from '../game/pong/display.js';
 import { initializeCanvasPong } from '../game/pong/canvas.js';
 import { updateDifficultySelection, updateLevelSelection } from '../game/pong/update.js';
 import { initControlLive } from '../game/pong/control.js';
+import { getUserInfos } from '../game/getUser.js';
+import { sendScoreInfo, sendTournamentInfo } from '../game/pong/network.js';
 import { getUserInfos2 } from '../game/getUser.js';
 import { fetchAuthData } from '../user/fetchData.js';
 
@@ -96,6 +98,10 @@ export async function showTournamentView2(tournamentName)
 	const box = document.getElementById('mainContent');
 	box.innerHTML = createTournamentLayoutHTML(tournamentName);
 
+	if (gameVar.tournamentArray)
+	{
+		updateTournamentsList(gameVar.tournamentArray);
+	}
 	currentTournamentId = await setupTournamentFlow(tournamentName);
 
 	const playersList = document.getElementById('playersList');

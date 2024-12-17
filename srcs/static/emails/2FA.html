@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your 2FA Code</title>
-</head>
-<body>
-    <h1>Two-Factor Authentication Code</h1>
-    <p>Dear {{ username }},</p>
-    <p>Your authentication code is:</p>
-    <p><strong>{{ verification_code }}</strong></p>
-    <p>This code is valid for 5 minutes.</p>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Your 2FA Code</title>
+    </head>
+    <body>
+        <h1>Two-Factor Authentication Code</h1>
+        <p>Dear {{ username }},</p>
+        <p>Your authentication code is:</p>
+        <p>
+            <strong>{{ verification_code }}</strong>
+        </p>
+        <p>This code is valid for 5 minutes.</p>
+    </body>
 </html>

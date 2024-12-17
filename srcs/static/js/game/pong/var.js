@@ -112,6 +112,8 @@ const gameVar =
 	tournamentSocket: null,
 	roomTour1: null,
 
+	tournamentArray: [],
+
 // --------------------------------------AI-----------------------------
 
 	aiServe: false,
@@ -195,7 +197,15 @@ const gameVar =
 	newRoomName: null,
 	
 	rooms: [
-		{ idx: null, name: null, difficulty: null, level: null, players: 0, status: null},
+		{
+			idx: null,
+			name: null,
+			difficulty: null, 
+			level: null, 
+			players: 0, 
+			status: null,
+			time: null,
+		},
 	],
 	
 	isFirstPlayer: false,

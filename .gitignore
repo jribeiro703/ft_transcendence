@@ -138,3 +138,4 @@ docker/nginx/certs
 srcs/staticfiles
 /docker/.mail
 docker/.42
+/srcs/media/avatars/

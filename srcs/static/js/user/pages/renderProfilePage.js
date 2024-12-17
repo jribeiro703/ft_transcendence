@@ -6,20 +6,21 @@ function createProfileContent() {
 	mainContent.innerHTML = `
 		<div class="profile-container">
 			<div class="profile-header">
-				<div class="avatar-container">
-					<img id="avatar" src="${DEFAULT_AVATAR}" alt="User Avatar" class="avatar" />
-					<h4 id="username">Username</h4>
-					<p id="alias" class="alias"></p>
-					<p id="isOnline" class="isOnline"></p>
+				<img id="avatar" class="profile-avatar" src="${DEFAULT_AVATAR}" alt="User Avatar" class="avatar" />
+				<h4 id="username" class="profile-username">Username</h4>
+				<p id="alias" class="profile-alias"></p>
+				<div id="isOnline" class="status-container">
+					<span class="status-indicator"></span>
+					<span class="status-text"></span>
 				</div>
-				<div class="stats">
+				<div class="profile-stats">
 					<strong>Total: </strong> <span id="totalMatches">0</span>
 				</div>
-				<div class="stats">
+				<div class="profile-stats">
 					<strong>Won: </strong> <span id="wonMatches">0</span>
 				</div>
 			</div>
-			<div class="match-history">
+			<div class="profile-match-history">
 				<h2>Match History</h2>
 				<ul id="matchHistory"></ul>
 			</div>
@@ -39,9 +40,19 @@ export async function renderProfilePage() {
 		createProfileContent();
 		const data = responseObject.data;
 
+		const statusIndicator = document.querySelector('#isOnline .status-indicator');
+		const statusText = document.querySelector('#isOnline .status-text');
+		
+		if (data.is_online) {
+			statusIndicator.classList.add('status-online');
+			statusText.textContent = 'Online';
+		} else {
+			statusIndicator.classList.add('status-offline');
+			statusText.textContent = 'Offline';
+		}
+
 		document.getElementById('username').textContent = data.username;
 		document.getElementById('avatar').src = data.avatar;
-		document.getElementById('isOnline').textContent = data.is_online ? "Online" : "Offline";
 		if (data.alias)
 			document.getElementById('alias').textContent = `(${data.alias})`;
 		document.getElementById('totalMatches').textContent = data.total_matches;
