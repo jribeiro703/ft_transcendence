@@ -1,0 +1,117 @@
+@import url("_globalVar.css");
+
+
+/* Settings container styles */
+#settings-container {
+	display: flex;
+	justify-content: space-between; /* Space between the avatar and the rest */
+	align-items: flex-start;
+	padding: 20px;
+	border-radius: 10px;
+	background-color: var(--background-color);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* User info section styles */
+  #user-info {
+	flex: 1; /* Allows content to grow */
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+  }
+  
+  #user-info p {
+	font-size: 16px;
+	margin: 5px 0;
+  }
+  
+  /* Avatar styles */
+  .avatar {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid #ccc;
+  }
+  
+  /* Avatar container */
+  #user-info {
+	position: relative;
+  }
+  
+  /* Change button styles */
+  .change-btn {
+	margin-left: 10px;
+	padding: 5px 10px;
+	font-size: 14px;
+	border: none;
+	border-radius: 5px;
+	background-color: #4a90e2;
+	color: white;
+	cursor: pointer;
+  }
+  
+  .change-btn:hover {
+	background-color: #357ab8;
+  }
+  
+  .upload-btn {
+	margin-left: 10px;
+	padding: 5px 10px;
+	font-size: 14px;
+	border: none;
+	border-radius: 5px;
+	background-color: #4a90e2;
+  }
+  
+  .upload-btn:hover {
+	background-color: #357ab8;
+  }
+  
+  /* Friend request section */
+  #friend-request {
+	margin-top: 20px;
+  }
+  
+  #friend-request label {
+	font-weight: bold;
+  }
+  
+  #friend-request input {
+	margin-left: 10px;
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+  }
+  
+  #friend-request button {
+	margin-left: 10px;
+	padding: 5px 10px;
+	font-size: 14px;
+	border: none;
+	border-radius: 5px;
+	background-color: #4a90e2;
+	color: white;
+	cursor: pointer;
+  }
+  
+  #friend-request button:hover {
+	background-color: #357ab8;
+  }
+  
+  /* Delete account button */
+  #delete-account-btn {
+	margin-top: 20px;
+	padding: 10px 20px;
+	font-size: 14px;
+	border: none;
+	border-radius: 5px;
+	background-color: #e74c3c;
+	color: white;
+	cursor: pointer;
+  }
+  
+  #delete-account-btn:hover {
+	background-color: #c0392b;
+  }
+  
