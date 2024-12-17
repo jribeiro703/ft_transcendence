@@ -1,6 +1,11 @@
 import { showToast, DEFAULT_AVATAR} from "../tools.js";
 import { fetchData, fetchAuthData } from "../fetchData.js";
 
+let currentPage = 1;
+let matchesPerPage = 5;
+let matchData;
+let userData;
+
 function createProfileContent() {
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = `
@@ -23,43 +28,76 @@ function createProfileContent() {
 				</div>
 			</div>
 			<div class="profile-match-history">
-				<h2>Match History</h2>
-				<ul id="matchHistory"></ul>
+				<h2 class="match-history-title">Match History</h2>
+				<div id="matchHistory" class="match-history-content"></div>
+				<div class="pagination" id="pagination">
+					<button id="prevButton" disabled>Précédent</button>
+					<button id="nextButton">Suivant</button>
+				</div>
 			</div>
 		</div>
 	`;
 }
 
-function createMatchHystory(container, data) {
-	const matchesData = data.match_history
-	if (matchesData.length > 0) {
+function createMatchHistory(container, data) {
+	matchData = data.match_history;
+	userData = data;
+	const totalMatches = matchData.length;
+	const totalPages = Math.ceil(totalMatches / matchesPerPage);
+	const startIndex = (currentPage - 1) * matchesPerPage;
+	const endIndex = startIndex + matchesPerPage;
+	const paginatedMatches = matchData.slice(startIndex, endIndex);
 
+	if (paginatedMatches.length > 0) {
 		const table = document.createElement('table');
-		matchesData.forEach(match => {4
-		console.log(match);
+		paginatedMatches.forEach(match => {
 			const row = document.createElement('tr');
 			row.innerHTML = `
-				<td>${match.winner && match.winner.username === data.username ? 'WIN' : 'LOSS'}</td>
-				<td>
-					${data.username}
-					<img src="${data.avatar}" alt="${data.username}'s avatar"/>
+				<td class="match-result">${match.winner && match.winner.username === userData.username ? 'WIN' : 'LOSS'}</td>
+				<td class="user-info">
+					${userData.username}
+					<img class="user-avatar" src="${userData.avatar}" alt="${userData.username}'s avatar"/>
 				</td>
-				<td>${match.me.score}</td>
-				<td>${match.enemy.score}</td>
-				<td>
-					<img src="${match.enemy.avatar}" alt="${match.enemy.username}'s avatar"/>
+				<td class="score">${match.me.score}</td>
+				<td class="score">${match.enemy.score}</td>
+				<td class="enemy-info">
+					<img class="enemy-avatar" src="${match.enemy.avatar}" alt="${match.enemy.username}'s avatar"/>
 					${match.enemy.username}
 				</td>
-				<td>${match.date}</td>
+				<td class="match-date">${match.date}</td>
 			`;
 			table.appendChild(row);
 		});
 		
+		container.innerHTML = '';
 		container.appendChild(table);
+		updateNavigationButtons(totalPages);
 
 	} else {
 		container.innerHTML = '<p>No match history available.</p>';
 	}
+}
+
+function updateNavigationButtons(totalPages) {
+	const prevButton = document.getElementById('prevButton');
+	const nextButton = document.getElementById('nextButton');
+
+	prevButton.disabled = currentPage === 1;
+	nextButton.disabled = currentPage === totalPages;
+
+	prevButton.onclick = () => {
+		if (currentPage > 1) {
+			currentPage--;
+			createMatchHistory(document.getElementById('matchHistory'), { match_history: matchData, ...userData });
+		}
+	};
+
+	nextButton.onclick = () => {
+		if (currentPage < totalPages) {
+			currentPage++;
+			createMatchHistory(document.getElementById('matchHistory'), { match_history: matchData, ...userData });
+		}
+	};
 }
 
 export async function renderProfilePage() {
@@ -93,9 +131,8 @@ export async function renderProfilePage() {
 		document.getElementById('wonMatches').textContent = data.won_matches;
 		
 		const matchHistory = document.getElementById('matchHistory');
-		createMatchHystory(matchHistory, data);
+		createMatchHistory(matchHistory, data);
 
-	
 	} else {
 		showToast("An error occurred while fetching profile data.", "error");
 	}
