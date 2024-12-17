@@ -6,12 +6,16 @@ export function displayLobbyView(level) {
   mainContent.innerHTML = "";
   const roomView = document.createElement("div");
 
+  roomView.style.width = "100%";
+  // gameSelection.style.width = "100%";
+
+
   roomView.innerHTML = `
   <div id="roomView" style="display: none;" class="h-100 d-flex justify-content-center">
       <div class="container-room gap-5">
-        <div class="server-list overflow-auto w-75 d-flex align-items-center justify-content-center flex-column">
+        <div class="server-list overflow-auto w-50 min-h-200px d-flex align-items-center justify-content-center flex-column">
           <h2>Room List</h2>
-          <div id="noRoomsMessage" style="display: flex;" class="justify-content-center">
+          <div id="noRoomsMessage" style="display: flex;" class="text-center justify-content-center">
             No room available for now. Create one !
           </div>
           <div id="roomsContainer" class="flex-column overflow-auto max-h-350px d-flex justify-content-start"></div>
@@ -64,6 +68,10 @@ export function displayGameSelectionMulti()
   const gameSelection = document.createElement('div');
   const pongUrl = "/static/css/images/ttLevel.png";
   const brickUrl = "/static/css/images/brickout.png";
+  const blackPongUrl = "/static/css/images/classicPong.png";
+
+
+  gameSelection.style.width = "100%";
 
   gameSelection.innerHTML = `
   <div id="settingView" class="d-flex">
@@ -73,7 +81,7 @@ export function displayGameSelectionMulti()
 
       <div class="game-row">
         <div class="game-image">
-          <img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
+          <img id="gameImage" src="${blackPongUrl}" alt="pongGame">
         </div>
         <div class="game-settings">
           <div id="settingsContainer" class="settings-info">
@@ -94,7 +102,7 @@ export function displayGameSelectionMulti()
 
       <div class="game-row">
         <div class="game-image">
-          <img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
+          <img id="gameImage" src="${brickUrl}" alt="brickGame">
         </div>
         <div class="game-settings">
           <div id="settingsContainer" class="settings-info">

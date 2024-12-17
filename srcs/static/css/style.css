@@ -112,12 +112,19 @@ p {
 }
 
 .main-img {
+  margin-top: 50px;
   width: 380px;
   border-radius: 10px;
   /* height: ; */
 }
 
-@media (max-height: 600px) {
+@media (max-width: 800px) {
+  .main-img {
+    width: 200px;
+  }
+}
+
+@media (max-height: 700px) {
   .main-img {
 	width: auto;
 	height: 50%;
@@ -663,7 +670,7 @@ p {
   background: var(--background-color);
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
   height: 100vh;
@@ -1100,12 +1107,29 @@ button:disabled {
 
 /* ------------------- Room View ---------------------------- */
 
+.min-h-200px {
+  min-height: 250px;
+}
+
+
 .container-room {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
   border-radius: 10px;
+  width: 100%;
+  overflow: auto;
+}
+
+@media (max-width: 1050px) {
+  .container-room {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .server-list,
+  .host-server {
+    width: 100% !important;
+  }
 }
 
 .max-h-350px {
@@ -1116,7 +1140,6 @@ button:disabled {
 .host-server {
   background: var(--quartiary-color);
   border-radius: 10px;
-  padding: 20px;
   color: white;
 }
 
@@ -1140,66 +1163,66 @@ button:disabled {
 
 
 .room-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	border-bottom: 1px solid #455F78;
-	padding-bottom: 10px;
-	margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #455F78;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .room-name {
-	color: white;
-	font-size: 1.2em;
-	font-weight: bold;
+  color: white;
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 .room-info {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: 8px;
-	color: #ccc;
-	padding-top: 5px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  color: #ccc;
+  padding-top: 5px;
 }
 
 .room-players, .room-difficulty, .room-level, .room-status {
-	font-size: 0.9em;
+  font-size: 0.9em;
 }
 
 .joinRoomBtn {
-	/* Keep your existing button styles */
-	background-color: #455F78;
-	border: none;
-	color: white;
-	padding: 5px 10px;
-	border-radius: 5px;
-	cursor: pointer;
+  /* Keep your existing button styles */
+  background-color: #455F78;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 .server-item {
-	background-color: #1F2E4D;
-	border-radius: 5px;
-	padding: 15px;
-	margin: 10px 0;
+  background-color: #1F2E4D;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 10px 0;
 }
 /* .server-item 
 {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin: 10px 0;
-	padding: 8px;
-	background-color: #1A1A40;
-	border-radius: 5px;
-	color: white;
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin: 10px 0;
+padding: 8px;
+background-color: #1A1A40;
+border-radius: 5px;
+color: white;
 } */
 .server-item button 
 {
-	background-color: #455F78;
-	border: none;
-	color: white;
-	padding: 5px 10px;
-	border-radius: 5px;
-	cursor: pointer;
+  background-color: #455F78;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 .server-item button:disabled {
   background-color: #555;
@@ -1207,16 +1230,16 @@ button:disabled {
 }
 #noRoomsMessage
 {
-	font-size: 20px;
+  font-size: 20px;
 }
 .refresh 
 {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-size: 0.9em;
-	color: #ccc;
-	padding-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9em;
+  color: #ccc;
+  padding-top: 10px;
 }
 
 .host-server input {
@@ -1278,19 +1301,19 @@ button:disabled {
 
 #brickoutCanvas2
 {
-	display: block; 
-	margin: 0 auto; 
-	border: 2px solid #FEFCFF;
-	border-radius: 8px; 
-	background-color: #1A1A40; 
+  display: block; 
+  margin: 0 auto; 
+  border: 2px solid #FEFCFF;
+  border-radius: 8px; 
+  background-color: #1A1A40; 
 }
 
 
 #twoPlayerBrick
 {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -1344,8 +1367,8 @@ button:disabled {
   height: 0;
   max-width: 33%;
   transition:
-	width 0.5s ease,
-	box-shadow 0.5s ease !important;
+  width 0.5s ease,
+  box-shadow 0.5s ease !important;
   visibility: hidden;
   pointer-events: none;
   padding: 0;
@@ -1361,19 +1384,19 @@ button:disabled {
 
 @media (max-width: 1300px) {
   .slidingDiv {
-	width: 0;
-	height: 0;
-	max-width: 100%;
-	overflow: hidden;
-	visibility: hidden;
-	pointer-events: none;
-	padding: 0;
-	position: absolute;
+    width: 0;
+    height: 0;
+    max-width: 100%;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+    padding: 0;
+    position: absolute;
   }
   .slidingDiv.visible {
-	height: 90%;
-	width: 90%;
-	position: absolute;
+    height: 90%;
+    width: 90%;
+    position: absolute;
   }
 }
 
@@ -1539,7 +1562,7 @@ button:disabled {
 }
 
 emoji-menu {
-	z-index: 9999;
+  z-index: 9999;
 }
 
 .noto-color-emoji-regular {
@@ -1583,11 +1606,11 @@ emoji-picker {
   /* border-color: #dee2e6; */
   border-color: var(--chat-border) !important;
   box-shadow:
-	inset 0 0 0px transparent,
-	inset 0 0 1px transparent,
-	inset 0 0 2px transparent,
-	inset 0 0 3px transparent,
-	inset 0 0 4px transparent;
+  inset 0 0 0px transparent,
+  inset 0 0 1px transparent,
+  inset 0 0 2px transparent,
+  inset 0 0 3px transparent,
+  inset 0 0 4px transparent;
   transition: box-shadow 0.3s ease-in-out;
   color: var(--text-color);
   transition: color 0.3s ease-in-out;
@@ -1595,22 +1618,22 @@ emoji-picker {
 
 .chat-btn:hover {
   box-shadow:
-	inset 0 0 0px var(--highlight-color),
-	inset 0 0 1px var(--highlight-color),
-	inset 0 0 2px var(--highlight-color),
-	inset 0 0 3px var(--highlight-color),
-	inset 0 0 4px var(--highlight-color);
+  inset 0 0 0px var(--highlight-color),
+  inset 0 0 1px var(--highlight-color),
+  inset 0 0 2px var(--highlight-color),
+  inset 0 0 3px var(--highlight-color),
+  inset 0 0 4px var(--highlight-color);
   background-color: var(--chat-btn-highlight);
   color: var(--highlight-color);
 }
 
 .chat-btn:focus {
   box-shadow:
-	inset 0 0 0px var(--highlight-color),
-	inset 0 0 1px var(--highlight-color),
-	inset 0 0 2px var(--highlight-color),
-	inset 0 0 3px var(--highlight-color),
-	inset 0 0 4px var(--highlight-color);
+  inset 0 0 0px var(--highlight-color),
+  inset 0 0 1px var(--highlight-color),
+  inset 0 0 2px var(--highlight-color),
+  inset 0 0 3px var(--highlight-color),
+  inset 0 0 4px var(--highlight-color);
   background-color: var(--chat-btn-highlight);
   color: var(--highlight-color);
 }
@@ -1618,7 +1641,7 @@ emoji-picker {
 @media (max-width: 576px) {
   /* Small devices (sm) */
   .min-height-sm {
-	min-height: 300px; /* Adjust the height as needed */
+    min-height: 300px; /* Adjust the height as needed */
   }
 }
 
@@ -1641,11 +1664,11 @@ emoji-picker {
 }
 
 .channel-container {
-	z-index: 9998 !important;
+  z-index: 9998 !important;
 }
 
 .channel-btn {
-	z-index: 9998 !important;
+  z-index: 9998 !important;
 }
 
 /* Add to CSS */
@@ -1656,12 +1679,12 @@ emoji-picker {
 /* -------------------- End Page --------------------------- */
 .footer-text
 {
-	position: absolute;
-	bottom: 10px;
-	left: 0;
-	width: 100%;
-	text-align: center;
-	padding: 10px 20;
-	font-size: 20px;
-	color: #FEFCFF !important;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px 20;
+  font-size: 20px;
+  color: #FEFCFF !important;
 }
