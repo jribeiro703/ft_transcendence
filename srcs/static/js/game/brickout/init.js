@@ -26,7 +26,10 @@ export function initListenerB()
             keyUpHandlerB(e);
         }
     });
+}
 
+export function initGame()
+{
 	brickVar.initialize = true;
 	if (brickVar.currLevel === 'classic')
 		startGameFirst("classic");

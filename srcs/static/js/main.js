@@ -3,19 +3,23 @@ import { renderPage } from "./user/historyManager.js";
 import { isGamePage } from "./game/HistoryManager.js";
 import { renderPageGame } from "./game/HistoryManager.js";
 
-document.getElementById('user-avatar').addEventListener('click', async () => {
-	
-	const authenticated = await isAuthenticated();
-	if (authenticated) {
-		renderPage("user");
-	} else {
-		renderPage("auth");
-	}
-});
+document
+  .querySelector("[data-profile-icon]")
+  .addEventListener("click", async () => {
+    const authenticated = await isAuthenticated();
+    if (authenticated) {
+      renderPage("user");
+    } else {
+      renderPage("auth");
+    }
+  });
 
-document.getElementById('btn-Home').addEventListener('click', async () => {
-	renderPage("home")
-});
+document
+  .querySelector("[data-home-icon]")
+  .addEventListener("click", async () => {
+    renderPage("home");
+  });
+
 
 // Execute as soon as the structure of the initial page is ready for interaction
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,3 +33,4 @@ document.addEventListener('DOMContentLoaded', () => {
 	else
 		renderPage(hash.substring(1));
 });
+

@@ -12,6 +12,7 @@ export async function getUserInfos()
 			{
 				gameVar.userName = response.data.username;
 				gameVar.userAvatar = response.data.avatar;
+				sendScoreInfo(gameVar.gameSocket, 1, gameVar.userName, 0, 0);
 			}
 			if (gameVar.playerIdx === 2)
 			{
@@ -28,18 +29,30 @@ export async function getUserInfos()
 
 export async function getUserInfos2()
 {
-        const response = await fetchAuthData('/user/private/')
-		if (response.status == 200)
-		{
-				gameVar.userName = response.data.username;
-				gameVar.userAvatar = response.data.avatar;
-		}
-		else
-		{
-			showErrorMessages(response.data.message, "error");
-		}
+	const response = await fetchAuthData('/user/private/')
+	if (response.status == 200)
+	{
+		gameVar.userName = response.data.username;
+		gameVar.userAvatar = response.data.avatar;
+	}
+	else
+	{
+		showErrorMessages(response.data.message, "error");
+	}
 }
-
+// export async function getUserInfosB()
+// {
+//         const response = await fetchAuthData('/user/private/')
+// 		if (response.status == 200)
+// 		{
+// 			gameVar.userName = response.data.username;
+// 			gameVar.userAvatar = response.data.avatar;
+// 		}
+// 		else
+// 		{
+// 			showErrorMessages(response.data.message, "error");
+// 		}
+// }
 export function displayUsers(users)
 {
     // const scoreboardElement = document.getElementById('scoreboard');

@@ -1,23 +1,39 @@
 import gameVar from "./var.js";
 import { checkSettingLive, updateSetting } from "./setting.js";
 import { createNewRoom } from "./room.js";
-import { displayGameView, displayLobbyView } from "./display.js";
+import { displayGameBrickView, displayGameView, displayLobbyView } from "./display.js";
 import { getElementLobby } from "./getElement.js";
-import { initializeCanvasPong } from "./canvas.js";
+import { initializeCanvasBrick, initializeCanvasBrick2p, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
 import { displayGameDataPong } from "./displayVar.js";
 import { getUserInfos } from "../getUser.js";
+import brickVar from "../brickout/var.js";
+import { initListenerB } from "../brickout/init.js";
 
 
 export function showLobbyView()
 {
 	let level = null;
 	if (gameVar.game == 'pong')
-		level = 'TableTennis';
+	{
+		if (!gameVar.currentLevel)
+		{
+			gameVar.currentLevel = 'tableTennis'
+			level = 'TableTennis';
+		}
+		else
+			level = gameVar.currentLevel;
+	}
 	else if (gameVar.game == 'brickout')
-		level = 'Classic';
+	{
+		if (!brickVar.currLevel)
+		{
+			brickVar.currLevel = 'classic'
+			level = 'Classic';
+		}
+		else
+			level = brickVar.currLevel;
+	}
 
-	// getUserInfos();
-	
 	displayLobbyView(level);
 	getElementLobby();
 }
@@ -31,7 +47,24 @@ export async function showPongRemote(room = null)
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	gameVar.gameView.style.display = 'block';
+	// gameVar.gameView.style.display = 'block';
+	
+	createNewRoom();
+}
+
+export async function showBrickoutRemote(room = null)
+{
+	// checkSettingLive();
+	// displayGameView();
+	displayGameBrickView();
+	await initializeCanvasBrick();
+	await initializeScoreCanvas2P();
+	initListenerB();
+
+	gameVar.gameView = document.getElementById('gameView');
+	gameVar.rematchBtn = document.getElementById('rematchBtn');	
+	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+	// gameVar.gameView.style.display = 'block';
 	
 	createNewRoom();
 }

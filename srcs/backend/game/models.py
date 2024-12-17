@@ -1,11 +1,10 @@
-from django.db import models
 # ensures that _ is defined as a shortcut for the gettext function for internationalization (i18n)
 # helps for lazy references to avoid circular dependencies
 from django.utils.translation import gettext as _ 
-
 from django.db import models
 from user.models import User
 from tournament.models import Tournament
+from django.utils import timezone
 
 class Game(models.Model):
 	GAME_STATUS_CHOICES = [
@@ -83,3 +82,6 @@ class GamePlayer(models.Model):
 
 	def __str__(self):
 		return f"GamePlayer {self.user.username} in Game {self.game.id}"
+
+# 	def __str__(self):
+# 		return f'{self.nickname}: {self.content}'

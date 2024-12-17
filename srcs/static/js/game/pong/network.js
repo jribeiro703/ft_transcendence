@@ -131,7 +131,22 @@ export function sendPlayerRoomData(socket, userid)
 	else
 		console.log("Error websocket");
 }
-
+export function sendScoreInfoB(socket, idx, score, lives)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data =
+		{
+			type: 'scoreB_info_data',
+			idx: idx,
+			score: score,
+			lives: lives,
+		};
+		socket.send(JSON.stringify(data));
+	}
+	else
+		console.log("Error websocket");
+}
 
 export function sendScoreInfo(socket, idx, name,  score1, score2)
 {
@@ -161,6 +176,30 @@ export function sendRoomNameData(socket, roomName)
 			roomName: roomName,
 		};
 		socket.send(JSON.stringify(data));
+	}
+	else
+		console.log("Error websocket");
+}
+export function sendTournamentInfo(socket, name, creator)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data =
+		{
+			type: 'tournament_info',
+			name: name,
+			creator: creator,
+		};
+		socket.send(JSON.stringify(data));
+	}
+	else
+		console.log("Error websocket");
+}
+export function askForTournamentList(socket)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		socket.send(JSON.stringify({type: 'get_tournaments'}));
 	}
 	else
 		console.log("Error websocket");

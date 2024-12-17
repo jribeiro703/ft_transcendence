@@ -16,11 +16,11 @@ export function listenSettingPU()
 		checkSaveBtn();
 	});
 
-	gameVar.withoutPowerUp.addEventListener('click', () => 
+	gameVar.withoutPowerUp.addEventListener('click', () =>
 	{
 		gameVar.withoutPowerUp.classList.add('selected');
 		gameVar.withPowerUp.classList.remove('selected');
-		updatePowerUpSelection(false, false); 
+		updatePowerUpSelection(false, false);
 		checkSaveBtn();
 	});
 }
