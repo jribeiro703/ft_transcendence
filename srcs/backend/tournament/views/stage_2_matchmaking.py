@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.shortcuts import get_object_or_404
 from django.apps import apps
 from random import shuffle
 import logging
@@ -74,25 +75,39 @@ class PerformMatchmakingView(APIView):
 
 class TournamentBracketView(APIView):
 	def get(self, request, tournament_id):
+		logger.debug(f"Received request to fetch tournament bracket for tournament_id: {tournament_id}")
 		try:
 			Tournament = apps.get_model('tournament', 'Tournament')
 			Game = apps.get_model('game', 'Game')
 			User = apps.get_model('user', 'User')
 
-			tournament = Tournament.objects.get(id=tournament_id)
+			logger.debug("Models loaded successfully.")
+
+			tournament = get_object_or_404(Tournament, id=tournament_id)
+			logger.debug(f"Tournament found: {tournament}")
+
 			games = tournament.games.all()
+			logger.debug(f"Games retrieved: {games}")
 
 			bracket = []
 			for game in games:
+				logger.debug(f"Processing game: {game}")
 				player1 = User.objects.get(id=game.player_one.id)
+				logger.debug(f"Player 1: {player1.username}")
 				player2 = User.objects.get(id=game.player_two.id) if game.player_two else 'BYE'
+				logger.debug(f"Player 2: {player2.username if player2 != 'BYE' else player2}")
+				winner = game.winner.username if game.winner else "TBD"
 				bracket.append({
+					"game_id": game.id,
 					"player1": player1.username,
-					"player2": player2.username if player2 != 'BYE' else player2
+					"player2": player2.username if player2 != 'BYE' else player2,
+					"winner": winner,
+					"status": game.status
 				})
-
+			logger.debug(f"Bracket constructed: {bracket}")
 			return Response({'bracket': bracket}, status=status.HTTP_200_OK)
 		except Tournament.DoesNotExist:
+			logger.error(f"Tournament with id {tournament_id} not found.")
 			return Response({'error': 'Tournament not found.'}, status=status.HTTP_404_NOT_FOUND)
 		except Exception as e:
 			logger.error(f"Error fetching tournament bracket: {e}")

@@ -36,7 +36,7 @@ export async function setupTournamentPage()
 		const tournamentName = document.getElementById('tournamentName').value;
 		const isValid = validateTournamentName(tournamentName);
 		if (isValid) {
-			showTournamentView2(tournamentName);
+			showTournamentView2(tournamentName, true);
 		} else {
 			alert('Error: Tournament cannot be created.');
 		}
@@ -61,9 +61,11 @@ export async function setupTournamentPage()
 	
 			const userData = userResponse.data;
 			const userId = userData.id;
-	
+			
 			// Attempt to join the tournament
 			const data = await joinTournament(tournamentId, userId);
+			const isCreator = data.is_creator;
+
 	
 			if (data.already_in_tournament) {
 				alert(`Welcome back to Tournament: ${data.tournament_name}`);
@@ -72,8 +74,8 @@ export async function setupTournamentPage()
 			}
 	
 			// Call showTournamentView2 to render the layout
-			showTournamentView2(data.tournament_name);
-	
+			showTournamentView2(data.tournament_name, isCreator);
+
 			// Update the players list dynamically
 			updatePlayersList(data.players);
 	
@@ -93,7 +95,7 @@ export async function setupTournamentPage()
 	});
 }
 
-export async function showTournamentView2(tournamentName)
+export async function showTournamentView2(tournamentName, isCreator)
 {
 	const box = document.getElementById('mainContent');
 	box.innerHTML = createTournamentLayoutHTML(tournamentName);
@@ -102,8 +104,9 @@ export async function showTournamentView2(tournamentName)
 	{
 		updateTournamentsList(gameVar.tournamentArray);
 	}
+	//TODO: This is where the confusion is happening. Fetched bracket: undefined. Think, if the setupTournamentFlow is only for the creator or somebody who joins...
 	currentTournamentId = await setupTournamentFlow(tournamentName);
-
+	console.log('currentTournamentId', currentTournamentId);
 	const playersList = document.getElementById('playersList');
 	if (!playersList)
 	{
@@ -112,13 +115,24 @@ export async function showTournamentView2(tournamentName)
 	}
 	initializeLobbySocket();
 	gameVar.liveMatch = true;
-
-	document.getElementById('generateMatches').addEventListener('click', async () =>
+	if (!isCreator) {
+		try {
+			const bracket = await fetchTournamentBracket(currentTournamentId);
+			console.log("Fetched bracket:", bracket);
+			renderBracket(bracket, currentTournamentId);
+		} catch (error) {
+			console.error("Error fetching tournament bracket:", error);
+		}
+	}
+	else
 	{
-		const bracket = await fetchTournamentBracket(currentTournamentId);
-		console.log("Fetched bracket:", bracket);
-		renderBracket(bracket, currentTournamentId);
-	});
+		document.getElementById('generateMatches').addEventListener('click', async () =>
+		{
+			const bracket = await fetchTournamentBracket(currentTournamentId);
+			console.log("Fetched bracket:", bracket);
+			renderBracket(bracket, currentTournamentId);
+		});
+	}
 	setupEligiblePlayersRefresh();
 }
 
@@ -159,6 +173,31 @@ export async function createTournamentGame()
 	createNewRoom();
 }
 
+function updateTournamentsList(tournaments)
+{
+	gameVar.tournamentArray = tournaments;
+	
+	const tournamentList = document.getElementById('tournament-list');
+	if (!tournamentList) return;
+
+	tournamentList.innerHTML = '';
+	
+	tournaments.forEach(tournament =>
+	{
+		const tournamentElement = document.createElement('div');
+		tournamentElement.className = 'tournament-item';
+		tournamentElement.innerHTML = `
+			<div class="tournament-name">${tournament.name}</div>
+			<div class="tournament-status">${tournament.status}</div>
+			<button class="join-tournament-btn" 
+					${tournament.status !== 'waiting' ? 'disabled' : ''}
+					onclick="joinTournament('${tournament.name}')">
+				Join Tournament
+			</button>
+		`;
+		tournamentList.appendChild(tournamentElement);
+	});
+}
 //------------------------------------------------------------------//
 // TODO: JOIN is a simulation of the invitation. 
 // 🤔 Not sure if we need this here, because if Invitations are dealt in the livechat, we may not need it here
@@ -180,6 +219,15 @@ export async function joinTournament(tournamentId, userId) {
 		throw new Error(data.error || "Unable to join the tournament.");
 	}
 
+/* 	// Fetch and render the tournament bracket after joining
+	try {
+		console.log("Fetching tournament bracket...");
+		const bracket = await fetchTournamentBracket(tournamentId);
+		console.log("Fetched bracket:", bracket);
+		renderBracket(bracket, tournamentId);
+	} catch (error) {
+		console.error("Error fetching bracket after join:", error.message);
+	} */
 	return data;
 }
 
