@@ -146,7 +146,9 @@ window.addEventListener('popstate', async (event) =>
 			await renderPageGame(page, false, params);
 		}
 		else
-		{
+		{		
+			clearAllpongStates();
+			clearAllBrickStates();
 			await renderPage(page, false);
 		}
 	}
