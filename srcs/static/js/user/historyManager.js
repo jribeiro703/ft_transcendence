@@ -7,6 +7,7 @@ import { renderOtpForm } from "./pages/renderOtpForm.js";
 import { renderProfilePage } from "./pages/renderProfilePage.js";
 import { renderRegisterForm } from "./pages/renderRegisterForm.js";
 import { renderSettingsPage } from "./pages/renderSettingPage.js";
+import { renderLeaderBoardPage } from "./pages/renderLeaderBoard.js";
 import { isAuthenticated } from "./isAuthenticated.js";
 import { updateUserAvatar } from "./tools.js";
 import { isGamePage, renderPageGame } from "../game/HistoryManager.js";
@@ -28,6 +29,10 @@ const userPages = {
 	profile: renderProfilePage,
 }
 
+const otherPages = {
+	leaderboard: renderLeaderBoardPage,
+}
+
 async function renderPage(page, updateHistory = true) {
 	
 	if (gameVar.gameSocket)
@@ -41,7 +46,7 @@ async function renderPage(page, updateHistory = true) {
 	await updateUserAvatar(authenticated);
 	
 	if (authenticated)
-		renderFunction = userPages[page];
+		renderFunction = userPages[page] || otherPages[page];
 	else
 		renderFunction = authPages[page];
 

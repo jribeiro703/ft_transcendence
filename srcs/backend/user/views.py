@@ -159,11 +159,12 @@ def getUserIdByNickname(request):
 			status=status.HTTP_500_INTERNAL_SERVER_ERROR
 		)
 	
+@api_view(['GET'])	
 @permission_classes([AllowAny])
 def getLeaderboard(request):
 	try:
 		leaderboard = {}
-		users = User.objects.all(is_staff=False)
+		users = User.objects.filter(is_staff=False)
 		for user in users:
 			matchs = get_user_matchs_infos(user)
 			username = user.username
