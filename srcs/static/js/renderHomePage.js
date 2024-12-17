@@ -3,6 +3,7 @@ import { isAuthenticated } from "./user/isAuthenticated.js";
 import { renderPageGame } from "./game/HistoryManager.js";
 import { showCreateTournamentForm } from "./tournament/tournamentPage.js";
 import { showCreateTournamentForm2 } from "./tournament/tournamentPage.js";
+import { renderPage } from "./user/historyManager.js";
 
 function createHomeContent() {
   const box = document.getElementById("mainContent");
@@ -32,7 +33,7 @@ async function renderHomePage() {
 		},
 		{
 			id: 'btn-Leaderboard',
-			handler: () => console.log('Leaderboard handler')
+			handler: () => renderPage("leaderboard")
 		},
 		{
 			id: 'btn-Tournament',
