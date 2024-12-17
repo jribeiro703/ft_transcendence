@@ -1,3 +1,5 @@
+import { fetchAuthData } from '../user/fetchData.js';
+
 export const clientIdColors = {};
 
 export const chatIconDots = `
@@ -61,5 +63,20 @@ export function toggleChat() {
 		setTimeout(() => {
 			messageInput.focus();
 		}, 100);
+	}
+}
+
+export async function isClientBlocked(clientId) {
+	try {
+		const response = await fetchAuthData(`/user/block/check/nickname/${clientId}/`);
+		if (response.status === 200) {
+			return response.data.is_blocked;
+		} else {
+			console.error('Error checking block status:', response);
+			return false;
+		}
+	} catch (error) {
+		console.error('Error checking block status:', error);
+		return false;
 	}
 }

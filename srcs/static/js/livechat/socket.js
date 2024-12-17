@@ -1,5 +1,5 @@
 import { fetchAuthData } from '../user/fetchData.js';
-import { formatTimestamp, getColorForClientId } from "./utils.js";
+import { formatTimestamp, getColorForClientId, isClientBlocked } from "./utils.js";
 import { initializeTooltip } from "./tooltip.js";
 import { showToast } from '../user/tools.js';
 
@@ -7,13 +7,16 @@ export let chatSocket = new WebSocket(
 	"wss://" + window.location.host + "/ws/livechat/",
 );
 
-function createMessageComponents(data) {
+async function createMessageComponents(data) {
+	console.log(data);
 	const message = data.message;
 	const clientId = data.client_id;
 	const timestamp = data.timestamp;
 	const chatLog = document.querySelector("#chat-log");
 	const formattedTime = formatTimestamp(timestamp);
 	const clientIdColor = getColorForClientId(clientId);
+
+
 
 	const messageElement = document.createElement("div");
 	const timeSpan = document.createElement("span");
@@ -33,7 +36,10 @@ function createMessageComponents(data) {
 	messageElement.appendChild(timeSpan);
 	messageElement.appendChild(nicknameSpan);
 	messageElement.appendChild(messageText);
-
+	const blocked = await isClientBlocked(clientId);
+	if (blocked) {
+		messageElement.classList.add("d-none");
+	}
 	chatLog.prepend(messageElement);
 	chatLog.scrollTop = chatLog.scrollHeight;
 }
