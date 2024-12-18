@@ -147,16 +147,27 @@ document.addEventListener("DOMContentLoaded", function () {
 const themes = ['darkGrey', 'neonBlue', 'neonPurple', 'darkPurple', 'minimalDark'];
 let currentThemeIndex = 0;
 
-export function changeTheme()
+export function changeTheme(theme)
 {
+
 	const body = document.body;
-	console.log("changeTHeme");
-	themes.forEach(theme => body.classList.remove(theme));
+	if (theme)
+	{
+		body.classList.add(theme);
+	}
+	else
+	{
+		console.log("changeTHeme");
+		themes.forEach(theme => body.classList.remove(theme));
 
-	currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+		currentThemeIndex = (currentThemeIndex + 1) % themes.length;
 
-	body.classList.add(themes[currentThemeIndex]);
-	console.log("theme changed to: ", themes[currentThemeIndex]);
+		body.classList.add(themes[currentThemeIndex]);
+		gameVar.currentTheme = themes[currentThemeIndex];
+		console.log("theme changed to: ", themes[currentThemeIndex]);
+		
+		console.log("change theme currentheme:", gameVar.currentTheme);
+	}
 }
 
 document
