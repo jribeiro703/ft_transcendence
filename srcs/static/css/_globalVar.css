@@ -1,7 +1,4 @@
-
 .darkGrey {
-  
-	/* Theme Std  */
 	--background-color: linear-gradient(
 	to right,
 	#0A1014 0%,
@@ -26,11 +23,11 @@
 	--chat-msg: var(--text-color);
 	--chat-border: var(--border-btn-color);
 	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+  --selected-btn: #000000;
 }
 
 .neonBlue {
 
-	/* Thème 1: Néon Bleu */
 	--background-color: radial-gradient(
 	circle at center,
 	#000B1E 0%,
@@ -49,33 +46,33 @@
 	--chat-msg: var(--text-color);
 	--chat-border: var(--border-btn-color);
 	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+  --selected-btn: #000000;
 }
 
-.neonPurple {
-  /* Thème 2: Rétro Purple */
-	--background-color: linear-gradient(
-	135deg,
-	#2B0B3F 0%,
-	#3B0B6F 50%,
-	#2B0B3F 100%
-	);
-	--text-color: #FF00FF;
-	--border-btn-color: #B829E8;
-	--highlight-color: #FF80FF;
-	--icon-color: #B829E8;
-	--box-shadow: 0px 0px 10px rgba(255, 0, 255, 0.7);
+.whiteSky {
+  --background-color: #FFFFFF;
+  --text-color: #444444;
+  --highlight-color: #4B6E84;
+  --icon-color: #000000;
 
-	--placeholder-color: var(--text-color);
-	--chat-btn-highlight: var(--highlight-color);
-	--chat-bg: rgba(0, 0, 0, 0.7);
-	--chat-msg: var(--text-color);
-	--chat-border: var(--border-btn-color);
-	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+  /* BTN */
+  --selected-btn: #000000;
+  --box-shadow-black: 0px 0px 10px #000000;
+  --border-btn-color: #555555;
+
+  /* chat */
+  --chat-msg: #000000;
+  --chat-border: #555555;
+  --chat-btn-highlight: #01FFFF;
+  --chat-bg: #555555;
+  --placeholder-color: #000000;
+  /* box */
+  --box-shadow: 0px 0px 10px #000000
+  --box-shadow-inset: inset 0px 0px 5px #000000;
+  --box-shadow-highlight: 0px 0px 3px #000000;
 }
 
 .darkPurple {
-
-	/* Thème 3: Synthwave */
 	--background-color: linear-gradient(
 	45deg,
 	#170B2B 0%,
@@ -94,10 +91,10 @@
 	--chat-msg: var(--text-color);
 	--chat-border: var(--border-btn-color);
 	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+  --selected-btn: #000000;
 }
 
 .minimalDark {
-	/* Thème 4: Minimal Dark */
 	--background-color: linear-gradient(
 	to right,
 	#0A1014 0%,
@@ -116,14 +113,10 @@
 	--chat-msg: var(--text-color);
 	--chat-border: var(--border-btn-color);
 	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+  --selected-btn: #000000;
 }
 
-
-  /* Variables communes */
-
-
-
-/* 
+/*
   --background-color: #b8acac;
   --text-color: #3e3f4a;
   --border-btn-color: #000000;
@@ -149,4 +142,4 @@
   --box-shadow-mainContent1: 0 0 0px #000000, 0 0 2px #000000, 0 0 4px #000000, 0 0 6px #000000;
   --box-shadow-mainContent2: 0 0 8px #000000;
   --box-shadow-mainContent3: 0 0 14px #000000; */
-/* } */ 
+/* } */
