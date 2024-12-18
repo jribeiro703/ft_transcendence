@@ -8,21 +8,20 @@
     gap: 20px;
     width: 70%;
     height: 100%;
-    padding: 20px;
+    padding: 35px;
     background-color: var(--background-color);
     color: var(--highlight-color);
-    border: 2px solid #FFFFFF;
   }
 
 
-  /* Header layout */
+/* Header layout */
 .profile-header {
 	display: flex;
     justify-content: center;
     align-items: center;
-    height: 25%;
-    width: 90%;
-    gap: 0px 60px;
+    height: 27%;
+    width: 50%;
+    gap: 18px;
     flex-wrap: wrap;
   }
   
@@ -49,8 +48,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	width: 75%;
-	/* gap: 30px; */
+	width: 100%;
 }
 
 .profile-username {
@@ -105,7 +103,6 @@
 .profile-stats {
 	text-align: right;
 	font-size: 16px;
-	/* margin: 5px 5px; */
   }
 
 
@@ -113,11 +110,11 @@
 .profile-match-history {
 	display: flex;
     flex-direction: column;
-    width: 90%;
-    height: 63%;
-    gap: 10px;
+	max-width: 800px;
+    width: 75%;
+    height: 70%;
+    gap: 20px;
     background-color: var(--background-color);
-    border: 2px solid var(--highlight-color);
     border-radius: 8px;
     align-items: center;
     justify-content: center;
@@ -131,9 +128,8 @@
 
 .match-history-content {
 	display: flex;
-    width: 90%;
+    width: 80%;
     height: 67%;
-    border: 2px solid;
     justify-content: center;
     flex-direction: column;
     align-items: center;
@@ -144,22 +140,20 @@
 	flex-direction: column;
 	align-items: center;
 	width: 100%;
-	gap: 8px;
+	gap: 20px;
 }
 
 .match-row {
 	display: flex;
 	align-items: center;
-	/* padding: 10px; */
-	/* gap: 30px; */
 	width: 100%;
-	/* justify-content: space-evenly; */
 }
 
 .match-result {
+	padding-top: 5px;
     font-size: 15px;
     font-weight: bold;
-    width: 11%;
+    width: 15%;
 	text-align: center;
 }
 
@@ -168,7 +162,7 @@
     align-items: center;
     justify-content: flex-end;
     width: 25%;
-    gap: 5px;
+    gap: 15px;
 }
 
 .user-name {
@@ -186,12 +180,17 @@
     text-align: center;
 }
 
+.score-separator {
+	width: 5%;
+	text-align: center;
+}
+
 .enemy-info {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     width: 25%;
-    gap: 10px;
+    gap: 15px;
 }
 
 .enemy-name {
@@ -205,6 +204,7 @@
 }
 
 .match-date {
+	width: 20%;
     text-align: center;
     color: gray;
     font-size: 14px;
@@ -214,14 +214,17 @@
 .pagination {
     display: flex;
     justify-content: center;
+	height: 10%;
+	width: 50%;
+	gap: 10px;
 }
 
 .pagination button {
     background-color: var(--background-color);
     color: var(--highlight-color);
     border: none;
-    padding: 10px 15px;
-    margin: 0 5px;
+	width: 40%;
+	max-width: 100px;
     cursor: pointer;
     border-radius: 5px;
 }
