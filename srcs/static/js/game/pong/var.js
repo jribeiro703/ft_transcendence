@@ -113,6 +113,7 @@ const gameVar =
 	roomTour1: null,
 
 	tournamentArray: null,
+	currentTheme: null,
 
 // --------------------------------------AI-----------------------------
 
