@@ -1,6 +1,6 @@
 import { isAuthenticated } from "./isAuthenticated.js";
 
-const API_BASE_URL = "https://localhost:8081";
+const API_BASE_URL = `https://${window.location.hostname}:8081`;
 
 function getCookie(name) {
 	const cookies = document.cookie.split(';');
