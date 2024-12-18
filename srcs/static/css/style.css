@@ -185,8 +185,12 @@ p {
 	/* transform: translateX(-50%); */
 }
 
-.d-flex {
-	filter: blur(0);
+.tournament-gap {
+  gap: 10px;
+}
+
+.my-row {
+  flex-direction: row;
 }
 
 /* .navbar.expanded .navbar-brand */
@@ -513,7 +517,6 @@ p {
 /* -------------------------- Setting View ------------------------ */
 
 #settingView {
-	padding: 42px;
 	font-size: 70px;
 	align-items: center;
 	flex-direction: column;
@@ -551,10 +554,10 @@ p {
 #restartLevelBtn:hover,
 #quitBtn:hover
 {
-    background-color: #1A2A35;
-    color: #fccb2d;
-    border-color: #2a3b47;
-    box-shadow: 0 0 15px rgba(252, 203, 45, 0.3);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--background-color);
+    box-shadow: var(--box-shadow);
     transform: translateY(-2px);
 }
 
@@ -569,10 +572,10 @@ p {
 #restartLevelBtn.selected,
 #quitBtn.selected
 {
-    background-color: #243447;
-    color: #ffd700;
-    border: 2px solid #ffd700;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--background-color);
+    box-shadow: var(--box-shadow-black);
     transform: scale(1.05);
 }
 
@@ -659,7 +662,6 @@ p {
   gap: 78px;
   background: var(--background-color);
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   justify-content: flex-start;
   align-items: center;
   width: 100%;
@@ -794,7 +796,7 @@ p {
 	}
 
 	.container-game {
-		justify-content: flex-start;
+		justify-content: flex-start !important;
 	}
 
 	#settingView {

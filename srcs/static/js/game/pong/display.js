@@ -275,7 +275,7 @@ export function displaySettingView()
   insertTo.style.flex = "1 0 0";
 
   insertTo.innerHTML = `
-  <div id="settingView" class="no-scrollbar d-flex justify-content-center settingsViewOverflow overflow-auto flex-column align-items-center gap-5" style="display: block;">
+  <div id="settingView" class="p-2 no-scrollbar d-flex justify-content-center settingsViewOverflow overflow-auto flex-column align-items-center gap-5" style="display: block;">
         <div class="d-flex justify-content-center align-items-center gap-5 flex-wrap">
           <button id="easy" class="settingsBtn btn height-btn level">Easy</button>
           <button id="medium" class="settingsBtn btn height-btn level">Medium</button>
