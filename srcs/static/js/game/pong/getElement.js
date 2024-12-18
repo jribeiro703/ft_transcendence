@@ -25,7 +25,7 @@ export function getElementLobby()
 }
 export function getBtnById()
 {
-	gameVar.powerUpSelection = document.getElementById('powerUpSelection');
+	// gameVar.powerUpSelection = document.getElementById('powerUpSelection');
 	gameVar.btnPowerUp = document.getElementById('btnPowerUp');
 	gameVar.withPowerUp = document.getElementById('withPowerUps');
 	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');

@@ -2,9 +2,11 @@ import gameVar from "./var.js";
 import { initializeBall } from "./ball.js";
 import { aiServeBall } from "./ai.js";
 import { checkball } from "./check.js";
-import { sendGameData } from "./network.js";
+import { sendGameData, sendScoreInfo, sendSettingData } from "./network.js";
 import { startGame } from "./start.js";
 import { checkScore } from "./score.js";
+import { updateDifficultySelection, updateLevelSelection } from "./update.js";
+import { updatePowerUpSelection } from "./powerUp.js";
 
 export function listenBtn()
 {
@@ -29,6 +31,9 @@ export function clearAllpongStates()
 		clearInterval(gameVar.gameTimer);
 		gameVar.gameTimer = null;
 	}
+	updateDifficultySelection('medium', true);
+	updateLevelSelection('classicPong', true);
+	updatePowerUpSelection(false, true);
 	gameVar.startTime = false;
 	gameVar.gameTime = 0;
 	gameVar.gameStart = false;
@@ -39,6 +44,8 @@ export function clearAllpongStates()
 	gameVar.finishGame = false;
 	gameVar.clientLeft = false;
 	gameVar.playerReady = false;
+	gameVar.liveMatch = false;
+	gameVar.localGame = false;
 	gameVar.currentServer = 'player';
 }
 
@@ -74,6 +81,8 @@ export function resetBall(winner)
 		gameVar.playerScore++;
 	else
 		gameVar.aiScore++;
+	if (gameVar.liveMatch)
+		sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.playerScore, gameVar.aiScore);
 	checkScore();
 	gameVar.serveCount++;
 	if (gameVar.serveCount >= 2)
