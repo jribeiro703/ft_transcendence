@@ -16,18 +16,16 @@ function createProfileContent() {
 					<h4 id="username" class="profile-username">Username</h4>
 					<p id="alias" class="profile-alias"></p>
 					<div id="isOnline" class="status-container">
-					<span class="status-indicator"></span>
-					<span class="status-text"></span>
-					</div>
-					<div class="profile-stats-container">
-					<div class="profile-stats">
-					<strong>Total: </strong> <span id="totalMatches">0</span>
+						<span class="status-indicator"></span>
+						<span class="status-text"></span>
 					</div>
 					<div class="profile-stats">
-					<strong>Won: </strong> <span id="wonMatches">0</span>
+						<strong>Total: </strong> <span id="totalMatches">0</span>
+					</div>
+					<div class="profile-stats">
+						<strong>Won: </strong> <span id="wonMatches">0</span>
 					</div>
 				</div>				
-				</div>
 			</div>
 			<div class="profile-match-history">
 				<h2 class="match-history-title">Match History</h2>
@@ -40,6 +38,7 @@ function createProfileContent() {
 		</div>
 	`;
 }
+{/* <div class="profile-stats-container"></div> */}
 
 function createMatchHistory(container, data) {
 	matchData = data.match_history;
@@ -52,19 +51,22 @@ function createMatchHistory(container, data) {
 
 	if (paginatedMatches.length > 0) {
 		const table = document.createElement('table');
+		table.classList.add('match-history-table');
 		paginatedMatches.forEach(match => {
 			const row = document.createElement('tr');
+			row.classList.add('match-row');
 			row.innerHTML = `
 				<td class="match-result">${match.winner && match.winner.username === userData.username ? 'WIN' : 'LOSS'}</td>
 				<td class="user-info">
-					${userData.username}
+					<div class-username >${userData.username}</div>
 					<img class="user-avatar" src="${userData.avatar}" alt="${userData.username}'s avatar"/>
 				</td>
 				<td class="score">${match.me.score}</td>
+				<td class="score-separator">-</td>
 				<td class="score">${match.enemy.score}</td>
 				<td class="enemy-info">
 					<img class="enemy-avatar" src="${match.enemy.avatar}" alt="${match.enemy.username}'s avatar"/>
-					${match.enemy.username}
+					<div class="enemy-name" >${match.enemy.username}</div>
 				</td>
 				<td class="match-date">${match.date}</td>
 			`;
