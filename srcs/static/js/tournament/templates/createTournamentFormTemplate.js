@@ -2,31 +2,21 @@
 
 export function createTournamentFormHTML(tournamentName) {
 	return `
-	<div class="container-fluid p-3 p-sm-5">
-		<div class="row h-100">
-			<div class="col-sm-12 col-lg-6 mx-auto">
-				<div class="card h-100 rounded">
-					<div class="card-body">
-						<h1 class="tournament-title">Create Tournament</h1>
-						<form id="createTournamentForm">
-							<div class="mb-3">
+					<div class="d-flex text-center justify-content-center flex-column align-items-center w-100 gap-1">
+						<h1 class="fw-normal">Create Tournament</h1>
+						<form id="createTournamentForm" class="d-flex justify-content-center align-items-center flex-column gap-3">
 								<label for="tournamentName" class="form-label">Tournament Name</label>
 								<input type="text" class="form-control" id="tournamentName" placeholder="Enter tournament name" value="${tournamentName}">
-							</div>
-							<button class="btn btn-primary" id="createTournament">Create Tournament</button>
+							<button class="settingsBtn rounded border-2" id="createTournament">Create Tournament</button>
 						</form>
-						<h2>Tounament List</h2>
+						<h2>Tournament List</h2>
 						<div id="noTournamentMessage" style="display: block;">
 							No tournament available for now. Create one !
 						</div>
 						<div id="tournamentContainer"></div>
 						<div class="refresh"></div>
-						<button id="refreshTourBtn" class="main-btn refresh-button">Refresh</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+						<button id="refreshTourBtn" class="settingsBtn rounded border-2">Refresh</button>
+  </div>
 	`;
 }
 
