@@ -5,6 +5,8 @@ export function initializeBall()
 {
 	if (gameVar.currentLevel === 'classicPong')
 		gameVar.ballRadius = 4;
+	else	
+		gameVar.ballRadius = 8;
 	if (gameVar.currentServer === 'player')
 	{
 		gameVar.x = gameVar.playerPaddleWidth + gameVar.ballRadius; 
