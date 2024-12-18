@@ -1,12 +1,12 @@
 // tournament/services/periodicService.js
 
-import { fetchEligiblePlayers } from './apiService.js';
+import { fetchPlayers } from './apiService.js';
 
 let eligiblePlayersInterval;
 let currentTournamentId;
 
-export function fetchEligiblePlayersPeriodically() {
-	fetchEligiblePlayers().then(data => {
+export function fetchPlayersPeriodically() {
+	fetchPlayers().then(data => {
 		const playersList = document.getElementById('playersList');
 		if (playersList) {
 			playersList.innerHTML = '';
@@ -23,8 +23,8 @@ export function fetchEligiblePlayersPeriodically() {
 }
 
 export function setupEligiblePlayersRefresh() {
-	fetchEligiblePlayersPeriodically(); // Initial fetch
-	eligiblePlayersInterval = setInterval(fetchEligiblePlayersPeriodically, 10000); // Fetch every 10 seconds
+	fetchPlayersPeriodically(); // Initial fetch
+	eligiblePlayersInterval = setInterval(fetchPlayersPeriodically, 10000); // Fetch every 10 seconds
 }
 
 // WebSocket setup for user status
@@ -35,6 +35,6 @@ const statusSocket = new WebSocket(
 statusSocket.onmessage = function(event) {
 	const data = JSON.parse(event.data);
 	if (data.action === 'update_status') {
-		fetchEligiblePlayersPeriodically(); // Refresh the list of online players
+		fetchPlayersPeriodically(); // Refresh the list of online players
 	}
 };

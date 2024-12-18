@@ -5,8 +5,8 @@ from game.models import GamePlayer
 from tournament.models import Tournament
 
 class UserAdmin(admin.ModelAdmin):
-	list_display = ('id', 'username', 'email',)
-	search_fields = ('username', 'alias', 'email',)
+	list_display = ('id', 'username', 'email', 'is_online',)
+	search_fields = ('username', 'alias', 'email', 'is_online')
 	ordering = ('id',)
 	list_filter = ('email',)
 
