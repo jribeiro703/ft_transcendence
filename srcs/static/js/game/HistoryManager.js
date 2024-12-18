@@ -24,6 +24,7 @@ import { API_BASE_URL } from "../user/fetchData.js";
 import { renderPage } from "../user/historyManager.js";
 import { showBrickoutRemote } from "./pong/gameViewMulti.js";
 import { showGameRoomB } from "./pong/gameView.js";
+import { changeTheme } from "../livechat/livechat.js";
 
 const pongGamePages = {
 
@@ -163,11 +164,13 @@ window.addEventListener('beforeunload', () =>
 		difficulty: gameVar.difficulty,
 		level: gameVar.currentLevel,
 		puEnable: gameVar.powerUpEnable,
+		theme: gameVar.currentTheme,
 
 		difficultyB: brickVar.difficulty,
 		levelB: brickVar.currLevel,
 		puEnableB: brickVar.powerUpEnable,
 	}));
+
 	// localStorage.clear()
 	// navigator.sendBeacon(API_BASE_URL + "/user/logout/"); // set user as offline
 });
@@ -194,7 +197,6 @@ window.addEventListener('load', () =>
 			updateDifficultySelectionB(brickVar.difficulty, true);
 			updateLevelSelectionB(brickVar.currLevel, true);
 			updatePowerUpSelectionB(brickVar.powerUpEnable, true);
-			console.log("update setting in refresh");
 			updateSetting();
 			updateSettingB();
 		}
@@ -223,4 +225,6 @@ function loadSetting(gameState)
 	brickVar.difficulty = gameState.difficultyB;
 	brickVar.currLevel = gameState.levelB;
 	brickVar.powerUpEnable = gameState.puEnableB;
+	gameVar.currentTheme = gameState.theme;
+	changeTheme(gameVar.currentTheme);
 }
