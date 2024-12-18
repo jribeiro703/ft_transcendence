@@ -11,7 +11,7 @@ function createProfileContent() {
 	mainContent.innerHTML = `
 		<div class="profile-container" >
 			<div class="profile-header">
-				<img id="avatar" class="profile-avatar img-fluid" src="${DEFAULT_AVATAR}" alt="User Avatar" class="avatar" />
+				<img id="avatar" class="profile-avatar" src="${DEFAULT_AVATAR}" alt="User Avatar" class="avatar" />
 				<div class="profile-info">
 					<h4 id="username" class="profile-username">Username</h4>
 					<p id="alias" class="profile-alias"></p>
@@ -58,7 +58,7 @@ function createMatchHistory(container, data) {
 			row.innerHTML = `
 				<td class="match-result">${match.winner && match.winner.username === userData.username ? 'WIN' : 'LOSS'}</td>
 				<td class="user-info">
-					<div class-username >${userData.username}</div>
+					<div class="user-name" >${userData.username}</div>
 					<img class="user-avatar" src="${userData.avatar}" alt="${userData.username}'s avatar"/>
 				</td>
 				<td class="score">${match.me.score}</td>
