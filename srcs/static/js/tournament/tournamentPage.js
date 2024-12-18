@@ -68,7 +68,6 @@ export async function showTournamentView2(tournamentName)
 
 	setupEligiblePlayersRefresh();
 
-	// joinTournament();
 }
 function updateTournamentsList(tournaments)
 {

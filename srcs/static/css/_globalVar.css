@@ -1,29 +1,124 @@
 
-:root {
+.darkGrey {
   
-  --background-color: linear-gradient(
-    to right,
+	/* Theme Std  */
+	--background-color: linear-gradient(
+	to right,
 	#0A1014 0%,
-    #0F1520 15%,
-    #141B2A 30%,
-    #1A2A35 50%,
-    #141B2A 70%,
-    #0F1520 85%,
-    #0A1014 100%
+	#0F1520 15%,
+	#141B2A 30%,
+	#1A2A35 50%,
+	#141B2A 70%,
+	#0F1520 85%,
+	#0A1014 100%
 
-  );
-  --text-color: #fccb2d;
-  --border-btn-color: #4A4A4A;
-  --highlight-color: #FFFFFF;
-  --icon-color: #808080;
-  --box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+	);
+	--text-color: #fccb2d;
+	--border-btn-color: #4A4A4A;
+	--highlight-color: #FFFFFF;
+	--icon-color: #808080;
+	--box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
 
-   --placeholder-color: var(--text-color);
-  --chat-btn-highlight: var(--highlight-color);
-  --chat-bg: rgba(0, 0, 0, 0.7);
-  --chat-msg: var(--text-color);
-  --chat-border: var(--border-btn-color);
-  --box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+	--placeholder-color: var(--text-color);
+	--chat-btn-highlight: var(--highlight-color);
+	--chat-bg: rgba(0, 0, 0, 0.7);
+	--chat-msg: var(--text-color);
+	--chat-border: var(--border-btn-color);
+	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+}
+
+.neonBlue {
+
+	/* Thème 1: Néon Bleu */
+	--background-color: radial-gradient(
+	circle at center,
+	#000B1E 0%,
+	#001F54 50%,
+	#000B30 100%
+	);
+	--text-color: #00FFFF;
+	--border-btn-color: #4CC9F0;
+	--highlight-color: #80FFFF;
+	--icon-color: #4CC9F0;
+	--box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.7);
+
+	--placeholder-color: var(--text-color);
+	--chat-btn-highlight: var(--highlight-color);
+	--chat-bg: rgba(0, 0, 0, 0.7);
+	--chat-msg: var(--text-color);
+	--chat-border: var(--border-btn-color);
+	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+}
+
+.neonPurple {
+  /* Thème 2: Rétro Purple */
+	--background-color: linear-gradient(
+	135deg,
+	#2B0B3F 0%,
+	#3B0B6F 50%,
+	#2B0B3F 100%
+	);
+	--text-color: #FF00FF;
+	--border-btn-color: #B829E8;
+	--highlight-color: #FF80FF;
+	--icon-color: #B829E8;
+	--box-shadow: 0px 0px 10px rgba(255, 0, 255, 0.7);
+
+	--placeholder-color: var(--text-color);
+	--chat-btn-highlight: var(--highlight-color);
+	--chat-bg: rgba(0, 0, 0, 0.7);
+	--chat-msg: var(--text-color);
+	--chat-border: var(--border-btn-color);
+	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+}
+
+.darkPurple {
+
+	/* Thème 3: Synthwave */
+	--background-color: linear-gradient(
+	45deg,
+	#170B2B 0%,
+	#2B0548 50%,
+	#170B2B 100%
+	);
+	--text-color: #FF71CE;
+	--border-btn-color: #B967FF;
+	--highlight-color: #01FFFF;
+	--icon-color: #FF71CE;
+	--box-shadow: 0px 0px 10px rgba(255, 113, 206, 0.7);
+
+	--placeholder-color: var(--text-color);
+	--chat-btn-highlight: var(--highlight-color);
+	--chat-bg: rgba(0, 0, 0, 0.7);
+	--chat-msg: var(--text-color);
+	--chat-border: var(--border-btn-color);
+	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+}
+
+.minimalDark {
+	/* Thème 4: Minimal Dark */
+	--background-color: linear-gradient(
+	to right,
+	#0A1014 0%,
+	#1A2A35 50%,
+	#0A1014 100%
+	);
+	--text-color: #E0E0E0;
+	--border-btn-color: #4A4A4A;
+	--highlight-color: #FFFFFF;
+	--icon-color: #808080;
+	--box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+
+	--placeholder-color: var(--text-color);
+	--chat-btn-highlight: var(--highlight-color);
+	--chat-bg: rgba(0, 0, 0, 0.7);
+	--chat-msg: var(--text-color);
+	--chat-border: var(--border-btn-color);
+	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+}
+
+
+  /* Variables communes */
 
 
 
