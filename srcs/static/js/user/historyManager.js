@@ -13,6 +13,7 @@ import { isGamePage, renderPageGame } from "../game/HistoryManager.js";
 import gameVar from "../game/pong/var.js";
 import { sendGameData } from "../game/pong/network.js";
 import { clearAllpongStates } from "../game/pong/reset.js";
+import { closeGameChat } from "../livechat/game.js";
 
 const authPages = {
 	auth: renderAuthPage,
@@ -29,7 +30,6 @@ const userPages = {
 }
 
 async function renderPage(page, updateHistory = true) {
-	
 	if (gameVar.gameSocket)
 	{
 		gameVar.clientLeft = true;
@@ -54,6 +54,7 @@ async function renderPage(page, updateHistory = true) {
 	}
 	
 	renderFunction();
+	closeGameChat();
 }
 
 // listen to precedent or next page event but don't push state to history
