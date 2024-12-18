@@ -176,6 +176,10 @@ p {
 	/* transform: translateX(-50%); */
 }
 
+.d-flex {
+	filter: blur(0);
+}
+
 .tournament-gap {
   gap: 10px;
 }
