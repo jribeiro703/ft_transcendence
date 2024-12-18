@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // slide le livechat avec focus touche entrer + clic souris
 
-const themes = ['darkGrey', 'neonBlue', 'neonPurple', 'darkPurple', 'minimalDark'];
+const themes = ['darkGrey', 'neonBlue', 'whiteSky', 'darkPurple', 'minimalDark'];
 let currentThemeIndex = 0;
 
 export function changeTheme(theme)
