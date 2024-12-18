@@ -17,15 +17,17 @@ document.addEventListener('DOMContentLoaded', function () {
 			document.getElementById('friendlist').classList.add('d-none');
 			document.getElementById('onlinelist').classList.add('d-none');
 			document.getElementById('notificationlist').classList.add('d-none');
-			gameChat.innerHTML = '';
 
-			// Connect to game chat websocket if in a game room
-			if (gameVar.gameSocket && gameVar.gameSocket.url) {
-				const roomMatch = gameVar.gameSocket.url.match(/ws\/pong\/room_(\d+)/);
-				if (roomMatch && roomMatch[1]) {
-					const roomNumber = roomMatch[1];
-					// Create new gamechat websocket with same room number
-					gameChatSocket = initializeGameChatSocket(roomNumber);
+			if (!gameChatSocket) {
+				gameChat.innerHTML = '';
+				// Connect to game chat websocket if in a game room
+				if (gameVar.gameSocket && gameVar.gameSocket.url) {
+					const roomMatch = gameVar.gameSocket.url.match(/ws\/pong\/room_(\d+)/);
+					if (roomMatch && roomMatch[1]) {
+						const roomNumber = roomMatch[1];
+						// Create new gamechat websocket with same room number
+						gameChatSocket = initializeGameChatSocket(roomNumber);
+					}
 				}
 			}
 		} else {
@@ -40,10 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 export function initializeGameChatSocket(roomNumber) {
-	// if (gameChatSocket) {
-	// 	gameChatSocket.close();
-	// }
-
 	gameChatSocket = new WebSocket(
 		`wss://${window.location.host}/ws/livechat/room_${roomNumber}/`
 	);
