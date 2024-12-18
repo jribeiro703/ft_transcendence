@@ -119,7 +119,7 @@ class CurrentPlayersView(APIView):
 		try:
 			Tournament = apps.get_model('tournament', 'Tournament')
 
-			tournament = Tournament.objects.get(id=tournament_id)
+			tournament = get_object_or_404(Tournament, id=tournament_id)
 			players = tournament.players.all()
 			player_list = [{'id': player.id, 'username': player.username} for player in players]
 			return Response({'players': player_list}, status=status.HTTP_200_OK)

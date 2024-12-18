@@ -37,7 +37,7 @@ export const createTournament = async (name) => {
 	}
 };
 
-export const fetchEligiblePlayers = async () => {
+export const fetchPlayers = async () => {
 	try {
 		const response = await fetch('https://localhost:8081/tournament/players/', {
 			method: 'GET',
@@ -162,13 +162,15 @@ export const fetchCurrentPlayers = async (tournamentId) => {
 			headers: { 'Content-Type': 'application/json' },
 		});
 
-		if (response.ok) {
-			const data = await response.json();
-			return data.players;
-		} else {
-			console.error('Failed to fetch current players:', response.status);
+		if (!response.ok) {
+			const errorData = await response.json();
+			throw new Error(errorData.error || `Failed to fetch current players: ${response.status}`);
 		}
+
+		const data = await response.json();
+		return data.players; // Expecting players array
 	} catch (error) {
-		console.error('Error fetching current players:', error);
+		console.error('Failed to fetch current players:', error.message);
+		throw error; // Propagate error to caller
 	}
 };
