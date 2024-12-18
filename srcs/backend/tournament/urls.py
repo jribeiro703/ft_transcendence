@@ -13,7 +13,7 @@ from .views.stage_1_create_tournament import (
 )
 
 from .views.stage_1_fetch_eligible_players import (
-	FetchEligiblePlayersView,
+	FetchPlayersView,
 )
 from .views.stage_1_fetch_participants import (
 	FetchParticipantsView,
@@ -30,15 +30,13 @@ from .views.stage_2_matchmaking import PerformMatchmakingView
 
 urlpatterns = [
 	path('', CreateTournamentView.as_view(), name='create_tournament'),
+	path('players/', FetchPlayersView.as_view(), name='fetch_players'),
+	path('preregister/', PreRegisterPlayersView.as_view(), name='preregister_players'),
 	path('generate-name/', GenerateTournamentNameView.as_view(), name='generate-name'),
 	path('validate-name/', ValidateTournamentNameView.as_view(), name='validate-name'),
-	path('players/', FetchEligiblePlayersView.as_view(), name='fetch_eligible_players'),
-	path('preregister/', PreRegisterPlayersView.as_view(), name='preregister_players'),
-	path('preregister/', PreRegisterPlayersView.as_view(), name='preregister_players'), 
-	path('<int:tournament_id>/', GetTournamentView.as_view(), name='get-tournament'),
 	path('join/', JoinTournamentView.as_view(), name='join-tournament'),
 	path('matchmaking/', PerformMatchmakingView.as_view(), name='perform_matchmaking'),
-	path('<int:tournament_id>/bracket/', TournamentBracketView.as_view(), name='tournament-bracket'),
 	path('<int:tournament_id>/players/', CurrentPlayersView.as_view(), name='current-players'),
+	path('<int:tournament_id>/bracket/', TournamentBracketView.as_view(), name='tournament-bracket'),
+	path('<int:tournament_id>/', GetTournamentView.as_view(), name='get-tournament'),
 ]
-
