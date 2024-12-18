@@ -6,7 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class FetchEligiblePlayersView(APIView):
+class FetchPlayersView(APIView):
 	def get(self, request):
 		try:
 			logger.debug("Attempting to fetch eligible players.")
