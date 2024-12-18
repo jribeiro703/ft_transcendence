@@ -143,22 +143,46 @@ export function displayGameSelectionMulti()
 }
 export function displayGameView()
 {
-  const mainContent = document.getElementById('mainContent');
-  mainContent.innerHTML = ``;
-  const gameView = document.createElement('div');
-  gameView.innerHTML=`
-  <div id="gameView" style="display: block;">
-    <div id="scoreboard">
-      <canvas id="scoreCanvas"></canvas>
-    </div>
-    <canvas id="myCanvas"></canvas>
-    <div class="button-container">
-      <button id="rematchBtn" style="display: none;" disabled>Rematch</button>
-      <button id="quitGameBtn" style="display: none;">Return Home</button>
-    </div>
-  </div>
-  `;
-  mainContent.appendChild(gameView);
+	if(!gameVar.tournament)
+	{
+		const mainContent = document.getElementById('mainContent');
+		mainContent.innerHTML = ``;
+		const gameView = document.createElement('div');
+		gameView.innerHTML=`
+		<div id="gameView" style="display: block;">
+			<div id="scoreboard">
+				<canvas id="scoreCanvas"></canvas>
+			</div>
+			<canvas id="myCanvas"></canvas>
+			<br><br>
+			<div class="button-container">
+				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+				<button id="quitGameBtn" style="display: none;">Return Home</button>
+			</div>
+		</div>
+		`;
+		mainContent.appendChild(gameView);
+	}
+	else
+	{
+		const mainContent = document.getElementById('tournamentdiv');
+		mainContent.innerHTML = ``;
+		const gameView = document.createElement('div');
+		gameView.innerHTML=`
+		<div id="gameView" style="display: block;">
+			<div id="scoreboard">
+				<canvas id="scoreCanvas"></canvas>
+			</div>
+			<canvas id="myCanvas"></canvas>
+			<br><br>
+			<div class="button-container">
+				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+				<button id="quitGameBtn" style="display: none;">Return Home</button>
+			</div>
+		</div>
+		`;
+		mainContent.appendChild(gameView);
+	}
 }
 
 export function displayCanvas() {
@@ -238,7 +262,7 @@ export function displayCanvas() {
 // }
 export function displaySettingView()
 {
-  const pongUrl = "static/css/images/ttLevel.png";
+  const ttUrl = "static/css/images/ttLevel.png";
   const footUrl = "static/css/images/footballLevel.png";
   const tennisUrl = "static/css/images/tennisLevel.png";
   const classicUrl = "static/css/images/classicPong.png";
@@ -253,30 +277,26 @@ export function displaySettingView()
   insertTo.innerHTML = `
   <div id="settingView" class="no-scrollbar d-flex justify-content-center settingsViewOverflow overflow-auto flex-column align-items-center gap-5" style="display: block;">
         <div class="d-flex justify-content-center align-items-center gap-5 flex-wrap">
-          <button id="easy" class="settingsBtn btn height-btn">Easy</button>
-          <button id="medium" class="settingsBtn btn height-btn">Medium</button>
-          <button id="hard" class="settingsBtn btn height-btn">Hard</button>
+          <button id="easy" class="settingsBtn btn height-btn level">Easy</button>
+          <button id="medium" class="settingsBtn btn height-btn level">Medium</button>
+          <button id="hard" class="settingsBtn btn height-btn level">Hard</button>
         </div>
-        <div id="btnPowerUp" style="display: block;" class="d-flex justify-content-center align-items-center gap-5 flex-wrap ">
-          <button id="withPowerUps" class="settingsBtn btn custom-btn height-btn">Power UP</button>
-          <button id="withoutPowerUps" class="settingsBtn btn custom-btn height-btn">No Power UP</button>
+        <div id="btnPowerUp" style="display: block;" class="d-flex justify-content-center align-items-center gap-5 flex-wrap pu">
+          <button id="withPowerUps" class="settingsBtn btn custom-btn height-btn powerUpBtn">Power UP</button>
+          <button id="withoutPowerUps" class="settingsBtn btn custom-btn height-btn powerUpBtn">No Power UP</button>
         </div>
         <div class="map-selection flex-wrap justify-content-center">
           <div id="map1" class="mapOption mapClic" data-map-name="classicMap">
-            <img src="${classicUrl}" alt="classicMap" class="map-image">
-            <p class="level">Table Tennis</p>
+            <img src="${classicUrl}" id="classicPong" alt="classicMap" class="map-image">
           </div>
           <div id="map2" class="mapOption mapClic" data-map-name="classicMap">
-            <img src="${pongUrl}" alt="footMap1" class="map-image">
-            <p class="level">FootBall</p>
+            <img src="${ttUrl}" id="tableTennis" alt="footMap1" class="map-image">
           </div>
           <div id="map3" class="mapOption mapClic" data-map-name="clasicMap">
-            <img src="${footUrl}" alt="customMap1" class="map-image">
-            <p class="level">Tennis</p>
+            <img src="${footUrl}" id="footLevel" alt="customMap1" class="map-image">
           </div>
-          <div id="map4" class="mapOption align-items-center mapClic" data-map-name="clasicMap">
-            <img src="${tennisUrl}" alt="customMap1" class="map-image">
-            <p class="level">Classic</p>
+          <div id="map4" class="mapOption mapClic" data-map-name="clasicMap">
+            <img src="${tennisUrl}" id="tennisLevel" alt="customMap1" class="map-image">
           </div>
         </div>
       <button id="saveBtn" class="settingsBtn btn custom-btn height-btn" disabled="true">Save and Return</button>
@@ -423,6 +443,7 @@ export function displayGameBrickView()
   const mainContent = document.getElementById('mainContent');
   mainContent.innerHTML = '';
   const insertTo = document.createElement('div');
+  insertTo.id = 'brickoutContainer';
   insertTo.innerHTML = `
   <div id="scoreboard">
     <canvas id="scoreCanvas"></canvas>

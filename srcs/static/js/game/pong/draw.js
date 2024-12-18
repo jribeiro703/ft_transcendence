@@ -2,16 +2,17 @@ import gameVar from "./var.js";
 import { drawPowerUp, collectPowerUp, updatePowerUp } from "./powerUp.js";
 import { manageServer } from "./manage.js";
 import { manageCollisionLive, manageRealCollision } from "./collision.js";
-import { aiMove} from "./ai.js";
+import { aiMove, drawPredictionPath} from "./ai.js";
 import { drawFootball } from "./foot.js";
 import { drawTennisCourt, drawLines} from "./tennis.js";
 import { manageMoveLive, manageMove } from './movement.js';
 import { drawBall } from "./ball.js";
 import { checkPaddles } from "./paddle.js";
-import { drawScoreBoard } from "./score.js";
+import { drawScoreBoard, drawScoreBoardLive } from "./score.js";
 import { updateCanvasColor } from "./update.js";
 import { addBtn } from "./manage.js";
 import { delRooms } from "./room.js";
+import brickVar from "../brickout/var.js";
 
 export function initDraw()
 {
@@ -31,13 +32,17 @@ export function initDraw()
 		}
 		drawBall();
 		checkPaddles();
-		drawScoreBoard();
+		if (gameVar.liveMatch)
+			drawScoreBoardLive();
+		else
+			drawScoreBoard();
 	}
 }
 
 export function draw()
 {
 	initDraw();
+	drawPredictionPath(gameVar.ctx);
 	if (gameVar.gameStart)
 	{
 		manageRealCollision();
@@ -73,11 +78,22 @@ export function drawLive()
 }
 export function kickOut()
 {
-	cancelAnimationFrame(gameVar.animationFrame);
-	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
-	gameVar.ctx.font = "35px Arial";
-	gameVar.ctx.fillStyle = "red";	
-	gameVar.ctx.fillText("Opponent has rage quit..." , gameVar.canvasW / 4, gameVar.canvasH / 3);
+	if (gameVar.game === 'pong')
+	{
+		cancelAnimationFrame(gameVar.animationFrame);
+		gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+		gameVar.ctx.font = "35px Arial";
+		gameVar.ctx.fillStyle = "red";	
+		gameVar.ctx.fillText("Opponent has rage quit..." , gameVar.canvasW / 4, gameVar.canvasH / 3);
+	}
+	else if (gameVar.game === 'brickout')
+	{
+		cancelAnimationFrame(brickVar.anim);
+		brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
+		brickVar.ctx.font = "35px Arial";
+		brickVar.ctx.fillStyle = "red";	
+		brickVar.ctx.fillText("Opponent has rage quit..." , brickVar.canvasW / 4, brickVar.canvasH / 3);
+	}
 	delRooms();
 	addBtn();
 }
