@@ -36,10 +36,33 @@ def getListOfUsers(request):
 	return Response(serializer.data, status=status.HTTP_200_OK)	
 
 @api_view(['GET'])
-def getUserFriends(request):
-	"""Get list of friends for the logged-in user"""
+@permission_classes([AllowAny])
+def searchUser(request, username):
 	try:
-		# Ensure user is a proper User instance
+		user = User.objects.get(username=username)
+	except User.DoesNotExist:
+		return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+	serializer = UserPublicInfosSerializer(user)
+	return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])	
+@permission_classes([AllowAny])
+def getLeaderboard(request):
+	try:
+		leaderboard = {}
+		users = User.objects.filter(is_staff=False)
+		for user in users:
+			matchs = get_user_matchs_infos(user)
+			username = user.username
+			avatar = user.avatar.url
+			leaderboard[username] = {"avatar": avatar, "matchs": matchs}
+		return Response(leaderboard, status=status.HTTP_200_OK)
+	except Exception as e:
+		return Response({"message": "Error fetching leaderboard"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def getUserFriends(request):
+	try:
 		if not isinstance(request.user, User):
 			return Response(
 				{"message": "Invalid user type"}, 
@@ -68,64 +91,9 @@ def getOnlineUsers(request):
 		return Response({"message": "Error fetching online users"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
-def searchUser(request):
-	username = request.query_params.get('username')
-	users = User.objects.filter(username__icontains=username)
-	serializer = UserPublicInfosSerializer(users, many=True)
-	return Response(serializer.data, status=status.HTTP_200_OK)
-
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def GetUserPublicInfos(request, pk):
-	try:
-		user = User.objects.get(id=pk)
-	except User.DoesNotExist:
-		return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-	serializer = UserPublicInfosSerializer(user)
-	return Response(serializer.data, status=status.HTTP_200_OK)
-
-@api_view(['GET'])
 def GetUserPrivateInfos(request):
 	serializer = UserPrivateInfosSerializer(request.user)
 	return Response(serializer.data, status=status.HTTP_200_OK)
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getUserFriends(request):
-	"""Get list of friends for the logged-in user"""
-	try:
-		# Ensure user is a proper User instance
-		if not isinstance(request.user, User):
-			return Response(
-				{"message": "Invalid user type"}, 
-				status=status.HTTP_401_UNAUTHORIZED
-			)
-			
-		friends = request.user.friends.all()
-		serializer = UserPublicInfosSerializer(friends, many=True)
-		return Response(serializer.data, status=status.HTTP_200_OK)
-		
-	except Exception as e:
-		return Response(
-			{"message": f"Error fetching friends list: {str(e)}"}, 
-			status=status.HTTP_500_INTERNAL_SERVER_ERROR
-		)
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getOnlineUsers(request):
-	"""Get list of all online users"""
-	try:
-		online_users = User.objects.filter(is_online=True).exclude(id=request.user.id)
-		serializer = UserPublicInfosSerializer(online_users, many=True)
-		return Response(serializer.data, status=status.HTTP_200_OK)
-		
-	except Exception as e:
-		return Response(
-			{"message": f"Error fetching online users: {str(e)}"}, 
-			status=status.HTTP_500_INTERNAL_SERVER_ERROR
-		)
 
 @api_view(['GET'])
 def getUserPk(request):
@@ -159,21 +127,6 @@ def getUserIdByNickname(request):
 			status=status.HTTP_500_INTERNAL_SERVER_ERROR
 		)
 	
-@api_view(['GET'])	
-@permission_classes([AllowAny])
-def getLeaderboard(request):
-	try:
-		leaderboard = {}
-		users = User.objects.filter(is_staff=False)
-		for user in users:
-			matchs = get_user_matchs_infos(user)
-			username = user.username
-			avatar = user.avatar.url
-			leaderboard[username] = {"avatar": avatar, "matchs": matchs}
-		return Response(leaderboard, status=status.HTTP_200_OK)
-	except Exception as e:
-		return Response({"message": "Error fetching leaderboard"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 # ------------------------------REGISTER USER ENDPOINTS--------------------------------	
 
 class CreateUserView(CreateAPIView):
@@ -247,9 +200,9 @@ class ActivateLinkView(View):
 class UserProfileView(APIView):
 	permission_classes = [AllowAny]
 
-	def get(self, request, pk, *args, **kwargs):
+	def get(self, request, username, *args, **kwargs):
 		try:
-			user = User.objects.get(id=pk)
+			user = User.objects.get(username=username)
 		except User.DoesNotExist:
 			return Response({"message": "Profile Not Found"}, status=status.HTTP_404_NOT_FOUND)
 
