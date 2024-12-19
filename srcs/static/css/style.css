@@ -1,6 +1,7 @@
 @import url("_user.css");
 @import url("_home.css");
 @import url("_globalVar.css");
+@import url("_livechat.css");
 
 body {
 	background: var(--background-color);
@@ -42,16 +43,6 @@ p1 {
 	color: var(--text-color);
 	text-align: center;
 	margin-bottom: 0;
-}
-
-#livechat {
-	max-height: 90%;
-	border-radius: 7px;
-}
-
-.livechat-height {
-	max-height: 100%;
-	height: 742px;
 }
 
 .height-btn {
@@ -188,6 +179,10 @@ p1 {
 	left: 50%;
 	top: 1px;
 	/* transform: translateX(-50%); */
+}
+
+.d-flex {
+	filter: blur(0);
 }
 
 .tournament-gap {
@@ -589,8 +584,9 @@ p1 {
 {
     background-color: var(--background-color);
     color: var(--text-color);
-    border-color: var(--background-color);
+    /* border-color: var(--selected-btn); */
     box-shadow: var(--box-shadow-black);
+    border: 1px solid var(--selected-btn);
     transform: scale(1.05);
 }
 
@@ -619,12 +615,47 @@ p1 {
 /*   border-radius: 5px; */
 /* } */
 
+#saveBtn:enabled {
+	background-color: var(--background-color);
+	color: var(--text-color);
+	width: 170px;
+	align-self: center;
+	border: 2px solid var(--text-color);
+	transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out transform 0.3s;
+}
+
+#saveBtn {
+	background-color: var(--background-color);
+	color: var(--text-color);
+	width: 170px;
+	align-self: center;
+	border: 2px solid var(--text-color);
+	transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out transform 0.3s;
+}
+
+#saveBtn:active {
+	transform: scale(0.90);
+	background-color: var(--background-color);
+	color: var(--text-color);
+	width: 170px;
+	align-self: center;
+	border: 2px solid var(--text-color);
+	transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out transform 0.3s;
+}
+
+#saveBtn:focus,
+#saveBtn:hover {
+	transform: scale(1.05);
+	color: var(--highlight-color);
+	box-shadow: var(--box-shadow), var(--box-shadow-inset);
+	border: 2px solid var(--text-color);
+}
+
 #saveBtn:disabled {
-    background-color: #1a1f25;
     color: #5a5a5a;
-    border-color: transparent;
+    border: 1px solid #000000;
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.2;
     transform: none;
     box-shadow: none;
     pointer-events: none;
@@ -677,7 +708,7 @@ p1 {
   gap: 78px;
   background: var(--background-color);
   border-radius: 10px;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   width: 100%;
   height: 100vh;
@@ -1322,25 +1353,6 @@ color: white;
 	color: #fefcff;
 }
 
-#chat-log,
-#friendlist,
-#onlinelist,
-#notificationlist,
-#gamechat {
-	outline: none;
-	flex: 1;
-	/* height: calc(100% - 56px); */
-	/* border-bottom: none; */
-	/* border-radius: 5px 5px 0px 0px; */
-	/* border-color: var(--highlight-color); */
-	border: 1px solid var(--chat-border);
-	border-radius: 5px;
-	background-color: var(--chat-bg);
-	color: var(--chat-msg);
-	/* padding: 10px; */
-	padding-right: 62px !important;
-}
-
 /* live chat qui slide */
 
 .slideWithLiveChat {
@@ -1573,107 +1585,6 @@ color: white;
 	margin-top: auto;
 }
 
-#chat-message-input {
-	background-color: var(--background-color);
-	color: var(--text-color);
-	border-color: var(--chat-border) !important;
-}
-
-/* Placeholder color */
-#chat-message-input::placeholder {
-	color: var(--placeholder-color);
-}
-
-#chat-message-input:focus {
-	outline: none;
-	box-shadow: none;
-	border-color: var(--chat-border) !important;
-	background-color: var(--background-color);
-	z-index: 1002;
-}
-
-#chat-message-submit {
-	z-index: 1000;
-	border-color: var(--chat-border) !important;
-}
-
-emoji-menu {
-  z-index: 9999;
-}
-
-.noto-color-emoji-regular {
-	font-family: "Noto Color Emoji", sans-serif;
-	font-weight: 400;
-	font-style: normal;
-}
-
-
-emoji-picker {
-	--emoji-padding: 0.25rem;
-	height: 250px;
-	width: 270px;
-	--border-radius: 5px;
-	--border-color: var(--highlight-color);
-	--background: var(--background-color);
-	--border-color: var(--highlight-color);
-	--indicator-color: var(--highlight-color);
-	--input-border-color: var(--highlight-color);
-	--input-font-color: var(--text-color);
-	--input-placeholder-color: var(--text-color);
-	--outline-color: var(--text-color);
-	--category-font-color: var(--text-color);
-	--button-active-background: var(--secondary-color);
-	--button-hover-background: var(--highlight-color);
-	--z-index: 9999;
-	--emoji-font-family: "Noto Color Emoji", sans-serif !important;
-}
-
-.emoji-picker-container {
-	display: none;
-	position: absolute;
-	bottom: 55px;
-	transform: translateX(0%);
-	border-radius: 5px;
-	z-index: 9999;
-}
-
-.chat-btn {
-  z-index: 1001;
-  /* border-color: #dee2e6; */
-  border-color: var(--chat-border) !important;
-  box-shadow:
-  inset 0 0 0px transparent,
-  inset 0 0 1px transparent,
-  inset 0 0 2px transparent,
-  inset 0 0 3px transparent,
-  inset 0 0 4px transparent;
-  transition: box-shadow 0.3s ease-in-out;
-  color: var(--text-color);
-  transition: color 0.3s ease-in-out;
-}
-
-.chat-btn:hover {
-  box-shadow:
-  inset 0 0 0px var(--highlight-color),
-  inset 0 0 1px var(--highlight-color),
-  inset 0 0 2px var(--highlight-color),
-  inset 0 0 3px var(--highlight-color),
-  inset 0 0 4px var(--highlight-color);
-  background-color: var(--chat-btn-highlight);
-  color: var(--highlight-color);
-}
-
-.chat-btn:focus {
-  box-shadow:
-  inset 0 0 0px var(--highlight-color),
-  inset 0 0 1px var(--highlight-color),
-  inset 0 0 2px var(--highlight-color),
-  inset 0 0 3px var(--highlight-color),
-  inset 0 0 4px var(--highlight-color);
-  background-color: var(--chat-btn-highlight);
-  color: var(--highlight-color);
-}
-
 @media (max-width: 576px) {
   /* Small devices (sm) */
   .min-height-sm {
@@ -1681,39 +1592,23 @@ emoji-picker {
   }
 }
 
-.channel-container::-webkit-scrollbar {
-	display: none;
+.status-dot {
+  font-size: 0.8em;
 }
 
-.friend-item,
-.online-item,
-.notification-item {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	padding: 0.5rem;
-	border: 1px solid;
-	border-radius: 0.25rem;
-	margin-bottom: 0.5rem;
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
 }
 
-.friend-item:last-child,
-.online-item:last-child,
-.notification-item:last-child {
-	margin-bottom: 0;
+.btn-outline-primary, .btn-outline-danger, .btn-outline-success {
+  border-color: var(--highlight-color);
+  color: var(--highlight-color);
 }
 
-.channel-container {
-  z-index: 9998 !important;
-}
-
-.channel-btn {
-  z-index: 9998 !important;
-}
-
-/* Add to CSS */
-.tooltip .tooltip-arrow {
-	display: none !important;
+.btn-outline-primary:hover, .btn-outline-danger:hover, .btn-outline-success:hover {
+  background-color: var(--highlight-color);
+  color: var(--chat-bg);
 }
 
 /* -------------------- End Page --------------------------- */
