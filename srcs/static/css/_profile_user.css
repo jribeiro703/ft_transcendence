@@ -58,17 +58,6 @@
 	border: 2px solid var(--highlight-color);
   }
 
-  /* @media (max-width: 768px) {
-	.profile-avatar {
-		width: 80px;
-		height: 80px;
-	  }
-	.profile-header {
-		justify-content: flex-start;
-	}
-
-} */
-
 .profile-info {
 	display: flex;
 	align-items: center;
@@ -113,18 +102,6 @@
   }
 
 
-/* Profile stats */
-/* .profile-stats-container {
-	display: flex;
-	gap: 0px 30px;
-} */
-
-/* @media (min-width: 768px) {
-	.profile-stats-container {
-		margin: 5px
-	}
-} */
-  
 .profile-stats {
 	text-align: right;
 	font-size: 16px;
@@ -158,6 +135,11 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
+}
+
+.match-history-content p {
+	margin: 0px;
+	text-align: center;
 }
 
 .match-history-table {
@@ -285,3 +267,4 @@
 .pagination .active {
     background-color: darken(var(--background-color), 20%);
 }
+
