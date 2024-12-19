@@ -1,4 +1,6 @@
-@import url("_user.css");
+@import url("_profile_user.css");
+@import url("_settings_user.css");
+@import url("_auth_form.css");
 @import url("_home.css");
 @import url("themes/_globalVar.css");
 @import url("_livechat.css");

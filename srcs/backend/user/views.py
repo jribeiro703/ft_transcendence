@@ -175,11 +175,12 @@ def getUserIdByNickname(request):
 			status=status.HTTP_500_INTERNAL_SERVER_ERROR
 		)
 	
+@api_view(['GET'])	
 @permission_classes([AllowAny])
 def getLeaderboard(request):
 	try:
 		leaderboard = {}
-		users = User.objects.all(is_staff=False)
+		users = User.objects.filter(is_staff=False)
 		for user in users:
 			matchs = get_user_matchs_infos(user)
 			username = user.username
@@ -268,34 +269,42 @@ class UserProfileView(APIView):
 		except User.DoesNotExist:
 			return Response({"message": "Profile Not Found"}, status=status.HTTP_404_NOT_FOUND)
 
-		total_matches = Game.objects.filter(
-			Q(player_one=user) | Q(player_two=user)
-		).count()
+		total_matches = Game.objects.filter(Q(player_one=user) | Q(player_two=user)).count()
 		won_matches = Game.objects.filter(winner=user).count()
-
-		last_matches = Game.objects.filter(
-			Q(player_one=user) | Q(player_two=user)
-		).order_by('-created_at')[:5]
+		matches_played = Game.objects.filter(Q(player_one=user) | Q(player_two=user)).order_by('-created_at')
 
 		match_history = []
-		for match in last_matches:
-
-			# match_info = {
-				# "date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-				# "game_type"
-				# "difficulty"
-				# "powerup"
-				# "level"
-				# "player_one"
-				# "score": f"{match.score_one} - {match.score_two}",
-				# "player_two"
-				# "winner": match.winner.username
-			# }
+		for match in matches_played:
+			if user.pk == match.player_one.pk:
+				me = {
+					"score": match.score_one,					
+				}
+				enemy = {
+					"avatar": match.player_two.avatar.url,
+					"username": match.player_two.username if match.player_two else None,
+					"score": match.score_two,
+				}
+			else:
+				me = {
+					"score": match.score_two
+				}
+				enemy = {
+					"avatar": match.player_one.avatar.url,
+					"username": match.player_one.username if match.player_one else None,
+					"score": match.score_one,					
+				}
 
 			match_info = {
-				"date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-				"score": f"{match.score_one} - {match.score_two}",
-				"winner": match.winner.username if match.winner else "No Winner"
+				"date": match.created_at.strftime('%Y-%m-%d'),
+				"me": {
+					"score": me["score"],
+				},
+				"enemy": {
+					"avatar": enemy["avatar"],
+					"username": enemy["username"],
+					"score": enemy["score"],
+				},
+				"winner": match.winner.username if match.winner else None
 			}
 			match_history.append(match_info)
 

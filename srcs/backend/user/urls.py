@@ -8,7 +8,7 @@ urlpatterns = [
 	path('search/', views.searchUser, name="search_user"),
 	path('public/<int:pk>/', views.GetUserPublicInfos, name="user_public_infos"),
 	path('get-id/', views.getUserIdByNickname, name="get_user_id"),
-	path('leaderbaord/', views.getLeaderboard, name='get_leaderboard'),
+	path('leaderboard/', views.getLeaderboard, name='get_leaderboard'),
 
 	# private user endpoints
 	path('online/', views.getOnlineUsers, name='online_users'),

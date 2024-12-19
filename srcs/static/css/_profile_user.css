@@ -1,0 +1,287 @@
+@import url("_globalVar.css");
+
+/* Profile container */
+.profile-container {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 70%;
+    height: 100%;
+    padding: 35px;
+    background-color: var(--background-color);
+    color: var(--highlight-color);
+	/*no cursor*/
+}
+
+
+/* Header layout */
+.profile-header {
+
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 27%;
+    width: 50%;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 950px) {
+	.profile-header {
+		height: 100%;
+
+	}
+	.profile-info {
+		flex-direction: column;
+		gap: 5px;
+	}
+	.match-date {
+		display: none;
+	}
+	.user-name {
+		display: none;
+	}
+	.enemy-name {
+		display: none;
+	}
+	.match-result {
+		display: none;
+	}
+  }
+  
+.profile-avatar {
+	width: 110px;
+	height: 110px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid var(--highlight-color);
+  }
+
+  /* @media (max-width: 768px) {
+	.profile-avatar {
+		width: 80px;
+		height: 80px;
+	  }
+	.profile-header {
+		justify-content: flex-start;
+	}
+
+} */
+
+.profile-info {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.profile-username {
+	margin: 0px;
+  }
+  
+.profile-alias {
+	margin: 0px;
+	font-size: 14px;
+	color: #666;
+  }
+
+
+/* Status indicator */
+.status-container {
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	margin: 0px;
+	color: #666;
+  }
+
+.status-indicator {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	margin-right: 5px;
+  }
+  
+.status-online {
+	background-color: #2ecc71;
+  }
+  
+.status-offline {
+	background-color: #666;
+  }
+
+
+/* Profile stats */
+/* .profile-stats-container {
+	display: flex;
+	gap: 0px 30px;
+} */
+
+/* @media (min-width: 768px) {
+	.profile-stats-container {
+		margin: 5px
+	}
+} */
+  
+.profile-stats {
+	text-align: right;
+	font-size: 16px;
+  }
+
+
+/* Match history styling */
+.profile-match-history {
+	display: flex;
+    flex-direction: column;
+	max-width: 800px;
+    width: 75%;
+    height: 70%;
+    gap: 20px;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.match-history-title {
+	font-size: 30px;
+	margin: 0px;
+	text-align: center;
+}
+
+.match-history-content {
+	display: flex;
+    width: 80%;
+    height: 67%;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.match-history-table {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	gap: 20px;
+}
+
+.match-row {
+	display: flex;
+	align-items: center;
+	width: 100%;
+}
+
+.match-result {
+	padding-top: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    width: 15%;
+	text-align: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 25%;
+    gap: 15px;
+}
+
+.user-name {
+	text-align: center;
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.score {
+	width: 8%;
+    text-align: center;
+}
+
+.score-separator {
+	width: 5%;
+	text-align: center;
+}
+
+.enemy-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 25%;
+    gap: 15px;
+}
+
+.enemy-name {
+	text-align: center;
+}
+
+.enemy-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.match-date {
+	width: 20%;
+    text-align: center;
+    color: gray;
+    font-size: 14px;
+}
+
+/* Pagination styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+	height: 10%;
+	width: 50%;
+	gap: 10px;
+}
+
+.pagination button {
+    background-color: var(--background-color);
+    color: var(--highlight-color);
+    border: none;
+	width: 40%;
+	max-width: 100px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+@media (max-width: 950px) {
+	.pagination button {
+		width: 100%;
+		max-width: 100%;
+	}
+	.pagination {
+		flex-direction: column;
+		width: 100%;
+		height: 100%;
+		gap: 10px;
+	}
+	.profile-stats {
+		text-align: center;
+	}
+	.match-row {
+		justify-content: center;
+		gap: 20px;
+	}
+	.profile-container {
+		overflow: auto;
+	}
+}
+
+.pagination button:hover {
+    background-color: darken(var(--background-color), 10%);
+    border: 2px solid var(--highlight-color);
+}
+
+.pagination .active {
+    background-color: darken(var(--background-color), 20%);
+}
