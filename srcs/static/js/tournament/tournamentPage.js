@@ -155,6 +155,7 @@ export async function joinTournamentGame() {
 	displayGameView();
 	await initializeCanvasPong();
 	initControlLive();
+	console.log("Joining room with ID:", gameVar.roomTour1);
 	joinRoom(gameVar.roomTour1);
 }
 
