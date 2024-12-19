@@ -74,68 +74,71 @@ export function displayGameSelectionMulti()
   gameSelection.style.width = "100%";
 
   gameSelection.innerHTML = `
-  <div id="settingView" class="d-flex">
-    <div class="container-game no-scrollbar">
+    <div id="settingView" class="d-flex gap-3 container-game justify-content-center no-scrollbar flex-row align-items-center w-100">
 
+<div id="localPlay" class="w-60">
         <h1>Local Play</h1>
 
-      <div class="game-row">
+      <div class="game-row gap-3">
         <div class="game-image">
-          <img id="gameImage" src="${blackPongUrl}" alt="pongGame">
+          <img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
         </div>
-        <div class="game-settings">
-          <div id="settingsContainer" class="settings-info">
-            <div class="settings-inline">
-              <button id="settingBtn1" class="main-btn settingsSelect-button">Settings</button>
-              <div class="settings-column" id="settings-column">
-                <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
+
+          <div id="settingsContainer" class="justify-content-center align-items-center d-flex flex-column settings-font-name">
+                <p>PONG</p>
+              <div id="settings-column" class="settings-column settings-font">
+                <p class="fs-settings">Difficulty: <span id="difficultyChoice" class="fs-settings">Medium</span></p>
                 <p>Power-Up: <span id="powerupChoice">❌</span></p>
                 <p>Level: <span id="levelSelected">Table Tennis</span></p>
               </div>
-            </div>
           </div>
-        </div>
-        <div class="game-play">
+
+        <div class="width-170 justify-content-center d-flex flex-column gap-2">
+              <button id="settingBtn1" class="main-btn settingsSelect-button ">Settings</button>
           <button id="playBtn" class="main-btn settingsSelect-button">Play</button>
         </div>
+
       </div>
 
-      <div class="game-row">
+      <div class="game-row gap-3">
         <div class="game-image">
-          <img id="gameImage" src="${brickUrl}" alt="brickGame">
+          <img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
         </div>
-        <div class="game-settings">
-          <div id="settingsContainer" class="settings-info">
-            <div class="settings-inline">
-              <button id="settingBtn2" class="main-btn settingsSelect-button">Settings</button>
-              <div class="settings-column2" id="settings-column2">
-                <p>Difficulty: <span id="difficultyChoice2">Medium</span></p>
+
+          <div id="settingsContainer" class="justify-content-center align-items-center d-flex flex-column settings-font-name">
+                <p>PONG</p>
+              <div id="settings-column2" class="settings-column settings-font">
+                <p class="fs-settings">Difficulty: <span id="difficultyChoice2" class="fs-settings">Medium</span></p>
                 <p>Power-Up: <span id="powerupChoice2">❌</span></p>
-                <p>Level: <span id="levelSelected2">Classic</span></p>
+                <p>Level: <span id="levelSelected2">Table Tennis</span></p>
               </div>
-            </div>
           </div>
-        </div>
-        <div class="game-play">
+
+        <div class="width-170 justify-content-center d-flex flex-column gap-2">
+              <button id="settingBtn2" class="main-btn settingsSelect-button ">Settings</button>
           <button id="playBtn2" class="main-btn settingsSelect-button">Play</button>
         </div>
+
+      </div>
       </div>
 
+<div id="onlinePlay" class="w-40">
     <h1>Online Play</h1>
 
-      <div class="game-row">
+      <div class="game-row-online">
         <div class="game-image">
               <img id="gameImage" src="${pongUrl}" alt="pongGame">
             </div>
                         <button id="playBtn3" class="main-btn settingsSelect-button">Join Lobby</button>
                 </div>
 
-      <div class="game-row">
+      <div class="game-row-online">
         <div class="game-image">
               <img id="gameImage" src="${brickUrl}" alt="brickGame">
             </div>
                         <button id="playBtn4" class="main-btn settingsSelect-button">Join Lobby</button>
                 </div>
+
     </div>
     </div>`;
 
@@ -275,17 +278,20 @@ export function displaySettingView()
   insertTo.style.flex = "1 0 0";
 
   insertTo.innerHTML = `
-  <div id="settingView" class="p-2 no-scrollbar d-flex justify-content-center settingsViewOverflow overflow-auto flex-column align-items-center gap-5" style="display: block;">
-        <div class="d-flex justify-content-center align-items-center gap-5 flex-wrap">
+  <div id="settingView" class="p-2 no-scrollbar d-flex justify-content-center settingsViewOverflow overflow-auto flex-column align-items-center gap-4" style="display: block;">
+
+        <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
           <button id="easy" class="settingsBtn btn height-btn level">Easy</button>
           <button id="medium" class="settingsBtn btn height-btn level">Medium</button>
           <button id="hard" class="settingsBtn btn height-btn level">Hard</button>
         </div>
-        <div id="btnPowerUp" style="display: block;" class="d-flex justify-content-center align-items-center gap-5 flex-wrap pu">
+
+        <div id="btnPowerUp" style="display: block;" class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
           <button id="withPowerUps" class="settingsBtn btn custom-btn height-btn powerUpBtn">Power UP</button>
           <button id="withoutPowerUps" class="settingsBtn btn custom-btn height-btn powerUpBtn">No Power UP</button>
         </div>
-        <div class="map-selection flex-wrap justify-content-center">
+
+        <div class="map-selection d-flex gap-4 flex-wrap justify-content-center">
           <div id="map1" class="mapOption mapClic" data-map-name="classicMap">
             <img src="${classicUrl}" id="classicPong" alt="classicMap" class="map-image">
           </div>
@@ -299,7 +305,9 @@ export function displaySettingView()
             <img src="${tennisUrl}" id="tennisLevel" alt="customMap1" class="map-image">
           </div>
         </div>
+
       <button id="saveBtn" class="settingsBtn btn custom-btn height-btn" disabled="true">Save and Return</button>
+
   </div>`;
 
   maincontent.appendChild(insertTo);
@@ -399,7 +407,7 @@ export function displayGameSelectionSolo()
         <div class="game-settings">
           <div id="settingsContainer" class="settings-info">
             <div class="settings-inline">
-              <button id="settingBtn1" class="main-btn settingsSelect-button">Settings</button>
+                <p class="fs-4">PONG</p>
               <div class="settings-column" id="settings-column">
                 <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
                 <p>Power-Up: <span id="powerupChoice">❌</span></p>
@@ -408,10 +416,12 @@ export function displayGameSelectionSolo()
             </div>
           </div>
         </div>
-        <div class="game-play">
+        <div class="game-play d-flex flex-column gap-2">
+              <button id="settingBtn1" class="main-btn settingsSelect-button ">Settings</button>
           <button id="playBtn" class="main-btn settingsSelect-button">Play</button>
         </div>
       </div>
+
       <div class="game-row">
         <div class="game-image">
           <img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
@@ -419,7 +429,7 @@ export function displayGameSelectionSolo()
         <div class="game-settings">
           <div id="settingsContainer" class="settings-info">
             <div class="settings-inline">
-              <button id="settingBtn2" class="main-btn settingsSelect-button">Settings</button>
+                <p class="fs-4">BRICKS</p>
               <div class="settings-column2" id="settings-column2">
                 <p>Difficulty: <span id="difficultyChoice2">Medium</span></p>
                 <p>Power-Up: <span id="powerupChoice2">❌</span></p>
@@ -428,7 +438,8 @@ export function displayGameSelectionSolo()
             </div>
           </div>
         </div>
-        <div class="game-play">
+        <div class="game-play d-flex flex-column gap-2">
+              <button id="settingBtn2" class="main-btn settingsSelect-button">Settings</button>
           <button id="playBtn2" class="main-btn settingsSelect-button">Play</button>
         </div>
       </div>
