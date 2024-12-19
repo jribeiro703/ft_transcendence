@@ -1,5 +1,4 @@
 import gameVar from "./var.js";
-import { updateImageUrl } from "./update.js";
 
 export function displayLobbyView(level) {
   const mainContent = document.getElementById("mainContent");
@@ -7,7 +6,6 @@ export function displayLobbyView(level) {
   const roomView = document.createElement("div");
 
   roomView.style.width = "100%";
-  // gameSelection.style.width = "100%";
 
 
   roomView.innerHTML = `
@@ -81,7 +79,7 @@ export function displayGameSelectionMulti()
 
       <div class="game-row gap-3">
         <div class="game-image">
-          <img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
+          <img id="gameImage" src="${blackPongUrl}" alt="pongGame">
         </div>
 
           <div id="settingsContainer" class="justify-content-center align-items-center d-flex flex-column settings-font-name">
@@ -102,7 +100,7 @@ export function displayGameSelectionMulti()
 
       <div class="game-row gap-3">
         <div class="game-image">
-          <img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
+          <img id="gameImage" src="${brickUrl}" alt="brickGame">
         </div>
 
           <div id="settingsContainer" class="justify-content-center align-items-center d-flex flex-column settings-font-name">
@@ -211,58 +209,7 @@ export function displayCanvas() {
 
   mainContent.appendChild(insertTo);
 }
-// export function displaySettingMultiView() {
-//   const pongUrl = "static/css/images/ttLevel.png";
-//   const footUrl = "static/css/images/footballLevel.png";
-//   const tennisUrl = "static/css/images/tennisLevel.png";
-//   const maincontent = document.getElementById("mainContent");
-//
-//   maincontent.innerHTML = "";
-//
-//   const insertTo = document.createElement("div");
-//
-//   insertTo.innerHTML = `
-//   <div id="settingView" style="display: block;">
-//     <Settings
-//     <div class="container">
-//       <div class="left-column">
-//         <p class="gpMode">Difficulty:</p>
-//         <p id="powerUpSelection" style="display: none;" class="gpMode">Power-Up Activation:</p>
-//         <p class="gpMode">Level Selection:</p>
-//       </div>
-//       <div class="right-column">
-//         <div>
-//           <button id="easy" class="level">Easy</button>
-//           <button id="medium" class="level">Medium</button>
-//           <button id="hard" class="level">Hard</button>
-//         </div>
-//         <div id="btnPowerUp" style="display: none;" class="pu">
-//           <button id="withPowerUps" class="powerUpBtn">Yes</button>
-//           <button id="withoutPowerUps" class="powerUpBtn">No</button>
-//         </div>
-//         <div class="map-selection">
-//           <div id="map1" class="mapOption" data-map-name="classicMap">
-//             <img src="${pongUrl}" alt="classicMap" class="map-image">
-//             <button id="tableTennis" class="level">Table Tennis</button>
-//           </div>
-//           <div id="map2" class="mapOption" data-map-name="classicMap">
-//             <img src="${footUrl}" alt="footMap1" class="map-image">
-//             <button id="footLevel" class="level">FootBall</button>
-//           </div>
-//           <div id="map3" class="mapOption" data-map-name="clasicMap">
-//             <img src="${tennisUrl}" alt="customMap1" class="map-image">
-//             <button id="tennisLevel" class="level">Tennis</button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//     <div>
-//       <button id="saveBtn">Save and Return</button>
-//     </div>
-//   </div>`;
-//
-//   maincontent.appendChild(insertTo);
-// }
+
 export function displaySettingView()
 {
   const ttUrl = "static/css/images/ttLevel.png";
@@ -328,122 +275,61 @@ export function displaySetting(difficulty, powerUp, level) {
   settingContain.appendChild(settingItem);
 }
 
-// const maincontent = document.getElementById('mainContent');
-// maincontent.innerHTML = '';
-// const gameSelection = document.createElement('div');
-//
-//
-// gameSelection.innerHTML =  `
-// <div id="settingView" class="game-selection">
-// 	<h1>Game Selection</h1>
-// 	<div class="container-game">
-// 		<div class="game-row">
-// 			<div class="game-title">
-// 				<h2 id="gameTitle">PONG</h2>
-// 			</div>
-// 			<div class="game-image">
-// 				<img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
-// 			</div>
-// 			<div class="game-settings">
-// 				<div id="settingsContainer" class="settings-info">
-// 					<div class="settings-inline">
-// 						<button id="settingBtn1" class="settingsSelect-button">Settings</button>
-// 						<div class="settings-column" id="settings-column">
-// 							<p>Difficulty: <span id="difficultyChoice">Medium</span></p>
-// 							<p>Power-Up: <span id="powerupChoice">❌</span></p>
-// 							<p>Level: <span id="levelSelected">Table Tennis</span></p>
-// 						</div>
-// 					</div>
-// 				</div>
-// 			</div>
-// 			<div class="game-play">
-// 				<button id="playBtn" class="startSelect-button">Play</button>
-// 			</div>
-// 		</div>
-// 		<div class="game-row">
-// 			<div class="game-title2">
-// 				<h2 id="gameTitle2">BRICKOUT</h2>
-// 			</div>
-// 			<div class="game-image">
-// 				<img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
-// 			</div>
-// 			<div class="game-settings">
-// 				<div id="settingsContainer" class="settings-info">
-// 					<div class="settings-inline">
-// 						<button id="settingBtn2" class="settingsSelect-button2">Settings</button>
-// 						<div class="settings-column2" id="settings-column2">
-// 							<p>Difficulty: <span id="difficultyChoice2">Medium</span></p>
-// 							<p>Power-Up: <span id="powerupChoice2">❌</span></p>
-// 							<p>Level: <span id="levelSelected2">Classic</span></p>
-// 						</div>
-// 					</div>
-// 				</div>
-// 			</div>
-// 			<div class="game-play">
-// 				<button id="playBtn2" class="startSelect-button">Play</button>
-// 			</div>
-// 		</div>
-// 	</div>
-// </div>`;
-//
-// maincontent.appendChild(gameSelection);
-
 export function displayGameSelectionSolo()
 {
   const maincontent = document.getElementById("mainContent");
   maincontent.innerHTML = "";
   const gameSelection = document.createElement("div");
+  const brickUrl = "/static/css/images/brickout.png";
+  const blackPongUrl = "/static/css/images/classicPong.png";
 
   gameSelection.style.width = "100%";
   gameSelection.style.flex = "1 0 0";
 
   gameSelection.innerHTML = `
-  <div id="settingView" class="d-flex">
-    <div class="container-game no-scrollbar">
-      <div class="game-row">
+    <div id="settingView" class="d-flex gap-3 container-game justify-content-center no-scrollbar flex-row align-items-center w-100">
+
+      <div class="game-row gap-3">
         <div class="game-image">
-          <img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
+          <img id="gameImage" src="${blackPongUrl}" alt="pongGame">
         </div>
-        <div class="game-settings">
-          <div id="settingsContainer" class="settings-info">
-            <div class="settings-inline">
-                <p class="fs-4">PONG</p>
-              <div class="settings-column" id="settings-column">
-                <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
+
+          <div id="settingsContainer" class="justify-content-center align-items-center d-flex flex-column settings-font-name">
+                <p>PONG</p>
+              <div id="settings-column" class="settings-column settings-font">
+                <p class="fs-settings">Difficulty: <span id="difficultyChoice" class="fs-settings">Medium</span></p>
                 <p>Power-Up: <span id="powerupChoice">❌</span></p>
                 <p>Level: <span id="levelSelected">Table Tennis</span></p>
               </div>
-            </div>
           </div>
-        </div>
-        <div class="game-play d-flex flex-column gap-2">
+
+        <div class="width-170 justify-content-center d-flex flex-column gap-2">
               <button id="settingBtn1" class="main-btn settingsSelect-button ">Settings</button>
           <button id="playBtn" class="main-btn settingsSelect-button">Play</button>
         </div>
+
       </div>
 
-      <div class="game-row">
+      <div class="game-row gap-3">
         <div class="game-image">
-          <img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
+          <img id="gameImage" src="${brickUrl}" alt="brickGame">
         </div>
-        <div class="game-settings">
-          <div id="settingsContainer" class="settings-info">
-            <div class="settings-inline">
-                <p class="fs-4">BRICKS</p>
-              <div class="settings-column2" id="settings-column2">
-                <p>Difficulty: <span id="difficultyChoice2">Medium</span></p>
+
+          <div id="settingsContainer" class="justify-content-center align-items-center d-flex flex-column settings-font-name">
+                <p>PONG</p>
+              <div id="settings-column2" class="settings-column settings-font">
+                <p class="fs-settings">Difficulty: <span id="difficultyChoice2" class="fs-settings">Medium</span></p>
                 <p>Power-Up: <span id="powerupChoice2">❌</span></p>
-                <p>Level: <span id="levelSelected2">Classic</span></p>
+                <p>Level: <span id="levelSelected2">Table Tennis</span></p>
               </div>
-            </div>
           </div>
-        </div>
-        <div class="game-play d-flex flex-column gap-2">
-              <button id="settingBtn2" class="main-btn settingsSelect-button">Settings</button>
+
+        <div class="width-170 justify-content-center d-flex flex-column gap-2">
+              <button id="settingBtn2" class="main-btn settingsSelect-button ">Settings</button>
           <button id="playBtn2" class="main-btn settingsSelect-button">Play</button>
         </div>
+
       </div>
-    </div>
   </div>`;
 
   maincontent.appendChild(gameSelection);

@@ -463,7 +463,7 @@ p {
 	border: 2px solid;
 	border-color: var(--border-btn-color);
 	max-width: 1000px;
-	width: 460px;
+	width: 380px;
 	align-self: center;
 	transition: color 0.3s ease-in-out;
 	transition: border-color 0.3s ease-in-out;
