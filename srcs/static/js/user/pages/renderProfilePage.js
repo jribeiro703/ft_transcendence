@@ -38,7 +38,6 @@ function createProfileContent() {
 		</div>
 	`;
 }
-{/* <div class="profile-stats-container"></div> */}
 
 function createMatchHistory(container, data) {
 	matchData = data.match_history;
