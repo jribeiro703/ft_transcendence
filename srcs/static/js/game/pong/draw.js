@@ -26,10 +26,8 @@ export function initDraw()
 		else if (gameVar.currentLevel === 'tennis')
 			drawTennisCourt();
 		else if (gameVar.currentLevel === 'classicPong')
-		{
 			drawClassicPong();
-			updateCanvasColor();
-		}
+		updateCanvasColor();
 		drawBall();
 		checkPaddles();
 		if (gameVar.liveMatch)

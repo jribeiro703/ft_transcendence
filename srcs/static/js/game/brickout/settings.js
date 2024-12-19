@@ -57,8 +57,28 @@ export function getSettingBtn()
 	brickVar.invaderLevel = document.getElementById('invaderLevel');
 }
 
+// export function displaySettingB(difficulty, powerUp, level)
+// {
+// 	const settingContain = document.getElementById('settings-column2');
+
+// 	settingContain.innerHTML = '';
+
+// 	const settingItem = document.createElement('div');
+
+// 	settingItem.innerHTML = `
+// 	<p>Difficulty: <span id="difficultyChoice2">${difficulty}</span></p>
+// 	<p>Power-Up: <span id="powerupChoice2">${powerUp}</span></p>
+// 	<p>Level: <span id="levelSelected2">${level}</span></p>`;
+
+// 	settingContain.appendChild(settingItem);
+// }
 export function displaySettingB(difficulty, powerUp, level)
 {
+	var pu = null;
+	if (brickVar.powerUpEnable)
+		pu = "✅";
+	else
+		pu = "❌";
 	const settingContain = document.getElementById('settings-column2');
 
 	settingContain.innerHTML = '';
@@ -66,9 +86,9 @@ export function displaySettingB(difficulty, powerUp, level)
 	const settingItem = document.createElement('div');
 
 	settingItem.innerHTML = `
-	<p>Difficulty: <span id="difficultyChoice2">${difficulty}</span></p>
-	<p>Power-Up: <span id="powerupChoice2">${powerUp}</span></p>
-	<p>Level: <span id="levelSelected2">${level}</span></p>`;
+	<p>Difficulty: <span id="difficultyChoice2">${brickVar.difficulty}</span></p>
+	<p>Power-Up: <span id="powerupChoice2">${pu}</span></p>
+	<p>Level: <span id="levelSelected2">${brickVar.currLevel}</span></p>`;
 
 	settingContain.appendChild(settingItem);
 }

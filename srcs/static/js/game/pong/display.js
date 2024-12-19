@@ -1,14 +1,13 @@
 import gameVar from "./var.js";
 import { updateImageUrl } from "./update.js";
 
-export function displayLobbyView(level) {
+export function displayLobbyView(level) 
+{
   const mainContent = document.getElementById("mainContent");
   mainContent.innerHTML = "";
   const roomView = document.createElement("div");
 
   roomView.style.width = "100%";
-  // gameSelection.style.width = "100%";
-
 
   roomView.innerHTML = `
   <div id="roomView" style="display: none;" class="h-100 d-flex justify-content-center">
@@ -40,7 +39,8 @@ export function displayLobbyView(level) {
   mainContent.appendChild(roomView);
 }
 
-export function displayPongRemote() {
+export function displayPongRemote()
+{
   const mainContent = document.getElementById("mainContent");
   mainContent.innerHTML = "";
   const insertTo = document.createElement("div");
@@ -66,10 +66,13 @@ export function displayGameSelectionMulti()
   const maincontent = document.getElementById('mainContent');
   maincontent.innerHTML = '';
   const gameSelection = document.createElement('div');
-  const pongUrl = "/static/css/images/ttLevel.png";
+  const pongUrl = "/static/css/images/classicPong.png";
   const brickUrl = "/static/css/images/brickout.png";
-  const blackPongUrl = "/static/css/images/classicPong.png";
 
+  if (!gameVar.pongUrl)
+	gameVar.pongUrl = pongUrl;
+  if(!gameVar.brickUrl)
+	gameVar.brickUrl = brickUrl;
 
   gameSelection.style.width = "100%";
 
@@ -81,7 +84,7 @@ export function displayGameSelectionMulti()
 
       <div class="game-row">
         <div class="game-image">
-          <img id="gameImage" src="${blackPongUrl}" alt="pongGame">
+          <img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
         </div>
         <div class="game-settings">
           <div id="settingsContainer" class="settings-info">
@@ -102,7 +105,7 @@ export function displayGameSelectionMulti()
 
       <div class="game-row">
         <div class="game-image">
-          <img id="gameImage" src="${brickUrl}" alt="brickGame">
+          <img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
         </div>
         <div class="game-settings">
           <div id="settingsContainer" class="settings-info">
@@ -185,7 +188,8 @@ export function displayGameView()
 	}
 }
 
-export function displayCanvas() {
+export function displayCanvas()
+{
   const mainContent = document.getElementById("mainContent");
 
   mainContent.innerHTML = "";
@@ -258,19 +262,21 @@ export function displaySettingView()
   maincontent.appendChild(insertTo);
 }
 
-export function displaySetting(difficulty, powerUp, level) {
-  const settingContain = document.getElementById("settings-column");
-  if (!settingContain) console.log("error on settingContain");
-  settingContain.innerHTML = "";
+export function displaySetting(difficulty, powerUp, level)
+{
+	const settingContain = document.getElementById("settings-column");
+	if (!settingContain)
+		console.log("error on settingContain");
+	settingContain.innerHTML = "";
 
-  const settingItem = document.createElement("div");
+	const settingItem = document.createElement("div");
 
-  settingItem.innerHTML = `
-  <p>Difficulty: <span id="difficultyChoice">${difficulty}</span></p>
-  <p>Power-Up: <span id="powerupChoice">${powerUp}</span></p>
-  <p>Level: <span id="levelSelected">${level}</span></p>`;
+	settingItem.innerHTML = `
+	<p>Difficulty: <span id="difficultyChoice">${difficulty}</span></p>
+	<p>Power-Up: <span id="powerupChoice">${powerUp}</span></p>
+	<p>Level: <span id="levelSelected">${level}</span></p>`;
 
-  settingContain.appendChild(settingItem);
+	settingContain.appendChild(settingItem);
 }
 
 
