@@ -16,9 +16,7 @@ from .views.stage_1_create_tournament import (
 from .views.stage_1_fetch_eligible_players import (
 	FetchPlayersView,
 )
-from .views.stage_1_fetch_participants import (
-	FetchParticipantsView,
-)
+
 from .views.stage_2_matchmaking import (
 	TournamentBracketView,
 	CurrentPlayersView
