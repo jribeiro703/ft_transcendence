@@ -217,3 +217,39 @@ class JoinTournamentView(APIView):
 			}, status=status.HTTP_200_OK)
 		except Exception as e:
 			return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# ❶ TOURNAMENT CREATTION STAGE - List User Tournaments
+class ListUserTournamentsView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def get(self, request):
+		try:
+			# Get the user
+			user = request.user
+
+			# Dynamically fetch the Tournament model
+			Tournament = apps.get_model('tournament', 'Tournament')
+
+			# Query tournaments where the user is a participant and status is 'UPCOMING'
+			tournaments = Tournament.objects.filter(
+				players=user,
+				status='UPCOMING'
+			).values('id', 'name')
+
+			# Check if any tournaments exist
+			if not tournaments.exists():
+				return Response(
+					{"message": "You are not part of any upcoming tournaments."},
+					status=status.HTTP_404_NOT_FOUND
+				)
+
+			return Response(
+				{"tournaments": list(tournaments)},
+				status=status.HTTP_200_OK
+			)
+
+		except Exception as e:
+			return Response(
+				{"error": f"Failed to fetch tournaments: {str(e)}"},
+				status=status.HTTP_500_INTERNAL_SERVER_ERROR
+			)

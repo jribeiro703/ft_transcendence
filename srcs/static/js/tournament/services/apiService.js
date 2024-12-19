@@ -174,3 +174,24 @@ export const fetchCurrentPlayers = async (tournamentId) => {
 		throw error; // Propagate error to caller
 	}
 };
+
+export const fetchUserTournaments = async () => {
+	try {
+		const response = await fetch("https://localhost:8081/tournament/user-tournaments/", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+
+		if (!response.ok) {
+			throw new Error(`Failed to fetch tournaments: ${response.status}`);
+		}
+
+		const data = await response.json();
+		console.log("User Tournaments:", data.tournaments);
+		return data.tournaments;
+	} catch (error) {
+		console.error("Error in fetchUserTournaments:", error);
+	}
+}
