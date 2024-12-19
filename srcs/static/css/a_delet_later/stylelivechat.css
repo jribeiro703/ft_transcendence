@@ -272,6 +272,7 @@ p
 	background-color: #6DC7C1;
 	color :#000000;
 	transform: scale(1.1);
+  border-color: var(--selected-btn);
 }
 
 .powerUpBtn:hover, .level:hover

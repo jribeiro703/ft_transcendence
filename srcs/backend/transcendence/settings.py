@@ -69,6 +69,7 @@ INSTALLED_APPS = [
 	'livechat',
 	'admin_interface',
 	'colorfield',
+	'corsheaders',
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
@@ -77,6 +78,7 @@ SILENCED_SYSTEM_CHECKS = ["security.W019"]
 MIDDLEWARE = [
 	"django.middleware.security.SecurityMiddleware",
 	"django.contrib.sessions.middleware.SessionMiddleware",
+	"corsheaders.middleware.CorsMiddleware",
 	"django.middleware.common.CommonMiddleware",
 	"django.middleware.csrf.CsrfViewMiddleware",
 	"django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -206,6 +208,12 @@ CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = [
 	"https://localhost:8081",
+]
+
+CORS_ALLOWED_ORIGINS = [
+	f"https://{HOSTNAME}:8081",
+	"https://localhost:8081",
+	"https://127.0.0.1:8081",
 ]
 
 CHANNEL_LAYERS = {
