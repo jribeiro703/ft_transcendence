@@ -6,7 +6,7 @@ export function renderOtpForm(url, msg) {
 	showToast(msg, "success");
 	const box = document.getElementById('mainContent');
 	box.innerHTML = `
-	<div id="defaultView" class="d-flex flex-column justify-content-center align-items-center gap-5 h-100">
+	<div id="defaultView" class="d-flex flex-column justify-content-center align-items-center gap-4 h-100">
 		<form id="otpForm" class="custom-form">
 			<div class="custom-form-group">
 				<label class="custom-label" for="otpCode">OTP Code:</label>
