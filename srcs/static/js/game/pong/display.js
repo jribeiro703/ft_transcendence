@@ -24,9 +24,9 @@ export function displayLobbyView(level) {
         </div>
         <div class="host-server w-40 d-flex justify-content-spa align-items-center flex-column">
           <h2>Host A Room</h2>
-          <h3 class="d-flex gap-4">Playing as: <strong>Login</strong></h3>
+          <h3 class="d-flex gap-4">Playing as: <strong>${gameVar.userName}</strong></h3>
           <div class="settings d-flex justify-content-center w-100 gap-4">
-            <button id="settingBtn" classe="main-btn">Settings</button>
+            <button id="settingBtn" class="main-btn">Settings</button>
             <div id="setting-container">
               Difficulty: <span id="difficultyChoice">Medium</span><br>
               Level: <span id="levelSelected">${level}</span>
@@ -77,7 +77,7 @@ export function displayGameSelectionMulti()
   <div id="settingView" class="d-flex">
     <div class="container-game no-scrollbar">
 
-        <h1>Local Play</h1>
+        <h1 class="custom-h1">Local Play</h1>
 
       <div class="game-row">
         <div class="game-image">
@@ -121,7 +121,7 @@ export function displayGameSelectionMulti()
         </div>
       </div>
 
-    <h1>Online Play</h1>
+    <h1 class="custom-h1">Online Play</h1>
 
       <div class="game-row">
         <div class="game-image">
@@ -208,58 +208,7 @@ export function displayCanvas() {
 
   mainContent.appendChild(insertTo);
 }
-// export function displaySettingMultiView() {
-//   const pongUrl = "static/css/images/ttLevel.png";
-//   const footUrl = "static/css/images/footballLevel.png";
-//   const tennisUrl = "static/css/images/tennisLevel.png";
-//   const maincontent = document.getElementById("mainContent");
-//
-//   maincontent.innerHTML = "";
-//
-//   const insertTo = document.createElement("div");
-//
-//   insertTo.innerHTML = `
-//   <div id="settingView" style="display: block;">
-//     <Settings
-//     <div class="container">
-//       <div class="left-column">
-//         <p class="gpMode">Difficulty:</p>
-//         <p id="powerUpSelection" style="display: none;" class="gpMode">Power-Up Activation:</p>
-//         <p class="gpMode">Level Selection:</p>
-//       </div>
-//       <div class="right-column">
-//         <div>
-//           <button id="easy" class="level">Easy</button>
-//           <button id="medium" class="level">Medium</button>
-//           <button id="hard" class="level">Hard</button>
-//         </div>
-//         <div id="btnPowerUp" style="display: none;" class="pu">
-//           <button id="withPowerUps" class="powerUpBtn">Yes</button>
-//           <button id="withoutPowerUps" class="powerUpBtn">No</button>
-//         </div>
-//         <div class="map-selection">
-//           <div id="map1" class="mapOption" data-map-name="classicMap">
-//             <img src="${pongUrl}" alt="classicMap" class="map-image">
-//             <button id="tableTennis" class="level">Table Tennis</button>
-//           </div>
-//           <div id="map2" class="mapOption" data-map-name="classicMap">
-//             <img src="${footUrl}" alt="footMap1" class="map-image">
-//             <button id="footLevel" class="level">FootBall</button>
-//           </div>
-//           <div id="map3" class="mapOption" data-map-name="clasicMap">
-//             <img src="${tennisUrl}" alt="customMap1" class="map-image">
-//             <button id="tennisLevel" class="level">Tennis</button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//     <div>
-//       <button id="saveBtn">Save and Return</button>
-//     </div>
-//   </div>`;
-//
-//   maincontent.appendChild(insertTo);
-// }
+
 export function displaySettingView()
 {
   const ttUrl = "static/css/images/ttLevel.png";
@@ -288,15 +237,19 @@ export function displaySettingView()
         <div class="map-selection flex-wrap justify-content-center">
           <div id="map1" class="mapOption mapClic" data-map-name="classicMap">
             <img src="${classicUrl}" id="classicPong" alt="classicMap" class="map-image">
+			<p1>Classic Pong</p1>
           </div>
           <div id="map2" class="mapOption mapClic" data-map-name="classicMap">
             <img src="${ttUrl}" id="tableTennis" alt="footMap1" class="map-image">
+			<p1>Table tennis</p1>
           </div>
           <div id="map3" class="mapOption mapClic" data-map-name="clasicMap">
             <img src="${footUrl}" id="footLevel" alt="customMap1" class="map-image">
+			<p1>Football</p1>
           </div>
           <div id="map4" class="mapOption mapClic" data-map-name="clasicMap">
             <img src="${tennisUrl}" id="tennisLevel" alt="customMap1" class="map-image">
+			<p1>Tennis</p1>
           </div>
         </div>
       <button id="saveBtn" class="settingsBtn btn custom-btn height-btn" disabled="true">Save and Return</button>
@@ -320,65 +273,6 @@ export function displaySetting(difficulty, powerUp, level) {
   settingContain.appendChild(settingItem);
 }
 
-// const maincontent = document.getElementById('mainContent');
-// maincontent.innerHTML = '';
-// const gameSelection = document.createElement('div');
-//
-//
-// gameSelection.innerHTML =  `
-// <div id="settingView" class="game-selection">
-// 	<h1>Game Selection</h1>
-// 	<div class="container-game">
-// 		<div class="game-row">
-// 			<div class="game-title">
-// 				<h2 id="gameTitle">PONG</h2>
-// 			</div>
-// 			<div class="game-image">
-// 				<img id="gameImage" src="${gameVar.pongUrl}" alt="pongGame">
-// 			</div>
-// 			<div class="game-settings">
-// 				<div id="settingsContainer" class="settings-info">
-// 					<div class="settings-inline">
-// 						<button id="settingBtn1" class="settingsSelect-button">Settings</button>
-// 						<div class="settings-column" id="settings-column">
-// 							<p>Difficulty: <span id="difficultyChoice">Medium</span></p>
-// 							<p>Power-Up: <span id="powerupChoice">❌</span></p>
-// 							<p>Level: <span id="levelSelected">Table Tennis</span></p>
-// 						</div>
-// 					</div>
-// 				</div>
-// 			</div>
-// 			<div class="game-play">
-// 				<button id="playBtn" class="startSelect-button">Play</button>
-// 			</div>
-// 		</div>
-// 		<div class="game-row">
-// 			<div class="game-title2">
-// 				<h2 id="gameTitle2">BRICKOUT</h2>
-// 			</div>
-// 			<div class="game-image">
-// 				<img id="gameImage" src="${gameVar.brickUrl}" alt="brickGame">
-// 			</div>
-// 			<div class="game-settings">
-// 				<div id="settingsContainer" class="settings-info">
-// 					<div class="settings-inline">
-// 						<button id="settingBtn2" class="settingsSelect-button2">Settings</button>
-// 						<div class="settings-column2" id="settings-column2">
-// 							<p>Difficulty: <span id="difficultyChoice2">Medium</span></p>
-// 							<p>Power-Up: <span id="powerupChoice2">❌</span></p>
-// 							<p>Level: <span id="levelSelected2">Classic</span></p>
-// 						</div>
-// 					</div>
-// 				</div>
-// 			</div>
-// 			<div class="game-play">
-// 				<button id="playBtn2" class="startSelect-button">Play</button>
-// 			</div>
-// 		</div>
-// 	</div>
-// </div>`;
-//
-// maincontent.appendChild(gameSelection);
 
 export function displayGameSelectionSolo()
 {

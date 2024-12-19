@@ -30,6 +30,11 @@ p {
 	font-size: 30px;
 }
 
+p1 {
+	color: var(--text-color);
+	font-size: 20px;
+}
+
 /* david work */
 
 .custom-h1 {
@@ -527,6 +532,15 @@ p {
 	overflow: auto;
 }
 
+#settingBtn
+{
+	font-size: 15px;
+	color: var(--text-color);
+	width: 100px;
+}
+
+
+
 .button,
 .level,
 .powerUpBtn,
@@ -552,6 +566,7 @@ p {
 #quitGameBtn:hover,
 #nextLevelBtn:hover,
 #restartLevelBtn:hover,
+#settingBtn:hover,
 #quitBtn:hover
 {
     background-color: var(--background-color);
@@ -1250,7 +1265,7 @@ color: white;
 	margin: 0 auto;
 	border: 2px solid var(--secondary-color);
 	border-radius: 8px;
-	background-color: #1a1a40;
+	background-color: #000000;
 }
 
 .finish,
@@ -1272,7 +1287,7 @@ color: white;
   margin: 0 auto; 
   border: 2px solid #FEFCFF;
   border-radius: 8px; 
-  background-color: #1A1A40; 
+  background-color: #000000; 
 }
 
 

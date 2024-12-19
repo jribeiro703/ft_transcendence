@@ -3,7 +3,7 @@ import { showErrorMessages } from '../user/tools.js';
 import { sendScoreInfo } from './pong/network.js';
 import gameVar from './pong/var.js';
 
-export async function getUserInfos()
+export async function getUserInfosRemote()
 {
         const response = await fetchAuthData('/user/private/')
 		if (response.status == 200)
@@ -27,7 +27,7 @@ export async function getUserInfos()
 		}
 }
 
-export async function getUserInfos2()
+export async function getUserInfos()
 {
 	const response = await fetchAuthData('/user/private/')
 	if (response.status == 200)

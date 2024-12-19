@@ -2,7 +2,7 @@ import gameVar from './var.js';
 import { sendPlayerData, sendPlayerRoomData, sendRoomNameData, sendScoreInfo, sendSettingData } from './network.js';
 import { renderPageGame } from '../HistoryManager.js';
 import { startLiveGame } from './start.js';
-import { getUserInfos } from '../getUser.js';
+import { getUserInfos, getUserInfosRemote } from '../getUser.js';
 import { joinRoomB } from '../brickout/room.js';
 import brickVar from '../brickout/var.js';
 import { startGameB } from '../brickout/control.js';
@@ -127,13 +127,13 @@ export async function joinRoom(roomName)
 			if (gameVar.playerIdx == 1)
 			{
 				console.log("if player 1");
-				getUserInfos();
+				getUserInfosRemote();
 				waitingPlayer();
 			}
 			if (gameVar.playerIdx == 2)
 			{
 				console.log("if player 2");
-				getUserInfos();
+				getUserInfosRemote();
 				sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
 				waitingForSettingLive();
 			}
