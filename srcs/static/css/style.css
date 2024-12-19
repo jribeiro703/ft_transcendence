@@ -281,40 +281,12 @@ p {
 /*   transition: box-shadow 0.4s ease-in-out; */
 /* } */
 
-.neon-white {
-	box-shadow:
-		0 0 0px #ffffff,
-		0 0 1px #ffffff,
-		0 0 2px #ffffff,
-		0 0 3px #ffffff,
-		0 0 4px #ffffff,
-		0 0 7px #ffffff,
-		0 0 8px #ffffff,
-		inset 0 0 0px #ffffff,
-		inset 0 0 1px #ffffff,
-		inset 0 0 2px #ffffff,
-		inset 0 0 3px #ffffff,
-		inset 0 0 4px #ffffff,
-		inset 0 0 7px #ffffff,
-		inset 0 0 8px #ffffff;
+.neon-main-image {
+	box-shadow: var(neon-main-image);
 }
 
-.neon-white:hover {
-	box-shadow:
-		0 0 0px #ffffff,
-		0 0 1px #ffffff,
-		0 0 2px #ffffff,
-		0 0 3px #ffffff,
-		0 0 4px #ffffff,
-		0 0 7px #ffffff,
-		0 0 8px #ffffff,
-		inset 0 0 0px #ffffff,
-		inset 0 0 1px #ffffff,
-		inset 0 0 2px #ffffff,
-		inset 0 0 3px #ffffff,
-		inset 0 0 4px #ffffff,
-		inset 0 0 7px #ffffff,
-		inset 0 0 8px #ffffff;
+.neon-main-image:hover {
+	box-shadow: var(--neon-main-image);
 }
 
 .neon-blue {
