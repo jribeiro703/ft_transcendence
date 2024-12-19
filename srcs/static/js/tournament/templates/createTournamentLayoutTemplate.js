@@ -29,7 +29,7 @@ export function createTournamentLayoutHTML(tournamentName) {
 				</div>
 			</div>
 			<div class="row flex-grow-1">
-				<div class="col-md-7 col-sm-12 d-flex justify-content-center align-items-center bg-body-secondary rounded" id="tournamentdiv">
+				<div id="tournamentdiv">
 						
 				</div>
 				<div class="col-lg-4 col-md-5 col-sm-12 d-flex flex-column">
