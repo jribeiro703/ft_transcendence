@@ -111,33 +111,11 @@ p {
 
 /* fin ajouts david */
 
-@media (max-height: 1050px) {
-	#defaultView {
-		gap: 5% !important;
-	}
-}
-
 .main-img {
   margin-top: 50px;
   width: 380px;
   border-radius: 10px;
   /* height: ; */
-}
-
-@media (max-width: 800px) {
-  .main-img {
-    width: 200px;
-  }
-}
-
-@media (max-height: 700px) {
-  .main-img {
-	width: auto;
-	height: 50%;
-  }
-  #defaultView {
-	gap: 5% !important;
-  }
 }
 
 .navbar-parent {
@@ -807,18 +785,6 @@ p {
 
 .card {
 	border: none;
-}
-
-
-
-@media (max-height: 900px) {
-	.container-game {
-		justify-content: flex-start;
-	}
-
-	.settingsViewOverflow {
-		justify-content: start !important;
-	}
 }
 
 @media (max-width: 1050px) {
