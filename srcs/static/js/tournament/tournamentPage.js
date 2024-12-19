@@ -137,8 +137,12 @@ export function startGameWithPlayers2(player1id, player2id, currentPlayer) {
 	const playerIdx = (currentPlayer === player1id) ? 1 : 2;
 
 	gameVar.playerIdx = playerIdx;
+	console.log(playerIdx);
 	gameVar.tournament = true;
 	gameVar.opponentName = player2id;
+	gameVar.game = 'pong';
+
+	console.log("gameVar.game: ", gameVar.game);
 
 	if (playerIdx === 1) {
 		createTournamentGame();
@@ -156,6 +160,7 @@ export async function joinTournamentGame() {
 	await initializeCanvasPong();
 	initControlLive();
 	console.log("Joining room with ID:", gameVar.roomTour1);
+	console.log("ready 2:", gameVar.playerReady);
 	joinRoom(gameVar.roomTour1);
 }
 
@@ -168,6 +173,7 @@ export async function createTournamentGame() {
 	displayGameView();
 	await initializeCanvasPong();
 	createNewRoom();
+	console.log("[createTournamentGame] Created room with ID:", gameVar.roomTour1);
 }
 
 function updateTournamentsList(tournaments) {

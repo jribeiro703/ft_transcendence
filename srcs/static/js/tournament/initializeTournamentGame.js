@@ -13,6 +13,7 @@ export function initializeLobbySocket() {
 
 	lobbySocket.onmessage = function(e) {
 		const data = JSON.parse(e.data);
+		console.log("data: ",data);
 		if (data.type === 'room_data')
 			gameVar.roomTour1 = data.room_data.roomName;
 	};
