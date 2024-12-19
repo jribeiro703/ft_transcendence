@@ -57,8 +57,8 @@ export function updateSetting()
 		updatePowerUpSelection(false, true);
 	}
 
-	updateImageUrl();
-	displaySetting(difficulty, powerUp, level);
+	// updateImageUrl();
+	// displaySetting(difficulty, powerUp, level);
 }
 
 export function updateLiveSetting()

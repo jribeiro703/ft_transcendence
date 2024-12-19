@@ -15,16 +15,6 @@ body {
     backdrop-filter: blur(12px);
 }
 
-@keyframes gradient {
-    0% { 
-        background-position: 0% 50%;
-    }
-    100% { 
-        background-position: 200% 50%;
-    }
-}
-
-
 p {
 	color: var(--text-color);
 	margin-left: 150px;
@@ -33,6 +23,7 @@ p {
 
 p1 {
 	color: var(--text-color);
+	padding-top: 15px;
 	font-size: 20px;
 }
 
@@ -584,7 +575,7 @@ p1 {
 {
     background-color: var(--background-color);
     color: var(--text-color);
-    /* border-color: var(--selected-btn); */
+    border-color: var(--selected-btn);
     box-shadow: var(--box-shadow-black);
     border: 1px solid var(--selected-btn);
     transform: scale(1.05);
@@ -661,35 +652,6 @@ p1 {
     pointer-events: none;
 }
 
-#startGameBtn,
-#quickGameBtn,
-#tournamentGameBtn {
-	width: 200px;
-	height: 60px;
-	font-size: 20px;
-	background-color: #0a1730;
-	color: var(--secondary-color);
-	border: none;
-	border-radius: 10px;
-	cursor: pointer;
-	transition:
-		background-color 0.3s,
-		transform 0.4s;
-}
-
-#startGameBtn:hover,
-#quickGameBtn:hover,
-#tournamentGameBtn:hover {
-	background-color: #6dc7c1;
-	transform: scale(1.05);
-}
-
-#startGameBtn:active,
-#quickGameBtn:active,
-#tournamentGameBtn:active {
-	background-color: #003372;
-	transform: scale(0.95);
-}
 
 .button-container {
 	display: flex;

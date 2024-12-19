@@ -31,16 +31,32 @@ export function initListenerB()
 export function initGame()
 {
 	brickVar.initialize = true;
+
 	if (brickVar.currLevel === 'classic')
+	{
+		initBricksFirst(brickVar.PATTERNS.CLASSIC);
 		startGameFirst("classic");
+	}
 	else if (brickVar.currLevel === 'castle')
+	{
+		initBricksFirst(brickVar.PATTERNS.CASTLE)
 		startGameFirst("castle");
+	}	
 	else if (brickVar.currLevel === 'x')
+	{
+		initBricksFirst(brickVar.PATTERNS.X);
 		startGameFirst('x');
+	}
 	else if (brickVar.currLevel === 'invader')
+	{
+		initBricksFirst(brickVar.PATTERNS.INVADER);
 		startGameFirst('invader');
+	}
 	else
+	{
+		initBricksFirst(brickVar.PATTERNS.CLASSIC);
 		startGameFirst('classic');
+	}
 }
 export function initListenerMultiB()
 {

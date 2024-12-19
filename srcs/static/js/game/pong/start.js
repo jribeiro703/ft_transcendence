@@ -6,11 +6,6 @@ import { manageAi } from "./ai.js";
 import { drawScoreBoard } from "./score.js";
 import { updateCanvasColor } from "./update.js";
 import { drawLive } from "./draw.js";
-import { sendScoreInfo } from "./network.js";
-import { displayScoreInfo } from "./displayVar.js";
-import { initGame, initListenerB } from "../brickout/init.js";
-import brickVar from "../brickout/var.js";
-import { startGameB } from "../brickout/control.js";
 
 export function startLiveGame()
 {

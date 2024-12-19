@@ -312,7 +312,7 @@ export function drawScoreBoardB()
 		const rightX = brickVar.scoreCanvW * 0.75;
 		const y = 35;
 
-		if (gameVar.game == 'brickout2p' || gameVar.game === 'brickout')
+		if (gameVar.game == 'brickout2p')
 		{
 			if (gameVar.localGame)
 			{

@@ -60,6 +60,37 @@ export function initializeCanvasBrick()
         }, 100);
     });
 }
+export function initializeScoreCanvasBrickout()
+{
+	return new Promise((resolve) =>
+	{
+        const checkCanvas = setInterval(() =>
+		{
+            const scoreCanvas = document.getElementById('scoreCanvas');
+			if (scoreCanvas)
+			{
+                brickVar.scoreCtx = scoreCanvas.getContext('2d');
+                scoreCanvas.width = brickVar.scoreCanvW;
+                scoreCanvas.height = brickVar.scoreCanvH + 100;
+                scoreCanvas.style.marginBottom = '10px';
+            }
+
+			brickVar.gameTime = 0;				
+			brickVar.gameTimer = setInterval(() =>
+			{
+				if (brickVar.startTime)
+				{
+					brickVar.gameTime++;
+				}
+			}, 1000);
+
+			clearInterval(checkCanvas);
+			resolve();
+
+        }, 100);
+    });
+}
+
 
 export function initializeScoreCanvas2P()
 {
@@ -67,6 +98,7 @@ export function initializeScoreCanvas2P()
 	{
         const checkCanvas = setInterval(() =>
 		{
+			console.log("canvasacore  2p");
             const scoreCanvas = document.getElementById('scoreCanvas');
 			if (scoreCanvas)
 			{
@@ -111,6 +143,8 @@ export function initializeCanvasBrick2p()
             const brickoutCanvas2 = document.getElementById('brickoutCanvas2');
             if (brickoutCanvas)
 			{
+				
+				console.log("canvas 1p");
                 brickVar.ctx = brickoutCanvas.getContext('2d');
                 brickoutCanvas.width = brickVar.canvasW;
                 brickoutCanvas.height = brickVar.canvasH;
@@ -119,6 +153,7 @@ export function initializeCanvasBrick2p()
             }
             if (brickoutCanvas2)
 			{
+				console.log("canvas 2p");
                 brickVar2.ctx = brickoutCanvas2.getContext('2d');
                 brickoutCanvas2.width = brickVar.canvasW;
                 brickoutCanvas2.height = brickVar.canvasH;

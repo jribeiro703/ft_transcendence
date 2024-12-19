@@ -18,6 +18,10 @@ export function youWinB()
 
 export function checkLevelB(level)
 {
+	if (!level)
+		level = brickVar.currLevel;
+	if (!brickVar.currLevel)
+		brickVar.currLevel = level;
 	if (level == "classic")
 		initBricksB(brickVar.PATTERNS.CLASSIC);
 	else if (level == "castle")

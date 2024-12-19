@@ -43,7 +43,7 @@ export function displayLocalRematch()
 }
 export function displaySettingViewB()
 {
-  const level1Url = "static/css/images/classicLevel.png";
+  const level1Url = "static/css/images/brickout.png";
   const level2Url = "static/css/images/castleLevel.png";
   const level3Url = "static/css/images/xLevel.png";
   const level4Url = "static/css/images/invadersLevel.png";
@@ -69,15 +69,19 @@ export function displaySettingViewB()
         <div class="map-selection flex-wrap justify-content-center">
           <div id="map1" class="mapOption mapClic" data-map-name="classicMap">
             <img src="${level1Url}" alt="classicMap" id="classicLevel" class="map-image">
+			<p1>Classic Level</p1>
           </div>
           <div id="map2" class="mapOption mapClic" data-map-name="classicMap">
             <img src="${level2Url}" alt="footMap1" id="castleLevel" class="map-image">
+			<p1>The Castle</p1>
           </div>
           <div id="map3" class="mapOption mapClic" data-map-name="clasicMap">
             <img src="${level3Url}" alt="customMap1" id="xLevel" class="map-image">
+			<p1>X Level</p1>
           </div>
           <div id="map3" class="mapOption mapClic" data-map-name="clasicMap">
             <img src="${level4Url}" alt="customMap1" id="invaderLevel" class="map-image">
+			<p1>Space Invader</p1>
           </div>
         </div>
       <button id="saveBtn" class="settingsBtn btn custom-btn height-btn" disabled="true">Save and Return</button>
