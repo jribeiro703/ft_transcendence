@@ -2,7 +2,7 @@
 
 import { setupTournamentFlow } from './utils/tournamentFlow.js';
 
-import { fetchPlayers, generateTournamentName, validateTournamentName, fetchTournamentBracket } from './services/apiService.js';
+import { fetchPlayers, generateTournamentName, validateTournamentName, fetchTournamentBracket, fetchUserTournaments } from './services/apiService.js';
 import { setupEligiblePlayersRefresh } from './services/periodicService.js';
 import { renderBracket } from './services/realtimeService.js';
 
@@ -24,6 +24,7 @@ import { fetchAuthData } from '../user/fetchData.js';
 let currentTournamentId;
 
 export async function setupTournamentPage() {
+
 	console.log("[setupTournamentPage] Initializing tournament page setup");
 	const box = document.getElementById('mainContent');
 	let randomName = "";
@@ -44,7 +45,21 @@ export async function setupTournamentPage() {
 			alert('Error: Tournament cannot be created.');
 		}
 	});
-
+	const tournaments = await fetchUserTournaments();
+	const tournamentList = document.getElementById("tournament-list");
+	if (tournaments && tournaments.length > 0) {
+		tournamentList.innerHTML = tournaments
+			.map(
+				(tournament) => `
+				<li>
+					<span>ID: ${tournament.id}</span> - 
+					<span>Name: ${tournament.name}</span>
+				</li>`
+			)
+			.join("");
+	} else {
+		tournamentList.innerHTML = `<p>You are not part of any upcoming tournaments.</p>`;
+	}
 	document.getElementById('joinTournamentBtn').addEventListener('click', async () => {
 		const tournamentId = document.getElementById('joinTournamentId').value;
 		if (!tournamentId) {

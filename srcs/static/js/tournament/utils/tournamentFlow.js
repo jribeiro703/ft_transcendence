@@ -34,6 +34,9 @@ export async function setupTournamentFlow(name, tournamentId, isCreator) {
 						Not enough players for the tournament.
 					</div>
 				`;
+				//const generateMatchesButton = document.getElementById('generateMatches');
+				//if (generateMatchesButton) generateMatchesButton.style.display = 'none';
+
 			}
 			console.log('[setupTournamentFlow] Eligible players fetched:', eligiblePlayers);
 			

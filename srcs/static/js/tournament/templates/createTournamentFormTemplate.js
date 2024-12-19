@@ -20,6 +20,11 @@ export function createTournamentFormHTML(tournamentName = '') {
 				<button class="btn" id="joinTournamentBtn">Join Tournament</button>
 			</form>
 		</div>
+		<div class="bg-body border rounded p-2 mb-3 join-container">
+			<div id="tournament-list">Join a Tournament>
+			
+			</div>
+		</div>		
 	</div>
 	`;
 }
