@@ -48,7 +48,7 @@ export function sendPaddleData(paddle_y, socket, playerIdx)
 		console.log("Error websocket");
 }
 
-export function sendPlayerData(socket, 	)
+export function sendPlayerData(socket, playerReady)
 {
 	if (socket && socket.readyState == WebSocket.OPEN)
 	{
