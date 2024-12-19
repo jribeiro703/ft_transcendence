@@ -26,7 +26,7 @@ export function displayLobbyView(level) {
           <h2>Host A Room</h2>
           <h3 class="d-flex gap-4">Playing as: <strong>Login</strong></h3>
           <div class="settings d-flex justify-content-center w-100 gap-4">
-            <button id="settingBtn" classe="main-btn">Settings</button>
+            <button id="settingBtn" class="settingsBtn">Settings</button>
             <div id="setting-container">
               Difficulty: <span id="difficultyChoice">Medium</span><br>
               Level: <span id="levelSelected">${level}</span>
