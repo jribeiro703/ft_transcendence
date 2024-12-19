@@ -289,6 +289,7 @@ export function displayGameSelectionSolo()
   gameSelection.innerHTML = `
     <div id="settingView" class="d-flex gap-3 container-game justify-content-center no-scrollbar flex-row align-items-center w-100">
 
+<div id="localPlay" class="w-60">
       <div class="game-row gap-3">
         <div class="game-image">
           <img id="gameImage" src="${blackPongUrl}" alt="pongGame">
@@ -330,6 +331,7 @@ export function displayGameSelectionSolo()
         </div>
 
       </div>
+  </div>
   </div>`;
 
   maincontent.appendChild(gameSelection);
