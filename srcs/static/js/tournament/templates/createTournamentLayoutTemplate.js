@@ -29,25 +29,8 @@ export function createTournamentLayoutHTML(tournamentName) {
 				</div>
 			</div>
 			<div class="row flex-grow-1">
-				<div class="col-lg-8 col-md-7 col-sm-12 d-flex justify-content-center align-items-center bg-body-secondary p-3 rounded position-relative tournament-container" id="tournamentdiv">
-					<div id="waiting-overlay" class="position-absolute top-50 start-50 translate-middle w-100 h-100 d-flex justify-content-center align-items-center waiting-overlay">
-						<div class="text-center text-white">
-							<h2>Waiting...</h2>
-							<button type="button" id="setupTournamentBtn">Setup Tournament</button>
-						</div>
-					</div>
-					<div id="intermission-overlay" class="position-absolute top-50 start-50 translate-middle w-100 h-100 d-flex justify-content-center align-items-center d-none intermission-overlay">
-						<div class="text-center text-white">
-							<h2 class="fs-1 animate-pulse" id="intermission-countdown">5</h2>
-						</div>
-					</div>
-					<div id="finished-overlay" class="position-absolute top-50 start-50 translate-middle w-100 h-100 d-none d-flex justify-content-center align-items-center finished-overlay">
-						<div class="text-center text-white">
-							<h2 id="winner-text"></h2>
-							<p id="finalScore" class="fs-4 mt-2">Tournament winner: <span id="tournament-winner" class="text-success"></span></p>
-							<a type="button" class="btn btn-primary mt-3" id="play-again" href="/play" data-router-navigation="true">Go to Lobby</a>
-						</div>
-					</div>
+				<div class="col-md-7 col-sm-12 d-flex justify-content-center align-items-center bg-body-secondary rounded" id="tournamentdiv">
+						
 				</div>
 				<div class="col-lg-4 col-md-5 col-sm-12 d-flex flex-column">
 					<div class="bg-body border rounded p-2 mb-3 bracket-container">

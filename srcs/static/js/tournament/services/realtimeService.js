@@ -41,6 +41,7 @@ export function renderBracket(bracket, tournamentId)
 			console.log("player1: ", match.player1);
 			console.log("player2: ", match.player2);
 			console.log("username: ", gameVar.userName );
+			console.log("gameVar.roomTour1: ", gameVar.roomTour1 );
 			const isPlayerInMatch = (match.player1 === gameVar.userName || match.player2 === gameVar.userName);
 
 			if (isPlayerInMatch)
