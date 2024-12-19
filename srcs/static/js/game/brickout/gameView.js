@@ -9,7 +9,7 @@ import { updateSettingSelectionForSecond } from './update.js';
 import { clearAllBrickStates } from './manage.js';
 import { drawB as drawFirst} from './draw.js';
 import { drawB as drawSecond} from './secondBrickout/draw.js';
-import { getUserInfos2 } from '../getUser.js';
+import { getUserInfos } from '../getUser.js';
 
 export async function showGameBrickView()
 {
@@ -28,7 +28,7 @@ export async function showGameBrickLocalView()
 
 	displayGameBrick2pView();
  
-	getUserInfos2();
+	getUserInfos();
 	await initializeCanvasBrick2p();
 	await initializeScoreCanvas2P();
 

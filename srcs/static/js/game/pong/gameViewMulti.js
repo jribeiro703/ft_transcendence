@@ -5,9 +5,10 @@ import { displayGameBrickView, displayGameView, displayLobbyView } from "./displ
 import { getElementLobby } from "./getElement.js";
 import { initializeCanvasBrick, initializeCanvasBrick2p, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
 import { displayGameDataPong } from "./displayVar.js";
-import { getUserInfos } from "../getUser.js";
+import { getUserInfosRemote } from "../getUser.js";
 import brickVar from "../brickout/var.js";
 import { initListenerB } from "../brickout/init.js";
+import { getUserInfos } from "../getUser.js";
 
 
 export function showLobbyView()
@@ -33,6 +34,7 @@ export function showLobbyView()
 		else
 			level = brickVar.currLevel;
 	}
+	getUserInfos();
 
 	displayLobbyView(level);
 	getElementLobby();
