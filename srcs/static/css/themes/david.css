@@ -1,0 +1,22 @@
+/* david */
+.Transcended {
+	--background-color: linear-gradient(
+	45deg,
+	#170B2B 0%,
+	#2B0548 50%,
+	#170B2B 100%
+	);
+	--text-color: #FF71CE;
+	--border-btn-color: #B967FF;
+	--highlight-color: #01FFFF;
+	--icon-color: #FF71CE;
+	--box-shadow: 0px 0px 10px rgba(255, 113, 206, 0.7);
+
+	--placeholder-color: var(--text-color);
+	--chat-btn-highlight: var(--highlight-color);
+	--chat-bg: rgba(0, 0, 0, 0.7);
+	--chat-msg: var(--text-color);
+	--chat-border: var(--border-btn-color);
+	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+  --selected-btn: #000000;
+}

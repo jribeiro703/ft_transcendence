@@ -1,0 +1,22 @@
+.whiteTheme {
+  --background-color: #FFFFFF;
+  --text-color: #444444;
+  --highlight-color: #4B6E84;
+  --icon-color: #000000;
+
+  /* BTN */
+  --selected-btn: #000000;
+  --box-shadow-black: 0px 0px 10px #000000;
+  --border-btn-color: #555555;
+
+  /* chat */
+  --chat-msg: #000000;
+  --chat-border: #555555;
+  --chat-btn-highlight: #01FFFF;
+  --chat-bg: #555555;
+  --placeholder-color: #000000;
+  /* box */
+  --box-shadow: 0px 0px 10px #000000
+  --box-shadow-inset: inset 0px 0px 5px #000000;
+  --box-shadow-highlight: 0px 0px 3px #000000;
+}

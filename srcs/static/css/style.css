@@ -1,6 +1,6 @@
 @import url("_user.css");
 @import url("_home.css");
-@import url("_globalVar.css");
+@import url("themes/_globalVar.css");
 @import url("_livechat.css");
 
 body {
