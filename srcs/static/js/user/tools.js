@@ -63,8 +63,8 @@ function showErrorMessages(responseObject) {
 
 async function logout() {	
 	try {
-		const response = await fetchAuthData('/user/logout/', 'POST', null, false);
-		if (response.status === 205) {
+			const response = await fetchAuthData('/user/logout/', 'POST', null, false);
+			if (response.status === 205) {
 			// sessionStorage.clear();
 			localStorage.clear();
 			return true;
@@ -75,4 +75,5 @@ async function logout() {
 		throw error;
 	}
 }
+
 export { escapeHTML, PONG_CARD, DEFAULT_AVATAR, showToast, updateUserAvatar, showErrorMessages, logout };

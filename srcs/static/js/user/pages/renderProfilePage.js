@@ -41,7 +41,13 @@ function createProfileContent() {
 
 function createMatchHistory(container, data) {
 	matchData = data.match_history;
+
+console.log(matchData);
+
 	userData = data;
+
+console.log(userData);
+
 	const totalMatches = matchData.length;
 	const totalPages = Math.ceil(totalMatches / matchesPerPage);
 	const startIndex = (currentPage - 1) * matchesPerPage;
@@ -52,10 +58,13 @@ function createMatchHistory(container, data) {
 		const table = document.createElement('table');
 		table.classList.add('match-history-table');
 		paginatedMatches.forEach(match => {
+
+			console.log(match);
+
 			const row = document.createElement('tr');
 			row.classList.add('match-row');
 			row.innerHTML = `
-				<td class="match-result">${match.winner && match.winner.username === userData.username ? 'WIN' : 'LOSS'}</td>
+				<td class="match-result">${match.winner === userData.username ? 'WIN' : 'LOSS'}</td>
 				<td class="user-info">
 					<div class="user-name" >${userData.username}</div>
 					<img class="user-avatar" src="${userData.avatar}" alt="${userData.username}'s avatar"/>
