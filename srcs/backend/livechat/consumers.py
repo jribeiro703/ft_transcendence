@@ -78,7 +78,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Handle authentication message
         if text_data_json.get('type') == 'authenticate':
             try:
-                token = text_data_json['token']
+                token = text_data_json.get('token')
+                if not token:
+                    raise InvalidTokenError("Token is missing or null")
+
                 decoded_token = decode(token, settings.SECRET_KEY, algorithms=['HS256'])
                 User = get_user_model()
                 user = await sync_to_async(User.objects.get)(id=decoded_token['user_id'])
@@ -100,10 +103,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 logger.info(f"User {self.nickname} authenticated via WebSocket")
                 return
                 
-            except (InvalidTokenError, User.DoesNotExist) as e:
-                logger.error(f"WebSocket authentication failed: {str(e)}")
+            except InvalidTokenError as e:
+                logger.error(f"WebSocket authentication failed: Invalid token - {str(e)}")
                 await self.send(text_data=json.dumps({
-                    'error': 'Authentication failed'
+                    'error': 'Invalid token'
+                }))
+                return
+            except get_user_model().DoesNotExist as e:
+                logger.error(f"WebSocket authentication failed: User does not exist - {str(e)}")
+                await self.send(text_data=json.dumps({
+                    'error': 'User does not exist'
                 }))
                 return
         
@@ -217,10 +226,15 @@ class GameChatConsumer(AsyncWebsocketConsumer):
                     'room': self.room_name
                 }
             )
-        except (InvalidTokenError, User.DoesNotExist) as e:
+        except InvalidTokenError as e:
             logger.error(f"Invalid token in room {self.room_name}: {str(e)}")
             await self.send(text_data=json.dumps({
                 'error': 'Invalid authentication'
+            }))
+        except get_user_model().DoesNotExist as e:
+            logger.error(f"User does not exist in room {self.room_name}: {str(e)}")
+            await self.send(text_data=json.dumps({
+                'error': 'User does not exist'
             }))
 
     async def chat_message(self, event):

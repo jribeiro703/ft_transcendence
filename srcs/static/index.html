@@ -58,182 +58,14 @@
 				>
 					<div
 						id="mainContent"
-						class="slideWithLiveChat neon-blue max-height-90 rounded flex-grow-1 d-flex h-100 align-item-center justify-content-center"
+						class=" p-0 p-sm-5 slideWithLiveChat neon-blue max-height-90 rounded flex-grow-1 d-flex h-100 align-item-center justify-content-center"
 					></div>
-					<div
-						id="livechat"
-						class="slidingDiv hide-children neon-purple d-flex flex-column gap-3"
-					>
-						<div
-							class="flex-grow-1 w-100 h-100 overflow-auto position-relative"
-						>
-							<!-- Chat log -->
-							<div
-								id="chat-log"
-								class="w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto"
-								aria-label="Chat log"
-							></div>
-
-							<!-- game chat with absolute positioning -->
-							<div
-								id="gamechat"
-								class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none"
-								aria-label="Game chat"
-							></div>
-
-							<!-- Notification list with absolute positioning -->
-							<div
-								id="notificationlist"
-								class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none"
-								aria-label="Notification list"
-							></div>
-
-							<!-- Friend list with absolute positioning -->
-							<div
-								id="friendlist"
-								class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none"
-								aria-label="Friend list"
-							></div>
-
-							<!-- online list with absolute positioning -->
-							<div
-								id="onlinelist"
-								class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none"
-								aria-label="Online list"
-							></div>
-						</div>
-						<div class="position-absolute top-0 end-0 h-100">
-							<div
-								class="channel-container d-flex flex-column"
-								style="
-									max-height: 100%;
-									height: calc(100% - 100px);
-									padding-right: 29px;
-									padding-top: 29px;
-									position: absolute;
-									top: 0;
-									right: 0;
-									bottom: 0;
-									/* width: 65px; */
-									overflow-y: auto;
-									scrollbar-width: none; /* Firefox */
-									-ms-overflow-style: none; /* IE and Edge */
-									&::-webkit-scrollbar {
-										display: none; /* Chrome, Safari, Opera */
-									}
-								"
-							>
-								<div
-									class="channel-btn d-flex flex-column gap-2"
-								>
-									<button
-										class="channel-btn chat-btn btn border rounded py-2"
-										type="button"
-										id="notificationButton"
-										aria-label="NotificationsChat"
-										data-bs-toggle="tooltip"
-										data-bs-placement="left"
-										title="Notifications"
-									>
-										🔔
-									</button>
-									<button
-										class="channel-btn chat-btn btn border rounded py-2"
-										type="button"
-										id="bubbleButton"
-										aria-label="GeneralChat"
-										data-bs-toggle="tooltip"
-										data-bs-placement="left"
-										title="General Chat"
-									>
-										️💬
-									</button>
-									<button
-										class="channel-btn chat-btn btn border rounded py-2"
-										type="button"
-										id="swordsButton"
-										aria-label="GameChat"
-										data-bs-toggle="tooltip"
-										data-bs-placement="left"
-										title="Game Chat"
-									>
-										⚔️
-									</button>
-									<button
-										class="channel-btn chat-btn btn border rounded py-2"
-										type="button"
-										id="trophyButton"
-										aria-label="TournamentChat"
-										data-bs-toggle="tooltip"
-										data-bs-placement="left"
-										title="Tournament Chat"
-									>
-										🏆
-									</button>
-									<button
-										class="channel-btn chat-btn btn border rounded py-2"
-										type="button"
-										id="friendsButton"
-										aria-label="FriendsChat"
-										data-bs-toggle="tooltip"
-										data-bs-placement="left"
-										title="Friends"
-									>
-										🤝
-									</button>
-									<button
-										class="channel-btn chat-btn btn border rounded py-2"
-										type="button"
-										id="onlineButton"
-										aria-label="OnlinePlayers"
-										data-bs-toggle="tooltip"
-										data-bs-placement="left"
-										title="Online Players"
-									>
-										👤
-									</button>
-								</div>
-							</div>
-						</div>
-						<div class="input-group d-flex gap-3">
-							<div
-								class="emoji-picker-container"
-								id="emojiPickerContainer"
-							>
-								<emoji-picker
-									emoji-version="15.1"
-									id="emoji-picker"
-									aria-label="Emoji picker"
-								></emoji-picker>
-							</div>
-							<button
-								class="chat-btn btn rounded border"
-								type="button"
-								id="emojiButton"
-								aria-label="Emoji picker"
-							>
-								😊
-							</button>
-							<input
-								id="chat-message-input"
-								type="text"
-								class="border rounded form-control"
-								placeholder="Type here..."
-								aria-label="Chat message input"
-							/>
-							<button
-								id="chat-message-submit"
-								class="btn border rounded chat-btn"
-								aria-label="Send message"
-							>
-								Send
-							</button>
-						</div>
-					</div>
+					{% include 'livechat.html' %}
 				</div>
 			</div>
 		</div>
-		<div data-chat-icon class="chat-close-icon" />
+		<div data-chat-icon class="chat-close-icon"></div>
+		<div data-palette-icon class="paletteIcon"></div>
 		<script>
 			const staticImageURL =
 				"{% static 'css/images/pong-game-card.png' %}";
@@ -243,10 +75,6 @@
 			src="{% static 'js/tournament/services/tournamentAPIService.js' %}?v=1.0"
 		></script>
 		<script type="module" src="{% static 'js/main.js' %}?v=1.1"></script>
-		<script
-			type="module"
-			src="{% static 'js/tournament/services/tournamentAPIService.js' %}?v=1.0"
-		></script>
 		<script
 			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 			integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

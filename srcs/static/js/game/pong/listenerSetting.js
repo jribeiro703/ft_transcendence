@@ -125,7 +125,7 @@ export function listenSettingBtn()
 {
 	gameVar.settingBtn1.addEventListener('click', () =>
 	{
-		renderPageGame("pongSetting", true);
+		renderPageGame("pongSetting", true, 'onePlayer');
 	});
 
 	gameVar.settingBtn2.addEventListener('click', () =>

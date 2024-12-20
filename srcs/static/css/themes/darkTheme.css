@@ -1,0 +1,21 @@
+.darkTheme {
+	--background-color: linear-gradient(
+	to right,
+	#0A1014 0%,
+	#1A2A35 50%,
+	#0A1014 100%
+	);
+	--text-color: #E0E0E0;
+	--border-btn-color: #4A4A4A;
+	--highlight-color: #FFFFFF;
+	--icon-color: #808080;
+	--box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+
+	--placeholder-color: var(--text-color);
+	--chat-btn-highlight: var(--highlight-color);
+	--chat-bg: rgba(0, 0, 0, 0.7);
+	--chat-msg: var(--text-color);
+	--chat-border: var(--border-btn-color);
+	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+  --selected-btn: #000000;
+}

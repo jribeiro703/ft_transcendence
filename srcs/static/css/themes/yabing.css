@@ -1,0 +1,27 @@
+.darkYellow {
+	--background-color: linear-gradient(
+	to right,
+	#0A1014 0%,
+	#0F1520 15%,
+	#141B2A 30%,
+	#1A2A35 50%,
+	#141B2A 70%,
+	#0F1520 85%,
+	#0A1014 100%
+
+	);
+	--text-color: #fccb2d;
+	--border-btn-color: #4A4A4A;
+	--highlight-color: #FFFFFF;
+	--icon-color: #808080;
+	--box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+	--font-family : 
+
+	--placeholder-color: var(--text-color);
+	--chat-btn-highlight: var(--highlight-color);
+	--chat-bg: rgba(0, 0, 0, 0.7);
+	--chat-msg: var(--text-color);
+	--chat-border: var(--border-btn-color);
+	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+  --selected-btn: #000000;
+}

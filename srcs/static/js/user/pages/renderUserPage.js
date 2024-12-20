@@ -6,7 +6,7 @@ function createUserContent() {
 	const box = document.getElementById("mainContent");
 	box.innerHTML = `
 		<div id="defaultView"
-			class="d-flex flex-column justify-content-center align-items-center gap-5 h-100">
+			class="d-flex flex-column justify-content-center align-items-center gap-4 h-100">
 			<img class="img-fluid neon-white main-img" src="${PONG_CARD}" alt="Pong Game">
 			<button id= btn-Profile class="main-btn btn custom-btn height-btn">Profile</button>
 			<button id= btn-Settings class="main-btn btn custom-btn height-btn">Settings</button>

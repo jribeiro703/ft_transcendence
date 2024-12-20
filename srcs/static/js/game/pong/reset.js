@@ -44,6 +44,8 @@ export function clearAllpongStates()
 	gameVar.finishGame = false;
 	gameVar.clientLeft = false;
 	gameVar.playerReady = false;
+	gameVar.liveMatch = false;
+	gameVar.localGame = false;
 	gameVar.currentServer = 'player';
 }
 
@@ -79,7 +81,8 @@ export function resetBall(winner)
 		gameVar.playerScore++;
 	else
 		gameVar.aiScore++;
-	sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.playerScore, gameVar.aiScore);
+	if (gameVar.liveMatch)
+		sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.playerScore, gameVar.aiScore);
 	checkScore();
 	gameVar.serveCount++;
 	if (gameVar.serveCount >= 2)
