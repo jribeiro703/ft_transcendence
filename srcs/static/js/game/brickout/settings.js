@@ -19,16 +19,7 @@ export function showSettingViewB(info)
 	displaySettingViewB();
 	getSettingBtn();
 
-	// if(info === 'live')
-	// {
-	// 	brickVar.powerUpSelection.style.display = 'none';
-	// 	brickVar.btnPowerUp.style.display = 'none';
-	// }
-	// else
-	// {
-		brickVar.powerUpSelection.style.display = 'block';
-		brickVar.btnPowerUp.style.display = 'block';
-	// }		
+	brickVar.btnPowerUp.style.display = 'block';
 
 	listenSettingPUB();
 	listenSettingDifficultyB();
@@ -53,7 +44,6 @@ export function checkSettingB()
 
 export function getSettingBtn()
 {
-	brickVar.powerUpSelection = document.getElementById('powerUpSelection');
 	brickVar.btnPowerUp = document.getElementById('btnPowerUp');
 	brickVar.withPowerUp = document.getElementById('withPowerUps');
 	brickVar.withoutPowerUp = document.getElementById('withoutPowerUps');

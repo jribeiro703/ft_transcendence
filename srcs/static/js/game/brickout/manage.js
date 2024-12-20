@@ -2,7 +2,7 @@ import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 import gameVar from "../pong/var.js";
 import { resetBallB } from "./ball.js";
-import { chechOpponent } from "./score.js"
+import { chechOpponent, chechOpponentRemote } from "./score.js"
 import { saveScoreB } from "./score.js";
 import { displayNextLevel, displayFinish, displayLocalRematch } from "./display.js";
 import { listenFinishBtn, listenNextLevelBtn, listenLocalRematchBtn } from "./listenerBtn.js";
@@ -70,29 +70,7 @@ export function manageMoveB()
 export function loseLives()
 {
 	if (gameVar.liveMatch)
-	{
-		if (gameVar.playerIdx === 1)
-		{
-			brickVar.playerLives--;
-			sendScoreInfoB(gameVar.gameSocket, 1, brickVar.playerScore, brickVar.playerLives);
-		}
-		if (gameVar.playerIdx === 2)
-		{
-			brickVar.opponentLives--;
-			sendScoreInfoB(gameVar.gameSocket, 2, brickVar.opponentScore,  brickVar.opponentLives);
-		}
-		if (!brickVar.playerLives && !brickVar.opponentLives)
-		{
-			brickVar.finish = true;
-			brickVar.startTime = false;
-			brickVar.finishLevel = true;
-			saveScoreB();
-			chechOpponent();
-			addBtnB();
-		}
-		else
-			resetBallB();
-	}
+		loseLivesRemote();
 	else
 	{
 		brickVar.lives--;
@@ -104,6 +82,43 @@ export function loseLives()
 			saveScoreB();
 			chechOpponent();
 			addBtnB();
+		}
+		else
+			resetBallB();
+	}
+}
+export function loseLivesRemote()
+{
+	if (gameVar.playerIdx === 1)
+	{
+		brickVar.playerLives--;
+		sendScoreInfoB(gameVar.gameSocket, 1, brickVar.playerScore, brickVar.playerLives);
+		if (!brickVar.playerLives)
+		{
+			brickVar.finish = true;
+			brickVar.startTime = false;
+			brickVar.finishLevel = true;
+			saveScoreB();
+			chechOpponentRemote();
+			// addBtnB();
+		}
+		else
+		{
+			resetBallB();
+		}
+	}
+	if (gameVar.playerIdx === 2)
+	{
+		brickVar.opponentLives--;
+		sendScoreInfoB(gameVar.gameSocket, 2, brickVar.opponentScore,  brickVar.opponentLives);
+		if (brickVar.opponentLives <= 0)
+		{
+			brickVar.finish = true;
+			brickVar.startTime = false;
+			brickVar.finishLevel = true;
+			saveScoreB();
+			chechOpponentRemote();
+			// addBtnB();
 		}
 		else
 			resetBallB();

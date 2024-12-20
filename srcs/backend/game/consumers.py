@@ -116,6 +116,8 @@ class PongConsumer(WebsocketConsumer):
 			self.broadcast_tournaments_info(data)
 		elif data['type'] == 'lobbyView':
 			self.lobby()
+		elif data['type'] == 'lobbyTour':
+			self.lobbyTour()
 		elif data['type'] == 'player_room_data':
 			logger.info(f'player room data receive : ')
 			logger.info(f'Player room data received:')
@@ -165,6 +167,31 @@ class PongConsumer(WebsocketConsumer):
 			'type': 'looks_rooms',
 			'rooms': available_rooms,
 			}))
+
+	def lobbyTour(self):
+		logger.info("Checking for available tournois")
+		tournament_rooms = [
+			{
+				'name' : room,
+				'creator': self.rooms[room][0] if room in self.rooms and self.rooms[room] else 'Unknow'
+			}
+			for room in self.rooms.keys()
+			if room.startswith('tournament_')
+		]
+
+		if not tournament_rooms:
+			logger.info("Pas de tournois dispo")
+			self.send(text_data=json.dumps({
+				'type': 'no_tournaments'
+			}))
+			return
+
+		logger.info(f"room de tournois find : {tournament_rooms}")
+		self.send(text_data=json.dumps({
+			'type': 'tournament_info',
+			'tournaments': tournament_rooms
+		}))
+
 
 	def room_joined(self, event):
 		self.send(text_data=json.dumps({

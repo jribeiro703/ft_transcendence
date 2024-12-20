@@ -91,13 +91,14 @@ export function addPuBtn(info)
 {
 	if(info === 'live')
 	{
-		gameVar.powerUpSelection.style.display = 'none';
 		gameVar.btnPowerUp.style.display = 'none';
+		gameVar.withPowerUp.style.display = 'none';
+		gameVar.withoutPowerUp.style.display = 'none';
 	}
 	else
 	{
-		gameVar.powerUpSelection.style.display = 'block';
 		gameVar.btnPowerUp.style.display = 'block';
-
-	}		
+		gameVar.withPowerUp.style.display = 'block';
+		gameVar.withoutPowerUp.style.display = 'block';
+	}
 }

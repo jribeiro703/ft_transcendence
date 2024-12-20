@@ -26,7 +26,7 @@ export function drawFootball()
 {
     gameVar.ctx.strokeStyle = 'white';
 	gameVar.ctx.fillStyle = 'white';
-    gameVar.ctx.lineWidth = 2;
+    gameVar.ctx.lineWidth = 3;
 
     const width = gameVar.canvasW;
     const height = gameVar.canvasH;
@@ -92,8 +92,9 @@ export function drawFootball()
     gameVar.ctx.arc(0, height, cornerRadius, 1.5*Math.PI, 2*Math.PI);
     gameVar.ctx.stroke();
 
+	gameVar.ctx.strokeRect(0, 0, width, height);
 	const goalHeight = 175;
-	const wallThickness = 4;
+	const wallThickness = 5;
 
     gameVar.ctx.fillStyle = 'gray';
     gameVar.ctx.fillRect(0, 0, wallThickness, (gameVar.canvasH - goalHeight) / 2);

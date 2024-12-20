@@ -182,20 +182,20 @@ p
 
 /* ------------------------ Main Button ---------------------------- */
 
-#playsoloGameBtn, #playmultiGameBtn, #btn-Leaderboard, #createRoomBtn, #settingBtn, #joinRoomBtn, #refreshBtn, #btn1, #btn2, #btn3
+#playsoloGameBtn, #playmultiGameBtn, #btn-Leaderboard, #createRoomBtn, #settingBtn, #joinRoomBtn, #btn1, #btn2, #btn3
 {
 	background-color: #1F2E4D;
 	color: #6DC1C1;
 }
 
-#playsoloGameBtn:hover, #playmultiGameBtn:hover, #btn-Leaderboard:hover, #createRoomBtn:hover, #settingBtn:hover, #refreshBtn:hover, #joinRoomBtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
+#playsoloGameBtn:hover, #playmultiGameBtn:hover, #btn-Leaderboard:hover, #createRoomBtn:hover, #settingBtn:hover, #joinRoomBtn:hover, #btn1:hover, #btn2:hover, #btn3:hover
 {
 	color: #1F2E4D;
 	background-color: #6DC7C1;
 	border-color: #000000;
 }
 
-#playGameBtn:active, #playmultiGameBtn:active, #btn-Leaderboard:active,  #createRoomBtn:active, #settingBtn:active, #refreshBtn:active,#joinRoomBtn:active, #btn1:active, #btn2:active, #btn3:active
+#playGameBtn:active, #playmultiGameBtn:active, #btn-Leaderboard:active,  #createRoomBtn:active, #settingBtn:active, #joinRoomBtn:active, #btn1:active, #btn2:active, #btn3:active
 {
 	color: #0A1730;
 	background-color: #455F78;
@@ -888,20 +888,20 @@ button:disabled
 	margin-top: 10px;
 }
 
-#refreshBtn 
-{
-	display: flex !important;
-	justify-content: center !important;
-	align-items: center !important;
-	background-color: #1F2E4D;
-	border: none;
-	color: #6DC7C1;
-	padding: 8px;
-	border-radius: 5px;
-	cursor: pointer;
-	text-align: center;
-	margin-top: 10px;
-}
+/* #refreshBtn  */
+/* { */
+/* 	display: flex !important; */
+/* 	justify-content: center !important; */
+/* 	align-items: center !important; */
+/* 	background-color: #1F2E4D; */
+/* 	border: none; */
+/* 	color: #6DC7C1; */
+/* 	padding: 8px; */
+/* 	border-radius: 5px; */
+/* 	cursor: pointer; */
+/* 	text-align: center; */
+/* 	margin-top: 10px; */
+/* } */
 
 /* ---------------------------Brickout--------------------------------- */
 #brickoutCanvas

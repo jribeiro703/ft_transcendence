@@ -5,7 +5,7 @@ import { showToast, showErrorMessages } from "../tools.js";
 export function renderRegisterForm() {
 	const mainContent = document.getElementById('mainContent');
 	mainContent.innerHTML = `
-	<div id="defaultView" class="d-flex flex-column justify-content-center align-items-center gap-5 h-100">
+	<div id="defaultView" class="d-flex flex-column justify-content-center align-items-center gap-4 h-100">
 		<form id="registerForm" class="custom-form">
 		<div class="custom-form-group">
 			<label class="custom-label" for="username">Username:</label>
