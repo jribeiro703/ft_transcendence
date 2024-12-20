@@ -42,7 +42,15 @@ def searchUser(request, username):
 		user = User.objects.get(username=username)
 	except User.DoesNotExist:
 		return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+	except Exception as e:
+		return Response({"message": "Error fetching user public data"}, status=status.HTTP_500_INTERNAL_SERVER)
 	serializer = UserPublicInfosSerializer(user)
+	return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def GetUserPrivateInfos(request):
+	serializer = UserPrivateInfosSerializer(request.user)
 	return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])	
@@ -55,12 +63,13 @@ def getLeaderboard(request):
 			matchs = get_user_matchs_infos(user)
 			username = user.username
 			avatar = user.avatar.url
-			leaderboard[username] = {"avatar": avatar, "matchs": matchs}
+			leaderboard[username] = { "username": username, "avatar": avatar, "matchs": matchs}
 		return Response(leaderboard, status=status.HTTP_200_OK)
 	except Exception as e:
 		return Response({"message": "Error fetching leaderboard"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getUserFriends(request):
 	try:
 		if not isinstance(request.user, User):
@@ -91,13 +100,21 @@ def getOnlineUsers(request):
 		return Response({"message": "Error fetching online users"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
-def GetUserPrivateInfos(request):
-	serializer = UserPrivateInfosSerializer(request.user)
-	return Response(serializer.data, status=status.HTTP_200_OK)
+@permission_classes([IsAuthenticated])
+def getSelfUsername(request):
+	try:
+		user = request.user
+	except Exception as e:
+		return Response({"message": "Error fetching self username"}, status=status.HTTP_500_INTERNAL_SERVER)
+	return Response({"username": user.username}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getUserPk(request):
-	user = request.user
+	try:
+		user = request.user
+	except Exception as e:
+		return Response({"message": "Error fetching self pk"}, status=status.HTTP_500_INTERNAL_SERVER)
 	return Response({"pk": user.id}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -261,6 +278,7 @@ class UserProfileView(APIView):
 class UserSettingsView(RetrieveUpdateDestroyAPIView):
 	queryset = User.objects.all()
 	serializer_class = UserSettingsSerializer
+	permission_classes = [IsAuthenticated]
 
 	def patch(self, request, *args, **kwargs):
 		try:
@@ -289,7 +307,8 @@ class UserSettingsView(RetrieveUpdateDestroyAPIView):
 # ------------------------------FRIENDS ENDPOINTS--------------------------------	
 
 class AcceptFriendRequestView(APIView):
-	
+	permission_classes = [IsAuthenticated]
+
 	def post(self, request, *args, **kwargs):
 		request_id = kwargs.get('request_id')
 		try:
@@ -307,7 +326,8 @@ class AcceptFriendRequestView(APIView):
 			return Response({"message": "Friend request not found."}, status=status.HTTP_404_NOT_FOUND)
 		
 class ListFriendRequestView(APIView):
-	
+	permission_classes = [IsAuthenticated]
+
 	def get(self, request, *args, **kwargs):
 		user = User.objects.get(pk=kwargs['pk'])
 		received_requests = user.received_requests.filter(is_accepted=False)
@@ -322,6 +342,7 @@ class ListFriendRequestView(APIView):
 # -----------------------------------CHECK AUTHENTICATION ENDPOINTS--------------------------------
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def check_auth(request):
 	return Response({
 		"message": "User is authenticated"

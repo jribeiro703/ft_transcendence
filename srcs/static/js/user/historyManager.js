@@ -13,7 +13,7 @@ import { updateUserAvatar } from "./tools.js";
 import { isGamePage, renderPageGame } from "../game/HistoryManager.js";
 import gameVar from "../game/pong/var.js";
 import { sendGameData } from "../game/pong/network.js";
-import { clearAllpongStates } from "../game/pong/reset.js";
+import { renderSelfProfilePage } from "./pages/profilePageTools.js";
 
 const authPages = {
 	auth: renderAuthPage,
@@ -26,14 +26,15 @@ const authPages = {
 const userPages = {
 	user: renderUserPage,
 	settings: renderSettingsPage,
-	profile: renderProfilePage,
+	profile: (params) => renderProfilePage(params),
+	selfProfile: renderSelfProfilePage,
 }
 
 const otherPages = {
 	leaderboard: renderLeaderBoardPage,
 }
 
-async function renderPage(page, updateHistory = true) {
+async function renderPage(page, updateHistory = true, params = '') {
 	
 	if (gameVar.gameSocket)
 	{
@@ -45,6 +46,8 @@ async function renderPage(page, updateHistory = true) {
 	const authenticated = await isAuthenticated();
 	await updateUserAvatar(authenticated);
 	
+// console.log(authenticated);
+
 	if (authenticated)
 		renderFunction = userPages[page] || otherPages[page];
 	else
@@ -55,10 +58,10 @@ async function renderPage(page, updateHistory = true) {
 		renderFunction = renderHomePage;
 	} else {
 		if (updateHistory)
-			history.pushState({ page: page }, page, `#${page}`);
+			history.pushState({ page: page, params : params }, page, `#${page}`);
 	}
 	
-	renderFunction();
+	renderFunction(params);
 }
 
 // listen to precedent or next page event but don't push state to history
@@ -68,8 +71,12 @@ window.addEventListener('popstate', (event) => {
 	if (event.state) {
 		if (isGamePage("#" + event.state.page))
 			renderPageGame(event.state.page, false);
-		else
-			renderPage(event.state.page, false);
+		else {
+			if (event.state.params)
+				renderPage(event.state.page, false, event.state.params);
+			else
+				renderPage(event.state.page, false);
+		}
 	}
 });
 

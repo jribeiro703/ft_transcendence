@@ -1,5 +1,6 @@
 import { showToast, DEFAULT_AVATAR} from "../tools.js";
 import { fetchData, fetchAuthData } from "../fetchData.js";
+import { renderPage } from "../historyManager.js";
 
 let currentPage = 1;
 let matchesPerPage = 5;
@@ -39,57 +40,6 @@ function createProfileContent() {
 	`;
 }
 
-function createMatchHistory(container, data) {
-	matchData = data.match_history;
-
-console.log(matchData);
-
-	userData = data;
-
-console.log(userData);
-
-	const totalMatches = matchData.length;
-	const totalPages = Math.ceil(totalMatches / matchesPerPage);
-	const startIndex = (currentPage - 1) * matchesPerPage;
-	const endIndex = startIndex + matchesPerPage;
-	const paginatedMatches = matchData.slice(startIndex, endIndex);
-
-	if (paginatedMatches.length > 0) {
-		const table = document.createElement('table');
-		table.classList.add('match-history-table');
-		paginatedMatches.forEach(match => {
-
-			console.log(match);
-
-			const row = document.createElement('tr');
-			row.classList.add('match-row');
-			row.innerHTML = `
-				<td class="match-result">${match.winner === userData.username ? 'WIN' : 'LOSS'}</td>
-				<td class="user-info">
-					<div class="user-name" >${userData.username}</div>
-					<img class="user-avatar" src="${userData.avatar}" alt="${userData.username}'s avatar"/>
-				</td>
-				<td class="score">${match.me.score}</td>
-				<td class="score-separator">-</td>
-				<td class="score">${match.enemy.score}</td>
-				<td class="enemy-info">
-					<img class="enemy-avatar" src="${match.enemy.avatar}" alt="${match.enemy.username}'s avatar"/>
-					<div class="enemy-name" >${match.enemy.username}</div>
-				</td>
-				<td class="match-date">${match.date}</td>
-			`;
-			table.appendChild(row);
-		});
-		
-		container.innerHTML = '';
-		container.appendChild(table);
-		updateNavigationButtons(totalPages);
-
-	} else {
-		container.innerHTML = '<p>No match history available.</p>';
-	}
-}
-
 function updateNavigationButtons(totalPages) {
 	const prevButton = document.getElementById('prevButton');
 	const nextButton = document.getElementById('nextButton');
@@ -112,14 +62,82 @@ function updateNavigationButtons(totalPages) {
 	};
 }
 
-export async function renderProfilePage() {
-	let responseObject = await fetchAuthData("/user/private/pk/", "GET", null, false);
-	if (responseObject.status !== 200) {
-		showToast("An error occurred while getting your profile data.", "error");
-		return;
-	}
+function createMatchHistory(container, data) {
+	matchData = data.match_history;
 
-	responseObject = await fetchAuthData(`/user/profile/${responseObject.data.pk}`, "GET", null, false);
+// console.log(matchData);
+
+	userData = data;
+
+// console.log(userData);
+
+	const totalMatches = matchData.length;
+	const totalPages = Math.ceil(totalMatches / matchesPerPage);
+	const startIndex = (currentPage - 1) * matchesPerPage;
+	const endIndex = startIndex + matchesPerPage;
+	const paginatedMatches = matchData.slice(startIndex, endIndex);
+
+	if (paginatedMatches.length > 0) {
+		const table = document.createElement('table');
+		table.classList.add('match-history-table');
+		paginatedMatches.forEach(match => {
+
+			console.log(match);
+
+			const row = document.createElement('tr');
+			row.classList.add('match-row');
+			row.innerHTML = `
+				<td class="match-result">${match.winner === userData.username ? 'WIN' : 'LOSS'}</td>
+				<td class="user-info">
+					<div class="user-name" >${userData.username}</div>
+					<img id="user-avatar" class="user-avatar" src="${userData.avatar}" alt="${userData.username}'s avatar"/>
+				</td>
+				<td class="score">${match.me.score}</td>
+				<td class="score-separator">-</td>
+				<td class="score">${match.enemy.score}</td>
+				<td class="enemy-info">
+					<img id="enemy-avatar" class="enemy-avatar" src="${match.enemy.avatar}" alt="${match.enemy.username}'s avatar"/>
+					<div class="enemy-name" >${match.enemy.username}</div>
+				</td>
+				<td class="match-date">${match.date}</td>
+			`;
+			table.appendChild(row);
+		});
+		
+		container.innerHTML = '';
+		container.appendChild(table);
+		updateNavigationButtons(totalPages);
+	
+
+		const userAvatars = document.querySelectorAll('.user-avatar');
+		userAvatars.forEach(avatar => {
+			avatar.style.cursor = 'pointer';
+			avatar.addEventListener('click', () => {
+				console.log("userData username: ", userData.username);
+				renderPage("profile", false, userData.username);
+			});
+		});
+
+		const enemyAvatars = document.querySelectorAll('.enemy-avatar');
+		enemyAvatars.forEach(avatar => {
+			avatar.style.cursor = 'pointer';
+			avatar.addEventListener('click', () => {
+				const enemyUsername = avatar.alt.replace("'s avatar", '');
+				console.log("enemy username: ", enemyUsername);
+				renderPage("profile", true, enemyUsername);
+			});
+		});
+
+	} else {
+		container.innerHTML = '<p>No match history available.</p>';
+	}
+}
+
+export async function renderProfilePage(username) {
+
+	console.log("renderProfilePage: ", username);
+
+	const responseObject = await fetchAuthData(`/user/profile/${username}/`, "GET", null, false);
 	if (responseObject.status === 200) {
 		createProfileContent();
 		const data = responseObject.data;
