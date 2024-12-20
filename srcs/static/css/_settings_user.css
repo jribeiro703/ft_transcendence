@@ -1,4 +1,4 @@
-@import url("_globalVar.css");
+@import url("themes/_globalVar.css");
 
 
 /* Settings container styles */
@@ -10,6 +10,7 @@
 	border-radius: 10px;
 	background-color: var(--background-color);
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	user-select: none;
   }
   
   /* User info section styles */

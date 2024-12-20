@@ -1,4 +1,5 @@
-@import url("_globalVar.css");
+@import url("themes/_globalVar.css");
+
 
 .leaderboard-container {
 	display: flex;
