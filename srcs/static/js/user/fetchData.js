@@ -46,7 +46,7 @@ async function fetchData(endpoint, method = 'GET', body = null, isFormData = fal
 	const options = await makeOptions(method, body, isFormData);
 
 	const responseObject = {
-		data: { message: "An unknown error occurred while fetching data" },
+		data: { message: "fetchData: error occurred while fetching data" },
 		status: 400,
 	};
 
@@ -66,11 +66,14 @@ async function fetchAuthData(endpoint, method = 'GET', body = null, isFormData =
 	const options = await makeAuthOptions(method, body, isFormData);
 
 	const responseObject = {
-		data: { message: "An unknown error occurred while fetching data" },
+		data: { message: "fetchAuthData: error occurred while fetching data" },
 		status: 400,
 	};
 
 	try {
+
+		console.log("fetchAuthData: ", url);
+
 		const response = await fetch(url, options);
 		responseObject.status = response.status;
 		responseObject.data = await response.json();

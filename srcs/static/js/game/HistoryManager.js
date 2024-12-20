@@ -147,7 +147,7 @@ window.addEventListener('popstate', async (event) =>
 		}
 		else
 		{
-			await renderPage(page, false);
+			await renderPage(page, false, params);
 		}
 	}
 });

@@ -5,15 +5,17 @@ urlpatterns = [
 
 	# public user endpoints
 	path('list/', views.getListOfUsers, name="list_users"), #for developmet only
-	path('search/<str:username>', views.searchUser, name="search_user"), #not used for the moment
+	path('search/<str:username>/', views.searchUser, name="search_user"), #data for search or mouse hover on match history avatar
+	path('profile/<str:username>/', views.UserProfileView.as_view(), name="user_profile"), #data for profile page
 	path('leaderboard/', views.getLeaderboard, name='get_leaderboard'),
-	path('profile/<str:username>/', views.UserProfileView.as_view(), name="user_profile"),
 
 	#ludo's endpoint
 	path('get-id/', views.getUserIdByNickname, name="get_user_id"),
 
 	# private user endpoints
 	path('online/', views.getOnlineUsers, name="online_users"),
+	path('self-username/', views.getSelfUsername, name="self_username"),
+	path('private/', views.GetUserPrivateInfos, name="user_private_infos"), #get user private infos
 	path('private/pk/', views.getUserPk, name="user_pk"),
 	path('settings/<int:pk>/', views.UserSettingsView.as_view(), name="user_settings"),
 	path('friends/', views.getUserFriends, name="user_friends"),
