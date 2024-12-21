@@ -1,7 +1,7 @@
 // tournament/templates/createTournamentLayout.js
 
 export function createTournamentLayoutHTML(tournamentName) {
-	return `
+  return `
 	<div class="d-flex w-100 flex-column align-items-center justify-content-center tournament-gap">
 
 				<div class="gap-1 justify-content-center text-center h-25 w-100 bg-light border rounded d-flex flex-column align-items-center text-center">
@@ -20,9 +20,9 @@ export function createTournamentLayoutHTML(tournamentName) {
 				<div class="h-100 col-lg-8 col-md-7 col-sm-12 d-flex justify-content-center align-items-center bg-body-secondary p-3 rounded position-relative" id="tournamentdiv" style="background-color: black !important;">
 
 					<div id="waiting-overlay" class="position-absolute top-50 start-50 translate-middle w-100 h-100 d-flex justify-content-center align-items-center" style="background: rgba(0, 0, 0, 1)">
-						<div class="text-center text-white">
+						<div class="text-center text-white w-100">
 							<h2>Waiting...</h2>
-							<button type="button" id="startTournamentBtn">Setup Tournament</button>
+							<button type="button" id="startTournamentBtn" class="primaryBtn w-50"><span>Setup Tournament</span></button>
 						</div>
 					</div>
 
