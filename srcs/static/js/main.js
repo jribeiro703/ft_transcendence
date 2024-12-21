@@ -35,7 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		renderPageGame(hash.substring(1));
 	else if (hash === "" || hash === "#home")
 		renderPage("home");
-	else
+	else {
+    console.log(hash);
 		renderPage(hash.substring(1));
+  }
 });
 

@@ -5,7 +5,7 @@
 	right: 20px;
 	padding: 12px 24px;
 	border-radius: 4px;
-	color: white;
+	color: var(--text-color);
 	opacity: 0;
 	transform: translateY(-20px);
 	transition: all 0.3s ease;
@@ -18,14 +18,11 @@
 	transform: translateY(0);
 }
 
-.toast-warning {
-	background: #455F78;
-}
-
 .toast-error {
-	background: #f44336;
+	background: #ea4a3e;
+	color: white !important;
 }
 
 .toast-success {
-	background: #455F78;
+	background: var(--background-color);
 }
