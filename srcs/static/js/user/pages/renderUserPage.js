@@ -20,7 +20,7 @@ export function renderUserPage() {
   createUserContent();
 
   document.getElementById("btn-Profile").addEventListener("click", () => {
-    renderPage("profile");
+    renderPage("selfProfile");
   });
 
   document.getElementById("btn-Settings").addEventListener("click", () => {

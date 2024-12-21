@@ -155,11 +155,3 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 			
 		instance.save()
 		return instance, message
-
-class UserSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = User
-		fields = ['id', 'username']
-
-
-	
