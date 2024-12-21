@@ -238,22 +238,6 @@ p {
   gap: 50px;
 }
 
-.mapClic {
-  transition:
-    transform 0.3s ease-in-out,
-    box-shadow 0.1s ease-in-out;
-}
-
-.mapClic:hover {
-  transform: scale(1.05);
-  /* box-shadow: var(--box-shadow); */
-}
-
-.mapClic:active {
-  transform: scale(0.95);
-  box-shadow: var(--box-shadow);
-}
-
 /* ------ modification par iD de thibaud  ------------------------ */
 
 #settingView {
@@ -558,7 +542,7 @@ p {
 .host-server {
   background: var(--quartiary-color);
   border-radius: 10px;
-  color: white;
+  color: var(--text-color);
 }
 
 .server-list h2,
@@ -567,7 +551,7 @@ p {
   padding: 10px 0;
   text-align: center;
   font-size: 1.2em;
-  color: var(--secondary-color);
+  color: var(--text-color);
 }
 
 .host-server h3 {
@@ -576,20 +560,20 @@ p {
   padding-top: 10px;
   padding-bottom: 10px;
   font-size: 1.4em;
-  color: #6dc7c1;
+  color: var(--text-color);
 }
 
 .room-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #455f78;
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 10px;
   margin-bottom: 10px;
 }
 
 .room-name {
-  color: white;
+  color: var(--text-color-rooms);
   font-size: 1.2em;
   font-weight: bold;
 }
@@ -598,7 +582,7 @@ p {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
-  color: #ccc;
+  color: var(--text-color-rooms);
   padding-top: 5px;
 }
 
@@ -610,7 +594,7 @@ p {
 }
 
 .server-item {
-  background-color: #1f2e4d;
+  background-color: var(--background-rooms);
   border-radius: 5px;
   padding: 15px;
   margin: 10px 0;
@@ -625,7 +609,7 @@ margin: 10px 0;
 padding: 8px;
 background-color: #1A1A40;
 border-radius: 5px;
-color: white;
+color: var(--text-color);;
 } */
 #noRoomsMessage {
   font-size: 20px;

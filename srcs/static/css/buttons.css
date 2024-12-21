@@ -1,62 +1,105 @@
 .btn-glow {
-	color: var(--text-color);
-	background-color: transparent;
-	border: none;
-	position: relative;
-	overflow: hidden;
-	font-size: 1rem;
-	transition: color 0.3s ease-in-out;
+  color: var(--text-color);
+  background-color: transparent;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  font-size: 1rem;
+  transition: color 0.3s ease-in-out;
 }
 
 .btn-glow:focus {
-	color: var(--highlight-color);
+  color: var(--highlight-color);
 }
 
 .height-btn {
-	height: 50px;
+  height: 50px;
 }
 .btn-glow:hover {
-	color: var(--highlight-color);
+  color: var(--highlight-color);
 }
 
 .btn-glow::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: rgba(255, 255, 255, 0.2);
-	opacity: 0;
-	transition: opacity 0.3s ease-in-out;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
-.settingsBtn { background-color: var(--background-color); color: var(--text-color); width: 170px; align-self: center; border: 2px solid var(--text-color); transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out transform 0.3s; } .settingsBtn:focus, .settingsBtn:hover { transform: scale(1.05); color: var(--highlight-color); box-shadow: var(--box-shadow), var(--box-shadow-inset); border: 2px solid var(--text-color); } .settingsBtn:active { transform: scale(0.95); color: var(--highlight-color); box-shadow: var(--box-shadow-highlight); border: 2px solid var(--text-color); } .level-btn { /* box-shadow: var(--box-shadow); */ background-color: var(--background-color); width: 100%; height: 42px; color: var(--text-color); border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: color 0.5s; }
+
+w-89 {
+  width: 89px !important;
+}
+
+.w-170 {
+  width: 170px !important;
+}
+
+.settingsBtn {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  width: 170px;
+  align-self: center;
+  border: 2px solid var(--text-color);
+  transition:
+    color 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out transform 0.3s;
+}
+.settingsBtn:focus,
+.settingsBtn:hover {
+  transform: scale(1.05);
+  color: var(--highlight-color);
+  box-shadow: var(--box-shadow), var(--box-shadow-inset);
+  border: 2px solid var(--text-color);
+}
+.settingsBtn:active {
+  transform: scale(0.95);
+  color: var(--highlight-color);
+  box-shadow: var(--box-shadow-highlight);
+  border: 2px solid var(--text-color);
+}
+.level-btn {
+  /* box-shadow: var(--box-shadow); */
+  background-color: var(--background-color);
+  width: 100%;
+  height: 42px;
+  color: var(--text-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.5s;
+}
 
 .level-btn:hover {
-	color: var(--highlight-color);
+  color: var(--highlight-color);
 }
 .main-btn {
-	background-color: var(--background-color);
-	color: var(--text-color);
-	border: 2px solid;
-	border-color: var(--border-btn-color);
-	max-width: 1000px;
-	width: 380px;
-	align-self: center;
-	transition: color 0.3s ease-in-out;
-	transition: border-color 0.3s ease-in-out;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: 2px solid;
+  border-color: var(--border-btn-color);
+  max-width: 1000px;
+  width: 380px;
+  align-self: center;
+  transition: color 0.3s ease-in-out;
+  transition: border-color 0.3s ease-in-out;
 }
 
 .main-btn:focus,
 .main-btn:hover {
-	border-color: var(--highlight-color);
-	color: var(--highlight-color);
+  border-color: var(--highlight-color);
+  color: var(--highlight-color);
 }
 
 .main-btn:active {
-	color: #0a1730;
-	background-color: var(--quartiary-color);
-	border-color: var(--primary-color);
+  color: #0a1730;
+  background-color: var(--quartiary-color);
+  border-color: var(--primary-color);
 }
 .startSelect-button {
   font-size: 48px;
@@ -81,37 +124,20 @@ button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
 }
-.joinRoomBtn {
-  /* Keep your existing button styles */
-  background-color: #455F78;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.server-item button 
-{
-  background-color: #455F78;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
+/* .server-item button { */
+/*   background-color: #455f78; */
+/*   border: none; */
+/*   color: white; */
+/*   padding: 5px 10px; */
+/*   border-radius: 5px; */
+/*   cursor: pointer; */
+/* } */
+/* 1F2E4D */
 
-.server-item button:disabled {
-  background-color: #555;
-  cursor: not-allowed;
-}
-.settings button {
-  background-color: var(--quaternary-color);
-  border: none;
-  color: white;
-  padding: 5px 8px;
-  border-radius: 5px;
-  cursor: pointer;
-}
+/* .server-item button:disabled { */
+/*   background-color: #555; */
+/*   cursor: not-allowed; */
+/* } */
 
 .start-button {
   background-color: #1a1a40;
@@ -125,31 +151,31 @@ button:disabled {
   margin-top: 10px;
 }
 .navbar .buttons-container {
-	display: flex;
-	justify-content: space-between;
-	width: 100%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 .button-container {
-	display: flex;
-	justify-content: space-between;
-	max-width: 800px;
-	gap: 10px;
-	align-items: center;
-	margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  max-width: 800px;
+  gap: 10px;
+  align-items: center;
+  margin: 0 auto;
 }
 .startSelect-button2 {
-	font-size: 48px;
-	padding: 8px 12px;
-	background-color: #1F2E4D;
-	border: none;
-	color: #6DC1C1;
-	padding: 10px;
-	width: 100%;
-	border-radius: 5px;
-	cursor: pointer;
-	margin-top: 150px;
+  font-size: 48px;
+  padding: 8px 12px;
+  background-color: var(--background-rooms);
+  border: none;
+  color: #6dc1c1;
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 150px;
 }
-.createRoom-button{
+.createRoom-button {
   font-size: 28px;
   border-radius: 5px;
   cursor: pointer;
@@ -166,12 +192,16 @@ button:disabled {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
 }
-.btn-outline-primary, .btn-outline-danger, .btn-outline-success {
+.btn-outline-primary,
+.btn-outline-danger,
+.btn-outline-success {
   border-color: var(--highlight-color);
   color: var(--highlight-color);
 }
 
-.btn-outline-primary:hover, .btn-outline-danger:hover, .btn-outline-success:hover {
+.btn-outline-primary:hover,
+.btn-outline-danger:hover,
+.btn-outline-success:hover {
   background-color: var(--highlight-color);
   color: var(--chat-bg);
 }
@@ -182,57 +212,57 @@ button:disabled {
 .custom-leaderboard,
 .custom-register,
 .custom-42 {
-	background-color: var(--quartiary-color);
-	color: #1a1a40;
-	border-color: var(--primary-color);
-	border-radius: 5px;
-	font-weight: bold;
+  background-color: var(--quartiary-color);
+  color: #1a1a40;
+  border-color: var(--primary-color);
+  border-radius: 5px;
+  font-weight: bold;
 }
 
 .custom-home {
-	width: 100px;
-	height: 35px;
-	font-size: 1rem;
-	margin-right: 10px;
+  width: 100px;
+  height: 35px;
+  font-size: 1rem;
+  margin-right: 10px;
 }
 
 .custom-leaderboard {
-	width: 140px;
-	height: 35px;
-	font-size: 1rem;
-	margin-right: 10px;
+  width: 140px;
+  height: 35px;
+  font-size: 1rem;
+  margin-right: 10px;
 }
 
 .custom-register {
-	width: 120px;
-	height: 35px;
-	font-size: 1rem;
+  width: 120px;
+  height: 35px;
+  font-size: 1rem;
 }
 
 .custom-42 {
-	width: 150px;
-	height: 35px;
-	font-size: 1rem;
-	margin-left: 10px;
+  width: 150px;
+  height: 35px;
+  font-size: 1rem;
+  margin-left: 10px;
 }
 
 .custom-home:hover,
 .custom-leaderboard:hover,
 .custom-register:hover,
 .custom-42:hover {
-	color: var(--primary-color);
-	background-color: #6dc7c1;
-	border-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: #6dc7c1;
+  border-color: var(--primary-color);
 
-	transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .custom-home:active,
 .custom-leaderboard:active,
 .custom-register:active,
 .custom-42:active {
-	color: #0a1730;
-	background-color: var(--quartiary-color);
+  color: #0a1730;
+  background-color: var(--quartiary-color);
 }
 
 /* Btn thibaud avec des iDs */
@@ -240,18 +270,14 @@ button:disabled {
 .button,
 .level,
 .powerUpBtn,
-.map-selection, 
-.map-image,
 #rematchBtn,
 #quitGameBtn,
 #nextLevelBtn,
 #restartLevelBtn,
-#quitBtn
-{
-    background-color: var(--background-color);
-    color: var(--text-color);
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
+#quitBtn {
+  background-color: var(--background-color);
+  color: var(--text-color-selected);
+  border: 2px solid transparent;
 }
 
 .button:hover,
@@ -262,105 +288,168 @@ button:disabled {
 #quitGameBtn:hover,
 #nextLevelBtn:hover,
 #restartLevelBtn:hover,
-#quitBtn:hover
-{
-    background-color: var(--background-color);
-    color: var(--text-color);
-    border-color: var(--background-color);
-    box-shadow: var(--box-shadow);
-    transform: translateY(-2px);
+#quitBtn:hover {
+  background-color: var(--background-color);
+  border-color: var(--border-btn-color);
+  color: var(--text-color);
+}
+
+.map-image:focus {
+  outline: none;
+}
+
+.map-selection,
+.map-image {
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.map-selection.selected,
+.map-image.selected {
+  transform: scale(1.1);
+  box-shadow: var(--box-shadow-images);
 }
 
 .button.selected,
 .level.selected,
 .powerUpBtn.selected,
-.map-selection.selected, 
-.map-image.selected,
 #rematchBtn.selected,
 #quitGameBtn.selected,
 #nextLevelBtn.selected,
 #restartLevelBtn.selected,
-#quitBtn.selected
-{
-    background-color: var(--background-color);
-    color: var(--text-color);
-    /* border-color: var(--selected-btn); */
-    box-shadow: var(--box-shadow-black);
-    border: 1px solid var(--selected-btn);
-    transform: scale(1.05);
+#quitBtn.selected {
+  background-color: var(--background-color-when-selected);
+  color: var(--text-color-selected);
+  border: 1px solid var(--selected-btn);
 }
+
 #saveBtn:enabled {
-	background-color: var(--background-color);
-	color: var(--text-color);
-	width: 170px;
-	align-self: center;
-	border: 2px solid var(--text-color);
-	transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out transform 0.3s;
-}
-
-#saveBtn {
-	background-color: var(--background-color);
-	color: var(--text-color);
-	width: 170px;
-	align-self: center;
-	border: 2px solid var(--text-color);
-	transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out transform 0.3s;
-}
-
-#saveBtn:active {
-	transform: scale(0.90);
-	background-color: var(--background-color);
-	color: var(--text-color);
-	width: 170px;
-	align-self: center;
-	border: 2px solid var(--text-color);
-	transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out transform 0.3s;
-}
-
-#saveBtn:focus,
-#saveBtn:hover {
-	transform: scale(1.05);
-	color: var(--highlight-color);
-	box-shadow: var(--box-shadow), var(--box-shadow-inset);
-	border: 2px solid var(--text-color);
+  background-color: var(--background-color);
+  width: 170px;
+  align-self: center;
+  border: 2px solid var(--text-color);
+  transition:
+    color 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out transform 0.3s;
 }
 
 #saveBtn:disabled {
-    color: #5a5a5a;
-    border: 1px solid #000000;
-    cursor: not-allowed;
-    opacity: 0.2;
-    transform: none;
-    box-shadow: none;
-    pointer-events: none;
+  color: #5a5a5a;
+  border: 1px solid #000000;
+  cursor: not-allowed;
+  opacity: 0.2;
+  transform: none;
+  box-shadow: none;
+  pointer-events: none;
 }
 
 #startGameBtn,
 #quickGameBtn,
 #tournamentGameBtn {
-	width: 200px;
-	height: 60px;
-	font-size: 20px;
-	background-color: #0a1730;
-	color: var(--secondary-color);
-	border: none;
-	border-radius: 10px;
-	cursor: pointer;
-	transition:
-		background-color 0.3s,
-		transform 0.4s;
+  width: 200px;
+  height: 60px;
+  font-size: 20px;
+  background-color: #0a1730;
+  color: var(--secondary-color);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    transform 0.4s;
 }
 
 #startGameBtn:hover,
 #quickGameBtn:hover,
 #tournamentGameBtn:hover {
-	background-color: #6dc7c1;
-	transform: scale(1.05);
+  background-color: #6dc7c1;
+  transform: scale(1.05);
 }
 
 #startGameBtn:active,
 #quickGameBtn:active,
 #tournamentGameBtn:active {
-	background-color: #003372;
-	transform: scale(0.95);
+  background-color: #003372;
+  transform: scale(0.95);
+}
+
+/* boutons de test */
+.primaryBtn {
+  width: 100%;
+  padding: 10px;
+  appearance: none;
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: #000000;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Clarkson, Helvetica, sans-serif;
+  font-size: 25px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1em;
+  margin: 0;
+  opacity: 1;
+  outline: 0;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-rendering: geometricprecision;
+  text-transform: uppercase;
+  transition:
+    opacity 300ms cubic-bezier(0.694, 0, 0.335, 1),
+    background-color 100ms cubic-bezier(0.694, 0, 0.335, 1),
+    color 100ms cubic-bezier(0.694, 0, 0.335, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.primaryBtn:before {
+  animation: opacityFallbackOut 0.5s step-end forwards;
+  backface-visibility: hidden;
+  background-color: #000000;
+  color: #ffffff;
+  clip-path: polygon(-1% 0, 0 0, -25% 100%, -1% 100%);
+  content: "";
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transform: translateZ(0);
+  transition:
+    clip-path 0.5s cubic-bezier(0.165, 0.84, 0.44, 1),
+    -webkit-clip-path 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  width: 100%;
+}
+
+.primaryBtn:hover:before {
+  animation: opacityFallbackIn 0s step-start forwards;
+  clip-path: polygon(0 0, 101% 0, 101% 101%, 0 101%);
+}
+
+.primaryBtn:hover {
+  color: #ffffff;
+}
+
+.primaryBtn:focus:before {
+  animation: opacityFallbackIn 0s step-start forwards;
+  clip-path: polygon(0 0, 101% 0, 101% 101%, 0 101%);
+}
+
+.primaryBtn:focus {
+  color: #ffffff;
+}
+
+.primaryBtn:after {
+  background-color: #ffffff;
+}
+.primaryBtn span {
+  z-index: 1;
+  position: relative;
 }
