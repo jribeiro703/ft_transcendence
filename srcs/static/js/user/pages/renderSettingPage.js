@@ -1,4 +1,4 @@
-import { escapeHTML, showErrorMessages } from "../tools.js";
+import { escapeHTML, showErrorMessages, UPLOAD_ICON } from "../tools.js";
 import { fetchAuthData } from "../fetchData.js";
 import { listenChangeAlias, listenChangeEmail, listenChangePassword} from "./settingsPageTools.js";
 
@@ -6,31 +6,35 @@ async function createSettingsPageContent(mainContent, data) {
 	const avatarPath = data.avatar.substring(data.avatar.indexOf('/media'));
 
 	mainContent.innerHTML = `
-		<div id="settings-container">
-				<div id="avatar-container">
+		<div class="settings-container">
+			<div class="header-container">
+				<div class="avatar-container">
 					<img id="avatar-img" src="${avatarPath}" alt="Avatar" class="avatar">
-					<button id="upload-avatar-btn" class="upload-btn">Upload</button>
+					<button id="upload-avatar-btn" class="upload-btn">
+						<img src="${UPLOAD_ICON}" style="width: 20px; height: 20px;">
+					</button>
 				</div>
-				<div id="username-container">
+				<div class="username-container">
 					<span id="username">${data.username}</span>
 				</div>
-				<div id="alias-container">
+			</div>
+				<div class="alias-container">
 					Alias: <span id="alias">${data.alias ? data.alias : "none"}</span>
 					<input type="text" id="alias-input" value="${data.alias ? data.alias : "none"}" style="display:none;">
 					<button id="save-alias-btn" class="save-btn" style="display:none;">Save</button>
 				</div>
-				<div id="email-container">
+				<div class="email-container">
 					Email: <span id="email">${data.email}</span>
 					<input type="text" id="email-input" placeholder="${data.email}" style="display:none">
 					<button id="save-email-btn" class="save-btn" style="display:none;">Save</button>
 				</div>
-				<div id="password-container">
+				<div class="password-container">
 					Password: <span id="password" > change your password</span>
 					<input type="text" id="current-password-input" placeholder="Enter your current password" style="display:none">
 					<input type="text" id="new-password-input" placeholder="Enter your new password " style="display:none">
 					<button id="save-password-btn" class="save-btn" style="display:none;">Save</button>
 				</div>
-				<div id="friend-request">
+				<div class="friend-request">
 					<label for="new-friend-username">Add new friend:</label>
 					<input type="text" id="new-friend-username" placeholder="Friend's username" required>
 					<span id="error-message" style="color: red; display: none;">Please enter a valid username!</span>
