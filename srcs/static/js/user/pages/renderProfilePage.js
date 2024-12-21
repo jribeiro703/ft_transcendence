@@ -84,7 +84,7 @@ function createMatchHistory(container, data) {
 		table.classList.add('match-history-table');
 		paginatedMatches.forEach(match => {
 
-			console.log(match);
+			// console.log(match);
 
 			const row = document.createElement('tr');
 			row.classList.add('match-row');
@@ -137,7 +137,7 @@ function createMatchHistory(container, data) {
 
 export async function renderProfilePage(username) {
 
-	console.log("renderProfilePage: ", username);
+	// console.log("renderProfilePage: ", username);
 
 	const responseObject = await fetchAuthData(`/user/profile/${username}/`, "GET", null, false);
 	if (responseObject.status === 200) {

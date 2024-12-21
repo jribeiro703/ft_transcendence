@@ -46,14 +46,17 @@ def searchUser(request, username):
 	except User.DoesNotExist:
 		return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 	except Exception as e:
-		return Response({"message": "Error fetching user public data"}, status=status.HTTP_500_INTERNAL_SERVER)
+		return Response({"message": "Error fetching user public data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 	serializer = UserPublicInfosSerializer(user)
 	return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def GetUserPrivateInfos(request):
-	serializer = UserPrivateInfosSerializer(request.user)
+	try:
+		serializer = UserPrivateInfosSerializer(request.user)
+	except Exception as e:
+		return Response({"message": "Error fetching user private data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 	return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])	

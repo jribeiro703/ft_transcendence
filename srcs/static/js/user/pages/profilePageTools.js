@@ -23,7 +23,7 @@ async function getSelfUsername() {
 		return null;
 	}
 
-console.log("getSelfUsername: ", responseObject.data);;
+// console.log("getSelfUsername: ", responseObject.data);;
 
 	return responseObject.data.username;
 }

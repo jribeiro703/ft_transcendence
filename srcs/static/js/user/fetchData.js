@@ -72,7 +72,7 @@ async function fetchAuthData(endpoint, method = 'GET', body = null, isFormData =
 
 	try {
 
-		console.log("fetchAuthData: ", url);
+		// console.log("fetchAuthData: ", url);
 
 		const response = await fetch(url, options);
 		responseObject.status = response.status;
