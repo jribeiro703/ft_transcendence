@@ -6,7 +6,7 @@ import { renderProfilePage } from "./renderProfilePage.js";
 async function GetUserPublicData(username) {
 	const responseObject = await fetchAuthData(`/user/search/${username}`, "GET", null, false);
 	if (responseObject.status !== 200) {
-		showErrorMessages(responseObject.data);
+		showErrorMessages(responseObject);
 		return null;
 	}
 
@@ -19,7 +19,7 @@ console.log("getUserPublicData: ", responseObject.data);
 async function getSelfUsername() {
 	const responseObject = await fetchAuthData(`/user/self-username/`, "GET", null, false);
 	if (responseObject.status !== 200) {
-		showErrorMessages(responseObject.data);
+		showErrorMessages(responseObject);
 		return null;
 	}
 

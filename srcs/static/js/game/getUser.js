@@ -23,7 +23,7 @@ export async function getUserInfos()
 		}
 		else
 		{
-			showErrorMessages(response.data.message, "error");
+			showErrorMessages(response);
 		}
 }
 
@@ -37,7 +37,7 @@ export async function getUserInfos2()
 	}
 	else
 	{
-		showErrorMessages(response.data.message, "error");
+		showErrorMessages(response);
 	}
 }
 // export async function getUserInfosB()

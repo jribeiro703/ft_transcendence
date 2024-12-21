@@ -8,63 +8,60 @@
 	flex-direction: column;
     align-items: center;
     background-color: var(--background-color);
+	height: 100%;
+	gap: 20px;
   }
-  
-  /* User info section styles */
-  #user-info {
-	/* flex: 1; Allows content to grow */
+
+#avatar-container {
 	display: flex;
-	flex-direction: column;
-	gap: 10px;
-  }
-  
-  #user-info p {
-	color: var(--highlight-color);
-	font-size: 16px;
-	/* margin: 5px 0; */
-  }
-  
-  /* Avatar styles */
-  .avatar {
+}
+
+#avatar-img {
 	width: 80px;
 	height: 80px;
 	border-radius: 50%;
 	object-fit: cover;
 	border: 2px solid var(--highlight-color);
   }
-  
-  /* Avatar container */
-  #user-info {
-	position: relative;
-  }
-  
-  /* Change button styles */
-  .change-btn {
-	/* margin-left: 10px; */
-	/* padding: 5px 10px; */
-	font-size: 14px;
-	border: none;
-	border-radius: 5px;
-	background-color: var(--highlight-color);
-	/* color: black; */
-	cursor: pointer;
-  }
-  
-  .change-btn:hover {
-	background-color: #357ab8;
-  }
-  
-  .upload-btn {
+
+.upload-btn {
 	margin-left: 10px;
 	padding: 5px 10px;
 	font-size: 14px;
 	border: none;
 	border-radius: 5px;
 	background-color: var(--highlight-color);
+}
+  
+.upload-btn:hover {
+	background-color: #357ab8;
+}
+
+#username-container {
+	display: flex;
+}
+
+
+/* change event styles */
+
+  #alias-container,
+  #email-container,
+  #password-container {
+	  margin: 10px 0;
+	  color: var(--highlight-color);
   }
   
-  .upload-btn:hover {
-	background-color: #357ab8;
+  #alias,
+  #email,
+  #password {
+	  cursor: pointer;
+  }
+  
+  #alias-input,
+  #email-input, 
+  #current-password-input,
+  #new-password-input {
+	  margin-left: 10px;
   }
   
   /* Friend request section */
@@ -113,4 +110,4 @@
   #delete-account-btn:hover {
 	background-color: #c0392b;
   }
-  
+
