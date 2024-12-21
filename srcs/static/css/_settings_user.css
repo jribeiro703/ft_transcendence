@@ -2,21 +2,32 @@
 
 
 /* Settings container styles */
-#settings-container {
+.settings-container {
     user-select: none;
 	display: flex;
 	flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     background-color: var(--background-color);
+	color: var(--highlight-color);
 	height: 100%;
 	gap: 20px;
   }
 
-#avatar-container {
+.header-container {
 	display: flex;
+	align-items: center;
+	gap: 20px;
 }
 
-#avatar-img {
+.avatar-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.avatar {
+	position: relative;
+	display: inline-block;
 	width: 80px;
 	height: 80px;
 	border-radius: 50%;
@@ -25,28 +36,40 @@
   }
 
 .upload-btn {
-	margin-left: 10px;
-	padding: 5px 10px;
-	font-size: 14px;
-	border: none;
-	border-radius: 5px;
-	background-color: var(--highlight-color);
-}
-  
-.upload-btn:hover {
-	background-color: #357ab8;
+	position: absolute;
+	/* font-size: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--highlight-color);
+    width: 32px;
+    height: 22px; */
+	bottom: 720px;
+    left: 598px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
 }
 
-#username-container {
+#upload-avatar-btn img {
+	width: 20px;
+	height: 20px;
+}
+  
+/* upload-btn:hover { */
+	/* background-color: #357ab8; */
+/* } */
+
+.username-container {
 	display: flex;
 }
 
 
 /* change event styles */
 
-  #alias-container,
-  #email-container,
-  #password-container {
+.alias-container,
+.email-container,
+.password-container {
 	  margin: 10px 0;
 	  color: var(--highlight-color);
   }

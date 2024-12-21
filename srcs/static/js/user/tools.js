@@ -1,6 +1,7 @@
 import { API_BASE_URL, fetchAuthData } from "./fetchData.js";
 
 const PONG_CARD = `${API_BASE_URL}/static/images/pong-game-card.png`;
+const UPLOAD_ICON = `${API_BASE_URL}/static/images/upload_icon.png`;
 const DEFAULT_AVATAR = `${API_BASE_URL}/static/images/default-avatar.jpg`;
 
 function escapeHTML(unsafe) {
@@ -76,4 +77,4 @@ async function logout() {
 	}
 }
 
-export { escapeHTML, PONG_CARD, DEFAULT_AVATAR, showToast, updateUserAvatar, showErrorMessages, logout };
+export { escapeHTML, PONG_CARD, DEFAULT_AVATAR, UPLOAD_ICON, showToast, updateUserAvatar, showErrorMessages, logout };
