@@ -1,12 +1,16 @@
 import { escapeHTML, showErrorMessages, UPLOAD_ICON } from "../tools.js";
 import { fetchAuthData } from "../fetchData.js";
-import { listenChangeAlias, listenChangeEmail, listenChangePassword} from "./settingsPageTools.js";
+import {
+  listenChangeAlias,
+  listenChangeEmail,
+  listenChangePassword,
+} from "./settingsPageTools.js";
 
 async function createSettingsPageContent(mainContent, data) {
-	const avatarPath = data.avatar.substring(data.avatar.indexOf('/media'));
+  const avatarPath = data.avatar.substring(data.avatar.indexOf("/media"));
 
-	mainContent.innerHTML = `
-		<div class="settings-container">
+  mainContent.innerHTML = `
+		<div class="settings-container w-100">
 			<div class="header-container">
 				<div class="avatar-container">
 					<img id="avatar-img" src="${avatarPath}" alt="Avatar" class="avatar">
@@ -38,7 +42,7 @@ async function createSettingsPageContent(mainContent, data) {
 					<label for="new-friend-username">Add new friend:</label>
 					<input type="text" id="new-friend-username" placeholder="Friend's username" required>
 					<span id="error-message" style="color: red; display: none;">Please enter a valid username!</span>
-					<button type="submit" id="send-friend-request-btn">Send</button>
+					<button type="submit" id="send-friend-request-btn" class="primaryBtn w-25"><span>Send</span></button>
 				</div>
 				<div>
 					<button id="delete-account-btn">Delete Account</button>
@@ -48,104 +52,123 @@ async function createSettingsPageContent(mainContent, data) {
 }
 
 export async function renderSettingsPage() {
-	const mainContent = document.getElementById("mainContent");
-	let responseObject = await fetchAuthData("/user/private/pk/", "GET", null, false);
-	if (responseObject.status !== 200) {
-		showToast("An error occurred while getting your settings data.", "error");
-		return;
-	}
-	const pk = responseObject.data.pk;
+  const mainContent = document.getElementById("mainContent");
+  let responseObject = await fetchAuthData(
+    "/user/private/pk/",
+    "GET",
+    null,
+    false,
+  );
+  if (responseObject.status !== 200) {
+    showToast("An error occurred while getting your settings data.", "error");
+    return;
+  }
+  const pk = responseObject.data.pk;
 
-	responseObject = await fetchAuthData(`/user/settings/${pk}`, "GET", null, false);
-	if (responseObject.status != 200) {
-		showErrorMessages(responseObject);
-		return;
-	}
-	const data = responseObject.data;
-	await createSettingsPageContent(mainContent, data);
+  responseObject = await fetchAuthData(
+    `/user/settings/${pk}`,
+    "GET",
+    null,
+    false,
+  );
+  if (responseObject.status != 200) {
+    showErrorMessages(responseObject);
+    return;
+  }
+  const data = responseObject.data;
+  await createSettingsPageContent(mainContent, data);
 
-	// alias
-	const aliasSpan = document.getElementById('alias');
-	const aliasInput = document.getElementById('alias-input');
-	const saveAliasButton = document.getElementById('save-alias-btn');
+  // alias
+  const aliasSpan = document.getElementById("alias");
+  const aliasInput = document.getElementById("alias-input");
+  const saveAliasButton = document.getElementById("save-alias-btn");
 
-	aliasSpan.addEventListener("click", function() {
-		
-		aliasInput.style.display = 'inline';
-		saveAliasButton.style.display = 'inline';
-		aliasInput.value = this.innerText;
-		this.style.display = 'none';
+  aliasSpan.addEventListener("click", function () {
+    aliasInput.style.display = "inline";
+    saveAliasButton.style.display = "inline";
+    aliasInput.value = this.innerText;
+    this.style.display = "none";
 
-		const handleClickOutside = function(event) {
-			const isClickInside = aliasInput.contains(event.target) || saveAliasButton.contains(event.target) || document.getElementById('alias').contains(event.target);
-			
-			if (!isClickInside) {
-				aliasSpan.style.display = 'inline';
-				aliasInput.style.display = 'none';
-				saveAliasButton.style.display = 'none';
-				document.removeEventListener("click", handleClickOutside);
-			}
-		}
+    const handleClickOutside = function (event) {
+      const isClickInside =
+        aliasInput.contains(event.target) ||
+        saveAliasButton.contains(event.target) ||
+        document.getElementById("alias").contains(event.target);
 
-		document.addEventListener("click", handleClickOutside)
-		listenChangeAlias(pk);
-	});
+      if (!isClickInside) {
+        aliasSpan.style.display = "inline";
+        aliasInput.style.display = "none";
+        saveAliasButton.style.display = "none";
+        document.removeEventListener("click", handleClickOutside);
+      }
+    };
 
-	if (!data.is_42_user) {
-		// email
-		const emailSpan = document.getElementById('email');
-		const emailInput = document.getElementById('email-input');
-		const saveEmailButton = document.getElementById('save-email-btn');
+    document.addEventListener("click", handleClickOutside);
+    listenChangeAlias(pk);
+  });
 
-		emailSpan.addEventListener("click", function() {
+  if (!data.is_42_user) {
+    // email
+    const emailSpan = document.getElementById("email");
+    const emailInput = document.getElementById("email-input");
+    const saveEmailButton = document.getElementById("save-email-btn");
 
-			emailInput.style.display = 'inline';
-			saveEmailButton.style.display = 'inline';
-			emailInput.value = this.innerText;
-			this.style.display = 'none';
+    emailSpan.addEventListener("click", function () {
+      emailInput.style.display = "inline";
+      saveEmailButton.style.display = "inline";
+      emailInput.value = this.innerText;
+      this.style.display = "none";
 
-			const handleClickOutside = function(event) {
-				const isClickInside = emailInput.contains(event.target) || saveEmailButton.contains(event.target) || document.getElementById('email').contains(event.target);
+      const handleClickOutside = function (event) {
+        const isClickInside =
+          emailInput.contains(event.target) ||
+          saveEmailButton.contains(event.target) ||
+          document.getElementById("email").contains(event.target);
 
-				if (!isClickInside) {
-					emailSpan.style.display = 'inline';
-					emailInput.style.display = 'none';
-					saveEmailButton.style.display = 'none';
-					document.removeEventListener("click", handleClickOutside);
-				}
-			}
+        if (!isClickInside) {
+          emailSpan.style.display = "inline";
+          emailInput.style.display = "none";
+          saveEmailButton.style.display = "none";
+          document.removeEventListener("click", handleClickOutside);
+        }
+      };
 
-			document.addEventListener("click", handleClickOutside)
-			listenChangeEmail(pk);
-		});
+      document.addEventListener("click", handleClickOutside);
+      listenChangeEmail(pk);
+    });
 
-		// password
-		const passwordSpan = document.getElementById('password');
-		const currentPasswordInput = document.getElementById('current-password-input');
-		const newPasswordInput = document.getElementById('new-password-input');
-		const savePasswordButton = document.getElementById('save-password-btn');
+    // password
+    const passwordSpan = document.getElementById("password");
+    const currentPasswordInput = document.getElementById(
+      "current-password-input",
+    );
+    const newPasswordInput = document.getElementById("new-password-input");
+    const savePasswordButton = document.getElementById("save-password-btn");
 
-		passwordSpan.addEventListener("click", function() {
+    passwordSpan.addEventListener("click", function () {
+      currentPasswordInput.style.display = "inline";
+      newPasswordInput.style.display = "inline";
+      savePasswordButton.style.display = "inline";
+      this.style.display = "none";
 
-			currentPasswordInput.style.display = 'inline';
-			newPasswordInput.style.display = 'inline';
-			savePasswordButton.style.display = 'inline';
-			this.style.display = 'none';
+      const handleClickOutside = function (event) {
+        const isClickInside =
+          currentPasswordInput.contains(event.target) ||
+          newPasswordInput.contains(event.target) ||
+          savePasswordButton.contains(event.target) ||
+          document.getElementById("password").contains(event.target);
 
-			const handleClickOutside = function(event) {
-				const isClickInside = currentPasswordInput.contains(event.target) || newPasswordInput.contains(event.target) || savePasswordButton.contains(event.target) || document.getElementById('password').contains(event.target);
+        if (!isClickInside) {
+          passwordSpan.style.display = "inline";
+          currentPasswordInput.style.display = "none";
+          newPasswordInput.style.display = "none";
+          savePasswordButton.style.display = "none";
+          document.removeEventListener("click", handleClickOutside);
+        }
+      };
 
-				if (!isClickInside) {
-					passwordSpan.style.display = 'inline';
-					currentPasswordInput.style.display = 'none';
-					newPasswordInput.style.display = 'none';
-					savePasswordButton.style.display = 'none';
-					document.removeEventListener("click", handleClickOutside);
-				}
-			}
-
-			document.addEventListener("click", handleClickOutside)
-			listenChangePassword(pk);
-		});
-	}
+      document.addEventListener("click", handleClickOutside);
+      listenChangePassword(pk);
+    });
+  }
 }
