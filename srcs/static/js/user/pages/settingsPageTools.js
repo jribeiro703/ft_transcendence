@@ -1,6 +1,7 @@
 import { fetchData, fetchAuthData } from "../fetchData.js";
 import { showToast, showErrorMessages } from "../tools.js";
 import { renderPage } from "../historyManager.js";
+import { escapeHTML } from "../tools.js";
 
 async function createDialog(mainContent, dialogConfig) {
 	const dialogElement = document.createElement('dialog');
@@ -65,6 +66,36 @@ async function listenForDialog(mainContent, dialogElement, pk, newInputId, key) 
 		dialogElement.close();
 		mainContent.removeChild(dialogElement);
 	})
+}
+
+async function updateUserData(pk, body = {}) {
+	const responseObject = await fetchAuthData(`/user/settings/${pk}/`, "PATCH", body, false);
+	if (responseObject.status !== 200) {
+		showErrorMessages(responseObject);
+		return;
+	}
+	showToast(responseObject.data.message, "success");
+}
+
+async function listenChangeAlias(pk) {
+	document.getElementById("save-alias-btn").addEventListener("click", async(e) => {
+		const newAlias = document.getElementById('alias-input').value;
+		updateUserData(pk, { alias: escapeHTML(newAlias) });
+	});
+}
+
+async function listenChangeEmail(pk) {
+	document.getElementById("save-email-btn").addEventListener("click", async(e) => {
+		const newEmail = document.getElementById('alias-input').value;
+		updateUserData(pk, { alias: escapeHTML(newAlias) });
+	});
+}
+
+async function listenChangePassword(pk) {
+	document.getElementById("save-alias-btn").addEventListener("click", async(e) => {
+		const newAlias = document.getElementById('alias-input').value;
+		updateUserData(pk, { alias: escapeHTML(newAlias) });
+	});
 }
 
 async function uploadAvatar(pk) {
@@ -140,4 +171,9 @@ async function addNewFriend(pk) {
 		showErrorMessages(responseObject);
 }
 
-export { createDialog, listenForDialog, deleteAccount, addNewFriend, uploadAvatar };
+export { 
+	createDialog, listenForDialog,
+	deleteAccount, addNewFriend, uploadAvatar,
+	listenChangeAlias, listenChangeEmail, listenChangePassword };
+
+	
