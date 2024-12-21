@@ -1,0 +1,94 @@
+[data-home-icon] svg {
+  transition: transform 0.1s ease;
+  width: 40px;
+  height: 40px;
+}
+[data-profile-icon] svg {
+  transition: transform 0.1s ease;
+  width: 50px;
+  height: 50px;
+}
+[data-palette-icon] svg {
+  transition: transform 0.1s ease;
+  width: 40px;
+  height: 40px;
+}
+[data-chat-icon] svg {
+  transition: transform 0.1s ease;
+  width: 30px;
+  height: 30px;
+}
+
+[data-home-icon]:focus,
+[data-palette-icon]:focus,
+[data-profile-icon]:focus,
+[data-chat-icon]:focus {
+  outline: none;
+}
+
+[data-home-icon]:focus svg,
+[data-palette-icon]:focus svg,
+[data-profile-icon]:focus svg,
+[data-chat-icon]:focus svg {
+  fill: var(--highlight-color);
+  transform: scale(1.2);
+}
+
+[data-home-icon] svg:hover,
+[data-chat-icon] svg:hover,
+[data-profile-icon] svg:hover,
+[data-palette-icon] svg:hover {
+  transform: scale(1.2);
+}
+
+/*  home icon */
+.homeIcon {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  color: var(--highlight-color);
+}
+
+/* profile icon */
+.profileIcon {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  color: var(--highlight-color);
+}
+
+/* chat icon */
+.chat-icon-dots,
+.chat-icon-fill {
+  fill: var(--icon-color);
+  transition: fill 0.1s ease;
+}
+.chat-icon-dots:hover,
+.chat-icon-dots:focus,
+.chat-icon-fill:hover,
+.chat-icon-fill:focus {
+  fill: var(--highlight-color);
+}
+
+.chat-close-icon {
+  cursor: pointer;
+  color: var(--highlight-color);
+  position: absolute;
+  bottom: 3%;
+  right: 90px;
+}
+
+/* palette icon */
+.paletteIcon {
+  cursor: pointer;
+  color: var(--highlight-color);
+  position: absolute;
+  bottom: 3%;
+  left: 83px;
+}
+.paletteIcon:hover {
+  color: var(--highlight-color);
+}
+.paletteIcon {
+  color: var(--icon-color);
+}
