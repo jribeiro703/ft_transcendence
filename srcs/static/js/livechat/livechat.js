@@ -262,15 +262,18 @@ document.addEventListener("DOMContentLoaded", function () {
     "#chat-message-input",
     "#chat-message-submit",
     "#emojiButton",
+    ".mapClic",
   ].join(", ");
 
   const getFocusableElements = () => {
     return Array.from(document.querySelectorAll(focusableSelectors)).filter(
       (element) => {
         return (
-          element.offsetParent !== null &&
-          !element.disabled &&
-          getComputedStyle(element).display !== "none"
+          element.offsetParent !== null && // élément visible
+          !element.disabled && // pas désactivé
+          !element.hasAttribute("hidden") && // pas caché
+          getComputedStyle(element).display !== "none" && // pas display none
+          getComputedStyle(element).visibility !== "hidden" // pas visibility hidden
         );
       },
     );
@@ -286,13 +289,19 @@ document.addEventListener("DOMContentLoaded", function () {
       const lastElement = focusableElements[focusableElements.length - 1];
       const activeElement = document.activeElement;
 
+      // Pour debug
+      console.log("Focusable elements:", focusableElements);
+      console.log("Active element:", activeElement);
+
       if (e.shiftKey) {
-        if (activeElement === firstElement) {
+        // Tab arrière
+        if (activeElement === firstElement || !activeElement) {
           e.preventDefault();
           lastElement.focus();
         }
       } else {
-        if (activeElement === lastElement) {
+        // Tab avant
+        if (activeElement === lastElement || !activeElement) {
           e.preventDefault();
           firstElement.focus();
         }

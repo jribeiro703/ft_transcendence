@@ -7,7 +7,6 @@ export function displayLobbyView(level) {
 
   roomView.style.width = "100%";
 
-
   roomView.innerHTML = `
   <div id="roomView" style="display: none;" class="h-100 d-flex justify-content-center">
       <div class="container-room gap-5">
@@ -18,19 +17,19 @@ export function displayLobbyView(level) {
           </div>
           <div id="roomsContainer" class="flex-column overflow-auto max-h-350px d-flex justify-content-start"></div>
           <div class="refresh"></div>
-          <button id="refreshBtn" class="main-btn settingsSelect-button">Refresh</button>
+          <button id="refreshBtn" class="primaryBtn w-170"><span>Refresh</span></button>
         </div>
         <div class="host-server w-40 d-flex justify-content-spa align-items-center flex-column">
           <h2>Host A Room</h2>
           <h3 class="d-flex gap-4">Playing as: <strong>Login</strong></h3>
           <div class="settings d-flex justify-content-center w-100 gap-4">
-            <button id="settingBtn" class="settingsBtn">Settings</button>
+            <button id="settingBtn" class="primaryBtn w-50"><span>Settings</span></button>
             <div id="setting-container">
               Difficulty: <span id="difficultyChoice">Medium</span><br>
               Level: <span id="levelSelected">${level}</span>
             </div>
           </div>
-          <button id="createRoomBtn" class="main-btn createRoom-button">Create Room</button>
+          <button id="createRoomBtn" class="primaryBtn w-50"><span>Create Room</span></button>
         </div>
       </div>
     </div>
@@ -59,15 +58,13 @@ export function displayPongRemote() {
   mainContent.appendChild(insertTo);
 }
 
-export function displayGameSelectionMulti()
-{
-  const maincontent = document.getElementById('mainContent');
-  maincontent.innerHTML = '';
-  const gameSelection = document.createElement('div');
+export function displayGameSelectionMulti() {
+  const maincontent = document.getElementById("mainContent");
+  maincontent.innerHTML = "";
+  const gameSelection = document.createElement("div");
   const pongUrl = "/static/css/images/ttLevel.png";
   const brickUrl = "/static/css/images/brickout.png";
   const blackPongUrl = "/static/css/images/classicPong.png";
-
 
   gameSelection.style.width = "100%";
 
@@ -92,8 +89,8 @@ export function displayGameSelectionMulti()
           </div>
 
         <div class="width-170 justify-content-center d-flex flex-column gap-2">
-              <button id="settingBtn1" class="main-btn settingsSelect-button ">Settings</button>
-          <button id="playBtn" class="main-btn settingsSelect-button">Play</button>
+              <button id="settingBtn1" class="primaryBtn"><span>Settings</span></button>
+          <button id="playBtn" class="primaryBtn"><span>Play</span></button>
         </div>
 
       </div>
@@ -113,8 +110,8 @@ export function displayGameSelectionMulti()
           </div>
 
         <div class="width-170 justify-content-center d-flex flex-column gap-2">
-              <button id="settingBtn2" class="main-btn settingsSelect-button ">Settings</button>
-          <button id="playBtn2" class="main-btn settingsSelect-button">Play</button>
+              <button id="settingBtn2" class="primaryBtn"><span>Settings</span></button>
+          <button id="playBtn2" class="primaryBtn"><span>Play</span></button>
         </div>
 
       </div>
@@ -127,14 +124,14 @@ export function displayGameSelectionMulti()
         <div class="game-image">
               <img id="gameImage" src="${pongUrl}" alt="pongGame">
             </div>
-                        <button id="playBtn3" class="main-btn settingsSelect-button">Join Lobby</button>
+                        <button id="playBtn3" class="primaryBtn w-170"><span>Join Lobby</span></button>
                 </div>
 
       <div class="game-row-online">
         <div class="game-image">
               <img id="gameImage" src="${brickUrl}" alt="brickGame">
             </div>
-                        <button id="playBtn4" class="main-btn settingsSelect-button">Join Lobby</button>
+                        <button id="playBtn4" class="primaryBtn w-170"><span>Join Lobby</span></button>
                 </div>
 
     </div>
@@ -142,14 +139,12 @@ export function displayGameSelectionMulti()
 
   maincontent.appendChild(gameSelection);
 }
-export function displayGameView()
-{
-	if(!gameVar.tournament)
-	{
-		const mainContent = document.getElementById('mainContent');
-		mainContent.innerHTML = ``;
-		const gameView = document.createElement('div');
-		gameView.innerHTML=`
+export function displayGameView() {
+  if (!gameVar.tournament) {
+    const mainContent = document.getElementById("mainContent");
+    mainContent.innerHTML = ``;
+    const gameView = document.createElement("div");
+    gameView.innerHTML = `
 		<div id="gameView" style="display: block;">
 			<div id="scoreboard">
 				<canvas id="scoreCanvas"></canvas>
@@ -162,14 +157,12 @@ export function displayGameView()
 			</div>
 		</div>
 		`;
-		mainContent.appendChild(gameView);
-	}
-	else
-	{
-		const mainContent = document.getElementById('tournamentdiv');
-		mainContent.innerHTML = ``;
-		const gameView = document.createElement('div');
-		gameView.innerHTML=`
+    mainContent.appendChild(gameView);
+  } else {
+    const mainContent = document.getElementById("tournamentdiv");
+    mainContent.innerHTML = ``;
+    const gameView = document.createElement("div");
+    gameView.innerHTML = `
 		<div id="gameView" style="display: block;">
 			<div id="scoreboard">
 				<canvas id="scoreCanvas"></canvas>
@@ -182,8 +175,8 @@ export function displayGameView()
 			</div>
 		</div>
 		`;
-		mainContent.appendChild(gameView);
-	}
+    mainContent.appendChild(gameView);
+  }
 }
 
 export function displayCanvas() {
@@ -210,13 +203,12 @@ export function displayCanvas() {
   mainContent.appendChild(insertTo);
 }
 
-export function displaySettingView()
-{
+export function displaySettingView() {
   const ttUrl = "static/css/images/ttLevel.png";
   const footUrl = "static/css/images/footballLevel.png";
   const tennisUrl = "static/css/images/tennisLevel.png";
   const classicUrl = "static/css/images/classicPong.png";
-  const maincontent = document.getElementById('mainContent');
+  const maincontent = document.getElementById("mainContent");
 
   maincontent.innerHTML = "";
 
@@ -228,14 +220,14 @@ export function displaySettingView()
   <div id="settingView" class="p-2 no-scrollbar d-flex justify-content-center settingsViewOverflow overflow-auto flex-column align-items-center gap-4" style="display: block;">
 
         <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
-          <button id="easy" class="settingsBtn btn height-btn level">Easy</button>
-          <button id="medium" class="settingsBtn btn height-btn level">Medium</button>
-          <button id="hard" class="settingsBtn btn height-btn level">Hard</button>
+          <button id="easy" class="primaryBtn w-170 level"><span>Easy</span></button>
+          <button id="medium" class="primaryBtn w-170 level"><span>Medium</span></button>
+          <button id="hard" class="primaryBtn w-170 level"><span>Hard</span></button>
         </div>
 
         <div id="btnPowerUp" style="display: block;" class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
-          <button id="withPowerUps" class="settingsBtn btn custom-btn height-btn powerUpBtn">Power UP</button>
-          <button id="withoutPowerUps" class="settingsBtn btn custom-btn height-btn powerUpBtn">No Power UP</button>
+          <button id="withPowerUps" class="primaryBtn w-170 powerUpBtn"><span>Power UP</span></button>
+          <button id="withoutPowerUps" class="primaryBtn w-170 powerUpBtn"><span>No Power</span></button>
         </div>
 
         <div class="map-selection d-flex gap-4 flex-wrap justify-content-center">
@@ -253,7 +245,7 @@ export function displaySettingView()
           </div>
         </div>
 
-      <button id="saveBtn" class="settingsBtn btn custom-btn height-btn" disabled="true">Save and Return</button>
+      <button id="saveBtn" class="primaryBtn w-170 level" disabled="true"><span>Save</span></button>
 
   </div>`;
 
@@ -275,8 +267,7 @@ export function displaySetting(difficulty, powerUp, level) {
   settingContain.appendChild(settingItem);
 }
 
-export function displayGameSelectionSolo()
-{
+export function displayGameSelectionSolo() {
   const maincontent = document.getElementById("mainContent");
   maincontent.innerHTML = "";
   const gameSelection = document.createElement("div");
@@ -305,8 +296,8 @@ export function displayGameSelectionSolo()
           </div>
 
         <div class="width-170 justify-content-center d-flex flex-column gap-2">
-              <button id="settingBtn1" class="main-btn settingsSelect-button ">Settings</button>
-          <button id="playBtn" class="main-btn settingsSelect-button">Play</button>
+              <button id="settingBtn1" class="primaryBtn"><span>Settings</span></button>
+          <button id="playBtn" class="primaryBtn"><span>Play</span></button>
         </div>
 
       </div>
@@ -326,8 +317,8 @@ export function displayGameSelectionSolo()
           </div>
 
         <div class="width-170 justify-content-center d-flex flex-column gap-2">
-              <button id="settingBtn2" class="main-btn settingsSelect-button ">Settings</button>
-          <button id="playBtn2" class="main-btn settingsSelect-button">Play</button>
+              <button id="settingBtn2" class="primaryBtn"><span>Settings</span></button>
+          <button id="playBtn2" class="primaryBtn"><span>Play</span></button>
         </div>
 
       </div>
@@ -337,12 +328,11 @@ export function displayGameSelectionSolo()
   maincontent.appendChild(gameSelection);
 }
 
-export function displayGameBrickView()
-{
-  const mainContent = document.getElementById('mainContent');
-  mainContent.innerHTML = '';
-  const insertTo = document.createElement('div');
-  insertTo.id = 'brickoutContainer';
+export function displayGameBrickView() {
+  const mainContent = document.getElementById("mainContent");
+  mainContent.innerHTML = "";
+  const insertTo = document.createElement("div");
+  insertTo.id = "brickoutContainer";
   insertTo.innerHTML = `
   <div id="scoreboard">
     <canvas id="scoreCanvas"></canvas>
@@ -351,11 +341,10 @@ export function displayGameBrickView()
   `;
   mainContent.appendChild(insertTo);
 }
-export function displayGameBrick2pView()
-{
-  const mainContent = document.getElementById('mainContent');
-  mainContent.innerHTML = '';
-  const insertTo = document.createElement('div');
+export function displayGameBrick2pView() {
+  const mainContent = document.getElementById("mainContent");
+  mainContent.innerHTML = "";
+  const insertTo = document.createElement("div");
   insertTo.innerHTML = `
   <div id="scoreboard">
     <canvas id="scoreCanvas"></canvas>
