@@ -339,7 +339,7 @@ export function updateRoomList() {
 			<div class="room-info">
 				<span class="room-players">Players: ${room.players}/2</span>
 				<span class="room-difficulty">Difficulty: ${room.difficulty}</span>
-				<span class="room-level">Level: ${room.level}</span>
+				<span class="room-level">Map: ${room.level}</span>
 				<span class="room-status">Status: ${room.status}</span>
 			</div>
 		`;
