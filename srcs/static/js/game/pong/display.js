@@ -26,7 +26,7 @@ export function displayLobbyView(level) {
             <button id="settingBtn" class="primaryBtn w-50"><span>Settings</span></button>
             <div id="setting-container">
               Difficulty: <span id="difficultyChoice">Medium</span><br>
-              Level: <span id="levelSelected">${level}</span>
+              Map: <span id="levelSelected">${level}</span>
             </div>
           </div>
           <button id="createRoomBtn" class="primaryBtn w-50"><span>Create Room</span></button>
@@ -84,7 +84,7 @@ export function displayGameSelectionMulti() {
               <div id="settings-column" class="settings-column settings-font">
                 <p class="fs-settings">Difficulty: <span id="difficultyChoice" class="fs-settings">Medium</span></p>
                 <p>Power-Up: <span id="powerupChoice">❌</span></p>
-                <p>Level: <span id="levelSelected">Table Tennis</span></p>
+                <p>Map: <span id="levelSelected">Table Tennis</span></p>
               </div>
           </div>
 
@@ -105,7 +105,7 @@ export function displayGameSelectionMulti() {
               <div id="settings-column2" class="settings-column settings-font">
                 <p class="fs-settings">Difficulty: <span id="difficultyChoice2" class="fs-settings">Medium</span></p>
                 <p>Power-Up: <span id="powerupChoice2">❌</span></p>
-                <p>Level: <span id="levelSelected2">Table Tennis</span></p>
+                <p>Map: <span id="levelSelected2">Table Tennis</span></p>
               </div>
           </div>
 
@@ -262,7 +262,7 @@ export function displaySetting(difficulty, powerUp, level) {
   settingItem.innerHTML = `
   <p>Difficulty: <span id="difficultyChoice">${difficulty}</span></p>
   <p>Power-Up: <span id="powerupChoice">${powerUp}</span></p>
-  <p>Level: <span id="levelSelected">${level}</span></p>`;
+  <p>Map: <span id="levelSelected">${level}</span></p>`;
 
   settingContain.appendChild(settingItem);
 }
@@ -291,7 +291,7 @@ export function displayGameSelectionSolo() {
               <div id="settings-column" class="settings-column settings-font">
                 <p class="fs-settings">Difficulty: <span id="difficultyChoice" class="fs-settings">Medium</span></p>
                 <p>Power-Up: <span id="powerupChoice">❌</span></p>
-                <p>Level: <span id="levelSelected">Table Tennis</span></p>
+                <p>Map: <span id="levelSelected">Table Tennis</span></p>
               </div>
           </div>
 
@@ -312,7 +312,7 @@ export function displayGameSelectionSolo() {
               <div id="settings-column2" class="settings-column settings-font">
                 <p class="fs-settings">Difficulty: <span id="difficultyChoice2" class="fs-settings">Medium</span></p>
                 <p>Power-Up: <span id="powerupChoice2">❌</span></p>
-                <p>Level: <span id="levelSelected2">Table Tennis</span></p>
+                <p>Map: <span id="levelSelected2">Table Tennis</span></p>
               </div>
           </div>
 
