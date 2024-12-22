@@ -75,6 +75,7 @@ async function updateUserData(pk, body = {}) {
 		return;
 	}
 	showToast(responseObject.data.message, "success");
+	renderPage("settings", false);
 }
 
 async function listenChangeAlias(pk) {
@@ -86,15 +87,16 @@ async function listenChangeAlias(pk) {
 
 async function listenChangeEmail(pk) {
 	document.getElementById("save-email-btn").addEventListener("click", async(e) => {
-		const newEmail = document.getElementById('alias-input').value;
-		updateUserData(pk, { alias: escapeHTML(newAlias) });
+		const newEmail = document.getElementById('email-input').value;
+		updateUserData(pk, { new_email: escapeHTML(newEmail) });
 	});
 }
 
 async function listenChangePassword(pk) {
-	document.getElementById("save-alias-btn").addEventListener("click", async(e) => {
-		const newAlias = document.getElementById('alias-input').value;
-		updateUserData(pk, { alias: escapeHTML(newAlias) });
+	document.getElementById("save-password-btn").addEventListener("click", async(e) => {
+		const currentPassword = document.getElementById('current-password-input').value
+		const newPassword = document.getElementById('new-password-input').value;
+		updateUserData(pk, { password: escapeHTML(currentPassword), new_password: escapeHTML(newPassword) });
 	});
 }
 
