@@ -12,11 +12,11 @@ async function createSettingsPageContent(mainContent, data) {
   mainContent.innerHTML = `
 		<div class="settings-container w-100">
 			<div class="header-container">
-				<div class="avatar-container">
-					<img id="avatar-img" src="${avatarPath}" alt="Avatar" class="avatar">
+				<div class="avatar-container gap-4">
 					<button id="upload-avatar-btn" class="upload-btn">
-						<img src="${UPLOAD_ICON}" style="width: 20px; height: 20px;">
+						<img src="${UPLOAD_ICON}">
 					</button>
+					<img id="avatar-img" src="${avatarPath}" alt="Avatar" class="avatar">
 				</div>
 				<div class="username-container">
 					<span id="username">${data.username}</span>
@@ -40,12 +40,12 @@ async function createSettingsPageContent(mainContent, data) {
 				</div>
 				<div class="friend-request">
 					<label for="new-friend-username">Add new friend:</label>
-					<input type="text" id="new-friend-username" placeholder="Friend's username" required>
+					<input type="text" id="new-friend-username" placeholder="Friend's username" class="friend-request-input" required></input>
 					<span id="error-message" style="color: red; display: none;">Please enter a valid username!</span>
-					<button type="submit" id="send-friend-request-btn" class="primaryBtn w-25"><span>Send</span></button>
+					<button type="submit" id="send-friend-request-btn" class="primaryBtn adapt-height-to-input w-25"><span>Send</span></button>
 				</div>
-				<div>
-					<button id="delete-account-btn">Delete Account</button>
+				<div class="w-100 d-flex justify-content-center">
+					<button id="delete-account-btn" class="primaryBtn overright-btn-red w-50 align-items-center"><span>Delete Account</span></button>
 				</div>
 		</div>
 	`;

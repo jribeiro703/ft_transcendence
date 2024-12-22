@@ -148,8 +148,6 @@ document.addEventListener("DOMContentLoaded", function () {
 const themes = [
   "whiteTheme",
   "darkTheme",
-  "goodForYourEyes",
-  "boti",
   "neonBlue",
   "Transcended",
   "darkYellow",
