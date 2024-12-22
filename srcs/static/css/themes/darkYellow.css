@@ -1,11 +1,21 @@
-.whiteTheme {
-  --my-black: #010101ff;
-  --my-white: #f9f9f9;
-  --my-gray: #808080;
-  --my-blue: #6c93cb;
-  --my-dark-gray: #555555;
+.darkYellow {
+  --my-black: #0a1014;
+  --my-white: #ffff00;
+  --my-gray: #ffff00;
+  --my-blue: #fccb2d;
+  --my-dark-gray: #ffff00;
+  --my-gradient: linear-gradient(
+    to right,
+    #0a1014 0%,
+    #0f1520 15%,
+    #141b2a 30%,
+    #1a2a35 50%,
+    #141b2a 70%,
+    #0f1520 85%,
+    #0a1014 100%
+  );
 
-  --background-color: var(--my-white);
+  --background-color: var(--my-gradient);
   --text-color: var(--my-dark-gray);
   --highlight-color: var(--my-gray);
   --icon-color: var(--my-black);
@@ -27,14 +37,16 @@
   /* chat */
   --chat-msg: var(--my-black);
   --chat-border: var(--my-dark-gray);
-  --chat-bg: var(--my-white);
+  --chat-bg: var(--my-gradient);
   --placeholder-color: var(--my-black);
+
   /* box */
   --box-shadow: 0px 0px 7px var(--my-black);
   --box-shadow-images: 0px 0px 7px var(--my-black);
   --box-shadow-inset: inset 0px 0px 3px var(--my-black);
   --box-shadow-highlight: 0px 0px 3px var(--my-black);
   --box-shadow-highlight-inset: inset 0px 0px 1px var(--my-black);
+
   /* chat neon */
   --box-shadow-neonChat1: 0 0 0px var(--my-black), 0 0 2px var(--my-black),
     0 0 4px var(--my-black), 0 0 6px var(--my-black);
