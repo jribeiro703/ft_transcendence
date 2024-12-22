@@ -1,10 +1,6 @@
 import { escapeHTML, showErrorMessages, UPLOAD_ICON } from "../tools.js";
 import { fetchAuthData } from "../fetchData.js";
-import {
-  listenChangeAlias,
-  listenChangeEmail,
-  listenChangePassword,
-} from "./settingsPageTools.js";
+import { listenChangeAlias, listenChangeEmail, listenChangePassword, uploadAvatar, deleteAccount, addNewFriend } from "./settingsPageTools.js";
 
 async function createSettingsPageContent(mainContent, data) {
   const avatarPath = data.avatar.substring(data.avatar.indexOf("/media"));
@@ -25,23 +21,22 @@ async function createSettingsPageContent(mainContent, data) {
 				<div class="alias-container">
 					Alias: <span id="alias">${data.alias ? data.alias : "none"}</span>
 					<input type="text" id="alias-input" value="${data.alias ? data.alias : "none"}" style="display:none;">
-					<button id="save-alias-btn" class="save-btn" style="display:none;">Save</button>
+					<button type="submit" id="save-alias-btn" class="save-btn" style="display:none;">Save</button>
 				</div>
 				<div class="email-container">
 					Email: <span id="email">${data.email}</span>
 					<input type="text" id="email-input" placeholder="${data.email}" style="display:none">
-					<button id="save-email-btn" class="save-btn" style="display:none;">Save</button>
+					<button type="submit" id="save-email-btn" class="save-btn" style="display:none;">Save</button>
 				</div>
 				<div class="password-container">
 					Password: <span id="password" > change your password</span>
-					<input type="text" id="current-password-input" placeholder="Enter your current password" style="display:none">
-					<input type="text" id="new-password-input" placeholder="Enter your new password " style="display:none">
-					<button id="save-password-btn" class="save-btn" style="display:none;">Save</button>
+					<input type="password" id="current-password-input" placeholder="Current password" style="display:none">
+					<input type="password" id="new-password-input" placeholder="New password " style="display:none">
+					<button type="submit" id="save-password-btn" class="save-btn" style="display:none;">Save</button>
 				</div>
 				<div class="friend-request">
-					<label for="new-friend-username">Add new friend:</label>
+					<label id="add-friend-label" for="new-friend-username">Add new friend:</label>
 					<input type="text" id="new-friend-username" placeholder="Friend's username" class="friend-request-input" required></input>
-					<span id="error-message" style="color: red; display: none;">Please enter a valid username!</span>
 					<button type="submit" id="send-friend-request-btn" class="primaryBtn adapt-height-to-input w-25"><span>Send</span></button>
 				</div>
 				<div class="w-100 d-flex justify-content-center">
@@ -83,7 +78,7 @@ export async function renderSettingsPage() {
   const aliasInput = document.getElementById("alias-input");
   const saveAliasButton = document.getElementById("save-alias-btn");
 
-  aliasSpan.addEventListener("click", function () {
+	aliasSpan.addEventListener("click", function () {
     aliasInput.style.display = "inline";
     saveAliasButton.style.display = "inline";
     aliasInput.value = this.innerText;
@@ -139,9 +134,7 @@ export async function renderSettingsPage() {
 
     // password
     const passwordSpan = document.getElementById("password");
-    const currentPasswordInput = document.getElementById(
-      "current-password-input",
-    );
+    const currentPasswordInput = document.getElementById("current-password-input");
     const newPasswordInput = document.getElementById("new-password-input");
     const savePasswordButton = document.getElementById("save-password-btn");
 
@@ -171,4 +164,17 @@ export async function renderSettingsPage() {
       listenChangePassword(pk);
     });
   }
+
+	document.getElementById("send-friend-request-btn").addEventListener("click", async (e) => {
+		await addNewFriend(pk);
+	});
+	
+	document.getElementById("upload-avatar-btn").addEventListener("click", async (e) => {
+		await uploadAvatar(pk);
+	});
+
+	document.getElementById("delete-account-btn").addEventListener("click", async (e) => {
+		await deleteAccount(pk);
+	});
+
 }
