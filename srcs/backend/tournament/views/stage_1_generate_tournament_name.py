@@ -37,7 +37,7 @@ class GenerateTournamentNameView(APIView):
 		while True:
 			name = generate_tournament_name()
 			user = request.user
-			username = user.username if user.is_authenticated else "Unknown User"
+			username = user.username
 	#		user = request.user  # Get the authenticated user #TODO: After real auth
 	#		if user.is_authenticat	ed:
 	#			username = user.username
