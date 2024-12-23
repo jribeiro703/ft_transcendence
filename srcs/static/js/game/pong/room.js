@@ -9,6 +9,7 @@ import { startGameB } from '../brickout/control.js';
 import { initGame, initListenerB } from '../brickout/init.js';
 import { initializeScoreCanvas2P } from './canvas.js';
 import { escapeHTML } from '../../user/tools.js';
+import { kickOut } from './draw.js';
 
 export function createNewRoom(joinRoomCallback)
 {
@@ -83,7 +84,7 @@ export function waitPlayerBrick()
 	sendSettingData(gameVar.lobbySocket, brickVar.gameReady, brickVar.difficulty, brickVar.currLevel);
 }
 
-export function finishPlayerWaitPong()
+export function finishPlayerWaitPong(waitingInterval)
 {
 	gameVar.gameReady = true;
 	clearInterval(waitingInterval);
@@ -92,7 +93,7 @@ export function finishPlayerWaitPong()
 	startLiveGame();
 }
 
-export function finishPLayerWaitBrick()
+export function finishPLayerWaitBrick(waitingInterval)
 {
 	brickVar.gameReady = true;
 	clearInterval(waitingInterval);
@@ -133,7 +134,7 @@ export function waitingPlayerTournament()
 		waitTime += 2;
 		if (waitTime >= maxWaitTime)
 		{
-			gameVar.clientLeft = true;
+			kickOut();
 			return ;
 		}
 		if (!gameVar.playerReady)
@@ -174,7 +175,7 @@ export async function joinRoom(roomName)
 				if (gameVar.tournament)
 					waitingPlayerTournament();
 				else
-					waitingPlayer();
+					waitingPlayerTournament();
 			}
 			if (gameVar.playerIdx == 2)
 			{

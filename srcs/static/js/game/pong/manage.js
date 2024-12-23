@@ -40,7 +40,11 @@ export function checkServer()
 }
 export function addBtn()
 {
-	const mainContent = document.getElementById("twoPlayerBrick");
+	const mainContent = null;
+	if (gameVar.tournament)
+		mainContent = document.getElementById("gameView");
+	else
+		mainContent = document.getElementById("twoPlayerBrick");
 	if (!mainContent)
 	{
 		console.log("error on twoplayerBrick")
