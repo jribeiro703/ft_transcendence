@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 import random
 
 from tournament.models import Tournament
@@ -27,6 +28,7 @@ def valid_name(name):
 	return 3 <= len(name) <= 30
 
 class GenerateTournamentNameView(APIView):
+	permission_classes = [IsAuthenticated]
 	"""
 	Endpoint to generate a random tournament name.
 	"""
@@ -34,10 +36,12 @@ class GenerateTournamentNameView(APIView):
 		print("GenerateTournamentNameView: GET request received")
 		while True:
 			name = generate_tournament_name()
+			user = request.user
+			username = user.username if user.is_authenticated else "Unknown User"
 	#		user = request.user  # Get the authenticated user #TODO: After real auth
 	#		if user.is_authenticat	ed:
 	#			username = user.username
-			username = "Latha" # Dummy Impl
+	#		username = "Latha" # Dummy Impl
 			if (username):
 				full_name = f"{name} by {username}"
 			else:
@@ -47,6 +51,7 @@ class GenerateTournamentNameView(APIView):
 				return Response({"name": full_name}, status=status.HTTP_200_OK)
 
 class ValidateTournamentNameView(APIView):
+	permission_classes = [IsAuthenticated]
 	"""
 	Endpoint to validate a tournament name.
 	"""
