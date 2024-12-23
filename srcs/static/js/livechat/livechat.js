@@ -10,7 +10,6 @@ import "./tooltip.js";
 import "./userItem.js";
 import "./utils.js";
 import { chatIconDots, chatIconFill, toggleChat } from "./utils.js";
-import gameVar from "../game/pong/var.js";
 
 // ajoute les neons dans le focus
 document.addEventListener("DOMContentLoaded", function () {
