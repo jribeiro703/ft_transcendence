@@ -1,7 +1,6 @@
-// palette de couleurs pour changer de themes dynamiquement
-
 import gameVar from "./game/pong/var.js";
 
+// palette de couleurs pour changer de themes dynamiquement
 const themes = [
   "whiteTheme",
   "darkTheme",
@@ -12,6 +11,7 @@ const themes = [
 let currentThemeIndex = 0;
 
 export function changeTheme(theme) {
+  console.log("changeTheme called from color_palette.js");
   const body = document.body;
   if (theme) {
     body.classList.add(theme);

@@ -1,4 +1,5 @@
 import { toggleChat } from "./livechat/utils.js";
+import { changeTheme } from "./color_palette.js";
 
 // mainAndLiveChat adapt gap and
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -141,8 +142,16 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (paletteIcon) {
-    paletteIcon.addEventListener("click", function () {
-      changeTheme();
-    });
+    const handlePalette = (event) => {
+      if (
+        event.type === "click" ||
+        (event.type === "keydown" && event.key === "Enter")
+      ) {
+        changeTheme();
+      }
+    };
+
+    paletteIcon.addEventListener("click", handlePalette);
+    paletteIcon.addEventListener("keydown", handlePalette);
   }
 });
