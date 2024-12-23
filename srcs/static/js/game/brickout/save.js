@@ -10,17 +10,20 @@ export function listenSaveBtnB(info)
 		if (info === 'live')
 		{
 			console.log("saveBtn render and update");
-			await renderPageGame('brickoutLobby', true);
+			// await renderPageGame('brickoutLobby', true);
+			renderPageGame('brickoutLobby', true);
 			updateLiveSettingB();
 		}
 		else if (info === 'local')
 		{
-			await renderPageGame("gameSelectionMulti", true);
+			// await renderPageGame("gameSelectionMulti", true);
+			renderPageGame("gameSelectionMulti", true);
 			updateSettingB();
 		}
 		else
 		{
-			await renderPageGame("gameSelectionSolo", true);
+			// await renderPageGame("gameSelectionSolo", true);
+			renderPageGame("gameSelectionSolo", true);
 			updateSettingB();
 		}
 	});

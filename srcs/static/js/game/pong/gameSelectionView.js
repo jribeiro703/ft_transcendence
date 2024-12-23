@@ -4,11 +4,12 @@ import { updateImageUrl } from "./update.js";
 import { displayGameSelectionSolo, displayGameSelectionMulti, displaySetting } from "./display.js";
 import { getElementGameSelection } from "./getElement.js";
 import { listenSettingMultiBtn } from "./listenerSetting.js";
-import { updateSetting } from "./setting.js";
+import { updateLiveSetting, updateSetting } from "./setting.js";
 import { updateSettingB } from "../brickout/update.js";
 import { listenPlayMultiBtn } from "./listenerSetting.js";
-import { displaySettingB } from "../brickout/settings.js";
+import { displaySettingB, updateLiveSettingB } from "../brickout/settings.js";
 import brickVar from "../brickout/var.js";
+import { getUserInfos } from "../getUser.js";
 
 export function showGameSelectionView()
 {
@@ -31,16 +32,16 @@ export function showGameSelectionView()
 
 export function showGameSelectionMultiView()
 {
-	console.log("showgameselectionmultiview curr:" ,brickVar.currLevel);
+	// console.log("showgameselectionmultiview curr:" ,brickVar.currLevel);
 
+	getUserInfos();
+	updateImageUrl();
 	displayGameSelectionMulti();
 	getElementGameSelection();
 
 	listenSettingMultiBtn();
-	updateSetting();
-	updateImageUrl();
-	displaySetting();
-	updateSettingB();
-	displaySettingB();
 	listenPlayMultiBtn();
+	updateSetting();
+	updateSettingB();
+	updateImageUrl();
 }

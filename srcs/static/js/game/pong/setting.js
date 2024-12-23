@@ -1,7 +1,7 @@
 import gameVar from "./var.js";
 import { updateDifficultySelection, updateImageUrl, updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
-import { displaySetting } from "./display.js";
+import { displayLiveSetting, displaySetting } from "./display.js";
 
 export function checkSetting()
 {
@@ -29,7 +29,9 @@ export function updateSetting()
 	var powerUp = null;
 
 	if (gameVar.difficulty)
+	{
 		difficulty = gameVar.difficulty;
+	}
 	else
 	{
 		difficulty = 'medium';
@@ -56,10 +58,9 @@ export function updateSetting()
 		powerUp = "❌";
 		updatePowerUpSelection(false, true);
 	}
-
-	// updateImageUrl();
-	// displaySetting(difficulty, powerUp, level);
+	displaySetting(difficulty, powerUp, level);
 }
+
 
 export function updateLiveSetting()
 {
@@ -74,18 +75,12 @@ export function updateLiveSetting()
 
 	if (gameVar.currentLevel)
 		level = gameVar.currentLevel;
+	else
+		level = 'Classic Pong'
 
-	const settingContain = document.getElementById('setting-container');
-	settingContain.innerHTML = '';
-	const settingItem = document.createElement('div');
-	settingItem.innerHTML = `
-	Difficulty: 
-	<span id="difficultyChoice">${difficulty}</span><br>
-	Level:
-	<span id="levelSelected">${level}</span>
-	`;
-	settingContain.appendChild(settingItem);
+	displayLiveSetting(difficulty, level);
 }
+
 
 export function addPuBtn(info)
 {

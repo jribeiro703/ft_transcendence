@@ -71,7 +71,8 @@ export function listenLocalRematchBtn()
 		rematchBtn.addEventListener('click', async () => 
 		{
 			clearAllBrickStates();
-			await renderPageGame("playBrickoutLocal", true);
+			// await renderPageGame("playBrickoutLocal", true);
+			renderPageGame("playBrickoutLocal", true);
 		});
 	}
 	if (quitBtn)
@@ -79,7 +80,8 @@ export function listenLocalRematchBtn()
 		quitBtn.addEventListener('click', async () =>
 		{
 			clearAllBrickStates();
-			await renderPageGame("home", true);
+			// await renderPageGame("home", true);
+			renderPageGame("home", true);
 		});
 	}
 }

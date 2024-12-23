@@ -22,6 +22,8 @@ async function renderHomePage() {
   createHomeContent();
 
 	document.getElementById('playsoloGameBtn').addEventListener('click', () => {
+
+		console.log("2");
 		renderPageGame("gameSelectionSolo");
 	});
 
@@ -50,6 +52,7 @@ async function renderHomePage() {
 			handler();
 		});
 	});
+	console.log("renderHomePage yes");
 }
 
 export { renderHomePage };
