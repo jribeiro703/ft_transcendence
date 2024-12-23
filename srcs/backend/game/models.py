@@ -16,27 +16,40 @@ class Game(models.Model):
 	]
 	status = models.CharField(max_length=20, choices=GAME_STATUS_CHOICES, default='NOT_STARTED')
 
+	# DIFFICULTY_CHOICES = [
+		# ('EASY', 'Easy'),
+		# ('MEDIUM', 'Medium'),
+		# ('HARD', 'Hard'),
+	# ]
 	DIFFICULTY_CHOICES = [
-		('EASY', 'easy'),
-		('MEDIUM', 'medium'),
-		('HARD', 'hard'),
+		('easy', 'Easy'),
+		('medium', 'Medium'),
+		('hard', 'Hard'),
 	]
 	difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES, default='EASY')
 
+	# LEVEL_CHOICES = [
+		# ('TABLETENNIS', 'Table Tennis'),
+		# ('FOOTBALL', 'Football'),
+		# ('TENNIS', 'Tennis'),
+		# ('CLASSIC', 'Classic'),
+	# ]
 	LEVEL_CHOICES = [
-		('TABLETENNIS', 'tableTennis'),
-		('FOOTBALL', 'football'),
-		('TENNIS', 'tennis'),
-		('CLASSIC', 'classicPong'),
+		('tableTennis', 'Table Tennis'),
+		('football', 'Football'),
+		('tennis', 'Tennis'),
+		('classicPong', 'Classic'),
 	]
 	level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='CLASSIC')
 
 	player_one = models.ForeignKey(
 		'user.User', related_name='game_as_player_one', on_delete=models.SET_NULL, null=True
 	) # FK to User
+	username_one = models.CharField(max_length=50, blank=True, null=True)
 	player_two = models.ForeignKey(
 		'user.User', related_name='game_as_player_two', on_delete=models.SET_NULL, null=True
 	) # FK to User
+	username_two = models.CharField(max_length=50, blank=True, null=True)
 	score_one = models.PositiveIntegerField(default=0)
 	score_two = models.PositiveIntegerField(default=0)
 
