@@ -294,7 +294,7 @@ export function drawScoreBoardB()
 {
 	if (!brickVar.scoreCtx || !brickVar.ctx)
 	{
-		console.log("Error on ctx");
+		console.log("Error on ctx1");
 		return;
 	}
     loadCustomFont().load().then(function(font) 
@@ -316,19 +316,11 @@ export function drawScoreBoardB()
 		{
 			if (gameVar.localGame)
 			{
-				console.log("brickout2p local");
 				ctx.fillText(gameVar.userName, leftX - 5, y);
 				ctx.fillText("Player 2", rightX + 15, y);
 			}
-			else if (gameVar.liveMatch)
-			{
-				console.log("brickout2p live");
-				ctx.fillText(gameVar.userName, leftX - 5, y);
-				ctx.fillText(gameVar.opponentName, rightX + 15, y);
-			}
 			else
 			{
-				console.log("else");
 				ctx.fillText("Player 1", leftX - 5, y);
 				ctx.fillText("Player 2", rightX + 15, y);
 			}
@@ -394,5 +386,5 @@ export function saveScoreB()
 
 export function sendScoreB()
 {
-	console.log("finalScroe : ", brickVar.finalScore);
+	// console.log("finalScroe : ", brickVar.finalScore);
 }

@@ -91,9 +91,6 @@ export function displayGameSelectionMulti()
             <div class="settings-inline">
               <button id="settingBtn1" class="main-btn settingsSelect-button">Settings</button>
               <div class="settings-column" id="settings-column">
-                <p>Difficulty: <span id="difficultyChoice">Medium</span></p>
-                <p>Power-Up: <span id="powerupChoice">❌</span></p>
-                <p>Level: <span id="levelSelected">Table Tennis</span></p>
               </div>
             </div>
           </div>
@@ -266,7 +263,10 @@ export function displaySetting(difficulty, powerUp, level)
 {
 	const settingContain = document.getElementById("settings-column");
 	if (!settingContain)
+	{
 		console.log("error on settingContain");
+		return;
+	}
 	settingContain.innerHTML = "";
 
 	const settingItem = document.createElement("div");
@@ -278,7 +278,24 @@ export function displaySetting(difficulty, powerUp, level)
 
 	settingContain.appendChild(settingItem);
 }
-
+export function displayLiveSetting(difficulty, level)
+{
+	const settingContain = document.getElementById('settings-columns');
+	if (!settingContain)
+	{
+		console.log("Errror on settings-columns");
+		return;
+	}
+	settingContain.innerHTML = '';
+	const settingItem = document.createElement('div');
+	settingItem.innerHTML = `
+	Difficulty: 
+	<span id="difficultyChoice">${difficulty}</span><br>
+	Level:
+	<span id="levelSelected">${level}</span>
+	`;
+	settingContain.appendChild(settingItem);
+}
 
 export function displayGameSelectionSolo()
 {

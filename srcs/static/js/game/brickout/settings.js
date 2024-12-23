@@ -57,38 +57,22 @@ export function getSettingBtn()
 	brickVar.invaderLevel = document.getElementById('invaderLevel');
 }
 
-// export function displaySettingB(difficulty, powerUp, level)
-// {
-// 	const settingContain = document.getElementById('settings-column2');
-
-// 	settingContain.innerHTML = '';
-
-// 	const settingItem = document.createElement('div');
-
-// 	settingItem.innerHTML = `
-// 	<p>Difficulty: <span id="difficultyChoice2">${difficulty}</span></p>
-// 	<p>Power-Up: <span id="powerupChoice2">${powerUp}</span></p>
-// 	<p>Level: <span id="levelSelected2">${level}</span></p>`;
-
-// 	settingContain.appendChild(settingItem);
-// }
 export function displaySettingB(difficulty, powerUp, level)
 {
-	var pu = null;
-	if (brickVar.powerUpEnable)
-		pu = "✅";
-	else
-		pu = "❌";
 	const settingContain = document.getElementById('settings-column2');
-
+	if (!settingContain)
+	{
+		console.log("error on setting-column2");
+		return;
+	}
 	settingContain.innerHTML = '';
 
 	const settingItem = document.createElement('div');
 
 	settingItem.innerHTML = `
-	<p>Difficulty: <span id="difficultyChoice2">${brickVar.difficulty}</span></p>
-	<p>Power-Up: <span id="powerupChoice2">${pu}</span></p>
-	<p>Level: <span id="levelSelected2">${brickVar.currLevel}</span></p>`;
+	<p>Difficulty: <span id="difficultyChoice2">${difficulty}</span></p>
+	<p>Power-Up: <span id="powerupChoice2">${powerUp}</span></p>
+	<p>Level: <span id="levelSelected2">${level}</span></p>`;
 
 	settingContain.appendChild(settingItem);
 }
@@ -98,20 +82,26 @@ export function updateLiveSettingB()
 	var difficulty = null;
 	var level = null;
 
-	console.log("update diff: ", brickVar.difficulty);
 	if (brickVar.difficulty)
 		difficulty = brickVar.difficulty;
 	else
 		difficulty = 'medium';
 
-
-	console.log("update level: ", brickVar.currLevel);
 	if (brickVar.currLevel)
 		level = brickVar.currLevel;
 	else
 		level = 'classic';
 
-	const settingContain = document.getElementById('setting-container');
+	displayLiveSettingB(difficulty, level);
+}
+export function displayLiveSettingB(difficulty, level)
+{
+	const settingContain = document.getElementById('settings-columns2');
+	if (!settingContain)
+	{
+		console.log("Error on setting-columns2");
+		return;
+	}
 	settingContain.innerHTML = '';
 	const settingItem = document.createElement('div');
 	settingItem.innerHTML = `
@@ -122,11 +112,4 @@ export function updateLiveSettingB()
 	`;
 	settingContain.appendChild(settingItem);
 }
-// export function checkSettingLiveB()
-// {
-// 	if (brickVar.settingsChanged === false)
-// 	{
-// 		updateDifficultySelectionB('medium');
-// 		updateLevelSelectionB('');
-// 	}
-// }
+

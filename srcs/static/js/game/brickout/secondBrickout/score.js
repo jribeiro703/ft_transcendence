@@ -69,7 +69,7 @@ export function drawScoreBoardB()
 {
 	if (!brickVar2.scoreCtx || !brickVar2.ctx)
 	{
-		console.log("Error on ctx");
+		console.log("Error on ctx2");
 		return;
 	}
 	

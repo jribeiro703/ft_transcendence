@@ -15,7 +15,6 @@ export async function showGameBrickView()
 {
 	displayGameBrickView();
 
-	console.log("start brickout await");
 	await initializeCanvasBrick();
 	await initializeScoreCanvasBrickout();
 
@@ -25,8 +24,6 @@ export async function showGameBrickView()
 
 export async function showGameBrickLocalView()
 {
-	// clearAllBrickStates();
-
 	displayGameBrick2pView();
  
 	getUserInfos();
@@ -37,11 +34,7 @@ export async function showGameBrickLocalView()
 	brickVar.initialize = true;
 	brickVar2.initialize = true;
 	updateSettingSelectionForSecond();
-	// checkSettingB();
 
 	startBrickGame2p();
-
-	// // drawFirst();
-	// drawSecond();
 }
 

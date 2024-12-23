@@ -42,8 +42,7 @@ export function updateSettingB()
 		powerUp = "❌";
 		updatePowerUpSelectionFirst(false, true);
 	}
-	// updateImageUrl();
-	// displaySettingB(difficulty, powerUp, level);
+	displaySettingB(difficulty, powerUp, level);
 }
 
 export function updateDifficultySelectionB(level, def)

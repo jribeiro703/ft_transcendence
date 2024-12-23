@@ -40,10 +40,15 @@ export function checkServer()
 }
 export function addBtn()
 {
-	const mainContent = document.getElementById("mainContent");
+	const mainContent = document.getElementById("twoPlayerBrick");
+	if (!mainContent)
+	{
+		console.log("error on twoplayerBrick")
+		return ;
+	}
 	const btn = document.createElement('div');
 	btn.innerHTML = `
-	<div class="finish id="finish">
+	<div class="finish" id="finish">
 		<button id="returnLobbyBtn" class="">Return Lobby</button> 
 		<button id="quitBtn">Return Home</button>
 	</div>
@@ -51,25 +56,25 @@ export function addBtn()
 	mainContent.appendChild(btn);
 	const returnLobbtyBtn = document.getElementById("returnLobbyBtn");
 	const quitBtn = document.getElementById("quitBtn");
-		if (returnLobbtyBtn)
+	if (returnLobbtyBtn)
+	{
+		returnLobbtyBtn.addEventListener("click", () =>
 		{
-			returnLobbtyBtn.addEventListener("click", () =>
-			{
-				gameVar.liveMatch = true;
-				gameVar.game = 'pong';
-				clearAllpongStates();
-				renderPageGame("pongLobby", true);
-			});
-		}
-		if (quitBtn)
+			gameVar.liveMatch = true;
+			gameVar.game = 'pong';
+			clearAllpongStates();
+			renderPageGame("pongLobby", true);
+		});
+	}
+	if (quitBtn)
+	{
+		quitBtn.addEventListener('click', () => 
 		{
-			quitBtn.addEventListener('click', () => 
-			{
-				gameVar.liveMatch = false;
-				clearAllpongStates();
-				renderPageGame("home", true);
-			});
+			gameVar.liveMatch = false;
+			clearAllpongStates();
+			renderPageGame("home", true);
+		});
 
-		}
+	}
 
 }

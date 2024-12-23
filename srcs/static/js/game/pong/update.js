@@ -44,7 +44,7 @@ export function updateLevelSelection(level, def)
 }
 export function updateImageUrl()
 {
-	console.log("updatimage currr:", brickVar.currLevel);
+	// console.log("updatimage currr:", brickVar.currLevel);
 
 	if (gameVar.currentLevel === 'tableTennis')
 		gameVar.pongUrl = "static/css/images/ttLevel.png"

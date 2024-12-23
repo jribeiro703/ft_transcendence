@@ -68,12 +68,18 @@ export function isMultiplayerPage(pageKey)
 	const exist = multiplayerPages.has(pageKey);
 	return exist ? true : false;
 }
+export function isGameplayPage(page) 
+{
+	return ['#playPong', '#playBrickout',
+		'#pongLobby', '#brickoutLobby', '#playPongLocal', '#playBrickoutLocal',
+		'#playPongRemote', '#playPongRemoteSecondP', '#playBrickoutRemote', '#playBrickoutRemoteSecondP'].includes(page);
+}
 
 export function isGamePage(page) 
 {
 	return ['#gameSelectionSolo', '#pongSetting', '#brickoutSetting', '#playPong', '#playBrickout',
 		'#gameSelectionMulti', '#pongLobby', '#brickoutLobby', '#playPongLocal', '#playBrickoutLocal',
-		'#playPongRemote', 'playPongRemoteSecondP', '#playBrickoutRemote', 'playBrickoutRemoteSecondP'].includes(page);
+		'#playPongRemote', '#playPongRemoteSecondP', '#playBrickoutRemote', '#playBrickoutRemoteSecondP'].includes(page);
 }
 
 export function isGamePageChat(page) 
@@ -131,27 +137,18 @@ window.addEventListener('popstate', async (event) =>
 	{
 		const page = event.state.page;
 		const params = event.state.params;
-		
+		clearAllpongStates();
+		clearAllBrickStates();	
 		if (isGamePage(window.location.hash))
 		{
 			gameVar.clientLeft = true;
 			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentLevel, gameVar.startTime, gameVar.clientLeft);
-			clearAllpongStates();
-			clearAllBrickStates();
-		}
-   
-		if (isGamePage("#" + page))
-		{
-			clearAllpongStates();
-			clearAllBrickStates();
-			await renderPageGame(page, false, params);
 		}
 		else
-		{		
-			clearAllpongStates();
-			clearAllBrickStates();
-			await renderPage(page, false);
+		{
+			renderPageGame(page, false, params);
 		}
+   
 	}
 });
 
@@ -186,7 +183,6 @@ window.addEventListener('load', () =>
 	const currentHash = window.location.hash.slice(1) || 'home';
 	const currentState = history.state || {};
 	sessionStorage.setItem('lastPage', currentHash);
-	console.log("hash : ", currentHash);
 	if (currentHash === 'gameSelectionSolo' || currentHash === 'gameSelectionMulti')
 	{
 		if (gameVar.saveSetting)
@@ -201,14 +197,15 @@ window.addEventListener('load', () =>
 			updateSettingB();
 		}
 	}
-	if (currentHash === 'playPong' || currentHash === 'playBrickout'
+	else if (currentHash === 'playPong' || currentHash === 'playBrickout'
 		|| currentHash === 'playPongLocal' || currentHash === 'playBrickoutLocal'
 		|| currentHash === 'playPongRemote' || currentHash === 'playPongRemoteSecondp'
 		|| currentHash === 'playBrickoutRemote') 
 	{
 		clearAllpongStates();
 		clearAllBrickStates();
-		renderPage("home");
+		renderHomePage();
+		return; 
 	}
 	else
 	{
