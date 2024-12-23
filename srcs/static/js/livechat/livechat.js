@@ -12,9 +12,7 @@ import "./utils.js";
 import { chatIconDots, chatIconFill, toggleChat } from "./utils.js";
 import gameVar from "../game/pong/var.js";
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// David add ////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+// ajoute les neons dans le focus
 document.addEventListener("DOMContentLoaded", function () {
   const grandparent = document.getElementById("livechat");
   const focusableElements = [
@@ -54,40 +52,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// ajoute les icons dans le html
+// ajoute licon du livechat dans le html
 document.addEventListener("DOMContentLoaded", function () {
   const chatIcon = document.querySelector("[data-chat-icon]");
   chatIcon.innerHTML = chatIconFill;
   chatIcon.setAttribute("tabindex", "0");
 });
-
-// slide le livechat avec focus touche entrer + clic souris
-const themes = [
-  "whiteTheme",
-  "darkTheme",
-  "neonBlue",
-  "Transcended",
-  "darkYellow",
-];
-let currentThemeIndex = 0;
-
-export function changeTheme(theme) {
-  const body = document.body;
-  if (theme) {
-    body.classList.add(theme);
-  } else {
-    console.log("changeTHeme");
-    themes.forEach((theme) => body.classList.remove(theme));
-
-    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-
-    body.classList.add(themes[currentThemeIndex]);
-    gameVar.currentTheme = themes[currentThemeIndex];
-    console.log("theme changed to: ", themes[currentThemeIndex]);
-
-    console.log("change theme currentheme:", gameVar.currentTheme);
-  }
-}
 
 document
   .querySelector("[data-chat-icon]")
