@@ -27,10 +27,7 @@
     <div class="d-flex flex-column mw-100 mh-100 w-100 h-100">
       <div class="navbar-parent px-4">
         <nav class="navbar px-5">
-          <div class="container-fluid d-flex justify-content-between">
-            <div data-home-icon id="btn-Home" class="homeIcon"></div>
-            <div data-profile-icon id="user-avatar" class="profileIcon"></div>
-          </div>
+          <div class="container-fluid d-flex justify-content-between">{% include 'icons_top.html' %}</div>
         </nav>
       </div>
       <div class="w-100 h-100" style="max-height: calc(100vh - 100px)">
@@ -43,8 +40,7 @@
         </div>
       </div>
     </div>
-    <div data-chat-icon class="chat-close-icon"></div>
-    <div data-palette-icon class="paletteIcon"></div>
+    {% include 'icons_bot.html' %}
     <script>
 			const staticImageURL =
 				"{% static 'css/images/pong-game-card.png' %}";
