@@ -20,8 +20,6 @@ import { showGameBrickLocalView } from "./brickout/gameView.js";
 import { initLobbyPongView, initLobbyBrickoutView } from "./pong/init.js";
 import { showPongRemote } from "./pong/gameViewMulti.js";
 import { clearAllpongStates } from "./pong/reset.js";
-import { API_BASE_URL } from "../user/fetchData.js";
-import { renderPage } from "../user/historyManager.js";
 import { showBrickoutRemote } from "./pong/gameViewMulti.js";
 import { showGameRoomB } from "./pong/gameView.js";
 import { changeTheme } from "../livechat/livechat.js";
@@ -148,7 +146,6 @@ window.addEventListener('popstate', async (event) =>
 		{
 			renderPageGame(page, false, params);
 		}
-   
 	}
 });
 
