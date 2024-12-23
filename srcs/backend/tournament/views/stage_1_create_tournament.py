@@ -1,64 +1,54 @@
 # POST /tournament/
 # This file contains the view for creating a new tournament.
 
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
 from django.apps import apps
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+from tournament.views.utils import get_user_role
 
 from user.models import User
-
 from tournament.models import Tournament
 from tournament.serializers import TournamentSerializer
 
 # ❶ TOURNAMENT CREATTION STAGE - Create Tournament
 class CreateTournamentView(APIView):
-	"""
-	Endpoint to create a new tournament.
+	permission_classes = [IsAuthenticated]
 
-	Flow:
-	1. Receive a POST request with tournament data.
-	2. Validate the data using TournamentSerializer.
-	3. If valid, save the tournament to the database.
-	4. Return the tournament ID and status in the response.
-	5. If invalid, return validation errors.
-
-	**Stage 1: Tournament Creation**
-	- Status: UPCOMING
-	- Players: None
-	- Games: None
-	"""
 	def post(self, request):
 		try:
-			# Log the incoming data
 			print('Incoming data:', request.data)
 
-			# Validate the incoming data
+			user = request.user
+			role = get_user_role(user)
+
+			if role != "default":
+				return Response(
+					{"error": "You cannot create a new tournament while managing, playing, or being invited to another."},
+					status=status.HTTP_400_BAD_REQUEST,
+				)
+
 			serializer = TournamentSerializer(data=request.data)
 			if serializer.is_valid():
-				# Save the tournament to the database
-				default_user = User.objects.first()  # TODO: Replace with the authenticated user
-				tournament = serializer.save(created_by=default_user)
-				# Return the tournament ID and status
+				# default_user = User.objects.first()  # TODO: Replace with the authenticated user
+				# tournament = serializer.save(created_by=default_user)
+				tournament = serializer.save(created_by=user)
 				return Response({
 					"tournament_id": tournament.id,
 					"status": 'UPCOMING',
 					"name": tournament.name
 				}, status=status.HTTP_201_CREATED)
-			# Return validation errors
-			print('Validation errors:', serializer.errors)  # Log the validation errors
+			print('Validation errors:', serializer.errors) 
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 		except IntegrityError as e:
-			# Handle unique constraint violation
 			print(f"Error creating tournament: {e}")
 			return Response({"error": "Tournament name must be unique."}, status=status.HTTP_400_BAD_REQUEST)
 		except Exception as e:
-			# Log the error for debugging
 			print(f"Error creating tournament: {e}")
-			# Return a generic error response
 			return Response({"error": "Internal server error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # ❶ TOURNAMENT CREATTION STAGE - Pre-register Players for a tournament
@@ -253,3 +243,31 @@ class ListUserTournamentsView(APIView):
 				{"error": f"Failed to fetch tournaments: {str(e)}"},
 				status=status.HTTP_500_INTERNAL_SERVER_ERROR
 			)
+
+class ManageInvitationsView(APIView):
+	def post(self, request):
+		tournament_id = request.data.get("tournament_id")
+		user_id = request.data.get("user_id")
+		action = request.data.get("action")
+
+		tournament = get_object_or_404(Tournament, id=tournament_id)
+
+		if tournament.created_by != request.user:
+			return Response({"error": "Only the creator can manage invitations."}, status=403)
+
+		user = get_object_or_404(User, id=user_id)
+
+		if action == "invite":
+			try:
+				tournament.invite_user(user)
+				return Response({"message": "User invited successfully."}, status=200)
+			except ValidationError as e:
+				return Response({"error": str(e)}, status=400)
+
+		if action == "accept":
+			try:
+				tournament.accept_invite(user)
+				return Response({"message": "Invite accepted."}, status=200)
+			except ValidationError as e:
+				return Response({"error": str(e)}, status=400)
+

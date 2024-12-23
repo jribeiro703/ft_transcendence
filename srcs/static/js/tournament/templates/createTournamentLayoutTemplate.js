@@ -30,7 +30,6 @@ export function createTournamentLayoutHTML(tournamentName) {
 			</div>
 			<div class="row flex-grow-1">
 				<div id="tournamentdiv">
-						
 				</div>
 				<div class="col-lg-4 col-md-5 col-sm-12 d-flex flex-column">
 					<div class="bg-body border rounded p-2 mb-3 bracket-container">
