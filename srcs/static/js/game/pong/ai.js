@@ -50,7 +50,7 @@ export function manageAi()
 		{
 			let future = predictBallPos(gameVar);
 
-			console.log("on predict", future);
+			// console.log("on predict", future);
 			gameVar.targetY = future[149][1];
 		}
 	}, AI_UPDATE_INTERVAL);	
