@@ -46,6 +46,7 @@ export function clearAllpongStates()
 	gameVar.playerReady = false;
 	gameVar.liveMatch = false;
 	gameVar.localGame = false;
+	gameVar.tournament = false;
 	gameVar.currentServer = 'player';
 }
 
