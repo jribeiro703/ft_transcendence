@@ -5,7 +5,6 @@ import { resetMatch } from "./reset.js";
 import { manageAi } from "./ai.js";
 import { startGame } from "./start.js";
 import { updateCanvasColor } from "./update.js";
-import { saveScore } from "./score.js";
 import { createPowerUp1, createPowerUp2 } from "./powerUp.js";
 import { checkServer } from "./manage.js";
 import { initControl } from "./control.js";
@@ -63,7 +62,6 @@ export function rematchView()
 	rematchBtn.style.display = 'block';
 	rematchBtn.disabled = true;
 	quitGameBtn.style.display = 'block';	
-	saveScore();
 	resetMatch();
 	initializeBall();
 	if (gameVar.powerUpEnable)

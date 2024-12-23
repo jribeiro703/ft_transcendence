@@ -53,6 +53,7 @@ const gameVar =
 	aiScoreElement: null,
 
 	scoreBoard: [],
+	winner: null,
 
 // ----------------------------Settings-------------------------
 

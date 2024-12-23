@@ -33,7 +33,10 @@ export function initDraw()
 		if (gameVar.liveMatch)
 			drawScoreBoardLive();
 		else
-			drawScoreBoard();
+		{
+			if (!gameVar.finishGame)
+				drawScoreBoard();
+		}
 	}
 }
 

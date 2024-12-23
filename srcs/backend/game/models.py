@@ -17,17 +17,17 @@ class Game(models.Model):
 	status = models.CharField(max_length=20, choices=GAME_STATUS_CHOICES, default='NOT_STARTED')
 
 	DIFFICULTY_CHOICES = [
-		('EASY', 'Easy'),
-		('MEDIUM', 'Medium'),
-		('HARD', 'Hard'),
+		('EASY', 'easy'),
+		('MEDIUM', 'medium'),
+		('HARD', 'hard'),
 	]
 	difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES, default='EASY')
 
 	LEVEL_CHOICES = [
-		('TABLETENNIS', 'Table Tennis'),
-		('FOOTBALL', 'Football'),
-		('TENNIS', 'Tennis'),
-		('CLASSIC', 'Classic'),
+		('TABLETENNIS', 'tableTennis'),
+		('FOOTBALL', 'football'),
+		('TENNIS', 'tennis'),
+		('CLASSIC', 'classicPong'),
 	]
 	level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='CLASSIC')
 

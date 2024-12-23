@@ -17,5 +17,10 @@ def game_index(request):
 class GameCreateView(CreateAPIView):
 	queryset = Game.objects.all()
 	serializer_class = GameCreateSerializer
-	authentication_classes = [JWTAuthentication]
-	permission_classes = [IsAuthenticated, IsOwner]
+	permission_classes = [IsAuthenticated]
+
+	# def perform_create(self, serializer):
+		# try:
+			# serializer.save()
+		# except Exception as e:
+			# return Response({"message": "failed to register game data"}, status=status.HTTP_400_BAD_REQUEST)
