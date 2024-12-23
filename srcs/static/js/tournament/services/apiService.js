@@ -1,4 +1,5 @@
 // tournament/services/apiService.js
+import { fetchAuthData } from "../../user/fetchData.js";
 
 // Function to sanitize the tournament name
 function sanitizeTournamentName(name) {
@@ -17,11 +18,11 @@ export const createTournament = async (name) => {
 		};
 		// console.log('Payload:', payload);
 
-		const response = await fetch('https://localhost:8081/tournament/', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(payload),
-		});
+		const response = await fetchAuthData('/tournament/', "POST" , payload);
+			// method: 'POST',
+			// headers: { 'Content-Type': 'application/json' },
+			// body: JSON.stringify(payload),
+		// });
 
 		if (response.ok) {
 			const tournament = await response.json();
@@ -99,12 +100,28 @@ export const preRegisterPlayers = async (tournamentId, playerIds) => {
 	}
 };
 
-export const generateTournamentName = async () => {
+/* export const generateTournamentName = async () => {
 	try {
 		const response = await fetch('https://localhost:8081/tournament/generate-name/');
 		if (response.ok) {
 			const data = await response.json();
 			return data.name;
+		} else {
+			console.error('Failed to generate tournament name:', response.status);
+			return '';
+		}
+	} catch (error) {
+		console.error('Error generating tournament name:', error);
+		return '';
+	}
+}; */
+
+export const generateTournamentName = async () => {
+	try {
+		const response = await fetchAuthData('/tournament/generate-name/');
+		if (response.status === 200) {
+			// const data = await response.json();
+			return response.data.name;
 		} else {
 			console.error('Failed to generate tournament name:', response.status);
 			return '';
