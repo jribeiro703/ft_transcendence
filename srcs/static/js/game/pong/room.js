@@ -8,6 +8,7 @@ import brickVar from '../brickout/var.js';
 import { startGameB } from '../brickout/control.js';
 import { initGame, initListenerB } from '../brickout/init.js';
 import { initializeScoreCanvas2P } from './canvas.js';
+import { escapeHTML } from '../../user/tools.js';
 
 export function createNewRoom(joinRoomCallback)
 {
@@ -58,59 +59,101 @@ export function createNewRoom(joinRoomCallback)
 
 // }
 
+export function waitPlayerPong()
+{
+	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
+	gameVar.ctx.font = '40px Arial';
+	gameVar.ctx.fillStyle = '#455F78';
+	gameVar.ctx.fillText("Waiting for opponent...", gameVar.canvasW / 4, gameVar.canvasH / 2);
+	gameVar.ctx.strokeStyle = '#1F2E4D'; 
+	gameVar.ctx.lineWidth = 1;
+	gameVar.ctx.strokeText("Waiting for opponent...", gameVar.canvasW / 4, gameVar.canvasH / 2);
+	sendSettingData(gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
+}
+
+export function waitPlayerBrick()
+{
+	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
+	brickVar.ctx.font = '40px Arial';
+	brickVar.ctx.fillStyle = '#455F78';
+	brickVar.ctx.fillText("Waiting for opponent...", brickVar.canvasW / 4, brickVar.canvasH / 2);
+	brickVar.ctx.strokeStyle = '#1F2E4D'; 
+	brickVar.ctx.lineWidth = 1;
+	brickVar.ctx.strokeText("Waiting for opponent...", brickVar.canvasW / 4, brickVar.canvasH / 2);
+	sendSettingData(gameVar.lobbySocket, brickVar.gameReady, brickVar.difficulty, brickVar.currLevel);
+}
+
+export function finishPlayerWaitPong()
+{
+	gameVar.gameReady = true;
+	clearInterval(waitingInterval);
+	sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
+	sendScoreInfo(gameVar.gameSocket, 1, gameVar.userName, 0, 0);
+	startLiveGame();
+}
+
+export function finishPLayerWaitBrick()
+{
+	brickVar.gameReady = true;
+	clearInterval(waitingInterval);
+	sendSettingData(gameVar.gameSocket, brickVar.gameReady, brickVar.difficulty, brickVar.currLevel);
+	sendScoreInfo(gameVar.gameSocket, 1, gameVar.userName, 0, 0);
+	initGame();
+}
+
 export function waitingPlayer()
 {
-	const waitingINterval = setInterval(() =>
+	const waitingInterval = setInterval(() =>
 	{
 		console.log("player ready in waiting: ", gameVar.playerReady);
 		if(!gameVar.playerReady)
 		{
 			if (gameVar.game === 'pong')
-			{
-				gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
-				gameVar.ctx.font = '40px Arial';
-				gameVar.ctx.fillStyle = '#455F78';
-				gameVar.ctx.fillText("Waiting for opponent...", gameVar.canvasW / 4, gameVar.canvasH / 2);
-				gameVar.ctx.strokeStyle = '#1F2E4D'; 
-				gameVar.ctx.lineWidth = 1;
-				gameVar.ctx.strokeText("Waiting for opponent...", gameVar.canvasW / 4, gameVar.canvasH / 2);
-				sendSettingData(gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
-			}
+				waitPlayerPong();
 			else if (gameVar.game === 'brickout')
-			{
-				brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
-				brickVar.ctx.font = '40px Arial';
-				brickVar.ctx.fillStyle = '#455F78';
-				brickVar.ctx.fillText("Waiting for opponent...", brickVar.canvasW / 4, brickVar.canvasH / 2);
-				brickVar.ctx.strokeStyle = '#1F2E4D'; 
-				brickVar.ctx.lineWidth = 1;
-				brickVar.ctx.strokeText("Waiting for opponent...", brickVar.canvasW / 4, brickVar.canvasH / 2);
-				sendSettingData(gameVar.lobbySocket, brickVar.gameReady, brickVar.difficulty, brickVar.currLevel);
-			}
+				waitPlayerBrick();
 		}
 		else
 		{
 			if (gameVar.game === 'pong')
-			{
-				gameVar.gameReady = true;
-				clearInterval(waitingINterval);
-				sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
-				sendScoreInfo(gameVar.gameSocket, 1, gameVar.userName, 0, 0);
-				startLiveGame();
-			}
+				finishPlayerWaitPong(waitingInterval);
 			else if (gameVar.game === 'brickout')
-			{
-				brickVar.gameReady = true;
-				clearInterval(waitingINterval);
-				sendSettingData(gameVar.gameSocket, brickVar.gameReady, brickVar.difficulty, brickVar.currLevel);
-				sendScoreInfo(gameVar.gameSocket, 1, gameVar.userName, 0, 0);
-				// startGameB(brickVar.currLevel);
-				initGame();
-			}
+				finishPLayerWaitBrick(waitingInterval);
+		}
+	}, 2000);
+}
+
+export function waitingPlayerTournament()
+{
+	let waitTime = 0;
+	const maxWaitTime = 120;
+
+	const waitingInterval = setInterval(() => 
+	{
+		waitTime += 2;
+		if (waitTime >= maxWaitTime)
+		{
+			gameVar.clientLeft = true;
+			return ;
+		}
+		if (!gameVar.playerReady)
+		{
+			if (gameVar.game === 'pong')
+				waitPlayerPong();
+			else if (gameVar.game === 'brickout')
+				waitPlayerBrick();	
+		}
+		else
+		{
+			if (gameVar.game === 'pong')
+				finishPlayerWaitPong(waitingInterval);
+			else if (gameVar.game === 'brickout')
+				finishPLayerWaitBrick(waitingInterval);
 		}
 	}, 2000);
 
 }
+
 
 export async function joinRoom(roomName)
 {
@@ -128,7 +171,10 @@ export async function joinRoom(roomName)
 			{
 				console.log("if player 1");
 				getUserInfosRemote();
-				waitingPlayer();
+				if (gameVar.tournament)
+					waitingPlayerTournament();
+				else
+					waitingPlayer();
 			}
 			if (gameVar.playerIdx == 2)
 			{
@@ -136,6 +182,7 @@ export async function joinRoom(roomName)
 				getUserInfosRemote();
 				sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
 				waitingForSettingLive();
+
 			}
 			document.dispatchEvent(new CustomEvent('multiplayerGame', {
 				detail: {

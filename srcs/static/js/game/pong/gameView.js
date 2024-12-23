@@ -11,7 +11,6 @@ import { checkServer } from "./manage.js";
 import { initControl } from "./control.js";
 import { displayGameView, displayCanvas, displayGameBrickView } from "./display.js";
 import { initializeCanvasBrick, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
-import { displayGameDataPong } from "./displayVar.js";
 import { getUserInfos } from "../getUser.js";
 
 export async function showGameView()

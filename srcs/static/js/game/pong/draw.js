@@ -83,6 +83,10 @@ export function kickOut()
 		gameVar.ctx.font = "35px Arial";
 		gameVar.ctx.fillStyle = "red";	
 		gameVar.ctx.fillText("Opponent has rage quit..." , gameVar.canvasW / 4, gameVar.canvasH / 3);
+		if (gameVar.tournament)
+		{
+			gameVar.ctx.fillText("You won the match by forfeit!", gameVar.canvasW / 4, (gameVar.canvasH / 3) + 50);
+		}
 	}
 	else if (gameVar.game === 'brickout')
 	{

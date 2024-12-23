@@ -7,8 +7,6 @@ import { listenSettingMultiBtn } from "./listenerSetting.js";
 import { updateLiveSetting, updateSetting } from "./setting.js";
 import { updateSettingB } from "../brickout/update.js";
 import { listenPlayMultiBtn } from "./listenerSetting.js";
-import { displaySettingB, updateLiveSettingB } from "../brickout/settings.js";
-import brickVar from "../brickout/var.js";
 import { getUserInfos } from "../getUser.js";
 
 export function showGameSelectionView()
@@ -32,8 +30,6 @@ export function showGameSelectionView()
 
 export function showGameSelectionMultiView()
 {
-	// console.log("showgameselectionmultiview curr:" ,brickVar.currLevel);
-
 	getUserInfos();
 	updateImageUrl();
 	displayGameSelectionMulti();
