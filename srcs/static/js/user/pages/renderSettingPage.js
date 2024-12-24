@@ -161,6 +161,13 @@ export async function renderSettingsPage() {
       document.addEventListener("click", handleClickOutside);
       listenChangePassword(pk);
     });
+  } else {
+	const emailSpan = document.getElementById("email");
+    const passwordContainer = document.querySelector(".password-container");
+    
+    emailSpan.style.cursor = "default";
+    
+    passwordContainer.style.display = "none";
   }
 
   	// friends

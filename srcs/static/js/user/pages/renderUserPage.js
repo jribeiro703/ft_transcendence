@@ -10,7 +10,6 @@ function createUserContent() {
 			<img class="img-fluid neon-white main-img" src="${PONG_CARD}" alt="Pong Game">
 			<button id= btn-Profile class="primaryBtn"><span>Profile</span></button>
 			<button id= btn-Settings class="primaryBtn"><span>Settings</span></button>
-			<button id= btn-Inbox class="primaryBtn"><span>Inbox</span></button>
 			<button id= btn-Logout class="primaryBtn"><span>Logout</span></button>
 		</div>
 	`;
@@ -25,10 +24,6 @@ export function renderUserPage() {
 
   document.getElementById("btn-Settings").addEventListener("click", () => {
     renderPage("settings");
-  });
-
-  document.getElementById("btn-Inbox").addEventListener("click", () => {
-    console.log("Inbox button clicked");
   });
 
   document.getElementById("btn-Logout").addEventListener("click", async (e) => {

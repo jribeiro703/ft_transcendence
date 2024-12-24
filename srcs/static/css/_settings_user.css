@@ -102,12 +102,12 @@ input::placeholder {
 #delete-account-btn {
     max-width: 500px;
     z-index: 1;
-	color: white;
 }
 
 .overright-btn-red:before {
   background-color: #ff0000 !important;
   z-index: -1;
+  color: var(--text-color-btn);
 }
 
 
