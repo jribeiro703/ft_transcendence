@@ -6,7 +6,8 @@
   --my-dark-gray: #b967ff;
   --my-gradient: linear-gradient(45deg, #170b2b 0%, #2b0548 50%, #170b2b 100%);
 
-  --background-color: var(--my-gradient);
+  --background-color-body: var(--my-gradient);
+  --background-color: var(--my-dark-gray);
   --text-color: var(--my-dark-gray);
   --highlight-color: var(--my-gray);
   --icon-color: var(--my-white);

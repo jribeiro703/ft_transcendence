@@ -308,7 +308,7 @@ export function displayGameSelectionSolo() {
         </div>
 
           <div id="settingsContainer" class="justify-content-center align-items-center d-flex flex-column settings-font-name">
-                <p>PONG</p>
+                <p>BRICKS</p>
               <div id="settings-column2" class="settings-column settings-font">
                 <p class="fs-settings">Difficulty: <span id="difficultyChoice2" class="fs-settings">Medium</span></p>
                 <p>Power-Up: <span id="powerupChoice2">❌</span></p>

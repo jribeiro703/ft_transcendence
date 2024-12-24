@@ -12,7 +12,8 @@
     #000b30 100%
   );
 
-  --background-color: var(--my-gradient);
+  --background-color-body: var(--my-gradient);
+  --background-color: var(--my-dark-blue);
   --text-color: var(--my-dark-gray);
   --highlight-color: var(--my-gray);
   --icon-color: var(--my-white);
