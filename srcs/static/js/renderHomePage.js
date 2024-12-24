@@ -9,12 +9,12 @@ function createHomeContent() {
   const box = document.getElementById("mainContent");
   box.innerHTML = `
             <div id="defaultView"
-                 class="d-flex flex-column justify-content-center align-items-center gap-4 h-100">
+                 class="d-flex flex-column justify-content-center align-items-center gap-4 h-100 w-100">
               <img class="img-fluid neon-main-image main-img" src="${PONG_CARD}" alt="Pong Game">
-              <button id="playsoloGameBtn" class="primaryBtn"><span>Single Player</span></button>
-              <button id="playmultiGameBtn" class="primaryBtn"><span>Multi Player</span></button>
-              <button id="btn-Tournament" class="primaryBtn"><span>Tournament</span></button>
-              <button id="btn-Leaderboard" class="primaryBtn"><span>LeaderBoard</span></button>
+              <button id="playsoloGameBtn" class="primaryBtn w-380"><span>Single Player</span></button>
+              <button id="playmultiGameBtn" class="primaryBtn w-380"><span>Multi Player</span></button>
+              <button id="btn-Tournament" class="primaryBtn w-380"><span>Tournament</span></button>
+              <button id="btn-Leaderboard" class="primaryBtn w-380"><span>LeaderBoard</span></button>
             </div>
             `;
 }

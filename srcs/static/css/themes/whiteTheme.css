@@ -6,6 +6,7 @@
   --my-dark-gray: #555555;
 
   --background-color: var(--my-white);
+  --background-color-body: var(--my-white);
   --text-color: var(--my-dark-gray);
   --highlight-color: var(--my-gray);
   --icon-color: var(--my-black);

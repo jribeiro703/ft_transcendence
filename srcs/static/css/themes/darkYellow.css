@@ -1,5 +1,6 @@
 .darkYellow {
   --my-black: #0a1014;
+  --my-clear-black: #0a2014;
   --my-white: #ffff00;
   --my-gray: #ffff00;
   --my-blue: #fccb2d;
@@ -15,7 +16,8 @@
     #0a1014 100%
   );
 
-  --background-color: var(--my-gradient);
+  --background-color: var(--my-blue);
+  --background-color-body: var(--my-gradient);
   --text-color: var(--my-dark-gray);
   --highlight-color: var(--my-gray);
   --icon-color: var(--my-black);

@@ -9,7 +9,7 @@
 @import url("_icons.css");
 
 body {
-  background: var(--background-color);
+  background: var(--background-color-body);
   width: 100%;
   height: 100vh;
   margin: 0;
@@ -269,7 +269,6 @@ p {
 /* -------------------------- Game Selection ---------------------- */
 
 .container-game {
-  background: var(--background-color);
   border-radius: 10px;
   align-items: center;
   height: 100vh;
@@ -285,7 +284,6 @@ p {
   min-width: 600px;
   width: 100%;
   padding: 10px;
-  background: var(--background-color);
 }
 
 .game-row-online {
@@ -296,7 +294,6 @@ p {
   min-width: 400px;
   width: 100%;
   padding: 10px;
-  background: var(--background-color);
 }
 
 .game-column {
