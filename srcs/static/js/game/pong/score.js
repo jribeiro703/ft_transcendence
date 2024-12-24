@@ -1,6 +1,7 @@
 import gameVar from "./var.js";
 import { listenBtn } from "./reset.js";
 import { WIN_SCORE, GAP_SCORE } from "./const.js";
+import { fetchAuthData } from "../../user/fetchData.js";
 
 export function saveScore()
 {
@@ -26,17 +27,37 @@ export function checkScore()
 	}	
 }
 
-export function sendScore()
+export async function sendScore()
 {
-	console.log("we send =>");
-	console.log("name player1"); // string
-	console.log("name player2"); // string
-	console.log("score player : ", gameVar.playerScore); // int
-	console.log("score opponent : ", gameVar.aiScore); // int 
-	console.log("game time : ", gameVar.gameTime); // int
-	console.log("Difficulty : ",gameVar.difficulty); // string = 'easy' || 'medium' || 'hard'
-	console.log("PowerUp active : ", gameVar.powerUpEnable); // boolean
-	console.log("Level : ", gameVar.currentLevel);  // string = 'tableTennis' || 'Football' || 'tennis' ( maybe an other : 'classic')
+	manageScore();
+    const body = {
+        player_one: gameVar.userName,
+        player_two: gameVar.opponentName,
+        score_one : gameVar.playerScore,
+        score_two : gameVar.aiScore,
+        time_played : gameVar.gameTime,
+        difficulty : gameVar.difficulty,
+        powerup : gameVar.powerUpEnable,
+        level : gameVar.currentLevel,
+		winner: gameVar.winner,
+    }
+    const responseObject = await fetchAuthData("/game/create/", "POST", body);
+	console.log("score: responseObj: ", responseObject);
+
+    if (responseObject.status === 201) {
+        console.log("Game successfully");
+    } else {
+        console.log("Game failed");
+    }
+    // console.log("we send =>");
+    // console.log("name player1"); // string
+    // console.log("name player2"); // string
+    // console.log("score player : ", gameVar.playerScore); // int
+    // console.log("score opponent : ", gameVar.aiScore); // int 
+    // console.log("game time : ", gameVar.gameTime); // int
+    // console.log("Difficulty : ",gameVar.difficulty); // string = 'easy'  'medium'  'hard'
+    // console.log("PowerUp active : ", gameVar.powerUpEnable); // boolean
+    // console.log("Level : ", gameVar.currentLevel);  // string = 'tableTennis'  'Football'  'tennis' ( maybe an other : 'classic')
 }
 function loadCustomFont()
 {

@@ -81,14 +81,20 @@ async function updateUserData(pk, body = {}) {
 async function listenChangeAlias(pk) {
 	document.getElementById("save-alias-btn").addEventListener("click", async(e) => {
 		const newAlias = document.getElementById('alias-input').value;
-		updateUserData(pk, { alias: escapeHTML(newAlias) });
+		if (newAlias)
+			updateUserData(pk, { alias: escapeHTML(newAlias) });
+		else
+			showToast("Please enter a new alias.", "error");
 	});
 }
 
 async function listenChangeEmail(pk) {
 	document.getElementById("save-email-btn").addEventListener("click", async(e) => {
 		const newEmail = document.getElementById('email-input').value;
-		updateUserData(pk, { new_email: escapeHTML(newEmail) });
+		if (newEmail)
+			updateUserData(pk, { new_email: escapeHTML(newEmail) });
+		else
+			showToast("Please enter a new email.", "error");
 	});
 }
 
@@ -96,7 +102,21 @@ async function listenChangePassword(pk) {
 	document.getElementById("save-password-btn").addEventListener("click", async(e) => {
 		const currentPassword = document.getElementById('current-password-input').value
 		const newPassword = document.getElementById('new-password-input').value;
-		updateUserData(pk, { password: escapeHTML(currentPassword), new_password: escapeHTML(newPassword) });
+		if (currentPassword && newPassword)
+			updateUserData(pk, { password: escapeHTML(currentPassword), new_password: escapeHTML(newPassword) });
+		else	
+			showToast("Please enter your current and new password.", "error");
+	});
+}
+
+async function listenAddNewFriend(pk) {
+	document.getElementById("send-friend-request-btn").addEventListener("click", async (e) => {
+    	const newFriendUsername = document.getElementById("new-friend-username").value;
+    	if (!newFriendUsername) {
+    	    showToast("Please enter a username to add as a friend.", "error");
+    	    return;
+    	}
+		updateUserData(pk, { new_friend: newFriendUsername });
 	});
 }
 
@@ -154,28 +174,9 @@ async function deleteAccount(pk) {
 		showErrorMessages(responseObject);
 }
 
-async function addNewFriend(pk) {
-    const newFriendUsername = document.getElementById("new-friend-username").value;
-
-    if (!newFriendUsername) {
-        showToast("Please enter a username to add as a friend.", "error");
-        return;
-    }
-    const responseObject = await fetchAuthData(
-		`/user/settings/${pk}/`, 
-		'PATCH', 
-		{new_friend: `${newFriendUsername}`}, 
-		false
-	);
-	if (responseObject.status === 200)
-		showToast(responseObject.data.message, "success");
-	else
-		showErrorMessages(responseObject);
-}
-
 export { 
 	createDialog, listenForDialog,
-	deleteAccount, addNewFriend, uploadAvatar,
+	deleteAccount, listenAddNewFriend, uploadAvatar,
 	listenChangeAlias, listenChangeEmail, listenChangePassword };
 
 	

@@ -19,7 +19,7 @@ function escapeHTML(unsafe) {
   return unsafe.replace(/[&<>"']/g, (match) => map[match]);
 }
 
-function showToast(message, type = "warning") {
+function showToast(message, type = "success") {
   const toast = document.createElement("div");
   toast.className = `toast toast-${type}`;
   toast.textContent = message;
