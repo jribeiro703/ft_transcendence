@@ -25,8 +25,9 @@ class CreateTournamentView(APIView):
 
 			user = request.user
 			role = get_user_role(user)
+			print(f"User role for {user.username}: {role}")
 
-			if role != "default":
+			if role != "creator" and role != "default":
 				return Response(
 					{"error": "You cannot create a new tournament while managing, playing, or being invited to another."},
 					status=status.HTTP_400_BAD_REQUEST,

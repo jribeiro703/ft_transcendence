@@ -51,10 +51,17 @@ export async function setupTournamentPage() {
 		tournamentList.innerHTML = tournaments
 			.map(
 				(tournament) => `
-				<li>
-					<span>ID: ${tournament.id}</span> - 
-					<span>Name: ${tournament.name}</span>
-				</li>`
+				<div class="tournament-item">
+					<div class="tournament-details">
+						<span class="tournament-name">${tournament.name}</span>
+						<span class="tournament-status">(${tournament.status})</span>
+					</div>
+					<button class="join-tournament-btn" 
+							${tournament.status !== 'UPCOMING' ? 'disabled' : ''}
+							onclick="joinTournament(${tournament.id})">
+						Join
+					</button>
+				</div>`
 			)
 			.join("");
 	} else {
