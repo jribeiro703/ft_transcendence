@@ -1,6 +1,6 @@
 import { escapeHTML, showErrorMessages, UPLOAD_ICON } from "../tools.js";
 import { fetchAuthData } from "../fetchData.js";
-import { listenChangeAlias, listenChangeEmail, listenChangePassword, uploadAvatar, deleteAccount, addNewFriend } from "./settingsPageTools.js";
+import { listenChangeAlias, listenChangeEmail, listenChangePassword, uploadAvatar, deleteAccount, listenAddNewFriend } from "./settingsPageTools.js";
 
 async function createSettingsPageContent(mainContent, data) {
   const avatarPath = data.avatar.substring(data.avatar.indexOf("/media"));
@@ -19,28 +19,28 @@ async function createSettingsPageContent(mainContent, data) {
 				</div>
 			</div>
 				<div class="alias-container">
-					Alias: <span id="alias">${data.alias ? data.alias : "none"}</span>
-					<input type="text" id="alias-input" value="${data.alias ? data.alias : "none"}" style="display:none;">
+					Alias: <span class="settings-span" id="alias">${data.alias ? data.alias : "None"}</span>
+					<input class="settings-input" type="text" id="alias-input" placeholder="${data.alias ? data.alias : "None"}" style="display:none;">
 					<button type="submit" id="save-alias-btn" class="save-btn" style="display:none;">Save</button>
 				</div>
 				<div class="email-container">
-					Email: <span id="email">${data.email}</span>
-					<input type="text" id="email-input" placeholder="${data.email}" style="display:none">
+					Email: <span class="settings-span" id="email">${data.email}</span>
+					<input class="settings-input" type="text" id="email-input" placeholder="${data.email}" style="display:none">
 					<button type="submit" id="save-email-btn" class="save-btn" style="display:none;">Save</button>
 				</div>
 				<div class="password-container">
-					Password: <span id="password" > change your password</span>
-					<input type="password" id="current-password-input" placeholder="Current password" style="display:none">
-					<input type="password" id="new-password-input" placeholder="New password " style="display:none">
+					Password: <span class="settings-span" id="password" >Click to change</span>
+					<input class="settings-input" type="password" id="current-password-input" placeholder="Current password" style="display:none">
+					<input class="settings-input" type="password" id="new-password-input" placeholder="New password " style="display:none">
 					<button type="submit" id="save-password-btn" class="save-btn" style="display:none;">Save</button>
 				</div>
 				<div class="friend-request">
-					<label id="add-friend-label" for="new-friend-username">Add new friend:</label>
-					<input type="text" id="new-friend-username" placeholder="Friend's username" class="friend-request-input" required></input>
-					<button type="submit" id="send-friend-request-btn" class="primaryBtn adapt-height-to-input w-25"><span>Send</span></button>
+					Add new friend: <span class="settings-span" id="friend-span">Click to add friend</span>
+					<input class="settings-input" type="text" id="new-friend-username" placeholder="Friend's username" class="friend-request-input" style="display:none" required></input>
+					<button type="submit" id="send-friend-request-btn" class="save-btn" style="display:none">Send</button>
 				</div>
 				<div class="w-100 d-flex justify-content-center">
-					<button id="delete-account-btn" class="primaryBtn overright-btn-red w-50 align-items-center"><span>Delete Account</span></button>
+					<button id="delete-account-btn" class="primaryBtn overright-btn-red w-50 align-items-center">Delete Account</button>
 				</div>
 		</div>
 	`;
@@ -79,27 +79,26 @@ export async function renderSettingsPage() {
   const saveAliasButton = document.getElementById("save-alias-btn");
 
 	aliasSpan.addEventListener("click", function () {
-    aliasInput.style.display = "inline";
-    saveAliasButton.style.display = "inline";
-    aliasInput.value = this.innerText;
-    this.style.display = "none";
+      aliasInput.style.display = "inline";
+	  saveAliasButton.style.display = "inline";
+      this.style.display = "none";
+	  
+      const handleClickOutside = function (event) {
+        const isClickInside =
+          aliasInput.contains(event.target) ||
+          saveAliasButton.contains(event.target) ||
+          document.getElementById("alias").contains(event.target);
+	  
+        if (!isClickInside) {
+          aliasSpan.style.display = "inline";
+          aliasInput.style.display = "none";
+          saveAliasButton.style.display = "none";
+          document.removeEventListener("click", handleClickOutside);
+        }
+      };
 
-    const handleClickOutside = function (event) {
-      const isClickInside =
-        aliasInput.contains(event.target) ||
-        saveAliasButton.contains(event.target) ||
-        document.getElementById("alias").contains(event.target);
-
-      if (!isClickInside) {
-        aliasSpan.style.display = "inline";
-        aliasInput.style.display = "none";
-        saveAliasButton.style.display = "none";
-        document.removeEventListener("click", handleClickOutside);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    listenChangeAlias(pk);
+      document.addEventListener("click", handleClickOutside);
+      listenChangeAlias(pk);
   });
 
   if (!data.is_42_user) {
@@ -110,8 +109,7 @@ export async function renderSettingsPage() {
 
     emailSpan.addEventListener("click", function () {
       emailInput.style.display = "inline";
-      saveEmailButton.style.display = "inline";
-      emailInput.value = this.innerText;
+	  saveEmailButton.style.display = "inline";
       this.style.display = "none";
 
       const handleClickOutside = function (event) {
@@ -165,8 +163,32 @@ export async function renderSettingsPage() {
     });
   }
 
-	document.getElementById("send-friend-request-btn").addEventListener("click", async (e) => {
-		await addNewFriend(pk);
+  	// friends
+	const friendSpan = document.getElementById("friend-span");
+	const friendInput = document.getElementById("new-friend-username");
+	const sendFriendButton = document.getElementById("send-friend-request-btn");
+
+	friendSpan.addEventListener("click", function () {
+	    friendInput.style.display = "inline";
+	    sendFriendButton.style.display = "inline";
+	    this.style.display = "none";
+
+	    const handleClickOutside = function (event) {
+	        const isClickInside =
+	            friendInput.contains(event.target) ||
+	            sendFriendButton.contains(event.target) ||
+	            friendSpan.contains(event.target);
+
+	        if (!isClickInside) {
+	            friendSpan.style.display = "inline";
+	            friendInput.style.display = "none";
+	            sendFriendButton.style.display = "none";
+	            document.removeEventListener("click", handleClickOutside);
+	        }
+	    };
+
+	    document.addEventListener("click", handleClickOutside);
+		listenAddNewFriend(pk);
 	});
 	
 	document.getElementById("upload-avatar-btn").addEventListener("click", async (e) => {

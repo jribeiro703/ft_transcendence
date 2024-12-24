@@ -34,9 +34,11 @@ class Game(models.Model):
 	player_one = models.ForeignKey(
 		'user.User', related_name='game_as_player_one', on_delete=models.SET_NULL, null=True
 	) # FK to User
+	username_one = models.CharField(max_length=50, blank=True, null=True)
 	player_two = models.ForeignKey(
 		'user.User', related_name='game_as_player_two', on_delete=models.SET_NULL, null=True
 	) # FK to User
+	username_two = models.CharField(max_length=50, blank=True, null=True)
 	score_one = models.PositiveIntegerField(default=0)
 	score_two = models.PositiveIntegerField(default=0)
 

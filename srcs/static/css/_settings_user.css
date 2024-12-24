@@ -50,10 +50,6 @@
   height: 35px;
 }
 
-/* upload-btn:hover { */
-/* background-color: #357ab8; */
-/* } */
-
 .username-container {
   display: flex;
 }
@@ -66,17 +62,31 @@
   color: var(--text-color);
 }
 
-#alias,
-#email,
-#password {
+.settings-span {
   cursor: pointer;
 }
 
-#alias-input,
-#email-input,
-#current-password-input,
-#new-password-input {
-  
+.settings-input {
+	border: 1px solid #000000;
+    border-radius: 5px;
+    height: 42px !important;
+    padding: 0px 10px !important;
+    cursor: text;
+	line-height: 1.2rem;
+}
+
+.settings-input:focus {    
+	outline: none;
+    border-color: var(--highlight-color);
+    box-shadow: 0 0 5px var(--highlight-color);
+}
+
+input::placeholder {
+    color: gray;
+    font-style: italic;
+    font-size: 20px;
+    opacity: 0.7;
+	text-align: center;
 }
 
 /* Friend request section */
@@ -89,64 +99,69 @@
   gap: 10px;
 }
 
-#friend-request label {
-  font-weight: bold;
+#delete-account-btn {
+    max-width: 500px;
+    z-index: 1;
+	color: white;
 }
-
-#friend-request input {
-  padding: 5px;
-  border: 1px solid #000000;
-  border-radius: 5px;
-  width: 100px;
-}
-
-.adapt-height-to-input {
-  height: 42px !important;
-  padding: 0 !important;
-}
-
-#new-friend-username {
-  padding: 5px;
-  height: 42px;
-  border: 1px solid #000000;
-  border-radius: 5px;
-  width: 197px;
-}
-
-/* #friend-request button { */
-/*   padding: 5px 10px; */
-/*   font-size: 14px; */
-/*   border: none; */
-/*   border-radius: 5px; */
-/*   background-color: #4a90e2; */
-/*   color: white; */
-/*   cursor: pointer; */
-/* } */
-
-/* #friend-request button:hover { */
-/*   background-color: #357ab8; */
-/* } */
-
-/* Delete account button */
-/* #delete-account-btn { */
-/*   padding: 10px 20px; */
-/*   font-size: 14px; */
-/*   border: none; */
-/*   border-radius: 5px; */
-/*   background-color: #e74c3c; */
-/*   color: white; */
-/*   cursor: pointer; */
-/* } */
 
 .overright-btn-red:before {
   background-color: #ff0000 !important;
-  color: #ffffff !important;
+  z-index: -1;
 }
 
-/* #delete-account-btn:hover { */
-/*   background-color: var(--dangerous-color); */
-/* } */
 
-/* .settings-container * { */
-/*   color: var(--text-color); */
-/* } */
+
+/*--------------------MEDIA-------------------------*/
+@media (max-width: 770px) {
+	#delete-account-btn,
+	#send-friend-request-btn {
+		font-size: 16px !important;
+	}
+
+	.password-container {
+		display: flex;
+	    flex-wrap: wrap;
+	    justify-content: center;
+	    flex-direction: column;
+	    align-items: center;
+	}
+}
+
+@media (max-width: 380px) {
+
+	.settings-container {
+		font-size: 18px;
+		gap: 15px;
+		padding: 2px;
+	}
+
+	.avatar {
+		width: 100px;
+		height: 100px;
+	}
+
+	.settings-input {
+		height: 30px !important;
+		width: 115px !important;
+	}
+
+	input::placeholder {
+		font-size: 16px;
+	}
+
+	.friend-request {
+		flex-wrap: wrap;
+		gap: 10px 20px;
+	}
+
+	#delete-account-btn,
+	#send-friend-request-btn {
+		font-size: 16px !important;
+		height: 38px !important;
+	}
+
+	#delete-account-btn {
+		width: 167px !important;
+	}
+}
