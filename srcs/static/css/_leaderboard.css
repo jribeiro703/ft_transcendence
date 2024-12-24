@@ -1,18 +1,41 @@
 @import url("themes/_globalVar.css");
 
-.leaderboard-container {
+/* .leaderboard-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: var(--highlight-color);
+  height: 100%;
+  width: 100%;
+}
+
+.leaderboard-search-container {
+	display: flex;
+	width: 50%;
+	height: 20%;
+}
+
+.leaderboard-list {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 80%;
+	overflow: scroll;
+  	max-width: 600px;
+ 	padding: 0px;
+}
+
+.leaderboard-item p {
+	margin: 0;
+	height: 35px;
 }
 
 .leaderboard-item {
   display: flex;
   gap: 10px;
-  height: 70px;
-}
+  height: 5%;
+} */
 
 .leaderboard-rank {
   font-size: 1.5rem;
@@ -31,20 +54,41 @@
 }
 
 .leaderboard-username {
-  font-size: 1.5rem;
+	font-size: 1.5rem;
 }
-
+	
 .leaderboard-stats {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	font-size: 1.5rem;
 }
 
-.leaderboard * {
-  font-size: 27px !important;
-  justify-content: center !important;
-  align-content: center;
-  align-items: center;
-  text-align: center;
-  margin: 0;
+.leaderboard-container {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+	box-sizing: border-box;
+	overflow: scroll;
+	gap: 15px;
+}
+
+.leaderboard-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+}
+
+.leaderboard-item {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding: 10px;
+	background: #f9f9f9;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	width: 60%;
 }

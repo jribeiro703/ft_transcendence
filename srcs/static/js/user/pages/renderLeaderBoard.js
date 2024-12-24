@@ -4,10 +4,10 @@ import { showErrorMessages } from "../tools.js";
 function createLeaderBoardContent(data) {
   const mainContent = document.getElementById("mainContent");
   mainContent.innerHTML = `
-		<div id="leaderboard-container" class="overflow-auto leaderboard justify-content-center">
-			<div>
-				<ul id="leaderboard-list">
-				</ul>
+		<div id="leaderboard-container" class="leaderboard-container">
+	  		<div>
+				<div id="leaderboard-list" class="leaderboard-list">
+				</div>
 			</div>
 		</div>
 	`;
@@ -15,20 +15,16 @@ function createLeaderBoardContent(data) {
   const leaderboardList = document.getElementById("leaderboard-list");
 
   data.forEach((user, index) => {
-    const listItem = document.createElement("li");
+    const listItem = document.createElement("div");
     listItem.classList.add("leaderboard-item");
     listItem.innerHTML = `
 			<div class="leaderboard-rank">#${index + 1}</div>
 			<img class="leaderboard-avatar" src="${user.avatar}" alt="${user.username}'s avatar" />
-			<div class="leaderboard-info">
-				<p class="leaderboard-username">${user.username}</p>
-				<p class="leaderboard-stats">
-					<span>Total: ${user.matchs.total_matches}</span>
-					<span>Wins: ${user.matchs.won_matches}</span>
-					<span>Losses: ${user.matchs.lost_matches}</span>
-					<span>Win Ratio: ${(user.matchs.win_ratio * 100).toFixed(2)}%</span>
-				</p>
-			</div>
+			<div class="leaderboard-username">${user.username}</div>
+			<div class="leaderboard-stats">Total: ${user.matchs.total_matches}</div>
+			<div class="leaderboard-stats">Win: ${user.matchs.won_matches}</div>
+			<div class="leaderboard-stats">Losse: ${user.matchs.lost_matches}</div>
+			<div class="leaderboard-stats"> ${(user.matchs.win_ratio * 100).toFixed(2)}%</div>
 		`;
     leaderboardList.appendChild(listItem);
   });

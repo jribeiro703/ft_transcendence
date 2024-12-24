@@ -10,8 +10,8 @@ let userData;
 function createProfileContent() {
   const mainContent = document.getElementById("mainContent");
   mainContent.innerHTML = `
-		<div class="profile-container" >
-    <div class="profile-scrollable">
+	<div class="profile-container" >
+    	<div class="profile-scrollable">
 			<div class="profile-header">
 				<img id="avatar" class="profile-avatar" src="${DEFAULT_AVATAR}" alt="User Avatar" class="avatar" />
 				<div class="profile-info">
