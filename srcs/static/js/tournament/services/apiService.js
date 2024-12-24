@@ -1,214 +1,175 @@
 // tournament/services/apiService.js
+
 import { fetchAuthData } from "../../user/fetchData.js";
 
-// Function to sanitize the tournament name
-function sanitizeTournamentName(name) {
-	return name.replace(/[^a-zA-Z0-9]/g, '');
-}
-
-// Create a new tournament dynamically via the API
 export const createTournament = async (name) => {
 	try {
-		//const sanitizedName = sanitizeTournamentName(name);
+		console.debug('[createTournament] Payload:', { name });
 		const payload = {
 			name: name,
 			start_date: new Date().toISOString(),
 			max_score: 100,
 			status: 'UPCOMING',
 		};
-		// console.log('Payload:', payload);
+		const response = await fetchAuthData('/tournament/', "POST", payload);
+		console.debug('[createTournament] Response:', response);
 
-		const response = await fetchAuthData('/tournament/', "POST" , payload);
-			// method: 'POST',
-			// headers: { 'Content-Type': 'application/json' },
-			// body: JSON.stringify(payload),
-		// });
-
-		if (response.ok) {
-			const tournament = await response.json();
-			// console.log('Tournament created:', tournament);
-			return tournament.tournament_id; // Return the tournament ID
+		if (response.status === 201) {
+			console.info('[createTournament] Tournament created successfully:', response.data.tournament_id);
+			return response.data.tournament_id;
 		} else {
-			console.error('Failed to create tournament:', response.status);
-			const errorData = await response.json();
-			// console.error('Error details:', errorData);
+			console.warn('[createTournament] Failed to create tournament. Status:', response.status);
+			console.warn('[createTournament] Error details:', response.data);
 		}
 	} catch (error) {
-		console.error('Error creating tournament:', error);
+		console.error('[createTournament] Error creating tournament:', error);
 	}
 };
 
 export const fetchPlayers = async () => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/players/', {
-			method: 'GET',
-			headers: { 'Content-Type': 'application/json' },
-		});
+		console.debug('[fetchPlayers] Fetching eligible players...');
+		const response = await fetchAuthData('/tournament/players/', "GET");
+		console.debug('[fetchPlayers] Response:', response);
 
-		if (response.ok) {
-			const data = await response.json();
-			// console.log('Eligible players:', data);
-			return data.eligible_players; // Return the list of eligible players
+		if (response.status === 200) {
+			console.info('[fetchPlayers] Eligible players fetched successfully:', response.data.eligible_players);
+			return response.data.eligible_players;
 		} else {
-			console.error('Failed to fetch participants:', response.status);
+			console.warn('[fetchPlayers] Failed to fetch players. Status:', response.status);
 		}
 	} catch (error) {
-		console.error('Error fetching participants:', error);
+		console.error('[fetchPlayers] Error fetching players:', error);
 	}
 };
 
 export const performMatchmaking = async (tournamentId) => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/matchmaking/', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ tournament_id: tournamentId }),
-		});
+		console.debug('[performMatchmaking] Payload:', { tournament_id: tournamentId });
+		const payload = { tournament_id: tournamentId };
+		const response = await fetchAuthData('/tournament/matchmaking/', "POST", payload);
+		console.debug('[performMatchmaking] Response:', response);
 
-		if (response.ok) {
-			const data = await response.json();
-			// console.log('Matchmaking successful:', data);
+		if (response.status === 200) {
+			console.info('[performMatchmaking] Matchmaking successful:', response.data);
 		} else {
-			console.error('Failed to perform matchmaking:', response.status);
+			console.warn('[performMatchmaking] Failed to perform matchmaking. Status:', response.status);
 		}
 	} catch (error) {
-		console.error('Error performing matchmaking:', error);
+		console.error('[performMatchmaking] Error performing matchmaking:', error);
 	}
 };
 
 export const preRegisterPlayers = async (tournamentId, playerIds) => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/preregister/', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				tournament_id: tournamentId,
-				player_ids: playerIds,
-			}),
-		});
+		console.debug('[preRegisterPlayers] Payload:', { tournamentId, playerIds });
+		const payload = { 
+			tournament_id: tournamentId,
+			player_ids: playerIds,
+		};
+		const response = await fetchAuthData('/tournament/preregister/', "POST", payload);
+		console.debug('[preRegisterPlayers] Response:', response);
 
-		if (response.ok) {
-			const data = await response.json();
-			// console.log('Players pre-registered:', data);
-			return data;
+		if (response.status === 200) {
+			console.info('[preRegisterPlayers] Players pre-registered successfully:', response.data);
+			return response.data;
 		} else {
-			const errorData = await response.json();
-			console.error('Failed to pre-register players:', errorData);
+			console.warn('[preRegisterPlayers] Failed to pre-register players. Status:', response.status);
+			console.warn('[preRegisterPlayers] Error details:', response.data);
 		}
 	} catch (error) {
-		console.error('Error pre-registering players:', error);
+		console.error('[preRegisterPlayers] Error pre-registering players:', error);
 	}
 };
 
-/* export const generateTournamentName = async () => {
-	try {
-		const response = await fetch('https://localhost:8081/tournament/generate-name/');
-		if (response.ok) {
-			const data = await response.json();
-			return data.name;
-		} else {
-			console.error('Failed to generate tournament name:', response.status);
-			return '';
-		}
-	} catch (error) {
-		console.error('Error generating tournament name:', error);
-		return '';
-	}
-}; */
-
 export const generateTournamentName = async () => {
 	try {
-		const response = await fetchAuthData('/tournament/generate-name/');
+		console.debug('[generateTournamentName] Generating tournament name...');
+		const response = await fetchAuthData('/tournament/generate-name/', "GET");
+		console.debug('[generateTournamentName] Response:', response);
+
 		if (response.status === 200) {
-			// const data = await response.json();
+			console.info('[generateTournamentName] Tournament name generated:', response.data.name);
 			return response.data.name;
 		} else {
-			console.error('Failed to generate tournament name:', response.status);
+			console.warn('[generateTournamentName] Failed to generate tournament name. Status:', response.status);
 			return '';
 		}
 	} catch (error) {
-		console.error('Error generating tournament name:', error);
+		console.error('[generateTournamentName] Error generating tournament name:', error);
 		return '';
 	}
 };
 
 export const validateTournamentName = async (name) => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/validate-name/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({ name })
-		});
-		if (response.ok) {
-			const data = await response.json();
-			return data.isValid;
+		console.debug('[validateTournamentName] Payload:', { name });
+		const payload = { name: name };
+		const response = await fetchAuthData('/tournament/validate-name/', "POST", payload);
+		console.debug('[validateTournamentName] Response:', response);
+
+		if (response.status === 200) {
+			console.info('[validateTournamentName] Tournament name validation result:', response.data.isValid);
+			return response.data.isValid;
 		} else {
-			console.error('Failed to validate tournament name:', response.status);
+			console.warn('[validateTournamentName] Failed to validate tournament name. Status:', response.status);
 			return false;
 		}
 	} catch (error) {
-		console.error('Error validating tournament name:', error);
+		console.error('[validateTournamentName] Error validating tournament name:', error);
 		return false;
 	}
 };
 
 export const fetchTournamentBracket = async (tournamentId) => {
 	try {
-		const response = await fetch(`https://localhost:8081/tournament/${tournamentId}/bracket/`, {
-			method: 'GET',
-			headers: { 'Content-Type': 'application/json' },
-		});
+		console.debug('[fetchTournamentBracket] Tournament ID:', tournamentId);
+		const response = await fetchAuthData(`/tournament/${tournamentId}/bracket/`, "GET");
+		console.debug('[fetchTournamentBracket] Response:', response);
 
-		if (response.ok) {
-			const data = await response.json();
-			return data.bracket;
+		if (response.status === 200) {
+			console.info('[fetchTournamentBracket] Tournament bracket fetched successfully:', response.data.bracket);
+			return response.data.bracket;
 		} else {
-			console.error('Failed to fetch tournament bracket:', response.status);
+			console.warn('[fetchTournamentBracket] Failed to fetch tournament bracket. Status:', response.status);
 		}
 	} catch (error) {
-		console.error('Error fetching tournament bracket:', error);
+		console.error('[fetchTournamentBracket] Error fetching tournament bracket:', error);
 	}
 };
 
 export const fetchCurrentPlayers = async (tournamentId) => {
 	try {
-		const response = await fetch(`https://localhost:8081/tournament/${tournamentId}/players/`, {
-			method: 'GET',
-			headers: { 'Content-Type': 'application/json' },
-		});
+		console.debug('[fetchCurrentPlayers] Tournament ID:', tournamentId);
+		const response = await fetchAuthData(`/tournament/${tournamentId}/players/`, "GET");
+		console.debug('[fetchCurrentPlayers] Response:', response);
 
-		if (!response.ok) {
-			const errorData = await response.json();
-			throw new Error(errorData.error || `Failed to fetch current players: ${response.status}`);
+		if (response.status === 200) {
+			console.info('[fetchCurrentPlayers] Current players fetched successfully:', response.data.players);
+			return response.data.players;
+		} else {
+			console.warn('[fetchCurrentPlayers] Failed to fetch current players. Status:', response.status);
+			console.warn('[fetchCurrentPlayers] Error details:', response.data);
 		}
-
-		const data = await response.json();
-		return data.players; // Expecting players array
 	} catch (error) {
-		console.error('Failed to fetch current players:', error.message);
-		throw error; // Propagate error to caller
+		console.error('[fetchCurrentPlayers] Error fetching current players:', error.message);
+		throw error;
 	}
 };
 
 export const fetchUserTournaments = async () => {
 	try {
-		const response = await fetch("https://localhost:8081/tournament/user-tournaments/", {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
+		console.debug('[fetchUserTournaments] Fetching user tournaments...');
+		const response = await fetchAuthData('/tournament/user-tournaments/', "GET");
+		console.debug('[fetchUserTournaments] Response:', response);
 
-		if (!response.ok) {
-			throw new Error(`Failed to fetch tournaments: ${response.status}`);
-		}
-
-		const data = await response.json();
-		console.log("User Tournaments:", data.tournaments);
-		return data.tournaments;
+		if (response.status === 200) {
+			console.info('[fetchUserTournaments] User tournaments fetched successfully:', response.data.tournaments);
+			return response.data.tournaments;
+		} else {
+			console.warn('[fetchUserTournaments] Failed to fetch user tournaments. Status:', response.status);
+		}	
 	} catch (error) {
-		console.error("Error in fetchUserTournaments:", error);
+		console.error('[fetchUserTournaments] Error fetching user tournaments:', error);
 	}
-}
+};
