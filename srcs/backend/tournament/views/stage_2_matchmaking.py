@@ -15,6 +15,7 @@ class PerformMatchmakingView(APIView):
 	"""
 	def post(self, request):
 		try:
+			print("Incoming request data:", request.data)
 			# Extract tournament ID from request
 			tournament_id = request.data.get('tournament_id')
 			if not tournament_id:
@@ -28,12 +29,14 @@ class PerformMatchmakingView(APIView):
 			# Fetch the tournament instance
 			try:
 				tournament = Tournament.objects.prefetch_related('players').get(id=tournament_id)
+				print("Tournament found:", tournament)
 			except Tournament.DoesNotExist:
 				return Response({'message': 'Tournament not found.'}, status=status.HTTP_404_NOT_FOUND)
 
 			# Fetch players and ensure they are User objects
 			players = list(tournament.players.all())
 			if len(players) < 2:
+				print("Not enough players for matchmaking. Players count:", len(players))
 				return Response({'message': 'Not enough players for matchmaking.'}, status=status.HTTP_400_BAD_REQUEST)
 
 			# Shuffle players for random matchmaking

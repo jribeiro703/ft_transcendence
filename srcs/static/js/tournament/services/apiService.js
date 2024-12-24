@@ -165,11 +165,17 @@ export const fetchUserTournaments = async () => {
 
 		if (response.status === 200) {
 			console.info('[fetchUserTournaments] User tournaments fetched successfully:', response.data.tournaments);
+			return response.data.tournaments.map(tournament => ({
+				id: tournament.id,
+				name: tournament.name,
+				status: tournament.status
+			}));
 			return response.data.tournaments;
 		} else {
 			console.warn('[fetchUserTournaments] Failed to fetch user tournaments. Status:', response.status);
 		}	
 	} catch (error) {
 		console.error('[fetchUserTournaments] Error fetching user tournaments:', error);
+		return [];
 	}
 };
