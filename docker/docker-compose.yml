@@ -91,6 +91,28 @@ services:
     networks:
       - transcendence
 
+  certbot:
+    image: certbot/dns-ovh:latest
+    container_name: certbot
+    volumes:
+      - ./nginx/certs:/etc/letsencrypt
+      - ./nginx/challenges:/var/www/certbot
+    environment:
+      - OVH_ENDPOINT=ovh-eu
+      - OVH_APPLICATION_KEY=${OVH_APPLICATION_KEY}
+      - OVH_APPLICATION_SECRET=${OVH_APPLICATION_SECRET}
+      - OVH_CONSUMER_KEY=${OVH_CONSUMER_KEY}
+    entrypoint: >
+      sh -c "trap exit TERM; while :; do
+      certbot certonly --dns-ovh --dns-ovh-credentials /etc/letsencrypt/ovh.ini -d haru-srv.fr --non-interactive --agree-tos --email lacuey.david@gmail.com --force-renewal
+      --cert-path /etc/letsencrypt/live/haru-srv.fr/haru-srv.fr.crt --key-path /etc/letsencrypt/live/haru-srv.fr/haru-srv.fr.key;
+      cp /etc/letsencrypt/live/haru-srv.fr/fullchain.pem /etc/letsencrypt/haru-srv.fr.cert;
+      cp /etc/letsencrypt/live/haru-srv.fr/privkey.pem /etc/letsencrypt/haru-srv.fr.key;
+      sleep 12;
+      done;"
+    networks:
+      - transcendence
+
   nginx:
     platform: ${DOCKER_PLATFORM}
     build:
@@ -98,16 +120,17 @@ services:
       dockerfile: ./docker/nginx/Dockerfile
     container_name: nginx
     ports:
-      - "8081:443"
+      - "443:443"
     volumes:
       - ${DOCKER_SOCK}:/tmp/docker.sock:ro
       - ./nginx/certs:/etc/nginx/certs:ro
       - ./nginx/htpasswd:/etc/nginx/htpasswd:ro
+      - ./nginx/challenges:/var/www/certbot
     environment:
       - HTTPS_METHOD=redirect
-      - DEFAULT_SSL_CERT=/etc/nginx/certs/localhost.crt
-      - DEFAULT_SSL_KEY=/etc/nginx/certs/localhost.key
     restart: on-failure
+    depends_on:
+      - certbot
     networks:
       - transcendence
 

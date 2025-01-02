@@ -139,3 +139,4 @@ srcs/staticfiles
 /docker/.mail
 docker/.42
 /srcs/media/avatars/
+docker/.ovh

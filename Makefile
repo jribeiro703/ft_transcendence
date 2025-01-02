@@ -208,6 +208,10 @@ generate-env:
 	echo "ELASTIC_USER=elastic" >> docker/.env; \
 	echo "ELASTIC_PASSWORD=$$HTPASSWD_PASSWORD" >> docker/.env; \
 	echo "HOSTNAME=$$HOSTNAME" >> docker/.env; \
+	cat docker/.ovh >> docker/.env; \
 	echo "Updated docker/.env file successfully."
+
+generate-certificates:
+	@docker-compose -f docker/docker-compose.yml run --rm certbot
 
 .PHONY: all build up down restart status logs logs-% shell-% rootless-docker generate-env prune-container prune-image restart-container
