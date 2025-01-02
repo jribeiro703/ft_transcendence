@@ -106,7 +106,7 @@ services:
       sh -c "trap exit TERM; while :; do
       certbot certonly --dns-ovh --dns-ovh-credentials /etc/letsencrypt/ovh.ini -d haru-srv.fr --non-interactive --agree-tos --email lacuey.david@gmail.com --force-renewal
       --cert-path /etc/letsencrypt/live/haru-srv.fr/haru-srv.fr.crt --key-path /etc/letsencrypt/live/haru-srv.fr/haru-srv.fr.key;
-      cp /etc/letsencrypt/live/haru-srv.fr/fullchain.pem /etc/letsencrypt/haru-srv.fr.cert;
+      cp /etc/letsencrypt/live/haru-srv.fr/fullchain.pem /etc/letsencrypt/haru-srv.fr.crt;
       cp /etc/letsencrypt/live/haru-srv.fr/privkey.pem /etc/letsencrypt/haru-srv.fr.key;
       sleep 12;
       done;"
