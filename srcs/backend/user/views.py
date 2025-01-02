@@ -89,7 +89,7 @@ def getUserFriends(request):
 
 		for friend in friends:
 			user_profile_view = UserProfileView()
-			response = user_profile_view.get(request, pk=friend.id)
+			response = user_profile_view.get(request, username=friend.username)
 			if response.status_code == status.HTTP_200_OK:
 				friends_data.append(response.data)
 			else:
@@ -120,7 +120,7 @@ def getOnlineUsers(request):
 
 		for user in online_users:
 			user_profile_view = UserProfileView()
-			response = user_profile_view.get(request, pk=user.id)
+			response = user_profile_view.get(request, username=user.username)
 			if response.status_code == status.HTTP_200_OK:
 				online_users_data.append(response.data)
 			else:
