@@ -156,7 +156,7 @@ function initializeTooltip(itemDiv, user) {
 	});
 
 	itemDiv.addEventListener('mouseenter', async function () {
-		const content = await getUserTooltipContent(user.id);
+		const content = await getUserTooltipContent(user.username);
 		tooltip.setContent({ '.tooltip-inner': content });
 	});
 

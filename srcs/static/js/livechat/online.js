@@ -1,5 +1,6 @@
 import { fetchAuthData } from '../user/fetchData.js';
 import { createUserListItem } from './userItem.js'
+import { showToast } from '../user/tools.js';
 
 document.addEventListener('DOMContentLoaded', function () {
 	const onlineButton = document.getElementById('onlineButton');
