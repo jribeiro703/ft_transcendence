@@ -21,7 +21,7 @@ def generate_activation_link(user, view_name, action):
 
 def send_activation_email(user, view_name, action, subject, text_file, html_file):
 	activation_link = generate_activation_link(user, view_name, action)
-	full_link = f'https://localhost:8081{activation_link}'
+	full_link = f'https://localhost/{activation_link}'
 
 	context = {"full_link": full_link}
 	text_content = render_to_string(text_file, context)

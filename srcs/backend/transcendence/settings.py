@@ -206,13 +206,13 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = [
-	"https://localhost:8081",
+	"https://localhost",
 ]
 
 CORS_ALLOWED_ORIGINS = [
-	f"https://{HOSTNAME}:8081",
-	"https://localhost:8081",
-	"https://127.0.0.1:8081",
+	f"https://{HOSTNAME}",
+	"https://localhost",
+	"https://127.0.0.1",
 ]
 
 CHANNEL_LAYERS = {

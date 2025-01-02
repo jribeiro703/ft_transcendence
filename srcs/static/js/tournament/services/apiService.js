@@ -17,7 +17,7 @@ export const createTournament = async (name) => {
 		};
 		// console.log('Payload:', payload);
 
-		const response = await fetch('https://localhost:8081/tournament/', {
+		const response = await fetch('https://localhost/tournament/', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(payload),
@@ -39,7 +39,7 @@ export const createTournament = async (name) => {
 
 export const fetchEligiblePlayers = async () => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/players/', {
+		const response = await fetch('https://localhost/tournament/players/', {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json' },
 		});
@@ -58,7 +58,7 @@ export const fetchEligiblePlayers = async () => {
 
 export const performMatchmaking = async (tournamentId) => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/matchmaking/', {
+		const response = await fetch('https://localhost/tournament/matchmaking/', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ tournament_id: tournamentId }),
@@ -77,7 +77,7 @@ export const performMatchmaking = async (tournamentId) => {
 
 export const preRegisterPlayers = async (tournamentId, playerIds) => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/preregister/', {
+		const response = await fetch('https://localhost/tournament/preregister/', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
@@ -101,7 +101,7 @@ export const preRegisterPlayers = async (tournamentId, playerIds) => {
 
 export const generateTournamentName = async () => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/generate-name/');
+		const response = await fetch('https://localhost/tournament/generate-name/');
 		if (response.ok) {
 			const data = await response.json();
 			return data.name;
@@ -117,7 +117,7 @@ export const generateTournamentName = async () => {
 
 export const validateTournamentName = async (name) => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/validate-name/', {
+		const response = await fetch('https://localhost/tournament/validate-name/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -139,7 +139,7 @@ export const validateTournamentName = async (name) => {
 
 export const fetchTournamentBracket = async (tournamentId) => {
 	try {
-		const response = await fetch(`https://localhost:8081/tournament/${tournamentId}/bracket/`, {
+		const response = await fetch(`https://localhost/tournament/${tournamentId}/bracket/`, {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json' },
 		});
@@ -157,7 +157,7 @@ export const fetchTournamentBracket = async (tournamentId) => {
 
 export const fetchCurrentPlayers = async (tournamentId) => {
 	try {
-		const response = await fetch(`https://localhost:8081/tournament/${tournamentId}/players/`, {
+		const response = await fetch(`https://localhost/tournament/${tournamentId}/players/`, {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json' },
 		});

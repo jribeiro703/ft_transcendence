@@ -613,7 +613,7 @@ def login42(request):
 
 		if "access_token" not in token_data:
 			# print("login42 view :error while getting access token")
-			response = redirect("https:localhost:8081/#home")
+			response = redirect("https:localhost/#home")
 			return response
 		
 		user_info = requests.get('https://api.intra.42.fr/v2/me', 
@@ -639,7 +639,7 @@ def login42(request):
 			if not user.avatar:
 				user.avatar.save(filename, ContentFile(avatar_response.content), save=True)
 
-		response = redirect("https://localhost:8081/#user")
+		response = redirect("https://localhost/#user")
 		access_token, refresh_token = generate_tokens_for_user(user)
 		set_refresh_token_in_cookies(response, refresh_token)
 		# print("set tokens in cookies and redirect to user page")
@@ -647,7 +647,7 @@ def login42(request):
 	
 	except Exception as e:
 		# print("login42 exception error: ", e)
-		response = redirect("https://localhost:8081/#home")
+		response = redirect("https://localhost/#home")
 		return response
 
 # ------------------------------LOGOUT ENDPOINTS--------------------------------	

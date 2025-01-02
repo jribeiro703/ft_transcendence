@@ -117,8 +117,8 @@ rootless-docker:
 	@systemctl --user start docker || { echo "Failed to start rootless Docker"; exit 1; }
 
 open:
-	@xdg-open https://$$(hostname):8081
-	@xdg-open https://$$(hostname):8081/admin
+	@xdg-open https://$$(hostname)
+	@xdg-open https://$$(hostname)/admin
 
 generate-env:
 	@echo "Generating docker/.env file..."

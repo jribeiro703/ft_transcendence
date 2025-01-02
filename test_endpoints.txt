@@ -5,27 +5,27 @@ You can test the flow step-by-step using cURL:
 Create Tournament
 `````````````````
 
-curl -X POST https://localhost:8081/tournament/ \
+curl -X POST https://localhost/tournament/ \
 	-H "Content-Type: application/json" \
 	-d '{"start_date": "2024-11-30T00:00:00Z", "max_score": 100, "status": "UPCOMING"}' \
 	-k
 
 Fetch Eligible Players
 ``````````````````````
-curl -X GET https://localhost:8081/tournament/players/ \
+curl -X GET https://localhost/tournament/players/ \
 	-H "Content-Type: application/json" \
 	-k
 
 Pre-register Players
 ````````````````````
-curl -X POST https://localhost:8081/tournament/preregister/ \
+curl -X POST https://localhost/tournament/preregister/ \
 	-H "Content-Type: application/json" \
 	-d '{"tournament_id": 7, "player_ids": [1, 2, 3, 4]}' \
 	-k
 
 Perform Matchmaking
 ```````````````````
-curl -X POST https://localhost:8081/tournament/matchmaking/ \
+curl -X POST https://localhost/tournament/matchmaking/ \
 	-H "Content-Type: application/json" \
 	-d '{"tournament_id": 7}' \
 	-k

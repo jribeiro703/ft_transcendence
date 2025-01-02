@@ -47,7 +47,7 @@ export function getFriendsList(tournamentId) {
  */
 window.inviteFriend = async (friendId, tournamentId) => {
 	try {
-		const response = await fetch('https://localhost:8081/tournament/preregister/', {
+		const response = await fetch('https://localhost/tournament/preregister/', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
