@@ -6,12 +6,13 @@ import { sendGameData, sendScoreInfo, sendSettingData } from "./network.js";
 import { startGame } from "./start.js";
 import { checkScore } from "./score.js";
 import { updateDifficultySelection, updateLevelSelection } from "./update.js";
-import { updatePowerUpSelection } from "./powerUp.js";
+import { resetPu, updatePowerUpSelection } from "./powerUp.js";
 import { clearBtnB } from "../brickout/manage.js";
 import { showGameView } from "./gameView.js";
 import { renderLogin42Page } from "../../user/pages/renderLogin42Page.js";
 import { renderHomePage } from "../../renderHomePage.js";
 import { renderPageGame } from "../HistoryManager.js";
+import { resetPowerUpB } from "../brickout/powerUp.js";
 
 export function listenBtn()
 {
@@ -19,12 +20,11 @@ export function listenBtn()
 	{
 		resetMatch();
 		clearBtn();
-		showGameView();
+		renderPageGame('playPong', true);
 	});
 
 	gameVar.quitGameBtn.addEventListener('click', () => 
 	{
-		// clearAllpongStates();
 		resetMatch();
 		clearBtn();
 		renderPageGame('home', true);
@@ -40,19 +40,13 @@ export function clearBtn()
 
 export function clearAllpongStates()
 {
-	if (gameVar.animationFrame)
-	{
-		cancelAnimationFrame(gameVar.animationFrame);
-		gameVar.animationFrame = null;
-	}
-	if(gameVar.gameTimer)
-	{
-		clearInterval(gameVar.gameTimer);
-		gameVar.gameTimer = null;
-	}
+	resetTimeFrame();
+	resetPu();
+
 	updateDifficultySelection('medium', true);
 	updateLevelSelection('classicPong', true);
 	updatePowerUpSelection(false, true);
+
 	gameVar.startTime = false;
 	gameVar.gameTime = 0;
 	gameVar.gameStart = false;
@@ -80,12 +74,17 @@ export function resetMatch()
 	gameVar.playerPaddleY = (420 - 75) / 2;
 	gameVar.aiPaddleY = (420 - 75) / 2;
 	gameVar.targetY = 0;
-
-	gameVar.gameTime = 0;
-	gameVar.startTime = false;
 	gameVar.finishGame = false;
 	gameVar.aiServe = false; 
 	gameVar.matchOver = false;
+	resetPu();
+	resetTimeFrame();
+}
+
+function resetTimeFrame()
+{
+	gameVar.gameTime = 0;
+	gameVar.startTime = false;
 	if (gameVar.animationFrame)
 	{
 		cancelAnimationFrame(gameVar.animationFrame);

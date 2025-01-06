@@ -22,6 +22,13 @@ function baseDrawB()
 	}
 }
 
+export function managePuB()
+{
+	drawPowerUpB();
+	collectPowerUpB();
+	updatePowerUpB();
+}
+
 export function drawB()
 {
 	if (gameVar.clientLeft)
@@ -34,11 +41,9 @@ export function drawB()
 		baseDrawB();
 		if (brickVar.gameStart)
 		{
-			drawPowerUpB();
-			collectPowerUpB();
+			managePuB();
 			collisionDetectionB();
 			manageCollisionB();
-			updatePowerUpB();
 		}
 		else
 		{

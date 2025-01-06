@@ -31,11 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// listen for hash change to call right page render and push the state in history
 	const hash = window.location.hash
-	console.log("DOM : hash:  ", hash);
 	if (isGameplayPage(hash))
 	{
-		console.log("gamepage  il es rentre, hash:", hash);
-		console.log("1");
 		renderPage('home', true);
 	}
 	else if (isGamePage(hash))

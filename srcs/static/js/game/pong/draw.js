@@ -40,17 +40,21 @@ export function initDraw()
 	}
 }
 
+export function managePu()
+{
+	drawPowerUp();
+	collectPowerUp();
+	updatePowerUp();
+}
+
 export function draw()
 {
 	initDraw();
-	// drawPredictionPath(gameVar.ctx);
-	manageAi();
+	drawPredictionPath(gameVar.ctx);
 	if (gameVar.gameStart)
 	{
 		manageRealCollision();
-		drawPowerUp();
-		collectPowerUp();
-		updatePowerUp();
+		managePu();
 	}
 	else
 		manageServer();

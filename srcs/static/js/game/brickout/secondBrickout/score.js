@@ -4,6 +4,11 @@ import gameVar from "../../pong/var.js";
 import { levelDisplayB } from "./level.js";
 import { addBtnB } from "./manage.js";
 
+function loadCustomFont()
+{
+    return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');
+}
+
 export function youWinB()
 {
 	if (!brickVar2.finish)
@@ -40,30 +45,34 @@ export function compareScore()
 {
 	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
 	brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
-	if (brickVar.score < brickVar2.score)
+	loadCustomFont().load().then(function(font)
 	{
-		brickVar2.ctx.font = 'bold 24px fontScore';
-		brickVar2.ctx.fillStyle = '#66a5e8';
-		brickVar2.ctx.textAlign = 'left';
-		brickVar2.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar2.canvasW/ 4 - 100, (brickVar2.canvasH / 2) - 100);
-		brickVar2.ctx.fillText("Your score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2);
-		brickVar2.ctx.fillText(brickVar2.score, brickVar2.canvasW / 4 + 200, brickVar2.canvasH / 2)
+		document.fonts.add(font);
+		if (brickVar.score < brickVar2.score)
+		{
+			brickVar2.ctx.font = 'bold 24px fontScore';
+			brickVar2.ctx.fillStyle = '#66a5e8';
+			brickVar2.ctx.textAlign = 'left';
+			brickVar2.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar2.canvasW/ 4 - 100, (brickVar2.canvasH / 2) - 100);
+			brickVar2.ctx.fillText("Your score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2);
+			brickVar2.ctx.fillText(brickVar2.score, brickVar2.canvasW / 4 + 200, brickVar2.canvasH / 2)
 
-		brickVar2.ctx.fillText("Your opponent has score only : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
-		brickVar2.ctx.fillText(brickVar.score, brickVar2.canvasW / 4 + 420, brickVar2.canvasH / 2 + 50);
+			brickVar2.ctx.fillText("Your opponent has score only : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
+			brickVar2.ctx.fillText(brickVar.score, brickVar2.canvasW / 4 + 420, brickVar2.canvasH / 2 + 50);
 
-		brickVar.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4 , (brickVar.canvasH / 2) - 100);
-		brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
-		brickVar.ctx.fillText(brickVar.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
+			brickVar.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4 , (brickVar.canvasH / 2) - 100);
+			brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
+			brickVar.ctx.fillText(brickVar.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
 
-		brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
-		brickVar.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50)
-	}
+			brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
+			brickVar.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50)
+		}
+	}).catch(function(error)
+	{
+		console.error("Error on font load", error);
+	});
 }
-function loadCustomFont()
-{
-    return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');
-}
+
 
 export function drawScoreBoardB()
 {

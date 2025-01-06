@@ -77,7 +77,7 @@ const brickVar = {
 		{ type: 'sizeP', image: '/static/css/images/paddleSp.png'},
 		{ type: 'sizeM', image: '/static/css/images/paddleSm.png'},
 		{ type: 'invincible', image: '/static/css/images/shield.png'},
-		{ type: 'ExtraLife', image: '/static/css/images/extraLife.png'},
+		{ type: 'extraLife', image: '/static/css/images/extraLife.png'},
 	],
 	currentPowerUp: null,
 
