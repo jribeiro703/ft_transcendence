@@ -16,6 +16,7 @@ export function createClassicPattern()
     brickVar2.totalBrick = brickVar2.brickColumnCount * brickVar2.brickRowCount;
 	brickVar2.currLevel = 'classic';
 }
+
 export function createCastlePattern()
 {
 	brickVar2.brickColumnCount = 16;

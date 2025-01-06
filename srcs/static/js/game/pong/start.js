@@ -13,6 +13,7 @@ export function startLiveGame()
 	updateCanvasColor();
 	drawLive();
 }
+
 export function startGame()
 {
 	drawScoreBoard();

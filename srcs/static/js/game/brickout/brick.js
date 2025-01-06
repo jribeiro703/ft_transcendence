@@ -49,13 +49,11 @@ export function manageRemoteScore()
 		if (gameVar.playerIdx === 1)
 		{
 			brickVar.playerScore = brickVar.score;
-			// brickVar.playerLives = brickVar.lives;
 			sendScoreInfoB(gameVar.gameSocket, 1, brickVar.playerScore, brickVar.playerLives);
 		}
 		if (gameVar.playerIdx === 2)
 		{
 			brickVar.opponentScore = brickVar.score;
-			// brickVar.opponentLives = brickVar.lives;
 			sendScoreInfoB(gameVar.gameSocket, 2, brickVar.opponentScore, brickVar.opponentLives);
 		}
 	}

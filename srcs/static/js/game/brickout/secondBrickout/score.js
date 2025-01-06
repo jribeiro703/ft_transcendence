@@ -1,7 +1,6 @@
 import brickVar from "../var.js";
 import brickVar2 from "./var.js";
 import gameVar from "../../pong/var.js";
-import { displayScore } from "../../pong/displayVar.js";
 import { levelDisplayB } from "./level.js";
 import { addBtnB } from "./manage.js";
 
@@ -36,6 +35,7 @@ export function sendScoreB()
 {
 	console.log("finalScroe : ", brickVar2.finalScore);
 }
+
 export function compareScore()
 {
 	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);

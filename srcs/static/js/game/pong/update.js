@@ -42,9 +42,9 @@ export function updateLevelSelection(level, def)
 	else if (level === "tennis")
 		gameVar.currentLevel = "tennis";
 }
+
 export function updateImageUrl()
 {
-	// console.log("updatimage currr:", brickVar.currLevel);
 
 	if (gameVar.currentLevel === 'tableTennis')
 		gameVar.pongUrl = "static/css/images/ttLevel.png"
@@ -64,6 +64,7 @@ export function updateImageUrl()
 	else
 		gameVar.brickUrl = "static/css/images/brickout.png";
 }
+
 export function 	updateCanvasColor()
 {
 	let color = null;

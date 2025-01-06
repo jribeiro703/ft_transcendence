@@ -71,7 +71,7 @@ export function initializeScoreCanvasBrickout()
 			{
                 brickVar.scoreCtx = scoreCanvas.getContext('2d');
                 scoreCanvas.width = brickVar.scoreCanvW;
-                scoreCanvas.height = brickVar.scoreCanvH + 100;
+                scoreCanvas.height = brickVar.scoreCanvH;
                 scoreCanvas.style.marginBottom = '10px';
             }
 

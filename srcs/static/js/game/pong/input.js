@@ -75,8 +75,9 @@ export function startBall(e)
 	if (e.code == "Space" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart && gameVar.currentServer == 'player'
 		|| e.code == "Enter" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart && gameVar.currentServer == 'player2')
 	{
+
 		if (!gameVar.finishGame)
-		{
+			{
 			if (!gameVar.init_dx || !gameVar.init_dy)
 				updateDifficultySelection(gameVar.difficulty, true);
 			gameVar.startTime = true;
