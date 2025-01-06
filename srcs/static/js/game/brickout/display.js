@@ -31,12 +31,12 @@ export function displayFinish()
 
 export function displayLocalRematch()
 {
-    const mainContent = document.getElementById("mainContent");
+    const mainContent = document.getElementById("brickout2pContainer");
     const btn = document.createElement('div');
     btn.innerHTML = `
     <div class="finish" id="finish">
-    <button id="rematchBtn">Rematch</button> 
-    <button id="quitBtn">Return Home</button>
+        <button id="rematchBtn">Rematch</button> 
+        <button id="quitBtn">Return Home</button>
     </div>
     `;
     mainContent.appendChild(btn);

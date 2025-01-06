@@ -52,7 +52,6 @@ async function renderHomePage() {
 			handler();
 		});
 	});
-	console.log("renderHomePage yes");
 }
 
 export { renderHomePage };

@@ -107,7 +107,7 @@ export function compareScoreRemote()
 	{
         document.fonts.add(font);
 		brickVar.ctx.font = 'bold 24px fontScore';
-		brickVar.ctx.fillStyle = 'yellow';
+		brickVar.ctx.fillStyle = '#66a5e8';
 		brickVar.ctx.textAlign = 'left';
 		if (brickVar.playerScore > brickVar.opponentScore)
 		{
@@ -165,7 +165,7 @@ export function compareScore()
 		if (brickVar.score > brickVar2.score)
 		{
 			brickVar.ctx.font = 'bold 24px fontScore';
-			brickVar.ctx.fillStyle = 'yellow';
+			brickVar.ctx.fillStyle = '#66a5e8';
 			brickVar.ctx.textAlign = 'left';
 			brickVar.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar.canvasW/ 4 - 100, (brickVar.canvasH / 2) - 100);
 			brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
@@ -270,19 +270,6 @@ export function drawScoreBoardBRemote()
 
 		ctx.font = '32px fontScore';
 		ctx.fillText("VS", centerX, (brickVar.scoreCanvH) / 2);
-
-		// const minutes = Math.floor(brickVar.gameTime / 60);
-		// const seconds = brickVar.gameTime % 60;
-		// const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-		// ctx.font = '20px fontScore';
-		// ctx.fillText(time, leftX - 10, y + brickVar.scoreCanvH + 45);
-	
-		// const minutes2 = Math.floor(brickVar2.gameTime / 60);
-		// const seconds2 = brickVar2.gameTime % 60;
-		// const time2 = `${minutes2}:${seconds2 < 10 ? '0' : ''}${seconds2}`;
-		// ctx.font = '20px fontScore';
-		// ctx.fillText(time2, rightX + 10, y + brickVar.scoreCanvH + 45);
-
 		
 	}).catch(function(error)
 	{
