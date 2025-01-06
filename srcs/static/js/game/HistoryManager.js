@@ -5,7 +5,7 @@ import { showGameSelectionMultiView } from "./pong/gameSelectionView.js";
 import { showSettingView } from "./pong/settingsView.js";
 import { showGameRoom, showGameView } from "./pong/gameView.js";
 import { renderHomePage } from "../renderHomePage.js";
-import { updateDifficultySelection, updateLevelSelection } from "./pong/update.js";
+import { updateDifficultySelection, updateImageUrl, updateLevelSelection } from "./pong/update.js";
 import { updatePowerUpSelection } from "./pong/powerUp.js";
 import { updateDifficultySelectionB, updateLevelSelectionB, updateSettingB } from "./brickout/update.js";
 import { updatePowerUpSelectionB } from "./brickout/powerUp.js";
@@ -192,6 +192,7 @@ window.addEventListener('load', () =>
 			updatePowerUpSelectionB(brickVar.powerUpEnable, true);
 			updateSetting();
 			updateSettingB();
+			updateImageUrl();
 		}
 	}
 	else if (currentHash === 'playPong' || currentHash === 'playBrickout'

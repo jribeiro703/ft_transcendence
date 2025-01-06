@@ -51,23 +51,12 @@ export function checkScore()
 		gameVar.rematchBtn.disabled = false;
 		gameVar.rematchBtn.style.cursor = false ? "pointer" : "not-allowed";
 		cancelAnimationFrame(gameVar.animationFrame);
-		sendScore();
+		if (gameVar.liveMatch || gameVar.localGame)
+			sendScore();
 		listenBtn();
 	}	
 }
 
-// export function sendScore()
-// {
-// 	console.log("we send =>");
-// 	console.log("name player1"); // string
-// 	console.log("name player2"); // string
-// 	console.log("score player : ", gameVar.playerScore); // int
-// 	console.log("score opponent : ", gameVar.aiScore); // int 
-// 	console.log("game time : ", gameVar.gameTime); // int
-// 	console.log("Difficulty : ",gameVar.difficulty); // string = 'easy' || 'medium' || 'hard'
-// 	console.log("PowerUp active : ", gameVar.powerUpEnable); // boolean
-// 	console.log("Level : ", gameVar.currentLevel);  // string = 'tableTennis' || 'Football' || 'tennis' ( maybe an other : 'classic')
-// }
 function loadCustomFont()
 {
     return new FontFace('fontScore', 'url(/static/css/font/scoreboard-webfont.woff2)');

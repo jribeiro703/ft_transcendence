@@ -2,7 +2,7 @@ import gameVar from "./var.js";
 import { drawPowerUp, collectPowerUp, updatePowerUp } from "./powerUp.js";
 import { manageServer } from "./manage.js";
 import { manageCollisionLive, manageRealCollision } from "./collision.js";
-import { aiMove, drawPredictionPath} from "./ai.js";
+import { aiMove, drawPredictionPath, manageAi} from "./ai.js";
 import { drawFootball } from "./foot.js";
 import { drawTennisCourt, drawLines} from "./tennis.js";
 import { manageMoveLive, manageMove } from './movement.js';
@@ -43,7 +43,8 @@ export function initDraw()
 export function draw()
 {
 	initDraw();
-	drawPredictionPath(gameVar.ctx);
+	// drawPredictionPath(gameVar.ctx);
+	manageAi();
 	if (gameVar.gameStart)
 	{
 		manageRealCollision();

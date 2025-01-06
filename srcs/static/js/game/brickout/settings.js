@@ -24,11 +24,8 @@ export function showSettingViewB(info)
 	listenSettingPUB();
 	listenSettingDifficultyB();
 	listenSettingLevelB();
-
 	listenSaveBtnB(info);
-
 }
-
 
 export function checkSettingB()
 {

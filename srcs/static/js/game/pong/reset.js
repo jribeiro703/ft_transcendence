@@ -7,16 +7,35 @@ import { startGame } from "./start.js";
 import { checkScore } from "./score.js";
 import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
+import { clearBtnB } from "../brickout/manage.js";
+import { showGameView } from "./gameView.js";
+import { renderLogin42Page } from "../../user/pages/renderLogin42Page.js";
+import { renderHomePage } from "../../renderHomePage.js";
+import { renderPageGame } from "../HistoryManager.js";
 
 export function listenBtn()
 {
 	gameVar.rematchBtn.addEventListener('click', () =>
 	{
 		resetMatch();
-		startGame();
+		clearBtn();
+		showGameView();
 	});
 
-	gameVar.quitGameBtn.addEventListener('click', () => document.location.reload());
+	gameVar.quitGameBtn.addEventListener('click', () => 
+	{
+		// clearAllpongStates();
+		resetMatch();
+		clearBtn();
+		renderPageGame('home', true);
+	});
+}
+
+export function clearBtn()
+{
+	// const finish = document.getElementById("gameView");
+	gameVar.quitGameBtn.style.display = 'none';
+	gameVar.rematchBtn.style.display = 'none';
 }
 
 export function clearAllpongStates()
@@ -58,10 +77,15 @@ export function resetMatch()
 	gameVar.serveCount = 0;
 	gameVar.gameStart = false;
 	gameVar.currentServer = 'player';
+	gameVar.playerPaddleY = (420 - 75) / 2;
 	gameVar.aiPaddleY = (420 - 75) / 2;
-	gameVar.targetY = (420 - 75) / 2;
+	gameVar.targetY = 0;
+
 	gameVar.gameTime = 0;
+	gameVar.startTime = false;
 	gameVar.finishGame = false;
+	gameVar.aiServe = false; 
+	gameVar.matchOver = false;
 	if (gameVar.animationFrame)
 	{
 		cancelAnimationFrame(gameVar.animationFrame);
@@ -71,6 +95,11 @@ export function resetMatch()
 	{
 		clearInterval(gameVar.aiMoveInterval);
 		gameVar.aiMoveInterval = null;
+	}
+	if(gameVar.gameTimer)
+	{
+		clearInterval(gameVar.gameTimer);
+		gameVar.gameTimer = null;
 	}
 }
 

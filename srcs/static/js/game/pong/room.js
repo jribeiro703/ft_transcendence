@@ -3,12 +3,8 @@ import { sendPlayerData, sendPlayerRoomData, sendRoomNameData, sendScoreInfo, se
 import { renderPageGame } from '../HistoryManager.js';
 import { startLiveGame } from './start.js';
 import { getUserInfos, getUserInfosRemote } from '../getUser.js';
-import { joinRoomB } from '../brickout/room.js';
 import brickVar from '../brickout/var.js';
-import { startGameB } from '../brickout/control.js';
 import { initGame, initListenerB } from '../brickout/init.js';
-import { initializeScoreCanvas2P } from './canvas.js';
-import { escapeHTML } from '../../user/tools.js';
 import { kickOut } from './draw.js';
 
 export function createNewRoom(joinRoomCallback)

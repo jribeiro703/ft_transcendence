@@ -23,10 +23,11 @@ export function listenFinishBtn()
 	const quitBtn = document.getElementById("quitBtn");
 	const restartLevelBtn = document.getElementById("restartLevelBtn")
 	if (restartLevelBtn)
-		restartLevelBtn.addEventListener("click", () => restartLevelB);
+		restartLevelBtn.addEventListener('click', () => restartLevelB);
 	if (quitBtn)
 		quitBtn.addEventListener('click', () => renderPageGame("home"), true);
 }
+
 export function clearAllGameStates()
 {
     if (brickVar.anim) {

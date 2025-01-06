@@ -1,10 +1,10 @@
 import brickVar from "./var.js";
+import gameVar from "../pong/var.js";
 import { collisionDetectionB, drawBricksB} from './brick.js'
 import { updateBallPositionB, handleBallB } from './ball.js';
 import { manageCollisionB, manageMoveB } from './manage.js';
 import { collectPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
 import { drawScoreBoardB, drawScoreBoardBRemote } from "./score.js";
-import gameVar from "../pong/var.js";
 import { kickOut } from "../pong/draw.js";
 
 function baseDrawB()

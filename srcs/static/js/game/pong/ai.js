@@ -42,15 +42,15 @@ export function aiMove(targetY)
 
 export function manageAi()
 {
-	if (gameVar.aiMoveInterval)
-		clearInterval(gameVar.aiMoveInterval);
+	// if (gameVar.aiMoveInterval)
+	// 	clearInterval(gameVar.aiMoveInterval);
 	gameVar.aiMoveInterval = setInterval(() =>
 	{
 		if (gameVar.dx > 0)
 		{
 			let future = predictBallPos(gameVar);
 
-			// console.log("on predict", future);
+			console.log("on predict");
 			gameVar.targetY = future[149][1];
 		}
 	}, AI_UPDATE_INTERVAL);	
