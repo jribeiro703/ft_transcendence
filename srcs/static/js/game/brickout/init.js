@@ -1,4 +1,5 @@
 import brickVar from "./var.js";
+import { PADDLE_POSX } from "../pong/const.js";
 import brickVar2 from "./secondBrickout/var.js";
 import { keyDownHandlerB, keyUpHandlerB } from "./control.js";
 import { startBallB as startBallFirst } from './ball.js';
@@ -98,4 +99,11 @@ function removeEventListenersB()
     document.removeEventListener("keyup", keyUpHandlerB);
     document.removeEventListener("keydown", startBallFirst);
     document.removeEventListener("keydown", startBallSecond);
+}
+
+
+export function initPaddlesPosB()
+{
+    brickVar.paddleX = PADDLE_POSX;
+    brickVar2.paddleX = PADDLE_POSX;
 }

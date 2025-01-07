@@ -1,3 +1,4 @@
+import { initPaddlesPosB } from "./init.js";
 import brickVar from "./var.js";
 
 export function resetPuB()
@@ -23,6 +24,7 @@ export function resetMatchB()
 	brickVar.gameTime = 0;
 	brickVar.startTime = false;
 	resetPuB();
+	initPaddlesPosB();
 	if (brickVar.anim)
 	{
 		cancelAnimationFrame(brickVar.anim);

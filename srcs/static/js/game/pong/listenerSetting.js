@@ -106,20 +106,20 @@ export function listenSettingSave(info)
 		{
 			// await renderPageGame("pongLobby", true);
 			renderPageGame("pongLobby", true);
-			updateLiveSetting();
+			// updateLiveSetting();
 		}
 		else if (info === 'local')
 		{
 			gameVar.saveSetting = true;
 			// await renderPageGame("gameSelectionMulti", true);
 			renderPageGame("gameSelectionMulti", true);
-			updateSetting();
+			// updateSetting();
 		}
 		else
 		{	
 			// await renderPageGame("gameSelectionSolo", true);
 			renderPageGame("gameSelectionSolo", true);
-			updateSetting();
+			// updateSetting();
 		}
 	});
 }

@@ -40,7 +40,7 @@ export function checkServer()
 }
 export function addBtn()
 {
-	const mainContent = null;
+	let mainContent = null;
 	if (gameVar.tournament)
 		mainContent = document.getElementById("gameView");
 	else

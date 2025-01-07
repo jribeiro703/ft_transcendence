@@ -34,7 +34,8 @@ export function collisionDetectionB()
 						brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
 						if (brickVar.currLevel === "invader")
 							brickVar.finish = true;
-						youWinB();
+						if (!gameVar.localGame)
+							youWinB();
 					}
 				}
 			}

@@ -5,7 +5,7 @@ export function collisionTennis()
 	const width = gameVar.canvasW;
     const height = gameVar.canvasH;
 
-	const wallArea = height * 0.6;
+	const wallArea = height * 0.70;
 	const goalY = (height - wallArea) / 2
     
     if (gameVar.y < goalY || gameVar.y > goalY + wallArea)

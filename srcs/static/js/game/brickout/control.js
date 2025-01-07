@@ -5,6 +5,7 @@ import { initBallB } from "./ball.js";
 import { createPowerUpB } from "./powerUp.js"; 
 import { drawB } from "./draw.js";
 import gameVar from "../pong/var.js";
+import { initPaddlesPosB } from "./init.js";
 
 export function keyDownHandlerB(e)
 {
@@ -62,6 +63,7 @@ export function startGameB(level)
 	if (!brickVar.initGame)
 	{
 		initBallB();
+		initPaddlesPosB();
 		checkLevelB(level);
 		if (brickVar.powerUpEnable)
 			createPowerUpB();

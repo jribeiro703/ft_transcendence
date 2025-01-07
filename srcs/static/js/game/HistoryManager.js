@@ -137,7 +137,7 @@ window.addEventListener('popstate', async (event) =>
 		const params = event.state.params;
 		clearAllpongStates();
 		clearAllBrickStates();	
-		if (isGamePage(window.location.hash))
+		if (isGamePage(window.location.hash) && gameVar.liveMatch)
 		{
 			gameVar.clientLeft = true;
 			sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentLevel, gameVar.startTime, gameVar.clientLeft);
@@ -190,9 +190,9 @@ window.addEventListener('load', () =>
 			updateDifficultySelectionB(brickVar.difficulty, true);
 			updateLevelSelectionB(brickVar.currLevel, true);
 			updatePowerUpSelectionB(brickVar.powerUpEnable, true);
-			updateSetting();
-			updateSettingB();
-			updateImageUrl();
+			// updateSetting();
+			// updateSettingB();
+			// updateImageUrl();
 		}
 	}
 	else if (currentHash === 'playPong' || currentHash === 'playBrickout'

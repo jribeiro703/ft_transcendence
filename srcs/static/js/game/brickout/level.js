@@ -3,13 +3,14 @@ import { initGame, initListenerB } from "./init.js";
 import { initBricksB } from "./brick.js";
 import { sendScoreB } from "./score.js";
 import { startGameB } from "./control.js";
+import { addBtnB } from "./manage.js";
 
 export function youWinB()
 {
 	if (!brickVar.finish)
 	{
 		brickVar.ctx.font = "35px Arial";
-    	brickVar.ctx.fillStyle = "red";
+    	brickVar.ctx.fillStyle = "#66a5e8";
     	brickVar.ctx.fillText("Congratulations, you win !!", brickVar.canvasW / 2 - 200, brickVar.canvasH / 2);
 	}
 	levelDisplayB();
@@ -48,7 +49,6 @@ export function levelDisplayB()
 		brickVar.finish = true;
 		brickVar.finalScore = 104 + 169 + 169 + 169;
 		brickVar.ctx.fillText("You have finish the game, Nice ! Score : " +brickVar.finalScore , brickVar.canvasW / 2 - 220, brickVar.canvasH / 6);
-		sendScoreB();
 		addImageB("/static/css/images/ms.png");
 	}
 }

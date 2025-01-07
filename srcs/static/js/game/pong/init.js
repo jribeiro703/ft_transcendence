@@ -5,9 +5,8 @@ import { showLobbyView } from "./gameViewMulti.js";
 import { roomNetwork } from "./room.js";
 import { updateLiveSetting } from "./setting.js";
 import { renderPageGame } from "../HistoryManager.js";
-import { clearAllpongStates } from "./reset.js";
-import { clearAllBrickStates } from "../brickout/manage.js";
 import { updateLiveSettingB } from "../brickout/settings.js";
+import { PADDLE_POSY } from "./const.js";
 
 
 export function removeEventListeners()
@@ -18,7 +17,6 @@ export function removeEventListeners()
     document.removeEventListener("keydown", startBall);
 }
 
-// BUG TOFIX TODO : ca open le livechat quand on clic sur le bouton create room
 export function initEventListenerRoom()
 {
 	removeEventListeners();
@@ -37,21 +35,17 @@ export function initEventListenerRoom()
 
 export function initLobbyPongView()
 {
-	// clearAllpongStates();
 	showLobbyView();
-	updateLiveSetting();
 	initEventListenerRoom();
 	initControlLive();
 	roomNetwork();
+	updateLiveSetting();
 }
 export function initLobbyBrickoutView()
 {
-	// clearAllpongStates();
-	// clearAllBrickStates();
 	showLobbyView();
 	updateLiveSettingB();
 	initEventListenerRoomB();
-	// initControlLive();
 	roomNetwork();
 }
 
@@ -69,5 +63,13 @@ export function initEventListenerRoomB()
 	{
 		renderPageGame("brickoutSetting", true, 'live');
 	});
+
+}
+
+export function initPaddlesPos()
+{
+	gameVar.playerPaddleY = PADDLE_POSY;
+	gameVar.player2PaddleY = PADDLE_POSY;
+	gameVar.aiPaddleY = PADDLE_POSY;
 
 }

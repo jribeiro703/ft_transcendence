@@ -1,3 +1,5 @@
+import { PADDLE_POSX } from "../pong/const.js";
+
 const brickVar = {
 
 // -------------------------------------Canvas-----------------
@@ -26,7 +28,7 @@ const brickVar = {
 
 	paddleHeight: 10,
 	paddleWidth: 75,
-	paddleX: (780 - 75 )/2,
+	paddleX: PADDLE_POSX,
 	paddleSpeed: 10,
 
 // -------------------------------------Controls-----------------
