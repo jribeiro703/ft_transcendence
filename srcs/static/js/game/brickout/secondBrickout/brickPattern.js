@@ -3,7 +3,6 @@ import { countBrick } from "./brick.js";
 
 export function createClassicPattern()
 {
-	console.log('createclassic');
 	brickVar2.brickColumnCount = 8;
     for(let c = 0; c < brickVar2.brickColumnCount; c++)
 	{

@@ -6,6 +6,7 @@ import { handleNextLevelB, restartLevelB } from "./level.js";
 import { displayFinish, displayNextLevel } from "./display.js";
 import { listenFinishBtn, listenNextLevelBtn} from "./listenBtn.js";
 import { chechOpponent } from "./score.js";
+import { displayLocalRematch } from "../display.js";
 
 export function manageCollisionB()
 {
@@ -77,10 +78,18 @@ export function manageMoveB()
 
 export function addBtnB()
 {
-	if (!brickVar2.finish)
-		displayNextLevel();
+	if (!gameVar.localGame)
+	{
+		if (!brickVar2.finish)
+			displayNextLevel();
+		else
+			displayFinish();
+	}
 	else
-		displayFinish();
+	{
+		// displayLocalRematch();
+		console.log("else...");
+	}
 }
 
 export function checkBtnB(status)

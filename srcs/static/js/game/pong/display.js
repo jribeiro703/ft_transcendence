@@ -47,12 +47,12 @@ export function displayPongRemote()
     insertTo.innerHTML = `
     <div id="gameView" style="display: none;">
         <div id="scoreboard">
-        <canvas id="scoreCanvas"></canvas>
+            <canvas id="scoreCanvas"></canvas>
         </div>
         <canvas id="myCanvas"></canvas>
         <div class="button-container">
-        <button id="rematchBtn" style="display: none;" disabled>Rematch</button>
-        <button id="quitGameBtn" style="display: none;">Quit Game</button>
+            <button id="rematchBtn" style="display: none;">Rematch</button>
+            <button id="quitGameBtn" style="display: none;">Quit Game</button>
         </div>
     </div>	
     `;
@@ -155,7 +155,7 @@ export function displayGameView()
 			<canvas id="myCanvas"></canvas>
 			<br><br>
 			<div class="button-container">
-				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+				<button id="rematchBtn" style="display: none;">Rematch</button>
 				<button id="quitGameBtn" style="display: none;">Return Home</button>
 			</div>
 		</div>
@@ -175,7 +175,7 @@ export function displayGameView()
 			<canvas id="myCanvas"></canvas>
 			<br><br>
 			<div class="button-container">
-				<button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+				<button id="rematchBtn" style="display: none;">Rematch</button>
 				<button id="quitGameBtn" style="display: none;">Return Home</button>
 			</div>
 		</div>
@@ -200,7 +200,7 @@ export function displayCanvas()
     </div>
     <canvas id="myCanvas"></canvas>
     <div class="button-container">
-        <button id="rematchBtn" style="display: none;" disabled>Rematch</button>
+        <button id="rematchBtn" style="display: none;">Rematch</button>
         <button id="quitGameBtn" style="display: none;">Quit Game</button>
     </div>
     </div>	
@@ -279,7 +279,8 @@ export function displaySetting(difficulty, powerUp, level)
 }
 export function displayLiveSetting(difficulty, level)
 {
-	const settingContain = document.getElementById('settings-columns');
+    console.log("displaySettingLive");
+	const settingContain = document.getElementById('setting-container');
 	if (!settingContain)
 	{
 		console.log("Errror on settings-columns");

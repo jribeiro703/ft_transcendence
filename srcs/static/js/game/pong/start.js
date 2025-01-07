@@ -6,6 +6,7 @@ import { manageAi } from "./ai.js";
 import { drawScoreBoard } from "./score.js";
 import { updateCanvasColor } from "./update.js";
 import { drawLive } from "./draw.js";
+import { initPaddlesPos } from "./init.js";
 
 export function startLiveGame()
 {
@@ -18,6 +19,7 @@ export function startGame()
 {
 	drawScoreBoard();
 	initializeBall();
+	initPaddlesPos();
 	if (gameVar.powerUpEnable)
 	{
 		newPowerUp(true, 1000);

@@ -1,4 +1,6 @@
 import { checkBtnB } from "./manage.js";
+import brickVar2 from "./secondBrickout/var.js";
+import brickVar from "./var.js";
 
 export function displayNextLevel()
 {

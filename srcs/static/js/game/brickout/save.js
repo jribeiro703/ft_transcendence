@@ -18,13 +18,13 @@ export function listenSaveBtnB(info)
 		{
 			// await renderPageGame("gameSelectionMulti", true);
 			renderPageGame("gameSelectionMulti", true);
-			updateSettingB();
+			// updateSettingB();
 		}
 		else
 		{
 			// await renderPageGame("gameSelectionSolo", true);
 			renderPageGame("gameSelectionSolo", true);
-			updateSettingB();
+			// updateSettingB();
 		}
 	});
 }

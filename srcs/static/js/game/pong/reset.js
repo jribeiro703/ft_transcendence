@@ -13,6 +13,8 @@ import { renderLogin42Page } from "../../user/pages/renderLogin42Page.js";
 import { renderHomePage } from "../../renderHomePage.js";
 import { renderPageGame } from "../HistoryManager.js";
 import { resetPowerUpB } from "../brickout/powerUp.js";
+import { initPaddlesPos } from "./init.js";
+
 
 export function listenBtn()
 {
@@ -42,6 +44,7 @@ export function clearAllpongStates()
 {
 	resetTimeFrame();
 	resetPu();
+	initPaddlesPos();
 
 	updateDifficultySelection('medium', true);
 	updateLevelSelection('classicPong', true);
@@ -71,13 +74,12 @@ export function resetMatch()
 	gameVar.serveCount = 0;
 	gameVar.gameStart = false;
 	gameVar.currentServer = 'player';
-	gameVar.playerPaddleY = (420 - 75) / 2;
-	gameVar.aiPaddleY = (420 - 75) / 2;
 	gameVar.targetY = 0;
 	gameVar.finishGame = false;
 	gameVar.aiServe = false; 
 	gameVar.matchOver = false;
 	resetPu();
+	initPaddlesPos();
 	resetTimeFrame();
 }
 

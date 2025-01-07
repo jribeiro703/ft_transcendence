@@ -23,7 +23,6 @@ async function renderHomePage() {
 
 	document.getElementById('playsoloGameBtn').addEventListener('click', () => {
 
-		console.log("2");
 		renderPageGame("gameSelectionSolo");
 	});
 

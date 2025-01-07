@@ -1,3 +1,5 @@
+import { PADDLE_POSY } from "./const.js";
+
 const gameVar = 
 {
 
@@ -22,10 +24,10 @@ const gameVar =
 	aiPaddleHeight: 75,
 	aiPaddleWidth: 12,
 
-	playerPaddleY: (420 - 75) / 2,
-	player2PaddleY: (420 - 75) / 2,
+	playerPaddleY: PADDLE_POSY,
+	player2PaddleY: PADDLE_POSY,
 
-	aiPaddleY: (420 - 75) / 2,
+	aiPaddleY: PADDLE_POSY,
 
 // ---------------------------------Control----------------------
 
