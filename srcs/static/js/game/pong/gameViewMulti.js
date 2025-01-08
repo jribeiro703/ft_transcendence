@@ -49,7 +49,7 @@ export async function showPongRemote(room = null)
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	// gameVar.gameView.style.display = 'block';
+	gameVar.returnLobby = document.getElementById('returnLobby');
 	
 	createNewRoom();
 }
@@ -66,7 +66,6 @@ export async function showBrickoutRemote(room = null)
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	// gameVar.gameView.style.display = 'block';
 	
 	createNewRoom();
 }

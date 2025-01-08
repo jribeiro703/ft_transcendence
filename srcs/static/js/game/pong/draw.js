@@ -132,5 +132,4 @@ function drawClassicPong()
 	gameVar.ctx.moveTo(0, gameVar.canvasH);
 	gameVar.ctx.lineTo(gameVar.canvasW, gameVar.canvasH);
 	gameVar.ctx.stroke();
-
 }

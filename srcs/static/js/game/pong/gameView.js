@@ -50,6 +50,7 @@ export async function showGameRoom()
 
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+	gameVar.returnLobby = document.getElementById('returnLobby');
 }
 
 export function rematchView()

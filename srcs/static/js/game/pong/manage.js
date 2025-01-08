@@ -2,6 +2,7 @@ import gameVar from "./var.js";
 import { checkball } from "./check.js";
 import { clearAllpongStates, resetBall } from "./reset.js";
 import { renderPageGame } from "../HistoryManager.js";
+import { resetLiveMatch } from "./reset.js";
 
 export function manageServer()
 {
@@ -66,7 +67,8 @@ export function addBtn()
 		{
 			gameVar.liveMatch = true;
 			gameVar.game = 'pong';
-			clearAllpongStates();
+			// clearAllpongStates();
+			resetLiveMatch();
 			renderPageGame("pongLobby", true);
 		});
 	}
@@ -74,7 +76,6 @@ export function addBtn()
 	{
 		quitBtn.addEventListener('click', () => 
 		{
-			gameVar.liveMatch = false;
 			clearAllpongStates();
 			renderPageGame("home", true);
 		});

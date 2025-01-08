@@ -14,14 +14,14 @@ export function aiServeBall()
 		}, 1000);
 	}
 }
-
 export function aiMove(targetY)
 {
+	targetY = checkTarget();
     if (!gameVar.localGame)
 	{
-        if (targetY !== 0)
+        if ((targetY > 50 && targetY < 190) || (targetY > 200 && targetY < 420))
 		{
-            const paddleCenterTarget = targetY - (gameVar.aiPaddleHeight / 2);
+            const paddleCenterTarget = (targetY) - (gameVar.aiPaddleHeight / 2);
             const boundedTarget = Math.max(0, Math.min(paddleCenterTarget, gameVar.canvasH - gameVar.aiPaddleHeight));
             
             if (Math.abs(gameVar.aiPaddleY - boundedTarget) > 5)
@@ -49,10 +49,25 @@ export function manageAi()
 		if (gameVar.dx > 0)
 		{
 			let future = predictBallPos(gameVar);
-			gameVar.targetY = future[149][1];
+			let pos = findWallCollisionX(gameVar);
+			gameVar.targetY = future[pos][1];
 		}
 	}, AI_UPDATE_INTERVAL);	
 
+}
+
+export function findWallCollisionX(gameVar)
+{
+    const predictions = predictBallPos(gameVar);
+    
+    for (let i = 0; i < predictions.length; i++)
+	{
+        if (predictions[i][0] >= gameVar.canvasW)
+		{
+            return (predictions[i][0]);
+        }
+    }
+    return (null);
 }
 
 export function updateIaMove()
@@ -75,10 +90,9 @@ export function drawPredictionPath(ctx)
 		return;
     
     const future = predictBallPos(gameVar);
-    
+	var x = 0;
     ctx.save();
     ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
-    
     for (let i = 0; i < future.length; i++)
 	{
         ctx.beginPath();
@@ -88,7 +102,7 @@ export function drawPredictionPath(ctx)
     
     ctx.fillStyle = 'rgba(0, 255, 0, 0.5)'; 
     ctx.beginPath();
-    ctx.arc(future[149][0], future[149][1], 4, 0, Math.PI * 2);
+    ctx.arc(future[x][0], future[x][1], 4, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
 }
@@ -119,7 +133,7 @@ function predictBallPos(gameVar)
 		y_min: 0,
 		y_max: gameVar.canvasH,
 	}
-	let step = 160;
+	let step = 1000;
 	let futurePtsList = [];
 
 	for (let i = 0; i < step; i++)
@@ -142,6 +156,7 @@ function predictBallPos(gameVar)
 		{
             yEnd = yTmp;
         }
+
         if (xTmp > (limits.x_max - gameVar.aiPaddleWidth))
 		{
             xEnd = Math.floor(limits.x_max);
@@ -187,5 +202,17 @@ export function collisionPaddleAi()
 	}
 }
 
-
+export function checkTarget()
+{
+	let targetY = 0;
+	let future = predictBallPos(gameVar);
+	let pos = findWallCollisionX(gameVar);
+	if (pos)
+	{
+		targetY = future[pos][1];
+		return (targetY);
+	}
+	else
+		return (0);
+}
 
