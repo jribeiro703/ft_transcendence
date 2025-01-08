@@ -46,13 +46,17 @@ export function checkScore()
 	{
 		gameVar.matchOver = true;
 		gameVar.startTime = false;
-		gameVar.rematchBtn.style.display = 'block';
-		gameVar.quitGameBtn.style.display = 'block';
-		gameVar.rematchBtn.disabled = false;
-		gameVar.rematchBtn.style.cursor = false ? "pointer" : "not-allowed";
 		cancelAnimationFrame(gameVar.animationFrame);
-		if (gameVar.liveMatch || gameVar.localGame)
+		if (!gameVar.liveMatch)
+		{
+			gameVar.rematchBtn.style.display = 'block';
+		}
+		else
+		{
 			sendScore();
+			gameVar.returnLobby.style.display = 'block';
+		}
+		gameVar.quitGameBtn.style.display = 'block';
 		listenBtn();
 	}	
 }
@@ -63,6 +67,7 @@ function loadCustomFont()
 }
 export function drawScoreBoardLive()
 {
+	console.log("drawscore live");
 	loadCustomFont().load().then(function(font) 
 	{
 		document.fonts.add(font);

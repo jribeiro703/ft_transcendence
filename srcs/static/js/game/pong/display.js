@@ -38,27 +38,7 @@ export function displayLobbyView(level)
     mainContent.appendChild(roomView);
 }
 
-export function displayPongRemote()
-{
-    const mainContent = document.getElementById("mainContent");
-    mainContent.innerHTML = "";
-    const insertTo = document.createElement("div");
 
-    insertTo.innerHTML = `
-    <div id="gameView" style="display: none;">
-        <div id="scoreboard">
-            <canvas id="scoreCanvas"></canvas>
-        </div>
-        <canvas id="myCanvas"></canvas>
-        <div class="button-container">
-            <button id="rematchBtn" style="display: none;">Rematch</button>
-            <button id="quitGameBtn" style="display: none;">Quit Game</button>
-        </div>
-    </div>	
-    `;
-
-    mainContent.appendChild(insertTo);
-}
 
 export function displayGameSelectionMulti()
 {
@@ -140,27 +120,34 @@ export function displayGameSelectionMulti()
 
     maincontent.appendChild(gameSelection);
 }
+
+export function displayPongRemote()
+{
+    const mainContent = document.getElementById("mainContent");
+    mainContent.innerHTML = "";
+    const insertTo = document.createElement("div");
+
+    insertTo.innerHTML = `
+    <div id="gameView" style="display: block;">
+        <div id="scoreboard">
+            <canvas id="scoreCanvas"></canvas>
+        </div>
+        <canvas id="myCanvas"></canvas>
+        <div class="button-container">
+            <button id="returnLobby" style="display: none;">Return Lobby</button>
+            <button id="quitGameBtn" style="display: none;">Quit Game</button>
+        </div>
+    </div>	
+    `;
+
+    mainContent.appendChild(insertTo);
+}
+
 export function displayGameView()
 {
 	if(!gameVar.tournament)
 	{
-		const mainContent = document.getElementById('mainContent');
-		mainContent.innerHTML = ``;
-		const gameView = document.createElement('div');
-		gameView.innerHTML=`
-		<div id="gameView" style="display: block;">
-			<div id="scoreboard">
-				<canvas id="scoreCanvas"></canvas>
-			</div>
-			<canvas id="myCanvas"></canvas>
-			<br><br>
-			<div class="button-container">
-				<button id="rematchBtn" style="display: none;">Rematch</button>
-				<button id="quitGameBtn" style="display: none;">Return Home</button>
-			</div>
-		</div>
-		`;
-		mainContent.appendChild(gameView);
+        displayPongRemote();
 	}
 	else
 	{

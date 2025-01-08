@@ -26,38 +26,16 @@ export function createNewRoom(joinRoomCallback)
 		joinRoom(roomName);
 	else if (gameVar.game === 'brickout')
 		joinRoom(roomName);
-		// joinRoomB(roomName)
 }
 
-// export function waitingPlayer()
-// {
-// 	const waitingINterval = setInterval(() =>
-// 	{
-// 		console.log("player ready in waiting: ", gameVar.playerReady);
-// 		if(!gameVar.playerReady)
-// 		{
-// 			gameVar.ctx.font = '40px Arial';
-// 			gameVar.ctx.fillStyle = '#455F78';
-// 			gameVar.ctx.fillText("Waiting for opponent...", gameVar.canvasW / 4, gameVar.canvasH / 2);
-// 			gameVar.ctx.strokeStyle = '#1F2E4D'; 
-// 			gameVar.ctx.lineWidth = 1;
-// 			gameVar.ctx.strokeText("Waiting for opponent...", gameVar.canvasW / 4, gameVar.canvasH / 2);
-// 			sendSettingData(gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
-// 		}
-// 		else
-// 		{
-// 			gameVar.gameReady = true;
-// 			clearInterval(waitingINterval);
-// 			sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
-// 			sendScoreInfo(gameVar.gameSocket, 1, gameVar.userName, 0, 0);
-// 			startLiveGame();
-// 		}
-// 	}, 2000);
-
-// }
 
 export function waitPlayerPong()
 {
+	if (gameVar.playerIdx === 1)
+		console.log("waiting player pong 1");
+	if (gameVar.playerIdx === 2)
+		console.log("waiting player pong 2");
+
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	gameVar.ctx.font = '40px Arial';
 	gameVar.ctx.fillStyle = '#455F78';
@@ -82,6 +60,13 @@ export function waitPlayerBrick()
 
 export function finishPlayerWaitPong(waitingInterval)
 {
+	if (gameVar.playerIdx === 1)
+	{
+		console.log("wait finish player 1");
+		console.log("info, game : ", gameVar.game, "live", gameVar.liveMatch);
+	}
+	if (gameVar.playerIdx === 2)
+		console.log("wait finish player 2");
 	gameVar.gameReady = true;
 	clearInterval(waitingInterval);
 	sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
@@ -168,10 +153,11 @@ export async function joinRoom(roomName)
 			{
 				console.log("if player 1");
 				getUserInfosRemote();
+				console.log("join room player 1");
 				if (gameVar.tournament)
 					waitingPlayerTournament();
 				else
-					waitingPlayerTournament();
+					waitingPlayer();
 			}
 			if (gameVar.playerIdx == 2)
 			{
@@ -196,8 +182,8 @@ export async function joinRoom(roomName)
 		try
 		{
 			const data = JSON.parse(e.data);
-			if (data.type !== 'ball_data' && data.type !== 'paddle_data' && data.type !== 'direction_data')
-				console.log("data: ", data);
+			// if (data.type === 'direction_data' || data.type === 'ball_data')
+				// console.log("data: ", data);
 			if (data.type === 'ping')
 			{
 				gameSocket.send(JSON.stringify({ type: 'pong' }));
@@ -415,9 +401,8 @@ export function waitingForSettingLive()
 			}
 			else
 			{
-				// sendScoreInfo(gameVar.gameSocket, 2, gameVar.userName, gameVar.opponentName, 0, 0);
-				startLiveGame();
 				clearInterval(waitingInterval);
+				startLiveGame();
 			}
 		}
 		else if (gameVar.game === 'brickout')
@@ -428,7 +413,6 @@ export function waitingForSettingLive()
 			}
 			else
 			{
-				// sendScoreInfo(gameVar.gameSocket, 2, gameVar.userName, gameVar.opponentName, 0, 0);
 				initListenerB();
 				initGame();
 				clearInterval(waitingInterval);

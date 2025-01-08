@@ -3,30 +3,37 @@ import { initializeBall } from "./ball.js";
 import { aiServeBall } from "./ai.js";
 import { checkball } from "./check.js";
 import { sendGameData, sendScoreInfo, sendSettingData } from "./network.js";
-import { startGame } from "./start.js";
 import { checkScore } from "./score.js";
 import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { resetPu, updatePowerUpSelection } from "./powerUp.js";
-import { clearBtnB } from "../brickout/manage.js";
-import { showGameView } from "./gameView.js";
-import { renderLogin42Page } from "../../user/pages/renderLogin42Page.js";
-import { renderHomePage } from "../../renderHomePage.js";
 import { renderPageGame } from "../HistoryManager.js";
-import { resetPowerUpB } from "../brickout/powerUp.js";
 import { initPaddlesPos } from "./init.js";
 
 
 export function listenBtn()
 {
-	gameVar.rematchBtn.addEventListener('click', () =>
+	if (!gameVar.liveMatch)
 	{
-		resetMatch();
-		clearBtn();
-		renderPageGame('playPong', true);
-	});
+		gameVar.rematchBtn.addEventListener('click', () =>
+		{
+			resetMatch();
+			clearBtn();
+			renderPageGame('playPong', true);
+		});
+	}
+	else
+	{
+		gameVar.returnLobby.addEventListener('click', () =>
+		{
+			resetLiveMatch();
+			clearBtn();
+			renderPageGame('pongLobby', true);
+		});
+	}
 
 	gameVar.quitGameBtn.addEventListener('click', () => 
 	{
+		clearAllpongStates();
 		resetMatch();
 		clearBtn();
 		renderPageGame('home', true);
@@ -35,9 +42,31 @@ export function listenBtn()
 
 export function clearBtn()
 {
-	// const finish = document.getElementById("gameView");
 	gameVar.quitGameBtn.style.display = 'none';
-	gameVar.rematchBtn.style.display = 'none';
+	if (gameVar.rematchBtn)
+		gameVar.rematchBtn.style.display = 'none';
+	if (gameVar.returnLobby)
+		gameVar.returnLobby.style.display = 'none';
+}
+
+export function resetLiveMatch()
+{
+	resetTimeFrame();
+	initPaddlesPos();
+	updateDifficultySelection('medium', true);
+	updateLevelSelection('classicPong', true);
+	updatePowerUpSelection(false, true);
+	gameVar.startTime = false;
+	gameVar.gameTime = 0;
+	gameVar.gameStart = false;
+	gameVar.playerScore = 0;
+	gameVar.aiScore = 0;
+	gameVar.matchOver = false;
+	gameVar.serveCount = 0;
+	gameVar.finishGame = false;
+	gameVar.clientLeft = false;
+	gameVar.playerReady = false;
+	gameVar.currentServer = 'player';
 }
 
 export function clearAllpongStates()

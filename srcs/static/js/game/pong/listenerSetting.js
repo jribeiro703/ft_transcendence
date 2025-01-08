@@ -1,5 +1,4 @@
 import gameVar from "./var.js";
-import { updateSetting, updateLiveSetting} from "./setting.js";
 import { updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { updateDifficultySelection } from "./update.js";
