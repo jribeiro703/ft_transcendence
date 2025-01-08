@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { PADDLE_SPEED, AI_UPDATE_INTERVAL, PADDLE_THRESHOLD } from './const.js';
+import { PADDLE_SPEED, AI_UPDATE_INTERVAL } from './const.js';
 
 export function aiServeBall()
 {

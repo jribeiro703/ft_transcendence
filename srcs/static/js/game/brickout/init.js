@@ -59,6 +59,7 @@ export function initGame()
 		startGameFirst('classic');
 	}
 }
+
 export function initListenerMultiB()
 {
 	removeEventListenersB();
@@ -89,10 +90,10 @@ export function startBrickGame2p()
 	const level = brickVar.currLevel || 'classic';
 	initBricksFirst(brickVar.PATTERNS[level.toUpperCase()]);
 	initBricksSecond(brickVar2.PATTERNS[level.toUpperCase()]);
-
 	startGameFirst(level);
 	startGameSecond(level);
 }
+
 function removeEventListenersB()
 {
     document.removeEventListener("keydown", keyDownHandlerB);
@@ -100,7 +101,6 @@ function removeEventListenersB()
     document.removeEventListener("keydown", startBallFirst);
     document.removeEventListener("keydown", startBallSecond);
 }
-
 
 export function initPaddlesPosB()
 {

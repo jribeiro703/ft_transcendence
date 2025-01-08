@@ -2,13 +2,12 @@ import gameVar from "./var.js";
 import { initializeBall } from "./ball.js";
 import { aiServeBall } from "./ai.js";
 import { checkball } from "./check.js";
-import { sendGameData, sendScoreInfo, sendSettingData } from "./network.js";
+import { sendGameData, sendScoreInfo } from "./network.js";
 import { checkScore } from "./score.js";
 import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { resetPu, updatePowerUpSelection } from "./powerUp.js";
 import { renderPageGame } from "../HistoryManager.js";
 import { initPaddlesPos } from "./init.js";
-
 
 export function listenBtn()
 {
@@ -74,11 +73,9 @@ export function clearAllpongStates()
 	resetTimeFrame();
 	resetPu();
 	initPaddlesPos();
-
 	updateDifficultySelection('medium', true);
 	updateLevelSelection('classicPong', true);
 	updatePowerUpSelection(false, true);
-
 	gameVar.startTime = false;
 	gameVar.gameTime = 0;
 	gameVar.gameStart = false;

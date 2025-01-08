@@ -35,6 +35,7 @@ export function initEventListenerRoom()
 
 export function initLobbyPongView()
 {
+	gameVar.game = 'pong';
 	showLobbyView();
 	initEventListenerRoom();
 	initControlLive();
@@ -43,12 +44,12 @@ export function initLobbyPongView()
 }
 export function initLobbyBrickoutView()
 {
+	gameVar.game = 'brickout';
 	showLobbyView();
 	updateLiveSettingB();
 	initEventListenerRoomB();
 	roomNetwork();
 }
-
 
 export function initEventListenerRoomB()
 {
@@ -63,7 +64,6 @@ export function initEventListenerRoomB()
 	{
 		renderPageGame("brickoutSetting", true, 'live');
 	});
-
 }
 
 export function initPaddlesPos()
@@ -71,5 +71,4 @@ export function initPaddlesPos()
 	gameVar.playerPaddleY = PADDLE_POSY;
 	gameVar.player2PaddleY = PADDLE_POSY;
 	gameVar.aiPaddleY = PADDLE_POSY;
-
 }

@@ -1,7 +1,6 @@
 import gameVar from "../pong/var.js";
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
-import { generateTournamentName } from "../../tournament/services/apiService.js";
 import { addBtnB } from "./manage.js";
 
 function loadCustomFont()
@@ -166,17 +165,11 @@ export function compareScore()
 	{
         document.fonts.add(font);
 		if (brickVar.score > brickVar2.score)
-		{
 			displayScoreP1Win();
-		}
 		else if (brickVar.score < brickVar2.score)
-		{
 			displayScoreP1Loose();
-		}
 		else
-		{
 			displayEqualScore();
-		}
 	}).catch(function(error)
 	{
 		console.error("Error on font load", error);

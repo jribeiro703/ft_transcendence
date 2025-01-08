@@ -1,6 +1,4 @@
 import { checkBtnB } from "./manage.js";
-import brickVar2 from "./secondBrickout/var.js";
-import brickVar from "./var.js";
 
 export function displayNextLevel()
 {
@@ -89,7 +87,8 @@ export function displaySettingViewB()
             </div>
         </div>
         <button id="saveBtn" class="settingsBtn btn custom-btn height-btn" disabled="true">Save and Return</button>
-    </div>`
+    </div>
+    `;
 
     maincontent.appendChild(insertTo);
 }

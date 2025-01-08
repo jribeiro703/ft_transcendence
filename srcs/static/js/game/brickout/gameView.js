@@ -10,10 +10,8 @@ import { getUserInfos } from '../getUser.js';
 export async function showGameBrickView()
 {
 	displayGameBrickView();
-
 	await initializeCanvasBrick();
 	await initializeScoreCanvasBrickout();
-
 	initListenerB();
 	initGame();
 }
@@ -21,16 +19,13 @@ export async function showGameBrickView()
 export async function showGameBrickLocalView()
 {
 	displayGameBrick2pView();
- 
 	getUserInfos();
 	await initializeCanvasBrick2p();
 	await initializeScoreCanvas2P();
-
 	initListenerMultiB();
 	brickVar.initialize = true;
 	brickVar2.initialize = true;
 	updateSettingSelectionForSecond();
-
 	startBrickGame2p();
 }
 

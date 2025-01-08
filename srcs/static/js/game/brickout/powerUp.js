@@ -1,4 +1,3 @@
-import { BUFFER_COLLISION } from "../pong/const.js";
 import brickVar from "./var.js";
 
 const img = new Image();

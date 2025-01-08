@@ -1,10 +1,7 @@
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 import { handleNextLevelB, restartLevelB } from "./level.js";
-import { clearAllBrickStates } from "./manage.js";
 import { renderPageGame } from "../HistoryManager.js";
-import { resetMatch } from "../pong/reset.js";
-import { showGameBrickView } from "./gameView.js";
 import { resetMatchB as resetMatchFirst } from "./reset.js";
 import { resetMatchB as resetMatchSecond } from "./secondBrickout/reset.js";
 
@@ -89,7 +86,6 @@ export function listenLocalRematchBtn()
 	{
 		rematchBtn.addEventListener('click', () => 
 		{
-			// clearAllBrickStates();
 			resetMatchFirst();
 			resetMatchSecond();
 			renderPageGame("playBrickoutLocal", true);
@@ -99,7 +95,6 @@ export function listenLocalRematchBtn()
 	{
 		quitBtn.addEventListener('click', () =>
 		{
-			// clearAllBrickStates();
 			resetMatchFirst();
 			resetMatchSecond();
 			renderPageGame("home", true);

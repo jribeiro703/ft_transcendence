@@ -1,8 +1,6 @@
 import gameVar from "./var.js";
 import { checkball } from "./check.js";
-import { clearAllpongStates, resetBall } from "./reset.js";
-import { renderPageGame } from "../HistoryManager.js";
-import { resetLiveMatch } from "./reset.js";
+import { resetBall } from "./reset.js";
 
 export function manageServer()
 {
@@ -39,47 +37,48 @@ export function checkServer()
 		resetBall('ai');
 	}
 }
-export function addBtn()
-{
-	let mainContent = null;
-	if (gameVar.tournament)
-		mainContent = document.getElementById("gameView");
-	else
-		mainContent = document.getElementById("twoPlayerBrick");
-	if (!mainContent)
-	{
-		console.log("error on twoplayerBrick")
-		return ;
-	}
-	const btn = document.createElement('div');
-	btn.innerHTML = `
-	<div class="finish" id="finish">
-		<button id="returnLobbyBtn" class="">Return Lobby</button> 
-		<button id="quitBtn">Return Home</button>
-	</div>
-	`;
-	mainContent.appendChild(btn);
-	const returnLobbtyBtn = document.getElementById("returnLobbyBtn");
-	const quitBtn = document.getElementById("quitBtn");
-	if (returnLobbtyBtn)
-	{
-		returnLobbtyBtn.addEventListener("click", () =>
-		{
-			gameVar.liveMatch = true;
-			gameVar.game = 'pong';
-			// clearAllpongStates();
-			resetLiveMatch();
-			renderPageGame("pongLobby", true);
-		});
-	}
-	if (quitBtn)
-	{
-		quitBtn.addEventListener('click', () => 
-		{
-			clearAllpongStates();
-			renderPageGame("home", true);
-		});
 
-	}
+// export function addBtn()
+// {
+// 	console.log("add btn");
+// 	let mainContent = document.getElementById("gameView");
+// 	if (!mainContent)
+// 	{
+// 		console.log("error on btn container");
+// 		return ;
+// 	}
+// 	const btn = document.createElement('div');
+// 	btn.innerHTML = `
+// 	<div class="finish" id="finish">
+// 		<button id="returnLobby">Return Lobby</button> 
+// 		<button id="quitBtn">Return Home</button>
+// 	</div>
+// 	`;
+// 	mainContent.appendChild(btn);
+// 	const returnLobby = document.getElementById("returnLobby");
+// 	const quitBtn = document.getElementById("quitBtn");
+// 	if (returnLobby)
+// 	{
+// 		returnLobby.addEventListener('click', () =>
+// 		{
 
-}
+// 			console.log("returnlobby");
+// 			gameVar.liveMatch = true;
+// 			gameVar.game = 'pong';
+// 			resetLiveMatch();
+// 			renderPageGame("pongLobby", true);
+// 		});
+// 	}
+// 	else
+// 	{
+// 		console.log("errr on returnlobby");
+// 	}
+// 	if (quitBtn)
+// 	{
+// 		quitBtn.addEventListener('click', () => 
+// 		{
+// 			clearAllpongStates();
+// 			renderPageGame("home", true);
+// 		});
+// 	}
+// }
