@@ -1,12 +1,10 @@
 import gameVar from "./var.js";
-import { checkSettingLive, updateSetting } from "./setting.js";
+import brickVar from "../brickout/var.js";
+import { checkSettingLive } from "./setting.js";
 import { createNewRoom } from "./room.js";
 import { displayGameBrickView, displayGameView, displayLobbyView } from "./display.js";
 import { getElementLobby } from "./getElement.js";
-import { initializeCanvasBrick, initializeCanvasBrick2p, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
-import { displayGameDataPong } from "./displayVar.js";
-import { getUserInfosRemote } from "../getUser.js";
-import brickVar from "../brickout/var.js";
+import { initializeCanvasBrick, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
 import { initListenerB } from "../brickout/init.js";
 import { getUserInfos } from "../getUser.js";
 
@@ -56,8 +54,6 @@ export async function showPongRemote(room = null)
 
 export async function showBrickoutRemote(room = null)
 {
-	// checkSettingLive();
-	// displayGameView();
 	displayGameBrickView();
 	await initializeCanvasBrick();
 	await initializeScoreCanvas2P();

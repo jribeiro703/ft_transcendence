@@ -3,7 +3,6 @@ import { listenBtn } from "./reset.js";
 import { WIN_SCORE, GAP_SCORE } from "./const.js";
 import { fetchAuthData } from "../../user/fetchData.js";
 
-
 export async function sendScore()
 {
 	manageScore();
@@ -31,9 +30,7 @@ export async function sendScore()
 export function manageScore()
 {
 	if (gameVar.localGame)
-	{
 		gameVar.opponentName = 'player2';
-	}
 	if (gameVar.playerScore > gameVar.aiScore)
 		gameVar.winnner = gameVar.userName;
 	else
@@ -49,6 +46,7 @@ export function checkScore()
 		cancelAnimationFrame(gameVar.animationFrame);
 		if (!gameVar.liveMatch)
 		{
+			gameVar.rematchBtn = document.getElementById('rematchBtn');
 			gameVar.rematchBtn.style.display = 'block';
 		}
 		else
@@ -67,7 +65,6 @@ function loadCustomFont()
 }
 export function drawScoreBoardLive()
 {
-	console.log("drawscore live");
 	loadCustomFont().load().then(function(font) 
 	{
 		document.fonts.add(font);
@@ -75,19 +72,15 @@ export function drawScoreBoardLive()
 		if (ctx)
 		{
 			ctx.clearRect(0, 0, gameVar.scoreCanvW, gameVar.scoreCanvH);
-		
 			ctx.font = '24px fontScore';
 			ctx.fillStyle = '#FFFFFF';
 			ctx.textAlign = 'center';
-			
 			const centerX = gameVar.scoreCanvW / 2;
 			const leftX = gameVar.scoreCanvW * 0.25;
 			const rightX = gameVar.scoreCanvW * 0.75;
 			const y = 35;
-			
 			ctx.fillText(gameVar.userName, leftX, y);
 			ctx.fillText(gameVar.opponentName, rightX, y);
-
 			ctx.font = '32px fontScore';
 			ctx.fillText(gameVar.playerScore, leftX, y + gameVar.scoreCanvH / 2);
 			ctx.fillText(gameVar.aiScore, rightX, y + gameVar.scoreCanvH / 2);
@@ -112,11 +105,9 @@ export function drawScoreBoard()
 		if (ctx)
 		{
 			ctx.clearRect(0, 0, gameVar.scoreCanvW, gameVar.scoreCanvH);
-		
 			ctx.font = '24px fontScore';
 			ctx.fillStyle = '#FFFFFF';
 			ctx.textAlign = 'center';
-			
 			const centerX = gameVar.scoreCanvW / 2;
 			const leftX = gameVar.scoreCanvW * 0.25;
 			const rightX = gameVar.scoreCanvW * 0.75;

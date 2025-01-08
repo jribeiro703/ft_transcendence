@@ -33,14 +33,7 @@ export function saveScoreB()
 	else if (brickVar2.currLevel === 'invader')
 		levelScore = 104 + 169 + 169;
 	brickVar2.finalScore = brickVar2.score + levelScore;
-	sendScoreB();
 }
-
-export function sendScoreB()
-{
-	// console.log("finalScroe : ", brickVar2.finalScore);
-}
-
 
 export function drawScoreBoardB()
 {

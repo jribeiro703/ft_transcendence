@@ -6,7 +6,6 @@ import { handleNextLevelB, restartLevelB } from "./level.js";
 import { displayFinish, displayNextLevel } from "./display.js";
 import { listenFinishBtn, listenNextLevelBtn} from "./listenBtn.js";
 import { chechOpponent } from "./score.js";
-import { displayLocalRematch } from "../display.js";
 
 export function manageCollisionB()
 {
@@ -87,7 +86,6 @@ export function addBtnB()
 	}
 	else
 	{
-		// displayLocalRematch();
 		console.log("else...");
 	}
 }

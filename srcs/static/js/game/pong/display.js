@@ -38,8 +38,6 @@ export function displayLobbyView(level)
     mainContent.appendChild(roomView);
 }
 
-
-
 export function displayGameSelectionMulti()
 {
     const maincontent = document.getElementById('mainContent');
@@ -134,6 +132,7 @@ export function displayPongRemote()
         </div>
         <canvas id="myCanvas"></canvas>
         <div class="button-container">
+            <button id="rematchBtn" style="display: none;">Rematch</button>
             <button id="returnLobby" style="display: none;">Return Lobby</button>
             <button id="quitGameBtn" style="display: none;">Quit Game</button>
         </div>
@@ -146,9 +145,7 @@ export function displayPongRemote()
 export function displayGameView()
 {
 	if(!gameVar.tournament)
-	{
         displayPongRemote();
-	}
 	else
 	{
 		const mainContent = document.getElementById('tournamentdiv');
@@ -266,7 +263,6 @@ export function displaySetting(difficulty, powerUp, level)
 }
 export function displayLiveSetting(difficulty, level)
 {
-    console.log("displaySettingLive");
 	const settingContain = document.getElementById('setting-container');
 	if (!settingContain)
 	{
@@ -356,6 +352,7 @@ export function displayGameBrickView()
     `;
     mainContent.appendChild(insertTo);
 }
+
 export function displayGameBrick2pView()
 {
     const mainContent = document.getElementById('mainContent');

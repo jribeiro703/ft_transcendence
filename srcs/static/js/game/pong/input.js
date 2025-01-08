@@ -80,7 +80,6 @@ export function startBall(e)
 		{
 			if (!gameVar.init_dx || !gameVar.init_dy)
 			{
-				console.log("init est nul, diff :", gameVar.difficulty);
 				updateDifficultySelection(gameVar.difficulty, true);
 			}
 			gameVar.startTime = true;

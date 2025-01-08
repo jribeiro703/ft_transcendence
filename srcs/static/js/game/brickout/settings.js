@@ -1,6 +1,6 @@
 import brickVar from "./var.js";
 import { updatePowerUpSelectionB as updatePowerUpSelectionFirst} from "./powerUp.js";
-import { updateLevelSelectionB, updateLevelSelectionB as updateLevelSelectionFirst} from "./update.js";
+import { updateLevelSelectionB as updateLevelSelectionFirst} from "./update.js";
 import { updateDifficultySelectionB } from "./update.js";
 import { listenSettingPUB } from "./listenerSetting.js";
 import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
@@ -8,7 +8,6 @@ import { listenSettingDifficultyB } from "./listenerSetting.js";
 import { listenSettingLevelB } from "./listenerSetting.js";
 import { listenSaveBtnB } from "./save.js";
 import { displaySettingViewB } from "./display.js";
-import gameVar from "../pong/var.js";
 
 export function showSettingViewB(info)
 {
@@ -18,9 +17,7 @@ export function showSettingViewB(info)
 	brickVar.checkLevel = false
 	displaySettingViewB();
 	getSettingBtn();
-
 	brickVar.btnPowerUp.style.display = 'block';
-
 	listenSettingPUB();
 	listenSettingDifficultyB();
 	listenSettingLevelB();
@@ -91,6 +88,7 @@ export function updateLiveSettingB()
 
 	displayLiveSettingB(difficulty, level);
 }
+
 export function displayLiveSettingB(difficulty, level)
 {
 	const settingContain = document.getElementById('settings-columns2');

@@ -1,5 +1,4 @@
 import { handleNextLevelB, restartLevelB } from "./level.js";
-import brickVar2 from "./var.js";
 import { renderPageGame } from "../../HistoryManager.js";
 
 export function listenNextLevelBtn()

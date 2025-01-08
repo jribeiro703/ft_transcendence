@@ -46,9 +46,7 @@ export function drawB()
 			manageCollisionB();
 		}
 		else
-		{
 			handleBallB();
-		}
 		manageMoveB();
 		updateBallPositionB();
 		if (brickVar.anim)

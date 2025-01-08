@@ -1,7 +1,6 @@
 import brickVar from "./var.js";
 import { initGame, initListenerB } from "./init.js";
 import { initBricksB } from "./brick.js";
-import { sendScoreB } from "./score.js";
 import { startGameB } from "./control.js";
 import { addBtnB } from "./manage.js";
 

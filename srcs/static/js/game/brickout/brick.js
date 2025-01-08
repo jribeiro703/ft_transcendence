@@ -1,7 +1,7 @@
 import brickVar from './var.js';
 import { youWinB } from './level.js';
 import { createCastlePattern, createInvaderPattern, createXPattern, createClassicPattern } from './brickPattern.js';
-import { sendScoreInfo, sendScoreInfoB } from '../pong/network.js';
+import { sendScoreInfoB } from '../pong/network.js';
 import gameVar from '../pong/var.js';
 
 for(var c = 0; c < brickVar.brickColumnCount; c++)

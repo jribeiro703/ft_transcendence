@@ -1,19 +1,19 @@
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 import gameVar from "../pong/var.js";
-import { resetBallB } from "./ball.js";
-import { chechOpponent, chechOpponentRemote } from "./score.js"
-import { saveScoreB } from "./score.js";
-import { displayNextLevel, displayFinish, displayLocalRematch } from "./display.js";
-import { listenFinishBtn, listenNextLevelBtn, listenLocalRematchBtn } from "./listenerBtn.js";
-import { handleNextLevelB, restartLevelB } from "./level.js";
-import { renderPageGame } from "../HistoryManager.js";
-import { updateDifficultySelectionB, updateSettingB } from "./update.js";
 import { updateLevelSelectionB as updateLevelSelectionBFirst } from "./update.js";
 import { updateLevelSelectionB as updateLevelSelectionBSecond } from "./secondBrickout/update.js";
 import { updatePowerUpSelectionB as updatePowerUpSelectionBFirst } from "./powerUp.js";
 import { updatePowerUpSelectionB as updatePowerUpSelectionBSecond } from "./secondBrickout/update.js";
+import { displayNextLevel, displayFinish, displayLocalRematch } from "./display.js";
+import { listenFinishBtn, listenNextLevelBtn, listenLocalRematchBtn } from "./listenerBtn.js";
+import { chechOpponent, chechOpponentRemote } from "./score.js"
+import { handleNextLevelB, restartLevelB } from "./level.js";
+import { updateDifficultySelectionB } from "./update.js";
 import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
+import { resetBallB } from "./ball.js";
+import { saveScoreB } from "./score.js";
+import { renderPageGame } from "../HistoryManager.js";
 import { sendScoreInfoB } from "../pong/network.js";
 
 export function manageCollisionB()
@@ -100,7 +100,6 @@ export function loseLivesRemote()
 			brickVar.finishLevel = true;
 			saveScoreB();
 			chechOpponentRemote();
-			// addBtnB();
 		}
 		else
 		{
@@ -118,7 +117,6 @@ export function loseLivesRemote()
 			brickVar.finishLevel = true;
 			saveScoreB();
 			chechOpponentRemote();
-			// addBtnB();
 		}
 		else
 			resetBallB();
@@ -200,8 +198,6 @@ export function clearAllBrickStates()
 	updateDifficultySelectionSB('medium');
 	updateLevelSelectionBSecond('classic');
 	updatePowerUpSelectionBSecond(false);
-	// updateSettingB();
-	// updateImageUrl();
     brickVar.initialize = false;
     brickVar2.initialize = false;
     brickVar.finishLevel = false;

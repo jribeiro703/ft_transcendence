@@ -24,6 +24,7 @@ export function initControlLive()
         }
     });
 }
+
 function removeEventListeners()
 {
     if (gameVar.eventHandlers.keydown)

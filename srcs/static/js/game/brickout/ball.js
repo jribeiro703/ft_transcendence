@@ -28,7 +28,6 @@ export function initBallB()
 {
 	brickVar.x = brickVar.paddleX + brickVar.paddleWidth / 2;
 	brickVar.y = brickVar.canvasH - brickVar.paddleHeight - brickVar.ballRadius;
-
 	brickVar.dx = 0;
 	brickVar.dy = 0;
 }
@@ -39,6 +38,7 @@ export function resetBallB()
 	brickVar.gameStart = false;
 	resetPowerUpB();
 }
+
 export function updateBallPositionB()
 {
     if (brickVar.gameStart)

@@ -1,8 +1,9 @@
 import gameVar from "./var.js";
+import brickVar from "../brickout/var.js";
 import { drawPowerUp, collectPowerUp, updatePowerUp } from "./powerUp.js";
 import { manageServer } from "./manage.js";
 import { manageCollisionLive, manageRealCollision } from "./collision.js";
-import { aiMove, drawPredictionPath, manageAi} from "./ai.js";
+import { aiMove, drawPredictionPath } from "./ai.js";
 import { drawFootball } from "./foot.js";
 import { drawTennisCourt, drawLines} from "./tennis.js";
 import { manageMoveLive, manageMove } from './movement.js';
@@ -10,9 +11,8 @@ import { drawBall } from "./ball.js";
 import { checkPaddles } from "./paddle.js";
 import { drawScoreBoard, drawScoreBoardLive } from "./score.js";
 import { updateCanvasColor } from "./update.js";
-import { addBtn } from "./manage.js";
 import { delRooms } from "./room.js";
-import brickVar from "../brickout/var.js";
+import { listenBtn } from "./reset.js";
 
 export function initDraw()
 {
@@ -105,7 +105,8 @@ export function kickOut()
 		brickVar.ctx.fillText("Opponent has rage quit..." , brickVar.canvasW / 4, brickVar.canvasH / 3);
 	}
 	delRooms();
-	addBtn();
+	gameVar.returnLobby.style.display = 'block';
+	listenBtn();
 }
 
 function drawClassicPong()
