@@ -2,14 +2,14 @@ import { checkBtnB } from "./manage.js";
 
 export function displayNextLevel()
 {
-    const mainContent = document.getElementById("mainContent");
+    const mainContent = document.getElementById("brickoutContainer");
     const btn = document.createElement('div');
+    btn.id = "finish";
+    btn.className = "finish";
     btn.innerHTML = `
-    <div class="finish" id="finish">
-        <button id="nextLevelBtn">Next Level</button> 
-        <button id="restartLevelBtn">Restart Level</button> 
-        <button id="quitBtn">Return Home</button>
-    </div>
+        <button id="nextLevelBtn" class="settingsBtn btn custom-btn height-btn">Next Level</button> 
+        <button id="restartLevelBtn" class="settingsBtn btn custom-btn height-btn">Restart Level</button> 
+        <button id="quitBtn" class="settingsBtn btn custom-btn height-btn">Return Home</button>
     `;
     mainContent.appendChild(btn);
     checkBtnB('nextLevel');
@@ -19,11 +19,11 @@ export function displayFinish()
 {
     const mainContent = document.getElementById("brickoutContainer");
     const btn = document.createElement('div');
+    btn.id = "finish";
+    btn.className = "finish";
     btn.innerHTML = `
-    <div class="finish" id="finish">
-        <button id="restartLevelBtn">Restart Level</button>
-        <button id="quitBtn">Return Home</button>
-    </div>
+        <button id="restartLevelBtn" class="settingsBtn btn custom-btn height-btn">Restart Level</button>
+        <button id="quitBtn" class="settingsBtn btn custom-btn height-btn">Return Home</button>
     `;
     mainContent.appendChild(btn);
     checkBtnB("finish");
@@ -35,8 +35,8 @@ export function displayLocalRematch()
     const btn = document.createElement('div');
     btn.innerHTML = `
     <div class="finish" id="finish">
-        <button id="rematchBtn">Rematch</button> 
-        <button id="quitBtn">Return Home</button>
+        <button id="rematchBtn" class="settingsBtn btn custom-btn height-btn">Rematch</button> 
+        <button id="quitBtn" class="settingsBtn btn custom-btn height-btn">Return Home</button>
     </div>
     `;
     mainContent.appendChild(btn);

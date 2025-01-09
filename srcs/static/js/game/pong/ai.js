@@ -16,10 +16,10 @@ export function aiServeBall()
 }
 export function aiMove(targetY)
 {
-	targetY = checkTarget();
     if (!gameVar.localGame)
 	{
-        if ((targetY > 50 && targetY < 190) || (targetY > 200 && targetY < 420))
+		targetY = checkTarget();
+        if ((targetY > 30 && targetY < 190) || (targetY > 200 && targetY < 410))
 		{
             const paddleCenterTarget = (targetY) - (gameVar.aiPaddleHeight / 2);
             const boundedTarget = Math.max(0, Math.min(paddleCenterTarget, gameVar.canvasH - gameVar.aiPaddleHeight));
@@ -48,6 +48,7 @@ export function manageAi()
 	{
 		if (gameVar.dx > 0)
 		{
+			console.log("find target");
 			let future = predictBallPos(gameVar);
 			let pos = findWallCollisionX(gameVar);
 			gameVar.targetY = future[pos][1];

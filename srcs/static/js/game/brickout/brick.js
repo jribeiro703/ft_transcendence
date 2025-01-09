@@ -28,6 +28,7 @@ export function collisionDetectionB()
 					b.status = 0;
 					brickVar.score++;
 					manageRemoteScore();
+					brickVar.totalBrick = 1;
 					if(brickVar.score == brickVar.totalBrick)
 					{
 						brickVar.finishLevel = true;

@@ -3,6 +3,10 @@ import { initGame, initListenerB } from "./init.js";
 import { initBricksB } from "./brick.js";
 import { startGameB } from "./control.js";
 import { addBtnB } from "./manage.js";
+import { clearBtnB } from "./manage.js";
+import { initializeCanvasBrick } from "../pong/canvas.js";
+import { initializeScoreCanvasBrickout } from "../pong/canvas.js";
+import { displayGameBrickView } from "../pong/display.js";
 
 export function youWinB()
 {
@@ -34,7 +38,7 @@ export function checkLevelB(level)
 
 export function levelDisplayB()
 {
-	brickVar.ctx.font = "35px Arial";
+	brickVar.ctx.font = "30px Arial";
     brickVar.ctx.fillStyle = "white";
 
 	if (brickVar.currLevel == "classic")
@@ -47,7 +51,8 @@ export function levelDisplayB()
 	{
 		brickVar.finish = true;
 		brickVar.finalScore = 104 + 169 + 169 + 169;
-		brickVar.ctx.fillText("You have finish the game, Nice ! Score : " +brickVar.finalScore , brickVar.canvasW / 2 - 220, brickVar.canvasH / 6);
+		brickVar.ctx.fillText("You have finish the game !", brickVar.canvasW / 2 - 190, brickVar.canvasH / 6);
+		brickVar.ctx.fillText("Nice, score : " + brickVar.finalScore , brickVar.canvasW / 2 - 190, brickVar.canvasH / 6 + 30);
 		addImageB("/static/css/images/ms.png");
 	}
 }
@@ -86,9 +91,12 @@ export function addImageB(url)
     };
 }
 
-export function handleNextLevelB()
+export async function handleNextLevelB()
 {
 	clearBtnB();
+	displayGameBrickView();
+	await initializeCanvasBrick();
+	await initializeScoreCanvasBrickout();
 	initListenerB();
 	initGame();
 	const nextLevelBtn = document.getElementById("nextLevelBtn");
@@ -111,9 +119,12 @@ export function handleNextLevelB()
 		return;
 }
 
-export function restartLevelB()
+export async function restartLevelB()
 {
 	clearBtnB();
+	displayGameBrickView();
+	await initializeCanvasBrick();
+	await initializeScoreCanvasBrickout();
 	initListenerB();
 	initGame();	
 	brickVar.initGame = false;

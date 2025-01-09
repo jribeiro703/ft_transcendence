@@ -131,10 +131,11 @@ export function displayPongRemote()
             <canvas id="scoreCanvas"></canvas>
         </div>
         <canvas id="myCanvas"></canvas>
+        <br><br>
         <div class="button-container">
-            <button id="rematchBtn" style="display: none;">Rematch</button>
-            <button id="returnLobby" style="display: none;">Return Lobby</button>
-            <button id="quitGameBtn" style="display: none;">Quit Game</button>
+            <button id="rematchBtn" class="settingsBtn btn custom-btn height-btn" style="display: none;">Rematch</button>
+            <button id="returnLobby" class="settingsBtn btn custom-btn height-btn" style="display: none;">Return Lobby</button>
+            <button id="quitGameBtn" class="settingsBtn btn custom-btn height-btn" style="display: none;">Quit Game</button>
         </div>
     </div>	
     `;
@@ -159,8 +160,8 @@ export function displayGameView()
 			<canvas id="myCanvas"></canvas>
 			<br><br>
 			<div class="button-container">
-				<button id="rematchBtn" style="display: none;">Rematch</button>
-				<button id="quitGameBtn" style="display: none;">Return Home</button>
+				<button id="rematchBtn" class="settingsBtn btn custom-btn height-btn" style="display: none;">Rematch</button>
+				<button id="quitGameBtn" class="settingsBtn btn custom-btn height-btn" style="display: none;">Return Home</button>
 			</div>
 		</div>
 		`;
@@ -183,9 +184,10 @@ export function displayCanvas()
         <canvas id="scoreCanvas"></canvas>
     </div>
     <canvas id="myCanvas"></canvas>
+    <br><br>
     <div class="button-container">
-        <button id="rematchBtn" style="display: none;">Rematch</button>
-        <button id="quitGameBtn" style="display: none;">Quit Game</button>
+        <button id="rematchBtn" class="settingsBtn btn custom-btn height-btn" style="display: none;">Rematch</button>
+        <button id="quitGameBtn" class="settingsBtn btn custom-btn height-btn" style="display: none;">Quit Game</button>
     </div>
     </div>	
     `;
