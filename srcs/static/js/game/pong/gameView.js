@@ -11,6 +11,7 @@ import { initControl } from "./control.js";
 import { displayGameView, displayGameBrickView } from "./display.js";
 import { initializeCanvasBrick, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
 import { getUserInfos } from "../getUser.js";
+import brickVar from "../brickout/var.js";
 
 export async function showGameView()
 {
@@ -30,6 +31,7 @@ export async function showGameView()
 export async function showGameRoomB()
 {
 	gameVar.playerIdx = 2;
+	brickVar.playerIdx = 2;
 	gameVar.playerReady = true;
 
 	displayGameBrickView();

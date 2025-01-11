@@ -22,14 +22,20 @@ export function createNewRoom(joinRoomCallback)
 			sendSettingData(gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
 		}
 
-	}, 1000)
+	}, 1000);
 
-	gameVar.playerIdx = 1;
-	gameVar.isFirstPlayer = true;
 	if (gameVar.game === 'pong')
+	{
+		gameVar.playerIdx = 1;
+		console.log("create pong");
 		joinRoom(roomName);
+	}
 	else if (gameVar.game === 'brickout')
+	{
+		brickVar.playerIdx = 1;
+		console.log("create brick");
 		joinRoom(roomName);
+	}
 }
 
 
@@ -125,6 +131,26 @@ export function waitingPlayerTournament()
 	}, 2000);
 }
 
+export function checkPlayerIdx()
+{
+	if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
+	{
+		console.log("player 1");
+		getUserInfosRemote();
+		if (gameVar.tournament)
+			waitingPlayerTournament();
+		else
+			waitingPlayer();
+	}
+	if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
+	{
+		console.log("player 2");
+		getUserInfosRemote();
+		sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
+		waitingForSettingLive();
+	}
+}
+
 export async function joinRoom(roomName)
 {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -134,23 +160,24 @@ export async function joinRoom(roomName)
 		try {
 			gameSocket.send(JSON.stringify({ type: 'join_room' }));
 			gameVar.gameSocket = gameSocket;
-			if (gameVar.playerIdx == 1)
-			{
-				console.log("player 1");
-				getUserInfosRemote();
-				if (gameVar.tournament)
-					waitingPlayerTournament();
-				else
-					waitingPlayer();
-			}
-			if (gameVar.playerIdx == 2)
-			{
-				console.log("player 2");
-				getUserInfosRemote();
-				sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
-				waitingForSettingLive();
+			checkPlayerIdx();
+			// if (gameVar.playerIdx == 1)
+			// {
+			// 	console.log("player 1");
+			// 	getUserInfosRemote();
+			// 	if (gameVar.tournament)
+			// 		waitingPlayerTournament();
+			// 	else
+			// 		waitingPlayer();
+			// }
+			// if (gameVar.playerIdx == 2)
+			// {
+			// 	console.log("player 2");
+			// 	getUserInfosRemote();
+			// 	sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
+			// 	waitingForSettingLive();
 
-			}
+			// }
 			document.dispatchEvent(new CustomEvent('multiplayerGame', {
 				detail: {
 					multiplayer_game: true
@@ -338,7 +365,7 @@ export function updateRoomList()
 		roomItem.innerHTML = `
 			<div class="room-header">
 				<span class="room-name">${room.name}</span>
-				<button class="joinRoomBtn" ${room.status === 'Started' ? 'disabled' : ''}>Join</button>
+				<button id="joinBtn" class="joinRoomBtn" ${room.status === 'Started' ? 'disabled' : ''}>Join</button>
 			</div>
 			<div class="room-info">
 				<span class="room-players">Players: ${room.players}/2</span>
@@ -352,8 +379,8 @@ export function updateRoomList()
 		const joinBtn = roomItem.querySelector('.joinRoomBtn');
 		joinBtn.addEventListener('click', () =>
 		{
-			gameVar.playerIdx = 2;
-			gameVar.playerReady = true;
+			// gameVar.playerIdx = 2;
+			// gameVar.playerReady = true;
 			if (gameVar.game === 'pong' && game === 'Pong')
 			{
 				renderPageGame('playPongRemoteSecondP', true);
@@ -367,6 +394,7 @@ export function updateRoomList()
 			else
 			{
 				console.log("wrong lobby");
+				// joinBtn.style.display = 'none';
 			}
 		});
 		gameVar.roomsContainer.appendChild(roomItem);
@@ -485,7 +513,7 @@ export function roomNetwork()
 		}
 		if (data.type === 'setting_data')
 		{
-			idx--;
+			// idx--;
 			updateRoomInfo(idx, data.setting_data.difficulty, data.setting_data.currentLevel);
 			updateRoomList();
 		}

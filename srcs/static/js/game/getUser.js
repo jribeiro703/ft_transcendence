@@ -1,5 +1,6 @@
 import { fetchAuthData } from '../user/fetchData.js';
 import { showErrorMessages } from '../user/tools.js';
+import brickVar from './brickout/var.js';
 import { sendScoreInfo } from './pong/network.js';
 import gameVar from './pong/var.js';
 
@@ -8,13 +9,13 @@ export async function getUserInfosRemote()
         const response = await fetchAuthData('/user/private/')
 		if (response.status == 200)
 		{
-			if (gameVar.playerIdx === 1)
+			if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1) 
 			{
 				gameVar.userName = response.data.username;
 				gameVar.userAvatar = response.data.avatar;
 				sendScoreInfo(gameVar.gameSocket, 1, gameVar.userName, 0, 0);
 			}
-			if (gameVar.playerIdx === 2)
+			if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
 			{
 				gameVar.opponentName = response.data.username;
 				gameVar.opponentAvatar = response.data.avatar;

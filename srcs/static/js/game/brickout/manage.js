@@ -212,4 +212,5 @@ export function clearAllBrickStates()
 	brickVar2.lives = 2
 	brickVar.initGame = false;
 	brickVar2.initGame = false;
+	brickVar.playerIdx = 0;
 }

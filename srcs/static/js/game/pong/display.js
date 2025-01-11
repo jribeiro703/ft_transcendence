@@ -135,7 +135,7 @@ export function displayPongRemote()
         <div class="button-container">
             <button id="rematchBtn" class="settingsBtn btn custom-btn height-btn" style="display: none;">Rematch</button>
             <button id="returnLobby" class="settingsBtn btn custom-btn height-btn" style="display: none;">Return Lobby</button>
-            <button id="quitGameBtn" class="settingsBtn btn custom-btn height-btn" style="display: none;">Quit Game</button>
+            <button id="quitGameBtn" class="settingsBtn btn custom-btn height-btn" style="display: none;">Return Home</button>
         </div>
     </div>	
     `;
