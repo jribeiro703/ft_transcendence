@@ -90,6 +90,7 @@ export function clearAllpongStates()
 	gameVar.localGame = false;
 	gameVar.tournament = false;
 	gameVar.currentServer = 'player';
+	gameVar.playerIdx = 0;
 }
 
 export function resetMatch()

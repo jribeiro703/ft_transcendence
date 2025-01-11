@@ -7,6 +7,9 @@ import { updateLiveSetting } from "./setting.js";
 import { renderPageGame } from "../HistoryManager.js";
 import { updateLiveSettingB } from "../brickout/settings.js";
 import { PADDLE_POSY } from "./const.js";
+import { getUserInfos } from "../getUser.js";
+import { resetLiveMatch } from "./reset.js";
+import brickVar from "../brickout/var.js";
 
 
 export function removeEventListeners()
@@ -36,6 +39,10 @@ export function initEventListenerRoom()
 export function initLobbyPongView()
 {
 	gameVar.game = 'pong';
+	gameVar.playerIdx = 0;
+	brickVar.playerIdx = 0;
+	resetLiveMatch();
+	getUserInfos();
 	showLobbyView();
 	initEventListenerRoom();
 	initControlLive();
@@ -45,10 +52,14 @@ export function initLobbyPongView()
 export function initLobbyBrickoutView()
 {
 	gameVar.game = 'brickout';
+	gameVar.playerIdx = 0;
+	brickVar.playerIdx = 0;
+	resetLiveMatch();
+	getUserInfos();
 	showLobbyView();
-	updateLiveSettingB();
 	initEventListenerRoomB();
 	roomNetwork();
+	updateLiveSettingB();
 }
 
 export function initEventListenerRoomB()

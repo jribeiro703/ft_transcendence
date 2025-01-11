@@ -106,6 +106,7 @@ export function kickOut()
 	}
 	delRooms();
 	gameVar.returnLobby.style.display = 'block';
+	gameVar.quitGameBtn.style.display = 'block';
 	listenBtn();
 }
 

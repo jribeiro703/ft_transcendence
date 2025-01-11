@@ -8,6 +8,8 @@ import { updateSetting } from "./setting.js";
 import { updateSettingB } from "../brickout/update.js";
 import { listenPlayMultiBtn } from "./listenerSetting.js";
 import { getUserInfos } from "../getUser.js";
+import { clearAllpongStates } from "./reset.js";
+import { clearAllBrickStates } from "../brickout/manage.js";
 
 export function showGameSelectionView()
 {
@@ -29,6 +31,8 @@ export function showGameSelectionView()
 
 export function showGameSelectionMultiView()
 {
+	clearAllpongStates();
+	clearAllBrickStates();
 	getUserInfos();
 	updateImageUrl();
 	displayGameSelectionMulti();

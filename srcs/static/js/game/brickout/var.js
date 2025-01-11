@@ -91,6 +91,8 @@ const brickVar = {
 	gameStart: false,
 	gameReady: false,
 
+	playerIdx: 0,
+
 	score: 0,
 	lives: 2,
 
