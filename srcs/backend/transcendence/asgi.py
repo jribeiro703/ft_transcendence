@@ -21,7 +21,7 @@ application = ProtocolTypeRouter({
 	"http": get_asgi_application(),
 	"websocket": AuthMiddlewareStack(
 		URLRouter(
-			game.routing.websocket_urlpatterns + tournament.routing.websocket_urlpatterns + livechat.routing.websocket_urlpatterns
+			game.routing.websocket_urlpatterns + livechat.routing.websocket_urlpatterns
 		)
 	),
 })
