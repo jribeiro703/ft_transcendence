@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <h1>The winner is:</h1>
+    <div id="winner" data-tournament-id="{{ tournament.id }}">{{ tournament.winner|default:"TBD" }}</div>
+</div>
+{% endblock %}
