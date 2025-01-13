@@ -1,44 +1,16 @@
 from django.urls import path
 
-from .views.stage_1_generate_tournament_name import (
-	GenerateTournamentNameView,
-	ValidateTournamentNameView,
-)
-
-from .views.stage_1_create_tournament import (
-	CreateTournamentView,
-	PreRegisterPlayersView,
-	GetTournamentView,
-	JoinTournamentView,
-	ListUserTournamentsView,
-	ManageInvitationsView,
-)
-
-from .views.stage_1_fetch_eligible_players import (
-	FetchPlayersView,
-)
-
-from .views.stage_2_matchmaking import (
-	TournamentBracketView,
-	CurrentPlayersView
-)
-
-from .views.tournament_progress import TournamentProgressView
-from .views.tournament_announcement import TournamentAnnouncementView
-from .views.stage_2_matchmaking import PerformMatchmakingView 
-
+from . import views
 
 urlpatterns = [
-	path('', CreateTournamentView.as_view(), name='create_tournament'),
-	path('players/', FetchPlayersView.as_view(), name='fetch_players'),
-	path('preregister/', PreRegisterPlayersView.as_view(), name='preregister_players'),
-	path('generate-name/', GenerateTournamentNameView.as_view(), name='generate-name'),
-	path('validate-name/', ValidateTournamentNameView.as_view(), name='validate-name'),
-	path('join/', JoinTournamentView.as_view(), name='join-tournament'),
-	path('matchmaking/', PerformMatchmakingView.as_view(), name='perform_matchmaking'),
-	path('<int:tournament_id>/players/', CurrentPlayersView.as_view(), name='current-players'),
-	path('<int:tournament_id>/bracket/', TournamentBracketView.as_view(), name='tournament-bracket'),
-	path('<int:tournament_id>/', GetTournamentView.as_view(), name='get-tournament'),
-	path('user-tournaments/', ListUserTournamentsView.as_view(), name='user-tournaments'),
-	path('invitations/', ManageInvitationsView.as_view(), name='manage_invitations'),
+	path("tournament/form/", views.get_tournament_form_page, name="tournament-form-page"),
+    path("tournament/<uuid:tournament_id>/", views.get_tournament_page, name="tournament-page"),
+    path("tournament/next/<uuid:tournament_id>/", views.go_to_tournament_next_match, name="tournament-next-match"),
+    path("tournament/winner/<uuid:tournament_id>/", views.get_winner_page, name="tournament-winner-page"),
+    path("tournament/game/<uuid:match_id>/", views.get_game_page, name="tournament-game-page"),
+    path("tournament/create/", views.create_tournament, name="tournament-create"),
+    path("tournament/delete/<uuid:tournament_id>/", views.delete_tournament, name="tournament-delete"),
+    path("tournament/info/", views.get_tournament_info, name="tournament-info"),
+    path("tournament/list/", views.tournament_list, name="tournament-list"),
+    
 ]

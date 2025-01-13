@@ -13,7 +13,6 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 import game.routing
 import livechat.routing
-import tournament.routing
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "transcendence.settings")
 
