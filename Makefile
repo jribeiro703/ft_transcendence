@@ -1,5 +1,16 @@
-# Variables
-DOCKER_COMPOSE	= DOCKER_PLATFORM=$(DOCKER_PLATFORM) DOCKER_SOCK=$(DOCKER_SOCK) HOSTNAME=$(HOSTNAME) docker-compose -f docker/docker-compose.yml
+# Variables:
+COMPOSE_CHECK := $(shell command -v docker-compose 2> /dev/null)
+DOCKER_COMPOSE_NEW := $(shell docker compose version 2> /dev/null)
+
+ifdef DOCKER_COMPOSE_NEW
+	COMPOSE = compose
+else ifdef COMPOSE_CHECK
+	COMPOSE = docker-compose
+else
+	$(error "docker-compose is not installed. Please install docker-compose to continue.")
+endif
+
+DOCKER_COMPOSE	= DOCKER_PLATFORM=$(DOCKER_PLATFORM) DOCKER_SOCK=$(DOCKER_SOCK) HOSTNAME=$(HOSTNAME) docker $(COMPOSE) -f docker/docker-compose.yml
 PROJECT_NAME	= ft_transcendence
 DOCKER_SOCK = $(shell if [ ! -S "$${XDG_RUNTIME_DIR}/docker.sock" ]; then echo "/var/run/docker.sock"; else echo "$${XDG_RUNTIME_DIR}/docker.sock"; fi)
 HOSTNAME = $(shell hostname)
