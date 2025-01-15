@@ -19,19 +19,21 @@ export async function setupTournamentPage() {
 
 export async function loadTournamentSetup() {
   const tournamentSetupForm = document.getElementById('tournament-setup-form');
-  const playerCountInputs = document.querySelectorAll('input[name="playerCount"]');
+  //const playerCountInputs = document.querySelectorAll('input[name="playerCount"]');
   const playerFieldsContainer = document.getElementById('player-fields-container');
   const playerFieldTemplate = document.getElementById('player-field-template');
   const tournamentFormDiv = document.getElementById('tournament-setup');
   const createTournamentButton = document.getElementById('create-tournament');
 
-  playerCountInputs.forEach(input => {
+  tournamentFormDiv.style.display = 'block';
+  /* playerCountInputs.forEach(input => {
     input.addEventListener('change', () => {
       tournamentFormDiv.style.display = 'block';
       updatePlayerFields(parseInt(input.value));
     });
-  });
-
+  }); */
+  updatePlayerFields(4);
+  
   function updatePlayerFields(count) {
     playerFieldsContainer.innerHTML = ''; // Clear existing fields
     for (let i = 1; i <= count; i++) {
