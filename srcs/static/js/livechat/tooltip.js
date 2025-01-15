@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 export async function getUserTooltipContent(userId) {
 	try {
-		const responseObject = await fetchAuthData(`/user/profile/${userId}/`);
+		const responseObject = await fetchAuthData(`/user/profile-id/${userId}/`);
 
 		if (!responseObject.status === 401) {
 			throw new Error('Authentication required');
