@@ -3,6 +3,10 @@ import uuid # Required for unique user id
 from django.conf import settings # Required for MAX_UPLOAD_SIZE
 from django.core.exceptions import ValidationError # Required for raising validation errors
 from django.utils import timezone # Required for timezone.now()
+from django.core.validators import MinLengthValidator, RegexValidator
+from .validators import alphanumeric
+
+alphanumeric_with_spaces = RegexValidator(r'^[0-9a-zA-Z\s]*$', 'Only alphanumeric characters and spaces are allowed.')
 
 class Guest(models.Model):
 	"""
@@ -39,17 +43,17 @@ class Tournament(models.Model):
 		current_match (String) : "$Player1 vs $Player2" of the current match in the tournament.
 		registered_users (ManyToManyField): The users registered for the tournament with a valid account.
 	"""
-	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+	name = models.CharField("tournamentname", max_length=30, unique=True, blank=False, validators=[MinLengthValidator(3), alphanumeric_with_spaces])
 	created_by = models.ForeignKey('user.User', related_name='created_tournaments', on_delete=models.CASCADE)
 	created_at = models.DateTimeField(auto_now_add=True)
 	status = models.CharField(max_length=50, default='open')
-	winner = models.CharField(max_length=50, blank=True)
+	winner = models.CharField(max_length=50, blank=True, default="Unknown")
 	player_count = models.IntegerField(default=0)
-	current_match = models.IntegerField()
+	current_match = models.IntegerField(default=0)
 	registered_users = models.ManyToManyField('user.User', related_name='registered_tournaments', blank=True)
 
 	def __str__(self):
-		return self.id
+		return self.name
 
 	def save(self, *args, **kwargs):
 		"""

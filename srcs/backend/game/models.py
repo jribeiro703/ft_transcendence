@@ -34,9 +34,15 @@ class Game(models.Model):
 	player_one = models.ForeignKey(
 		'user.User', related_name='game_as_player_one', on_delete=models.SET_NULL, null=True
 	) # FK to User
+	username_one = models.CharField(max_length=50, blank=True, null=True)
+	player_one_guest = models.CharField(max_length=50, blank=True, null=True)  # Optional guest player
+
 	player_two = models.ForeignKey(
 		'user.User', related_name='game_as_player_two', on_delete=models.SET_NULL, null=True
 	) # FK to User
+	username_two = models.CharField(max_length=50, blank=True, null=True)
+	player_two_guest = models.CharField(max_length=50, blank=True, null=True)  # Optional guest player
+
 	score_one = models.PositiveIntegerField(default=0)
 	score_two = models.PositiveIntegerField(default=0)
 
@@ -51,13 +57,31 @@ class Game(models.Model):
 	created_at = models.DateTimeField(auto_now_add=True)  # Automatically set when created
 	start_time = models.DateTimeField(null=True, blank=True)
 	end_time = models.DateTimeField(null=True, blank=True)
+	timestamp = models.DateTimeField(auto_now_add=True)  # For compatibility with Match model
+
 
 	# Customization options
 	powerup = models.BooleanField(default=False)  # True = Active, False = Inactive
 	time_played = models.IntegerField(default=0)  # Time in seconds (or minutes)
 
+	walkover = models.BooleanField(default=False)
+
 	def __str__(self):
 		return f"Game {self.id} between {self.player_one} and {self.player_two}"
+      
+	def get_player_one_display(self):
+		if self.player_one:
+			return self.player_one.username
+		elif self.player_one_guest:
+			return self.player_one_guest
+		return 'Unknown'
+
+	def get_player_two_display(self):
+		if self.player_two:
+			return self.player_two.username
+		elif self.player_two_guest:
+			return self.player_two_guest
+		return 'Unknown'
 
 class GamePlayer(models.Model):
 	PLAYER_STATUS_CHOICES = [
