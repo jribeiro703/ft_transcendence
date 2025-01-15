@@ -11,12 +11,14 @@ export function chechOpponentRemote()
 {
 	console.log("chech opponent remote, idx : ", brickVar.playerIdx, "finish 1 ? ", brickVar.finishLevel, "finish 2 ? ", brickVar2.finishLevel);
 	let display = false;
+	let display2 = false;
 	const waiting = setInterval(() =>
 	{
 		if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
 		{
 			if (brickVar.playerLives === 0 || brickVar.finishLevel)
 			{
+				console.log("finish 1");
 				if (!display)
 				{
 					display = true;
@@ -41,11 +43,12 @@ export function chechOpponentRemote()
 		}
 		if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
 		{
-			if (brickVar.opponentLives === 0 || brickVar.finishLevel)
+			if (brickVar.opponentLives === 0 || brickVar2.finishLevel)
 			{
-				if (!display)
+				console.log("finish 2");
+				if (!display2)
 				{
-					display = true;
+					display2 = true;
 					drawScoreBoardBRemote();
 					brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
 					brickVar.ctx.font = 'bold 24px fontScore';
@@ -58,25 +61,19 @@ export function chechOpponentRemote()
 				else
 					drawScoreBoardBRemote();
 			}
-			if (brickVar.playerLives === 0 && brickVar.opponentLives === 0 )
+			if (brickVar.playerLives === 0 && brickVar.opponentLives === 0)
 			{
 				clearInterval(waiting);
 				compareScoreRemote();
 				addBtnB();
 			}
 		}
-		if (brickVar.finishLevel && brickVar2.finishLevel)
-		{
-			clearInterval(waiting);
-			compareScoreRemote();
-			addBtnB();
-		}
 	},1000);
 }
+
 export function chechOpponent()
 {
-
-	console.log("chech opponent");
+	console.log("check opponent");
 	let display = false;
 	if (gameVar.localGame)
 	{

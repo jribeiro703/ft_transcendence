@@ -2,6 +2,7 @@ import { checkBtnB } from "./manage.js";
 
 export function displayNextLevel()
 {
+    console.log("display next level ");
     const mainContent = document.getElementById("brickoutContainer");
     const btn = document.createElement('div');
     btn.id = "finish";
@@ -17,6 +18,7 @@ export function displayNextLevel()
 
 export function displayFinish()
 {
+    console.log("display finish");
     const mainContent = document.getElementById("brickoutContainer");
     const btn = document.createElement('div');
     btn.id = "finish";
@@ -31,6 +33,8 @@ export function displayFinish()
 
 export function displayLocalRematch()
 {
+
+    console.log("display Local");
     const mainContent = document.getElementById("brickout2pContainer");
     const btn = document.createElement('div');
     btn.innerHTML = `

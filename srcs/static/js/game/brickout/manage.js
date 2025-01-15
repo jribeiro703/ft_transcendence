@@ -107,8 +107,7 @@ export function loseLivesRemote()
 			resetBallB();
 		}
 	}
-	if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2
-	)
+	if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
 	{
 		brickVar.opponentLives--;
 		sendScoreInfoB(gameVar.gameSocket, 2, brickVar.opponentScore,  brickVar.opponentLives);
