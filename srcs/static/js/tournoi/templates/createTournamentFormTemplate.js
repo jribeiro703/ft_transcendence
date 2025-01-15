@@ -38,7 +38,7 @@ export function createTournamentFormHTML() {
 										<select class="form-select player-select" required>
 											<option value="" disabled selected>Select Player</option>
 											{% for player in users %}
-												<option value="{{ player.id }}">{{ player.display_name }}</option>
+												<option value="{{ player.id }}">{{ player.username }}</option>
 											{% endfor %}
 										</select>
 										<div class="token-container" style="display: none; margin-top: 10px;">
