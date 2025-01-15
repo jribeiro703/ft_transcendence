@@ -5,6 +5,7 @@
   --my-gray: #ffff00;
   --my-blue: #fccb2d;
   --my-dark-gray: #ffff00;
+  --my-white-gray: #808080;
   --my-gradient: linear-gradient(
     to right,
     #0a1014 0%,
@@ -37,10 +38,11 @@
   --text-color-selected: var(--my-blue);
 
   /* chat */
-  --chat-msg: var(--my-black);
-  --chat-border: var(--my-dark-gray);
+  --chat-message-input: var(--my-gradient);
+  --chat-msg: var(--my-dark-gray);
+  --chat-border: var(--my-white-gray);
   --chat-bg: var(--my-gradient);
-  --placeholder-color: var(--my-black);
+  --placeholder-color: var(--text-color);
 
   /* box */
   --box-shadow: 0px 0px 7px var(--my-black);
