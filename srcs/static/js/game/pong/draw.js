@@ -105,9 +105,12 @@ export function kickOut()
 		brickVar.ctx.fillText("Opponent has rage quit..." , brickVar.canvasW / 4, brickVar.canvasH / 3);
 	}
 	delRooms();
-	gameVar.returnLobby.style.display = 'block';
-	gameVar.quitGameBtn.style.display = 'block';
-	listenBtn();
+	if (gameVar.returnLobby && gameVar.quitGameBtn)
+	{
+		gameVar.returnLobby.style.display = 'block';
+		gameVar.quitGameBtn.style.display = 'block';
+		listenBtn();
+	}
 }
 
 function drawClassicPong()
