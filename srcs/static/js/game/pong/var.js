@@ -1,4 +1,5 @@
 import { PADDLE_POSY } from "./const.js";
+import { waitingPlayer } from "./room.js";
 
 const gameVar = 
 {
@@ -199,6 +200,7 @@ const gameVar =
 	refreshBtn: null,
 	leftRoom: false,
 	newRoomName: null,
+	waitingInterval: null,
 	
 	rooms: [
 		{

@@ -3,6 +3,7 @@ import { youWinB } from './level.js';
 import { createCastlePattern, createInvaderPattern, createXPattern, createClassicPattern } from './brickPattern.js';
 import { sendScoreInfoB } from '../pong/network.js';
 import gameVar from '../pong/var.js';
+import brickVar2 from './secondBrickout/var.js';
 
 for(var c = 0; c < brickVar.brickColumnCount; c++)
 {
@@ -31,7 +32,16 @@ export function collisionDetectionB()
 					brickVar.totalBrick = 1;
 					if(brickVar.score == brickVar.totalBrick)
 					{
-						brickVar.finishLevel = true;
+						if (brickVar.playerIdx === 2)
+						{
+							console.log("if 2");
+							brickVar2.finishLevel = true;
+						}
+						else
+						{
+							console.log("else");
+							brickVar.finishLevel = true;
+						}
 						brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
 						if (brickVar.currLevel === "invader")
 							brickVar.finish = true;

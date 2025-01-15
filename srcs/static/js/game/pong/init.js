@@ -41,6 +41,8 @@ export function initLobbyPongView()
 	gameVar.game = 'pong';
 	gameVar.playerIdx = 0;
 	brickVar.playerIdx = 0;
+	gameVar.playerReady = false;
+	clearInterval(gameVar.waitingInterval);
 	resetLiveMatch();
 	getUserInfos();
 	showLobbyView();
@@ -54,6 +56,8 @@ export function initLobbyBrickoutView()
 	gameVar.game = 'brickout';
 	gameVar.playerIdx = 0;
 	brickVar.playerIdx = 0;
+	gameVar.playerReady = false;
+	clearInterval(gameVar.waitingInterval);
 	resetLiveMatch();
 	getUserInfos();
 	showLobbyView();
@@ -68,6 +72,8 @@ export function initEventListenerRoomB()
 
 	gameVar.createRoomBtn.addEventListener('click', () => 
 	{
+		gameVar.playerIdx = 1;
+		gameVar.playerReady = false;
 		renderPageGame("playBrickoutRemote", true);
 	});
 

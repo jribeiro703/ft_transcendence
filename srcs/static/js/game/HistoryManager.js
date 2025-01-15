@@ -9,7 +9,6 @@ import { updateDifficultySelection, updateImageUrl, updateLevelSelection } from 
 import { updatePowerUpSelection } from "./pong/powerUp.js";
 import { updateDifficultySelectionB, updateLevelSelectionB, updateSettingB } from "./brickout/update.js";
 import { updatePowerUpSelectionB } from "./brickout/powerUp.js";
-import { updateSetting } from "./pong/setting.js";
 import { showSettingViewB } from "./brickout/settings.js";
 import { clearAllBrickStates } from "./brickout/manage.js";
 import { sendGameData, sendPlayerData } from "./pong/network.js";

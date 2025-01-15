@@ -41,6 +41,7 @@ export function createNewRoom(joinRoomCallback)
 
 export function waitPlayerPong()
 {
+	console.log("in waiting : player ready: ", gameVar.playerReady);
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	gameVar.ctx.font = '40px Arial';
 	gameVar.ctx.fillStyle = '#455F78';
@@ -85,6 +86,8 @@ export function waitingPlayer()
 {
 	const waitingInterval = setInterval(() =>
 	{
+
+		gameVar.waitingInterval = waitingInterval; 
 		if(!gameVar.playerReady)
 		{
 			if (gameVar.game === 'pong')
@@ -176,7 +179,6 @@ export async function joinRoom(roomName)
 			// 	getUserInfosRemote();
 			// 	sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
 			// 	waitingForSettingLive();
-
 			// }
 			document.dispatchEvent(new CustomEvent('multiplayerGame', {
 				detail: {
@@ -379,15 +381,17 @@ export function updateRoomList()
 		const joinBtn = roomItem.querySelector('.joinRoomBtn');
 		joinBtn.addEventListener('click', () =>
 		{
-			// gameVar.playerIdx = 2;
-			// gameVar.playerReady = true;
 			if (gameVar.game === 'pong' && game === 'Pong')
 			{
+				gameVar.playerReady = true;
+				gameVar.playerIdx = 2;
 				renderPageGame('playPongRemoteSecondP', true);
 				joinRoom(room.name); 
 			}
 			else if (gameVar.game === 'brickout' && game === 'Brickout')
 			{
+				gameVar.playerReady = true;
+				gameVar.playerIdx = 2;
 				renderPageGame('playBrickoutRemoteSecondP', true);
 				joinRoom(room.name);
 			}
@@ -513,7 +517,7 @@ export function roomNetwork()
 		}
 		if (data.type === 'setting_data')
 		{
-			// idx--;
+			idx--;
 			updateRoomInfo(idx, data.setting_data.difficulty, data.setting_data.currentLevel);
 			updateRoomList();
 		}

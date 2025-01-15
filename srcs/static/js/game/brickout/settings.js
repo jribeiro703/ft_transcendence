@@ -5,16 +5,17 @@ import { updateDifficultySelectionB } from "./update.js";
 import { listenSettingPUB } from "./listenerSetting.js";
 import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
 import { listenSettingDifficultyB } from "./listenerSetting.js";
-import { listenSettingLevelB } from "./listenerSetting.js";
-import { listenSaveBtnB } from "./save.js";
+import { listenSettingLevelB } from "./listenerSetting.js"
 import { displaySettingViewB } from "./display.js";
+import { listenSaveBtnB } from "./save.js";
 
 export function showSettingViewB(info)
+
 {
 	brickVar.settingChanged = false;
 	brickVar.checkDiff = false;
 	brickVar.checkPu = false;
-	brickVar.checkLevel = false
+	brickVar.checkLevel = false;
 	displaySettingViewB();
 	getSettingBtn();
 	brickVar.btnPowerUp.style.display = 'block';
@@ -56,7 +57,7 @@ export function displaySettingB(difficulty, powerUp, level)
 	const settingContain = document.getElementById('settings-column2');
 	if (!settingContain)
 	{
-		console.log("error on setting-column2");
+		console.log("error on setting-container");
 		return;
 	}
 	settingContain.innerHTML = '';
@@ -91,7 +92,7 @@ export function updateLiveSettingB()
 
 export function displayLiveSettingB(difficulty, level)
 {
-	const settingContain = document.getElementById('settings-columns2');
+	const settingContain = document.getElementById('setting-container');
 	if (!settingContain)
 	{
 		console.log("Error on setting-columns2");

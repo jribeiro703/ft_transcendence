@@ -19,7 +19,7 @@ export function aiMove(targetY)
     if (!gameVar.localGame)
 	{
 		targetY = checkTarget();
-        if ((targetY > 30 && targetY < 190) || (targetY > 200 && targetY < 410))
+        if ((targetY > 0 && targetY < 420))
 		{
             const paddleCenterTarget = (targetY) - (gameVar.aiPaddleHeight / 2);
             const boundedTarget = Math.max(0, Math.min(paddleCenterTarget, gameVar.canvasH - gameVar.aiPaddleHeight));
