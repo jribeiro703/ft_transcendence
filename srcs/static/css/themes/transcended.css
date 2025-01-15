@@ -7,7 +7,7 @@
   --my-gradient: linear-gradient(45deg, #170b2b 0%, #2b0548 50%, #170b2b 100%);
 
   --background-color-body: var(--my-gradient);
-  --background-color: var(--my-dark-gray);
+  --background-color: var(--my-gradient);
   --text-color: var(--my-dark-gray);
   --highlight-color: var(--my-gray);
   --icon-color: var(--my-white);
@@ -27,9 +27,9 @@
   --text-color-selected: var(--my-blue);
 
   /* chat */
-  --chat-msg: var(--my-white);
+  --chat-msg: var(--my-blue);
   --chat-border: var(--my-dark-gray);
-  --chat-bg: var(--my-black);
+  --chat-bg: var(--background-color-body);
   --placeholder-color: var(--my-white);
   /* box */
   --box-shadow: 0px 0px 7px var(--my-white);
