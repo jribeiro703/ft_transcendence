@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import User
+from .models import User, FriendRequest
 from game.models import Game
 from game.models import GamePlayer
 from tournament.models import Tournament
