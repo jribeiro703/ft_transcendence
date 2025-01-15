@@ -315,12 +315,11 @@ export async function loadTournamentSetup() {
     tournamentSetupForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(tournamentSetupForm);
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
+        console.log("submit clicked:", formData);
         fetch('/tournament/create/', {
             method: 'POST',
             headers: {
-                'X-CSRFToken': csrfToken
+                'X-CSRFToken': getCookie('csrftoken'),
             },
             body: formData
         })

@@ -53,8 +53,8 @@ export function createTournamentFormHTML() {
 											</div>
 										</div>
 									</div>
+									<button type="submit" id="create-tournament" class="btn btn-primary" disabled>Create Tournament</button>
 								</div>
-								<button type="submit" id="create-tournament" class="btn btn-primary" disabled>Create Tournament</button>
 							</form>
 						</div>
 
