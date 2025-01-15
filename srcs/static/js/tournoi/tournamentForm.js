@@ -19,21 +19,17 @@ export async function setupTournamentPage() {
 
 export async function loadTournamentSetup() {
   const tournamentSetupForm = document.getElementById('tournament-setup-form');
-  //const playerCountInputs = document.querySelectorAll('input[name="playerCount"]');
   const playerFieldsContainer = document.getElementById('player-fields-container');
   const playerFieldTemplate = document.getElementById('player-field-template');
   const tournamentFormDiv = document.getElementById('tournament-setup');
   const createTournamentButton = document.getElementById('create-tournament');
 
   tournamentFormDiv.style.display = 'block';
-  /* playerCountInputs.forEach(input => {
-    input.addEventListener('change', () => {
-      tournamentFormDiv.style.display = 'block';
-      updatePlayerFields(parseInt(input.value));
-    });
-  }); */
+
+  const users = await fetchUsers(); // Fetch users from the yabing endpoint
   updatePlayerFields(4);
-  
+
+
   function updatePlayerFields(count) {
     playerFieldsContainer.innerHTML = ''; // Clear existing fields
     for (let i = 1; i <= count; i++) {
@@ -53,11 +49,18 @@ export async function loadTournamentSetup() {
       const lastPlayerField = playerFieldsContainer.lastElementChild;
 
       if (lastPlayerField) {
-        const hiddenInputsHTML = `
-          <input type="hidden" name="player${i}_user" id="tournament-player${i}-user" class="player-user-input" value="">
-          <input type="hidden" name="player${i}_guest" id="tournament-player${i}-guest" class="player-guest-input" value="">
-        `;
-        lastPlayerField.insertAdjacentHTML('beforeend', hiddenInputsHTML);
+        const playerSelect = lastPlayerField.querySelector('.player-select');
+        if (playerSelect) {
+            // Add default option
+            playerSelect.innerHTML = '<option value="" disabled selected>Select Player</option>';
+            // Populate dropdown with users
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = user.username;
+                playerSelect.appendChild(option);
+            });
+        }
       }
     }
   
@@ -69,6 +72,24 @@ export async function loadTournamentSetup() {
         playerFieldTemplate.remove();
     }
 }
+
+async function fetchUsers() {
+  console.log("Fetching users...");
+  try {
+      const response = await fetch('/user/list/');
+      // const response = await fetch('/user/online/');
+      if (!response.ok) {
+          throw new Error('Failed to fetch users');
+      }
+      const users = await response.json();
+      console.log('Fetched Users:', users); // Add this for debugging
+      return users;
+  } catch (error) {
+      console.error('Error fetching users:', error);
+      return [];
+  }
+}
+
 
   function updateFieldDependencies() {
     const playerGuestSwitches = document.querySelectorAll('.player-guest-switch');

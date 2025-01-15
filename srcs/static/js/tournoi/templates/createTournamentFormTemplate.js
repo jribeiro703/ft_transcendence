@@ -37,7 +37,9 @@ export function createTournamentFormHTML() {
 										</div>
 										<select class="form-select player-select" required>
 											<option value="" disabled selected>Select Player</option>
-											<!-- Populate with JS -->
+											{% for player in users %}
+												<option value="{{ player.id }}">{{ player.display_name }}</option>
+											{% endfor %}
 										</select>
 										<div class="token-container" style="display: none; margin-top: 10px;">
 											<input type="text" class="form-control game-token" placeholder="Player Game Token">
