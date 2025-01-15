@@ -29,7 +29,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# -----------------------------------LUDO ENDPOINTS--------------------------------
+# -----------------------------------USED ENDPOINTS FOR LIVECHAT--------------------------------
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -57,24 +57,6 @@ def getUserIdByNickname(request):
 			{"message": f"Error fetching user ID: {str(e)}"}, 
 			status=status.HTTP_500_INTERNAL_SERVER_ERROR
 		)
-
-# @api_view(['GET'])
-# @permission_classes([AllowAny])
-# def searchUser(request):
-# 	username = request.query_params.get('username')
-# 	users = User.objects.filter(username__icontains=username)
-# 	serializer = UserPublicInfosSerializer(users, many=True)
-# 	return Response(serializer.data, status=status.HTTP_200_OK)
-
-# @api_view(['GET'])
-# @permission_classes([AllowAny])
-# def GetUserPublicInfos(request, pk):
-# 	try:
-# 		user = User.objects.get(id=pk)
-# 	except User.DoesNotExist:
-# 		return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-# 	serializer = UserPublicInfosSerializer(user)
-# 	return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserProfileViewId(APIView):
 	permission_classes = [AllowAny]
@@ -135,6 +117,8 @@ class UserProfileViewId(APIView):
 			"is_blocked": is_blocked
 		}
 		return Response(data, status=status.HTTP_200_OK)
+
+# ------------------------------FRIENDS ENDPOINTS--------------------------------	
 
 class AcceptFriendRequestView(APIView):
 	
@@ -598,139 +582,6 @@ class UserSettingsView(RetrieveUpdateDestroyAPIView):
 			return response
 		except Exception as e:
 			return Response({"message": "An unknown error occured, failed to delete account."}, status=status.HTTP_400_BAD_REQUEST)
-
-# ------------------------------FRIENDS ENDPOINTS--------------------------------	
-
-# class AcceptFriendRequestView(APIView):
-# 	permission_classes = [IsAuthenticated]
-
-# 	def post(self, request, *args, **kwargs):
-# 		request_id = kwargs.get('request_id')
-# 		try:
-# 			friend_request = FriendRequest.objects.get(id=request_id)
-# 			if friend_request.receiver != request.user:
-# 				return Response({"message": "You are not authorized to accept this request."}, status=status.HTTP_403_FORBIDDEN)
-
-# 			friend_request.is_accepted = True
-# 			friend_request.save()
-# 			friend_request.sender.friends.add(friend_request.receiver)
-# 			friend_request.receiver.friends.add(friend_request.sender)
-
-# 			return Response({"message": "Friend request accepted."}, status=status.HTTP_200_OK)
-# 		except FriendRequest.DoesNotExist:
-# 			return Response({"message": "Friend request not found."}, status=status.HTTP_404_NOT_FOUND)
-		
-# class ListFriendRequestView(APIView):
-# 	permission_classes = [IsAuthenticated]
-
-# 	def get(self, request, *args, **kwargs):
-# 		user = User.objects.get(pk=kwargs['pk'])
-# 		received_requests = user.received_requests.filter(is_accepted=False)
-# 		sent_requests = user.sent_requests.filter(is_accepted=False)
-
-# 		return Response({
-# 			"received_requests": [{"id": req.id, "sender": req.sender.username} for req in received_requests],
-# 			"sent_requests": [{"id": req.id, "receiver": req.receiver.username} for req in sent_requests],
-# 			})
-
-# class SendFriendRequestView(APIView):
-# 	permission_classes = [IsAuthenticated]
-
-# 	def post(self, request, *args, **kwargs):
-# 		user_id = kwargs.get('user_id')
-# 		sender = request.user
-# 		receiver = get_object_or_404(User, id=user_id)
-
-# 		# # Log the incoming data
-# 		# logger.info(f"Friend request data received: sender={sender.username}, receiver_id={receiver.username}")
-
-# 		if sender.friends.filter(id=receiver.id).exists():
-# 			return Response({"message": f"{receiver.username} is already in your friends list"}, status=status.HTTP_400_BAD_REQUEST)
-		
-# 		if FriendRequest.objects.filter(sender=sender, receiver=receiver).exists():
-# 			return Response({"message": f"You have already sent a friend request to {receiver.username}"}, status=status.HTTP_400_BAD_REQUEST)
-		
-# 		FriendRequest.objects.create(sender=sender, receiver=receiver)
-# 		return Response({"message": f"Friend request sent to {receiver.username}"}, status=status.HTTP_200_OK)
-
-# class IsFriendView(APIView):
-# 	permission_classes = [IsAuthenticated]
-
-# 	def get(self, request, *args, **kwargs):
-# 		user_id = kwargs.get('user_id')
-# 		user = request.user
-# 		try:
-# 			friend = User.objects.get(id=user_id)
-# 			is_friend = user.friends.filter(id=friend.id).exists()
-# 			return Response({"is_friend": is_friend}, status=status.HTTP_200_OK)
-# 		except User.DoesNotExist:
-# 			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-# class RemoveFriendView(APIView):
-# 	permission_classes = [IsAuthenticated]
-
-# 	def post(self, request, *args, **kwargs):
-# 		user_id = kwargs.get('user_id')
-# 		user = request.user
-# 		try:
-# 			friend = User.objects.get(id=user_id)
-# 			user.remove_friend(friend)
-# 			return Response({"message": f"Friend {friend.username} removed successfully."}, status=status.HTTP_200_OK)
-# 		except User.DoesNotExist:
-# 			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-# class IsBlockedViewId(APIView):
-# 	permission_classes = [IsAuthenticated]
-
-# 	def get(self, request, *args, **kwargs):
-# 		user_id = kwargs.get('user_id')
-# 		user = request.user
-# 		try:
-# 			blocked_user = User.objects.get(id=user_id)
-# 			is_blocked = user.blocklist.filter(id=blocked_user.id).exists()
-# 			return Response({"is_blocked": is_blocked}, status=status.HTTP_200_OK)
-# 		except User.DoesNotExist:
-# 			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-# class IsBlockedViewNick(APIView):
-# 	permission_classes = [IsAuthenticated]
-
-# 	def get(self, request, *args, **kwargs):
-# 		nickname = kwargs.get('nickname')
-# 		logger.info(nickname)
-# 		user = request.user
-# 		try:
-# 			blocked_user = User.objects.get(username=nickname)
-# 			is_blocked = user.blocklist.filter(id=blocked_user.id).exists()
-# 			return Response({"is_blocked": is_blocked}, status=status.HTTP_200_OK)
-# 		except User.DoesNotExist:
-# 			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-# class BlockUserView(APIView):
-# 	permission_classes = [IsAuthenticated]
-
-# 	def post(self, request, *args, **kwargs):
-# 		user_id = kwargs.get('user_id')
-# 		user = request.user
-# 		try:
-# 			user_to_block = User.objects.get(id=user_id)
-# 			user.block_user(user_to_block)
-# 			return Response({"message": f"User {user_to_block.username} blocked successfully."}, status=status.HTTP_200_OK)
-# 		except User.DoesNotExist:
-# 			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-# class UnblockUserView(APIView):
-# 	permission_classes = [IsAuthenticated]
-
-# 	def post(self, request, *args, **kwargs):
-# 		user_id = kwargs.get('user_id')
-# 		user = request.user
-# 		try:
-# 			user_to_unblock = User.objects.get(id=user_id)
-# 			user.unblock_user(user_to_unblock)
-# 			return Response({"message": f"User {user_to_unblock.username} unblocked successfully."}, status=status.HTTP_200_OK)
-# 		except User.DoesNotExist:
-# 			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 # -----------------------------------CHECK AUTHENTICATION ENDPOINTS--------------------------------
 
