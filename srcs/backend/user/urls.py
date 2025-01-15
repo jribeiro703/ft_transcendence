@@ -11,6 +11,20 @@ urlpatterns = [
 
 	#ludo's endpoint
 	path('get-id/', views.getUserIdByNickname, name="get_user_id"),
+	path('search/', views.searchUser, name="search_user"),
+	path('public/<int:pk>/', views.GetUserPublicInfos, name="user_public_infos"),
+	path('profile/<int:pk>/', views.UserProfileView.as_view(), name="user_profile"),
+
+	path('friends/<int:pk>/', views.ListFriendRequestView.as_view(), name='list_friend_request'),
+	path('friends/accept/<int:request_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),
+	path('friends/deny/<int:request_id>/', views.DenyFriendRequestView.as_view(), name='deny_friend_request'),
+	path('friends/add/<int:user_id>/', views.SendFriendRequestView.as_view(), name='send_friend_request'),
+	path('friends/remove/<int:user_id>/', views.RemoveFriendView.as_view(), name='remove_friend'),
+	path('friends/check/<int:user_id>/', views.IsFriendView.as_view(), name='is_friend'),
+	path('block/check/id/<int:user_id>/', views.IsBlockedViewId.as_view(), name='is_blocked_id'),
+	path('block/check/nickname/<str:nickname>/', views.IsBlockedViewNick.as_view(), name='is_blocked_nickname'),
+	path('block/add/<int:user_id>/', views.BlockUserView.as_view(), name='block_user'),
+	path('block/remove/<int:user_id>/', views.UnblockUserView.as_view(), name='unblock_user'),
 
 	# private user endpoints
 	path('online/', views.getOnlineUsers, name="online_users"),

@@ -7,9 +7,8 @@ export let chatSocket = new WebSocket(
 	"wss://" + window.location.host + "/ws/livechat/",
 );
 
-let messagesArray = [];
-
 async function createMessageComponents(data) {
+	console.log(data);
 	const message = data.message;
 	const clientId = data.client_id;
 	const timestamp = data.timestamp;
@@ -17,8 +16,9 @@ async function createMessageComponents(data) {
 	const formattedTime = formatTimestamp(timestamp);
 	const clientIdColor = getColorForClientId(clientId);
 
+
+
 	const messageElement = document.createElement("div");
-	messageElement.dataset.timestamp = timestamp;
 	const timeSpan = document.createElement("span");
 	timeSpan.textContent = `[${formattedTime}] `;
 	timeSpan.style.color = clientIdColor;
@@ -36,19 +36,11 @@ async function createMessageComponents(data) {
 	messageElement.appendChild(timeSpan);
 	messageElement.appendChild(nicknameSpan);
 	messageElement.appendChild(messageText);
-
 	const blocked = await isClientBlocked(clientId);
 	if (blocked) {
 		messageElement.classList.add("d-none");
 	}
-	if (messagesArray.length > 100) {
-		chatLog.prepend(messageElement);
-	} else {
-		messagesArray.push({ timestamp, element: messageElement });
-		messagesArray.sort((b, a) => new Date(a.timestamp) - new Date(b.timestamp));
-		chatLog.innerHTML = '';
-		messagesArray.forEach(msg => chatLog.appendChild(msg.element));
-	}
+	chatLog.prepend(messageElement);
 	chatLog.scrollTop = chatLog.scrollHeight;
 }
 
