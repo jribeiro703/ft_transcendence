@@ -6,6 +6,9 @@ from django.utils.translation import gettext as _
 from tournament.models import Match, Guest
 import json
 from django.db.models import F
+import logging
+
+logger = logging.getLogger(__name__)
 
 def get_match_context(user: User):
     matchesMain = Match.objects.filter(player1_user=user).order_by('-timestamp')
@@ -37,15 +40,26 @@ def validate_game_token(request):
             player_id = data.get('player_id')
             game_token = data.get('game_token')
 
+            logger.debug(f"Received player_id: {player_id}, game_token: {game_token}")
+
             try:
                 player = User.objects.get(id=player_id)
+                logger.debug(f"Player found: {player.username}, Expected token: {player.game_token}")
+
                 if player.game_token == game_token:
+                    logger.info(f"Game token validation successful for player_id: {player_id}")
                     return JsonResponse({'valid': True})
+                else:
+                    logger.warning(f"Game token mismatch for player_id: {player_id}. Received: {game_token}, Expected: {player.game_token}")
+
             except User.DoesNotExist:
+                logger.error(f"User with id {player_id} does not exist.")
                 pass
         except json.JSONDecodeError:
+            logger.error("Invalid JSON received.")
             return JsonResponse({'valid': False, 'error': 'Invalid JSON'})
 
+    logger.warning(f"Game token validation failed for player_id: {player_id}, game_token: {game_token}")
     return JsonResponse({'valid': False, 'player_id': player_id, 'game_token': game_token})
 
 
