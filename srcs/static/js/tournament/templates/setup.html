@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <form id="tournament-setup-form">
+        {% csrf_token %}
+        <div class="btn-group btn-group-toggle">
+            <input type="radio" name="playerCount" id="players4" value="4">
+            <label for="players4">4 Players</label>
+            <input type="radio" name="playerCount" id="players8" value="8">
+            <label for="players8">8 Players</label>
+        </div>
+        <div id="player-fields-container"></div>
+        <button type="submit" class="btn btn-primary">Create Tournament</button>
+    </form>
+</div>
+{% endblock %}

@@ -17,7 +17,7 @@ class GamePlayerAdmin(admin.ModelAdmin):
 	ordering = ('game_id',)
  
 class TournamentAdmin(admin.ModelAdmin):
-	list_display = ('id', 'name', 'created_by',)
+	list_display = ('id', 'created_by',)
 	ordering = ('created_at',)
 
 admin.site.register(User, UserAdmin)
