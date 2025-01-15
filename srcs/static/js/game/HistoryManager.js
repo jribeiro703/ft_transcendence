@@ -24,7 +24,7 @@ import { API_BASE_URL } from "../user/fetchData.js";
 import { renderPage } from "../user/historyManager.js";
 import { showBrickoutRemote } from "./pong/gameViewMulti.js";
 import { showGameRoomB } from "./pong/gameView.js";
-import { changeTheme } from "../livechat/livechat.js";
+// import { changeTheme } from "../livechat/livechat.js";
 
 const pongGamePages = {
 
@@ -224,5 +224,5 @@ function loadSetting(gameState)
 	brickVar.currLevel = gameState.levelB;
 	brickVar.powerUpEnable = gameState.puEnableB;
 	gameVar.currentTheme = gameState.theme;
-	changeTheme(gameVar.currentTheme);
+	// changeTheme(gameVar.currentTheme);
 }
