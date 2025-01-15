@@ -9,12 +9,13 @@ function loadCustomFont()
 }
 export function chechOpponentRemote()
 {
+	console.log("chech opponent remote, idx : ", brickVar.playerIdx, "finish 1 ? ", brickVar.finishLevel, "finish 2 ? ", brickVar2.finishLevel);
 	let display = false;
 	const waiting = setInterval(() =>
 	{
-		if (gameVar.playerIdx === 1)
+		if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
 		{
-			if (brickVar.playerLives === 0)
+			if (brickVar.playerLives === 0 || brickVar.finishLevel)
 			{
 				if (!display)
 				{
@@ -38,9 +39,9 @@ export function chechOpponentRemote()
 				addBtnB();
 			}
 		}
-		if (gameVar.playerIdx === 2)
+		if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
 		{
-			if (brickVar.opponentLives === 0)
+			if (brickVar.opponentLives === 0 || brickVar.finishLevel)
 			{
 				if (!display)
 				{
@@ -57,17 +58,25 @@ export function chechOpponentRemote()
 				else
 					drawScoreBoardBRemote();
 			}
-			if (brickVar.playerLives === 0 && brickVar.opponentLives === 0)
+			if (brickVar.playerLives === 0 && brickVar.opponentLives === 0 )
 			{
 				clearInterval(waiting);
 				compareScoreRemote();
 				addBtnB();
 			}
 		}
+		if (brickVar.finishLevel && brickVar2.finishLevel)
+		{
+			clearInterval(waiting);
+			compareScoreRemote();
+			addBtnB();
+		}
 	},1000);
 }
 export function chechOpponent()
 {
+
+	console.log("chech opponent");
 	let display = false;
 	if (gameVar.localGame)
 	{
@@ -113,7 +122,7 @@ export function compareScoreRemote()
 		brickVar.ctx.textAlign = 'left';
 		if (brickVar.playerScore > brickVar.opponentScore)
 		{
-			if (gameVar.playerIdx === 1)
+			if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
 			{
 				brickVar.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar.canvasW/ 4 - 100, (brickVar.canvasH / 2) - 100);
 				brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
@@ -121,7 +130,7 @@ export function compareScoreRemote()
 				brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
 				brickVar.ctx.fillText(brickVar.opponentScore, brickVar.canvasW / 4 + 420, brickVar.canvasH / 2 + 50);
 			}
-			if (gameVar.playerIdx === 2)
+			if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
 			{
 				brickVar.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4, (brickVar.canvasH / 2) - 100);
 				brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
@@ -133,7 +142,7 @@ export function compareScoreRemote()
 		}
 		if (brickVar.opponentScore > brickVar.playerScore)
 		{
-			if (gameVar.playerIdx === 2)
+			if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
 			{
 				brickVar.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar.canvasW/ 4 - 100, (brickVar2.canvasH / 2) - 100);
 				brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
@@ -142,7 +151,7 @@ export function compareScoreRemote()
 				brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
 				brickVar.ctx.fillText(brickVar.playerScore, brickVar.canvasW / 4 + 420, brickVar.canvasH / 2 + 50);
 			}
-			if (gameVar.playerIdx === 1)
+			if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
 			{
 				brickVar.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4 , (brickVar.canvasH / 2) - 100);
 				brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
@@ -288,7 +297,6 @@ export function drawScoreBoardBRemote()
 		const leftX = brickVar.scoreCanvW * 0.25;
 		const rightX = brickVar.scoreCanvW * 0.75;
 		const y = 35;
-		console.log("brickout2p live");
 		ctx.fillText(gameVar.userName, leftX - 5, y);
 		ctx.fillText(gameVar.opponentName, rightX + 15, y);
 		

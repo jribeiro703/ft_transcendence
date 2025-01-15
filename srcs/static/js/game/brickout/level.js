@@ -7,6 +7,8 @@ import { clearBtnB } from "./manage.js";
 import { initializeCanvasBrick } from "../pong/canvas.js";
 import { initializeScoreCanvasBrickout } from "../pong/canvas.js";
 import { displayGameBrickView } from "../pong/display.js";
+import gameVar from "../pong/var.js";
+import { chechOpponentRemote } from "./score.js";
 
 export function youWinB()
 {
@@ -16,7 +18,10 @@ export function youWinB()
     	brickVar.ctx.fillStyle = "#66a5e8";
     	brickVar.ctx.fillText("Congratulations, you win !!", brickVar.canvasW / 2 - 200, brickVar.canvasH / 2);
 	}
-	levelDisplayB();
+	if (!gameVar.liveMatch)
+		levelDisplayB();
+	else
+		chechOpponentRemote();
 	addBtnB();
 }
 

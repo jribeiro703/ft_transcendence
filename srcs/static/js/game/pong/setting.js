@@ -1,7 +1,7 @@
 import gameVar from "./var.js";
 import { updateDifficultySelection, updateImageUrl, updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
-import { displayLiveSetting, displaySetting } from "./display.js";
+import { displayLiveSetting, displaySetting } from "./displaySettings.js";
 
 export function checkSetting()
 {

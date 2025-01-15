@@ -69,6 +69,7 @@ export function manageMoveB()
 
 export function loseLives()
 {
+	console.log("loseLives, live ? : ", gameVar.liveMatch);
 	if (gameVar.liveMatch)
 		loseLivesRemote();
 	else
@@ -89,7 +90,7 @@ export function loseLives()
 }
 export function loseLivesRemote()
 {
-	if (gameVar.playerIdx === 1)
+	if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
 	{
 		brickVar.playerLives--;
 		sendScoreInfoB(gameVar.gameSocket, 1, brickVar.playerScore, brickVar.playerLives);
@@ -106,7 +107,8 @@ export function loseLivesRemote()
 			resetBallB();
 		}
 	}
-	if (gameVar.playerIdx === 2)
+	if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2
+	)
 	{
 		brickVar.opponentLives--;
 		sendScoreInfoB(gameVar.gameSocket, 2, brickVar.opponentScore,  brickVar.opponentLives);
@@ -127,10 +129,13 @@ export function addBtnB()
 {
 	if (!gameVar.localGame)
 	{
-		if (!brickVar.finish)
-			displayNextLevel();
-		else
-			displayFinish();
+		if (!gameVar.liveMatch)
+		{
+			if (!brickVar.finish)
+				displayNextLevel();
+			else
+				displayFinish();
+		}
 	}
 	else
 		displayLocalRematch();
