@@ -9,12 +9,12 @@ urlpatterns = [
 	path('profile/<str:username>/', views.UserProfileView.as_view(), name="user_profile"), #data for profile page
 	path('leaderboard/', views.getLeaderboard, name='get_leaderboard'),
 
-	#ludo's endpoint
+	#used endpoints for livechat
 	path('get-id/', views.getUserIdByNickname, name="get_user_id"),
-	# path('search/', views.searchUser, name="search_user"),
-	# path('public/<int:pk>/', views.GetUserPublicInfos, name="user_public_infos"),
 	path('profile-id/<int:pk>/', views.UserProfileViewId.as_view(), name="user_profile_id"),
 
+	#friends's endpoints
+	path('friends/', views.getUserFriends, name="user_friends"),
 	path('friends/<int:pk>/', views.ListFriendRequestView.as_view(), name='list_friend_request'),
 	path('friends/accept/<int:request_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),
 	path('friends/deny/<int:request_id>/', views.DenyFriendRequestView.as_view(), name='deny_friend_request'),
@@ -33,9 +33,6 @@ urlpatterns = [
 	path('private/pk/', views.getUserPk, name="user_pk"),
 	path('settings/<int:pk>/', views.UserSettingsView.as_view(), name="user_settings"),
 
-	path('friends/', views.getUserFriends, name="user_friends"),
-	# path('friend-requests/<int:pk>/', views.ListFriendRequestView.as_view(), name='list_friend_request'),
-	# path('friend-requests/accept/<int:request_id>/', views.AcceptFriendRequestView.as_view(), name='accept_friend_request'),
 
 	# authentication endpoints
 	path('register/', views.CreateUserView.as_view(), name="register"),
