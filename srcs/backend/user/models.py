@@ -18,6 +18,7 @@ class User(AbstractUser):
 	friends = models.ManyToManyField('self', related_name='friendship', symmetrical=False, blank=True, verbose_name="friends")
 	blocklist = models.ManyToManyField('self', related_name='blocked_by', symmetrical=False, blank=True, verbose_name="blocklist")
 	is_online = models.BooleanField(default=False)
+	game_token = models.CharField(max_length=10, blank=True, null=True)
 	
 	# related_name : tournaments, game_as_player_one, game_as_player_two
 	# ex: user_instance.tournaments.all() to have access to alls tournaments
