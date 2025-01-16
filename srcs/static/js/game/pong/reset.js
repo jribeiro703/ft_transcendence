@@ -93,6 +93,28 @@ export function clearAllpongStates()
 	gameVar.playerIdx = 0;
 }
 
+export function clearPongVar()
+{
+	resetTimeFrame();
+	resetPu();
+	initPaddlesPos();
+	gameVar.startTime = false;
+	gameVar.gameTime = 0;
+	gameVar.gameStart = false;
+	gameVar.playerScore = 0;
+	gameVar.aiScore = 0;
+	gameVar.matchOver = false;
+	gameVar.serveCount = 0;
+	gameVar.finishGame = false;
+	gameVar.clientLeft = false;
+	gameVar.playerReady = false;
+	gameVar.liveMatch = false;
+	gameVar.localGame = false;
+	gameVar.tournament = false;
+	gameVar.currentServer = 'player';
+	gameVar.playerIdx = 0;
+}
+
 export function resetMatch()
 {
 	gameVar.playerScore = 0;
@@ -112,8 +134,7 @@ export function resetMatch()
 
 function resetTimeFrame()
 {
-	gameVar.gameTime = 0;
-	gameVar.startTime = false;
+
 	if (gameVar.animationFrame)
 	{
 		cancelAnimationFrame(gameVar.animationFrame);
