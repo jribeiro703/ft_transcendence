@@ -33,15 +33,14 @@ export function displayFinish()
 
 export function displayLocalRematch()
 {
-
     console.log("display Local");
     const mainContent = document.getElementById("brickout2pContainer");
     const btn = document.createElement('div');
+    btn.id = "finish";
+    btn.className = "finish";
     btn.innerHTML = `
-    <div class="finish" id="finish">
         <button id="rematchBtn" class="settingsBtn btn custom-btn height-btn">Rematch</button> 
         <button id="quitBtn" class="settingsBtn btn custom-btn height-btn">Return Home</button>
-    </div>
     `;
     mainContent.appendChild(btn);
     checkBtnB("localRematch");	

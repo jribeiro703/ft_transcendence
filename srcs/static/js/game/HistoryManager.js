@@ -197,7 +197,8 @@ window.addEventListener('load', () =>
 	else if (currentHash === 'playPong' || currentHash === 'playBrickout'
 		|| currentHash === 'playPongLocal' || currentHash === 'playBrickoutLocal'
 		|| currentHash === 'playPongRemote' || currentHash === 'playPongRemoteSecondp'
-		|| currentHash === 'playBrickoutRemote') 
+		|| currentHash === 'playBrickoutRemote' || currentHash === 'pongLobby' 
+		|| currentHash === 'brickoutLobby') 
 	{
 		clearAllpongStates();
 		clearAllBrickStates();

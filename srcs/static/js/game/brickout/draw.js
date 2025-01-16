@@ -37,7 +37,7 @@ export function drawB()
 		kickOut();
 		return;
 	}
-	if (brickVar.initialize && (!brickVar2.finishLevel || !brickVar.finishLevel))
+	if (brickVar.initialize && !brickVar.finishLevel)
 	{
 		baseDrawB();
 		if (brickVar.gameStart)

@@ -30,7 +30,7 @@ export function collisionDetectionB()
 					b.status = 0;
 					brickVar.score++;
 					manageRemoteScore();
-					brickVar.totalBrick = 4;
+					// brickVar.totalBrick = 10;
 					if(brickVar.score == brickVar.totalBrick)
 					{
 						if (brickVar.playerIdx === 2)

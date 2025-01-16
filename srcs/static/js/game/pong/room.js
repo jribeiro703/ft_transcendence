@@ -7,6 +7,15 @@ import { getUserInfosRemote } from '../getUser.js';
 import { initGame, initListenerB } from '../brickout/init.js';
 import { kickOut } from './draw.js';
 
+export function createPrivateRoom()
+{
+	gameVar.game = 'pong';
+	updatePowerUpSelection(false, true); 
+	updateDifficultySelection('medium', true);
+	updateLevelSelection("classicPong", true);
+	createNewRoom();
+}
+
 export function createNewRoom(joinRoomCallback)
 {
 	var roomName;
@@ -27,13 +36,11 @@ export function createNewRoom(joinRoomCallback)
 	if (gameVar.game === 'pong')
 	{
 		gameVar.playerIdx = 1;
-		console.log("create pong");
 		joinRoom(roomName);
 	}
 	else if (gameVar.game === 'brickout')
 	{
 		brickVar.playerIdx = 1;
-		console.log("create brick");
 		joinRoom(roomName);
 	}
 }
@@ -41,7 +48,6 @@ export function createNewRoom(joinRoomCallback)
 
 export function waitPlayerPong()
 {
-	console.log("in waiting : player ready: ", gameVar.playerReady);
 	gameVar.ctx.clearRect(0, 0, gameVar.canvasW, gameVar.canvasH);
 	gameVar.ctx.font = '40px Arial';
 	gameVar.ctx.fillStyle = '#455F78';
@@ -164,22 +170,6 @@ export async function joinRoom(roomName)
 			gameSocket.send(JSON.stringify({ type: 'join_room' }));
 			gameVar.gameSocket = gameSocket;
 			checkPlayerIdx();
-			// if (gameVar.playerIdx == 1)
-			// {
-			// 	console.log("player 1");
-			// 	getUserInfosRemote();
-			// 	if (gameVar.tournament)
-			// 		waitingPlayerTournament();
-			// 	else
-			// 		waitingPlayer();
-			// }
-			// if (gameVar.playerIdx == 2)
-			// {
-			// 	console.log("player 2");
-			// 	getUserInfosRemote();
-			// 	sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
-			// 	waitingForSettingLive();
-			// }
 			document.dispatchEvent(new CustomEvent('multiplayerGame', {
 				detail: {
 					multiplayer_game: true
@@ -195,8 +185,6 @@ export async function joinRoom(roomName)
 		try
 		{
 			const data = JSON.parse(e.data);
-			// if (data.type === 'direction_data' || data.type === 'ball_data')
-				// console.log("data: ", data);
 			if (data.type === 'ping')
 			{
 				gameSocket.send(JSON.stringify({ type: 'pong' }));
@@ -377,7 +365,6 @@ export function updateRoomList()
 				<span class="room-game">Game: ${game}</span>
 			</div>
 		`;
-
 		const joinBtn = roomItem.querySelector('.joinRoomBtn');
 		joinBtn.addEventListener('click', () =>
 		{
@@ -397,8 +384,13 @@ export function updateRoomList()
 			}
 			else
 			{
-				console.log("wrong lobby");
-				// joinBtn.style.display = 'none';
+				const gameSpan = roomItem.querySelector('.room-game');
+				gameSpan.style.transition = 'color 0.3s ease';
+				gameSpan.style.color = 'red';
+				
+				setTimeout(() => {
+					gameSpan.style.color = '';
+				}, 300);
 			}
 		});
 		gameVar.roomsContainer.appendChild(roomItem);

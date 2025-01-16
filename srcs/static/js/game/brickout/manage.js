@@ -69,14 +69,14 @@ export function manageMoveB()
 
 export function loseLives()
 {
-	console.log("loseLives, live ? : ", gameVar.liveMatch);
 	if (gameVar.liveMatch)
 		loseLivesRemote();
 	else
 	{
 		brickVar.lives--;
-		if(!brickVar.lives)
+		if(brickVar.lives === 0)
 		{
+			cancelAnimationFrame(brickVar.anim);
 			brickVar.finish = true;
 			brickVar.startTime = false;
 			brickVar.finishLevel = true;
@@ -135,6 +135,8 @@ export function addBtnB()
 			else
 				displayFinish();
 		}
+		else
+			displayFinish();
 	}
 	else
 		displayLocalRematch();
@@ -173,29 +175,30 @@ export function clearBtnB(nextLevel)
         console.error("Error removing buttons:", error);
     }
 }
+
+export function clearBrickVar()
+{
+	resetTimeFrame();
+	brickVar.initialize = false;
+    brickVar2.initialize = false;
+    brickVar.finishLevel = false;
+    brickVar2.finishLevel = false;
+    brickVar.gameStart = false;
+    brickVar2.gameStart = false;
+    brickVar.startTime = false;
+    brickVar2.startTime = false;
+	brickVar.score = 0;
+	brickVar2.score = 0;
+	brickVar.lives = 2;
+	brickVar2.lives = 2
+	brickVar.initGame = false;
+	brickVar2.initGame = false;
+	brickVar.playerIdx = 0;
+}
+
 export function clearAllBrickStates()
 {
-    if (brickVar.anim)
-	{
-        cancelAnimationFrame(brickVar.anim);
-        brickVar.anim = null;
-	}
-    if (brickVar2.anim)
-	{
-        cancelAnimationFrame(brickVar2.anim);
-        brickVar2.anim = null;
-    }
-    if (brickVar.gameTimer)
-	{
-        clearInterval(brickVar.gameTimer);
-        brickVar.gameTimer = null;
-    }
-    if (brickVar2.gameTimer)
-	{
-        clearInterval(brickVar2.gameTimer);
-        brickVar2.gameTimer = null;
-    }
-
+	resetTimeFrame();
 	updateDifficultySelectionB('medium', true);
 	updateLevelSelectionBFirst('classic', true);
 	updatePowerUpSelectionBFirst(false, true);
@@ -217,4 +220,28 @@ export function clearAllBrickStates()
 	brickVar.initGame = false;
 	brickVar2.initGame = false;
 	brickVar.playerIdx = 0;
+}
+
+function resetTimeFrame()
+{
+    if (brickVar.anim)
+	{
+        cancelAnimationFrame(brickVar.anim);
+        brickVar.anim = null;
+	}
+    if (brickVar2.anim)
+	{
+        cancelAnimationFrame(brickVar2.anim);
+        brickVar2.anim = null;
+    }
+    if (brickVar.gameTimer)
+	{
+        clearInterval(brickVar.gameTimer);
+        brickVar.gameTimer = null;
+    }
+    if (brickVar2.gameTimer)
+	{
+        clearInterval(brickVar2.gameTimer);
+        brickVar2.gameTimer = null;
+    }
 }

@@ -9,7 +9,6 @@ function loadCustomFont()
 }
 export function chechOpponentRemote()
 {
-	console.log("chech opponent remote, idx : ", brickVar.playerIdx, "finish 1 ? ", brickVar.finishLevel, "finish 2 ? ", brickVar2.finishLevel);
 	let display = false;
 	let display2 = false;
 	const waiting = setInterval(() =>
@@ -18,7 +17,6 @@ export function chechOpponentRemote()
 		{
 			if (brickVar.playerLives === 0 || brickVar.finishLevel)
 			{
-				console.log("finish 1");
 				if (!display)
 				{
 					display = true;
@@ -45,7 +43,6 @@ export function chechOpponentRemote()
 		{
 			if (brickVar.opponentLives === 0 || brickVar2.finishLevel)
 			{
-				console.log("finish 2");
 				if (!display2)
 				{
 					display2 = true;
@@ -73,7 +70,6 @@ export function chechOpponentRemote()
 
 export function chechOpponent()
 {
-	console.log("check opponent");
 	let display = false;
 	if (gameVar.localGame)
 	{
@@ -107,10 +103,10 @@ export function chechOpponent()
 		},1000);
 	}
 }
+
 export function compareScoreRemote()
 {
 	brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
-
 	loadCustomFont().load().then(function(font) 
 	{
         document.fonts.add(font);
@@ -120,44 +116,33 @@ export function compareScoreRemote()
 		if (brickVar.playerScore > brickVar.opponentScore)
 		{
 			if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
-			{
-				brickVar.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar.canvasW/ 4 - 100, (brickVar.canvasH / 2) - 100);
-				brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
-				brickVar.ctx.fillText(brickVar.playerScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2)
-				brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
-				brickVar.ctx.fillText(brickVar.opponentScore, brickVar.canvasW / 4 + 420, brickVar.canvasH / 2 + 50);
-			}
+				displayScoreP1Win(true);
 			if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
 			{
 				brickVar.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4, (brickVar.canvasH / 2) - 100);
 				brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
 				brickVar.ctx.fillText(brickVar.opponentScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
 				brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
-				brickVar.ctx.fillText(brickVar.playerScore, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50)
+				brickVar.ctx.fillText(brickVar.playerScore, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50);
 			}
 
 		}
-		if (brickVar.opponentScore > brickVar.playerScore)
+		else if (brickVar.opponentScore > brickVar.playerScore)
 		{
 			if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
-			{
-				brickVar.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar.canvasW/ 4 - 100, (brickVar2.canvasH / 2) - 100);
-				brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
-				brickVar.ctx.fillText(brickVar.opponentScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2)
-
-				brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
-				brickVar.ctx.fillText(brickVar.playerScore, brickVar.canvasW / 4 + 420, brickVar.canvasH / 2 + 50);
-			}
+				displayScoreP1Win(false);
 			if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
 			{
+				console.log("je suis le 1 et jai perdu");
 				brickVar.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4 , (brickVar.canvasH / 2) - 100);
 				brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
 				brickVar.ctx.fillText(brickVar.playerScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
-
 				brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
 				brickVar.ctx.fillText(brickVar.opponentScore, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50)
 			}
 		}
+		else
+			displayEqualScore();
 	}).catch(function(error)
 	{
 		console.error("Error on font load", error);
@@ -189,60 +174,98 @@ function displayEqualScore()
 	brickVar.ctx.textAlign = 'left';
 	brickVar.ctx.fillText("DRAW !", brickVar.canvasW / 4, (brickVar.canvasH / 2) - 100);
 	brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
-	brickVar.ctx.fillText(brickVar.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2)
 	brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
-	brickVar.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50);
-
-	brickVar2.ctx.font = 'bold 24px fontScore';
-	brickVar2.ctx.fillStyle = '#66a5e8';
-	brickVar2.ctx.textAlign = 'left';
-	brickVar2.ctx.fillText("DRAW !", brickVar.canvasW / 4, (brickVar.canvasH / 2) - 100);
-	brickVar2.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
-	brickVar2.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
-	brickVar2.ctx.fillText("Your opponent has score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
-	brickVar2.ctx.fillText(brickVar.score, brickVar2.canvasW / 4 + 380, brickVar2.canvasH / 2 + 50);
+	if (gameVar.liveMatch)
+	{
+		brickVar.ctx.fillText(brickVar.playerScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
+		brickVar.ctx.fillText(brickVar.opponentScore, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50);
+	}
+	else
+	{
+		brickVar.ctx.fillText(brickVar.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
+		brickVar.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50);
+	}
+	if (gameVar.localGame)
+	{
+		brickVar2.ctx.font = 'bold 24px fontScore';
+		brickVar2.ctx.fillStyle = '#66a5e8';
+		brickVar2.ctx.textAlign = 'left';
+		brickVar2.ctx.fillText("DRAW !", brickVar.canvasW / 4, (brickVar.canvasH / 2) - 100);
+		brickVar2.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
+		brickVar2.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
+		brickVar2.ctx.fillText("Your opponent has score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
+		brickVar2.ctx.fillText(brickVar.score, brickVar2.canvasW / 4 + 380, brickVar2.canvasH / 2 + 50);
+	}
 }
 
-function displayScoreP1Win()
+function displayScoreP1Win(player1)
 {
 	brickVar.ctx.font = 'bold 24px fontScore';
 	brickVar.ctx.fillStyle = '#66a5e8';
 	brickVar.ctx.textAlign = 'left';
-	brickVar.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar.canvasW/ 4 - 100, (brickVar.canvasH / 2) - 100);
+	brickVar.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar.canvasW / 4 - 100, (brickVar.canvasH / 2) - 100);
 	brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
-	brickVar.ctx.fillText(brickVar.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2)
 	brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
-	brickVar.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50);
-
-	brickVar2.ctx.font = 'bold 24px fontScore';
-	brickVar2.ctx.fillStyle = '#66a5e8';
-	brickVar2.ctx.textAlign = 'left';
-	brickVar2.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4, (brickVar.canvasH / 2) - 100);
-	brickVar2.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
-	brickVar2.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
-	brickVar2.ctx.fillText("Your opponent has score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
-	brickVar2.ctx.fillText(brickVar.score, brickVar2.canvasW / 4 + 380, brickVar2.canvasH / 2 + 50);
+	if (gameVar.liveMatch)
+	{
+		if (player1 === true)
+		{
+			brickVar.ctx.fillText(brickVar.playerScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2)
+			brickVar.ctx.fillText(brickVar.opponentScore, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50);
+		}
+		else
+		{
+			brickVar.ctx.fillText(brickVar.opponentScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2)
+			brickVar.ctx.fillText(brickVar.playerScore, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50);
+		}
+	}
+	else
+	{
+		brickVar.ctx.fillText(brickVar.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2)
+		brickVar.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50);
+	}
+	if (gameVar.localGame)
+	{
+		brickVar2.ctx.font = 'bold 24px fontScore';
+		brickVar2.ctx.fillStyle = '#66a5e8';
+		brickVar2.ctx.textAlign = 'left';
+		brickVar2.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4, (brickVar.canvasH / 2) - 100);
+		brickVar2.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
+		brickVar2.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
+		brickVar2.ctx.fillText("Your opponent has score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
+		brickVar2.ctx.fillText(brickVar.score, brickVar2.canvasW / 4 + 380, brickVar2.canvasH / 2 + 50);
+	}
 }
 
 function displayScoreP1Loose()
 {
-	brickVar2.ctx.font = 'bold 24px fontScore';
-	brickVar2.ctx.fillStyle = '#66a5e8';
-	brickVar2.ctx.textAlign = 'left';
-	brickVar2.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar2.canvasW/ 4 - 100, (brickVar2.canvasH / 2) - 100);
-	brickVar2.ctx.fillText("Your score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2);
-	brickVar2.ctx.fillText(brickVar2.score, brickVar2.canvasW / 4 + 200, brickVar2.canvasH / 2)
-	brickVar2.ctx.fillText("Your opponent has score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
-	brickVar2.ctx.fillText(brickVar.score, brickVar2.canvasW / 4 + 380, brickVar2.canvasH / 2 + 50);
-
+	if (gameVar.localGame)
+	{
+		brickVar2.ctx.font = 'bold 24px fontScore';
+		brickVar2.ctx.fillStyle = '#66a5e8';
+		brickVar2.ctx.textAlign = 'left';
+		brickVar2.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar2.canvasW/ 4 - 100, (brickVar2.canvasH / 2) - 100);
+		brickVar2.ctx.fillText("Your score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2);
+		brickVar2.ctx.fillText(brickVar2.score, brickVar2.canvasW / 4 + 200, brickVar2.canvasH / 2)
+		brickVar2.ctx.fillText("Your opponent has score : ", brickVar2.canvasW / 4, brickVar2.canvasH / 2 + 50);
+		brickVar2.ctx.fillText(brickVar.score, brickVar2.canvasW / 4 + 380, brickVar2.canvasH / 2 + 50);
+	}
 	brickVar.ctx.font = 'bold 24px fontScore';
 	brickVar.ctx.fillStyle = '#66a5e8';
 	brickVar.ctx.textAlign = 'left';
 	brickVar.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4 , (brickVar.canvasH / 2) - 100);
 	brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
-	brickVar.ctx.fillText(brickVar.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
 	brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
-	brickVar.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50);
+	if (gameVar.liveMatch)
+	{
+		brickVar.ctx.fillText(brickVar.playerScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
+		brickVar.ctx.fillText(brickVar.opponentScore, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50);
+	}
+	else
+	{
+		brickVar.ctx.fillText(brickVar.score, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
+		brickVar.ctx.fillText(brickVar2.score, brickVar.canvasW / 4 + 380, brickVar.canvasH / 2 + 50);
+	}
 }
 
 export function checkInterval()
@@ -285,18 +308,15 @@ export function drawScoreBoardBRemote()
         document.fonts.add(font);
 		const ctx = brickVar.scoreCtx;
 		ctx.clearRect(0, 0, brickVar.scoreCanvW, brickVar.scoreCanvH + 100);
-		
 		ctx.font = '24px fontScore';
 		ctx.fillStyle = 'white';
 		ctx.textAlign = 'center';
-		
 		const centerX = brickVar.scoreCanvW / 2;
 		const leftX = brickVar.scoreCanvW * 0.25;
 		const rightX = brickVar.scoreCanvW * 0.75;
 		const y = 35;
 		ctx.fillText(gameVar.userName, leftX - 5, y);
 		ctx.fillText(gameVar.opponentName, rightX + 15, y);
-		
 		ctx.fillText("Score" , leftX - 15, y + 60);
 		ctx.fillText("Lives", leftX - 15, y + 100);
 		ctx.fillText("Score" , rightX, y + 60);
@@ -305,7 +325,6 @@ export function drawScoreBoardBRemote()
 		ctx.fillText(brickVar.playerLives, leftX + 45, y + 100);
 		ctx.fillText(brickVar.opponentScore, rightX + 60, y + 60);
 		ctx.fillText(brickVar.opponentLives, rightX + 60, y + 100);
-
 		ctx.font = '32px fontScore';
 		ctx.fillText("VS", centerX, (brickVar.scoreCanvH) / 2);
 		
@@ -327,16 +346,13 @@ export function drawScoreBoardB()
         document.fonts.add(font);
 		const ctx = brickVar.scoreCtx;
 		ctx.clearRect(0, 0, brickVar.scoreCanvW, brickVar.scoreCanvH + 100);
-		
 		ctx.font = '24px fontScore';
 		ctx.fillStyle = 'white';
 		ctx.textAlign = 'center';
-		
 		const centerX = brickVar.scoreCanvW / 2;
 		const leftX = brickVar.scoreCanvW * 0.25;
 		const rightX = brickVar.scoreCanvW * 0.75;
 		const y = 35;
-
 		if (gameVar.game == 'brickout2p')
 		{
 			if (gameVar.localGame)
@@ -357,22 +373,18 @@ export function drawScoreBoardB()
 			ctx.fillText(brickVar.lives, leftX + 45, y + 100);
 			ctx.fillText(brickVar2.score, rightX + 60, y + 60);
 			ctx.fillText(brickVar2.lives, rightX + 60, y + 100);
-
 			ctx.font = '32px fontScore';
 			ctx.fillText("VS", centerX, (brickVar.scoreCanvH) / 2);
-
 			const minutes = Math.floor(brickVar.gameTime / 60);
 			const seconds = brickVar.gameTime % 60;
 			const time = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 			ctx.font = '20px fontScore';
 			ctx.fillText(time, leftX - 10, y + brickVar.scoreCanvH + 45);
-		
 			const minutes2 = Math.floor(brickVar2.gameTime / 60);
 			const seconds2 = brickVar2.gameTime % 60;
 			const time2 = `${minutes2}:${seconds2 < 10 ? '0' : ''}${seconds2}`;
 			ctx.font = '20px fontScore';
 			ctx.fillText(time2, rightX + 10, y + brickVar.scoreCanvH + 45);
-
 		}
 		else
 		{
@@ -394,6 +406,7 @@ export function drawScoreBoardB()
 		console.error("Error on font load", error);
 	});
 }
+
 export function saveScoreB()
 {
 	var levelScore = 0;
@@ -406,10 +419,5 @@ export function saveScoreB()
 	else if (brickVar.currLevel === 'invader')
 		levelScore = 104 + 169 + 169;
 	brickVar.finalScore = brickVar.score + levelScore;
-	sendScoreB();
 }
 
-export function sendScoreB()
-{
-	// console.log("finalScroe : ", brickVar.finalScore);
-}

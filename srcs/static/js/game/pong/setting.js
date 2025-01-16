@@ -9,7 +9,7 @@ export function checkSetting()
 	{
 		updatePowerUpSelection(false, true); 
 		updateDifficultySelection('medium', true);
-		updateLevelSelection("calssicPong", true);
+		updateLevelSelection("classicPong", true);
 	}
 }
 
@@ -58,6 +58,7 @@ export function updateSetting()
 		powerUp = "❌";
 		updatePowerUpSelection(false, true);
 	}
+	// updateImageUrl();
 	displaySetting(difficulty, powerUp, level);
 }
 

@@ -19,6 +19,10 @@ export function resetMatchB()
 	brickVar.gameReady = false;
 	brickVar.initialize = false;
 	brickVar.score = 0;
+	brickVar.opponentScore = 0;
+	brickVar.playerScore = 0;
+	brickVar.opponentLives = 2;
+	brickVar.playerLives = 2;
 	brickVar.lives = 2;
 	brickVar.gameStart = false;
 	brickVar.gameTime = 0;
