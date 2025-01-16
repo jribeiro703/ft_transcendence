@@ -3,35 +3,35 @@ from user.models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import gettext as _
-from tournament.models import Match, Guest
+from tournament.models import Guest
+from game.models import Game
 import json
 from django.db.models import F
 import logging
 
 logger = logging.getLogger(__name__)
 
-def get_match_context(user: User):
-    matchesMain = Match.objects.filter(player1_user=user).order_by('-timestamp')
-    matchesOpponent = Match.objects.filter(player2_user=user).order_by('-timestamp')
-    matches = matchesMain | matchesOpponent.order_by('-timestamp')
-    matches = matches.exclude(status='wo')
-    victoriesMain = matchesMain.filter(score_player1__gt=F('score_player2')).count()
-    victoriesOpponent = matchesOpponent.filter(score_player2__gt=F('score_player1')).count()
-    lossesMain = matchesMain.filter(score_player1__lt=F('score_player2')).count()
-    lossesOpponent = matchesOpponent.filter(score_player2__lt=F('score_player1')).count()
-    victories = victoriesMain + victoriesOpponent
-    losses = lossesMain + lossesOpponent
-    display_name = user.display_name
+def get_game_context(user: User):
+    gamesMain = Game.objects.filter(player_one=user).order_by('-timestamp')
+    gamesOpponent = Game.objects.filter(player_two=user).order_by('-timestamp')
+    games = gamesMain | gamesOpponent.order_by('-timestamp')
+    games = games.exclude(status='WO')
+    victoriesMain = gamesMain.filter(score_one__gt=F('score_two')).count()
+    victoriesOpponent = gamesOpponent.filter(score_two__gt=F('score_one')).count()
+    lossesMain = gamesMain.filter(score_one__lt=F('score_two')).count()
+    lossesOpponent = gamesOpponent.filter(score_two__lt=F('score_one')).count()
+    display_name = user.username
     avatar = user.avatar
 
     return {
         'display_name': display_name,
         'avatar': avatar,
-        'matches': matches,
+        'games': games,
         'victories': victories,
         'losses': losses,
     }
 
+#used
 @csrf_exempt
 def validate_game_token(request):
     if request.method == 'POST':
@@ -64,7 +64,7 @@ def validate_game_token(request):
 
 
 @csrf_exempt
-def create_match(request):
+def create_game(request):
     if request.method == 'POST':
         difficulty = request.POST.get('difficulty')
         player1_user_id = request.POST.get('player1_user')
@@ -88,88 +88,88 @@ def create_match(request):
             player2_user = User.objects.get(id=player2_user_id)
             player2_guest = None
 
-        # Create the Match
-        match = Match(
-            player1_user=player1_user,
+        # Create the Game
+        game = Game(
+            player_one=player1_user,
             player1_guest=player1_guest,
-            player2_user=player2_user,
+            player_two=player2_user,
             player2_guest=player2_guest,
             difficulty=difficulty,
-            score_player1=0,
-            score_player2=0
+            score_one=0,
+            score_two=0,
         )
-        match.save()
-        return JsonResponse({'success': 'Match created', 'match_id': match.id}, status=200)
+        game.save()
+        return JsonResponse({'success': 'Game created', 'game_id': game.id}, status=200)
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 @csrf_exempt
-def update_result_wo(request, match_id):
+def update_result_wo(request, game_id):
     if request.method == 'POST':
         try:
-            match = Match.objects.get(pk=match_id)
-            if match.status == 'pending':
-                match.status = 'wo'
-                match.walkover = True
-                match.save()
-            return JsonResponse({'success': 'Match result updated'}, status=200)
-        except Match.DoesNotExist:
-            return JsonResponse({'error': 'Match not found'}, status=404)
+            game = Game.objects.get(pk=game_id)
+            if game.status == 'PENDING':
+                game.status = 'WO'
+                game.walkover = True
+                game.save()
+            return JsonResponse({'success': 'Game result updated'}, status=200)
+        except Game.DoesNotExist:
+            return JsonResponse({'error': 'Game not found'}, status=404)
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
-def update_match_result(request, match_id):
+def update_game_result(request, game_id):
     if request.method == 'POST':
         try:
-            match = Match.objects.get(pk=match_id)
-            match.status = 'finished'
-            match.score_player1 = request.POST.get('score_player1')
-            match.score_player2 = request.POST.get('score_player2')
-            match.save()
-            return JsonResponse({'success': 'Match result updated'}, status=200)
+            game = Game.objects.get(pk=game_id)
+            game.status = 'FINISHED'
+            game.score_one = request.POST.get('score_one')
+            game.score_two = request.POST.get('score_two')
+            game.save()
+            return JsonResponse({'success': 'Game result updated'}, status=200)
         except:
-            return JsonResponse({'error': 'Match not found'}, status=404)
+            return JsonResponse({'error': 'Game not found'}, status=404)
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
-def get_match_status(request, match_id):
-    # return status of the match and the winner's display name
+def get_game_status(request, game_id):
+    # return status of the Game and the winner's display name
     if request.method == 'GET':
         try:
-            match = Match.objects.get(pk=match_id)
-            if match.status == 'finished':
-                if match.score_player1 > match.score_player2:
-                    winner = match.player1_user.display_name if match.player1_user else match.player1_guest.display_name
+            game = Game.objects.get(pk=game_id)
+            if game.status == 'FINISHED':
+                if game.score_one > game.score_two:
+                    winner = game.player_one.username if game.player_one else game.player1_guest.display_name
                 else:
-                    winner = match.player2_user.display_name if match.player2_user else match.player2_guest.display_name
+                    winner = game.player_two.username if game.player_two else game.player2_guest.display_name
                 return JsonResponse({'status': _('{} has won').format(winner)}, status=200)
-            if match.status == 'wo':
+            if game.status == 'WO':
                 return JsonResponse({'status': _('Game has been forfeited')}, status=200)
             else:
                 return JsonResponse({'status': None}, status=200)
-        except Match.DoesNotExist:
-            return JsonResponse({'error': 'Match not found'}, status=404)
+        except Game.DoesNotExist:
+            return JsonResponse({'error': 'Game not found'}, status=404)
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
-def get_match_data(request, match_id):
+def get_game_data(request, game_id):
     if request.method == 'GET':
         try:
-            match = Match.objects.get(pk=match_id)
-            tournament = match.tournament.id if match.tournament else None
-            player1 = match.player1_user.display_name if match.player1_user else match.player1_guest.display_name
-            player2 = match.player2_user.display_name if match.player2_user else match.player2_guest.display_name
-            game_over = match.status == 'finished' or match.status == 'wo'
+            game = Game.objects.get(pk=game_id)
+            tournament = game.tournament.id if game.tournament else None
+            player1 = game.get_player1_name()
+            player2 = game.get_player2_name()
+            game_over = game.status == 'FINISHED' or game.status == 'WO'
             return JsonResponse({
                 'tournament': tournament,
                 'player1': player1,
-                'score_player1': match.score_player1,
+                'score_player1': game.score_one,
                 'player2': player2,
-                'score_player2': match.score_player2,
-                'difficulty': match.difficulty,
+                'score_player2': game.score_two,
+                'difficulty': game.difficulty,
                 'game_over': game_over,
                 'max_score': '5'
                 }, status=200)
-        except Match.DoesNotExist:
-            return JsonResponse({'error': 'Match not found'}, status=404)
+        except Game.DoesNotExist:
+            return JsonResponse({'error': 'Game not found'}, status=404)
     return JsonResponse({'error': 'Invalid request'}, status=400)
