@@ -73,7 +73,7 @@ const socketHandlers = {
 				token: token
 			}));
 
-			console.log('Chat socket connected and authenticated');
+			// console.log('Chat socket connected and authenticated');
 		} catch (error) {
 			console.error('Error authenticating chat socket:', error);
 			showToast("Error connecting to chat", "error");

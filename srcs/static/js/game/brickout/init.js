@@ -1,4 +1,5 @@
 import brickVar from "./var.js";
+import { PADDLE_POSX } from "../pong/const.js";
 import brickVar2 from "./secondBrickout/var.js";
 import { keyDownHandlerB, keyUpHandlerB } from "./control.js";
 import { startBallB as startBallFirst } from './ball.js';
@@ -31,17 +32,34 @@ export function initListenerB()
 export function initGame()
 {
 	brickVar.initialize = true;
+
 	if (brickVar.currLevel === 'classic')
+	{
+		initBricksFirst(brickVar.PATTERNS.CLASSIC);
 		startGameFirst("classic");
+	}
 	else if (brickVar.currLevel === 'castle')
+	{
+		initBricksFirst(brickVar.PATTERNS.CASTLE)
 		startGameFirst("castle");
+	}	
 	else if (brickVar.currLevel === 'x')
+	{
+		initBricksFirst(brickVar.PATTERNS.X);
 		startGameFirst('x');
+	}
 	else if (brickVar.currLevel === 'invader')
+	{
+		initBricksFirst(brickVar.PATTERNS.INVADER);
 		startGameFirst('invader');
+	}
 	else
+	{
+		initBricksFirst(brickVar.PATTERNS.CLASSIC);
 		startGameFirst('classic');
+	}
 }
+
 export function initListenerMultiB()
 {
 	removeEventListenersB();
@@ -72,14 +90,20 @@ export function startBrickGame2p()
 	const level = brickVar.currLevel || 'classic';
 	initBricksFirst(brickVar.PATTERNS[level.toUpperCase()]);
 	initBricksSecond(brickVar2.PATTERNS[level.toUpperCase()]);
-
 	startGameFirst(level);
 	startGameSecond(level);
 }
+
 function removeEventListenersB()
 {
     document.removeEventListener("keydown", keyDownHandlerB);
     document.removeEventListener("keyup", keyUpHandlerB);
     document.removeEventListener("keydown", startBallFirst);
     document.removeEventListener("keydown", startBallSecond);
+}
+
+export function initPaddlesPosB()
+{
+    brickVar.paddleX = PADDLE_POSX;
+    brickVar2.paddleX = PADDLE_POSX;
 }

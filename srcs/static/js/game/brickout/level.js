@@ -1,23 +1,36 @@
 import brickVar from "./var.js";
 import { initGame, initListenerB } from "./init.js";
 import { initBricksB } from "./brick.js";
-import { sendScoreB } from "./score.js";
 import { startGameB } from "./control.js";
+import { addBtnB } from "./manage.js";
+import { clearBtnB } from "./manage.js";
+import { initializeCanvasBrick } from "../pong/canvas.js";
+import { initializeScoreCanvasBrickout } from "../pong/canvas.js";
+import { displayGameBrickView } from "../pong/display.js";
+import gameVar from "../pong/var.js";
+import { chechOpponentRemote } from "./score.js";
 
 export function youWinB()
 {
 	if (!brickVar.finish)
 	{
 		brickVar.ctx.font = "35px Arial";
-    	brickVar.ctx.fillStyle = "red";
+    	brickVar.ctx.fillStyle = "#66a5e8";
     	brickVar.ctx.fillText("Congratulations, you win !!", brickVar.canvasW / 2 - 200, brickVar.canvasH / 2);
 	}
-	levelDisplayB();
+	if (!gameVar.liveMatch)
+		levelDisplayB();
+	else
+		chechOpponentRemote();
 	addBtnB();
 }
 
 export function checkLevelB(level)
 {
+	if (!level)
+		level = brickVar.currLevel;
+	if (!brickVar.currLevel)
+		brickVar.currLevel = level;
 	if (level == "classic")
 		initBricksB(brickVar.PATTERNS.CLASSIC);
 	else if (level == "castle")
@@ -30,7 +43,7 @@ export function checkLevelB(level)
 
 export function levelDisplayB()
 {
-	brickVar.ctx.font = "35px Arial";
+	brickVar.ctx.font = "30px Arial";
     brickVar.ctx.fillStyle = "white";
 
 	if (brickVar.currLevel == "classic")
@@ -43,8 +56,8 @@ export function levelDisplayB()
 	{
 		brickVar.finish = true;
 		brickVar.finalScore = 104 + 169 + 169 + 169;
-		brickVar.ctx.fillText("You have finish the game, Nice ! Score : " +brickVar.finalScore , brickVar.canvasW / 2 - 220, brickVar.canvasH / 6);
-		sendScoreB();
+		brickVar.ctx.fillText("You have finish the game !", brickVar.canvasW / 2 - 190, brickVar.canvasH / 6);
+		brickVar.ctx.fillText("Nice, score : " + brickVar.finalScore , brickVar.canvasW / 2 - 190, brickVar.canvasH / 6 + 30);
 		addImageB("/static/css/images/ms.png");
 	}
 }
@@ -83,9 +96,12 @@ export function addImageB(url)
     };
 }
 
-export function handleNextLevelB()
+export async function handleNextLevelB()
 {
 	clearBtnB();
+	displayGameBrickView();
+	await initializeCanvasBrick();
+	await initializeScoreCanvasBrickout();
 	initListenerB();
 	initGame();
 	const nextLevelBtn = document.getElementById("nextLevelBtn");
@@ -108,9 +124,12 @@ export function handleNextLevelB()
 		return;
 }
 
-export function restartLevelB()
+export async function restartLevelB()
 {
 	clearBtnB();
+	displayGameBrickView();
+	await initializeCanvasBrick();
+	await initializeScoreCanvasBrickout();
 	initListenerB();
 	initGame();	
 	brickVar.initGame = false;

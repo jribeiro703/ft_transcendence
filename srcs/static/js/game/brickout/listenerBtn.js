@@ -1,9 +1,9 @@
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 import { handleNextLevelB, restartLevelB } from "./level.js";
-import { clearAllBrickStates } from "./manage.js";
 import { renderPageGame } from "../HistoryManager.js";
-
+import { resetMatchB as resetMatchFirst } from "./reset.js";
+import { resetMatchB as resetMatchSecond } from "./secondBrickout/reset.js";
 
 export function listenNextLevelBtn()
 {
@@ -11,11 +11,27 @@ export function listenNextLevelBtn()
 	const quitBtn = document.getElementById("quitBtn");
 	const restartLevelBtn = document.getElementById("restartLevelBtn")
 	if (nextLevelBtn)
-		nextLevelBtn.addEventListener("click", handleNextLevelB);
+	{
+		nextLevelBtn.addEventListener("click", () =>
+		{
+			handleNextLevelB();
+		});
+	}
+
 	if (restartLevelBtn)
-		restartLevelBtn.addEventListener("click", restartLevelB);
+	{
+		restartLevelBtn.addEventListener("click", () =>
+		{
+			restartLevelB();
+		});
+	}
 	if (quitBtn)
-		quitBtn.addEventListener('click', () => renderPageGame("home", true));
+	{
+		quitBtn.addEventListener('click', () => 
+		{
+			renderPageGame("home", true);
+		});
+	}
 }
 
 export function listenFinishBtn()
@@ -23,10 +39,26 @@ export function listenFinishBtn()
 	const quitBtn = document.getElementById("quitBtn");
 	const restartLevelBtn = document.getElementById("restartLevelBtn")
 	if (restartLevelBtn)
-		restartLevelBtn.addEventListener("click", () => restartLevelB);
+	{
+		restartLevelBtn.addEventListener('click', () =>
+		{
+			resetMatchFirst();
+			renderPageGame("playBrickout", true);
+		});
+	}
+
 	if (quitBtn)
-		quitBtn.addEventListener('click', () => renderPageGame("home"), true);
+	{
+		quitBtn.addEventListener('click', () => 
+		{
+			resetMatchFirst();
+			renderPageGame("home", true);
+		});
+	}
 }
+
+
+
 export function clearAllGameStates()
 {
     if (brickVar.anim) {
@@ -68,18 +100,20 @@ export function listenLocalRematchBtn()
 	const quitBtn = document.getElementById('quitBtn');
 	if (rematchBtn)
 	{
-		rematchBtn.addEventListener('click', async () => 
+		rematchBtn.addEventListener('click', () => 
 		{
-			clearAllBrickStates();
-			await renderPageGame("playBrickoutLocal", true);
+			resetMatchFirst();
+			resetMatchSecond();
+			renderPageGame("playBrickoutLocal", true);
 		});
 	}
 	if (quitBtn)
 	{
-		quitBtn.addEventListener('click', async () =>
+		quitBtn.addEventListener('click', () =>
 		{
-			clearAllBrickStates();
-			await renderPageGame("home", true);
+			resetMatchFirst();
+			resetMatchSecond();
+			renderPageGame("home", true);
 		});
 	}
 }

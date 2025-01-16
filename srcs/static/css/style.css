@@ -34,6 +34,12 @@ p {
   font-size: 30px;
 }
 
+p1 {
+  color: var(--text-color);
+  padding-top: 15px;
+  font-size: 20px;
+}
+
 /* david work */
 
 .custom-h1 {
@@ -645,10 +651,9 @@ color: var(--text-color);;
   margin: 0 auto;
   border: 2px solid var(--secondary-color);
   border-radius: 8px;
-  background-color: #1a1a40;
+  background-color: #000000;
 }
 
-.finish,
 .nextLevel {
   display: flex;
   justify-content: center;
@@ -666,7 +671,7 @@ color: var(--text-color);;
   margin: 0 auto;
   border: 2px solid #fefcff;
   border-radius: 8px;
-  background-color: #1a1a40;
+  background-color: #000000;
 }
 
 #twoPlayerBrick {

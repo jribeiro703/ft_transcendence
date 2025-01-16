@@ -75,10 +75,13 @@ export function startBall(e)
 	if (e.code == "Space" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart && gameVar.currentServer == 'player'
 		|| e.code == "Enter" && !gameVar.matchOver && !gameVar.aiServe && !gameVar.gameStart && gameVar.currentServer == 'player2')
 	{
+
 		if (!gameVar.finishGame)
 		{
 			if (!gameVar.init_dx || !gameVar.init_dy)
+			{
 				updateDifficultySelection(gameVar.difficulty, true);
+			}
 			gameVar.startTime = true;
 			gameVar.gameStart = true;
 			gameVar.dx = gameVar.init_dx;
@@ -99,11 +102,16 @@ export function startBallLive(e)
 	{
 		if (e.code == "Space" && !gameVar.matchOver && !gameVar.gameStart)
 		{
+			if (!gameVar.init_dx || !gameVar.init_dy)
+			{
+				console.log("init est nul diff ", gameVar.difficulty);
+				updateDifficultySelection(gameVar.difficulty, true);
+			}
+            gameVar.gameStart = true;
+			gameVar.startTime = true;
 			gameVar.dx = gameVar.init_dx;
             gameVar.dy = (Math.random() < 0.5 ? gameVar.init_dy : -gameVar.init_dy);
             sendDirectionData(gameVar.dx, gameVar.dy, gameVar.init_dx, gameVar.init_dy, gameVar.gameSocket);
-            gameVar.gameStart = true;
-			gameVar.startTime = true;
             sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
 		}
 	}

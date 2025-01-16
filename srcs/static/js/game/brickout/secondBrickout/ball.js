@@ -39,6 +39,7 @@ export function resetBallB()
 	brickVar2.gameStart = false;
 	resetPowerUpB();
 }
+
 export function updateBallPositionB()
 {
     if (brickVar2.gameStart)

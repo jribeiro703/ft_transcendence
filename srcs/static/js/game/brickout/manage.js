@@ -1,19 +1,19 @@
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 import gameVar from "../pong/var.js";
-import { resetBallB } from "./ball.js";
-import { chechOpponent, chechOpponentRemote } from "./score.js"
-import { saveScoreB } from "./score.js";
-import { displayNextLevel, displayFinish, displayLocalRematch } from "./display.js";
-import { listenFinishBtn, listenNextLevelBtn, listenLocalRematchBtn } from "./listenerBtn.js";
-import { handleNextLevelB, restartLevelB } from "./level.js";
-import { renderPageGame } from "../HistoryManager.js";
-import { updateDifficultySelectionB, updateSettingB } from "./update.js";
 import { updateLevelSelectionB as updateLevelSelectionBFirst } from "./update.js";
 import { updateLevelSelectionB as updateLevelSelectionBSecond } from "./secondBrickout/update.js";
 import { updatePowerUpSelectionB as updatePowerUpSelectionBFirst } from "./powerUp.js";
 import { updatePowerUpSelectionB as updatePowerUpSelectionBSecond } from "./secondBrickout/update.js";
+import { displayNextLevel, displayFinish, displayLocalRematch } from "./display.js";
+import { listenFinishBtn, listenNextLevelBtn, listenLocalRematchBtn } from "./listenerBtn.js";
+import { chechOpponent, chechOpponentRemote } from "./score.js"
+import { handleNextLevelB, restartLevelB } from "./level.js";
+import { updateDifficultySelectionB } from "./update.js";
 import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
+import { resetBallB } from "./ball.js";
+import { saveScoreB } from "./score.js";
+import { renderPageGame } from "../HistoryManager.js";
 import { sendScoreInfoB } from "../pong/network.js";
 
 export function manageCollisionB()
@@ -74,8 +74,9 @@ export function loseLives()
 	else
 	{
 		brickVar.lives--;
-		if(!brickVar.lives)
+		if(brickVar.lives === 0)
 		{
+			cancelAnimationFrame(brickVar.anim);
 			brickVar.finish = true;
 			brickVar.startTime = false;
 			brickVar.finishLevel = true;
@@ -89,7 +90,7 @@ export function loseLives()
 }
 export function loseLivesRemote()
 {
-	if (gameVar.playerIdx === 1)
+	if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
 	{
 		brickVar.playerLives--;
 		sendScoreInfoB(gameVar.gameSocket, 1, brickVar.playerScore, brickVar.playerLives);
@@ -100,14 +101,13 @@ export function loseLivesRemote()
 			brickVar.finishLevel = true;
 			saveScoreB();
 			chechOpponentRemote();
-			// addBtnB();
 		}
 		else
 		{
 			resetBallB();
 		}
 	}
-	if (gameVar.playerIdx === 2)
+	if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
 	{
 		brickVar.opponentLives--;
 		sendScoreInfoB(gameVar.gameSocket, 2, brickVar.opponentScore,  brickVar.opponentLives);
@@ -118,7 +118,6 @@ export function loseLivesRemote()
 			brickVar.finishLevel = true;
 			saveScoreB();
 			chechOpponentRemote();
-			// addBtnB();
 		}
 		else
 			resetBallB();
@@ -129,8 +128,13 @@ export function addBtnB()
 {
 	if (!gameVar.localGame)
 	{
-		if (!brickVar.finish)
-			displayNextLevel();
+		if (!gameVar.liveMatch)
+		{
+			if (!brickVar.finish)
+				displayNextLevel();
+			else
+				displayFinish();
+		}
 		else
 			displayFinish();
 	}
@@ -171,7 +175,54 @@ export function clearBtnB(nextLevel)
         console.error("Error removing buttons:", error);
     }
 }
+
+export function clearBrickVar()
+{
+	resetTimeFrame();
+	brickVar.initialize = false;
+    brickVar2.initialize = false;
+    brickVar.finishLevel = false;
+    brickVar2.finishLevel = false;
+    brickVar.gameStart = false;
+    brickVar2.gameStart = false;
+    brickVar.startTime = false;
+    brickVar2.startTime = false;
+	brickVar.score = 0;
+	brickVar2.score = 0;
+	brickVar.lives = 2;
+	brickVar2.lives = 2
+	brickVar.initGame = false;
+	brickVar2.initGame = false;
+	brickVar.playerIdx = 0;
+}
+
 export function clearAllBrickStates()
+{
+	resetTimeFrame();
+	updateDifficultySelectionB('medium', true);
+	updateLevelSelectionBFirst('classic', true);
+	updatePowerUpSelectionBFirst(false, true);
+	updateDifficultySelectionSB('medium');
+	updateLevelSelectionBSecond('classic');
+	updatePowerUpSelectionBSecond(false);
+    brickVar.initialize = false;
+    brickVar2.initialize = false;
+    brickVar.finishLevel = false;
+    brickVar2.finishLevel = false;
+    brickVar.gameStart = false;
+    brickVar2.gameStart = false;
+    brickVar.startTime = false;
+    brickVar2.startTime = false;
+	brickVar.score = 0;
+	brickVar2.score = 0;
+	brickVar.lives = 2;
+	brickVar2.lives = 2
+	brickVar.initGame = false;
+	brickVar2.initGame = false;
+	brickVar.playerIdx = 0;
+}
+
+function resetTimeFrame()
 {
     if (brickVar.anim)
 	{
@@ -193,25 +244,4 @@ export function clearAllBrickStates()
         clearInterval(brickVar2.gameTimer);
         brickVar2.gameTimer = null;
     }
-
-	updateDifficultySelectionB('medium', true);
-	updateLevelSelectionBFirst('classic', true);
-	updatePowerUpSelectionBFirst(false, true);
-	updateDifficultySelectionSB('medium');
-	updateLevelSelectionBSecond('classic');
-	updatePowerUpSelectionBSecond(false);
-	// updateSettingB();
-	// updateImageUrl();
-    brickVar.initialize = false;
-    brickVar2.initialize = false;
-    brickVar.finishLevel = false;
-    brickVar2.finishLevel = false;
-    brickVar.gameStart = false;
-    brickVar2.gameStart = false;
-    brickVar.startTime = false;
-    brickVar2.startTime = false;
-	brickVar.score = 0;
-	brickVar2.score = 0;
-	brickVar.lives = 2;
-	brickVar2.lives = 2
 }

@@ -10,6 +10,7 @@ import { handleBallB } from "./ball.js";
 import { manageMoveB } from "./manage.js";
 import { updateBallPositionB } from "./ball.js";
 import { updatePowerUpB } from "./update.js";
+import { kickOut } from "../../pong/draw.js";
 
 function baseDrawB()
 {
@@ -26,6 +27,11 @@ function baseDrawB()
 
 export function drawB()
 {
+	if (gameVar.clientLeft)
+	{
+		kickOut();
+		return;
+	}
 	if (!brickVar2.finishLevel && brickVar2.initialize)
 	{
 		baseDrawB();
