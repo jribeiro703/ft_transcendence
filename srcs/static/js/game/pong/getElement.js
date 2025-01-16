@@ -18,14 +18,12 @@ export function getElementLobby()
 	gameVar.noRoomsMessage = document.getElementById('noRoomsMessage');
 	gameVar.refreshBtn = document.getElementById('refreshBtn');
 	gameVar.settingBtn = document.getElementById('settingBtn');
-
 	gameVar.roomView.style.display = 'block';
 	gameVar.refreshBtn.style.display = 'block';
 	gameVar.settingBtn.style.display = 'block';
 }
 export function getBtnById()
 {
-	// gameVar.powerUpSelection = document.getElementById('powerUpSelection');
 	gameVar.btnPowerUp = document.getElementById('btnPowerUp');
 	gameVar.withPowerUp = document.getElementById('withPowerUps');
 	gameVar.withoutPowerUp = document.getElementById('withoutPowerUps');

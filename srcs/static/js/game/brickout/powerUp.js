@@ -23,12 +23,15 @@ export function updatePowerUpB()
 {
 	if (brickVar.powerUpEnable)
     {
-		if (!brickVar.powerUpActive)
+		if (brickVar.powerUpOnscreen)
 		{
 			brickVar.powerUpY += brickVar.powerUpSpeed;
 			
 			if (brickVar.powerUpY > brickVar.canvasH)
+			{
+				brickVar.powerUpOnscreen = false;
 				createPowerUpB();
+			}
 		}
 	}
 }

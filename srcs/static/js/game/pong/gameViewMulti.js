@@ -1,13 +1,12 @@
 import gameVar from "./var.js";
-import { checkSettingLive, updateSetting } from "./setting.js";
+import brickVar from "../brickout/var.js";
+import { checkSettingLive } from "./setting.js";
 import { createNewRoom } from "./room.js";
 import { displayGameBrickView, displayGameView, displayLobbyView } from "./display.js";
 import { getElementLobby } from "./getElement.js";
-import { initializeCanvasBrick, initializeCanvasBrick2p, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
-import { displayGameDataPong } from "./displayVar.js";
-import { getUserInfos } from "../getUser.js";
-import brickVar from "../brickout/var.js";
+import { initializeCanvasBrick, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
 import { initListenerB } from "../brickout/init.js";
+import { getUserInfos } from "../getUser.js";
 
 
 export function showLobbyView()
@@ -33,6 +32,7 @@ export function showLobbyView()
 		else
 			level = brickVar.currLevel;
 	}
+	getUserInfos();
 
 	displayLobbyView(level);
 	getElementLobby();
@@ -47,15 +47,13 @@ export async function showPongRemote(room = null)
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	// gameVar.gameView.style.display = 'block';
+	gameVar.returnLobby = document.getElementById('returnLobby');
 	
 	createNewRoom();
 }
 
 export async function showBrickoutRemote(room = null)
 {
-	// checkSettingLive();
-	// displayGameView();
 	displayGameBrickView();
 	await initializeCanvasBrick();
 	await initializeScoreCanvas2P();
@@ -64,7 +62,6 @@ export async function showBrickoutRemote(room = null)
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	// gameVar.gameView.style.display = 'block';
 	
 	createNewRoom();
 }

@@ -1,15 +1,16 @@
-.darkTheme {
+/* david */
+.Transcended {
 	--background-color: linear-gradient(
-	to right,
-	#0A1014 0%,
-	#1A2A35 50%,
-	#0A1014 100%
+	45deg,
+	#170B2B 0%,
+	#2B0548 50%,
+	#170B2B 100%
 	);
-	--text-color: #E0E0E0;
-	--border-btn-color: #4A4A4A;
-	--highlight-color: #FFFFFF;
-	--icon-color: #808080;
-	--box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+	--text-color: #FF71CE;
+	--border-btn-color: #B967FF;
+	--highlight-color: #01FFFF;
+	--icon-color: #FF71CE;
+	--box-shadow: 0px 0px 10px rgba(255, 113, 206, 0.7);
 
 	--placeholder-color: var(--text-color);
 	--chat-btn-highlight: var(--highlight-color);

@@ -1,6 +1,7 @@
 import brickVar2 from './var.js';
 import { youWinB } from './score.js';
 import { createClassicPattern, createCastlePattern, createXPattern, createInvaderPattern } from './brickPattern.js';
+import gameVar from '../../pong/var.js';
 
 for(var c = 0; c < brickVar2.brickColumnCount; c++)
 {
@@ -25,13 +26,15 @@ export function collisionDetectionB()
 					brickVar2.dy = -brickVar2.dy;
 					b.status = 0;
 					brickVar2.score++;
+					// brickVar2.totalBrick = 2;
 					if(brickVar2.score == brickVar2.totalBrick)
 					{
 						brickVar2.finishLevel = true;
 						brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
 						if (brickVar2.currLevel === "invader")
 							brickVar2.finish = true;
-						youWinB();
+						if (!gameVar.localGame)
+							youWinB();
 					}
 				}
 			}

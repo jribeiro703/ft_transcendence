@@ -1,45 +1,53 @@
 import { checkBtnB } from "./manage.js";
 
 export function displayNextLevel() {
-  const mainContent = document.getElementById("mainContent");
+  console.log("display next level ");
+  const mainContent = document.getElementById("brickoutContainer");
   const btn = document.createElement("div");
+  btn.id = "finish";
+  btn.className =
+    "finish d-flex justify-content-center align-items-center gap-4 flex-wrap";
   btn.innerHTML = `
-    <div class="finish" id="finish">
-      <button id="nextLevelBtn">Next Level</button> 
-      <button id="restartLevelBtn">Restart Game</button> 
-      <button id="quitBtn">Return Home</button>
-    </div>
-  `;
+        <button id="nextLevelBtn" class="primaryBtn w-170 level"><span>Next Level</span></button> 
+        <button id="restartLevelBtn" class="primaryBtn w-170 level"><span>Restart Level</span></button> 
+        <button id="quitBtn" class="primaryBtn w-170 level"><span>Return Home</span></button>
+    `;
   mainContent.appendChild(btn);
   checkBtnB("nextLevel");
 }
 
 export function displayFinish() {
+  console.log("display finish");
   const mainContent = document.getElementById("brickoutContainer");
   const btn = document.createElement("div");
+  btn.id = "finish";
+  btn.className =
+    "finish d-flex justify-content-center align-items-center gap-4 flex-wrap";
   btn.innerHTML = `
-  <div class="finish id="finish">
-    <button id="quitBtn">Return Home</button>
-  </div>
-  `;
+        <button id="restartLevelBtn" class="primaryBtn w-25"><span>Restart Level</span></button> 
+        <button id="quitBtn" class="primaryBtn w-25"><span>Return Home</span></button>
+    `;
   mainContent.appendChild(btn);
   checkBtnB("finish");
 }
 
 export function displayLocalRematch() {
-  const mainContent = document.getElementById("mainContent");
+  console.log("display Local");
+  const mainContent = document.getElementById("brickout2pContainer");
   const btn = document.createElement("div");
+  btn.id = "finish";
+  btn.className =
+    "finish d-flex justify-content-center align-items-center gap-4 flex-wrap";
   btn.innerHTML = `
-  <div class="finish id="finish">
-    <button id="rematchBtn">Rematch</button> 
-    <button id="quitBtn">Return Home</button>
-  </div>
-  `;
+        <button id="rematchBtn" class="primaryBtn w-50"><span>Rematch</span></button> 
+        <button id="quitBtn" class="primaryBtn w-50"><span>Return Home</span></button>
+    `;
   mainContent.appendChild(btn);
   checkBtnB("localRematch");
 }
+
 export function displaySettingViewB() {
-  const level1Url = "static/css/images/classicLevel.png";
+  const level1Url = "static/css/images/brickout.png";
   const level2Url = "static/css/images/castleLevel.png";
   const level3Url = "static/css/images/xLevel.png";
   const level4Url = "static/css/images/invadersLevel.png";
@@ -67,16 +75,20 @@ export function displaySettingViewB() {
         <div class="map-selection d-flex gap-4 flex-wrap justify-content-center">
           <div id="map1" class="mapOption mapClic" data-map-name="classicMap">
             <img src="${level1Url}" alt="classicMap" id="classicLevel" class="map-image">
-          </div>
-          <div id="map2" class="mapOption mapClic" data-map-name="classicMap">
+            <p1>Classic Level</p1>
+            </div>
+            <div id="map2" class="mapOption mapClic" data-map-name="classicMap">
             <img src="${level2Url}" alt="footMap1" id="castleLevel" class="map-image">
-          </div>
-          <div id="map3" class="mapOption mapClic" data-map-name="clasicMap">
+            <p1>The Castle</p1>
+            </div>
+            <div id="map3" class="mapOption mapClic" data-map-name="clasicMap">
             <img src="${level3Url}" alt="customMap1" id="xLevel" class="map-image">
-          </div>
-          <div id="map3" class="mapOption mapClic" data-map-name="clasicMap">
+            <p1>X Level</p1>
+            </div>
+            <div id="map3" class="mapOption mapClic" data-map-name="clasicMap">
             <img src="${level4Url}" alt="customMap1" id="invaderLevel" class="map-image">
-          </div>
+            <p1>Space Invader</p1>
+            </div>
         </div>
 
       <button id="saveBtn" class="primaryBtn w-170 level" disabled="true"><span>Save</span></button>
