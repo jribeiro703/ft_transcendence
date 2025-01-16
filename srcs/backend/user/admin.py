@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import User, FriendRequest
+from .models import User, FriendRequest, GameRequest
 from game.models import Game
 from game.models import GamePlayer
 from tournament.models import Tournament
@@ -59,9 +59,16 @@ class FriendRequestAdmin(admin.ModelAdmin):
 	search_fields = ('sender__username', 'receiver__username')
 	ordering = ('-created_at',)
 
+class GameRequestAdmin(admin.ModelAdmin):
+	list_display = ('sender', 'receiver', 'created_at', 'is_accepted', 'room')
+	list_filter = ('is_accepted', 'created_at')
+	search_fields = ('sender__username', 'receiver__username')
+	ordering = ('-created_at',)
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Game, GameAdmin)
 admin.site.register(GamePlayer, GamePlayerAdmin)
 admin.site.register(Tournament, TournamentAdmin)
 admin.site.register(FriendRequest, FriendRequestAdmin)
+admin.site.register(GameRequest, GameRequestAdmin)
 

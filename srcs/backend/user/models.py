@@ -45,3 +45,13 @@ class FriendRequest(models.Model):
 
 	def __str__(self):
 		return f"{self.sender.username} sent a friend request to {self.receiver.username}"
+
+class GameRequest(models.Model):
+	sender = models.ForeignKey(User, related_name='sent_invitations', on_delete=models.CASCADE)
+	receiver = models.ForeignKey(User, related_name='received_invitations', on_delete=models.CASCADE)
+	created_at = models.DateTimeField(auto_now_add=True)
+	is_accepted = models.BooleanField(default=False)
+	room = models.CharField(max_length=100)
+
+	def __str__(self):
+		return f"{self.sender.username} sent a game request to {self.receiver.username} for room {self.room}"

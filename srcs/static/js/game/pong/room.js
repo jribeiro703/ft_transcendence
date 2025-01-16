@@ -23,7 +23,7 @@ import { initializeCanvasPong } from "./canvas.js";
 
 export async function createPrivateRoom()
 {
-	checkSettingLive();
+    checkSettingLive();
     displayGameView();
     await initializeCanvasPong();
 
@@ -32,28 +32,47 @@ export async function createPrivateRoom()
     gameVar.quitGameBtn = document.getElementById('quitGameBtn');
     gameVar.returnLobby = document.getElementById('returnLobby');
     gameVar.game = 'pong';
-    return createNewRoom();
+    const roomName = await createNewRoom();
+    return roomName;
+}
+
+export async function joinPrivateRoom(roomName)
+{
+    renderPageGame("playPongRemoteSecondP", true);
+    displayGameView();
+    await initializeCanvasPong();
+
+    gameVar.gameView = document.getElementById('gameView');
+    gameVar.rematchBtn = document.getElementById('rematchBtn');
+    gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+    gameVar.returnLobby = document.getElementById('returnLobby');
+    gameVar.game = 'pong';
+    await joinRoom(roomName);
 }
 
 export function createNewRoom(joinRoomCallback) {
-  const roomName = `room_${Math.floor(Math.random() * 10000)}`;
-  const inter = setInterval(() => {
-    if (gameVar.tournament) {
-      sendRoomNameData(gameVar.lobbySocket, roomName);
-      sendSettingData(
-        gameVar.lobbySocket,
-        gameVar.gameReady,
-        gameVar.difficulty,
-        gameVar.currentLevel,
-      );
-    }
-  }, 1000);
+    return new Promise((resolve) => {
+        const roomName = `room_${Math.floor(Math.random() * 10000)}`;
+        const inter = setInterval(() => {
+            if (gameVar.tournament) {
+                sendRoomNameData(gameVar.lobbySocket, roomName);
+                sendSettingData(
+                    gameVar.lobbySocket,
+                    gameVar.gameReady,
+                    gameVar.difficulty,
+                    gameVar.currentLevel,
+                );
+            }
+        }, 1000);
 
-  gameVar.playerIdx = 1;
-  gameVar.isFirstPlayer = true;
-  if (gameVar.game === "pong") joinRoom(roomName);
-  else if (gameVar.game === "brickout") joinRoom(roomName);
-  // joinRoomB(roomName)
+        gameVar.playerIdx = 1;
+        gameVar.isFirstPlayer = true;
+        if (gameVar.game === "pong") joinRoom(roomName);
+        else if (gameVar.game === "brickout") joinRoom(roomName);
+        // joinRoomB(roomName)
+
+        resolve(roomName);
+    });
 }
 
 // export function waitingPlayer()
@@ -352,17 +371,17 @@ export function updateRoomList() {
     roomItem.className = "server-item";
 
     roomItem.innerHTML = `
-			<div class="room-header">
-				<span class="room-name">${room.name}</span>
-				<button id="joinRoomBtn" class="primaryBtn w-50" ${room.status === "Started" ? "disabled" : ""}><span>Join</span></button>
-			</div>
-			<div class="room-info">
-				<span class="room-players">Players: ${room.players}/2</span>
-				<span class="room-difficulty">Difficulty: ${room.difficulty}</span>
-				<span class="room-level">Map: ${room.level}</span>
-				<span class="room-status">Status: ${room.status}</span>
-			</div>
-		`;
+            <div class="room-header">
+                <span class="room-name">${room.name}</span>
+                <button id="joinRoomBtn" class="primaryBtn w-50" ${room.status === "Started" ? "disabled" : ""}><span>Join</span></button>
+            </div>
+            <div class="room-info">
+                <span class="room-players">Players: ${room.players}/2</span>
+                <span class="room-difficulty">Difficulty: ${room.difficulty}</span>
+                <span class="room-level">Map: ${room.level}</span>
+                <span class="room-status">Status: ${room.status}</span>
+            </div>
+        `;
 
     const joinBtn = roomItem.querySelector("#joinRoomBtn");
     joinBtn.addEventListener("click", () => {
