@@ -14,6 +14,26 @@ import brickVar from "../brickout/var.js";
 import { startGameB } from "../brickout/control.js";
 import { initGame, initListenerB } from "../brickout/init.js";
 import { initializeScoreCanvas2P } from "./canvas.js";
+import { updatePowerUpSelection } from "./powerUp.js";
+import { updateDifficultySelection } from "./update.js";
+import { updateLevelSelection } from "./update.js";
+import { checkSettingLive } from "./setting.js";
+import { displayGameView } from "./display.js";
+import { initializeCanvasPong } from "./canvas.js";
+
+export async function createPrivateRoom()
+{
+	checkSettingLive();
+    displayGameView();
+    await initializeCanvasPong();
+
+    gameVar.gameView = document.getElementById('gameView');
+    gameVar.rematchBtn = document.getElementById('rematchBtn');
+    gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+    gameVar.returnLobby = document.getElementById('returnLobby');
+    gameVar.game = 'pong';
+    return createNewRoom();
+}
 
 export function createNewRoom(joinRoomCallback) {
   const roomName = `room_${Math.floor(Math.random() * 10000)}`;
