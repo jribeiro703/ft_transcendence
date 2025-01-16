@@ -1,5 +1,4 @@
 import gameVar from "./var.js";
-import { updateSetting, updateLiveSetting} from "./setting.js";
 import { updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { updateDifficultySelection } from "./update.js";
@@ -104,19 +103,16 @@ export function listenSettingSave(info)
 	{
 		if (info === 'live')
 		{
-			await renderPageGame("pongLobby", true);
-			updateLiveSetting();
+			renderPageGame("pongLobby", true);
 		}
 		else if (info === 'local')
 		{
 			gameVar.saveSetting = true;
-			await renderPageGame("gameSelectionMulti", true);
-			updateSetting();
+			renderPageGame("gameSelectionMulti", true);
 		}
 		else
 		{	
-			await renderPageGame("gameSelectionSolo", true);
-			updateSetting();
+			renderPageGame("gameSelectionSolo", true);
 		}
 	});
 }
@@ -151,7 +147,6 @@ export function listenSettingMultiBtn()
 
 export function listenPlayBtn()
 {
-
 	gameVar.playBtn.addEventListener('click', () =>
 	{
 		gameVar.game = "pong";

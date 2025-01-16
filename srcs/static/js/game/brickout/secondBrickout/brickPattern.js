@@ -3,7 +3,6 @@ import { countBrick } from "./brick.js";
 
 export function createClassicPattern()
 {
-	console.log('createclassic');
 	brickVar2.brickColumnCount = 8;
     for(let c = 0; c < brickVar2.brickColumnCount; c++)
 	{
@@ -16,6 +15,7 @@ export function createClassicPattern()
     brickVar2.totalBrick = brickVar2.brickColumnCount * brickVar2.brickRowCount;
 	brickVar2.currLevel = 'classic';
 }
+
 export function createCastlePattern()
 {
 	brickVar2.brickColumnCount = 16;

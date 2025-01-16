@@ -1,6 +1,6 @@
 import { isAuthenticated } from "./user/isAuthenticated.js";
 import { renderPage } from "./user/historyManager.js";
-import { isGamePage } from "./game/HistoryManager.js";
+import { isGamePage, isGameplayPage } from "./game/HistoryManager.js";
 import { renderPageGame } from "./game/HistoryManager.js";
 import { clearAllBrickStates } from "./game/brickout/manage.js";
 import { clearAllGameStates } from "./game/brickout/listenerBtn.js";
@@ -31,8 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// listen for hash change to call right page render and push the state in history
 	const hash = window.location.hash
-	if (isGamePage(hash))
+	if (isGameplayPage(hash))
+	{
+		renderPage('home', true);
+	}
+	else if (isGamePage(hash))
+	{
 		renderPageGame(hash.substring(1));
+	}
 	else if (hash === "" || hash === "#home")
 		renderPage("home");
 	else {
