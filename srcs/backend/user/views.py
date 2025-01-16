@@ -145,7 +145,7 @@ class DenyFriendRequestView(APIView):
 		request_id = kwargs.get('request_id')
 		try:
 			friend_request = FriendRequest.objects.get(id=request_id)
-			if friend_request.receiver != request.user:
+			if friend_request.receiver != request.user and friend_request.sender != request.user:
 				return Response({"message": "You are not authorized to deny this request."}, status=status.HTTP_403_FORBIDDEN)
 
 			friend_request.delete()

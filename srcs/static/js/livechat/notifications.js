@@ -112,7 +112,6 @@ document.addEventListener('click', async function(e) {
 		try {
 			console.log(requestId);
 			await fetchAuthData(`/user/friends/accept/${requestId}/`, 'POST');
-			await fetchAuthData(`/user/friends/deny/${requestId}/`, 'POST');
 			// Remove the notification item after successful acceptance
 			e.target.closest('.notification-item').remove();
 			
@@ -150,6 +149,29 @@ document.addEventListener('click', async function(e) {
 			const errorDiv = document.createElement('div');
 			errorDiv.className = 'alert alert-danger mt-2';
 			errorDiv.textContent = 'Failed to reject friend request';
+			e.target.closest('.notification-item').appendChild(errorDiv);
+		}
+	}
+
+	if (e.target.classList.contains('cancel-request')) {
+		const requestId = e.target.dataset.id;
+		try {
+			console.log(requestId);
+			await fetchAuthData(`/user/friends/deny/${requestId}/`, 'POST');
+			// Remove the notification item after successful cancellation
+			e.target.closest('.notification-item').remove();
+			
+			// If no more requests, show empty message
+			if (document.querySelectorAll('.notification-item').length === 0) {
+				document.querySelector('.notification-list').innerHTML = 
+					'<div class="text-muted">No friend requests</div>';
+			}
+		} catch (error) {
+			console.error('Error canceling friend request:', error);
+			// Show error message
+			const errorDiv = document.createElement('div');
+			errorDiv.className = 'alert alert-danger mt-2';
+			errorDiv.textContent = 'Failed to cancel friend request';
 			e.target.closest('.notification-item').appendChild(errorDiv);
 		}
 	}
