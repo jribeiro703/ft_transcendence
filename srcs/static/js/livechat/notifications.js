@@ -1,5 +1,5 @@
 import { fetchAuthData } from '../user/fetchData.js';
-// import { joinPrivateRoom } from '../game/pong/room.js';
+import { joinPrivateRoom } from '../game/pong/room.js';
 
 // Update getUserId function to handle response structure
 export async function getUserId() {

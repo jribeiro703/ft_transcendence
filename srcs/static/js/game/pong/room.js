@@ -11,41 +11,63 @@ import { startLiveGame } from "./start.js";
 import { getUserInfosRemote } from "../getUser.js";
 import { initGame, initListenerB } from "../brickout/init.js";
 import { kickOut } from "./draw.js";
-import { updateDifficultySelection, updateLevelSelection } from "./update.js";
+import { checkSettingLive } from "./setting.js";
+import { displayGameView } from "./display.js";
+import { initializeCanvasPong } from "./canvas.js";
 
-export function createPrivateRoom() {
-  gameVar.game = "pong";
-//   updatePowerUpSelection(false, true);
-  updateDifficultySelection("medium", true);
-  updateLevelSelection("classicPong", true);
-  createNewRoom();
+export async function createPrivateRoom()
+{
+	renderPageGame("playPongRemote", true)
+    checkSettingLive();
+    displayGameView();
+    await initializeCanvasPong();
+
+    gameVar.gameView = document.getElementById('gameView');
+    gameVar.rematchBtn = document.getElementById('rematchBtn');
+    gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+    gameVar.returnLobby = document.getElementById('returnLobby');
+    gameVar.game = 'pong';
+    const roomName = await createNewRoom();
+    return roomName;
+}
+
+export async function joinPrivateRoom(roomName)
+{
+    renderPageGame("playPongRemoteSecondP", true);
+    displayGameView();
+    await initializeCanvasPong();
+
+    gameVar.gameView = document.getElementById('gameView');
+    gameVar.rematchBtn = document.getElementById('rematchBtn');
+    gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+    gameVar.returnLobby = document.getElementById('returnLobby');
+    gameVar.game = 'pong';
+    await joinRoom(roomName);
 }
 
 export function createNewRoom(joinRoomCallback) {
-  var roomName;
-  if (gameVar.game === "pong")
-    roomName = `pongRoom_${Math.floor(Math.random() * 10000)}`;
-  else if (gameVar.game === "brickout")
-    roomName = `brickRoom_${Math.floor(Math.random() * 10000)}`;
-  const inter = setInterval(() => {
-    if (gameVar.tournament) {
-      sendRoomNameData(gameVar.lobbySocket, roomName);
-      sendSettingData(
-        gameVar.lobbySocket,
-        gameVar.gameReady,
-        gameVar.difficulty,
-        gameVar.currentLevel,
-      );
-    }
-  }, 1000);
+    return new Promise((resolve) => {
+        const roomName = `room_${Math.floor(Math.random() * 10000)}`;
+        const inter = setInterval(() => {
+            if (gameVar.tournament) {
+                sendRoomNameData(gameVar.lobbySocket, roomName);
+                sendSettingData(
+                    gameVar.lobbySocket,
+                    gameVar.gameReady,
+                    gameVar.difficulty,
+                    gameVar.currentLevel,
+                );
+            }
+        }, 1000);
 
-  if (gameVar.game === "pong") {
-    gameVar.playerIdx = 1;
-    joinRoom(roomName);
-  } else if (gameVar.game === "brickout") {
-    brickVar.playerIdx = 1;
-    joinRoom(roomName);
-  }
+        gameVar.playerIdx = 1;
+        gameVar.isFirstPlayer = true;
+        if (gameVar.game === "pong") joinRoom(roomName);
+        else if (gameVar.game === "brickout") joinRoom(roomName);
+        // joinRoomB(roomName)
+
+        resolve(roomName);
+    });
 }
 
 export function waitPlayerPong() {
