@@ -1,5 +1,4 @@
 import { createTournamentFormHTML } from './templates/createTournamentFormTemplate.js';
-import { generateTournamentName, validateTournamentName } from './services/apiService.js';
 import { fetchData, getCookie } from "../user/fetchData.js";
 
 export async function setupTournamentPage() {
@@ -7,11 +6,11 @@ export async function setupTournamentPage() {
     const box = document.getElementById('mainContent');
 
     // Generate a random tournament name
-    const randomName = await generateTournamentName();
-    console.log("[setupTournamentPage] Generated tournament name:", randomName);
+    //const randomName = await generateTournamentName();
+    //console.log("[setupTournamentPage] Generated tournament name:", randomName);
 
     // Render the tournament setup form
-    box.innerHTML = createTournamentFormHTML(randomName);
+    box.innerHTML = createTournamentFormHTML("tournament");
 
     // Load the new tournament setup functionality
     loadTournamentSetup();

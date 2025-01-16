@@ -15,8 +15,8 @@ import random
 @login_required
 def create_tournament(request):
 	if request.method == 'POST':
+		logger.info(f"Request user: {request.user}")
 		request_user = request.user
-	
 		# Fixed number of players and matches for a simplified tournament
 		nb_players = 4
 		nb_matches = 3
@@ -84,7 +84,7 @@ def create_tournament(request):
 
 			tournament_match = TournamentMatch(
 				tournament=tournament,
-				game=Game,
+				game=game,
 				position=i + 1,
 				player1_name=game.get_player1_name(),
                 player2_name=game.get_player2_name(),
@@ -104,7 +104,7 @@ def create_tournament(request):
 
 			tournament_match = TournamentMatch(
 				tournament=tournament,
-				game=Game,
+				game=game,
 				position=i + 1, # this will always be 3, the final match
 				player1_name="TBD",
             	player2_name="TBD",
