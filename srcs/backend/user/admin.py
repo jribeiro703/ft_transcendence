@@ -11,7 +11,7 @@ class UserAdmin(admin.ModelAdmin):
 	list_filter = ('email',)
 
 class GameAdmin(admin.ModelAdmin):
-	ordering = ('created_at',)
+	ordering = ('id',)
 
 class GamePlayerAdmin(admin.ModelAdmin):
 	ordering = ('game_id',)
