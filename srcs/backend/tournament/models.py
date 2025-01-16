@@ -18,7 +18,7 @@ class Guest(models.Model):
 
 # Tournament model
 class Tournament(models.Model):
-	name = models.CharField("tournamentname", max_length=30, unique=True, blank=False, validators=[MinLengthValidator(3), alphanumeric_with_spaces])
+	#name = models.CharField("tournamentname", max_length=30, unique=True, blank=False, validators=[MinLengthValidator(3), alphanumeric_with_spaces])
 	created_by = models.ForeignKey('user.User', related_name='created_tournaments', on_delete=models.CASCADE)
 	created_at = models.DateTimeField(auto_now_add=True)
 	status = models.CharField(max_length=50, default='open')
@@ -28,7 +28,7 @@ class Tournament(models.Model):
 	registered_users = models.ManyToManyField('user.User', related_name='registered_tournaments', blank=True)
 
 	def __str__(self):
-		return self.name
+		return self.id
 
 	def save(self, *args, **kwargs):
 		self.created_at = timezone.now()
