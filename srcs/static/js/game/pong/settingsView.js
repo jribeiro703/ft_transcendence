@@ -2,7 +2,7 @@ import gameVar from "./var.js";
 import { addPuBtn } from "./setting.js";
 import { getBtnById } from "./getElement.js";
 import { listenSettingPU, listenSettingDifficulty, listenSettingLevel, listenSettingSave } from "./listenerSetting.js";
-import { displaySettingView } from "./display.js";
+import { displaySettingView } from "./displaySettings.js";
 
 export function showSettingView(info)
 {

@@ -313,7 +313,7 @@ button:disabled {
 #quitBtn.selected {
   background-color: var(--background-color-when-selected);
   color: var(--text-color-selected);
-  border: 3px solid var(--border-btn-color-when-selected);
+  border: 1px solid var(--selected-btn);
 }
 
 #saveBtn:enabled {

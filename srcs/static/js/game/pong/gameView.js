@@ -5,16 +5,17 @@ import { resetMatch } from "./reset.js";
 import { manageAi } from "./ai.js";
 import { startGame } from "./start.js";
 import { updateCanvasColor } from "./update.js";
-import { saveScore } from "./score.js";
 import { createPowerUp1, createPowerUp2 } from "./powerUp.js";
 import { checkServer } from "./manage.js";
 import { initControl } from "./control.js";
-import { displayGameView, displayCanvas, displayGameBrickView } from "./display.js";
+import { displayGameView, displayGameBrickView } from "./display.js";
 import { initializeCanvasBrick, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
-import { displayGameDataPong } from "./displayVar.js";
+import { getUserInfos } from "../getUser.js";
+import brickVar from "../brickout/var.js";
 
 export async function showGameView()
 {
+	getUserInfos();
 	displayGameView();
 	updateCanvasColor();
 
@@ -30,6 +31,7 @@ export async function showGameView()
 export async function showGameRoomB()
 {
 	gameVar.playerIdx = 2;
+	brickVar.playerIdx = 2;
 	gameVar.playerReady = true;
 
 	displayGameBrickView();
@@ -50,6 +52,7 @@ export async function showGameRoom()
 
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+	gameVar.returnLobby = document.getElementById('returnLobby');
 }
 
 export function rematchView()
@@ -62,7 +65,6 @@ export function rematchView()
 	rematchBtn.style.display = 'block';
 	rematchBtn.disabled = true;
 	quitGameBtn.style.display = 'block';	
-	saveScore();
 	resetMatch();
 	initializeBall();
 	if (gameVar.powerUpEnable)

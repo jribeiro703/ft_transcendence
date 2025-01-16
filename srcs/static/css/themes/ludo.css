@@ -1,15 +1,15 @@
-.darkTheme {
-	--background-color: linear-gradient(
-	to right,
-	#0A1014 0%,
-	#1A2A35 50%,
-	#0A1014 100%
+.neonBlue {
+	--background-color: radial-gradient(
+	circle at center,
+	#000B1E 0%,
+	#001F54 50%,
+	#000B30 100%
 	);
-	--text-color: #E0E0E0;
-	--border-btn-color: #4A4A4A;
-	--highlight-color: #FFFFFF;
-	--icon-color: #808080;
-	--box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+	--text-color: #00FFFF;
+	--border-btn-color: #4CC9F0;
+	--highlight-color: #80FFFF;
+	--icon-color: #4CC9F0;
+	--box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.7);
 
 	--placeholder-color: var(--text-color);
 	--chat-btn-highlight: var(--highlight-color);

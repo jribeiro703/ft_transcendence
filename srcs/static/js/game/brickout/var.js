@@ -1,3 +1,5 @@
+import { PADDLE_POSX } from "../pong/const.js";
+
 const brickVar = {
 
 // -------------------------------------Canvas-----------------
@@ -26,7 +28,7 @@ const brickVar = {
 
 	paddleHeight: 10,
 	paddleWidth: 75,
-	paddleX: (780 - 75 )/2,
+	paddleX: PADDLE_POSX,
 	paddleSpeed: 10,
 
 // -------------------------------------Controls-----------------
@@ -77,7 +79,7 @@ const brickVar = {
 		{ type: 'sizeP', image: '/static/css/images/paddleSp.png'},
 		{ type: 'sizeM', image: '/static/css/images/paddleSm.png'},
 		{ type: 'invincible', image: '/static/css/images/shield.png'},
-		{ type: 'ExtraLife', image: '/static/css/images/extraLife.png'},
+		{ type: 'extraLife', image: '/static/css/images/extraLife.png'},
 	],
 	currentPowerUp: null,
 
@@ -88,6 +90,8 @@ const brickVar = {
 	startBtn: null,
 	gameStart: false,
 	gameReady: false,
+
+	playerIdx: 0,
 
 	score: 0,
 	lives: 2,

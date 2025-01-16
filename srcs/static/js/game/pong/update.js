@@ -42,30 +42,35 @@ export function updateLevelSelection(level, def)
 	else if (level === "tennis")
 		gameVar.currentLevel = "tennis";
 }
+
 export function updateImageUrl()
 {
-	gameVar.pongUrl = "static/css/images/classicPong.png";
+
 	if (gameVar.currentLevel === 'tableTennis')
 		gameVar.pongUrl = "static/css/images/ttLevel.png"
 	else if (gameVar.currentLevel === 'football')
 		gameVar.pongUrl = "static/css/images/footballLevel.png";
 	else if (gameVar.currentLevel === 'tennis')
 		gameVar.pongUrl = "static/css/images/tennisLevel.png";
+	else
+		gameVar.pongUrl = "static/css/images/classicPong.png";
 
-	gameVar.brickUrl = "static/css/images/brickout.png";
 	if (brickVar.currLevel === 'castle')
 		gameVar.brickUrl = "static/css/images/castleLevel.png";
 	else if (brickVar.currLevel === 'x')
 		gameVar.brickUrl = "static/css/images/xLevel.png";
 	else if (brickVar.currLevel === 'invader')
 		gameVar.brickUrl = 'static/css/images/invadersLevel.png';
+	else
+		gameVar.brickUrl = "static/css/images/brickout.png";
 }
+
 export function 	updateCanvasColor()
 {
 	let color = null;
 	if (gameVar.currentLevel === 'classicPong')
 		color = 'black';
-	else if (gameVar.currentLevel === 'tennisTable')
+	else if (gameVar.currentLevel === 'tableTennis')
 		color = '#1A1A40';
 	else if (gameVar.currentLevel === 'football')
 		color = '#006400';

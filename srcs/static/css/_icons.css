@@ -89,11 +89,6 @@
 .paletteIcon:hover {
   color: var(--highlight-color);
 }
-
-.paletteIcon:focus {
-  color: var(--highlight-color);
-}
-
 .paletteIcon {
   color: var(--icon-color);
 }
