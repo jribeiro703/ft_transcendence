@@ -21,11 +21,11 @@ export function displayLobbyView(level) {
         </div>
         <div class="host-server w-40 d-flex justify-content-spa align-items-center flex-column">
           <h2>Host A Room</h2>
-          <h3 class="d-flex gap-4">Playing as: <strong>Login</strong></h3>
+          <h3 class="d-flex gap-4">Playing as: <strong>${gameVar.userName}</strong></h3>
           <div class="settings d-flex justify-content-center w-100 gap-4">
             <button id="settingBtn" class="primaryBtn w-50"><span>Settings</span></button>
             <div id="setting-container">
-              Difficulty: <span id="difficultyChoice">Medium</span><br>
+              Difficulty: <span id="difficultyChoice">Medium</span>
               Level: <span id="levelSelected">${level}</span>
             </div>
           </div>
@@ -43,14 +43,15 @@ export function displayPongRemote() {
   const insertTo = document.createElement("div");
 
   insertTo.innerHTML = `
-  <div id="gameView" style="display: none;">
+  <div id="gameView" style="display: block;">
       <div id="scoreboard">
         <canvas id="scoreCanvas"></canvas>
       </div>
       <canvas id="myCanvas"></canvas>
       <div class="button-container">
-        <button id="rematchBtn" style="display: none;" disabled>Rematch</button>
-        <button id="quitGameBtn" style="display: none;">Quit Game</button>
+        <button id="rematchBtn" class="primaryBtn w-50" style="display: none;" disabled>Rematch</button>
+        <button id="returnLobby" class="primaryBtn w-50" style="display: none;" disabled>Rematch</button>
+        <button id="quitGameBtn" class="primaryBtn w-50" style="display: none;">Quit Game</button>
       </div>
     </div>	
   `;
