@@ -4,6 +4,7 @@ from rest_framework import serializers, exceptions
 from datetime import datetime, timezone, timedelta
 from .utils import send_activation_email
 from smtplib import SMTPException
+from secrets import token_urlsafe
 import logging
 logger = logging.getLogger(__name__)
 
@@ -38,6 +39,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
 		user.set_password(password)
 		user.is_active = False
 		user.otp_secret = pyotp.random_base32()
+		# Generate and assign a game token
+		user.game_token = token_urlsafe(4)[:5]  # Generate a 5-character token
+		print(f"Generated game_token: {user.game_token}")  # Debug log
 		user.save()
 
 		try:
