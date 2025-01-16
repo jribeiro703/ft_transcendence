@@ -1,6 +1,7 @@
 import { fetchAuthData } from '../user/fetchData.js';
 import { getUserTooltipContent } from './tooltip.js';
 import { showToast } from '../user/tools.js';
+import { createPrivateRoom } from '../game/pong/room.js';
 
 function createUserInfo(user) {
 	const userInfoDiv = document.createElement('div');
@@ -130,6 +131,8 @@ function createGameButton(user) {
 	button.style.fontSize = '0.75rem';
 
 	button.addEventListener('click', async (e) => {
+		// const roomName = createPrivateRoom();
+		// console.log(roomName);
 		e.stopPropagation();
 		try {
 			const response = await fetchAuthData(`/user/game/invite/${user.id}/`, 'POST');
