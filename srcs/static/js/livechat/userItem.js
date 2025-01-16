@@ -131,11 +131,10 @@ function createGameButton(user) {
 	button.style.fontSize = '0.75rem';
 
 	button.addEventListener('click', async (e) => {
-		// const roomName = createPrivateRoom();
-		// console.log(roomName);
+		const roomName = await createPrivateRoom();
 		e.stopPropagation();
 		try {
-			const response = await fetchAuthData(`/user/game/invite/${user.id}/`, 'POST');
+			const response = await fetchAuthData(`/user/game/invite/${user.id}/`, 'POST', { roomName });
 			if (response.status === 200) {
 				showToast('Game invitation sent!', 'success');
 			}

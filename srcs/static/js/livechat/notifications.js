@@ -1,4 +1,5 @@
 import { fetchAuthData } from '../user/fetchData.js';
+import { joinPrivateRoom } from '../game/pong/room.js';
 
 // Update getUserId function to handle response structure
 export async function getUserId() {
@@ -15,12 +16,15 @@ export async function getUserId() {
 async function checkPendingNotifications() {
     try {
         const userId = await getUserId();
-        const response = await fetchAuthData(`/user/friends/${userId}/`, 'GET');
-        const friendRequests = response.data;
+        const friendResponse = await fetchAuthData(`/user/friends/${userId}/`, 'GET');
+        const gameResponse = await fetchAuthData(`/user/game/${userId}/`, 'GET');
+        const friendRequests = friendResponse.data;
+        const gameInvitations = gameResponse.data;
 
         const notificationButton = document.getElementById('notificationButton');
 
-        if (friendRequests.received_requests?.length > 0 || friendRequests.sent_requests?.length > 0) {
+        if (friendRequests.received_requests?.length > 0 || friendRequests.sent_requests?.length > 0 ||
+            gameInvitations.received_requests?.length > 0 || gameInvitations.sent_requests?.length > 0) {
             notificationButton.classList.add('has-notifications');
         } else {
             notificationButton.classList.remove('has-notifications');
@@ -51,19 +55,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             const userId = await getUserId();
-            const response = await fetchAuthData(`/user/friends/${userId}/`, 'GET');
-            const friendRequests = response.data;
+            const friendResponse = await fetchAuthData(`/user/friends/${userId}/`, 'GET');
+            const gameResponse = await fetchAuthData(`/user/game/${userId}/`, 'GET');
+            const friendRequests = friendResponse.data;
+            const gameInvitations = gameResponse.data;
 
             const notificationListContainer = document.createElement('div');
             notificationListContainer.className = 'notification-list';
 
-            if (!friendRequests || (!friendRequests.received_requests?.length && !friendRequests.sent_requests?.length)) {
-                notificationListContainer.innerHTML = '<div class="text-muted">No friend requests</div>';
+            if ((!friendRequests || (!friendRequests.received_requests?.length && !friendRequests.sent_requests?.length)) &&
+                (!gameInvitations || (!gameInvitations.received_requests?.length && !gameInvitations.sent_requests?.length))) {
+                notificationListContainer.innerHTML = '<div class="text-muted">No notifications</div>';
             } else {
-                // Handle received requests
+                // Handle received friend requests
                 if (friendRequests.received_requests?.length > 0) {
                     const receivedTitle = document.createElement('h6');
-                    receivedTitle.textContent = 'Received Requests';
+                    receivedTitle.textContent = 'Received Friend Requests';
                     notificationListContainer.appendChild(receivedTitle);
 
                     friendRequests.received_requests.forEach(async request => {
@@ -94,10 +101,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 }
 
-                // Handle sent requests
+                // Handle sent friend requests
                 if (friendRequests.sent_requests?.length > 0) {
                     const sentTitle = document.createElement('h6');
-                    sentTitle.textContent = 'Sent Requests';
+                    sentTitle.textContent = 'Sent Friend Requests';
                     sentTitle.className = 'mt-3';
                     notificationListContainer.appendChild(sentTitle);
 
@@ -116,13 +123,59 @@ document.addEventListener('DOMContentLoaded', function () {
                         notificationListContainer.appendChild(notificationDiv);
                     });
                 }
+
+                // Handle received game invitations
+                if (gameInvitations.received_requests?.length > 0) {
+                    const receivedTitle = document.createElement('h6');
+                    receivedTitle.textContent = 'Received Game Invitations';
+                    notificationListContainer.appendChild(receivedTitle);
+
+                    gameInvitations.received_requests.forEach(async request => {
+                        const notificationDiv = document.createElement('div');
+                        notificationDiv.className = 'notification-item d-flex align-items-center gap-2 p-2 border rounded mb-2';
+                        notificationDiv.innerHTML = `
+                            <span class="notification-icon">🎮</span>
+                            <div class="flex-grow-1">
+                                <div><strong>${request.sender}</strong> invited you to a game in <strong>${request.room}</strong></div>
+                                <div class="mt-2">
+                                    <button class="btn btn-sm btn-success accept-game" data-id="${request.id}" data-room="${request.room}">Accept</button>
+                                    <button class="btn btn-sm btn-danger reject-game" data-id="${request.id}">Reject</button>
+                                </div>
+                            </div>
+                        `;
+                        notificationListContainer.appendChild(notificationDiv);
+                    });
+                }
+
+                // Handle sent game invitations
+                if (gameInvitations.sent_requests?.length > 0) {
+                    const sentTitle = document.createElement('h6');
+                    sentTitle.textContent = 'Sent Game Invitations';
+                    sentTitle.className = 'mt-3';
+                    notificationListContainer.appendChild(sentTitle);
+
+                    gameInvitations.sent_requests.forEach(request => {
+                        const notificationDiv = document.createElement('div');
+                        notificationDiv.className = 'notification-item d-flex align-items-center gap-2 p-2 border rounded mb-2';
+                        notificationDiv.innerHTML = `
+                            <span class="notification-icon">📤</span>
+                            <div class="flex-grow-1">
+                                <div>Game invitation sent to <strong>${request.receiver}</strong> in <strong>${request.room}</strong></div>
+                                <div class="mt-2">
+                                    <button class="btn btn-sm btn-secondary cancel-game" data-id="${request.id}">Cancel</button>
+                                </div>
+                            </div>
+                        `;
+                        notificationListContainer.appendChild(notificationDiv);
+                    });
+                }
             }
 
             chatLog.innerHTML = '';
             chatLog.appendChild(notificationListContainer);
 
         } catch (error) {
-            chatLog.innerHTML = `<div class="text-danger">Error loading friend requests: ${error.message}</div>`;
+            chatLog.innerHTML = `<div class="text-danger">Error loading notifications: ${error.message}</div>`;
         }
     });
 });
@@ -140,7 +193,7 @@ document.addEventListener('click', async function(e) {
             // If no more requests, show empty message
             if (document.querySelectorAll('.notification-item').length === 0) {
                 document.querySelector('.notification-list').innerHTML = 
-                    '<div class="text-muted">No friend requests</div>';
+                    '<div class="text-muted">No notifications</div>';
                 document.getElementById('notificationButton').classList.remove('has-notifications');
             }
         } catch (error) {
@@ -164,7 +217,7 @@ document.addEventListener('click', async function(e) {
             // If no more requests, show empty message
             if (document.querySelectorAll('.notification-item').length === 0) {
                 document.querySelector('.notification-list').innerHTML = 
-                    '<div class="text-muted">No friend requests</div>';
+                    '<div class="text-muted">No notifications</div>';
                 document.getElementById('notificationButton').classList.remove('has-notifications');
             }
         } catch (error) {
@@ -188,7 +241,7 @@ document.addEventListener('click', async function(e) {
             // If no more requests, show empty message
             if (document.querySelectorAll('.notification-item').length === 0) {
                 document.querySelector('.notification-list').innerHTML = 
-                    '<div class="text-muted">No friend requests</div>';
+                    '<div class="text-muted">No notifications</div>';
                 document.getElementById('notificationButton').classList.remove('has-notifications');
             }
         } catch (error) {
@@ -197,6 +250,80 @@ document.addEventListener('click', async function(e) {
             const errorDiv = document.createElement('div');
             errorDiv.className = 'alert alert-danger mt-2';
             errorDiv.textContent = 'Failed to cancel friend request';
+            e.target.closest('.notification-item').appendChild(errorDiv);
+        }
+    }
+
+    if (e.target.classList.contains('accept-game')) {
+        const requestId = e.target.dataset.id;
+		const roomName = e.target.dataset.room;
+        try {
+            console.log(requestId);
+            await fetchAuthData(`/user/game/accept/${requestId}/`, 'POST');
+            // Remove the notification item after successful acceptance
+            e.target.closest('.notification-item').remove();
+			joinPrivateRoom(roomName);
+            
+            // If no more requests, show empty message
+            if (document.querySelectorAll('.notification-item').length === 0) {
+                document.querySelector('.notification-list').innerHTML = 
+                    '<div class="text-muted">No notifications</div>';
+                document.getElementById('notificationButton').classList.remove('has-notifications');
+            }
+        } catch (error) {
+            console.error('Error accepting game invitation:', error);
+            // Show error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'alert alert-danger mt-2';
+            errorDiv.textContent = 'Failed to accept game invitation';
+            e.target.closest('.notification-item').appendChild(errorDiv);
+        }
+    }
+
+    if (e.target.classList.contains('reject-game')) {
+        const requestId = e.target.dataset.id;
+        try {
+            console.log(requestId);
+            await fetchAuthData(`/user/game/deny/${requestId}/`, 'POST');
+            // Remove the notification item after successful rejection
+            e.target.closest('.notification-item').remove();
+            
+            // If no more requests, show empty message
+            if (document.querySelectorAll('.notification-item').length === 0) {
+                document.querySelector('.notification-list').innerHTML = 
+                    '<div class="text-muted">No notifications</div>';
+                document.getElementById('notificationButton').classList.remove('has-notifications');
+            }
+        } catch (error) {
+            console.error('Error rejecting game invitation:', error);
+            // Show error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'alert alert-danger mt-2';
+            errorDiv.textContent = 'Failed to reject game invitation';
+            e.target.closest('.notification-item').appendChild(errorDiv);
+        }
+    }
+
+    if (e.target.classList.contains('cancel-game')) {
+        const requestId = e.target.dataset.id;
+        try {
+            console.log(requestId);
+            await fetchAuthData(`/user/game/deny/${requestId}/`, 'POST');
+            // Remove the notification item after successful cancellation
+            e.target.closest('.notification-item').remove();
+            
+            // If no more requests, show empty message
+            if (document.querySelectorAll('.notification-item').length === 0) {
+                document.querySelector('.notification-list').innerHTML = 
+                    '<div class="text-muted">No notifications</div>';
+                document.getElementById('notificationButton').classList.remove('has-notifications');
+            }
+        } catch (error) {
+            console.error('Error canceling game invitation:', error);
+            // Show error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'alert alert-danger mt-2';
+            errorDiv.textContent = 'Failed to cancel game invitation';
             e.target.closest('.notification-item').appendChild(errorDiv);
         }
     }

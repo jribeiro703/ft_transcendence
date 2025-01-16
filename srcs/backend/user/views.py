@@ -22,7 +22,7 @@ from datetime import timedelta
 from game.models import Game
 from transcendence import settings
 from .serializers import UserCreateSerializer, OtpCodeSerializer, UserSettingsSerializer, UserPrivateInfosSerializer, UserPublicInfosSerializer
-from .models import User, FriendRequest
+from .models import User, FriendRequest, GameRequest
 from .utils import send_2FA_mail, generate_tokens_for_user, set_refresh_token_in_cookies, get_user_matchs_infos
 import json
 import logging
@@ -117,6 +117,71 @@ class UserProfileViewId(APIView):
 			"is_blocked": is_blocked
 		}
 		return Response(data, status=status.HTTP_200_OK)
+
+# -------------------------------GAME ENDPOINTS--------------------------------	
+
+class ListGameInvitationsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = get_object_or_404(User, pk=kwargs['pk'])
+        received_requests = GameRequest.objects.filter(receiver=user, is_accepted=False)
+        sent_requests = GameRequest.objects.filter(sender=user, is_accepted=False)
+
+        return Response({
+            "received_requests": [{"id": req.id, "sender": req.sender.username, "room": req.room} for req in received_requests],
+            "sent_requests": [{"id": req.id, "receiver": req.receiver.username, "room": req.room} for req in sent_requests],
+        })
+
+class SendGameInvitationView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def post(self, request, *args, **kwargs):
+		user_id = kwargs.get('user_id')
+		sender = request.user
+		receiver = get_object_or_404(User, id=user_id)
+		room_name = request.data.get('roomName')
+		
+		if not room_name:
+			return Response({"message:" "Room name is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+		if GameRequest.objects.filter(sender=sender, receiver=receiver).exists():
+			return Response({"message": f"You have already sent an invitation for a match to {receiver.username}"}, status=status.HTTP_400_BAD_REQUEST)
+		
+		GameRequest.objects.create(sender=sender, receiver=receiver, room=room_name)
+		return Response({"message": f" Invitation for a match sent to {receiver.username} in {room_name}"}, status=status.HTTP_200_OK)
+
+
+class AcceptGameInvitationView(APIView):
+	
+	def post(self, request, *args, **kwargs):
+		request_id = kwargs.get('request_id')
+		try:
+			game_request = GameRequest.objects.get(id=request_id)
+			if game_request.receiver != request.user:
+				return Response({"message": "You are not authorized to accept this request."}, status=status.HTTP_403_FORBIDDEN)
+
+			game_request.delete()
+
+			return Response({"message": "Game invitation accepted."}, status=status.HTTP_200_OK)
+		except GameRequest.DoesNotExist:
+			return Response({"message": "Game invitation not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class DenyGameInvitationView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def post(self, request, *args, **kwargs):
+		request_id = kwargs.get('request_id')
+		try:
+			game_request = GameRequest.objects.get(id=request_id)
+			if game_request.receiver != request.user and game_request.sender != request.user:
+				return Response({"message": "You are not authorized to deny this request."}, status=status.HTTP_403_FORBIDDEN)
+
+			game_request.delete()
+
+			return Response({"message": "game request denied and deleted."}, status=status.HTTP_200_OK)
+		except GameRequest.DoesNotExist:
+			return Response({"message": "game request not found."}, status=status.HTTP_404_NOT_FOUND)
 
 # ------------------------------FRIENDS ENDPOINTS--------------------------------	
 

@@ -12,6 +12,10 @@ urlpatterns = [
 	#used endpoints for livechat
 	path('get-id/', views.getUserIdByNickname, name="get_user_id"),
 	path('profile-id/<int:pk>/', views.UserProfileViewId.as_view(), name="user_profile_id"),
+	path('game/invite/<int:user_id>/', views.SendGameInvitationView.as_view(), name='send_invitation'),
+	path('game/<int:pk>/', views.ListGameInvitationsView.as_view(), name='list_invitations_request'),
+	path('game/accept/<int:request_id>/', views.AcceptGameInvitationView.as_view(), name='accept_invitation_request'),
+	path('game/deny/<int:request_id>/', views.DenyGameInvitationView.as_view(), name='deny_invitation_request'),
 
 	#friends's endpoints
 	path('friends/', views.getUserFriends, name="user_friends"),
