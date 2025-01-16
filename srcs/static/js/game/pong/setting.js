@@ -1,5 +1,5 @@
 import gameVar from "./var.js";
-import { updateDifficultySelection, updateImageUrl, updateLevelSelection } from "./update.js";
+import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
 import { displayLiveSetting, displaySetting } from "./displaySettings.js";
 
@@ -58,7 +58,6 @@ export function updateSetting()
 		powerUp = "❌";
 		updatePowerUpSelection(false, true);
 	}
-	// updateImageUrl();
 	displaySetting(difficulty, powerUp, level);
 }
 

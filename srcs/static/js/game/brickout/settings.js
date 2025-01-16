@@ -10,7 +10,6 @@ import { displaySettingViewB } from "./display.js";
 import { listenSaveBtnB } from "./save.js";
 
 export function showSettingViewB(info)
-
 {
 	brickVar.settingChanged = false;
 	brickVar.checkDiff = false;
