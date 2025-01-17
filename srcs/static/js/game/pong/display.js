@@ -3,6 +3,8 @@ import gameVar from "./var.js";
 export function displayPongRemote()
 {
     const mainContent = document.getElementById("mainContent");
+    if (!mainContent)
+        console.log("errreur");
     mainContent.innerHTML = "";
     const insertTo = document.createElement("div");
     insertTo.innerHTML = `
@@ -149,6 +151,7 @@ export function displayGameView()
 {
     if (!gameVar.tournament)
     {
+        console.log("displaypongremote");
         displayPongRemote();
     }
     else

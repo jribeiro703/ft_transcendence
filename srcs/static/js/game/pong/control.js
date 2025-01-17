@@ -3,6 +3,7 @@ import { keyDownHandler, keyUpHandler, startBallLive, startBall } from "./input.
 
 export function initControlLive()
 {
+    removeEventListeners();
 	document.addEventListener("keydown", (e) => {
         if (e.code === "Space")
 		{
