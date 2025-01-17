@@ -1,5 +1,4 @@
 import { PADDLE_POSY } from "./const.js";
-import { waitingPlayer } from "./room.js";
 
 const gameVar = {
   // ----------------------------Canvas-------------------------
@@ -209,11 +208,11 @@ const gameVar = {
     },
   ],
 
-  isFirstPlayer: false,
 
   roomName: null,
   gameSocket: null,
   lobbySocket: null,
+  private: false,
 
   // -------------------Power Ups------------------------
 

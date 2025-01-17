@@ -46,7 +46,6 @@ export async function showGameRoom()
 {
 	gameVar.playerIdx = 2;
 	gameVar.playerReady = true;
-
 	displayGameView();
 	await initializeCanvasPong();
 
