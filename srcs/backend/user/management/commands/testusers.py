@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 import pyotp
 import requests
+from secrets import token_urlsafe
 
 class Command(BaseCommand):
 	help = 'Create random test users with OTP secrets and avatars'
@@ -19,7 +20,8 @@ class Command(BaseCommand):
 				'username': username,
 				'email': f'{username}@example.com',
 				'password': '88888888',
-				'otp_secret': pyotp.random_base32()
+				'otp_secret': pyotp.random_base32(),
+				'game_token': token_urlsafe(4)[:5]  # Generate a 5-character game token
 			}
 			
 			if not User.objects.filter(username=user_data['username']).exists():
