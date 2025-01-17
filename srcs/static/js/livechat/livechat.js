@@ -125,7 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-	console.log("consol log homeiconsvg", homeIconSvg);
 	const homeIcon = document.querySelector("[data-home-icon]");
 	homeIcon.innerHTML = homeIconSvg;
 	homeIcon.setAttribute("tabindex", "0");
@@ -149,28 +148,27 @@ const themes = [
 	"whiteTheme",
 	"darkTheme",
 	"goodForYourEyes",
-	"boti",
+	"boty",
 	"neonBlue",
 	"Transcended",
-	"darkYellow",
 ];
   let currentThemeIndex = 0;
   
-  export function changeTheme(theme) {
+export function changeTheme(theme)
+{
 	const body = document.body;
-	if (theme) {
-	  body.classList.add(theme);
-	} else {
-	  console.log("changeTHeme");
-	  themes.forEach((theme) => body.classList.remove(theme));
-  
-	  currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-  
-	  body.classList.add(themes[currentThemeIndex]);
-	  gameVar.currentTheme = themes[currentThemeIndex];
-	  console.log("theme changed to: ", themes[currentThemeIndex]);
-  
-	  console.log("change theme currentheme:", gameVar.currentTheme);
+	if (theme)
+	{
+		body.classList.add(theme);
+	}
+	else
+	{
+		themes.forEach((theme) => body.classList.remove(theme));
+		currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+		body.classList.add(themes[currentThemeIndex]);
+		gameVar.currentTheme = themes[currentThemeIndex];
+		// console.log("theme changed to: ", themes[currentThemeIndex]);
+		// console.log("change theme currentheme:", gameVar.currentTheme);
 	}
 }
 
