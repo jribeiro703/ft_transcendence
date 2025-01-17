@@ -208,7 +208,6 @@ const gameVar = {
     },
   ],
 
-  isFirstPlayer: false,
 
   roomName: null,
   gameSocket: null,

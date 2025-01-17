@@ -9,67 +9,92 @@ import { kickOut } from "./draw.js";
 import { checkSettingLive } from "./setting.js";
 import { displayGameView } from "./display.js";
 import { initializeCanvasPong } from "./canvas.js";
+import { initControlLive } from "./control.js";
+import { clearPongVar } from "./reset.js";
 
 export async function createPrivateRoom()
 {
+    console.log("createprivate");
+    clearPongVar();
     gameVar.private = true;
-    roomNetwork();
-    renderPageGame("playPongRemote", true)
-    checkSettingLive();
+    gameVar.liveMatch = true;
+    gameVar.game = 'pong';
+    initControlLive();
+    renderPageGame("playPongRemote", true);
     displayGameView();
     await initializeCanvasPong();
+    getUserInfosRemote();
 
     gameVar.gameView = document.getElementById('gameView');
     gameVar.rematchBtn = document.getElementById('rematchBtn');
     gameVar.quitGameBtn = document.getElementById('quitGameBtn');
     gameVar.returnLobby = document.getElementById('returnLobby');
-    gameVar.game = 'pong';
     const roomName = await createNewRoom();
     return roomName;
 } 
 
 export async function joinPrivateRoom(roomName)
 {
+    console.log("joinprivate");
+    clearPongVar();
     gameVar.private = true;
-    roomNetwork();
+    gameVar.liveMatch = true;
+    gameVar.game = 'pong';
+    initControlLive();
+    checkSettingLive();
     renderPageGame("playPongRemoteSecondP", true);
     displayGameView();
     await initializeCanvasPong();
+    getUserInfosRemote();
 
     gameVar.gameView = document.getElementById('gameView');
     gameVar.rematchBtn = document.getElementById('rematchBtn');
     gameVar.quitGameBtn = document.getElementById('quitGameBtn');
     gameVar.returnLobby = document.getElementById('returnLobby');
-    gameVar.game = 'pong';
     await joinRoom(roomName);
 }
 
 export function createNewRoom(joinRoomCallback)
 {
-    var roomName;
-    if (gameVar.game === "pong")
-        roomName = `pongRoom_${Math.floor(Math.random() * 10000)}`;
-    else if (gameVar.game === "brickout")
-        roomName = `brickRoom_${Math.floor(Math.random() * 10000)}`;
-    const inter = setInterval(() =>
+    if (gameVar.private)
     {
-        if (gameVar.tournament)
+        return new Promise((resolve) => 
         {
-            sendRoomNameData(gameVar.lobbySocket, roomName);
-            sendSettingData(gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
-        }
-    }, 1000);
+            const roomName = `room_${Math.floor(Math.random() * 10000)}`;
+            gameVar.playerIdx = 1;
+            joinRoom(roomName);
+            resolve(roomName);
+        });
+    }
+    else
+    {
+        var roomName;
+        if (gameVar.game === "pong")
+            roomName = `pongRoom_${Math.floor(Math.random() * 10000)}`;
+        else if (gameVar.game === "brickout")
+            roomName = `brickRoom_${Math.floor(Math.random() * 10000)}`;
+        const inter = setInterval(() =>
+        {
+            if (gameVar.tournament)
+            {
+                sendRoomNameData(gameVar.lobbySocket, roomName);
+                sendSettingData(gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
+            }
+        }, 1000);
 
-    if (gameVar.game === "pong")
-    {
-        gameVar.playerIdx = 1;
-        joinRoom(roomName);
+        if (gameVar.game === "pong")
+        {
+            gameVar.playerIdx = 1;
+            joinRoom(roomName);
+        }
+        else if (gameVar.game === "brickout")
+        {
+            brickVar.playerIdx = 1;
+            joinRoom(roomName);
+        }
     }
-    else if (gameVar.game === "brickout")
-    {
-        brickVar.playerIdx = 1;
-        joinRoom(roomName);
-    }
+    
+    
 }
 
 export function waitPlayerPong()
@@ -84,7 +109,10 @@ export function waitPlayerPong()
 
     // console.log("var:", gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
 
-    sendSettingData(gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
+    if (!gameVar.private)
+        sendSettingData(gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
+    else
+        sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
 }
 
 export function waitPlayerBrick()
@@ -182,8 +210,6 @@ export function checkPlayerIdx()
     if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
     {
         console.log("player 2");
-        getUserInfosRemote();
-        sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
         waitingForSettingLive();
     }
 }
@@ -505,14 +531,11 @@ export function roomNetwork()
     const tempSocket = new WebSocket(protocol + "//" + window.location.host + "/ws/pong/check_rooms/");
     gameVar.lobbySocket = tempSocket;
     var idx = 0;
-    if (!gameVar.private)
+    gameVar.refreshBtn.addEventListener("click", () =>
     {
-        gameVar.refreshBtn.addEventListener("click", () =>
-        {
-            tempSocket.send(JSON.stringify({ type: "lobbyView" }));
-            updateRoomList();
-        });
-    }
+        tempSocket.send(JSON.stringify({ type: "lobbyView" }));
+        updateRoomList();
+    });
     tempSocket.onopen = function (e)
     {
         tempSocket.send(JSON.stringify({ type: "lobbyView" }));
@@ -542,11 +565,8 @@ export function roomNetwork()
         if (data.type == "norooms")
         {
             delRooms();
-            if (!gameVar.private)
-            {
-                gameVar.noRoomsMessage.style.display = "flex";
-                updateRoomList();
-            }
+            gameVar.noRoomsMessage.style.display = "flex";
+            updateRoomList();
         }
         if (data.type === "ping")
         {
@@ -555,11 +575,8 @@ export function roomNetwork()
         if (data.type === "setting_data")
         {
             idx--;
-            if (!gameVar.private)
-            {
-                updateRoomInfo(idx, data.setting_data.difficulty, data.setting_data.currentLevel);
-                updateRoomList();
-            }
+            updateRoomInfo(idx, data.setting_data.difficulty, data.setting_data.currentLevel);
+            updateRoomList();
         }
     };
     tempSocket.onerror = function (event)

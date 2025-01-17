@@ -18,7 +18,7 @@ export function checkSettingLive()
 	if (gameVar.settingsChanged === false)
 	{
 		updateDifficultySelection('medium');
-		updateLevelSelection('tableTennis');
+		updateLevelSelection('classicPong');
 	}
 }
 
