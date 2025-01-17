@@ -15,6 +15,20 @@ export function displayNextLevel()
     checkBtnB("nextLevel");
 }
 
+export function displayFinishLive()
+{
+    const mainContent = document.getElementById("brickoutContainer");
+    const btn = document.createElement("div");
+    btn.id = "finish";
+    btn.className = "finish d-flex justify-content-center align-items-center gap-4 flex-wrap";
+    btn.innerHTML = `
+        <button id="returnLobbyBtn" class="primaryBtn w-25"><span>Return Lobby</span></button> 
+        <button id="quitBtn" class="primaryBtn w-25"><span>Return Home</span></button>
+    `;
+    mainContent.appendChild(btn);
+    checkBtnB("finish");
+}
+
 export function displayFinish()
 {
     const mainContent = document.getElementById("brickoutContainer");

@@ -1,0 +1,133 @@
+.boty
+{
+
+    --myYellowPulp: #ffa500;
+    --myYellowVif: #FFDA00;
+
+    --myYellowChat: #FFDC00;
+
+    --myYellowMain: #FFDA00;
+    --myDarkRed: #D90012;
+    --boty-font: 'itc blair';
+
+
+
+    --background-color: radial-gradient(
+    circle at center,
+    #0a1014 0%,
+    /* #0f1520 15%, */
+    /* #141b2a 30%, */
+    #1a2a35 50%,
+    /* #141b2a 70%, */
+    /* #0f1520 85%, */
+    #0a1014 100%
+    );
+
+    --text-color: var(--myYellowVif);
+    --border-btn-color: #4a4a4a;
+    --highlight-color: white;
+    --icon-color: #808080;
+    --box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+    --font-family: --placeholder-color: var(--text-color);
+    --chat-btn-highlight: var(--highlight-color);
+    --chat-bg: linear-gradient(
+    to right,
+    #0a1014 0%,
+    #0f1520 15%,
+    #141b2a 30%,
+    #1a2a35 50%,
+    #141b2a 70%,
+    #0f1520 85%,
+    #0a1014 100%
+    );
+
+    --chat-msg: var(--text-color);
+    --chat-border: var(--border-btn-color);
+    --box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
+
+    --background-rooms: #000000;
+    --text-color-rooms: #ffffff;
+    --text-color-btn-highlight: #000000;
+    --border-color: var(--myYellowPulp);
+
+    /* BTN */
+
+    --text-color-btn: var(--myYellowMain);
+    --selected-btn: var(--myYellowPulp);
+    --box-shadow-black: 0px 0px 10px #000000;
+    --border-btn-color: var(--myYellowMain);
+    --background-color-when-selected: var(--myYellowMain);
+    --text-color-selected: #000000;
+
+    /* chat */
+
+    --placeholder-color: #000000;
+
+    /* box */
+
+    --box-shadow: 0px 0px 7px rgba(255, 255, 0, 0.9);
+    --box-shadow-images: 0px 0px 7px var(--myYellowMain);
+    --box-shadow-inset: inset 0px 0px 3px rgba(255, 255, 0, 0.9);
+    --box-shadow-highlight: 0px 0px 3px rgba(255, 255, 0, 1);
+    --box-shadow-highlight-inset: inset 0px 0px 1px rgba(255, 255, 0, 1);
+
+    /* chat neon */
+
+    --box-shadow-neonChat1: 0 0 0px var(--myYellowChat),
+                            0 0 2px var(--myYellowChat),
+                            0 0 4px var(--myYellowChat),
+                            0 0 6px var(--myYellowChat);
+
+    --box-shadow-neonChat2: 0 0 8px var(--myYellowChat);
+
+    --box-shadow-neonChat3: 0 0 14px var(--myYellowChat);
+
+    /* mainContent neons */
+    --box-shadow-mainContent1: 0 0 0px var(--myYellowMain),
+                                0 0 2px var(--myYellowMain),
+                                0 0 4px var(--myYellowMain),
+                                0 0 6px var(--myYellowMain);
+
+    --box-shadow-mainContent2: 0 0 8px var(--myYellowMain);
+
+    --box-shadow-mainContent3: 0 0 14px var(--myYellowMain);
+
+    --neon-main-image: 0 0 0px var(--myYellowMain),
+                        0 0 1px var(--myYellowMain),
+                        0 0 2px var(--myYellowMain),
+                        0 0 3px var(--myYellowMain),
+                        0 0 4px var(--myYellowMain),
+                        0 0 7px var(--myYellowMain),
+                        0 0 8px var(--myYellowMain),
+                        inset 0 0 0px var(--myYellowMain),
+                        inset 0 0 1px var(--myYellowMain),
+                        inset 0 0 2px var(--myYellowMain),
+                        inset 0 0 3px var(--myYellowMain),
+                        inset 0 0 4px var(--myYellowMain),
+                        inset 0 0 7px var(--myYellowMain),
+                        inset 0 0 8px var(--myYellowMain);
+}
+
+.boty .primaryBtn
+{
+    font-family: var(--boty-font);
+    font-size: 26px;
+    letter-spacing: 2px;
+    text-transform: none;
+}
+
+.boty .settings-font
+{
+    font-family: var(--boty-font);
+    text-transform: none;
+}
+
+.boty .settings-font p
+{
+    font-size: 16px;
+}
+
+.boty h1
+{
+    color: var(--myYellowChat);
+}
