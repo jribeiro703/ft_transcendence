@@ -213,6 +213,7 @@ const gameVar = {
   roomName: null,
   gameSocket: null,
   lobbySocket: null,
+  private: false,
 
   // -------------------Power Ups------------------------
 
