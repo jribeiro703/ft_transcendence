@@ -13,7 +13,9 @@
     --myYellowChat: #FFDC00;
     --myYellowMain: #FFDA00;
     --myDarkRed: #D90012;
+    --myBlack: #2c2c2c;
     --boty-font: 'Geometric415Black', sans-serif;
+    --setting-font: 'itc blair';
 
     --background-color: radial-gradient(
     circle at center,
@@ -52,8 +54,8 @@
     /* BTN */
 
     --text-color-btn: var(--myYellowMain);
-    --selected-btn: var(--myYellowPulp);
-    --box-shadow-black: 0px 0px 10px #000000;
+    --selected-btn: var(--myYellowVif);
+    --box-shadow-black: 0px 0px 10px var(--myYellowMain);
     --border-btn-color: var(--myYellowMain);
     --background-color-when-selected: var(--myYellowMain);
     --text-color-selected: #000000;
@@ -64,8 +66,10 @@
 
     /* box */
 
-    --box-shadow: 0px 0px 7px rgba(255, 255, 0, 0.9);
-    --box-shadow-images: 0px 0px 7px var(--myYellowVif);
+    --box-shadow: 0px 0px 7px var(--myYellowMain);
+    --box-shadow-images: 0px 0px 7px var(--myYellowVif),
+                        0px 0px 14px var(--myYellowVif),
+                        0px 0px 21px var(--myYellowVif);
     --box-shadow-inset: inset 0px 0px 3px rgba(255, 255, 0, 0.9);
     --box-shadow-highlight: 0px 0px 3px rgba(255, 255, 0, 1);
     --box-shadow-highlight-inset: inset 0px 0px 1px rgba(255, 255, 0, 1);
@@ -117,13 +121,14 @@
 
 .boty .settings-font
 {
-    font-family: var(--boty-font);
+    font-family: var(--setting-font);
     text-transform: none;
 }
 
 .boty .settings-font p
 {
-    font-size: 16px;
+    font-size: 20px;
+    letter-spacing: 1px;
 }
 
 .boty h1
@@ -131,7 +136,20 @@
     color: var(--myYellowChat);
 }
 
-.boty .p1
+.boty p1
 {
     font-family: var(--boty-font) !important;
+}
+
+
+.boty .level:active,
+.boty .level.selected,
+.boty .powerUpBtn:active,
+.boty .powerUpBtn.selected,
+.boty #saveBtn:active,
+.boty #saveBtn.selected {
+    box-shadow: 
+        0px 0px 5px var(--myYellowPulp),
+        0px 0px 10px var(--myYellowPulp),
+        0px 0px 15px var(--myYellowPulp);
 }
