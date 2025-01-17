@@ -6,14 +6,42 @@ import { startLiveGame } from "./start.js";
 import { getUserInfosRemote } from "../getUser.js";
 import { initGame, initListenerB } from "../brickout/init.js";
 import { kickOut } from "./draw.js";
+import { checkSettingLive } from "./setting.js";
+import { displayGameView } from "./display.js";
+import { initializeCanvasPong } from "./canvas.js";
 
-export function createPrivateRoom()
+export async function createPrivateRoom()
 {
-    gameVar.game = "pong";
-    updatePowerUpSelection(false, true);
-    updateDifficultySelection("medium", true);
-    updateLevelSelection("classicPong", true);
-    createNewRoom();
+    gameVar.private = true;
+    roomNetwork();
+    renderPageGame("playPongRemote", true)
+    checkSettingLive();
+    displayGameView();
+    await initializeCanvasPong();
+
+    gameVar.gameView = document.getElementById('gameView');
+    gameVar.rematchBtn = document.getElementById('rematchBtn');
+    gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+    gameVar.returnLobby = document.getElementById('returnLobby');
+    gameVar.game = 'pong';
+    const roomName = await createNewRoom();
+    return roomName;
+} 
+
+export async function joinPrivateRoom(roomName)
+{
+    gameVar.private = true;
+    roomNetwork();
+    renderPageGame("playPongRemoteSecondP", true);
+    displayGameView();
+    await initializeCanvasPong();
+
+    gameVar.gameView = document.getElementById('gameView');
+    gameVar.rematchBtn = document.getElementById('rematchBtn');
+    gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+    gameVar.returnLobby = document.getElementById('returnLobby');
+    gameVar.game = 'pong';
+    await joinRoom(roomName);
 }
 
 export function createNewRoom(joinRoomCallback)
@@ -53,6 +81,9 @@ export function waitPlayerPong()
     gameVar.ctx.strokeStyle = "#1F2E4D";
     gameVar.ctx.lineWidth = 1;
     gameVar.ctx.strokeText("Waiting for opponent...", gameVar.canvasW / 4, gameVar.canvasH / 2);
+
+    // console.log("var:", gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
+
     sendSettingData(gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
 }
 
@@ -342,13 +373,15 @@ export function addRoom(index, roomName, status, nbplayer, difficulty = null, le
 export function updateRoomList()
 {
     var game;
-    gameVar.roomsContainer.innerHTML = "";
+    if (!gameVar.private)
+        gameVar.roomsContainer.innerHTML = "";
     gameVar.rooms.forEach((room) =>
     {
         if (room.idx === null || room.idx === undefined)
             return;
 
-        gameVar.noRoomsMessage.style.display = "none";
+        if (!gameVar.private)
+            gameVar.noRoomsMessage.style.display = "none";
         if (room.name.charAt(0) === "p")
             game = "Pong";
         else if (room.name.charAt(0) === "b")
@@ -472,11 +505,14 @@ export function roomNetwork()
     const tempSocket = new WebSocket(protocol + "//" + window.location.host + "/ws/pong/check_rooms/");
     gameVar.lobbySocket = tempSocket;
     var idx = 0;
-    gameVar.refreshBtn.addEventListener("click", () =>
+    if (!gameVar.private)
     {
-        tempSocket.send(JSON.stringify({ type: "lobbyView" }));
-        updateRoomList();
-    });
+        gameVar.refreshBtn.addEventListener("click", () =>
+        {
+            tempSocket.send(JSON.stringify({ type: "lobbyView" }));
+            updateRoomList();
+        });
+    }
     tempSocket.onopen = function (e)
     {
         tempSocket.send(JSON.stringify({ type: "lobbyView" }));
@@ -506,8 +542,11 @@ export function roomNetwork()
         if (data.type == "norooms")
         {
             delRooms();
-            gameVar.noRoomsMessage.style.display = "flex";
-            updateRoomList();
+            if (!gameVar.private)
+            {
+                gameVar.noRoomsMessage.style.display = "flex";
+                updateRoomList();
+            }
         }
         if (data.type === "ping")
         {
@@ -516,8 +555,11 @@ export function roomNetwork()
         if (data.type === "setting_data")
         {
             idx--;
-            updateRoomInfo(idx, data.setting_data.difficulty, data.setting_data.currentLevel);
-            updateRoomList();
+            if (!gameVar.private)
+            {
+                updateRoomInfo(idx, data.setting_data.difficulty, data.setting_data.currentLevel);
+                updateRoomList();
+            }
         }
     };
     tempSocket.onerror = function (event)
