@@ -22,12 +22,314 @@ from datetime import timedelta
 from game.models import Game
 from transcendence import settings
 from .serializers import UserCreateSerializer, OtpCodeSerializer, UserSettingsSerializer, UserPrivateInfosSerializer, UserPublicInfosSerializer
-from .models import User, FriendRequest
+from .models import User, FriendRequest, GameRequest
 from .utils import send_2FA_mail, generate_tokens_for_user, set_refresh_token_in_cookies, get_user_matchs_infos
 import json
 import logging
 
 logger = logging.getLogger(__name__)
+
+# -----------------------------------USED ENDPOINTS FOR LIVECHAT--------------------------------
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserIdByNickname(request):
+	"""Get user ID from nickname"""
+	try:
+		nickname = request.query_params.get('nickname')
+		if not nickname:
+			return Response(
+				{"message": "Nickname parameter is required"}, 
+				status=status.HTTP_400_BAD_REQUEST
+			)
+
+		user = User.objects.filter(username=nickname).first()
+		if not user:
+			return Response(
+				{"message": "User not found"}, 
+				status=status.HTTP_404_NOT_FOUND
+			)
+
+		return Response({"id": user.id}, status=status.HTTP_200_OK)
+
+	except Exception as e:
+		return Response(
+			{"message": f"Error fetching user ID: {str(e)}"}, 
+			status=status.HTTP_500_INTERNAL_SERVER_ERROR
+		)
+
+class UserProfileViewId(APIView):
+	permission_classes = [AllowAny]
+
+	def get(self, request, pk, *args, **kwargs):
+		try:
+			user = User.objects.get(id=pk)
+		except User.DoesNotExist:
+			return Response({"message": "Profile Not Found"}, status=status.HTTP_404_NOT_FOUND)
+
+		total_matches = Game.objects.filter(
+			Q(player_one=user) | Q(player_two=user)
+		).count()
+		won_matches = Game.objects.filter(winner=user).count()
+
+		last_matches = Game.objects.filter(
+			Q(player_one=user) | Q(player_two=user)
+		).order_by('-created_at')[:5]
+
+		match_history = []
+		for match in last_matches:
+
+			# match_info = {
+				# "date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+				# "game_type"
+				# "difficulty"
+				# "powerup"
+				# "level"
+				# "player_one"
+				# "score": f"{match.score_one} - {match.score_two}",
+				# "player_two"
+				# "winner": match.winner.username
+			# }
+
+			match_info = {
+				"date": match.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+				"score": f"{match.score_one} - {match.score_two}",
+				"winner": match.winner.username if match.winner else "No Winner"
+			}
+			match_history.append(match_info)
+
+		is_friend = False
+		is_blocked = False
+		if request.user.is_authenticated:
+			is_friend = request.user.friends.filter(id=user.id).exists()
+			is_blocked = request.user.blocklist.filter(id=user.id).exists()
+
+		data = {
+			"id": user.id,
+			"username": user.username,
+			"avatar": user.avatar.url,
+			"alias": user.alias,
+			"is_online": user.is_online,
+			"total_matches": total_matches,
+			"won_matches": won_matches,
+			"match_history": match_history,
+			"is_friend": is_friend,
+			"is_blocked": is_blocked
+		}
+		return Response(data, status=status.HTTP_200_OK)
+
+# -------------------------------GAME ENDPOINTS--------------------------------	
+
+class ListGameInvitationsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = get_object_or_404(User, pk=kwargs['pk'])
+        received_requests = GameRequest.objects.filter(receiver=user, is_accepted=False)
+        sent_requests = GameRequest.objects.filter(sender=user, is_accepted=False)
+
+        return Response({
+            "received_requests": [{"id": req.id, "sender": req.sender.username, "room": req.room} for req in received_requests],
+            "sent_requests": [{"id": req.id, "receiver": req.receiver.username, "room": req.room} for req in sent_requests],
+        })
+
+class SendGameInvitationView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def post(self, request, *args, **kwargs):
+		user_id = kwargs.get('user_id')
+		sender = request.user
+		receiver = get_object_or_404(User, id=user_id)
+		room_name = request.data.get('roomName')
+		
+		if not room_name:
+			return Response({"message:" "Room name is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+		if GameRequest.objects.filter(sender=sender, receiver=receiver).exists():
+			return Response({"message": f"You have already sent an invitation for a match to {receiver.username}"}, status=status.HTTP_400_BAD_REQUEST)
+		
+		GameRequest.objects.create(sender=sender, receiver=receiver, room=room_name)
+		return Response({"message": f" Invitation for a match sent to {receiver.username} in {room_name}"}, status=status.HTTP_200_OK)
+
+
+class AcceptGameInvitationView(APIView):
+	
+	def post(self, request, *args, **kwargs):
+		request_id = kwargs.get('request_id')
+		try:
+			game_request = GameRequest.objects.get(id=request_id)
+			if game_request.receiver != request.user:
+				return Response({"message": "You are not authorized to accept this request."}, status=status.HTTP_403_FORBIDDEN)
+
+			game_request.delete()
+
+			return Response({"message": "Game invitation accepted."}, status=status.HTTP_200_OK)
+		except GameRequest.DoesNotExist:
+			return Response({"message": "Game invitation not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class DenyGameInvitationView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def post(self, request, *args, **kwargs):
+		request_id = kwargs.get('request_id')
+		try:
+			game_request = GameRequest.objects.get(id=request_id)
+			if game_request.receiver != request.user and game_request.sender != request.user:
+				return Response({"message": "You are not authorized to deny this request."}, status=status.HTTP_403_FORBIDDEN)
+
+			game_request.delete()
+
+			return Response({"message": "game request denied and deleted."}, status=status.HTTP_200_OK)
+		except GameRequest.DoesNotExist:
+			return Response({"message": "game request not found."}, status=status.HTTP_404_NOT_FOUND)
+
+# ------------------------------FRIENDS ENDPOINTS--------------------------------	
+
+class AcceptFriendRequestView(APIView):
+	
+	def post(self, request, *args, **kwargs):
+		request_id = kwargs.get('request_id')
+		try:
+			friend_request = FriendRequest.objects.get(id=request_id)
+			if friend_request.receiver != request.user:
+				return Response({"message": "You are not authorized to accept this request."}, status=status.HTTP_403_FORBIDDEN)
+
+			friend_request.is_accepted = True
+			friend_request.save()
+			friend_request.sender.friends.add(friend_request.receiver)
+			friend_request.receiver.friends.add(friend_request.sender)
+
+			return Response({"message": "Friend request accepted."}, status=status.HTTP_200_OK)
+		except FriendRequest.DoesNotExist:
+			return Response({"message": "Friend request not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class DenyFriendRequestView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def post(self, request, *args, **kwargs):
+		request_id = kwargs.get('request_id')
+		try:
+			friend_request = FriendRequest.objects.get(id=request_id)
+			if friend_request.receiver != request.user and friend_request.sender != request.user:
+				return Response({"message": "You are not authorized to deny this request."}, status=status.HTTP_403_FORBIDDEN)
+
+			friend_request.delete()
+
+			return Response({"message": "Friend request denied and deleted."}, status=status.HTTP_200_OK)
+		except FriendRequest.DoesNotExist:
+			return Response({"message": "Friend request not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class ListFriendRequestView(APIView):
+	
+	def get(self, request, *args, **kwargs):
+		user = User.objects.get(pk=kwargs['pk'])
+		received_requests = user.received_requests.filter(is_accepted=False)
+		sent_requests = user.sent_requests.filter(is_accepted=False)
+
+		return Response({
+			"received_requests": [{"id": req.id, "sender": req.sender.username} for req in received_requests],
+			"sent_requests": [{"id": req.id, "receiver": req.receiver.username} for req in sent_requests],
+			})
+
+class SendFriendRequestView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def post(self, request, *args, **kwargs):
+		user_id = kwargs.get('user_id')
+		sender = request.user
+		receiver = get_object_or_404(User, id=user_id)
+
+		# # Log the incoming data
+		# logger.info(f"Friend request data received: sender={sender.username}, receiver_id={receiver.username}")
+
+		if sender.friends.filter(id=receiver.id).exists():
+			return Response({"message": f"{receiver.username} is already in your friends list"}, status=status.HTTP_400_BAD_REQUEST)
+		
+		if FriendRequest.objects.filter(sender=sender, receiver=receiver).exists():
+			return Response({"message": f"You have already sent a friend request to {receiver.username}"}, status=status.HTTP_400_BAD_REQUEST)
+		
+		FriendRequest.objects.create(sender=sender, receiver=receiver)
+		return Response({"message": f"Friend request sent to {receiver.username}"}, status=status.HTTP_200_OK)
+
+class IsFriendView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def get(self, request, *args, **kwargs):
+		user_id = kwargs.get('user_id')
+		user = request.user
+		try:
+			friend = User.objects.get(id=user_id)
+			is_friend = user.friends.filter(id=friend.id).exists()
+			return Response({"is_friend": is_friend}, status=status.HTTP_200_OK)
+		except User.DoesNotExist:
+			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class RemoveFriendView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def post(self, request, *args, **kwargs):
+		user_id = kwargs.get('user_id')
+		user = request.user
+		try:
+			friend = User.objects.get(id=user_id)
+			user.remove_friend(friend)
+			return Response({"message": f"Friend {friend.username} removed successfully."}, status=status.HTTP_200_OK)
+		except User.DoesNotExist:
+			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class IsBlockedViewId(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def get(self, request, *args, **kwargs):
+		user_id = kwargs.get('user_id')
+		user = request.user
+		try:
+			blocked_user = User.objects.get(id=user_id)
+			is_blocked = user.blocklist.filter(id=blocked_user.id).exists()
+			return Response({"is_blocked": is_blocked}, status=status.HTTP_200_OK)
+		except User.DoesNotExist:
+			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class IsBlockedViewNick(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def get(self, request, *args, **kwargs):
+		nickname = kwargs.get('nickname')
+		logger.info(nickname)
+		user = request.user
+		try:
+			blocked_user = User.objects.get(username=nickname)
+			is_blocked = user.blocklist.filter(id=blocked_user.id).exists()
+			return Response({"is_blocked": is_blocked}, status=status.HTTP_200_OK)
+		except User.DoesNotExist:
+			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class BlockUserView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def post(self, request, *args, **kwargs):
+		user_id = kwargs.get('user_id')
+		user = request.user
+		try:
+			user_to_block = User.objects.get(id=user_id)
+			user.block_user(user_to_block)
+			return Response({"message": f"User {user_to_block.username} blocked successfully."}, status=status.HTTP_200_OK)
+		except User.DoesNotExist:
+			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class UnblockUserView(APIView):
+	permission_classes = [IsAuthenticated]
+
+	def post(self, request, *args, **kwargs):
+		user_id = kwargs.get('user_id')
+		user = request.user
+		try:
+			user_to_unblock = User.objects.get(id=user_id)
+			user.unblock_user(user_to_unblock)
+			return Response({"message": f"User {user_to_unblock.username} unblocked successfully."}, status=status.HTTP_200_OK)
+		except User.DoesNotExist:
+			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 # -----------------------------------GET USER INFOS ENDPOINTS--------------------------------
 
@@ -88,7 +390,7 @@ def getUserFriends(request):
 		friends_data = []
 
 		for friend in friends:
-			user_profile_view = UserProfileView()
+			user_profile_view = UserProfileViewId()
 			response = user_profile_view.get(request, pk=friend.id)
 			if response.status_code == status.HTTP_200_OK:
 				friends_data.append(response.data)
@@ -119,7 +421,7 @@ def getOnlineUsers(request):
 		online_users_data = []
 
 		for user in online_users:
-			user_profile_view = UserProfileView()
+			user_profile_view = UserProfileViewId()
 			response = user_profile_view.get(request, pk=user.id)
 			if response.status_code == status.HTTP_200_OK:
 				online_users_data.append(response.data)
@@ -345,139 +647,6 @@ class UserSettingsView(RetrieveUpdateDestroyAPIView):
 			return response
 		except Exception as e:
 			return Response({"message": "An unknown error occured, failed to delete account."}, status=status.HTTP_400_BAD_REQUEST)
-
-# ------------------------------FRIENDS ENDPOINTS--------------------------------	
-
-class AcceptFriendRequestView(APIView):
-	permission_classes = [IsAuthenticated]
-
-	def post(self, request, *args, **kwargs):
-		request_id = kwargs.get('request_id')
-		try:
-			friend_request = FriendRequest.objects.get(id=request_id)
-			if friend_request.receiver != request.user:
-				return Response({"message": "You are not authorized to accept this request."}, status=status.HTTP_403_FORBIDDEN)
-
-			friend_request.is_accepted = True
-			friend_request.save()
-			friend_request.sender.friends.add(friend_request.receiver)
-			friend_request.receiver.friends.add(friend_request.sender)
-
-			return Response({"message": "Friend request accepted."}, status=status.HTTP_200_OK)
-		except FriendRequest.DoesNotExist:
-			return Response({"message": "Friend request not found."}, status=status.HTTP_404_NOT_FOUND)
-		
-class ListFriendRequestView(APIView):
-	permission_classes = [IsAuthenticated]
-
-	def get(self, request, *args, **kwargs):
-		user = User.objects.get(pk=kwargs['pk'])
-		received_requests = user.received_requests.filter(is_accepted=False)
-		sent_requests = user.sent_requests.filter(is_accepted=False)
-
-		return Response({
-			"received_requests": [{"id": req.id, "sender": req.sender.username} for req in received_requests],
-			"sent_requests": [{"id": req.id, "receiver": req.receiver.username} for req in sent_requests],
-			})
-
-class SendFriendRequestView(APIView):
-	permission_classes = [IsAuthenticated]
-
-	def post(self, request, *args, **kwargs):
-		user_id = kwargs.get('user_id')
-		sender = request.user
-		receiver = get_object_or_404(User, id=user_id)
-
-		# # Log the incoming data
-		# logger.info(f"Friend request data received: sender={sender.username}, receiver_id={receiver.username}")
-
-		if sender.friends.filter(id=receiver.id).exists():
-			return Response({"message": f"{receiver.username} is already in your friends list"}, status=status.HTTP_400_BAD_REQUEST)
-		
-		if FriendRequest.objects.filter(sender=sender, receiver=receiver).exists():
-			return Response({"message": f"You have already sent a friend request to {receiver.username}"}, status=status.HTTP_400_BAD_REQUEST)
-		
-		FriendRequest.objects.create(sender=sender, receiver=receiver)
-		return Response({"message": f"Friend request sent to {receiver.username}"}, status=status.HTTP_200_OK)
-
-class IsFriendView(APIView):
-	permission_classes = [IsAuthenticated]
-
-	def get(self, request, *args, **kwargs):
-		user_id = kwargs.get('user_id')
-		user = request.user
-		try:
-			friend = User.objects.get(id=user_id)
-			is_friend = user.friends.filter(id=friend.id).exists()
-			return Response({"is_friend": is_friend}, status=status.HTTP_200_OK)
-		except User.DoesNotExist:
-			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-class RemoveFriendView(APIView):
-	permission_classes = [IsAuthenticated]
-
-	def post(self, request, *args, **kwargs):
-		user_id = kwargs.get('user_id')
-		user = request.user
-		try:
-			friend = User.objects.get(id=user_id)
-			user.remove_friend(friend)
-			return Response({"message": f"Friend {friend.username} removed successfully."}, status=status.HTTP_200_OK)
-		except User.DoesNotExist:
-			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-class IsBlockedViewId(APIView):
-	permission_classes = [IsAuthenticated]
-
-	def get(self, request, *args, **kwargs):
-		user_id = kwargs.get('user_id')
-		user = request.user
-		try:
-			blocked_user = User.objects.get(id=user_id)
-			is_blocked = user.blocklist.filter(id=blocked_user.id).exists()
-			return Response({"is_blocked": is_blocked}, status=status.HTTP_200_OK)
-		except User.DoesNotExist:
-			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-class IsBlockedViewNick(APIView):
-	permission_classes = [IsAuthenticated]
-
-	def get(self, request, *args, **kwargs):
-		nickname = kwargs.get('nickname')
-		logger.info(nickname)
-		user = request.user
-		try:
-			blocked_user = User.objects.get(username=nickname)
-			is_blocked = user.blocklist.filter(id=blocked_user.id).exists()
-			return Response({"is_blocked": is_blocked}, status=status.HTTP_200_OK)
-		except User.DoesNotExist:
-			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-class BlockUserView(APIView):
-	permission_classes = [IsAuthenticated]
-
-	def post(self, request, *args, **kwargs):
-		user_id = kwargs.get('user_id')
-		user = request.user
-		try:
-			user_to_block = User.objects.get(id=user_id)
-			user.block_user(user_to_block)
-			return Response({"message": f"User {user_to_block.username} blocked successfully."}, status=status.HTTP_200_OK)
-		except User.DoesNotExist:
-			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-class UnblockUserView(APIView):
-	permission_classes = [IsAuthenticated]
-
-	def post(self, request, *args, **kwargs):
-		user_id = kwargs.get('user_id')
-		user = request.user
-		try:
-			user_to_unblock = User.objects.get(id=user_id)
-			user.unblock_user(user_to_unblock)
-			return Response({"message": f"User {user_to_unblock.username} unblocked successfully."}, status=status.HTTP_200_OK)
-		except User.DoesNotExist:
-			return Response({"message": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 # -----------------------------------CHECK AUTHENTICATION ENDPOINTS--------------------------------
 

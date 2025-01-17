@@ -12,6 +12,9 @@ import { displayGameView } from '../game/pong/display.js';
 import { initializeCanvasPong } from '../game/pong/canvas.js';
 import { updateDifficultySelection, updateLevelSelection } from '../game/pong/update.js';
 import { initControlLive } from '../game/pong/control.js';
+import { getUserInfos } from '../game/getUser.js';
+import { sendScoreInfo, sendTournamentInfo } from '../game/pong/network.js';
+// import { getUserInfos2 } from '../game/getUser.js';
 import { initializeTournamentSocket } from '../tournament/initializeTournamentGame.js'
 
 let currentTournamentId;

@@ -1,57 +1,57 @@
-import "./friends.js";
-import "./emoji.js";
-import "./game.js";
-import "./general.js";
-import "./messages.js";
-import "./notifications.js";
-import "./online.js";
-import "./socket.js";
-import "./tooltip.js";
-import "./userItem.js";
-import "./utils.js";
-import { chatIconDots, chatIconFill, toggleChat } from "./utils.js";
+import './friends.js'
+import './emoji.js'
+import './game.js'
+import './general.js'
+import './messages.js'
+import './notifications.js'
+import './online.js'
+import './socket.js'
+import './tooltip.js'
+import './userItem.js'
+import './utils.js'
+import { chatIconDots, chatIconFill, toggleChat } from './utils.js'
 import gameVar from "../game/pong/var.js";
 
 ///////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// David add ////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 document.addEventListener("DOMContentLoaded", function () {
-  const grandparent = document.getElementById("livechat");
-  const focusableElements = [
-    "emojiButton",
-    "chat-message-input",
-    "chat-message-submit",
-  ];
+	const grandparent = document.getElementById("livechat");
+	const focusableElements = [
+		"emojiButton",
+		"chat-message-input",
+		"chat-message-submit",
+	];
 
-  focusableElements.forEach((id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.addEventListener("focus", function () {
-        grandparent.classList.add("livechat-neon-focus");
-      });
+	focusableElements.forEach((id) => {
+		const element = document.getElementById(id);
+		if (element) {
+			element.addEventListener("focus", function () {
+				grandparent.classList.add("livechat-neon-focus");
+			});
 
-      element.addEventListener("blur", function () {
-        grandparent.classList.remove("livechat-neon-focus");
-      });
-    }
-  });
+			element.addEventListener("blur", function () {
+				grandparent.classList.remove("livechat-neon-focus");
+			});
+		}
+	});
 });
 
 // test qui disparait dans le focus de lindex ou on ecrit
 document.addEventListener("DOMContentLoaded", function () {
-  const messageInput = document.querySelector("#chat-message-input");
+	const messageInput = document.querySelector("#chat-message-input");
 
-  if (messageInput) {
-    messageInput.addEventListener("focus", function () {
-      messageInput.placeholder = "";
-    });
+	if (messageInput) {
+		messageInput.addEventListener("focus", function () {
+			messageInput.placeholder = "";
+		});
 
-    messageInput.addEventListener("blur", function () {
-      messageInput.placeholder = "Type here...";
-    });
-  } else {
-    console.error("Message input not found");
-  }
+		messageInput.addEventListener("blur", function () {
+			messageInput.placeholder = "Type here...";
+		});
+	} else {
+		console.error("Message input not found");
+	}
 });
 
 // liste des icons SVG
@@ -119,193 +119,185 @@ m30 -1129 c94 -24 186 -105 232 -205 19 -40 23 -66 23 -144 0 -85 -3 -101 -29
 
 // ajoute les icons dans le html
 document.addEventListener("DOMContentLoaded", function () {
-  const chatIcon = document.querySelector("[data-chat-icon]");
-  chatIcon.innerHTML = chatIconFill;
-  chatIcon.setAttribute("tabindex", "0");
+	const chatIcon = document.querySelector("[data-chat-icon]");
+	chatIcon.innerHTML = chatIconFill;
+	chatIcon.setAttribute("tabindex", "0");
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("consol log homeiconsvg", homeIconSvg);
-  const homeIcon = document.querySelector("[data-home-icon]");
-  homeIcon.innerHTML = homeIconSvg;
-  homeIcon.setAttribute("tabindex", "0");
+	console.log("consol log homeiconsvg", homeIconSvg);
+	const homeIcon = document.querySelector("[data-home-icon]");
+	homeIcon.innerHTML = homeIconSvg;
+	homeIcon.setAttribute("tabindex", "0");
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  const profileIcon = document.querySelector("[data-profile-icon]");
-  profileIcon.innerHTML = profileIconSvg;
-  profileIcon.setAttribute("tabindex", "0");
+	const profileIcon = document.querySelector("[data-profile-icon]");
+	profileIcon.innerHTML = profileIconSvg;
+	profileIcon.setAttribute("tabindex", "0");
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  const paletteIcon = document.querySelector("[data-palette-icon]");
-  paletteIcon.innerHTML = paletteIconSvg;
-  paletteIcon.setAttribute("tabindex", "0");
+	const paletteIcon = document.querySelector("[data-palette-icon]");
+	paletteIcon.innerHTML = paletteIconSvg;
+	paletteIcon.setAttribute("tabindex", "0");
 });
 
 // slide le livechat avec focus touche entrer + clic souris
 
 const themes = [
-  "whiteTheme",
-  "darkTheme",
-  "goodForYourEyes",
-  "boti",
-  "neonBlue",
-  "Transcended",
-  "darkYellow",
+	"whiteTheme",
+	"darkTheme",
+	"goodForYourEyes",
+	"boti",
+	"neonBlue",
+	"Transcended",
+	"darkYellow",
 ];
-let currentThemeIndex = 0;
-
-export function changeTheme(theme) {
-  const body = document.body;
-  if (theme) {
-    body.classList.add(theme);
-  } else {
-    console.log("changeTHeme");
-    themes.forEach((theme) => body.classList.remove(theme));
-
-    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-
-    body.classList.add(themes[currentThemeIndex]);
-    gameVar.currentTheme = themes[currentThemeIndex];
-    console.log("theme changed to: ", themes[currentThemeIndex]);
-
-    console.log("change theme currentheme:", gameVar.currentTheme);
-  }
+  let currentThemeIndex = 0;
+  
+  export function changeTheme(theme) {
+	const body = document.body;
+	if (theme) {
+	  body.classList.add(theme);
+	} else {
+	  console.log("changeTHeme");
+	  themes.forEach((theme) => body.classList.remove(theme));
+  
+	  currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+  
+	  body.classList.add(themes[currentThemeIndex]);
+	  gameVar.currentTheme = themes[currentThemeIndex];
+	  console.log("theme changed to: ", themes[currentThemeIndex]);
+  
+	  console.log("change theme currentheme:", gameVar.currentTheme);
+	}
 }
 
 document
-  .querySelector("[data-chat-icon]")
-  .addEventListener("click", toggleChat);
+	.querySelector("[data-chat-icon]")
+	.addEventListener("click", toggleChat);
 
 // can click with enter
 document.addEventListener("DOMContentLoaded", function () {
-  const homeIcon = document.querySelector("[data-home-icon]");
-  const profileIcon = document.querySelector("[data-profile-icon]");
-  const chatIcon = document.querySelector("[data-chat-icon]");
-  const paletteIcon = document.querySelector("[data-palette-icon]");
+	const homeIcon = document.querySelector("[data-home-icon]");
+	const profileIcon = document.querySelector("[data-profile-icon]");
+	const chatIcon = document.querySelector("[data-chat-icon]");
+	const paletteIcon = document.querySelector("[data-palette-icon]");
 
-  if (homeIcon) {
-    homeIcon.setAttribute("tabindex", "0");
-    homeIcon.addEventListener("keydown", function (event) {
-      if (event.key === "Enter") {
-        homeIcon.click();
-      }
-    });
-  }
+	if (homeIcon) {
+		homeIcon.setAttribute("tabindex", "0");
+		homeIcon.addEventListener("keydown", function (event) {
+			if (event.key === "Enter") {
+				homeIcon.click();
+			}
+		});
+	}
 
-  if (profileIcon) {
-    profileIcon.setAttribute("tabindex", "0");
-    profileIcon.addEventListener("keydown", function (event) {
-      if (event.key === "Enter") {
-        profileIcon.click();
-      }
-    });
-  }
+	if (profileIcon) {
+		profileIcon.setAttribute("tabindex", "0");
+		profileIcon.addEventListener("keydown", function (event) {
+			if (event.key === "Enter") {
+				profileIcon.click();
+			}
+		});
+	}
 
-  if (chatIcon) {
-    chatIcon.setAttribute("tabindex", "0");
-    chatIcon.addEventListener("keydown", function (event) {
-      if (event.key === "Enter") {
-        toggleChat();
-      }
-    });
-  }
+	if (chatIcon) {
+		chatIcon.setAttribute("tabindex", "0");
+		chatIcon.addEventListener("keydown", function (event) {
+			if (event.key === "Enter") {
+				toggleChat();
+			}
+		});
+	}
 
-  if (paletteIcon) {
-    paletteIcon.setAttribute("tabindex", 0);
-    paletteIcon.addEventListener("click", function () {
-      changeTheme();
-    });
-  }
+	if (paletteIcon) {
+		paletteIcon.setAttribute("tabindex", 0);
+		paletteIcon.addEventListener("click", function () {
+		  changeTheme();
+		});
+	}
 });
 
 // rend jolie apres avoir cliqué a la souris
 document.addEventListener("mousedown", function (event) {
-  const focusableSelectors = [
-    "button",
-    "[data-chat-icon]",
-    "[data-home-icon]",
-    "[data-palette-icon]",
-    "[data-profile-icon]",
-    "#chat-message-submit",
-    "#emojiButton",
-  ];
+	const focusableSelectors = [
+		"button",
+		"[data-chat-icon]",
+		"[data-home-icon]",
+		"[data-palette-icon]",
+		"[data-profile-icon]",
+		"#chat-message-submit",
+		"#emojiButton",
+	];
 
-  const target = event.target;
+	const target = event.target;
 
-  if (
-    target.matches(focusableSelectors) ||
-    target.closest(focusableSelectors)
-  ) {
-    requestAnimationFrame(() => {
-      if (document.activeElement) {
-        document.activeElement.blur();
-      }
-    });
-  }
+	if (
+		target.matches(focusableSelectors) ||
+		target.closest(focusableSelectors)
+	) {
+		requestAnimationFrame(() => {
+			if (document.activeElement) {
+				document.activeElement.blur();
+			}
+		});
+	}
 });
 
 // tab trap
 document.addEventListener("DOMContentLoaded", function () {
-  const focusableSelectors = [
-    "button",
-    "[href]",
-    "input",
-    "select",
-    "textarea",
-    '[tabindex]:not([tabindex="-1"])',
-    "[data-chat-icon]",
-    "[data-home-icon]",
-    "[data-palette-icon]",
-    "[data-profile-icon]",
-    "#chat-message-input",
-    "#chat-message-submit",
-    "#emojiButton",
-    ".mapClic",
-  ].join(", ");
+	const focusableSelectors = [
+		"button",
+		"[href]",
+		"input",
+		"select",
+		"textarea",
+		'[tabindex]:not([tabindex="-1"])',
+		"[data-chat-icon]",
+		"[data-home-icon]",
+    	"[data-palette-icon]",
+		"[data-profile-icon]",
+		"#chat-message-input",
+		"#chat-message-submit",
+		"#emojiButton",
+		".mapClic",
+	].join(", ");
 
-  const getFocusableElements = () => {
-    return Array.from(document.querySelectorAll(focusableSelectors)).filter(
-      (element) => {
-        return (
-          element.offsetParent !== null && // élément visible
-          !element.disabled && // pas désactivé
-          !element.hasAttribute("hidden") && // pas caché
-          getComputedStyle(element).display !== "none" && // pas display none
-          getComputedStyle(element).visibility !== "hidden" // pas visibility hidden
-        );
-      },
-    );
-  };
+	const getFocusableElements = () => {
+		return Array.from(document.querySelectorAll(focusableSelectors)).filter(
+			(element) => {
+				return (
+					element.offsetParent !== null &&
+					!element.disabled &&
+					getComputedStyle(element).display !== "none"
+				);
+			},
+		);
+	};
 
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Tab") {
-      const focusableElements = getFocusableElements();
+	document.addEventListener("keydown", function (e) {
+		if (e.key === "Tab") {
+			const focusableElements = getFocusableElements();
 
-      if (focusableElements.length === 0) return;
+			if (focusableElements.length === 0) return;
 
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
-      const activeElement = document.activeElement;
+			const firstElement = focusableElements[0];
+			const lastElement = focusableElements[focusableElements.length - 1];
+			const activeElement = document.activeElement;
 
-      // Pour debug
-      console.log("Focusable elements:", focusableElements);
-      console.log("Active element:", activeElement);
-
-      if (e.shiftKey) {
-        // Tab arrière
-        if (activeElement === firstElement || !activeElement) {
-          e.preventDefault();
-          lastElement.focus();
-        }
-      } else {
-        // Tab avant
-        if (activeElement === lastElement || !activeElement) {
-          e.preventDefault();
-          firstElement.focus();
-        }
-      }
-    }
-  });
+			if (e.shiftKey) {
+				if (activeElement === firstElement) {
+					e.preventDefault();
+					lastElement.focus();
+				}
+			} else {
+				if (activeElement === lastElement) {
+					e.preventDefault();
+					firstElement.focus();
+				}
+			}
+		}
+	});
 });
