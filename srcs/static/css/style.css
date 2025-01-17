@@ -60,6 +60,16 @@ p1 {
   display: none;
 }
 
+/* ---------------------- vh ---------------------- */
+
+.vh-10 {
+  height: 10vh;
+}
+
+.vh-80 {
+  height: 80vh;
+}
+
 /* ---------------------- Nav Bar ---------------------- */
 
 #me {
@@ -89,7 +99,6 @@ p1 {
 .navbar-parent {
   position: relative;
   display: flex;
-  height: 100px;
 }
 
 .navbar {

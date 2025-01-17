@@ -1,22 +1,22 @@
 [data-home-icon] svg {
   transition: transform 0.1s ease;
-  width: 40px;
-  height: 40px;
+  width: 100%;
+  height: 100%;
 }
 [data-profile-icon] svg {
   transition: transform 0.1s ease;
-  width: 50px;
-  height: 50px;
+  width: 100%;
+  height: 100%;
 }
 [data-palette-icon] svg {
   transition: transform 0.1s ease;
-  width: 40px;
-  height: 40px;
+  width: 100%;
+  height: 100%;
 }
 [data-chat-icon] svg {
   transition: transform 0.1s ease;
-  width: 30px;
-  height: 30px;
+  width: 100%;
+  height: 100%;
 }
 
 [data-home-icon]:focus,
@@ -51,8 +51,8 @@
 
 /* profile icon */
 .profileIcon {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   color: var(--highlight-color);
 }
@@ -73,18 +73,22 @@
 .chat-close-icon {
   cursor: pointer;
   color: var(--highlight-color);
-  position: absolute;
-  bottom: 3%;
-  right: 90px;
+  width: 40px;
+  height: 40px;
+  /* position: absolute; */
+  /* bottom: 3%; */
+  /* right: 90px; */
 }
 
 /* palette icon */
 .paletteIcon {
   cursor: pointer;
   color: var(--highlight-color);
-  position: absolute;
-  bottom: 3%;
-  left: 83px;
+  width: 40px;
+  height: 40px;
+  /* position: absolute; */
+  /* bottom: 3%; */
+  /* left: 83px; */
 }
 .paletteIcon:hover {
   color: var(--highlight-color);
