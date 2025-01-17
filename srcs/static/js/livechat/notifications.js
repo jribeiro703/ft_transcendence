@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     friendRequests.received_requests.forEach(async request => {
                         const notificationDiv = document.createElement('div');
-                        notificationDiv.className = 'notification-item d-flex align-items-center gap-2 p-2 border rounded mb-2';
+                        notificationDiv.className = 'notification-item d-flex align-items-center gap-2 p-2 border rounded';
                         notificationDiv.innerHTML = `
                             <span class="notification-icon">👥</span>
                             <div class="flex-grow-1">
