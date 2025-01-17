@@ -11,10 +11,10 @@ function createHomeContent() {
             <div id="defaultView"
                  class="d-flex flex-column justify-content-center align-items-center gap-4 h-100">
               <img class="img-fluid neon-main-image main-img" src="${PONG_CARD}" alt="Pong Game">
-              <button id="playsoloGameBtn" class="primaryBtn"><span>Single Player</span></button>
-              <button id="playmultiGameBtn" class="primaryBtn"><span>Multi Player</span></button>
-              <button id="btn-Tournament" class="primaryBtn"><span>Tournament</span></button>
-              <button id="btn-Leaderboard" class="primaryBtn"><span>LeaderBoard</span></button>
+              <button id="playsoloGameBtn" class="primaryBtn"><span class="homespan">Singleplayer</span></button>
+              <button id="playmultiGameBtn" class="primaryBtn"><span class="homespan">Multiplayer</span></button>
+              <button id="btn-Tournament" class="primaryBtn"><span class="homespan">Tournament</span></button>
+              <button id="btn-Leaderboard" class="primaryBtn"><span class="homespan">LeaderBoard</span></button>
             </div>
             `;
 }

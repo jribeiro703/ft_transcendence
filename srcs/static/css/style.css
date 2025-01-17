@@ -15,19 +15,19 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-size: 200% 200%;
-  animation: gradient 120s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  backdrop-filter: blur(12px);
+  /* background-size: 200% 200%; */
+  /* animation: gradient 120s cubic-bezier(0.4, 0, 0.2, 1) infinite; */
+  /* backdrop-filter: blur(12px); */
 }
 
-@keyframes gradient {
+/* @keyframes gradient {
   0% {
     background-position: 0% 50%;
   }
   100% {
     background-position: 200% 50%;
   }
-}
+} */
 
 p {
   color: var(--text-color);

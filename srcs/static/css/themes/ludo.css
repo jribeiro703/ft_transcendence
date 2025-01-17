@@ -1,21 +1,192 @@
-.neonBlue {
-	--background-color: radial-gradient(
-	circle at center,
-	#000B1E 0%,
-	#001F54 50%,
-	#000B30 100%
-	);
-	--text-color: #00FFFF;
-	--border-btn-color: #4CC9F0;
-	--highlight-color: #80FFFF;
-	--icon-color: #4CC9F0;
-	--box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.7);
+@import url('https://matiaslescano.com.ar/static/fonts/pixelicious.css');
 
-	--placeholder-color: var(--text-color);
-	--chat-btn-highlight: var(--highlight-color);
-	--chat-bg: rgba(0, 0, 0, 0.7);
-	--chat-msg: var(--text-color);
-	--chat-border: var(--border-btn-color);
-	--box-shadow-inset: inset 0px 0px 5px var(--highlight-color);
-  --selected-btn: #000000;
+/* .ludo.primary-btn {
+} */
+
+.ludo .primaryBtn{
+	font-family: Pixelicious, monospace;
+	font-size: 1.5em;
+	text-transform: uppercase;
+	color: transparent;
+	filter: blur(.3px);
+	animation: 2s ease-in-out infinite alternate pulse-text;
+  }
+
+.ludo .primaryBtn:hover {
+    color: var(--pink-transparent);
+    animation: 2s ease-in-out infinite alternate pulse-text-hover !important;
+    position: relative;
+}
+/* 
+.ludo .homespan {
+	display: block;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+} */
+
+.ludo .homespan:hover::before {
+    content: '$>';
+    color: var(--pink-transparent);
+    animation: 2s ease-in-out infinite alternate pulse-text-hover !important;
+}
+
+.ludo .homespan:hover::after {
+    content: '...';
+    color: var(--pink-transparent);
+    animation: 2s ease-in-out infinite alternate pulse-text-hover !important;
+}
+
+@keyframes pulse-text {
+  0% {
+    text-shadow: rgba(255, 255, 255, 0.9) -0.06em -0.06em, rgba(67, 144, 126, 0.9) 0 0;
+  }
+
+  33% {
+    text-shadow: rgba(204, 255, 251, 0.9) -0.15em -0.15em, rgba(153, 144, 202, 0.9) 0 0;
+  }
+
+  66% {
+    text-shadow: rgba(179, 255, 251, 0.9) -0.06em -0.06em, rgba(153, 144, 202, 0.9) 0 0;
+  }
+
+  100% {
+    text-shadow: rgba(179, 255, 251, 0.9) -0.15em -0.15em, rgba(202, 69, 215, 0.9) 0 0;
+  }
+}
+
+@keyframes pulse-text-hover {
+  0% {
+    text-shadow: rgba(255, 255, 255, 0.9) -0.06em -0.06em, rgba(192, 66, 66, 0.9) 0 0;
+  }
+
+  33% {
+    text-shadow: rgba(204, 255, 251, 0.9) -0.15em -0.15em, rgba(163, 97, 152, 0.9) 0 0;
+  }
+
+  66% {
+    text-shadow: rgba(179, 255, 251, 0.9) -0.06em -0.06em, rgba(139, 88, 146, 0.9) 0 0;
+  }
+
+  100% {
+    text-shadow: rgba(179, 255, 251, 0.9) -0.15em -0.15em, rgba(238, 133, 133, 0.9) 0 0;
+  }
+}
+
+@keyframes pulse-icon {
+    0% {
+        filter: drop-shadow(-0.06em -0.06em rgba(67, 144, 126, 0.9));
+    }
+    33% {
+        filter: drop-shadow(-0.15em -0.15em 0px rgba(153, 144, 202, 0.9));
+    }
+    66% {
+        filter: drop-shadow(-0.06em -0.06em 0px rgba(153, 144, 202, 0.9));
+    }
+    100% {
+        filter: drop-shadow(-0.15em -0.15em 0px rgba(202, 69, 215, 0.9));
+    }
+}
+
+.ludo .paletteIcon{
+	color: var(--yellow-transparent);
+	filter: blur(.3px);
+	animation: 2s ease-in-out infinite alternate pulse-icon;
+}
+
+.ludo .chat-icon-fill{
+	color: var(--yellow-transparent);
+	filter: blur(.3px);
+	animation: 2s ease-in-out infinite alternate pulse-icon;
+	fill: var(--yellow-transparent);
+}
+
+.ludo .chat-icon-dots{
+	color: var(--yellow-transparent);
+	filter: blur(.3px);
+	animation: 2s ease-in-out infinite alternate pulse-icon;
+	fill: var(--yellow-transparent);
+}
+
+.ludo {
+	/* font-family: Pixelicious, monospace; */
+  --yellow: #fad009;
+  --yellow-transparent: #fad20963;
+  --pink: #ed2ea5;
+  --pink-transparent: #ed2ea550;
+  --blue: #6172c5;
+  --orange: #fa8057;
+  --purple: #2c0d2a;
+  /* --my-gradient: radial-gradient(
+    to right,
+    #0a140b 0%,
+    #10200f 15%,
+    #142a15 30%,
+    #1d351a 50%,
+    #142a15 70%,
+    #10200f 85%,
+    #0a140b 100%
+  ); */
+  /* background: rgb(238,174,220); */
+  /* --my-gradient: radial-gradient(circle, rgba(238,174,220,1) 0%, rgba(148,233,163,1) 100%);  */
+  /* background: rgb(195,34,166); */
+  /* --blue: linear-gradient(0deg, rgba(195,34,166,1) 0%, rgba(106,45,253,1) 40%);  */
+	/* --blue: linear-gradient(0deg, rgba(195,34,166,1) 30%, rgb(202, 186, 39) 50%, rgba(106,45,253,1) 70%); */
+	--bg-gradient: radial-gradient(circle, rgba(250,208,9,1) 1%, rgba(237,46,165,1) 63%, rgba(44,13,42,1) 100%);
+  /* --background-color: rgb(238,174,220); */
+  /* --background-color: radial-gradient(circle, rgba(238,174,220,1) 0%, rgba(148,233,163,1) 100%); */
+  /* --background-color: radial-gradient(circle, rgba(238,174,220,1) 0%, rgba(148,233,163,1) 100%); */
+  /* --background-color-body: radial-gradient(circle, rgba(238,174,220,1) 0%, rgba(148,233,163,1) 100%); */
+  --background-color: var(--bg-gradient);
+  /* --background-color-body: var(--my-gradient); */
+  --background-color-body: var(--pink);
+  --text-color: var(--yellow);
+  --highlight-color: var(--yellow);
+  --icon-color: var(--blue);
+  --background-rooms: var(--my-black);
+  --text-color-rooms: var(--my-white);
+
+  /* BTN */
+  --box-shadow-black: 0px 0px 10px var(--my-black);
+  --border-color: var(--my-black);
+  --text-color-btn: var(--my-black);
+  --text-color-btn-highlight: var(--my-white);
+  --selected-btn: var(--my-black);
+  --border-btn-color: var(--my-black);
+  --border-btn-color-when-selected: var(--my-blue);
+  --chat-btn-highlight: var(--my-blue);
+  --background-color-when-selected: var(--my-black);
+  --text-color-selected: var(--my-blue);
+
+  /* chat */
+  --chat-message-input: var(--my-gradient);
+  --chat-msg: var(--my-dark-gray);
+  --chat-border: var(--my-white-gray);
+  --chat-bg: var(--my-gradient);
+  --placeholder-color: var(--text-color);
+
+  /* box */
+  --box-shadow: 0px 0px 7px var(--my-black);
+  --box-shadow-images: 0px 0px 7px var(--my-black);
+  --box-shadow-inset: inset 0px 0px 3px var(--my-black);
+  --box-shadow-highlight: 0px 0px 3px var(--my-black);
+  --box-shadow-highlight-inset: inset 0px 0px 1px var(--my-black);
+
+  /* chat neon */
+  --box-shadow-neonChat1: 0 0 0px var(--my-black), 0 0 2px var(--my-black),
+    0 0 4px var(--my-black), 0 0 6px var(--my-black);
+  --box-shadow-neonChat2: 0 0 8px var(--my-black);
+  --box-shadow-neonChat3: 0 0 14px var(--my-black);
+
+  /* mainContent neons */
+  --box-shadow-mainContent1: 0 0 0px var(--my-black), 0 0 2px var(--my-black),
+    0 0 4px var(--my-black), 0 0 6px var(--my-black);
+  --box-shadow-mainContent2: 0 0 8px var(--my-black);
+  --box-shadow-mainContent3: 0 0 14px var(--my-black);
+  --neon-main-image: 0 0 0px var(--my-gray), 0 0 1px var(--my-gray),
+    0 0 2px var(--my-gray), 0 0 3px var(--my-gray), 0 0 4px var(--my-gray),
+    0 0 7px var(--my-gray), 0 0 8px var(--my-gray), inset 0 0 0px var(--my-gray),
+    inset 0 0 1px var(--my-gray), inset 0 0 2px var(--my-gray),
+    inset 0 0 3px var(--my-gray), inset 0 0 4px var(--my-gray),
+    inset 0 0 7px var(--my-gray), inset 0 0 8px var(--my-gray);
 }
