@@ -1,8 +1,15 @@
-
-
 #livechat {
 	max-height: 90%;
 	border-radius: 7px;
+	background: var(--background-color-body);
+}
+
+/* #chat-text-background { */
+/*   background: var(--background-color-body); */
+/* } */
+
+.text-muted {
+	color: var(--text-color) !important;
 }
 
 .livechat-height {
@@ -11,7 +18,7 @@
 }
 
 #chat-message-input {
-	background-color: var(--background-color);
+	background-color: var(--chat-message-input);
 	color: var(--text-color);
 	border-color: var(--chat-border) !important;
 }
@@ -25,7 +32,7 @@
 	outline: none;
 	box-shadow: none;
 	border-color: var(--chat-border) !important;
-	background-color: var(--background-color);
+	background-color: var(--background-color-body);
 	z-index: 1002;
 }
 
@@ -41,11 +48,10 @@ emoji-menu {
 @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
 
 .noto-color-emoji-regular {
-	font-family: "Noto Color Emoji", sans-serif;
+	font-family: 'Noto Color Emoji', sans-serif;
 	font-weight: 400;
 	font-style: normal;
 }
-
 
 emoji-picker {
 	--emoji-padding: 0.25rem;
@@ -64,7 +70,7 @@ emoji-picker {
 	--button-active-background: var(--secondary-color);
 	--button-hover-background: var(--highlight-color);
 	--z-index: 9999;
-	--emoji-font-family: "Noto Color Emoji", sans-serif !important;
+	--emoji-font-family: 'Noto Color Emoji', sans-serif !important;
 }
 
 .emoji-picker-container {
@@ -79,11 +85,8 @@ emoji-picker {
 .chat-btn {
 	z-index: 1001;
 	border-color: var(--chat-border) !important;
-	box-shadow:
-		inset 0 0 0px transparent,
-		inset 0 0 1px transparent,
-		inset 0 0 2px transparent,
-		inset 0 0 3px transparent,
+	box-shadow: inset 0 0 0px transparent, inset 0 0 1px transparent,
+		inset 0 0 2px transparent, inset 0 0 3px transparent,
 		inset 0 0 4px transparent;
 	transition: box-shadow 0.3s ease-in-out;
 	color: var(--text-color);
@@ -91,8 +94,7 @@ emoji-picker {
 }
 
 .chat-btn:hover {
-	box-shadow:
-		inset 0 0 0px var(--highlight-color),
+	box-shadow: inset 0 0 0px var(--highlight-color),
 		inset 0 0 1px var(--highlight-color),
 		inset 0 0 2px var(--highlight-color),
 		inset 0 0 3px var(--highlight-color),
@@ -102,8 +104,7 @@ emoji-picker {
 }
 
 .chat-btn:focus {
-	box-shadow:
-		inset 0 0 0px var(--highlight-color),
+	box-shadow: inset 0 0 0px var(--highlight-color),
 		inset 0 0 1px var(--highlight-color),
 		inset 0 0 2px var(--highlight-color),
 		inset 0 0 3px var(--highlight-color),
@@ -116,31 +117,37 @@ emoji-picker {
 	display: none !important;
 }
 
-.friends-list, .online-list, .notification-list {
-  width: 100%;
+.friends-list,
+.online-list,
+.notification-list {
+	width: 100%;
 }
 
-.friend-item, .online-item, .notification-item {
-  cursor: pointer;
-  transition: background-color 0.2s;
+.friend-item,
+.online-item,
+.notification-item {
+	cursor: pointer;
+	transition: background-color 0.2s;
 }
 
-.friend-item:hover, .online-item:hover, .notification-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.friend-item:hover,
+.online-item:hover,
+.notification-item:hover {
+	background-color: rgba(255, 255, 255, 0.1);
 }
 
 .user-tooltip {
-  max-width: 300px;
+	max-width: 300px;
 }
 
 .tooltip-inner {
-  max-width: 300px;
-  background-color: var(--chat-bg);
-  border: 1px solid var(--highlight-color);
+	max-width: 300px;
+	background-color: var(--chat-bg);
+	border: 1px solid var(--highlight-color);
 }
 
 .tooltip.bs-tooltip-end .tooltip-arrow::before {
-  border-right-color: var(--highlight-color);
+	border-right-color: var(--highlight-color);
 }
 
 .channel-container::-webkit-scrollbar {
