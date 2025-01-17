@@ -29,7 +29,7 @@ import { showPongRemote } from "./pong/gameViewMulti.js";
 import { clearAllpongStates } from "./pong/reset.js";
 import { showBrickoutRemote } from "./pong/gameViewMulti.js";
 import { showGameRoomB } from "./pong/gameView.js";
-import { changeTheme } from "../livechat/livechat.js";
+import { changeTheme } from "../color_palette.js";
 
 const pongGamePages = {
   gameSelectionSolo: showGameSelectionView,

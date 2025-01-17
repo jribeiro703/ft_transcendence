@@ -69,7 +69,7 @@ export async function handleTooltipHover(tooltip, clientId) {
 		}
 
 		const userId = nicknameResponse.data.id;
-		const content = await getUserTooltipContent(userId);
+		const content = await getUserTooltipContent(clientId);
 		tooltip.setContent({ '.tooltip-inner': content });
 	} catch (error) {
 		console.error('Error fetching user data:', error);

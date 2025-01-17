@@ -10,11 +10,8 @@ import "./tooltip.js";
 import "./userItem.js";
 import "./utils.js";
 import { chatIconDots, chatIconFill, toggleChat } from "./utils.js";
-import gameVar from "../game/pong/var.js";
 
-///////////////////////////////////////////////////////////////////////////////
-//////////////////////////////// David add ////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+// ajoute les neons dans le focus
 document.addEventListener("DOMContentLoaded", function () {
   const grandparent = document.getElementById("livechat");
   const focusableElements = [
@@ -37,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// test qui disparait dans le focus de lindex ou on ecrit
+// text qui disparait dans le focus de lindex ou on ecrit
 document.addEventListener("DOMContentLoaded", function () {
   const messageInput = document.querySelector("#chat-message-input");
 
