@@ -1,19 +1,13 @@
 @import url('https://matiaslescano.com.ar/static/fonts/pixelicious.css');
 
-/* .ludo.primary-btn {
-} */
-
-
-
 .ludo .primaryBtn {
 	font-family: Pixelicious, monospace;
-	font-size: 1.5em;
+	/* font-size: 1.5em; */
 	text-transform: uppercase;
 	color: transparent;
 	filter: blur(.3px);
 	animation: 2s ease-in-out infinite alternate pulse-text;
 	padding: 0;
-	/* display: none; */
 }
 
 .ludo .primaryBtn:hover {
@@ -27,6 +21,10 @@
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
+	padding: 10px;
+}
+
+.ludo .profilespan {
 	padding: 10px;
 }
 
@@ -148,8 +146,8 @@
 	--text-color: var(--yellow);
 	--highlight-color: var(--yellow);
 	--icon-color: var(--blue);
-	--background-rooms: var(--my-black);
-	--text-color-rooms: var(--my-white);
+	/* --background-rooms: red;
+	--text-color-rooms: white; */
 
 	/* BTN */
 	--box-shadow-black: 0px 0px 10px var(--my-black);
@@ -194,4 +192,64 @@
 		inset 0 0 1px var(--my-gray), inset 0 0 2px var(--my-gray),
 		inset 0 0 3px var(--my-gray), inset 0 0 4px var(--my-gray),
 		inset 0 0 7px var(--my-gray), inset 0 0 8px var(--my-gray);
+}
+
+.ludo .emoji-picker-container {
+	--background-color: var(--pink-transparent);
+}
+
+.ludo .tooltip {
+	backdrop-filter: blur(20px);
+}
+
+.ludo .tooltip-inner {
+	color: white;
+}
+
+.ludo #livechat {
+	backdrop-filter: blur(5px);
+}
+
+.ludo #chat-message-input {
+	--background-color-body: var(--pink-transparent);
+	--text-color: white;
+	border-color: var(--yellow) !important;
+}
+
+.ludo #chat-message-input:focus {
+	border-color: var(--yellow) !important;
+}
+
+.ludo #settingView {
+	/* --background-color-body: var(--yellow-transparent); */
+	--background-color: var(--yellow-transparent);
+	--text-color: white;
+}
+
+.ludo .game-row {
+	--background-color: transparent;
+	--text-color: white;
+}
+
+.ludo .game-row-online {
+	--background-color: transparent;
+	--text-color: white;
+}
+
+.ludo #roomView {
+	/* --background-color-body: var(--yellow-transparent) !important;
+	--background-color: var(--yellow-transparent) !important; */
+	background: var(--yellow-transparent);
+	/* background-color: red; */
+	--text-color: white;
+}
+
+.ludo .profile-container {
+	background: var(--yellow-transparent);
+	--text-color: white;
+}
+
+.ludo .settings-container {
+	background: var(--yellow-transparent);
+	--text-color: white;
 }

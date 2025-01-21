@@ -8,9 +8,9 @@ function createUserContent() {
 		<div id="defaultView"
 			class="d-flex flex-column justify-content-center align-items-center gap-4 h-100">
 			<img class="img-fluid neon-white main-img" src="${PONG_CARD}" alt="Pong Game">
-			<button id= btn-Profile class="primaryBtn"><span>Profile</span></button>
-			<button id= btn-Settings class="primaryBtn"><span>Settings</span></button>
-			<button id= btn-Logout class="primaryBtn"><span>Logout</span></button>
+			<button id= btn-Profile class="primaryBtn profilespan"><span>Profile</span></button>
+			<button id= btn-Settings class="primaryBtn profilespan"><span>Settings</span></button>
+			<button id= btn-Logout class="primaryBtn profilespan"><span>Logout</span></button>
 		</div>
 	`;
 }
