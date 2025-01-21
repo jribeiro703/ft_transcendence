@@ -98,6 +98,8 @@ export function reloadChatSocket() {
 		chatSocket.close();
 	}
 
+	document.querySelector("#chat-log").innerHTML = '';
+
 	chatSocket = new WebSocket(
 		"wss://" + window.location.host + "/ws/livechat/",
 	);
