@@ -34,7 +34,7 @@ const otherPages = {
 	leaderboard: renderLeaderBoardPage,
 }
 
-async function renderPage(page, updateHistory = true, params = '') {
+async function renderPage(page, updateHistory = true, params = '', logout = false) {
 	
 	if (gameVar.gameSocket)
 	{
@@ -43,8 +43,11 @@ async function renderPage(page, updateHistory = true, params = '') {
 	}
 
 	let renderFunction;
-	const authenticated = await isAuthenticated();
-	await updateUserAvatar(authenticated);
+	let authenticated;
+	if (!logout) {
+		authenticated = await isAuthenticated();
+		await updateUserAvatar(authenticated);
+	}
 	
 // console.log(authenticated);
 

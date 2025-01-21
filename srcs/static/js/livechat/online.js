@@ -2,6 +2,7 @@ import { fetchAuthData } from '../user/fetchData.js';
 import { createUserListItem } from './userItem.js'
 import { showToast } from '../user/tools.js';
 import { renderPage } from '../user/historyManager.js';
+import { isAuth } from './socket.js';
 
 document.addEventListener('DOMContentLoaded', function () {
 	const onlineButton = document.getElementById('onlineButton');
@@ -32,9 +33,11 @@ async function showOnlineList(chatLog) {
 }
 
 async function loadOnline() {
-	const responseObject = await fetchAuthData('/user/online/');
-
-	if (responseObject.status === 401) {
+	let responseObject;
+	if (isAuth) {
+		responseObject = await fetchAuthData('/user/online/');
+	}
+	if (!isAuth || responseObject.status === 401) {
 		showToast("You must be logged in to see online users.", "warning");
 		throw new Error('Unauthorized');
 	}
