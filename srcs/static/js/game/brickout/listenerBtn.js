@@ -2,10 +2,8 @@ import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 import { handleNextLevelB, restartLevelB } from "./level.js";
 import { renderPageGame } from "../HistoryManager.js";
-import { resetMatchB, resetMatchB as resetMatchFirst } from "./reset.js";
+import { resetMatchB as resetMatchFirst } from "./reset.js";
 import { resetMatchB as resetMatchSecond } from "./secondBrickout/reset.js";
-import { resetLiveMatch } from "../pong/reset.js";
-import { clearBtnB } from "./manage.js";
 
 export function listenNextLevelBtn()
 {
@@ -40,17 +38,6 @@ export function listenFinishBtn()
 {
 	const quitBtn = document.getElementById("quitBtn");
 	const restartLevelBtn = document.getElementById("restartLevelBtn")
-	const returnLobbyBtn = document.getElementById("returnLobbyBtn");
-	if (returnLobbyBtn)
-	{
-		returnLobbyBtn.addEventListener('click', () =>
-		{
-			resetLiveMatch();
-			resetMatchB();
-			clearBtnB();
-			renderPageGame("brickoutLobby", true);
-		});
-	}
 	if (restartLevelBtn)
 	{
 		restartLevelBtn.addEventListener('click', () =>
