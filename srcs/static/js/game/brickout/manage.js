@@ -15,7 +15,6 @@ import { resetBallB } from "./ball.js";
 import { saveScoreB } from "./score.js";
 import { renderPageGame } from "../HistoryManager.js";
 import { sendScoreInfoB } from "../pong/network.js";
-import { displayFinishLive } from "./display.js";
 
 export function manageCollisionB()
 {
@@ -83,7 +82,7 @@ export function loseLives()
 			brickVar.finishLevel = true;
 			saveScoreB();
 			chechOpponent();
-				// addBtnB();
+			addBtnB();
 		}
 		else
 			resetBallB();
@@ -137,7 +136,7 @@ export function addBtnB()
 				displayFinish();
 		}
 		else
-			displayFinishLive();
+			displayFinish();
 	}
 	else
 		displayLocalRematch();

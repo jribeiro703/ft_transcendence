@@ -16,29 +16,18 @@ class Game(models.Model):
 	]
 	status = models.CharField(max_length=20, choices=GAME_STATUS_CHOICES, default='NOT_STARTED')
 
-	# DIFFICULTY_CHOICES = [
-		# ('EASY', 'Easy'),
-		# ('MEDIUM', 'Medium'),
-		# ('HARD', 'Hard'),
-	# ]
 	DIFFICULTY_CHOICES = [
-		('easy', 'Easy'),
-		('medium', 'Medium'),
-		('hard', 'Hard'),
+		('EASY', 'Easy'),
+		('MEDIUM', 'Medium'),
+		('HARD', 'Hard'),
 	]
 	difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES, default='EASY')
 
-	# LEVEL_CHOICES = [
-		# ('TABLETENNIS', 'Table Tennis'),
-		# ('FOOTBALL', 'Football'),
-		# ('TENNIS', 'Tennis'),
-		# ('CLASSIC', 'Classic'),
-	# ]
 	LEVEL_CHOICES = [
-		('tableTennis', 'Table Tennis'),
-		('football', 'Football'),
-		('tennis', 'Tennis'),
-		('classicPong', 'Classic'),
+		('TABLETENNIS', 'Table Tennis'),
+		('FOOTBALL', 'Football'),
+		('TENNIS', 'Tennis'),
+		('CLASSIC', 'Classic'),
 	]
 	level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='CLASSIC')
 

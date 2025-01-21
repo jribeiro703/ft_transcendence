@@ -20,4 +20,3 @@ class GameCreateSerializer(serializers.ModelSerializer):
 		game.save()
 		print("game winner:", game.winner)
 		return game
-

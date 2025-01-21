@@ -165,7 +165,6 @@ export function compareScore()
 	{
 		console.error("Error on font load", error);
 	});	
-	addBtnB();
 }
 
 function displayEqualScore()
