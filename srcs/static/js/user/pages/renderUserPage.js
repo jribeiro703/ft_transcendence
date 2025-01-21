@@ -38,13 +38,17 @@ export function renderUserPage() {
       null,
       false,
     );
-
     if (responseObject.status == 200) {
       console.log(responseObject);
       showToast(responseObject.data.message, "success");
       // sessionStorage.clear();
       localStorage.clear();
-      renderPage("home");
+      renderPage("home", true, '', true);
+      document.dispatchEvent(new CustomEvent('Logout', {
+        detail: {
+            reload_chat: true
+        }
+      }));
     } else {
       console.log(responseObject);
       showErrorMessages(responseObject);

@@ -2,6 +2,8 @@ import { fetchAuthData } from '../user/fetchData.js';
 import { showToast } from '../user/tools.js';
 import { chatSocket } from './socket.js';
 import { gameChatSocket } from './game.js';
+import { renderPage } from '../user/historyManager.js';
+import { isAuth } from './socket.js';
 
 export let messageInCooldown = false;
 export const COOLDOWN_MS = 200;
@@ -49,16 +51,17 @@ export async function sendChatMessage(socket, inputId, logId) {
 	if (message === "" || messageInCooldown) {
 		return;
 	}
-
+	let response;
 	try {
 		messageInCooldown = true;
 
-		const response = await fetchAuthData('/user/check-auth/');
-
-		if (response.status === 401) {
-			console.error('User not authenticated');
+		if (isAuth) {
+			response = await fetchAuthData('/user/check-auth/');
+		}
+		if (!isAuth || response.status === 401) {
+			console.log('User not authenticated');
 			showToast("You must be logged in to use this feature.", "warning");
-			window.location.href = '/#login';
+			renderPage("auth", true);
 			return;
 		}
 
@@ -70,6 +73,10 @@ export async function sendChatMessage(socket, inputId, logId) {
 			}
 		}
 
+		if (message.length > 512) {
+			showToast("Message is too long. It has been trimmed to 512 characters", "warning");
+			message = message.substring(0, 512);
+		}
 		socket.send(
 			JSON.stringify({
 				message: message,

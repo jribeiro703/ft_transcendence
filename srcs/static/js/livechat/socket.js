@@ -3,6 +3,10 @@ import { formatTimestamp, getColorForClientId, isClientBlocked } from "./utils.j
 import { initializeTooltip } from "./tooltip.js";
 import { showToast } from '../user/tools.js';
 
+export let isAuth = false;
+export let logoutLivechat = false;
+export const logoutNotifs = { value: false };
+
 export let chatSocket = new WebSocket(
 	"wss://" + window.location.host + "/ws/livechat/",
 );
@@ -60,10 +64,14 @@ const socketHandlers = {
 
 	onOpen: async function () {
 		try {
+			if (logoutLivechat) {
+				logoutLivechat = false;
+				return;
+			}
 			const response = await fetchAuthData('/user/check-auth/');
 
 			if (response.status === 401) {
-				console.error('Authentication required');
+				console.log('Authentication required');
 				return;
 			}
 
@@ -73,7 +81,8 @@ const socketHandlers = {
 				token: token
 			}));
 
-			// console.log('Chat socket connected and authenticated');
+			console.log('Chat socket connected and authenticated');
+			isAuth = true;
 		} catch (error) {
 			console.error('Error authenticating chat socket:', error);
 			showToast("Error connecting to chat", "error");
@@ -99,6 +108,7 @@ export function reloadChatSocket() {
 	}
 
 	document.querySelector("#chat-log").innerHTML = '';
+	messagesArray = [];
 
 	chatSocket = new WebSocket(
 		"wss://" + window.location.host + "/ws/livechat/",
@@ -109,6 +119,15 @@ export function reloadChatSocket() {
 
 document.addEventListener('otpVerificationSuccess', function (e) {
 	if (e.detail.reload_chat) {
+		reloadChatSocket();
+	}
+});
+
+document.addEventListener('Logout', function (e) {
+	if (e.detail.reload_chat) {
+		isAuth = false;
+		logoutLivechat = true;
+		logoutNotifs.value = true;
 		reloadChatSocket();
 	}
 });

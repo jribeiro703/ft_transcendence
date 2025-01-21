@@ -2,6 +2,7 @@ import { fetchAuthData } from '../user/fetchData.js';
 import { createUserListItem } from './userItem.js';
 import { showToast } from '../user/tools.js';
 import { renderPage } from '../user/historyManager.js';
+import { isAuth } from './socket.js';
 
 document.addEventListener('DOMContentLoaded', function () {
 	const friendsButton = document.getElementById('friendsButton');
@@ -32,9 +33,11 @@ async function showFriendList(chatLog) {
 }
 
 async function loadFriends() {
-	const responseObject = await fetchAuthData('/user/friends/');
-
-	if (responseObject.status === 401) {
+	let responseObject
+	if (isAuth) {
+		responseObject = await fetchAuthData('/user/friends/');
+	}
+	if (!isAuth || responseObject.status === 401) {
 		showToast("You must be logged in to see your friends", "warning");
 		throw new Error('Unauthorized');
 	}
