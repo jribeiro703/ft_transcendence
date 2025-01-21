@@ -1,4 +1,5 @@
 import { fetchAuthData } from '../user/fetchData.js';
+import { isAuth } from './socket.js';
 
 export const clientIdColors = {};
 
@@ -67,6 +68,9 @@ export function toggleChat() {
 }
 
 export async function isClientBlocked(clientId) {
+	if (!isAuth) {
+		return false;
+	}
 	try {
 		const response = await fetchAuthData(`/user/block/check/nickname/${clientId}/`);
 		if (response.status === 200) {

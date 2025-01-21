@@ -9,6 +9,7 @@ from urllib.parse import parse_qs
 from django.apps import apps
 from asgiref.sync import sync_to_async
 from django.utils import timezone
+from django.utils.html import escape
 import logging
 
 logger = logging.getLogger('websocket')
@@ -119,20 +120,28 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Handle regular messages
         elif 'message' in text_data_json:
             message = text_data_json['message']
+            if len(message) > 512:
+                await self.send(text_data=json.dumps({
+                    'error': 'Message is too long.'
+                }))
+                return
+
             if not hasattr(self, 'nickname'):
                 await self.send(text_data=json.dumps({
                     'error': 'Not authenticated'
                 }))
                 return
                 
+            sanitized_message = escape(message)
+
             timestamp = timezone.now().isoformat()
-            await self.save_message(self.nickname, message, timestamp)
+            await self.save_message(self.nickname, sanitized_message, timestamp)
             
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'chat_message',
-                    'message': message,
+                    'message': sanitized_message,
                     'client_id': self.nickname,
                     'timestamp': timestamp
                 }
@@ -213,14 +222,22 @@ class GameChatConsumer(AsyncWebsocketConsumer):
             self.nickname = user.username
             logger.info(f"Valid token for user {self.nickname} in room {self.room_name}")
             
+            if len(message) > 512:
+                await self.send(text_data=json.dumps({
+                    'error': 'Message is too long.'
+                }))
+                return
+
+            sanitized_message = escape(message)
+
             timestamp = timezone.now().isoformat()
-            await self.save_message(self.nickname, message, timestamp)
+            await self.save_message(self.nickname, sanitized_message, timestamp)
             
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'chat_message',
-                    'message': message,
+                    'message': sanitized_message,
                     'client_id': self.nickname,
                     'timestamp': timestamp,
                     'room': self.room_name

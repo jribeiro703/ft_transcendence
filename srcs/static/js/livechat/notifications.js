@@ -1,37 +1,43 @@
 import { fetchAuthData } from '../user/fetchData.js';
 import { joinPrivateRoom } from '../game/pong/room.js';
+import { showToast } from '../user/tools.js';
+import { renderPage } from '../user/historyManager.js';
+import { isAuth, logoutNotifs } from './socket.js';
 
 // Update getUserId function to handle response structure
 export async function getUserId() {
-    try {
-        const response = await fetchAuthData('/user/private/', 'GET');
-        return response.data.id;
-    } catch (error) {
-        console.error('Error getting user ID:', error);
-        throw error;
-    }
+	try {
+		const response = await fetchAuthData('/user/private/', 'GET');
+		return response.data.id;
+	} catch (error) {
+		console.error('Error getting user ID:', error);
+		throw error;
+	}
 }
 
 // Function to check for pending notifications
 async function checkPendingNotifications() {
-    try {
-        const userId = await getUserId();
-        const friendResponse = await fetchAuthData(`/user/friends/${userId}/`, 'GET');
-        const gameResponse = await fetchAuthData(`/user/game/${userId}/`, 'GET');
-        const friendRequests = friendResponse.data;
-        const gameInvitations = gameResponse.data;
+	if (isAuth && !logoutNotifs.value) {
+		logoutNotifs.value = false;
+		try {
+			const userId = await getUserId();
+			const friendResponse = await fetchAuthData(`/user/friends/${userId}/`, 'GET');
+			const gameResponse = await fetchAuthData(`/user/game/${userId}/`, 'GET');
+			const friendRequests = friendResponse.data;
+			const gameInvitations = gameResponse.data;
 
-        const notificationButton = document.getElementById('notificationButton');
+			const notificationButton = document.getElementById('notificationButton');
 
-        if (friendRequests.received_requests?.length > 0 || friendRequests.sent_requests?.length > 0 ||
-            gameInvitations.received_requests?.length > 0 || gameInvitations.sent_requests?.length > 0) {
-            notificationButton.classList.add('has-notifications');
-        } else {
-            notificationButton.classList.remove('has-notifications');
-        }
-    } catch (error) {
-        console.error('Error checking pending notifications:', error);
-    }
+			if (friendRequests.received_requests?.length > 0 || friendRequests.sent_requests?.length > 0 ||
+				gameInvitations.received_requests?.length > 0 || gameInvitations.sent_requests?.length > 0) {
+				notificationButton.classList.add('has-notifications');
+			} else {
+				notificationButton.classList.remove('has-notifications');
+			}
+		} catch (error) {
+			console.error('Error checking pending notifications:', error);
+		}
+	}
 }
 
 // Periodically check for pending notifications
@@ -54,14 +60,22 @@ document.addEventListener('DOMContentLoaded', function () {
         chatLog.appendChild(loadingDiv);
 
         try {
-            const userId = await getUserId();
-            const friendResponse = await fetchAuthData(`/user/friends/${userId}/`, 'GET');
-            const gameResponse = await fetchAuthData(`/user/game/${userId}/`, 'GET');
-            const friendRequests = friendResponse.data;
-            const gameInvitations = gameResponse.data;
-
             const notificationListContainer = document.createElement('div');
             notificationListContainer.className = 'notification-list';
+
+			let friendResponse, gameResponse;
+			if (isAuth) {
+				const userId = await getUserId();
+				friendResponse = await fetchAuthData(`/user/friends/${userId}/`, 'GET');
+				gameResponse = await fetchAuthData(`/user/game/${userId}/`, 'GET');
+			} else {
+				chatLog.innerHTML = `<div class="text-danger">You must be logged in to see your notifications.</div>`;
+				showToast("You must be logged in to see your notifications.", "warning");
+				renderPage("auth", true);
+				return;
+			}
+            const friendRequests = friendResponse.data;
+            const gameInvitations = gameResponse.data;
 
             if ((!friendRequests || (!friendRequests.received_requests?.length && !friendRequests.sent_requests?.length)) &&
                 (!gameInvitations || (!gameInvitations.received_requests?.length && !gameInvitations.sent_requests?.length))) {

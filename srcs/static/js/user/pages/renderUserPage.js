@@ -5,14 +5,14 @@ import { renderPage } from "../historyManager.js";
 function createUserContent() {
   const box = document.getElementById("mainContent");
   box.innerHTML = `
-		<div id="defaultView"
-			class="d-flex flex-column justify-content-center align-items-center gap-4 h-100">
-			<img class="img-fluid neon-white main-img" src="${PONG_CARD}" alt="Pong Game">
-			<button id= btn-Profile class="primaryBtn"><span>Profile</span></button>
-			<button id= btn-Settings class="primaryBtn"><span>Settings</span></button>
-			<button id= btn-Logout class="primaryBtn"><span>Logout</span></button>
-		</div>
-	`;
+        <div id="defaultView"
+            class="d-flex flex-column justify-content-center align-items-center gap-4 h-100">
+            <img class="img-fluid neon-white main-img" src="${PONG_CARD}" alt="Pong Game">
+            <button id= btn-Profile class="primaryBtn"><span>Profile</span></button>
+            <button id= btn-Settings class="primaryBtn"><span>Settings</span></button>
+            <button id= btn-Logout class="primaryBtn"><span>Logout</span></button>
+        </div>
+    `;
 }
 
 export function renderUserPage() {
@@ -38,13 +38,17 @@ export function renderUserPage() {
       null,
       false,
     );
-
     if (responseObject.status == 200) {
       console.log(responseObject);
       showToast(responseObject.data.message, "success");
       // sessionStorage.clear();
       localStorage.clear();
-      renderPage("home");
+      renderPage("home", true, '', true);
+      document.dispatchEvent(new CustomEvent('Logout', {
+        detail: {
+            reload_chat: true
+        }
+      }));
     } else {
       console.log(responseObject);
       showErrorMessages(responseObject);

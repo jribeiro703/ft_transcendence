@@ -60,7 +60,7 @@ export function initializeGameChatSocket(roomNumber) {
 	};
 
 	gameChatSocket.onclose = function () {
-		console.error("Game chat socket closed unexpectedly");
+		console.log("Game chat socket closed.");
 	};
 
 	return gameChatSocket;
