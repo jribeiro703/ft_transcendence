@@ -150,6 +150,7 @@ const themes = [
   "boty",
   "neonBlue",
   "transcended",
+  "ludo",
 ];
 let currentThemeIndex = 0;
 
