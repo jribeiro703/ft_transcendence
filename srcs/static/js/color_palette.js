@@ -4,9 +4,10 @@ import gameVar from "./game/pong/var.js";
 const themes = [
   "whiteTheme",
   "darkTheme",
+  "yabing",
+  "boty",
   "neonBlue",
-  "Transcended",
-  "darkYellow",
+  "transcended",
 ];
 let currentThemeIndex = 0;
 
