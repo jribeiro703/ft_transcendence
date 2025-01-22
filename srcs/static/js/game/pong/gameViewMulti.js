@@ -1,12 +1,12 @@
 import gameVar from "./var.js";
 import brickVar from "../brickout/var.js";
-import { checkSettingLive } from "./setting.js";
 import { createNewRoom, createPrivateRoom, roomNetwork } from "./room.js";
 import { displayGameBrickView, displayGameView, displayLobbyView } from "./display.js";
 import { getElementLobby } from "./getElement.js";
 import { initializeCanvasBrick, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
 import { initListenerB } from "../brickout/init.js";
 import { initControl } from "./control.js";
+import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 
 
 export function showLobbyView()
@@ -39,7 +39,8 @@ export function showLobbyView()
 
 export async function showPongRemote(room = null)
 {
-	checkSettingLive();
+	updateDifficultySelection('medium', true);
+	updateLevelSelection('classicPong', true);
 	displayGameView();
 	await initializeCanvasPong();
 	initControl();

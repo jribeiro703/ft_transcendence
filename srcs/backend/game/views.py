@@ -8,6 +8,7 @@ from rest_framework.generics import CreateAPIView
 from .serializers import GameCreateSerializer
 from .models import Game
 from user.permissions import IsOwner
+from rest_framework import status, serializers
 
 @api_view(['GET'])
 def game_index(request):
