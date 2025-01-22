@@ -7,6 +7,7 @@ import { getUserInfosRemote } from "../getUser.js";
 import { initGame, initListenerB } from "../brickout/init.js";
 import { kickOut } from "./draw.js";
 import { clearPongVar } from "./reset.js";
+import { checkScore } from "./score.js";
 
 export async function createPrivateRoom()
 {
@@ -179,7 +180,6 @@ export function checkPlayerIdx()
 {
     if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
     {
-        // console.log("player 1 left : ", gameVar.clientLeft);
         getUserInfosRemote();
         if (gameVar.tournament)
             waitingPlayerTournament();
@@ -231,7 +231,6 @@ export async function joinRoom(roomName)
             }
             else if (data.type == "client_left")
             {
-                // console.log("received client Left");
                 gameVar.clientLeft = true;
                 if (gameSocket && gameSocket.readyState === WebSocket.OPEN)
                     {
@@ -267,7 +266,6 @@ export async function joinRoom(roomName)
             }
             else if (data.type == "game_data")
             {
-                // console.log("received client left : ", data.game_data.clientLeft);
                 gameVar.gameStart = data.game_data.gameStart;
                 gameVar.currentServer = data.game_data.currentServer;
                 gameVar.startTime = data.game_data.startTime;
@@ -292,6 +290,7 @@ export async function joinRoom(roomName)
             {
                 gameVar.playerScore = data.score_info_data.score1;
                 gameVar.aiScore = data.score_info_data.score2;
+                checkScore();
                 if (data.score_info_data.idx === 1)
                     gameVar.userName = data.score_info_data.name;
                 if (data.score_info_data.idx === 2)

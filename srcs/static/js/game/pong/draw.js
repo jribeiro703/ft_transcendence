@@ -9,7 +9,7 @@ import { drawTennisCourt, drawLines} from "./tennis.js";
 import { manageMoveLive, manageMove } from './movement.js';
 import { drawBall } from "./ball.js";
 import { checkPaddles } from "./paddle.js";
-import { drawScoreBoard, drawScoreBoardLive } from "./score.js";
+import { checkScore, drawScoreBoard, drawScoreBoardLive } from "./score.js";
 import { updateCanvasColor } from "./update.js";
 import { delRooms } from "./room.js";
 import { listenBtn } from "./reset.js";
@@ -31,7 +31,10 @@ export function initDraw()
 		drawBall();
 		checkPaddles();
 		if (gameVar.liveMatch)
+		{
 			drawScoreBoardLive();
+			// checkScore();
+		}
 		else
 		{
 			if (!gameVar.finishGame)
