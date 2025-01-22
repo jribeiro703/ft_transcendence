@@ -170,7 +170,9 @@ export function resetBall(winner)
 		{
 			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'player2' : 'player';
 			if (gameVar.liveMatch)
+			{
 				sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
+			}
 		}
 	}
 	initializeBall();
@@ -180,7 +182,10 @@ export function resetBall(winner)
 		checkball();
 	gameVar.gameStart = false;
 	if (gameVar.liveMatch)
+	{
 		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
+	}
+
 	if (gameVar.currentServer == 'ai')
 	{
 		gameVar.aiServe = true;

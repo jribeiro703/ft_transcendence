@@ -1,7 +1,7 @@
 // initializeTournamentGame.js
 
 import gameVar from "../game/pong/var.js";
-import { sendPlayerData, sendRoomData } from "../game/pong/network.js";
+import { sendPlayerData } from "../game/pong/network.js";
 
 export function initializeLobbySocket(tournamentName) {
 	const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';

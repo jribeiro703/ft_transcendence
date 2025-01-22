@@ -7,7 +7,7 @@ import { updateLiveSetting } from "./setting.js";
 import { renderPageGame } from "../HistoryManager.js";
 import { updateLiveSettingB } from "../brickout/settings.js";
 import { PADDLE_POSY } from "./const.js";
-import { getUserInfos } from "../getUser.js";
+import { getUserInfos, getUserInfosRemote } from "../getUser.js";
 import { resetLiveMatch } from "./reset.js";
 import brickVar from "../brickout/var.js";
 import { resetMatchB } from "../brickout/reset.js";
@@ -46,6 +46,7 @@ export function initLobbyPongView()
 	clearInterval(gameVar.waitingInterval);
 	resetLiveMatch();
 	getUserInfos();
+	getUserInfosRemote();
 	showLobbyView();
 	initEventListenerRoom();
 	initControlLive();

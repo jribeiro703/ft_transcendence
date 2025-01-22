@@ -1,7 +1,7 @@
 import gameVar from "./var.js";
 import brickVar from "../brickout/var.js";
 import { checkSettingLive } from "./setting.js";
-import { createNewRoom } from "./room.js";
+import { createNewRoom, createPrivateRoom, roomNetwork } from "./room.js";
 import { displayGameBrickView, displayGameView, displayLobbyView } from "./display.js";
 import { getElementLobby } from "./getElement.js";
 import { initializeCanvasBrick, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
@@ -43,13 +43,10 @@ export async function showPongRemote(room = null)
 	checkSettingLive();
 	displayGameView();
 	await initializeCanvasPong();
+	checkElementId();
 
-	gameVar.gameView = document.getElementById('gameView');
-	gameVar.rematchBtn = document.getElementById('rematchBtn');	
-	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	gameVar.returnLobby = document.getElementById('returnLobby');
-	
-	createNewRoom();
+	if (!gameVar.private)
+		createNewRoom();
 }
 
 export async function showBrickoutRemote(room = null)
@@ -64,4 +61,21 @@ export async function showBrickoutRemote(room = null)
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
 	
 	createNewRoom();
+}
+
+
+function checkElementId()
+{
+	gameVar.gameView = document.getElementById('gameView');
+	if (!gameVar.gameView)
+		console.log("error on gameView");
+	gameVar.rematchBtn = document.getElementById('rematchBtn');	
+	if (!gameVar.rematchBtn)
+		console.log("error on rematch");
+	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+	if (!gameVar.quitGameBtn)
+		console.log("error on quitgame");
+	gameVar.returnLobby = document.getElementById('returnLobby');
+	if (!gameVar.returnLobby)
+		console.log("error on return lobby");
 }

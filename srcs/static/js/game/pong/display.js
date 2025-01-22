@@ -151,7 +151,7 @@ export function displayGameView()
 {
     if (!gameVar.tournament)
     {
-        console.log("displaypongremote");
+        // console.log("displaypongremote");
         displayPongRemote();
     }
     else
