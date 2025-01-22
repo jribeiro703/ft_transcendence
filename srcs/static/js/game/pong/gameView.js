@@ -50,8 +50,16 @@ export async function showGameRoom()
 	await initializeCanvasPong();
 
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
+	if (!gameVar.rematchBtn)
+		console.log("errror on rematch");
+
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+	if (!gameVar.quitGameBtn)
+		console.log("errror on quit");
+
 	gameVar.returnLobby = document.getElementById('returnLobby');
+	if (!gameVar.returnLobby)
+		console.log("errror on return");
 }
 
 export function rematchView()

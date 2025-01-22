@@ -171,13 +171,7 @@ window.addEventListener("popstate", async (event) =>
         if (isGamePage(window.location.hash) && gameVar.liveMatch)
         {
             gameVar.clientLeft = true;
-            sendGameData(
-                gameVar.gameSocket,
-                gameVar.gameStart,
-                gameVar.currentLevel,
-                gameVar.startTime,
-                gameVar.clientLeft,
-            );
+            sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentLevel, gameVar.startTime, gameVar.clientLeft);
         }
         else
         {
