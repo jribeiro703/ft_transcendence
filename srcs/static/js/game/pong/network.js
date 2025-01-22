@@ -65,7 +65,7 @@ export function sendPlayerData(socket, playerReady)
 
 export function sendGameData(socket, gameStart, currentServer, startTime, clientLeft)
 {
-	console.log("send game data, client left ? ", clientLeft);
+	// console.log("send game data, client left ? ", clientLeft);
 	if (socket && socket.readyState == WebSocket.OPEN)
 	{
 		const data = 

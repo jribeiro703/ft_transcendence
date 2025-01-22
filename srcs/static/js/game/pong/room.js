@@ -6,13 +6,11 @@ import { startLiveGame } from "./start.js";
 import { getUserInfosRemote } from "../getUser.js";
 import { initGame, initListenerB } from "../brickout/init.js";
 import { kickOut } from "./draw.js";
-import { initControlLive } from "./control.js";
 import { clearPongVar } from "./reset.js";
 
 export async function createPrivateRoom()
 {
     clearPongVar();
-    initControlLive();
 
     gameVar.private = true;
     gameVar.liveMatch = true;
@@ -28,7 +26,6 @@ export async function createPrivateRoom()
 export async function joinPrivateRoom(roomName)
 {
     clearPongVar();
-    initControlLive();
 
     gameVar.private = true;
     gameVar.liveMatch = true;

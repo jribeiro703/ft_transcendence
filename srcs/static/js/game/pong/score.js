@@ -35,6 +35,7 @@ export function manageScore()
 		gameVar.winnner = gameVar.userName;
 	else
 		gameVar.winner = gameVar.opponentName;
+	console.log("winner : ", gameVar.winner);
 }
 
 export function checkScore()
