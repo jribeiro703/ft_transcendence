@@ -1,3 +1,5 @@
+// tournoi/tournament.js
+
 async function loadTournament(tournamentId) {
   const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
   const formData = new FormData();
@@ -72,6 +74,7 @@ async function loadTournament(tournamentId) {
 
   const playNextMatchButton = document.getElementById("play-next-match");
   playNextMatchButton.addEventListener("click", () => {
+    console.log("Play next match");
     showSection("/tournament/game/"+data.current_match.match_id+"/");
   });
 }

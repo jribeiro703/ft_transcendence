@@ -1,5 +1,10 @@
+// tournoi/tournamentForm.js
+
 import { createTournamentFormHTML } from './templates/createTournamentFormTemplate.js';
-import { fetchData, getCookie } from "../user/fetchData.js";
+import { createTournamentLayoutHTML } from './templates/createTournamentLayoutTemplate.js';
+import { createTournament } from './services/apiService.js'
+import { displayTournamentLayout } from './tournamentLayout.js';
+import { fetchAuthData, getCookie } from "../user/fetchData.js";
 
 export async function setupTournamentPage() {
     console.log("[setupTournamentPage] Initializing tournament page setup");
@@ -313,23 +318,37 @@ export async function loadTournamentSetup() {
 
     tournamentSetupForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const formData = new FormData(tournamentSetupForm);
-        console.log("submit clicked:", formData);
-        fetch('/tournament/create/', {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': getCookie('csrftoken'),
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.tournament_id) {
-                showSection(`/tournament/${data.tournament_id}/`);
+    
+       // Construct the players array from the form fields
+        const players = [];
+        const playerFields = document.querySelectorAll('.player-field-container');
+
+        playerFields.forEach((field, index) => {
+            const guestSwitch = field.querySelector('.player-guest-switch');
+            const playerSelect = field.querySelector('.player-select');
+            const guestInput = field.querySelector('.player-guest');
+
+            if (guestSwitch.checked) {
+                players.push({ guest_name: guestInput.value || `Guest ${index + 1}` });
+            } else {
+                players.push({ user_id: playerSelect.value });
             }
-        })
-        .catch(error => {
-            console.error('Error creating tournament:', error);
         });
-    });
+
+        console.log("Payload for tournament creation:", players);
+    
+            try {
+                const tournamentId = await createTournament(players);
+                if (tournamentId) {
+                    console.log("Tournament created successfully. ID:", tournamentId);
+                    await displayTournamentLayout(tournamentId); 
+                } else {
+                    console.warn("Failed to create tournament.");
+                }
+            } catch (error) {
+                console.error("Error creating tournament:", error);
+            }
+        });
+    
+   
 }
