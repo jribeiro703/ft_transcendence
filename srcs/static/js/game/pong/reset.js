@@ -7,7 +7,7 @@ import { checkScore } from "./score.js";
 import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { resetPu, updatePowerUpSelection } from "./powerUp.js";
 import { renderPageGame } from "../HistoryManager.js";
-import { initPaddlesPos } from "./init.js";
+import { initPaddlesPos, removeEventListeners } from "./init.js";
 
 export function listenBtn()
 {
@@ -73,6 +73,7 @@ export function clearAllpongStates()
 	updateDifficultySelection('medium', true);
 	updateLevelSelection('classicPong', true);
 	updatePowerUpSelection(false, true);
+	removeEventListeners();
 	gameVar.startTime = false;
 	gameVar.gameTime = 0;
 	gameVar.gameStart = false;
@@ -95,6 +96,7 @@ export function clearPongVar()
 	resetTimeFrame();
 	resetPu();
 	initPaddlesPos();
+	removeEventListeners();
 	gameVar.startTime = false;
 	gameVar.gameTime = 0;
 	gameVar.gameStart = false;

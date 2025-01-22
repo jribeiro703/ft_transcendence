@@ -6,7 +6,7 @@ import { displayGameBrickView, displayGameView, displayLobbyView } from "./displ
 import { getElementLobby } from "./getElement.js";
 import { initializeCanvasBrick, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
 import { initListenerB } from "../brickout/init.js";
-import { getUserInfos } from "../getUser.js";
+import { initControl } from "./control.js";
 
 
 export function showLobbyView()
@@ -32,7 +32,6 @@ export function showLobbyView()
 		else
 			level = brickVar.currLevel;
 	}
-	getUserInfos();
 
 	displayLobbyView(level);
 	getElementLobby();
@@ -43,6 +42,7 @@ export async function showPongRemote(room = null)
 	checkSettingLive();
 	displayGameView();
 	await initializeCanvasPong();
+	initControl();
 	checkElementId();
 
 	if (!gameVar.private)

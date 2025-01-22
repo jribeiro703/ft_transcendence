@@ -11,7 +11,6 @@ import gameVar from '../game/pong/var.js';
 import { displayGameView } from '../game/pong/display.js';
 import { initializeCanvasPong } from '../game/pong/canvas.js';
 import { updateDifficultySelection, updateLevelSelection } from '../game/pong/update.js';
-import { initControlLive } from '../game/pong/control.js';
 import { initializeTournamentSocket } from '../tournament/initializeTournamentGame.js'
 
 let currentTournamentId;
@@ -128,7 +127,7 @@ export async function joinTournamentGame()
 	gameVar.playerReady = true;
 	displayGameView();
 	await initializeCanvasPong();
-	initControlLive();
+	// initControlLive();
 	joinRoom(gameVar.roomTour1);
 }
 
@@ -138,7 +137,7 @@ export async function createTournamentGame()
 	gameVar.tournament = true;
 	updateDifficultySelection('medium');
 	updateLevelSelection('classicPong');
-	initControlLive();
+	// initControlLive();
 	displayGameView();
 	await initializeCanvasPong();
 	createNewRoom();
