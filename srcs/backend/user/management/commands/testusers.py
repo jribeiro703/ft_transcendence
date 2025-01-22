@@ -5,6 +5,10 @@ from django.core.files.base import ContentFile
 import pyotp
 import requests
 from secrets import token_urlsafe
+from game.models import Game
+import random
+from django.utils import timezone
+
 
 class Command(BaseCommand):
 	help = 'Create random test users with OTP secrets and avatars'
@@ -54,3 +58,41 @@ class Command(BaseCommand):
 				self.stdout.write(
 					self.style.WARNING(f"User {user_data['username']} already exists")
 				)
+
+			# Add 10 random matchs for alls users
+			for user in created_users:
+				num_matches_per_user = 10
+				other_users = [u for u in created_users if u != user]
+
+				if not other_users:
+					self.stdout.write(self.style.WARNING(f"Not enough users to create matches for {user.username}. Skipping matches."))
+					continue	
+
+				for _ in range(num_matches_per_user):
+					if not other_users:
+						self.stdout.write(self.style.WARNING(f"Not enough users to create matches for {user.username}."))
+						break
+
+				opponent = random.choice(other_users)
+				score_one = random.randint(0, 10)
+				score_two = random.randint(0, 10)
+				winner = user if score_one > score_two else opponent if score_two > score_one else None
+
+				game = Game.objects.create(
+					player_one=user,
+					player_two=opponent,
+					status='NOT_STARTED',
+					difficulty=random.choice(['EASY', 'MEDIUM', 'HARD']),
+					level=random.choice(['TABLETENNIS', 'FOOTBALL', 'TENNIS', 'CLASSIC']),
+					max_score=random.randint(5, 15),
+					created_at=timezone.now(),
+					start_time=None,
+					end_time=None,
+					powerup=random.choice([True, False]),
+					time_played=random.randint(0, 300),
+					score_one=score_one,
+					score_two=score_two,
+					winner=winner
+				)
+
+				self.stdout.write(self.style.SUCCESS(f"Match created: {game} between {user.username} and {opponent.username} "))

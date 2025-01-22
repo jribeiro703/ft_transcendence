@@ -1,4 +1,5 @@
 import { fetchAuthData } from '../user/fetchData.js';
+import { isAuth } from './socket.js';
 
 document.addEventListener('DOMContentLoaded', function () {
 	const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -9,9 +10,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 export async function getUserTooltipContent(userId) {
 	try {
-		const responseObject = await fetchAuthData(`/user/profile-id/${userId}/`);
+		let responseObject
+		if (isAuth) {
+			responseObject = await fetchAuthData(`/user/profile-id/${userId}/`);
+		}
 
-		if (!responseObject.status === 401) {
+		if (!isAuth || !responseObject.status === 401) {
 			throw new Error('Authentication required');
 		}
 
@@ -57,14 +61,17 @@ export function initializeTooltip(nicknameSpan, clientId) {
 }
 
 export async function handleTooltipHover(tooltip, clientId) {
+	let nicknameResponse;
 	try {
-		const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${clientId}`);
+		if (isAuth) {
+			nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${clientId}`);
+		}
 
-		if (nicknameResponse.status === 401) {
+		if (!isAuth || nicknameResponse.status === 401) {
 			throw new Error('Authentication required');
 		}
 
-		if (!nicknameResponse.data || !nicknameResponse.data.id) {
+		if (!isAuth || !nicknameResponse.data || !nicknameResponse.data.id) {
 			throw new Error('User not found');
 		}
 
@@ -72,7 +79,7 @@ export async function handleTooltipHover(tooltip, clientId) {
 		const content = await getUserTooltipContent(userId);
 		tooltip.setContent({ '.tooltip-inner': content });
 	} catch (error) {
-		console.error('Error fetching user data:', error);
+		console.log('Error fetching user data:', error);
 		if (error.message === 'Authentication required') {
 			tooltip.setContent({ '.tooltip-inner': 'You must be logged in to see user data' });
 		} else {

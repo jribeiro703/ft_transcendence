@@ -62,19 +62,4 @@ function showErrorMessages(responseObject) {
 	showToast(errorMessages.join('\n'), "error");
 }
 
-async function logout() {	
-	try {
-			const response = await fetchAuthData('/user/logout/', 'POST', null, false);
-			if (response.status === 205) {
-			// sessionStorage.clear();
-			localStorage.clear();
-			return true;
-		}
-		return false;
-	} catch (error) {
-		console.error('logout(): Error during logout:', error);
-		throw error;
-	}
-}
-
-export { escapeHTML, PONG_CARD, DEFAULT_AVATAR, UPLOAD_ICON, showToast, updateUserAvatar, showErrorMessages, logout };
+export { escapeHTML, PONG_CARD, DEFAULT_AVATAR, UPLOAD_ICON, showToast, updateUserAvatar, showErrorMessages };

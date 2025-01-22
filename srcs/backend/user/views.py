@@ -753,7 +753,9 @@ class OtpVerificationView(APIView):
 def get_42_auth_url(request):
 	try:
 		client_id = settings.FT_CLIENT_ID	
-		redirect_uri = settings.FT_REDIRECT_URI
+		# redirect_uri = settings.FT_REDIRECT_URI
+		domain = request.get_host().split(':')[0]  # Extract only the domain
+		redirect_uri = f"{request.scheme}://{domain}:8081/user/login42/callback/"
 		auth_url = f"https://api.intra.42.fr/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code"
 		return Response({"auth_url": auth_url}, status=status.HTTP_200_OK)
 	except Exception as e:
@@ -767,6 +769,9 @@ def login42(request):
 	client_id = settings.FT_CLIENT_ID
 	client_secret = settings.FT_CLIENT_SECRET
 	redirect_uri = settings.FT_REDIRECT_URI
+	domain = request.get_host().split(':')[0]  # Extract only the domain
+	redirect_uri = f"{request.scheme}://{domain}:8081/user/login42/callback/"
+	redirect_home = f"{request.scheme}://{domain}:8081/#home"
 
 	data = {
 		"grant_type": "authorization_code",
@@ -782,7 +787,7 @@ def login42(request):
 
 		if "access_token" not in token_data:
 			# print("login42 view :error while getting access token")
-			response = redirect("https:localhost:8081/#home")
+			response = redirect(redirect_home)
 			return response
 		
 		user_info = requests.get('https://api.intra.42.fr/v2/me', 
@@ -808,7 +813,7 @@ def login42(request):
 			if not user.avatar:
 				user.avatar.save(filename, ContentFile(avatar_response.content), save=True)
 
-		response = redirect("https://localhost:8081/#user")
+		response = redirect(redirect_home)
 		access_token, refresh_token = generate_tokens_for_user(user)
 		set_refresh_token_in_cookies(response, refresh_token)
 		# print("set tokens in cookies and redirect to user page")
@@ -816,7 +821,7 @@ def login42(request):
 	
 	except Exception as e:
 		# print("login42 exception error: ", e)
-		response = redirect("https://localhost:8081/#home")
+		response = redirect(redirect_uri)
 		return response
 
 # ------------------------------LOGOUT ENDPOINTS--------------------------------	
