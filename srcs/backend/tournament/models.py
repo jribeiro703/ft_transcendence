@@ -28,7 +28,7 @@ class Tournament(models.Model):
 	registered_users = models.ManyToManyField('user.User', related_name='registered_tournaments', blank=True)
 
 	def __str__(self):
-		return self.id
+		return f"{self.id}"
 
 	def save(self, *args, **kwargs):
 		self.created_at = timezone.now()
