@@ -15,7 +15,6 @@ import brickVar from "../brickout/var.js";
 
 export async function showGameView()
 {
-
 	getUserInfos();
 	displayGameView();
 	updateCanvasColor();

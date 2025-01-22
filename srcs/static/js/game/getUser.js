@@ -24,6 +24,7 @@ export async function getUserInfosRemote()
 		}
 		else
 		{
+			console.log("erreur on fetch on getuserinfoRemote");
 			showErrorMessages(response);
 		}
 }
@@ -38,6 +39,7 @@ export async function getUserInfos()
 	}
 	else
 	{
+		console.log("erreur on fetch on getuserinfo");
 		showErrorMessages(response);
 	}
 }
