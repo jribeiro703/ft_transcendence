@@ -19,7 +19,7 @@ class UserPrivateInfosSerializer(serializers.ModelSerializer):
 class UserPublicInfosSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('id', 'username', 'alias', 'avatar', 'is_online')
+		fields = ('id', 'username', 'alias', 'avatar', 'is_online', 'game_token')
 
 # ------------------------------REGISTER USER SERIALIZERS--------------------------------	
 
@@ -93,8 +93,8 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = User
-		fields = ('id', 'is_online', 'is_42_user', 'username', 'alias', 'avatar', 'email', 'new_email', 'password', 'new_password', 'friends', 'new_friend')
-		read_only_fields = ('id', 'username', 'is_online', 'is_42_user', 'avatar', 'email', 'friends')
+		fields = ('id', 'is_online', 'is_42_user', 'username', 'game_token', 'alias', 'avatar', 'email', 'new_email', 'password', 'new_password', 'friends', 'new_friend')
+		read_only_fields = ('id', 'username', 'game_token', 'is_online', 'is_42_user', 'avatar', 'email', 'friends')
 		extra_kwargs = {'password': {'write_only': True}, 'new_password': {'write_only': True}, 'new_email': {'write_only': True}, 'new_friend': {'write_only': True}}
 
 	def update(self, instance, validated_data):
