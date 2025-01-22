@@ -359,3 +359,43 @@ createTournamentBtn:hover, joinTournamentBtn:hover {
     border: 2px solid red;
     background-color: #ffe6e6;
 }
+
+.bracket-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.matchup {
+    margin: 10px 0;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+}
+
+.player {
+    color: #fff;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .bracket-container {
+        flex-direction: column;
+    }
+    .matchup {
+        text-align: center;
+    }
+}
+
+#play-next-match {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+#play-next-match:hover {
+    background-color: #0056b3;
+}
