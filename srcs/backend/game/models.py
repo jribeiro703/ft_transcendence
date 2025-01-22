@@ -76,8 +76,8 @@ class Game(models.Model):
 	time_played = models.IntegerField(default=0)  # Time in seconds (or minutes)
 	
 	def __str__(self):
-		return f"Game {self.id} = {self.get_player1_display()} vs {self.get_player2_display()}"
-      
+		return f"{self.id}"
+
 	def get_player1_name(self):
 		if self.player_one:
 			return self.player_one.username
