@@ -42,6 +42,12 @@ export function initControl()
         gameVar.eventHandlers.keydown = (e) => keyDownHandler(e, false);
         gameVar.eventHandlers.keyup = (e) => keyUpHandler(e, false);
     }
+    else
+    {
+        gameVar.eventHandlers.startBall = startBall;
+        gameVar.eventHandlers.keydown = (e) => keyDownHandler(e, false);
+        gameVar.eventHandlers.keyup = (e) => keyUpHandler(e, false);
+    }
 
     document.addEventListener("keydown", gameVar.eventHandlers.startBall);
     document.addEventListener("keydown", gameVar.eventHandlers.keydown);
