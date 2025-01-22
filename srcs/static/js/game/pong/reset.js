@@ -160,8 +160,19 @@ export function resetBall(winner)
 	else
 		gameVar.aiScore++;
 	if (gameVar.liveMatch)
-		sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.playerScore, gameVar.aiScore);
-	checkScore();
+	{
+		if (gameVar.playerIdx ===  1)
+		{
+			sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.playerScore, gameVar.aiScore);
+			checkScore();
+		}
+		else if (gameVar.playerIdx === 2)
+		{
+			sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.opponentName, gameVar.playerScore, gameVar.aiScore);
+			checkScore();
+		}
+	}
+	// checkScore();
 	gameVar.serveCount++;
 	if (gameVar.serveCount >= 2)
 	{
@@ -187,7 +198,6 @@ export function resetBall(winner)
 	{
 		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
 	}
-
 	if (gameVar.currentServer == 'ai')
 	{
 		gameVar.aiServe = true;

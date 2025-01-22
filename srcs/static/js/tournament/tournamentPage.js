@@ -1,7 +1,7 @@
 // tournament/tournamentPage.js
 
 import { setupTournamentFlow } from './utils/tournamentFlow.js';
-import { fetchEligiblePlayers, generateTournamentName, validateTournamentName } from './services/apiService.js';
+import { generateTournamentName, validateTournamentName } from './services/apiService.js';
 import { createTournamentFormHTML } from './templates/createTournamentFormTemplate.js';
 import { createTournamentLayoutHTML } from './templates/createTournamentLayoutTemplate.js';
 import { setupEligiblePlayersRefresh } from './services/periodicService.js';
