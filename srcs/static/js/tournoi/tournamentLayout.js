@@ -16,17 +16,25 @@ export async function displayTournamentLayout(tournamentId) {
 
             const playNextMatchButton = document.getElementById('play-next-match');
             playNextMatchButton.disabled = false;
+            console.log("...playNextMatchButton disabled...");
+            
 
             // TODO: BUG: What if the button is pressed 4th time? The tournament finishes in 3 matches
             document.getElementById('play-next-match').addEventListener('click', () => {
                 playNextMatchButton.disabled = true;
-                launchNextMatch(tournamentId, response.data.current_match);
+                console.log("...Launching next match...");
+                console.log("...Tournament ID:", tournamentId);
+                console.log("...Response data:", response.data);
+                console .log("...Current match:", response.data.current_match);
+                launchNextMatch(tournamentId, response.data);
 
             });
             // Periodically check if the match is over
             const intervalId = setInterval(() => {
-                // TODO: Bug: ??
-                if (gameVar.matchOver) {
+                // TODO: if the score is >= 11 and if the gap score is >= 2 , but actually it s score >= 4 for debug
+                if (gameVar.scoreBoard.score1 >= 2 || gameVar.scoreBoard.score2 >= 2) {
+                    gameVar.rematchBtn.style.display = 'none';
+                    gameVar.quitGameBtn.style.display = 'none';
                     clearInterval(intervalId);
                     playNextMatchButton.disabled = false;
                 }
@@ -51,11 +59,14 @@ function renderBracket(matches) {
     `).join('');
 }
 
-async function launchNextMatch(tournamentId, currentMatch) {
-    if (!currentMatch) return console.error("No match ID provided");
+async function launchNextMatch(tournamentId, data) {
+    if (!data.current_match) return console.error("No match ID provided");
 
-    const payload = { matchId: currentMatch, score_one: 0, score_two: 0 };
-    console.log(`[launchNextMatch] Launching match ${currentMatch} for tournament ${tournamentId}`);
+    const currentMatch = data.matches.find(match => match.match_id === data.current_match);
+    if (!currentMatch) return console.error("Current match not found in matches array");
+
+    const payload = { matchId: data.current_match, score_one: 0, score_two: 0 };
+    console.log(`[launchNextMatch] Launching match ${data.current_match} for tournament ${tournamentId}`);
 
     try {
         const response = await fetchAuthData(`/tournament/next/${tournamentId}/`, "POST", payload);
@@ -64,9 +75,15 @@ async function launchNextMatch(tournamentId, currentMatch) {
             displayTournamentArena();
 
             // Launch Play Local game
-            launchGame();
-            
-            displayTournamentLayout(tournamentId); // Refresh -temporarily disabled
+            launchGame(currentMatch.player1, currentMatch.player2);
+            if (data.status === "finished") {
+                const playNextMatchButton = document.getElementById('play-next-match');
+                playNextMatchButton.disabled = true;
+                playNextMatchButton.textContent = "Tournament Finished";
+                announceWinner(data.winner);
+            } else {
+                displayTournamentLayout(tournamentId); // Refresh
+            }
         } else {
             console.error("Failed to launch match:", response.data);
         }
@@ -84,17 +101,41 @@ function displayTournamentArena() {
 
 }
 
-function launchGame() {
+function launchGame(player1, player2) {
     console.log("[launchGame] Preparing game launch...");
-    // Set gameVar properties based on the tournament and match
+
     gameVar.game = "pong";
     gameVar.localGame = true;
-    gameVar.tournament = true; // Indicate this is a tournament game
+    gameVar.tournament = true;
+    gameVar.userName = player1;
+    gameVar.opponentName = player2;
     //gameVar.currTournament = tournamentData;
 
     // Render the game
-    renderPageGame("playPongLocal", true); // Assume renderPageGame is globally available
-    gameVar.rematchBtn.style.display = 'none';
-    gameVar.quitGameBtn.style.display = 'none';
+    renderPageGame("playPongLocal", true);
     console.log("[launchGame] Game launched successfully.");
 }
+
+function updateWinnerInBracket(matchId, winnerName) {
+    const matchElement = document.querySelector(`[data-match-id="${matchId}"]`);
+    if (matchElement) {
+        const winnerElement = matchElement.querySelector('.winner');
+        if (winnerElement) {
+            winnerElement.textContent = winnerName;
+        }
+    }
+}
+
+function announceWinner(winnerName) {
+    const winnerSection = document.createElement('div');
+    winnerSection.id = 'winner-section';
+    winnerSection.innerHTML = `
+        <div class="winner-banner">
+            <h2>🏆 Congratulations to the Winner! 🏆</h2>
+            <h3>${winnerName}</h3>
+        </div>
+    `;
+    const bracketContainer = document.getElementById('tournament-bracket-section');
+    bracketContainer.insertAdjacentElement('afterend', winnerSection);
+}
+
