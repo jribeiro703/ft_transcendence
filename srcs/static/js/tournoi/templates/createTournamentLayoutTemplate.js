@@ -10,9 +10,9 @@ export function createTournamentLayoutHTML() {
           </div>
           <hr>
           <div id="next-match" class="matchup">
-            <div id="player-l" class="current">Player L</div>
+            <div id="player-l" class="current">Semi finalist 1</div>
             <div class="vs">vs</div>
-            <div id="player-r" class="current">Player R</div>
+            <div id="player-r" class="current">Semi finalist 2</div>
           </div>
           <button
             id="play-next-match"
@@ -22,6 +22,9 @@ export function createTournamentLayoutHTML() {
 
         <!-- Game Section -->
         <div id="tournamentdiv" class="col-lg-9 col-md-8 d-flex align-items-center justify-content-center">
+        </div>
+
+        <div id="winner-section" class="col-lg-3 col-md-4 bg-light rounded p-3">
         </div>
       </div>
     </div>
