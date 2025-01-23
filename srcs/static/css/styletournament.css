@@ -399,3 +399,40 @@ createTournamentBtn:hover, joinTournamentBtn:hover {
 #play-next-match:hover {
     background-color: #0056b3;
 }
+
+#tournament-bracket-section {
+	max-height: 100vh;
+	overflow-y: auto;
+  }
+  
+  #game-view-section {
+	background-color: #000;
+	border-radius: 10px;
+	padding: 20px;
+  }
+  
+  #brickoutCanvas {
+	border: 3px solid #f8f9fa;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+  
+  .matchup {
+	margin: 10px 0;
+  }
+  
+  .vs {
+	font-weight: bold;
+	text-align: center;
+	margin: 5px 0;
+  }
+  
+  .btn-primary {
+	background-color: #007bff;
+	border-color: #0056b3;
+  }
+  
+  .btn-primary:hover {
+	background-color: #0056b3;
+	border-color: #003f7f;
+  }
+  
