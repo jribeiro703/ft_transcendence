@@ -224,11 +224,11 @@ def go_to_tournament_next_match(request, tournament_id):
 			if match.score_one > match.score_two:
 				winner_user = match.player_one
 				winner_guest = match.player1_guest
-				winner = match.player_one.display_name if match.player_one else match.player1_guest.display_name
+				winner = match.player_one.username if match.player_one else match.player1_guest.display_name
 			else:
 				winner_user = match.player_two
 				winner_guest = match.player2_guest
-				winner = match.player_two.display_name if match.player_two else match.player2_guest.display_name
+				winner = match.player_two.username if match.player_two else match.player2_guest.display_name
 
 			# Get all tournament matches
 			tournamentMatches = TournamentMatch.objects.filter(tournament=tournament).order_by('position')
@@ -292,7 +292,7 @@ def tournament_list(request):
 
 		item = {
 			'id': tournament.id,
-			'name': tournament.created_by.display_name + _("'s tournament"),
+			'name': tournament.created_by.username + _("'s tournament"),
 			'current_stage': current_stage,
 			'current_match': f'{current_match.player1_name} VS {current_match.player2_name}' if current_match else f'🏆: {tournament.winner}',
 			'was_created_by_me': tournament.created_by == request.user
