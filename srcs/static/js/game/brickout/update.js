@@ -48,8 +48,8 @@ export function updateDifficultySelectionB(level, def)
 {
 	if (level == 'easy')
 	{
-		brickVar.initDx = 2;
-		brickVar.initDy = 2;
+		brickVar.initDx = 3;
+		brickVar.initDy = 3;
 		brickVar.difficulty = 'easy';
 	}
 	if (level == 'medium')
@@ -60,8 +60,8 @@ export function updateDifficultySelectionB(level, def)
 	}
 	if (level == 'hard')
 	{
-		brickVar.initDx = 8;
-		brickVar.initDy = 8;
+		brickVar.initDx = 6;
+		brickVar.initDy = 6;
 		brickVar.difficulty = 'hard';
 	}
 	if (!def)

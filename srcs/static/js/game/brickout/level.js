@@ -8,7 +8,7 @@ import { initializeCanvasBrick } from "../pong/canvas.js";
 import { initializeScoreCanvasBrickout } from "../pong/canvas.js";
 import { displayGameBrickView } from "../pong/display.js";
 import gameVar from "../pong/var.js";
-import { chechOpponentRemote } from "./score.js";
+import { chechOpponent, chechOpponentRemote } from "./score.js";
 
 export function youWinB()
 {
@@ -18,11 +18,18 @@ export function youWinB()
     	brickVar.ctx.fillStyle = "#66a5e8";
     	brickVar.ctx.fillText("Congratulations, you win !!", brickVar.canvasW / 2 - 200, brickVar.canvasH / 2);
 	}
-	if (!gameVar.liveMatch)
+	if (!gameVar.liveMatch && !gameVar.localGame)
 		levelDisplayB();
-	else
+	else if (gameVar.liveMatch)
 		chechOpponentRemote();
-	addBtnB();
+	else if (gameVar.localGame)
+	{
+		chechOpponent();
+		if (brickVar.playerLives === 0 && brickVar.opponentLives === 0)
+			addBtnB();
+	}
+	else
+		addBtnB();
 }
 
 export function checkLevelB(level)
@@ -56,8 +63,8 @@ export function levelDisplayB()
 	{
 		brickVar.finish = true;
 		brickVar.finalScore = 104 + 169 + 169 + 169;
-		brickVar.ctx.fillText("You have finish the game !", brickVar.canvasW / 2 - 190, brickVar.canvasH / 6);
-		brickVar.ctx.fillText("Nice, score : " + brickVar.finalScore , brickVar.canvasW / 2 - 190, brickVar.canvasH / 6 + 30);
+		brickVar.ctx.fillText("You've finish the game !", brickVar.canvasW / 2 - 190, brickVar.canvasH / 6);
+		brickVar.ctx.fillText("Congratulation !", brickVar.canvasW / 2 - 190, brickVar.canvasH / 6 + 30);
 		addImageB("/static/css/images/ms.png");
 	}
 }
@@ -73,8 +80,8 @@ export function addImageB(url)
 	}
 	const mickeal = document.createElement('div');
 	mickeal.innerHTML = `
-	<div = id="mickeal">
-		<img id="mScot" src="${msUrl}" width="380" height"300">
+	<div id="mickeal">
+		<img id="mScot" src="${msUrl}" width="550" height="300">
 	</div>
 	`;
 	mainContent.appendChild(mickeal);
@@ -83,7 +90,7 @@ export function addImageB(url)
     image.src = msUrl;
     image.onload = () =>
 	{
-        const imgWidth = 380;
+        const imgWidth = 550;
         const imgHeight = 300;
         const x = (brickVar.canvasW - imgWidth) / 2;
         const y = (brickVar.canvasH - imgHeight) / 2 + 50;

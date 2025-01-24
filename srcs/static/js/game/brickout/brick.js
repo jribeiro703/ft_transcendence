@@ -30,24 +30,26 @@ export function collisionDetectionB()
 					b.status = 0;
 					brickVar.score++;
 					manageRemoteScore();
-					// brickVar.totalBrick = 10;
+					brickVar.totalBrick = 5;
 					if(brickVar.score == brickVar.totalBrick)
 					{
 						if (brickVar.playerIdx === 2)
 						{
-							console.log("if 2");
 							brickVar2.finishLevel = true;
 						}
 						else
 						{
-							console.log("else");
 							brickVar.finishLevel = true;
 						}
+						brickVar.finishLevel = true;
 						brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
-						if (brickVar.currLevel === "invader")
-							brickVar.finish = true;
-						if (!gameVar.localGame)
-							youWinB();
+						if (!gameVar.localGame && !gameVar.liveMatch)
+						{
+							if (brickVar.currLevel === "invader")
+								brickVar.finish = true;
+						}
+						youWinB();
+						
 					}
 				}
 			}

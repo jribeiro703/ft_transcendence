@@ -75,7 +75,7 @@ export function chechOpponent()
 	{
 		const waiting = setInterval(() =>
 		{
-			if (brickVar2.startTime === true || brickVar2.gameTime < 1)
+			if ((brickVar2.startTime === true || brickVar2.gameTime < 1) && (!brickVar2.finishLevel))
 			{
 				if (!display)
 				{
@@ -133,7 +133,6 @@ export function compareScoreRemote()
 				displayScoreP1Win(false);
 			if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
 			{
-				console.log("je suis le 1 et jai perdu");
 				brickVar.ctx.fillText("Too Bad ! You lose...", brickVar.canvasW / 4 , (brickVar.canvasH / 2) - 100);
 				brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
 				brickVar.ctx.fillText(brickVar.playerScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2);
@@ -165,7 +164,9 @@ export function compareScore()
 	{
 		console.error("Error on font load", error);
 	});	
-	addBtnB();
+
+	if ((brickVar.lives === 0 || brickVar.finishLevel) && (brickVar2.lives === 0 || brickVar2.finishLevel))
+		addBtnB();
 }
 
 function displayEqualScore()

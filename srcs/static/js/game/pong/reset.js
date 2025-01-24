@@ -172,7 +172,8 @@ export function resetBall(winner)
 			checkScore();
 		}
 	}
-	// checkScore();
+	else
+		checkScore();
 	gameVar.serveCount++;
 	if (gameVar.serveCount >= 2)
 	{
