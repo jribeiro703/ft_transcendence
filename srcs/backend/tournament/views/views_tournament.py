@@ -16,7 +16,6 @@ import random
 from django.apps import apps
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
-from tournament.views.utils import get_user_role
 
 from user.models import User
 from tournament.models import Tournament, Guest, TournamentMatch
