@@ -22,7 +22,20 @@ document.addEventListener('DOMContentLoaded', function () {
 				gameChat.innerHTML = '';
 				// Connect to game chat websocket if in a game room
 				if (gameVar.gameSocket && gameVar.gameSocket.url) {
-					const roomMatch = gameVar.gameSocket.url.match(/ws\/pong\/room_(\d+)/);
+					let roomMatch;
+					if (gameVar.game === "pong")
+					{
+						if (gameVar.private)
+						{
+							roomMatch = gameVar.gameSocket.url.match(/ws\/pong\/privatePongRoom_(\d+)/);
+						}
+						else {
+							roomMatch = gameVar.gameSocket.url.match(/ws\/pong\/PongRoom_(\d+)/);
+						}
+					} else
+					{
+							roomMatch = gameVar.gameSocket.url.match(/ws\/pong\/BrickRoom_(\d+)/);
+					}
 					if (roomMatch && roomMatch[1]) {
 						const roomNumber = roomMatch[1];
 						// Create new gamechat websocket with same room number
