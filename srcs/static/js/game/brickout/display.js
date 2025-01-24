@@ -21,12 +21,11 @@ export function displayFinishLive()
     const mainContent = document.getElementById("brickoutContainer");
     const btn = document.createElement("div");
     btn.id = "finish";
-    btn.className = "finish d-flex justify-content-center align-items-center gap-4 flex-wrap";
     btn.innerHTML = `
         <div class="button-container" style="margin-top: 50px">
             <button id="returnLobbyBtn" class="primaryBtn w-40"><span>Return Lobby</span></button> 
             <button id="quitBtn" class="primaryBtn w-40"><span>Return Home</span></button>
-            </div>
+        </div>
     `;
     mainContent.appendChild(btn);
     checkBtnB("finish");

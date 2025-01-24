@@ -50,7 +50,7 @@ export function displaySetting(difficulty, powerUp, level)
     const settingContain = document.getElementById("settings-column");
     if (!settingContain)
     {
-        console.log("error on settingContain");
+        console.log("error on settings-column");
         return;
     }
     settingContain.innerHTML = "";
@@ -67,7 +67,7 @@ export function displayLiveSetting(difficulty, level)
     const settingContain = document.getElementById("setting-container");
     if (!settingContain)
     {
-        console.log("Errror on settings-columns");
+        console.log("Errror on settings-container");
         return;
     }
     settingContain.innerHTML = "";
