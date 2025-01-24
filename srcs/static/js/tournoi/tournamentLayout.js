@@ -4,7 +4,7 @@ import { createTournamentLayoutHTML } from './templates/createTournamentLayoutTe
 import { fetchAuthData } from "../user/fetchData.js";
 import gameVar from "../game/pong/var.js";
 import { renderPageGame } from "../game/HistoryManager.js";
-import { clearAllpongStates } from '../game/pong/reset.js';
+import { clearPongVar } from '../game/pong/reset.js';
 
 export async function displayTournamentLayout(tournamentId) {
     const box = document.getElementById('mainContent');
@@ -106,13 +106,12 @@ function displayTournamentArena() {
 function launchGame(player1, player2) {
     console.log("[launchGame] Preparing game launch...");
 
-    clearAllpongStates();
+    clearPongVar();
     gameVar.game = "pong";
     gameVar.localGame = true;
     gameVar.tournament = true;
     gameVar.userName = player1;
     gameVar.opponentName = player2;
-    //gameVar.currTournament = tournamentData;
 
     // Render the game
     renderPageGame("playPongLocal", true);
