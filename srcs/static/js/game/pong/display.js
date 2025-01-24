@@ -4,7 +4,7 @@ export function displayPong()
 {
     const mainContent = document.getElementById("mainContent");
     if (!mainContent)
-        console.log("errreur");
+        console.log("error on mainContent");
     mainContent.innerHTML = "";
     const insertTo = document.createElement("div");
     insertTo.innerHTML = `
@@ -233,7 +233,7 @@ export function displaySetting(difficulty, powerUp, level)
 {
     const settingContain = document.getElementById("settings-column");
     if (!settingContain)
-        console.log("error on settingContain");
+        console.log("error on setting-column");
     settingContain.innerHTML = "";
     const settingItem = document.createElement("div");
     settingItem.innerHTML = `
