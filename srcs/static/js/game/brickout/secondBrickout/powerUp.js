@@ -94,7 +94,6 @@ export function collectPowerUpB()
 				powerUpCenterY >= paddleTop - tolerance &&
 				powerUpCenterY <= paddleBottom + tolerance)
 			{
-				console.log("PowerUp collected!");
 				brickVar2.powerUpOnscreen = false;
 				brickVar2.powerUpX = -100;
 				checkPowerUpB();
@@ -137,7 +136,6 @@ function puExtraLife()
 
 function puSpeedB()
 {
-	console.log("on accelere");
 	const originSpeed = Math.sqrt(brickVar2.dx * brickVar2.dx + brickVar2.dy * brickVar2.dy);
 
 	brickVar2.dx *= 2;
