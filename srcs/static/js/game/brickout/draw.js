@@ -39,6 +39,8 @@ export function drawB()
 	}
 	if (brickVar.initialize && !brickVar.finishLevel)
 	{
+		if (brickVar.loose)
+			return;
 		baseDrawB();
 		if (brickVar.gameStart)
 		{

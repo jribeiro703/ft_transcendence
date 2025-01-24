@@ -1,4 +1,5 @@
 import { fetchAuthData } from "../fetchData.js";
+import { renderPage } from "../historyManager.js";
 import { showErrorMessages } from "../tools.js";
 
 function createBasicLayout() {
@@ -33,7 +34,7 @@ function createTheRest(data) {
     row.classList.add("leaderboard-item");
     row.innerHTML = `
       <td>#${index + 4}</td>
-      <td><img class="leaderboard-avatar" src="${user.avatar}" alt="${user.username}'s avatar" /></td>
+      <td><img class="leaderboard-avatar avatar-onclick" src="${user.avatar}" alt="${user.username}'s avatar" /></td>
       <td>${user.username}</td>
       <td>${user.matchs.total_matches}</td>
       <td>${user.matchs.won_matches}</td>
@@ -52,7 +53,7 @@ function createTop3(data) {
     top3Item.classList.add("top3-item");
     top3Item.innerHTML = `
       <div class="top3-header">
-        <img class="top3-avatar" src="${user.avatar}" alt="${user.username}'s avatar" />
+        <img class="top3-avatar avatar-onclick" src="${user.avatar}" alt="${user.username}'s avatar" />
         <div class="top3-username">${user.username}</div>
       </div>
       <div class="top3-score">
@@ -61,8 +62,10 @@ function createTop3(data) {
       <div class="top3-rank">#${index + 1}</div>
       </div>
     `;
+
     top3Container.appendChild(top3Item);
   });
+
 }
 
 function sortLeaderBoardData(dataArray) {
@@ -94,5 +97,15 @@ export async function renderLeaderBoardPage() {
   createBasicLayout();
   createTop3(sortedDataArray.slice(0, 3));
   createTheRest(sortedDataArray.slice(3));
+
+  const avatars = document.querySelectorAll('.avatar-onclick');
+  avatars.forEach((avatar) => {
+    avatar.style.cursor = "pointer";
+    avatar.addEventListener('click', () => {
+      const username = avatar.alt.replace("'s avatar", "");
+      renderPage('profile', true, username);
+    });
+  });
+
 }
 

@@ -27,7 +27,7 @@ export async function sendScore()
     }
 }
 
-export function manageScore()
+export async function manageScore()
 {
 	if (gameVar.localGame)
 		gameVar.opponentName = 'player2';
@@ -35,6 +35,30 @@ export function manageScore()
 		gameVar.winnner = gameVar.userName;
 	else
 		gameVar.winner = gameVar.opponentName;
+
+	console.log("win", gameVar.winner);
+
+	const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${gameVar.winner}`);
+
+
+	gameVar.winner = nicknameResponse;
+
+	if (gameVar.difficulty === 'easy')
+		gameVar.difficulty = 'EASY';
+	else if (gameVar.difficulty === 'medium')
+		gameVar.difficulty = 'MEDIUM';
+	else if (gameVar.difficulty === 'hard')
+		gameVar.difficulty = 'HARD';
+
+	if (gameVar.currentLevel === 'classicPong')
+		gameVar.currentLevel = 'CLASSIC';
+	else if (gameVar.currentLevel === 'tableTennis')
+		gameVar.currentLevel = 'TABLETENNIS';
+	else if (gameVar.currentLevel === 'football')
+		gameVar.currentLevel = 'FOOTBALL';
+	else if (gameVar.currentLevel === 'tennis')
+		gameVar.currentLevel = 'TENNIS';
+	
 }
 
 export function checkScore()
@@ -43,6 +67,13 @@ export function checkScore()
 	{
 		gameVar.matchOver = true;
 		gameVar.startTime = false;
+		if (!gameVar.tournament)
+		{
+			gameVar.rematchBtn.style.display = 'block';
+			gameVar.quitGameBtn.style.display = 'block';
+		}
+		gameVar.rematchBtn.disabled = false;
+		gameVar.rematchBtn.style.cursor = false ? "pointer" : "not-allowed";
 		cancelAnimationFrame(gameVar.animationFrame);
 		if (!gameVar.liveMatch)
 		{

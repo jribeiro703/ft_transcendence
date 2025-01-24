@@ -11,6 +11,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.shortcuts import get_object_or_404
 from django.core.files.base import ContentFile
 from rest_framework import status, serializers, exceptions
+from rest_framework.exceptions import NotAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -653,6 +654,8 @@ class UserSettingsView(RetrieveUpdateDestroyAPIView):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def check_auth(request):
+	if not request.user.is_authenticated:
+		raise NotAuthenticated(detail="User is not authenticated")
 	return Response({
 		"message": "User is authenticated"
 		}, status=status.HTTP_200_OK)

@@ -26,15 +26,17 @@ export function collisionDetectionB()
 					brickVar2.dy = -brickVar2.dy;
 					b.status = 0;
 					brickVar2.score++;
-					// brickVar2.totalBrick = 2;
+					brickVar2.totalBrick = 5;
 					if(brickVar2.score == brickVar2.totalBrick)
 					{
 						brickVar2.finishLevel = true;
 						brickVar2.ctx.clearRect(0, 0, brickVar2.canvasW, brickVar2.canvasH);
-						if (brickVar2.currLevel === "invader")
-							brickVar2.finish = true;
-						if (!gameVar.localGame)
-							youWinB();
+						if (!gameVar.localGame && !gameVar.liveMatch)
+						{
+							if (brickVar2.currLevel === "invader")
+							brickVar2.finish = true;						
+						}
+						youWinB();
 					}
 				}
 			}

@@ -3,6 +3,7 @@ import brickVar2 from "./var.js";
 import gameVar from "../../pong/var.js";
 import { levelDisplayB } from "./level.js";
 import { addBtnB } from "./manage.js";
+import { compareScore } from "../score.js";
 
 function loadCustomFont()
 {
@@ -13,13 +14,41 @@ export function youWinB()
 {
 	if (!brickVar2.finish)
 	{
-		brickVar2.ctx.font = "35px Arial";
-    	brickVar2.ctx.fillStyle = "red";
-    	brickVar2.ctx.fillText("Congratulations, you win !!", brickVar2.canvasW / 2 - 200, brickVar2.canvasH / 2);
+		loadCustomFont().load().then(function(font) 
+		{
+			brickVar2.ctx.font = 'bold 24px fontScore';
+			brickVar2.ctx.fillStyle = "#66a5e8";
+			brickVar2.ctx.fillText("Congratulations, you win !!", brickVar2.canvasW / 2 - 200, brickVar2.canvasH / 2);
+
+		}).catch(function(error)
+		{
+			console.error("Error on font load", error);
+		});	
 	}
-	levelDisplayB();
-	addBtnB();
+	if (!gameVar.liveMatch && !gameVar.localGame)
+		levelDisplayB();
+	else if (gameVar.liveMatch)
+		chechOpponentRemote();
+	else if (gameVar.localGame)
+	{
+		chechOpponent();
+		if ((brickVar.lives === 0 || brickVar.finishLevel) && (brickVar2.lives === 0 || brickVar2.finishLevel))
+			addBtnB();
+	}
+	else
+		addBtnB();
 }
+// export function youWinB()
+// {
+// 	if (!brickVar2.finish)
+// 	{
+// 		brickVar2.ctx.font = "35px Arial";
+//     	brickVar2.ctx.fillStyle = "red";
+//     	brickVar2.ctx.fillText("Congratulations, you win !!", brickVar2.canvasW / 2 - 200, brickVar2.canvasH / 2);
+// 	}
+// 	levelDisplayB();
+// 	addBtnB();
+// }
 
 export function saveScoreB()
 {
@@ -81,7 +110,7 @@ export function chechOpponent()
 	{
 		const waiting = setInterval(() =>
 		{
-			if (brickVar.startTime === true || brickVar.gameTime < 1)
+			if ((brickVar.startTime === true || brickVar.gameTime < 1) && (!brickVar.finishLevel))
 			{
 				if (!display)
 				{
@@ -97,7 +126,11 @@ export function chechOpponent()
 			}
 			else
 			{
-				clearInterval(waiting);
+				if (brickVar.gameTime > 2)
+				{
+					clearInterval(waiting);
+					compareScore();
+				}	
 			}
 		}, 1000);
 	}

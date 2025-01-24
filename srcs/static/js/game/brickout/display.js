@@ -1,46 +1,61 @@
 import { checkBtnB } from "./manage.js";
 
 export function displayNextLevel() {
-  console.log("display next level ");
   const mainContent = document.getElementById("brickoutContainer");
   const btn = document.createElement("div");
   btn.id = "finish";
-  btn.className =
-    "finish d-flex justify-content-center align-items-center gap-4 flex-wrap";
   btn.innerHTML = `
-        <button id="nextLevelBtn" class="primaryBtn w-170 level"><span>Next Level</span></button> 
-        <button id="restartLevelBtn" class="primaryBtn w-170 level"><span>Restart Level</span></button> 
-        <button id="quitBtn" class="primaryBtn w-170 level"><span>Return Home</span></button>
+        <div class="button-container" style="margin-top: 50px">
+            <button id="nextLevelBtn" class="primaryBtn w-40 level"><span>Next Level</span></button> 
+            <button id="restartLevelBtn" class="primaryBtn w-40 level"><span>Restart Level</span></button> 
+            <button id="quitBtn" class="primaryBtn w-40 level"><span>Return Home</span></button>
+            </div>
     `;
   mainContent.appendChild(btn);
   checkBtnB("nextLevel");
 }
 
-export function displayFinish() {
-  console.log("display finish");
+export function displayFinishLive() {
   const mainContent = document.getElementById("brickoutContainer");
   const btn = document.createElement("div");
   btn.id = "finish";
   btn.className =
     "finish d-flex justify-content-center align-items-center gap-4 flex-wrap";
   btn.innerHTML = `
-        <button id="restartLevelBtn" class="primaryBtn w-25"><span>Restart Level</span></button> 
-        <button id="quitBtn" class="primaryBtn w-25"><span>Return Home</span></button>
+        <div class="button-container" style="margin-top: 50px">
+            <button id="returnLobbyBtn" class="primaryBtn w-40"><span>Return Lobby</span></button> 
+            <button id="quitBtn" class="primaryBtn w-40"><span>Return Home</span></button>
+            </div>
+    `;
+  mainContent.appendChild(btn);
+  checkBtnB("finish");
+}
+
+export function displayFinish() {
+  const mainContent = document.getElementById("brickoutContainer");
+  const btn = document.createElement("div");
+  btn.id = "finish";
+  btn.innerHTML = `
+        <div class="button-container" style="margin-top: 50px">
+            <button id="restartLevelBtn" class="primaryBtn w-40"><span>Restart Level</span></button> 
+            <button id="quitBtn" class="primaryBtn w-40"><span>Return Home</span></button>
+        </div>
     `;
   mainContent.appendChild(btn);
   checkBtnB("finish");
 }
 
 export function displayLocalRematch() {
-  console.log("display Local");
+  const finishCheck = document.getElementById("finish");
+  if (finishCheck) return;
   const mainContent = document.getElementById("brickout2pContainer");
   const btn = document.createElement("div");
   btn.id = "finish";
-  btn.className =
-    "finish d-flex justify-content-center align-items-center gap-4 flex-wrap";
   btn.innerHTML = `
-        <button id="rematchBtn" class="primaryBtn w-50"><span>Rematch</span></button> 
-        <button id="quitBtn" class="primaryBtn w-50"><span>Return Home</span></button>
+        <div class="button-container" style="margin-top: 50px">
+            <button id="rematchBtn" class="primaryBtn w-40"><span>Rematch</span></button> 
+            <button id="quitBtn" class="primaryBtn w-40"><span>Return Home</span></button>
+        </div>
     `;
   mainContent.appendChild(btn);
   checkBtnB("localRematch");

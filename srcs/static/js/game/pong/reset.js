@@ -7,7 +7,7 @@ import { checkScore } from "./score.js";
 import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { resetPu, updatePowerUpSelection } from "./powerUp.js";
 import { renderPageGame } from "../HistoryManager.js";
-import { initPaddlesPos } from "./init.js";
+import { initPaddlesPos, removeEventListeners } from "./init.js";
 
 export function listenBtn()
 {
@@ -76,6 +76,7 @@ export function clearAllpongStates()
 	updateDifficultySelection('medium', true);
 	updateLevelSelection('classicPong', true);
 	updatePowerUpSelection(false, true);
+	removeEventListeners();
 	gameVar.startTime = false;
 	gameVar.gameTime = 0;
 	gameVar.gameStart = false;
@@ -98,6 +99,7 @@ export function clearPongVar()
 	resetTimeFrame();
 	resetPu();
 	initPaddlesPos();
+	removeEventListeners();
 	gameVar.startTime = false;
 	gameVar.gameTime = 0;
 	gameVar.gameStart = false;
@@ -161,8 +163,15 @@ export function resetBall(winner)
 	else
 		gameVar.aiScore++;
 	if (gameVar.liveMatch)
-		sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.playerScore, gameVar.aiScore);
-	checkScore();
+	{
+		if (gameVar.playerIdx === 1)
+			sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.playerScore, gameVar.aiScore);
+		if (gameVar.playerIdx === 2)
+			sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.opponentName, gameVar.playerScore, gameVar.aiScore);
+		checkScore();
+	}
+	else
+		checkScore();
 	gameVar.serveCount++;
 	if (gameVar.serveCount >= 2)
 	{
@@ -173,7 +182,9 @@ export function resetBall(winner)
 		{
 			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'player2' : 'player';
 			if (gameVar.liveMatch)
+			{
 				sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
+			}
 		}
 	}
 	initializeBall();
@@ -183,7 +194,9 @@ export function resetBall(winner)
 		checkball();
 	gameVar.gameStart = false;
 	if (gameVar.liveMatch)
+	{
 		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
+	}
 	if (gameVar.currentServer == 'ai')
 	{
 		gameVar.aiServe = true;

@@ -520,7 +520,7 @@ p1 {
   background-color: var(--background-color);
 }
 
-#rematchBtn:not(:disabled):hover,
+/* #rematchBtn:not(:disabled):hover,
 #quitGameBtn:hover {
   background-color: #6dc7c1;
   transform: scale(1.05);
@@ -530,7 +530,7 @@ p1 {
 #quitGameBtn:active {
   background-color: #003372;
   transform: scale(0.95);
-}
+} */
 
 /* ------------------- Room View ---------------------------- */
 

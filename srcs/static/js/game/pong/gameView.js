@@ -1,7 +1,7 @@
 import gameVar from "./var.js";
 import { initializeBall } from "./ball.js";
 import { draw } from "./draw.js";
-import { resetMatch } from "./reset.js";
+import { clearPongVar, resetMatch } from "./reset.js";
 import { manageAi } from "./ai.js";
 import { startGame } from "./start.js";
 import { updateCanvasColor } from "./update.js";
@@ -25,7 +25,7 @@ export async function showGameView()
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
 	gameVar.gameView = document.getElementById('gameView');
 
-	initControl(gameVar.localGame)
+	initControl();
 	startGame();
 }
 export async function showGameRoomB()
@@ -49,10 +49,19 @@ export async function showGameRoom()
 
 	displayGameView();
 	await initializeCanvasPong();
+	initControl();
 
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
+	if (!gameVar.rematchBtn)
+		console.log("errror on rematch");
+
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+	if (!gameVar.quitGameBtn)
+		console.log("errror on quit");
+
 	gameVar.returnLobby = document.getElementById('returnLobby');
+	if (!gameVar.returnLobby)
+		console.log("errror on return");
 }
 
 export function rematchView()

@@ -1,5 +1,3 @@
-# ensures that _ is defined as a shortcut for the gettext function for internationalization (i18n)
-# helps for lazy references to avoid circular dependencies
 from django.utils.translation import gettext as _ 
 from django.db import models
 from user.models import User
@@ -8,13 +6,11 @@ from django.utils import timezone
 
 class Game(models.Model):
 	GAME_STATUS_CHOICES = [
-		('NOT_STARTED', 'Not Started'),
-		('ONGOING', 'Ongoing'),
-		('PAUSED', 'Paused'),
-		('COMPLETED', 'Completed'),
-		('CANCELED', 'Canceled'),
+		('PENDING', 'Pending'),
+		('FINISHED', 'Finished'),
+		('WO', 'Walkover'),
 	]
-	status = models.CharField(max_length=20, choices=GAME_STATUS_CHOICES, default='NOT_STARTED')
+	status = models.CharField(max_length=20, choices=GAME_STATUS_CHOICES, default='PENDING')
 
 	DIFFICULTY_CHOICES = [
 		('EASY', 'Easy'),
@@ -30,36 +26,72 @@ class Game(models.Model):
 		('CLASSIC', 'Classic'),
 	]
 	level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='CLASSIC')
+	created_at = models.DateTimeField(default=timezone.now)  # Automatically set when created
 
 	player_one = models.ForeignKey(
-		'user.User', related_name='game_as_player_one', on_delete=models.SET_NULL, null=True
-	) # FK to User
+		'user.User', null=True, blank=True, 
+		related_name='game_as_player_one', on_delete=models.SET_NULL,
+	)
+	player1_guest = models.ForeignKey(
+		'tournament.Guest', null=True, blank=True, 
+		related_name='game_as_player1_guest', on_delete=models.SET_NULL,
+	)
+	# @yabing - you can use a display method <p>Player One: {{ game.get_player1_name }}</p>
+	# instead of storing the username in the model
 	username_one = models.CharField(max_length=50, blank=True, null=True)
+
 	player_two = models.ForeignKey(
-		'user.User', related_name='game_as_player_two', on_delete=models.SET_NULL, null=True
-	) # FK to User
+		'user.User', null=True, blank=True, 
+		related_name='game_as_player_two', on_delete=models.SET_NULL,
+	)
+	player2_guest = models.ForeignKey(
+		'tournament.Guest', null=True, blank=True, 
+		related_name='game_as_player2_guest', on_delete=models.SET_NULL,
+	)
+	# @yabing - you can use a display method <p>Player One: {{ game.get_player2_name }}</p>
+	# instead of storing the username in the model
 	username_two = models.CharField(max_length=50, blank=True, null=True)
+
 	score_one = models.PositiveIntegerField(default=0)
 	score_two = models.PositiveIntegerField(default=0)
+	timestamp = models.DateTimeField(auto_now_add=True)
+	walkover = models.BooleanField(default=False)
 
 	winner = models.ForeignKey(
-		'user.User', related_name='game_as_winner', on_delete=models.SET_NULL, null=True
-	) # FK to User
-	tournament = models.ForeignKey(
-		'tournament.Tournament', related_name='tournament_games', on_delete=models.CASCADE, null=True
-	) # FK to Tournament
-	max_score = models.PositiveIntegerField(default=10)
- 
-	created_at = models.DateTimeField(auto_now_add=True)  # Automatically set when created
-	start_time = models.DateTimeField(null=True, blank=True)
-	end_time = models.DateTimeField(null=True, blank=True)
+		'user.User', null=True, blank=True,
+		related_name='game_as_winner', on_delete=models.SET_NULL,
+	)
 
+	winner_guest = models.ForeignKey(
+    	'tournament.Guest', null=True, blank=True, 
+		related_name='game_as_winner_guest', on_delete=models.SET_NULL,
+	)
+
+	tournament = models.ForeignKey(
+		'tournament.Tournament', null=True, blank=True, 
+		 related_name='tournament_games', on_delete=models.CASCADE,
+	)
+ 
 	# Customization options
 	powerup = models.BooleanField(default=False)  # True = Active, False = Inactive
 	time_played = models.IntegerField(default=0)  # Time in seconds (or minutes)
-
+	
 	def __str__(self):
-		return f"Game {self.id} between {self.player_one} and {self.player_two}"
+		return f"{self.id}"
+
+	def get_player1_name(self):
+		if self.player_one:
+			return self.player_one.username
+		elif self.player1_guest:
+			return self.player1_guest.display_name
+		return 'Unknown'
+
+	def get_player2_name(self):
+		if self.player_two:
+			return self.player_two.username
+		elif self.player2_guest:
+			return self.player2_guest.display_name
+		return 'Unknown'
 
 class GamePlayer(models.Model):
 	PLAYER_STATUS_CHOICES = [
