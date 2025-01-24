@@ -28,7 +28,6 @@ export function checkSettingB()
 {
 	if (brickVar.settingChanged === false)
 	{
-		console.log("check setting");
 		updatePowerUpSelectionFirst(false, true); 
 		updateDifficultySelectionB('medium');
 		updateDifficultySelectionSB('medium');
@@ -94,7 +93,7 @@ export function displayLiveSettingB(difficulty, level)
 	const settingContain = document.getElementById('setting-container');
 	if (!settingContain)
 	{
-		console.log("Error on setting-columns2");
+		console.log("Error on setting-container");
 		return;
 	}
 	settingContain.innerHTML = '';

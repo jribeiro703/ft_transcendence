@@ -84,10 +84,6 @@ export function addBtnB()
 		else
 			displayFinish();
 	}
-	else
-	{
-		console.log("else...");
-	}
 }
 
 export function checkBtnB(status)

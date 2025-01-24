@@ -1,6 +1,6 @@
 import gameVar from "./var.js";
 import { sendDirectionData, sendGameData } from "./network.js";
-import { updateDifficultySelection } from "./update.js";
+import { updateDifficultySelection } from "./update.js"
 
 export function keyDownHandler(e, local)
 {
@@ -104,8 +104,11 @@ export function startBallLive(e)
 		{
 			if (!gameVar.init_dx || !gameVar.init_dy)
 			{
-				console.log("init est nul diff ", gameVar.difficulty);
-				updateDifficultySelection(gameVar.difficulty, true);
+				console.log("init est nul diff ");
+				if (gameVar.difficulty)
+					updateDifficultySelection(gameVar.difficulty, true);
+				else
+					updateDifficultySelection('medium', true);
 			}
             gameVar.gameStart = true;
 			gameVar.startTime = true;
