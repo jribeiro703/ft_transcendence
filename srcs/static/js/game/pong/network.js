@@ -58,6 +58,7 @@ export function sendPlayerData(socket, playerReady)
 			playerReady: playerReady,
 		};
 		socket.send(JSON.stringify(data));
+		console.log("Player data sent:", data);
 	}
 	else
 		console.log("Error websocket");

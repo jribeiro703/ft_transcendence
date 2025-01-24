@@ -161,16 +161,11 @@ export function resetBall(winner)
 		gameVar.aiScore++;
 	if (gameVar.liveMatch)
 	{
-		if (gameVar.playerIdx ===  1)
-		{
+		if (gameVar.playerIdx === 1)
 			sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.playerScore, gameVar.aiScore);
-			checkScore();
-		}
-		else if (gameVar.playerIdx === 2)
-		{
+		if (gameVar.playerIdx === 2)
 			sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.opponentName, gameVar.playerScore, gameVar.aiScore);
-			checkScore();
-		}
+		checkScore();
 	}
 	else
 		checkScore();

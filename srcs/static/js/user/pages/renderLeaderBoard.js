@@ -1,4 +1,3 @@
-import { showCreateTournamentForm } from "../../tournament/tournamentPage.js";
 import { fetchAuthData } from "../fetchData.js";
 import { renderPage } from "../historyManager.js";
 import { showErrorMessages } from "../tools.js";
