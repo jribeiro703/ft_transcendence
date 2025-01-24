@@ -79,8 +79,16 @@ export function resetBall(winner)
 		gameVar.playerScore++;
 	else
 		gameVar.aiScore++;
-	sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.playerScore, gameVar.aiScore);
-	checkScore();
+	if (gameVar.liveMatch)
+	{
+		if (gameVar.playerIdx === 1)
+			sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.userName, gameVar.playerScore, gameVar.aiScore);
+		if (gameVar.playerIdx === 2)
+			sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.opponentName, gameVar.playerScore, gameVar.aiScore);
+		checkScore();
+	}
+	else
+		checkScore();
 	gameVar.serveCount++;
 	if (gameVar.serveCount >= 2)
 	{

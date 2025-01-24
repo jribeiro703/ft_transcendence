@@ -16,8 +16,11 @@ export function checkScore()
 	{
 		gameVar.matchOver = true;
 		gameVar.startTime = false;
-		gameVar.rematchBtn.style.display = 'block';
-		gameVar.quitGameBtn.style.display = 'block';
+		if (!gameVar.tournament)
+		{
+			gameVar.rematchBtn.style.display = 'block';
+			gameVar.quitGameBtn.style.display = 'block';
+		}
 		gameVar.rematchBtn.disabled = false;
 		gameVar.rematchBtn.style.cursor = false ? "pointer" : "not-allowed";
 		cancelAnimationFrame(gameVar.animationFrame);
