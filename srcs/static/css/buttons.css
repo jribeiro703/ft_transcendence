@@ -260,27 +260,15 @@ button:disabled {
 /* Btn thibaud avec des iDs */
 
 .button,
-.level,
-.powerUpBtn,
-#rematchBtn,
-#quitGameBtn,
-#nextLevelBtn,
-#restartLevelBtn,
-#quitBtn {
+.powerUpBtn {
   background-color: var(--background-color);
   color: var(--text-color-selected);
   border: 2px solid transparent;
 }
 
 .button:hover,
-.level:hover,
 .powerUpBtn:hover,
-.map-image:hover,
-#rematchBtn:hover,
-#quitGameBtn:hover,
-#nextLevelBtn:hover,
-#restartLevelBtn:hover,
-#quitBtn:hover {
+.map-image:hover {
   background-color: var(--background-color);
   border-color: var(--border-btn-color);
   color: var(--text-color);
@@ -306,11 +294,7 @@ button:disabled {
 .button.selected,
 .level.selected,
 .powerUpBtn.selected,
-#rematchBtn.selected,
-#quitGameBtn.selected,
-#nextLevelBtn.selected,
-#restartLevelBtn.selected,
-#quitBtn.selected {
+#nextLevelBtn.selected {
   background-color: var(--background-color-when-selected);
   color: var(--text-color-selected);
   border: 1px solid var(--selected-btn);
@@ -352,7 +336,7 @@ button:disabled {
     transform 0.4s;
 }
 
-#startGameBtn:hover,
+/* #startGameBtn:hover,
 #quickGameBtn:hover,
 #tournamentGameBtn:hover {
   background-color: #6dc7c1;
@@ -364,7 +348,7 @@ button:disabled {
 #tournamentGameBtn:active {
   background-color: #003372;
   transform: scale(0.95);
-}
+} */
 
 /* boutons de test */
 .primaryBtn {

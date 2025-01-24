@@ -111,7 +111,7 @@
                         inset 0 0 8px var(--myYellowMain);
 }
 
-.boty .primaryBtn
+.boty .primaryBtn 
 {
     font-family: var(--boty-font);
     font-size: 26px;
@@ -147,7 +147,8 @@
 .boty .powerUpBtn:active,
 .boty .powerUpBtn.selected,
 .boty #saveBtn:active,
-.boty #saveBtn.selected {
+.boty #saveBtn.selected
+{
     box-shadow: 
         0px 0px 5px var(--myYellowPulp),
         0px 0px 10px var(--myYellowPulp),

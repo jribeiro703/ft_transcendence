@@ -26,6 +26,7 @@ class Game(models.Model):
 		('CLASSIC', 'Classic'),
 	]
 	level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='CLASSIC')
+	created_at = models.DateTimeField(default=timezone.now)  # Automatically set when created
 
 	player_one = models.ForeignKey(
 		'user.User', null=True, blank=True, 

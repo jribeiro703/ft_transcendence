@@ -1,6 +1,6 @@
 import gameVar from "./var.js";
 
-export function displayPongRemote()
+export function displayPong()
 {
     const mainContent = document.getElementById("mainContent");
     if (!mainContent)
@@ -13,12 +13,45 @@ export function displayPongRemote()
             <canvas id="scoreCanvas"></canvas>
         </div>
         <canvas id="myCanvas"></canvas>
-        <div class="button-container">
-            <button id="rematchBtn" class="primaryBtn w-50" style="display: none;">Rematch</button>
-            <button id="returnLobby" class="primaryBtn w-50" style="display: none;">Return Lobby</button>
-            <button id="quitGameBtn" class="primaryBtn w-50" style="display: none;">Quit Game</button>
+        <div class="button-container" style="margin-top: 50px">
+            <button id="rematchBtn" class="primaryBtn w-40" style="display: none;"><span>Rematch</span></button>
+            <button id="returnLobby" class="primaryBtn w-40" style="display: none;"><span>Return Lobby</span></button>
+            <button id="quitGameBtn" class="primaryBtn w-40" style="display: none;"><span>Quit Game</span></button>
         </div>
     </div>	
+    `;
+    mainContent.appendChild(insertTo);
+}
+
+export function displayGameBrickView()
+{
+    const mainContent = document.getElementById("mainContent");
+    mainContent.innerHTML = "";
+    const insertTo = document.createElement("div");
+    insertTo.id = "brickoutContainer";
+    insertTo.innerHTML = `
+    <div id="scoreboard">
+        <canvas id="scoreCanvas"></canvas>
+    </div>
+        <canvas id="brickoutCanvas"></canvas>
+    `;
+    mainContent.appendChild(insertTo);
+}
+
+export function displayGameBrick2pView()
+{
+    const mainContent = document.getElementById("mainContent");
+    mainContent.innerHTML = "";
+    const insertTo = document.createElement("div");
+    insertTo.id = "brickout2pContainer";
+    insertTo.innerHTML = `
+    <div id="scoreboard">
+        <canvas id="scoreCanvas"></canvas>
+    </div>
+    <div id="twoPlayerBrick" style="display: flex; gap: 20px; justify-content: center;">
+        <canvas id="brickoutCanvas"></canvas>
+        <canvas id="brickoutCanvas2"></canvas>
+    </div>
     `;
     mainContent.appendChild(insertTo);
 }
@@ -151,8 +184,7 @@ export function displayGameView()
 {
     if (!gameVar.tournament)
     {
-        // console.log("displaypongremote");
-        displayPongRemote();
+        displayPong();
     }
     else
     {
@@ -166,7 +198,7 @@ export function displayGameView()
                 </div>
                 <canvas id="myCanvas"></canvas>
                 <br><br>
-                <div class="button-container">
+                <div class="button-container" style="margin-bottom: 10px;">
                     <button id="rematchBtn" class="settingsBtn btn custom-btn height-btn" style="display: none;">Rematch</button>
                     <button id="quitGameBtn" class="settingsBtn btn custom-btn height-btn" style="display: none;">Return Home</button>
                 </div>
@@ -251,35 +283,4 @@ export function displayLobbyView(level)
     mainContent.appendChild(roomView);
 }
 
-export function displayGameBrickView()
-{
-    const mainContent = document.getElementById("mainContent");
-    mainContent.innerHTML = "";
-    const insertTo = document.createElement("div");
-    insertTo.id = "brickoutContainer";
-    insertTo.innerHTML = `
-    <div id="scoreboard">
-        <canvas id="scoreCanvas"></canvas>
-    </div>
-        <canvas id="brickoutCanvas"></canvas>
-    `;
-    mainContent.appendChild(insertTo);
-}
 
-export function displayGameBrick2pView()
-{
-    const mainContent = document.getElementById("mainContent");
-    mainContent.innerHTML = "";
-    const insertTo = document.createElement("div");
-    insertTo.id = "brickout2pContainer";
-    insertTo.innerHTML = `
-    <div id="scoreboard">
-        <canvas id="scoreCanvas"></canvas>
-    </div>
-    <div id="twoPlayerBrick">
-        <canvas id="brickoutCanvas"></canvas>
-        <canvas id="brickoutCanvas2"></canvas>
-    </div>
-    `;
-    mainContent.appendChild(insertTo);
-}
