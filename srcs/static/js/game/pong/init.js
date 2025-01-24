@@ -1,13 +1,14 @@
 import gameVar from "./var.js";
 import { keyDownHandler, keyUpHandler, startBallLive, startBall } from "./input.js";
-import { initControlLive } from "./control.js";
 import { showLobbyView } from "./gameViewMulti.js";
 import { roomNetwork } from "./room.js";
 import { updateLiveSetting } from "./setting.js";
 import { renderPageGame } from "../HistoryManager.js";
-import { clearAllpongStates } from "./reset.js";
-import { clearAllBrickStates } from "../brickout/manage.js";
 import { updateLiveSettingB } from "../brickout/settings.js";
+import { PADDLE_POSY } from "./const.js";
+import { resetLiveMatch } from "./reset.js";
+import brickVar from "../brickout/var.js";
+import { resetMatchB } from "../brickout/reset.js";
 
 
 export function removeEventListeners()
@@ -36,24 +37,32 @@ export function initEventListenerRoom()
 
 export function initLobbyPongView()
 {
-	// clearAllpongStates();
+	gameVar.game = 'pong';
+	gameVar.playerIdx = 0;
+	brickVar.playerIdx = 0;
+	gameVar.playerReady = false;
+	clearInterval(gameVar.waitingInterval);
+	resetLiveMatch();
+	// getUserInfosRemote();
 	showLobbyView();
-	updateLiveSetting();
 	initEventListenerRoom();
-	initControlLive();
 	roomNetwork();
+	updateLiveSetting();
 }
 export function initLobbyBrickoutView()
 {
-	// clearAllpongStates();
-	// clearAllBrickStates();
+	gameVar.game = 'brickout';
+	gameVar.playerIdx = 0;
+	brickVar.playerIdx = 0;
+	gameVar.playerReady = false;
+	clearInterval(gameVar.waitingInterval);
+	resetMatchB();
+	resetLiveMatch();
 	showLobbyView();
-	updateLiveSettingB();
 	initEventListenerRoomB();
-	// initControlLive();
 	roomNetwork();
+	updateLiveSettingB();
 }
-
 
 export function initEventListenerRoomB()
 {
@@ -61,6 +70,8 @@ export function initEventListenerRoomB()
 
 	gameVar.createRoomBtn.addEventListener('click', () => 
 	{
+		gameVar.playerIdx = 1;
+		gameVar.playerReady = false;
 		renderPageGame("playBrickoutRemote", true);
 	});
 
@@ -68,5 +79,11 @@ export function initEventListenerRoomB()
 	{
 		renderPageGame("brickoutSetting", true, 'live');
 	});
+}
 
+export function initPaddlesPos()
+{
+	gameVar.playerPaddleY = PADDLE_POSY;
+	gameVar.player2PaddleY = PADDLE_POSY;
+	gameVar.aiPaddleY = PADDLE_POSY;
 }

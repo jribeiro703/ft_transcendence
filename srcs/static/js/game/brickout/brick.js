@@ -1,8 +1,9 @@
 import brickVar from './var.js';
 import { youWinB } from './level.js';
 import { createCastlePattern, createInvaderPattern, createXPattern, createClassicPattern } from './brickPattern.js';
-import { sendScoreInfo, sendScoreInfoB } from '../pong/network.js';
+import { sendScoreInfoB } from '../pong/network.js';
 import gameVar from '../pong/var.js';
+import brickVar2 from './secondBrickout/var.js';
 
 for(var c = 0; c < brickVar.brickColumnCount; c++)
 {
@@ -15,6 +16,7 @@ for(var c = 0; c < brickVar.brickColumnCount; c++)
 
 export function collisionDetectionB()
 {
+	let checkOpp = false;
 	for(var c = 0; c < brickVar.brickColumnCount; c++) 
 	{
 		for(var r = 0; r<brickVar.brickRowCount; r++)
@@ -28,13 +30,24 @@ export function collisionDetectionB()
 					b.status = 0;
 					brickVar.score++;
 					manageRemoteScore();
+					// brickVar.totalBrick = 10;
 					if(brickVar.score == brickVar.totalBrick)
 					{
-						brickVar.finishLevel = true;
+						if (brickVar.playerIdx === 2)
+						{
+							console.log("if 2");
+							brickVar2.finishLevel = true;
+						}
+						else
+						{
+							console.log("else");
+							brickVar.finishLevel = true;
+						}
 						brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
 						if (brickVar.currLevel === "invader")
 							brickVar.finish = true;
-						youWinB();
+						if (!gameVar.localGame)
+							youWinB();
 					}
 				}
 			}
@@ -49,13 +62,11 @@ export function manageRemoteScore()
 		if (gameVar.playerIdx === 1)
 		{
 			brickVar.playerScore = brickVar.score;
-			brickVar.playerLives = brickVar.lives;
 			sendScoreInfoB(gameVar.gameSocket, 1, brickVar.playerScore, brickVar.playerLives);
 		}
 		if (gameVar.playerIdx === 2)
 		{
 			brickVar.opponentScore = brickVar.score;
-			brickVar.opponentLives = brickVar.lives;
 			sendScoreInfoB(gameVar.gameSocket, 2, brickVar.opponentScore, brickVar.opponentLives);
 		}
 	}

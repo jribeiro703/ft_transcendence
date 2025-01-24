@@ -1,0 +1,144 @@
+<div
+	id="livechat"
+	class="slidingDiv hide-children neon-purple d-flex flex-column gap-3"
+>
+	<div id="chat-text-background" class="flex-grow-1 w-100 h-100 overflow-auto position-relative">
+		<!-- Chat log -->
+		<div
+			id="chat-log"
+			class="w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto"
+			aria-label="Chat log"
+		></div>
+
+		<!-- game chat with absolute positioning -->
+		<div
+			id="gamechat"
+			class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none"
+			aria-label="Game chat"
+		></div>
+
+		<!-- Notification list with absolute positioning -->
+		<div
+			id="notificationlist"
+			class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none"
+			aria-label="Notification list"
+		></div>
+
+		<!-- Friend list with absolute positioning -->
+		<div
+			id="friendlist"
+			class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none"
+			aria-label="Friend list"
+		></div>
+
+		<!-- online list with absolute positioning -->
+		<div
+			id="onlinelist"
+			class="position-absolute top-0 start-0 w-100 h-100 p-2 d-flex flex-column-reverse text-break overflow-auto d-none"
+			aria-label="Online list"
+		></div>
+	</div>
+	<div class="position-absolute top-0 end-0 h-100">
+		<div class="channel-container d-flex flex-column">
+			<div class="channel-btn d-flex flex-column gap-2">
+				<button
+					class="channel-btn chat-btn btn border rounded py-2"
+					type="button"
+					id="notificationButton"
+					aria-label="NotificationsChat"
+					data-bs-toggle="tooltip"
+					data-bs-placement="left"
+					title="Notifications"
+				>
+					🔔
+				</button>
+				<button
+					class="channel-btn chat-btn btn border rounded py-2"
+					type="button"
+					id="bubbleButton"
+					aria-label="GeneralChat"
+					data-bs-toggle="tooltip"
+					data-bs-placement="left"
+					title="General Chat"
+				>
+					️💬
+				</button>
+				<button
+					class="channel-btn chat-btn btn border rounded py-2"
+					type="button"
+					id="swordsButton"
+					aria-label="GameChat"
+					data-bs-toggle="tooltip"
+					data-bs-placement="left"
+					title="Game Chat"
+				>
+					⚔️
+				</button>
+				<button
+					class="channel-btn chat-btn btn border rounded py-2"
+					type="button"
+					id="trophyButton"
+					aria-label="TournamentChat"
+					data-bs-toggle="tooltip"
+					data-bs-placement="left"
+					title="Tournament Chat"
+				>
+					🏆
+				</button>
+				<button
+					class="channel-btn chat-btn btn border rounded py-2"
+					type="button"
+					id="friendsButton"
+					aria-label="FriendsChat"
+					data-bs-toggle="tooltip"
+					data-bs-placement="left"
+					title="Friends"
+				>
+					🤝
+				</button>
+				<button
+					class="channel-btn chat-btn btn border rounded py-2"
+					type="button"
+					id="onlineButton"
+					aria-label="OnlinePlayers"
+					data-bs-toggle="tooltip"
+					data-bs-placement="left"
+					title="Online Players"
+				>
+					👤
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="input-group d-flex gap-3">
+		<div class="emoji-picker-container" id="emojiPickerContainer">
+			<emoji-picker
+				emoji-version="15.1"
+				id="emoji-picker"
+				aria-label="Emoji picker"
+			></emoji-picker>
+		</div>
+		<button
+			class="chat-btn btn rounded border"
+			type="button"
+			id="emojiButton"
+			aria-label="Emoji picker"
+		>
+			😊
+		</button>
+		<input
+			id="chat-message-input"
+			type="text"
+			class="border rounded form-control"
+			placeholder="Type here..."
+			aria-label="Chat message input"
+		/>
+		<button
+			id="chat-message-submit"
+			class="btn border rounded chat-btn"
+			aria-label="Send message"
+		>
+			Send
+		</button>
+	</div>
+</div>

@@ -5,7 +5,6 @@ import { updatePowerUpSelectionB as updatePowerUpSelectionSecond } from './secon
 import { updateLevelSelectionB as updateLevelSelectionFirst} from "./update.js";
 import { updateLevelSelectionB as updateLevelSelectionSecond} from "./secondBrickout/update.js";
 import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
-import { updateImageUrl } from "../pong/update.js";
 import { displaySettingB } from "./settings.js";
 
 export function updateSettingB()
@@ -42,7 +41,6 @@ export function updateSettingB()
 		powerUp = "❌";
 		updatePowerUpSelectionFirst(false, true);
 	}
-	updateImageUrl();
 	displaySettingB(difficulty, powerUp, level);
 }
 

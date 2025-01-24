@@ -77,10 +77,17 @@ export function manageMoveB()
 
 export function addBtnB()
 {
-	if (!brickVar2.finish)
-		displayNextLevel();
+	if (!gameVar.localGame)
+	{
+		if (!brickVar2.finish)
+			displayNextLevel();
+		else
+			displayFinish();
+	}
 	else
-		displayFinish();
+	{
+		console.log("else...");
+	}
 }
 
 export function checkBtnB(status)

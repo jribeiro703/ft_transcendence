@@ -6,3 +6,5 @@ export const POWER_UP_DURATION = 7000;
 export const BUFFER_COLLISION = 20;
 export const SCORE_CANVAS_HEIGHT = 100;
 export const PADDLE_THRESHOLD = 10;
+export const PADDLE_POSY = (420 - 75) / 2;
+export const PADDLE_POSX = (780 - 75) / 2;

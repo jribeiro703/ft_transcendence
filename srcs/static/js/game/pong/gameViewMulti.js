@@ -1,13 +1,12 @@
 import gameVar from "./var.js";
-import { checkSettingLive, updateSetting } from "./setting.js";
-import { createNewRoom } from "./room.js";
+import brickVar from "../brickout/var.js";
+import { createNewRoom, createPrivateRoom, roomNetwork } from "./room.js";
 import { displayGameBrickView, displayGameView, displayLobbyView } from "./display.js";
 import { getElementLobby } from "./getElement.js";
-import { initializeCanvasBrick, initializeCanvasBrick2p, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
-import { displayGameDataPong } from "./displayVar.js";
-import { getUserInfos } from "../getUser.js";
-import brickVar from "../brickout/var.js";
+import { initializeCanvasBrick, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
 import { initListenerB } from "../brickout/init.js";
+import { initControl } from "./control.js";
+import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 
 
 export function showLobbyView()
@@ -40,22 +39,19 @@ export function showLobbyView()
 
 export async function showPongRemote(room = null)
 {
-	checkSettingLive();
+	updateDifficultySelection('medium', true);
+	updateLevelSelection('classicPong', true);
 	displayGameView();
 	await initializeCanvasPong();
+	initControl();
+	checkElementId();
 
-	gameVar.gameView = document.getElementById('gameView');
-	gameVar.rematchBtn = document.getElementById('rematchBtn');	
-	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	// gameVar.gameView.style.display = 'block';
-	
-	createNewRoom();
+	if (!gameVar.private)
+		createNewRoom();
 }
 
 export async function showBrickoutRemote(room = null)
 {
-	// checkSettingLive();
-	// displayGameView();
 	displayGameBrickView();
 	await initializeCanvasBrick();
 	await initializeScoreCanvas2P();
@@ -64,7 +60,23 @@ export async function showBrickoutRemote(room = null)
 	gameVar.gameView = document.getElementById('gameView');
 	gameVar.rematchBtn = document.getElementById('rematchBtn');	
 	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-	// gameVar.gameView.style.display = 'block';
 	
 	createNewRoom();
+}
+
+
+function checkElementId()
+{
+	gameVar.gameView = document.getElementById('gameView');
+	if (!gameVar.gameView)
+		console.log("error on gameView");
+	gameVar.rematchBtn = document.getElementById('rematchBtn');	
+	if (!gameVar.rematchBtn)
+		console.log("error on rematch");
+	gameVar.quitGameBtn = document.getElementById('quitGameBtn');
+	if (!gameVar.quitGameBtn)
+		console.log("error on quitgame");
+	gameVar.returnLobby = document.getElementById('returnLobby');
+	if (!gameVar.returnLobby)
+		console.log("error on return lobby");
 }

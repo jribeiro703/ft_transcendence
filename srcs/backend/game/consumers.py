@@ -112,23 +112,12 @@ class PongConsumer(WebsocketConsumer):
 			self.broadcast_game_data(data)
 		elif data['type'] == 'setting_data':
 			self.broadcast_setting_data(data)
-		elif data['type'] == 'tournament_info':
-			self.broadcast_tournaments_info(data)
 		elif data['type'] == 'lobbyView':
 			self.lobby()
-		elif data['type'] == 'player_room_data':
-			logger.info(f'player room data receive : ')
-			logger.info(f'Player room data received:')
-			logger.info(f'Full data: {data}')
-			logger.info(f'User ID: {data.get("userid")}')
-			logger.info(f'Room name: {self.room_name}')
-			logger.info(f'Channel name: {self.channel_name}')
 		elif data['type'] == 'score_info_data':
 			self.broadcast_score_info_data(data)
 		elif data['type'] == 'scoreB_info_data':
 			self.broadcast_scoreB_info_data(data)
-		elif data['type'] == 'room_data':
-			self.broadcast_room_data(data)
 		elif data['type'] == 'room_deleted':
 			self.room_name = data['room_name']
 			if self.room_name in self.rooms:
@@ -270,23 +259,6 @@ class PongConsumer(WebsocketConsumer):
 			}
 		}))
 	
-	def room_data(self, event):
-		self.send(text_data=json.dumps({
-			'type': 'room_data',
-			'room_data': {
-				'roomName': event['roomName'],
-			}
-		}))
-
-	def tournament_info(self, event):
-		self.send(text_data=json.dumps({
-			'type': 'tournament_info',
-			'tournament_info': {
-				'name': event['name'],
-				'creator': event['creator'],
-			}
-		}))
-
 	def broadcast_ball_data(self, data):
 		async_to_sync(self.channel_layer.group_send)(
 			self.room_group_name,
@@ -373,22 +345,3 @@ class PongConsumer(WebsocketConsumer):
 				'lives': data['lives'],
 			}
 		)	
-
-	def broadcast_room_data(self, data):
-		async_to_sync(self.channel_layer.group_send)(
-			self.room_group_name,
-			{
-				'type': 'room_data',
-				'roomName': data['roomName'],
-			}
-		)
-
-	def broadcast_tournaments_info(self, data):
-		async_to_sync(self.channel_layer.group_send)(
-			self.room_group_name,
-			{
-				'type': 'tournament_info',
-				'name': data['name'],
-				'creator': data['creator'],
-			}
-		)

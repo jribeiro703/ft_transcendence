@@ -1,18 +1,18 @@
 import gameVar from "./var.js";
+import brickVar from "../brickout/var.js";
 import { drawPowerUp, collectPowerUp, updatePowerUp } from "./powerUp.js";
 import { manageServer } from "./manage.js";
 import { manageCollisionLive, manageRealCollision } from "./collision.js";
-import { aiMove} from "./ai.js";
+import { aiMove, drawPredictionPath } from "./ai.js";
 import { drawFootball } from "./foot.js";
 import { drawTennisCourt, drawLines} from "./tennis.js";
 import { manageMoveLive, manageMove } from './movement.js';
 import { drawBall } from "./ball.js";
 import { checkPaddles } from "./paddle.js";
-import { drawScoreBoard, drawScoreBoardLive } from "./score.js";
+import { checkScore, drawScoreBoard, drawScoreBoardLive } from "./score.js";
 import { updateCanvasColor } from "./update.js";
-import { addBtn } from "./manage.js";
 import { delRooms } from "./room.js";
-import brickVar from "../brickout/var.js";
+import { listenBtn } from "./reset.js";
 
 export function initDraw()
 {
@@ -26,28 +26,38 @@ export function initDraw()
 		else if (gameVar.currentLevel === 'tennis')
 			drawTennisCourt();
 		else if (gameVar.currentLevel === 'classicPong')
-		{
 			drawClassicPong();
-			updateCanvasColor();
-		}
+		updateCanvasColor();
 		drawBall();
 		checkPaddles();
 		if (gameVar.liveMatch)
+		{
 			drawScoreBoardLive();
+			// checkScore();
+		}
 		else
-			drawScoreBoard();
+		{
+			if (!gameVar.finishGame)
+				drawScoreBoard();
+		}
 	}
+}
+
+export function managePu()
+{
+	drawPowerUp();
+	collectPowerUp();
+	updatePowerUp();
 }
 
 export function draw()
 {
 	initDraw();
+	drawPredictionPath(gameVar.ctx);
 	if (gameVar.gameStart)
 	{
 		manageRealCollision();
-		drawPowerUp();
-		collectPowerUp();
-		updatePowerUp();
+		managePu();
 	}
 	else
 		manageServer();
@@ -84,6 +94,10 @@ export function kickOut()
 		gameVar.ctx.font = "35px Arial";
 		gameVar.ctx.fillStyle = "red";	
 		gameVar.ctx.fillText("Opponent has rage quit..." , gameVar.canvasW / 4, gameVar.canvasH / 3);
+		if (gameVar.tournament)
+		{
+			gameVar.ctx.fillText("You won the match by forfeit!", gameVar.canvasW / 4, (gameVar.canvasH / 3) + 50);
+		}
 	}
 	else if (gameVar.game === 'brickout')
 	{
@@ -94,7 +108,12 @@ export function kickOut()
 		brickVar.ctx.fillText("Opponent has rage quit..." , brickVar.canvasW / 4, brickVar.canvasH / 3);
 	}
 	delRooms();
-	addBtn();
+	if (gameVar.returnLobby && gameVar.quitGameBtn)
+	{
+		gameVar.returnLobby.style.display = 'block';
+		gameVar.quitGameBtn.style.display = 'block';
+		listenBtn();
+	}
 }
 
 function drawClassicPong()
@@ -121,5 +140,4 @@ function drawClassicPong()
 	gameVar.ctx.moveTo(0, gameVar.canvasH);
 	gameVar.ctx.lineTo(gameVar.canvasW, gameVar.canvasH);
 	gameVar.ctx.stroke();
-
 }

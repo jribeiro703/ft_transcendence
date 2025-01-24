@@ -40,7 +40,8 @@ def send_activation_email(user, view_name, action, subject, text_file, html_file
 
 def send_2FA_mail(user):
 	totp = pyotp.TOTP(user.otp_secret, interval=300)  # validity 5min
-	verification_code = totp.at(datetime.now(timezone.utc))
+	user.otp_timestamp = datetime.now(timezone.utc)
+	verification_code = totp.at(user.otp_timestamp)
 
 	context={"username": user.username, "verification_code": verification_code,}
 	html_content = render_to_string("emails/2FA.html", context)

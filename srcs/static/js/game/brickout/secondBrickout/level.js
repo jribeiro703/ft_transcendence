@@ -2,7 +2,6 @@ import brickVar2 from "./var.js";
 import { initBricksB } from "./brick.js";
 import { initListenerB } from "./init.js";
 import { startGameB } from "./control.js";
-import { sendScoreB } from "./score.js"
 
 export function checkLevelB(level)
 {
@@ -32,7 +31,6 @@ export function levelDisplayB()
 		brickVar2.finish = true;
 		brickVar2.finalScore = 104 + 169 + 169 + 169;
 		brickVar2.ctx.fillText("You have finish the game, Nice ! Score : " +brickVar2.finalScore , brickVar2.canvasW / 2 - 220, brickVar2.canvasH / 6);
-		sendScoreB();
 		addImageB("/static/css/images/ms.png");
 	}
 }

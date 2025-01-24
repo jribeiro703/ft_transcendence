@@ -69,6 +69,7 @@ INSTALLED_APPS = [
 	'livechat',
 	'admin_interface',
 	'colorfield',
+	'corsheaders',
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
@@ -77,6 +78,7 @@ SILENCED_SYSTEM_CHECKS = ["security.W019"]
 MIDDLEWARE = [
 	"django.middleware.security.SecurityMiddleware",
 	"django.contrib.sessions.middleware.SessionMiddleware",
+	"corsheaders.middleware.CorsMiddleware",
 	"django.middleware.common.CommonMiddleware",
 	"django.middleware.csrf.CsrfViewMiddleware",
 	"django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -175,7 +177,6 @@ REST_FRAMEWORK = {
 		'rest_framework_simplejwt.authentication.JWTAuthentication',
 	),
 	'DEFAULT_PERMISSION_CLASSES': (
-		# 'rest_framework.permissions.IsAuthenticated',
 		'rest_framework.permissions.AllowAny',
 	)
 }
@@ -183,7 +184,7 @@ REST_FRAMEWORK = {
 # JWT settings
 from datetime import timedelta
 SIMPLE_JWT = {
-	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+	"ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
 	"REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 	"ROTATE_REFRESH_TOKENS": True,
 	"BLACKLIST_AFTER_ROTATION": True,
@@ -206,6 +207,12 @@ CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = [
 	"https://localhost:8081",
+]
+
+CORS_ALLOWED_ORIGINS = [
+	f"https://{HOSTNAME}:8081",
+	"https://localhost:8081",
+	"https://127.0.0.1:8081",
 ]
 
 CHANNEL_LAYERS = {
