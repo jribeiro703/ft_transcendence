@@ -15,7 +15,7 @@ async function createSettingsPageContent(mainContent, data) {
 					<img id="avatar-img" src="${avatarPath}" alt="Avatar" class="avatar">
 				</div>
 				<div class="username-container">
-					<span id="username">${data.username}</span>
+					<span id="username">${data.username} ( ${data.game_token} )</span><br>
 				</div>
 			</div>
 				<div class="alias-container">

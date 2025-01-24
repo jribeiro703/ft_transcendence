@@ -48,7 +48,6 @@ export function manageAi()
 	{
 		if (gameVar.dx > 0)
 		{
-			console.log("find target");
 			let future = predictBallPos(gameVar);
 			let pos = findWallCollisionX(gameVar);
 			gameVar.targetY = future[pos][1];

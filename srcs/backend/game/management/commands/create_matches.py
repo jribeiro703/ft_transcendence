@@ -42,10 +42,10 @@ class Command(BaseCommand):
                 status='NOT_STARTED',
                 difficulty=random.choice(['EASY', 'MEDIUM', 'HARD']),
                 level=random.choice(['TABLETENNIS', 'FOOTBALL', 'TENNIS', 'CLASSIC']),
-                max_score=random.randint(5, 15),  # Random maximum score between 5 and 15
-                created_at=timezone.now(),
-                start_time=None,
-                end_time=None,
+                # max_score=random.randint(5, 15),  # Random maximum score between 5 and 15
+                # created_at=timezone.now(),
+                # start_time=None,
+                # end_time=None,
                 powerup=random.choice([True, False]),
                 time_played=random.randint(0, 300),  # Random play time between 0 and 300 seconds
                 score_one=score_one,  # Assign random score for player one

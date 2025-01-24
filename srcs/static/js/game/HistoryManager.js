@@ -7,19 +7,17 @@ import { showGameRoom, showGameView } from "./pong/gameView.js";
 import { renderHomePage } from "../renderHomePage.js";
 import {
   updateDifficultySelection,
-  updateImageUrl,
   updateLevelSelection,
 } from "./pong/update.js";
 import { updatePowerUpSelection } from "./pong/powerUp.js";
 import {
   updateDifficultySelectionB,
   updateLevelSelectionB,
-  updateSettingB,
 } from "./brickout/update.js";
 import { updatePowerUpSelectionB } from "./brickout/powerUp.js";
 import { showSettingViewB } from "./brickout/settings.js";
 import { clearAllBrickStates } from "./brickout/manage.js";
-import { sendGameData, sendPlayerData } from "./pong/network.js";
+import { sendGameData } from "./pong/network.js";
 import { isAuthenticated } from "../user/isAuthenticated.js";
 import { updateUserAvatar } from "../user/tools.js";
 import { showGameBrickView } from "./brickout/gameView.js";
@@ -30,6 +28,7 @@ import { clearAllpongStates } from "./pong/reset.js";
 import { showBrickoutRemote } from "./pong/gameViewMulti.js";
 import { showGameRoomB } from "./pong/gameView.js";
 import { changeTheme } from "../livechat/livechat.js";
+import { renderPage } from "../user/historyManager.js";
 
 const pongGamePages = {
   gameSelectionSolo: showGameSelectionView,
@@ -53,6 +52,7 @@ const pongGamePages = {
   playBrickoutRemote: showBrickoutRemote,
   playBrickoutRemoteSecondP: showGameRoomB,
 };
+
 const multiplayerPages = new Map([
   ["gameSelectionMulti", showGameSelectionMultiView],
   ["playPongLocal", showGameView],
@@ -69,6 +69,7 @@ export function isMultiplayerPage(pageKey) {
   const exist = multiplayerPages.has(pageKey);
   return exist ? true : false;
 }
+
 export function isGameplayPage(page) {
   return [
     "#playPong",
@@ -123,7 +124,6 @@ export async function renderPageGame(
   if (!authenticated && isMultiplayerPage(page)) renderPageGame("home", true);
 
   let renderFunction = pongGamePages[page];
-
   const lastPage = sessionStorage.getItem("lastPage");
   const isRefresh = lastPage === page;
   if (params !== null) {
@@ -149,7 +149,6 @@ export async function renderPageGame(
       );
     }
   }
-
   sessionStorage.setItem("lastPage", page);
 
   if (params === null && history.state && history.state.params !== undefined) {
@@ -174,7 +173,7 @@ window.addEventListener("popstate", async (event) => {
         gameVar.clientLeft,
       );
     } else {
-      renderPage(page, false, params);
+      renderPageGame(page, false, params);
     }
   }
 });
@@ -217,9 +216,6 @@ window.addEventListener("load", () => {
       updateDifficultySelectionB(brickVar.difficulty, true);
       updateLevelSelectionB(brickVar.currLevel, true);
       updatePowerUpSelectionB(brickVar.powerUpEnable, true);
-      // updateSetting();
-      // updateSettingB();
-      // updateImageUrl();
     }
   } else if (
     currentHash === "playPong" ||
@@ -234,7 +230,7 @@ window.addEventListener("load", () => {
   ) {
     clearAllpongStates();
     clearAllBrickStates();
-    renderHomePage();
+    renderPage("home");
     return;
   } else {
     renderPageGame(currentHash, false, currentState.params || false);
@@ -242,8 +238,8 @@ window.addEventListener("load", () => {
 });
 
 function loadSetting(gameState) {
-  (gameVar.saveSetting = gameState.save),
-    (gameVar.difficulty = gameState.difficulty);
+  gameVar.saveSetting = gameState.save;
+  gameVar.difficulty = gameState.difficulty;
   gameVar.currentLevel = gameState.level;
   gameVar.powerUpEnable = gameState.puEnable;
   brickVar.difficulty = gameState.difficultyB;

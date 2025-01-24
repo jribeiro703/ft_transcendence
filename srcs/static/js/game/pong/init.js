@@ -1,13 +1,11 @@
 import gameVar from "./var.js";
 import { keyDownHandler, keyUpHandler, startBallLive, startBall } from "./input.js";
-import { initControlLive } from "./control.js";
 import { showLobbyView } from "./gameViewMulti.js";
 import { roomNetwork } from "./room.js";
 import { updateLiveSetting } from "./setting.js";
 import { renderPageGame } from "../HistoryManager.js";
 import { updateLiveSettingB } from "../brickout/settings.js";
 import { PADDLE_POSY } from "./const.js";
-import { getUserInfos } from "../getUser.js";
 import { resetLiveMatch } from "./reset.js";
 import brickVar from "../brickout/var.js";
 import { resetMatchB } from "../brickout/reset.js";
@@ -45,10 +43,9 @@ export function initLobbyPongView()
 	gameVar.playerReady = false;
 	clearInterval(gameVar.waitingInterval);
 	resetLiveMatch();
-	getUserInfos();
+	// getUserInfosRemote();
 	showLobbyView();
 	initEventListenerRoom();
-	initControlLive();
 	roomNetwork();
 	updateLiveSetting();
 }
@@ -61,7 +58,6 @@ export function initLobbyBrickoutView()
 	clearInterval(gameVar.waitingInterval);
 	resetMatchB();
 	resetLiveMatch();
-	getUserInfos();
 	showLobbyView();
 	initEventListenerRoomB();
 	roomNetwork();

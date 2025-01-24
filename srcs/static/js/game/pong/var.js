@@ -209,11 +209,10 @@ const gameVar = {
     },
   ],
 
-  isFirstPlayer: false,
-
   roomName: null,
   gameSocket: null,
   lobbySocket: null,
+  private: false,
 
   // -------------------Power Ups------------------------
 
@@ -251,4 +250,3 @@ const gameVar = {
 };
 
 export default gameVar;
-

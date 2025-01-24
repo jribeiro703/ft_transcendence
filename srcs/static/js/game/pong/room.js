@@ -1,73 +1,74 @@
 import gameVar from "./var.js";
 import brickVar from "../brickout/var.js";
-import {
-  sendPlayerData,
-  sendRoomNameData,
-  sendScoreInfo,
-  sendSettingData,
-} from "./network.js";
+import { sendPlayerData, sendScoreInfo, sendSettingData } from "./network.js";
 import { renderPageGame } from "../HistoryManager.js";
 import { startLiveGame } from "./start.js";
 import { getUserInfosRemote } from "../getUser.js";
 import { initGame, initListenerB } from "../brickout/init.js";
 import { kickOut } from "./draw.js";
-import { checkSettingLive } from "./setting.js";
-import { displayGameView } from "./display.js";
-import { initializeCanvasPong } from "./canvas.js";
+import { clearPongVar } from "./reset.js";
+import { checkScore } from "./score.js";
 
-export async function createPrivateRoom()
-{
-	renderPageGame("playPongRemote", true)
-    checkSettingLive();
-    displayGameView();
-    await initializeCanvasPong();
+export async function createPrivateRoom() {
+  clearPongVar();
 
-    gameVar.gameView = document.getElementById('gameView');
-    gameVar.rematchBtn = document.getElementById('rematchBtn');
-    gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-    gameVar.returnLobby = document.getElementById('returnLobby');
-    gameVar.game = 'pong';
-    const roomName = await createNewRoom();
-    return roomName;
+  gameVar.private = true;
+  gameVar.liveMatch = true;
+  gameVar.game = "pong";
+  gameVar.playerIdx = 1;
+
+  renderPageGame("playPongRemote", true);
+  const roomName = await createNewRoom();
+  return roomName;
 }
 
-export async function joinPrivateRoom(roomName)
-{
-    renderPageGame("playPongRemoteSecondP", true);
-    displayGameView();
-    await initializeCanvasPong();
+export async function joinPrivateRoom(roomName) {
+  clearPongVar();
 
-    gameVar.gameView = document.getElementById('gameView');
-    gameVar.rematchBtn = document.getElementById('rematchBtn');
-    gameVar.quitGameBtn = document.getElementById('quitGameBtn');
-    gameVar.returnLobby = document.getElementById('returnLobby');
-    gameVar.game = 'pong';
-    await joinRoom(roomName);
+  gameVar.private = true;
+  gameVar.liveMatch = true;
+  gameVar.game = "pong";
+  gameVar.playerIdx = 2;
+  gameVar.playerReady = true;
+
+  renderPageGame("playPongRemoteSecondP", true);
+  await joinRoom(roomName);
 }
 
 export function createNewRoom(joinRoomCallback) {
+  if (gameVar.private) {
     return new Promise((resolve) => {
-        const roomName = `room_${Math.floor(Math.random() * 10000)}`;
-        const inter = setInterval(() => {
-            if (gameVar.tournament) {
-                sendRoomNameData(gameVar.lobbySocket, roomName);
-                sendSettingData(
-                    gameVar.lobbySocket,
-                    gameVar.gameReady,
-                    gameVar.difficulty,
-                    gameVar.currentLevel,
-                );
-            }
-        }, 1000);
-
-        gameVar.playerIdx = 1;
-        gameVar.isFirstPlayer = true;
-        if (gameVar.game === "pong") joinRoom(roomName);
-        else if (gameVar.game === "brickout") joinRoom(roomName);
-        // joinRoomB(roomName)
-
-        resolve(roomName);
+      const roomName = `privatePongRoom_${Math.floor(Math.random() * 10000)}`;
+      gameVar.playerIdx = 1;
+      joinRoom(roomName);
+      resolve(roomName);
     });
+  } else {
+    var roomName;
+    if (gameVar.game === "pong")
+      roomName = `PongRoom_${Math.floor(Math.random() * 10000)}`;
+    else if (gameVar.game === "brickout")
+      roomName = `BrickRoom_${Math.floor(Math.random() * 10000)}`;
+    const inter = setInterval(() => {
+      if (gameVar.tournament) {
+        sendRoomNameData(gameVar.lobbySocket, roomName);
+        sendSettingData(
+          gameVar.lobbySocket,
+          gameVar.gameReady,
+          gameVar.difficulty,
+          gameVar.currentLevel,
+        );
+      }
+    }, 1000);
+
+    if (gameVar.game === "pong") {
+      gameVar.playerIdx = 1;
+      joinRoom(roomName);
+    } else if (gameVar.game === "brickout") {
+      brickVar.playerIdx = 1;
+      joinRoom(roomName);
+    }
+  }
 }
 
 export function waitPlayerPong() {
@@ -86,12 +87,21 @@ export function waitPlayerPong() {
     gameVar.canvasW / 4,
     gameVar.canvasH / 2,
   );
-  sendSettingData(
-    gameVar.lobbySocket,
-    gameVar.gameReady,
-    gameVar.difficulty,
-    gameVar.currentLevel,
-  );
+
+  if (!gameVar.private)
+    sendSettingData(
+      gameVar.lobbySocket,
+      gameVar.gameReady,
+      gameVar.difficulty,
+      gameVar.currentLevel,
+    );
+  else
+    sendSettingData(
+      gameVar.gameSocket,
+      gameVar.gameReady,
+      gameVar.difficulty,
+      gameVar.currentLevel,
+    );
 }
 
 export function waitPlayerBrick() {
@@ -180,7 +190,6 @@ export function waitingPlayerTournament() {
 
 export function checkPlayerIdx() {
   if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1) {
-    console.log("player 1");
     getUserInfosRemote();
     if (gameVar.tournament) waitingPlayerTournament();
     else waitingPlayer();
@@ -263,7 +272,7 @@ export async function joinRoom(roomName) {
       } else if (data.type == "score_info_data") {
         gameVar.playerScore = data.score_info_data.score1;
         gameVar.aiScore = data.score_info_data.score2;
-
+        checkScore();
         if (data.score_info_data.idx === 1)
           gameVar.userName = data.score_info_data.name;
         if (data.score_info_data.idx === 2)
@@ -310,9 +319,11 @@ export function findGameScore() {
     }
   }
 }
+
 export function delRooms() {
   while (gameVar.rooms.length > 0) gameVar.rooms.pop();
 }
+
 export function updateRoomInfo(index, difficulty, level) {
   const room = gameVar.rooms.find((room) => room.idx === index);
 
@@ -321,74 +332,77 @@ export function updateRoomInfo(index, difficulty, level) {
     room.level = level;
   }
 }
-export function addRoom(
-  index,
-  roomName,
-  status,
-  nbplayer,
-  difficulty = null,
-  level = null,
-  time,
-  visibility,
-) {
-  if (!gameVar.rooms.some((room) => room.name === roomName)) {
-    gameVar.rooms.push({
-      idx: index,
-      name: roomName,
-      players: nbplayer,
-      difficulty: difficulty,
-      level: level,
-      status: status,
-      time: time,
-      visibility: visibility,
-    });
-  }
-}
 
 export function updateRoomList() {
   var game;
-  gameVar.roomsContainer.innerHTML = "";
+  if (!gameVar.private) gameVar.roomsContainer.innerHTML = "";
   gameVar.rooms.forEach((room) => {
     if (room.idx === null || room.idx === undefined) return;
 
     gameVar.noRoomsMessage.style.display = "none";
-    if (room.name.charAt(0) === "p") game = "Pong";
-    else if (room.name.charAt(0) === "b") game = "Brickout";
+    if (room.name.charAt(0) === "P") {
+      game = "Pong";
+      room.visibility = "Public";
+    } else if (room.name.charAt(0) === "B") {
+      game = "Brickout";
+      room.visibility = "Public";
+    } else if (room.name.charAt(0) === "p") {
+      game = "Pong";
+      room.visibility = "Private";
+    }
+
     const roomItem = document.createElement("div");
     roomItem.className = "server-item";
     roomItem.innerHTML = `
-			<div class="room-header">
-				<span class="room-name">${room.name}</span>
-				<button id="joinBtn" class="joinRoomBtn" ${room.status === "Started" ? "disabled" : ""}>Join</button>
-			</div>
-			<div class="room-info">
-				<span class="room-players">Players: ${room.players}/2</span>
-				<span class="room-difficulty">Difficulty: ${room.difficulty}</span>
-				<span class="room-level">Level: ${room.level}</span>
-				<span class="room-status">Status: ${room.status}</span>
-				<span class="room-game">Game: ${game}</span>
-				<span class="room-visibility">${room.visibility}</span> //todo
-			</div>
-		`;
+                <div class="room-header">
+                    <span class="room-name">${room.name}</span>
+                    <button id="joinBtn" class="joinRoomBtn" ${room.status === "Started" ? "disabled" : ""}>Join</button>
+                </div>
+                <div class="room-info">
+                    <span class="room-players">Players: ${room.players}/2</span>
+                    <span class="room-difficulty">Difficulty: ${room.difficulty}</span>
+                    <span class="room-level">Level: ${room.level}</span>
+                    <span class="room-status">Status: ${room.status}</span>
+                    <span class="room-game">Game: ${game}</span>
+                    <span class="room-visibility">Acces: ${room.visibility}</span>
+                </div>
+            `;
     const joinBtn = roomItem.querySelector(".joinRoomBtn");
+
     joinBtn.addEventListener("click", () => {
-      if (gameVar.game === "pong" && game === "Pong") {
+      if (
+        gameVar.game === "pong" &&
+        game === "Pong" &&
+        room.visibility !== "Private"
+      ) {
         gameVar.playerReady = true;
         gameVar.playerIdx = 2;
         renderPageGame("playPongRemoteSecondP", true);
         joinRoom(room.name);
-      } else if (gameVar.game === "brickout" && game === "Brickout") {
+      } else if (
+        gameVar.game === "brickout" &&
+        game === "Brickout" &&
+        room.visibility !== "Private"
+      ) {
         gameVar.playerReady = true;
         gameVar.playerIdx = 2;
         renderPageGame("playBrickoutRemoteSecondP", true);
         joinRoom(room.name);
-      } else {
+      } else if (room.visibility === "Public") {
         const gameSpan = roomItem.querySelector(".room-game");
         gameSpan.style.transition = "color 0.3s ease";
         gameSpan.style.color = "red";
 
         setTimeout(() => {
           gameSpan.style.color = "";
+        }, 300);
+      } else if (room.visibility === "Private") {
+        const visiSpan = roomItem.querySelector(".room-visibility");
+        visiSpan.style.transition = "color 0.3s ease";
+        visiSpan.style.color = "red";
+
+        setTimeout(() => {
+          visiSpan.style.color = "";
         }, 300);
       }
     });
@@ -416,12 +430,14 @@ export function waitingForSettingLive() {
     }
   }, 2000);
 }
+
 export function checkRoom(rooms) {
   if (rooms && Array.isArray(rooms)) {
     gameVar.rooms = gameVar.rooms.filter((room) => rooms.includes(room.name));
     updateRoomList();
   }
 }
+
 export function getDateTime() {
   var currentDateTime;
   const now = new Date();
@@ -440,6 +456,7 @@ export function getDateTime() {
   currentDateTime = `${date} ${time}`;
   return currentDateTime;
 }
+
 export function roomNetwork() {
   const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
   const tempSocket = new WebSocket(
@@ -451,7 +468,6 @@ export function roomNetwork() {
     tempSocket.send(JSON.stringify({ type: "lobbyView" }));
     updateRoomList();
   });
-
   tempSocket.onopen = function (e) {
     tempSocket.send(JSON.stringify({ type: "lobbyView" }));
   };
@@ -461,16 +477,35 @@ export function roomNetwork() {
     if (data.type === "looks_rooms") {
       if (data.rooms) {
         idx = gameVar.rooms.length;
-
         data.rooms.forEach((roomName) => {
           checkRoom(data.rooms);
           const roomExists = gameVar.rooms.some(
             (room) => room.name === roomName,
           );
-
           if (!roomExists) {
             const time = getDateTime();
-            addRoom(idx, roomName, "Waiting for opponent", 1, time);
+            if (gameVar.private)
+              addRoom(
+                idx,
+                roomName,
+                "Waiting for opponent",
+                1,
+                gameVar.difficulty,
+                gameVar.currentLevel,
+                time,
+                "private",
+              );
+            else
+              addRoom(
+                idx,
+                roomName,
+                "Waiting for opponent",
+                1,
+                gameVar.difficulty,
+                gameVar.currentLevel,
+                time,
+                "public",
+              );
             idx++;
           }
         });
@@ -501,4 +536,28 @@ export function roomNetwork() {
   tempSocket.onclose = function (event) {
     console.log("WebSocket closed:", event);
   };
+}
+
+export function addRoom(
+  index,
+  roomName,
+  status,
+  nbplayer,
+  difficulty = null,
+  level = null,
+  time,
+  visibility,
+) {
+  if (!gameVar.rooms.some((room) => room.name === roomName)) {
+    gameVar.rooms.push({
+      idx: index,
+      name: roomName,
+      players: nbplayer,
+      difficulty: difficulty,
+      level: level,
+      status: status,
+      time: time,
+      visibility: visibility,
+    });
+  }
 }
