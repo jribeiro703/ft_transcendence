@@ -18,6 +18,7 @@ async function showFriendList(chatLog) {
 	document.getElementById('onlinelist').classList.add('d-none');
 	document.getElementById('chat-log').classList.add('d-none');
 	document.getElementById('notificationlist').classList.add('d-none');
+	document.getElementById('gamechat').classList.add('d-none');
 
 	chatLog.innerHTML = '';
 	const loadingDiv = document.createElement('div');
