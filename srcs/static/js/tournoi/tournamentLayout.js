@@ -4,6 +4,7 @@ import { createTournamentLayoutHTML } from './templates/createTournamentLayoutTe
 import { fetchAuthData } from "../user/fetchData.js";
 import gameVar from "../game/pong/var.js";
 import { renderPageGame } from "../game/HistoryManager.js";
+import { clearAllpongStates } from '../game/pong/reset.js';
 
 export async function displayTournamentLayout(tournamentId) {
     const box = document.getElementById('mainContent');
@@ -32,9 +33,10 @@ export async function displayTournamentLayout(tournamentId) {
             // Periodically check if the match is over
             const intervalId = setInterval(() => {
                 // TODO: if the score is >= 11 and if the gap score is >= 2 , but actually it s score >= 4 for debug
-                if (gameVar.scoreBoard.score1 >= 2 || gameVar.scoreBoard.score2 >= 2) {
-                    gameVar.rematchBtn.style.display = 'none';
-                    gameVar.quitGameBtn.style.display = 'none';
+                if (gameVar.matchOver) {
+                    console.log("Match is over");
+                    // gameVar.rematchBtn.style.display = 'none';
+                    // gameVar.quitGameBtn.style.display = 'none';`
                     clearInterval(intervalId);
                     playNextMatchButton.disabled = false;
                 }
@@ -104,6 +106,7 @@ function displayTournamentArena() {
 function launchGame(player1, player2) {
     console.log("[launchGame] Preparing game launch...");
 
+    clearAllpongStates();
     gameVar.game = "pong";
     gameVar.localGame = true;
     gameVar.tournament = true;
