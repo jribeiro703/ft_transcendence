@@ -35,7 +35,7 @@ async function renderHomePage() {
     },
     {
       id: "btn-Tournament",
-      handler: () => showCreateTournamentForm2(),
+      handler: () => setupTournamentPage(),
     },
   ];
 
