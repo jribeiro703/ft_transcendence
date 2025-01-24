@@ -27,6 +27,7 @@ export function resetMatchB()
 	brickVar.gameStart = false;
 	brickVar.gameTime = 0;
 	brickVar.startTime = false;
+	brickVar.loose = false;
 	// brickVar.gameReady = false;
 	resetPuB();
 	initPaddlesPosB();

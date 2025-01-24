@@ -50,14 +50,14 @@ export function updateDifficultySelectionSB(level)
 	}
 	if (level == 'medium')
 	{
-		brickVar2.initDx = 6;
-		brickVar2.initDy = 6;
+		brickVar2.initDx = 5;
+		brickVar2.initDy = 5;
 		brickVar2.difficulty = 'medium';
 	}
 	if (level == 'hard')
 	{
-		brickVar2.initDx = 8;
-		brickVar2.initDy = 8;
+		brickVar2.initDx = 6;
+		brickVar2.initDy = 6;
 		brickVar2.difficulty = 'hard';
 	}
 }
