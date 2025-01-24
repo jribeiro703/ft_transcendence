@@ -1,0 +1,47 @@
+.whiteTheme {
+  --background-color: #ffffff;
+  --text-color: #444444;
+  --highlight-color: #4b6e84;
+  --icon-color: #000000;
+  --background-rooms: #000000;
+  --text-color-rooms: #ffffff;
+  --text-color-btn: #000000;
+  --text-color-btn-highlight: #ffffff;
+
+  /* BTN */
+  --selected-btn: #000000;
+  --box-shadow-black: 0px 0px 10px #000000;
+  --border-color: #000000;
+  --border-btn-color: #000000;
+  --background-color-when-selected: #000000;
+  --text-color-selected: #01ffff;
+
+  /* chat */
+  --chat-msg: #000000;
+  --chat-border: #555555;
+  --chat-btn-highlight: #01ffff;
+  --chat-bg: #555555;
+  --placeholder-color: #000000;
+  /* box */
+  --box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.9);
+  --box-shadow-images: 0px 0px 7px #000000ff;
+  --box-shadow-inset: inset 0px 0px 3px rgba(0, 0, 0, 0.9);
+  --box-shadow-highlight: 0px 0px 3px rgba(0, 0, 0, 1);
+  --box-shadow-highlight-inset: inset 0px 0px 1px rgba(0, 0, 0, 1);
+  /* chat neon */
+  --box-shadow-neonChat1: 0 0 0px #000000, 0 0 2px #000000, 0 0 4px #000000,
+    0 0 6px #000000;
+  --box-shadow-neonChat2: 0 0 8px #000000;
+  --box-shadow-neonChat3: 0 0 14px #000000;
+
+  /* mainContent neons */
+  --box-shadow-mainContent1: 0 0 0px #000000, 0 0 2px #000000, 0 0 4px #000000,
+    0 0 6px #000000;
+  --box-shadow-mainContent2: 0 0 8px #000000;
+  --box-shadow-mainContent3: 0 0 14px #000000;
+  --neon-main-image: 0 0 0px #808080, 0 0 1px #808080, 0 0 2px #808080,
+    0 0 3px #808080, 0 0 4px #808080, 0 0 7px #808080, 0 0 8px #808080,
+    inset 0 0 0px #808080, inset 0 0 1px #808080, inset 0 0 2px #808080,
+    inset 0 0 3px #808080, inset 0 0 4px #808080, inset 0 0 7px #808080,
+    inset 0 0 8px #808080;
+}

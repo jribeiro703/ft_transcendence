@@ -1,10 +1,10 @@
 import brickVar from "./var.js";
+import gameVar from "../pong/var.js";
 import { collisionDetectionB, drawBricksB} from './brick.js'
 import { updateBallPositionB, handleBallB } from './ball.js';
 import { manageCollisionB, manageMoveB } from './manage.js';
 import { collectPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
 import { drawScoreBoardB, drawScoreBoardBRemote } from "./score.js";
-import gameVar from "../pong/var.js";
 import { kickOut } from "../pong/draw.js";
 
 function baseDrawB()
@@ -22,6 +22,13 @@ function baseDrawB()
 	}
 }
 
+export function managePuB()
+{
+	drawPowerUpB();
+	collectPowerUpB();
+	updatePowerUpB();
+}
+
 export function drawB()
 {
 	if (gameVar.clientLeft)
@@ -29,21 +36,17 @@ export function drawB()
 		kickOut();
 		return;
 	}
-	if (!brickVar.finishLevel && brickVar.initialize)
+	if (brickVar.initialize && !brickVar.finishLevel)
 	{
 		baseDrawB();
 		if (brickVar.gameStart)
 		{
-			drawPowerUpB();
-			collectPowerUpB();
+			managePuB();
 			collisionDetectionB();
 			manageCollisionB();
-			updatePowerUpB();
 		}
 		else
-		{
 			handleBallB();
-		}
 		manageMoveB();
 		updateBallPositionB();
 		if (brickVar.anim)

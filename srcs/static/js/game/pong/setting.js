@@ -1,7 +1,7 @@
 import gameVar from "./var.js";
-import { updateDifficultySelection, updateImageUrl, updateLevelSelection } from "./update.js";
+import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { updatePowerUpSelection } from "./powerUp.js";
-import { displaySetting } from "./display.js";
+import { displayLiveSetting, displaySetting } from "./displaySettings.js";
 
 export function checkSetting()
 {
@@ -9,7 +9,7 @@ export function checkSetting()
 	{
 		updatePowerUpSelection(false, true); 
 		updateDifficultySelection('medium', true);
-		updateLevelSelection("calssicPong", true);
+		updateLevelSelection("classicPong", true);
 	}
 }
 
@@ -18,7 +18,7 @@ export function checkSettingLive()
 	if (gameVar.settingsChanged === false)
 	{
 		updateDifficultySelection('medium');
-		updateLevelSelection('tableTennis');
+		updateLevelSelection('classicPong');
 	}
 }
 
@@ -29,7 +29,9 @@ export function updateSetting()
 	var powerUp = null;
 
 	if (gameVar.difficulty)
+	{
 		difficulty = gameVar.difficulty;
+	}
 	else
 	{
 		difficulty = 'medium';
@@ -56,10 +58,9 @@ export function updateSetting()
 		powerUp = "❌";
 		updatePowerUpSelection(false, true);
 	}
-
-	updateImageUrl();
 	displaySetting(difficulty, powerUp, level);
 }
+
 
 export function updateLiveSetting()
 {
@@ -74,30 +75,25 @@ export function updateLiveSetting()
 
 	if (gameVar.currentLevel)
 		level = gameVar.currentLevel;
+	else
+		level = 'Classic Pong'
 
-	const settingContain = document.getElementById('setting-container');
-	settingContain.innerHTML = '';
-	const settingItem = document.createElement('div');
-	settingItem.innerHTML = `
-	Difficulty: 
-	<span id="difficultyChoice">${difficulty}</span><br>
-	Level:
-	<span id="levelSelected">${level}</span>
-	`;
-	settingContain.appendChild(settingItem);
+	displayLiveSetting(difficulty, level);
 }
+
 
 export function addPuBtn(info)
 {
 	if(info === 'live')
 	{
-		gameVar.powerUpSelection.style.display = 'none';
 		gameVar.btnPowerUp.style.display = 'none';
+		gameVar.withPowerUp.style.display = 'none';
+		gameVar.withoutPowerUp.style.display = 'none';
 	}
 	else
 	{
-		gameVar.powerUpSelection.style.display = 'block';
 		gameVar.btnPowerUp.style.display = 'block';
-
-	}		
+		gameVar.withPowerUp.style.display = 'block';
+		gameVar.withoutPowerUp.style.display = 'block';
+	}
 }

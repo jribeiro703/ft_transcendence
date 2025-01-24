@@ -23,3 +23,4 @@ export function listenFinishBtn()
 	if (quitBtn)
 		quitBtn.addEventListener('click', () => renderPageGame("home", true));
 }
+

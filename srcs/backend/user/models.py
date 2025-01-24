@@ -12,14 +12,14 @@ class User(AbstractUser):
 	email_sent_at = models.DateTimeField(null=True, blank=True)
 	password = models.CharField("password", max_length=128, validators=[MinLengthValidator(8)])
 	otp_secret = models.CharField(max_length=32, blank=True, null=True)
-	
+	otp_timestamp = models.DateTimeField(null=True, blank=True)
 	alias = models.CharField("alias", max_length=30, unique=True, blank=True, null=True, validators=[MinLengthValidator(3)])
 	avatar = models.ImageField("avatar", upload_to='avatars/', default='default-avatar.jpg')
 	friends = models.ManyToManyField('self', related_name='friendship', symmetrical=False, blank=True, verbose_name="friends")
+	blocklist = models.ManyToManyField('self', related_name='blocked_by', symmetrical=False, blank=True, verbose_name="blocklist")
 	is_online = models.BooleanField(default=False)
-
 	game_token = models.CharField(max_length=10, blank=True, null=True)
-
+	
 	# related_name : tournaments, game_as_player_one, game_as_player_two
 	# ex: user_instance.tournaments.all() to have access to alls tournaments
 
@@ -29,12 +29,31 @@ class User(AbstractUser):
 	def __str__(self):
 		return self.username
 
+	def remove_friend(self, friend):
+		self.friends.remove(friend)
+		friend.friends.remove(self)
+
+	def block_user(self, user):
+		self.blocklist.add(user)
+	
+	def unblock_user(self, user):
+		self.blocklist.remove(user)
+
 class FriendRequest(models.Model):
-    sender = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_accepted = models.BooleanField(default=False)
+	sender = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
+	receiver = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
+	created_at = models.DateTimeField(auto_now_add=True)
+	is_accepted = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f"{self.sender.username} sent a friend request to {self.receiver.username}"
+	def __str__(self):
+		return f"{self.sender.username} sent a friend request to {self.receiver.username}"
 
+class GameRequest(models.Model):
+	sender = models.ForeignKey(User, related_name='sent_invitations', on_delete=models.CASCADE)
+	receiver = models.ForeignKey(User, related_name='received_invitations', on_delete=models.CASCADE)
+	created_at = models.DateTimeField(auto_now_add=True)
+	is_accepted = models.BooleanField(default=False)
+	room = models.CharField(max_length=100)
+
+	def __str__(self):
+		return f"{self.sender.username} sent a game request to {self.receiver.username} for room {self.room}"

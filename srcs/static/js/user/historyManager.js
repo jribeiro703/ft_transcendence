@@ -7,12 +7,13 @@ import { renderOtpForm } from "./pages/renderOtpForm.js";
 import { renderProfilePage } from "./pages/renderProfilePage.js";
 import { renderRegisterForm } from "./pages/renderRegisterForm.js";
 import { renderSettingsPage } from "./pages/renderSettingPage.js";
+import { renderLeaderBoardPage } from "./pages/renderLeaderBoard.js";
 import { isAuthenticated } from "./isAuthenticated.js";
 import { updateUserAvatar } from "./tools.js";
 import { isGamePage, renderPageGame } from "../game/HistoryManager.js";
 import gameVar from "../game/pong/var.js";
 import { sendGameData } from "../game/pong/network.js";
-import { clearAllpongStates } from "../game/pong/reset.js";
+import { renderSelfProfilePage } from "./pages/profilePageTools.js";
 
 const authPages = {
 	auth: renderAuthPage,
@@ -25,10 +26,15 @@ const authPages = {
 const userPages = {
 	user: renderUserPage,
 	settings: renderSettingsPage,
-	profile: renderProfilePage,
+	profile: (params) => renderProfilePage(params),
+	selfProfile: renderSelfProfilePage,
 }
 
-async function renderPage(page, updateHistory = true) {
+const otherPages = {
+	leaderboard: renderLeaderBoardPage,
+}
+
+async function renderPage(page, updateHistory = true, params = '', logout = false) {
 	
 	if (gameVar.gameSocket)
 	{
@@ -37,11 +43,16 @@ async function renderPage(page, updateHistory = true) {
 	}
 
 	let renderFunction;
-	const authenticated = await isAuthenticated();
-	await updateUserAvatar(authenticated);
+	let authenticated;
+	if (!logout) {
+		authenticated = await isAuthenticated();
+		await updateUserAvatar(authenticated);
+	}
 	
+// console.log(authenticated);
+
 	if (authenticated)
-		renderFunction = userPages[page];
+		renderFunction = userPages[page] || otherPages[page];
 	else
 		renderFunction = authPages[page];
 
@@ -50,10 +61,10 @@ async function renderPage(page, updateHistory = true) {
 		renderFunction = renderHomePage;
 	} else {
 		if (updateHistory)
-			history.pushState({ page: page }, page, `#${page}`);
+			history.pushState({ page: page, params : params }, page, `#${page}`);
 	}
 	
-	renderFunction();
+	renderFunction(params);
 }
 
 // listen to precedent or next page event but don't push state to history
@@ -63,8 +74,12 @@ window.addEventListener('popstate', (event) => {
 	if (event.state) {
 		if (isGamePage("#" + event.state.page))
 			renderPageGame(event.state.page, false);
-		else
-			renderPage(event.state.page, false);
+		else {
+			if (event.state.params)
+				renderPage(event.state.page, false, event.state.params);
+			else
+				renderPage(event.state.page, false);
+		}
 	}
 });
 

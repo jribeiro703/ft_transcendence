@@ -22,16 +22,18 @@ async function isAuthenticated() {
 	// const access_token = sessionStorage.getItem('access_token');
 	const access_token = localStorage.getItem('access_token');
 	if (access_token || access_token == '') {
-		
 		options['headers']['Authorization'] = `Bearer ${access_token}`
 		const responseObject = await fetch("/user/check-auth/", options);
 		if (responseObject.status === 200) {
 			return true;
 		} else if (responseObject.status === 401) {
-			// console.warn("isAuthenticated: access token expired, refreshing...");
+			console.warn("isAuthenticated: access token expired, refreshing...");
 			const refreshed = await refreshAccessToken();
 			if (refreshed) {
+				console.warn("isAuthenticated: Successfully refreshed access token");
 				return true;
+			} else {
+				console.error("isAuthenticated: Failed to refresh access token");
 			}
 		}
 		// console.warn("isAuthenticated: user is not authenticated");

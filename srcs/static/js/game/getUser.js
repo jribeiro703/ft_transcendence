@@ -1,20 +1,21 @@
 import { fetchAuthData } from '../user/fetchData.js';
 import { showErrorMessages } from '../user/tools.js';
+import brickVar from './brickout/var.js';
 import { sendScoreInfo } from './pong/network.js';
 import gameVar from './pong/var.js';
 
-export async function getUserInfos()
+export async function getUserInfosRemote()
 {
         const response = await fetchAuthData('/user/private/')
 		if (response.status == 200)
 		{
-			if (gameVar.playerIdx === 1)
+			if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1) 
 			{
 				gameVar.userName = response.data.username;
 				gameVar.userAvatar = response.data.avatar;
 				sendScoreInfo(gameVar.gameSocket, 1, gameVar.userName, 0, 0);
 			}
-			if (gameVar.playerIdx === 2)
+			if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
 			{
 				gameVar.opponentName = response.data.username;
 				gameVar.opponentAvatar = response.data.avatar;
@@ -23,11 +24,12 @@ export async function getUserInfos()
 		}
 		else
 		{
-			showErrorMessages(response.data.message, "error");
+			console.log("erreur on fetch on getuserinfoRemote");
+			showErrorMessages(response);
 		}
 }
 
-export async function getUserInfos2()
+export async function getUserInfos()
 {
 	const response = await fetchAuthData('/user/private/')
 	if (response.status == 200)
@@ -37,7 +39,8 @@ export async function getUserInfos2()
 	}
 	else
 	{
-		showErrorMessages(response.data.message, "error");
+		console.log("erreur on fetch on getuserinfo");
+		showErrorMessages(response);
 	}
 }
 // export async function getUserInfosB()

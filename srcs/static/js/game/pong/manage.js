@@ -1,7 +1,6 @@
 import gameVar from "./var.js";
 import { checkball } from "./check.js";
-import { clearAllpongStates, resetBall } from "./reset.js";
-import { renderPageGame } from "../HistoryManager.js";
+import { resetBall } from "./reset.js";
 
 export function manageServer()
 {
@@ -37,39 +36,4 @@ export function checkServer()
 		gameVar.aiServe = true;
 		resetBall('ai');
 	}
-}
-export function addBtn()
-{
-	const mainContent = document.getElementById("mainContent");
-	const btn = document.createElement('div');
-	btn.innerHTML = `
-	<div class="finish id="finish">
-		<button id="returnLobbyBtn" class="">Return Lobby</button> 
-		<button id="quitBtn">Return Home</button>
-	</div>
-	`;
-	mainContent.appendChild(btn);
-	const returnLobbtyBtn = document.getElementById("returnLobbyBtn");
-	const quitBtn = document.getElementById("quitBtn");
-		if (returnLobbtyBtn)
-		{
-			returnLobbtyBtn.addEventListener("click", () =>
-			{
-				gameVar.liveMatch = true;
-				gameVar.game = 'pong';
-				clearAllpongStates();
-				renderPageGame("pongLobby", true);
-			});
-		}
-		if (quitBtn)
-		{
-			quitBtn.addEventListener('click', () => 
-			{
-				gameVar.liveMatch = false;
-				clearAllpongStates();
-				renderPageGame("home", true);
-			});
-
-		}
-
 }

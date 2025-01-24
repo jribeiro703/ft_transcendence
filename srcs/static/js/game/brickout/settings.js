@@ -1,43 +1,28 @@
 import brickVar from "./var.js";
 import { updatePowerUpSelectionB as updatePowerUpSelectionFirst} from "./powerUp.js";
-import { updateLevelSelectionB, updateLevelSelectionB as updateLevelSelectionFirst} from "./update.js";
+import { updateLevelSelectionB as updateLevelSelectionFirst} from "./update.js";
 import { updateDifficultySelectionB } from "./update.js";
 import { listenSettingPUB } from "./listenerSetting.js";
 import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
 import { listenSettingDifficultyB } from "./listenerSetting.js";
-import { listenSettingLevelB } from "./listenerSetting.js";
-import { listenSaveBtnB } from "./save.js";
+import { listenSettingLevelB } from "./listenerSetting.js"
 import { displaySettingViewB } from "./display.js";
-import gameVar from "../pong/var.js";
+import { listenSaveBtnB } from "./save.js";
 
 export function showSettingViewB(info)
 {
 	brickVar.settingChanged = false;
 	brickVar.checkDiff = false;
 	brickVar.checkPu = false;
-	brickVar.checkLevel = false
+	brickVar.checkLevel = false;
 	displaySettingViewB();
 	getSettingBtn();
-
-	// if(info === 'live')
-	// {
-	// 	brickVar.powerUpSelection.style.display = 'none';
-	// 	brickVar.btnPowerUp.style.display = 'none';
-	// }
-	// else
-	// {
-		brickVar.powerUpSelection.style.display = 'block';
-		brickVar.btnPowerUp.style.display = 'block';
-	// }		
-
+	brickVar.btnPowerUp.style.display = 'block';
 	listenSettingPUB();
 	listenSettingDifficultyB();
 	listenSettingLevelB();
-
 	listenSaveBtnB(info);
-
 }
-
 
 export function checkSettingB()
 {
@@ -53,7 +38,6 @@ export function checkSettingB()
 
 export function getSettingBtn()
 {
-	brickVar.powerUpSelection = document.getElementById('powerUpSelection');
 	brickVar.btnPowerUp = document.getElementById('btnPowerUp');
 	brickVar.withPowerUp = document.getElementById('withPowerUps');
 	brickVar.withoutPowerUp = document.getElementById('withoutPowerUps');
@@ -70,7 +54,11 @@ export function getSettingBtn()
 export function displaySettingB(difficulty, powerUp, level)
 {
 	const settingContain = document.getElementById('settings-column2');
-
+	if (!settingContain)
+	{
+		console.log("error on setting-container");
+		return;
+	}
 	settingContain.innerHTML = '';
 
 	const settingItem = document.createElement('div');
@@ -88,20 +76,27 @@ export function updateLiveSettingB()
 	var difficulty = null;
 	var level = null;
 
-	console.log("update diff: ", brickVar.difficulty);
 	if (brickVar.difficulty)
 		difficulty = brickVar.difficulty;
 	else
 		difficulty = 'medium';
 
-
-	console.log("update level: ", brickVar.currLevel);
 	if (brickVar.currLevel)
 		level = brickVar.currLevel;
 	else
 		level = 'classic';
 
+	displayLiveSettingB(difficulty, level);
+}
+
+export function displayLiveSettingB(difficulty, level)
+{
 	const settingContain = document.getElementById('setting-container');
+	if (!settingContain)
+	{
+		console.log("Error on setting-columns2");
+		return;
+	}
 	settingContain.innerHTML = '';
 	const settingItem = document.createElement('div');
 	settingItem.innerHTML = `
@@ -112,11 +107,4 @@ export function updateLiveSettingB()
 	`;
 	settingContain.appendChild(settingItem);
 }
-// export function checkSettingLiveB()
-// {
-// 	if (brickVar.settingsChanged === false)
-// 	{
-// 		updateDifficultySelectionB('medium');
-// 		updateLevelSelectionB('');
-// 	}
-// }
+

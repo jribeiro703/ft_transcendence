@@ -25,6 +25,23 @@ export function drawPowerUp()
 	}
 }
 
+export function resetPu()
+{
+	gameVar.powerUpX1 = null;
+	gameVar.powerUpY1 = null;
+	gameVar.powerUpX2 = null;
+	gameVar.powerUpY2 = null;
+	gameVar.powerUp1Active = false;
+	gameVar.powerUp2Active = false;
+	gameVar.powerUp1OnScreen = false;
+	gameVar.powerUp2OnScreen = false;
+	gameVar.currentPowerUp1 = null;
+	gameVar.currentPowerUp2 = null;
+	gameVar.playerPaddleHeight = 75;
+	gameVar.player2PaddleHeight = 75;
+	gameVar.aiPaddleHeight = 75;
+}
+
 function drawPowerUp1()
 {
 	const imgWidth = 50;
@@ -75,7 +92,6 @@ export function newPowerUp(isFirstPu, time)
 {
 	if (isFirstPu && gameVar.powerUp1Active || !isFirstPu && gameVar.powerUp2Active) 
 	{
-		console.log("pu deja active pour :", isFirstPu);
 		return;
 	}
 	setTimeout(() =>
@@ -174,7 +190,6 @@ function collectPowerUp1()
 		gameVar.powerUp1OnScreen = false;
 		gameVar.powerUpX1 = -100;
 		checkPowerUp('player', gameVar.currentPowerUp1);
-		console.log("player catch :", gameVar.currentPowerUp1);
 		gameVar.powerUp1Active = true;
 	}
 }
@@ -188,7 +203,6 @@ function collectPowerUp2()
 		gameVar.powerUp2OnScreen = false;
 		gameVar.powerUpX2 = gameVar.canvasW + 100;
 		checkPowerUp('player2', gameVar.currentPowerUp2);
-		console.log("player2 catch :", gameVar.currentPowerUp2);
 		gameVar.powerUp2Active = true;
 	}
 }
@@ -205,6 +219,7 @@ function collectPowerUp2Ai()
 		gameVar.powerUp2Active = true;
 	}
 }
+
 function applyPowerUpEffect(player, effect, duration = POWER_UP_DURATION)
 {
     if (player === 'player')

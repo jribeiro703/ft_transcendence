@@ -1,6 +1,6 @@
 import { isAuthenticated } from "./isAuthenticated.js";
 
-const API_BASE_URL = "https://localhost:8081";
+const API_BASE_URL = `https://${window.location.hostname}:8081`;
 
 function getCookie(name) {
 	const cookies = document.cookie.split(';');
@@ -41,12 +41,36 @@ async function makeAuthOptions(method, body, isFormData) {
 	return options;
 }
 
+async function refreshToken() {
+    const refreshToken = getCookie('refresh_token');
+    if (!refreshToken) {
+        return null;
+    }
+
+    const response = await fetch(`${API_BASE_URL}/user/token/refresh/`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('access_token', data.access_token);
+        return data.access_token;
+    } else {
+        localStorage.removeItem('access_token');
+        return null;
+    }
+}
+
 async function fetchData(endpoint, method = 'GET', body = null, isFormData = false) {
 	const url = `${API_BASE_URL}${endpoint}`;
 	const options = await makeOptions(method, body, isFormData);
 
 	const responseObject = {
-		data: { message: "An unknown error occurred while fetching data" },
+		data: { message: "fetchData: error occurred while fetching data" },
 		status: 400,
 	};
 
@@ -66,12 +90,22 @@ async function fetchAuthData(endpoint, method = 'GET', body = null, isFormData =
 	const options = await makeAuthOptions(method, body, isFormData);
 
 	const responseObject = {
-		data: { message: "An unknown error occurred while fetching data" },
+		data: { message: "fetchAuthData: error occurred while fetching data" },
 		status: 400,
 	};
 
 	try {
-		const response = await fetch(url, options);
+
+		// console.log("fetchAuthData: ", url);
+
+		let response = await fetch(url, options);
+		if (response.status === 401) {
+			const newAccessToken = await refreshToken();
+			if (newAccessToken) {
+				options = await makeAuthOptions(method, body, isFormData);
+				response = await fetch(url, options);
+			}
+		}
 		responseObject.status = response.status;
 		responseObject.data = await response.json();
 		return responseObject;

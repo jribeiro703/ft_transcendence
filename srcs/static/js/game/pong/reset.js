@@ -2,38 +2,56 @@ import gameVar from "./var.js";
 import { initializeBall } from "./ball.js";
 import { aiServeBall } from "./ai.js";
 import { checkball } from "./check.js";
-import { sendGameData, sendScoreInfo, sendSettingData } from "./network.js";
-import { startGame } from "./start.js";
+import { sendGameData, sendScoreInfo } from "./network.js";
 import { checkScore } from "./score.js";
 import { updateDifficultySelection, updateLevelSelection } from "./update.js";
-import { updatePowerUpSelection } from "./powerUp.js";
+import { resetPu, updatePowerUpSelection } from "./powerUp.js";
+import { renderPageGame } from "../HistoryManager.js";
+import { initPaddlesPos, removeEventListeners } from "./init.js";
 
 export function listenBtn()
 {
-	gameVar.rematchBtn.addEventListener('click', () =>
+	if (!gameVar.liveMatch)
 	{
-		resetMatch();
-		startGame();
-	});
+		gameVar.rematchBtn.addEventListener('click', () =>
+		{
+			resetMatch();
+			clearBtn();
+			renderPageGame('playPong', true);
+		});
+	}
+	else
+	{
+		gameVar.returnLobby.addEventListener('click', () =>
+		{
+			resetLiveMatch();
+			clearBtn();
+			renderPageGame('pongLobby', true);
+		});
+	}
 
-	gameVar.quitGameBtn.addEventListener('click', () => document.location.reload());
+	gameVar.quitGameBtn.addEventListener('click', () => 
+	{
+		clearAllpongStates();
+		resetMatch();
+		clearBtn();
+		renderPageGame('home', true);
+	});
 }
 
-export function clearAllpongStates()
+export function clearBtn()
 {
-	if (gameVar.animationFrame)
-	{
-		cancelAnimationFrame(gameVar.animationFrame);
-		gameVar.animationFrame = null;
-	}
-	if(gameVar.gameTimer)
-	{
-		clearInterval(gameVar.gameTimer);
-		gameVar.gameTimer = null;
-	}
-	updateDifficultySelection('medium', true);
-	updateLevelSelection('classicPong', true);
-	updatePowerUpSelection(false, true);
+	gameVar.quitGameBtn.style.display = 'none';
+	if (gameVar.rematchBtn)
+		gameVar.rematchBtn.style.display = 'none';
+	if (gameVar.returnLobby)
+		gameVar.returnLobby.style.display = 'none';
+}
+
+export function resetLiveMatch()
+{
+	resetTimeFrame();
+	initPaddlesPos();
 	gameVar.startTime = false;
 	gameVar.gameTime = 0;
 	gameVar.gameStart = false;
@@ -47,6 +65,55 @@ export function clearAllpongStates()
 	gameVar.currentServer = 'player';
 }
 
+export function clearAllpongStates()
+{
+	resetTimeFrame();
+	resetPu();
+	initPaddlesPos();
+	updateDifficultySelection('medium', true);
+	updateLevelSelection('classicPong', true);
+	updatePowerUpSelection(false, true);
+	removeEventListeners();
+	gameVar.startTime = false;
+	gameVar.gameTime = 0;
+	gameVar.gameStart = false;
+	gameVar.playerScore = 0;
+	gameVar.aiScore = 0;
+	gameVar.matchOver = false;
+	gameVar.serveCount = 0;
+	gameVar.finishGame = false;
+	gameVar.clientLeft = false;
+	gameVar.playerReady = false;
+	gameVar.liveMatch = false;
+	gameVar.localGame = false;
+	gameVar.tournament = false;
+	gameVar.currentServer = 'player';
+	gameVar.playerIdx = 0;
+}
+
+export function clearPongVar()
+{
+	resetTimeFrame();
+	resetPu();
+	initPaddlesPos();
+	removeEventListeners();
+	gameVar.startTime = false;
+	gameVar.gameTime = 0;
+	gameVar.gameStart = false;
+	gameVar.playerScore = 0;
+	gameVar.aiScore = 0;
+	gameVar.matchOver = false;
+	gameVar.serveCount = 0;
+	gameVar.finishGame = false;
+	gameVar.clientLeft = false;
+	gameVar.playerReady = false;
+	gameVar.liveMatch = false;
+	gameVar.localGame = false;
+	gameVar.tournament = false;
+	gameVar.currentServer = 'player';
+	gameVar.playerIdx = 0;
+}
+
 export function resetMatch()
 {
 	gameVar.playerScore = 0;
@@ -55,10 +122,18 @@ export function resetMatch()
 	gameVar.serveCount = 0;
 	gameVar.gameStart = false;
 	gameVar.currentServer = 'player';
-	gameVar.aiPaddleY = (420 - 75) / 2;
-	gameVar.targetY = (420 - 75) / 2;
-	gameVar.gameTime = 0;
+	gameVar.targetY = 0;
 	gameVar.finishGame = false;
+	gameVar.aiServe = false; 
+	gameVar.matchOver = false;
+	resetPu();
+	initPaddlesPos();
+	resetTimeFrame();
+}
+
+function resetTimeFrame()
+{
+
 	if (gameVar.animationFrame)
 	{
 		cancelAnimationFrame(gameVar.animationFrame);
@@ -68,6 +143,11 @@ export function resetMatch()
 	{
 		clearInterval(gameVar.aiMoveInterval);
 		gameVar.aiMoveInterval = null;
+	}
+	if(gameVar.gameTimer)
+	{
+		clearInterval(gameVar.gameTimer);
+		gameVar.gameTimer = null;
 	}
 }
 
@@ -99,7 +179,9 @@ export function resetBall(winner)
 		{
 			gameVar.currentServer = (gameVar.currentServer == 'player') ? 'player2' : 'player';
 			if (gameVar.liveMatch)
+			{
 				sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
+			}
 		}
 	}
 	initializeBall();
@@ -109,7 +191,9 @@ export function resetBall(winner)
 		checkball();
 	gameVar.gameStart = false;
 	if (gameVar.liveMatch)
+	{
 		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
+	}
 	if (gameVar.currentServer == 'ai')
 	{
 		gameVar.aiServe = true;

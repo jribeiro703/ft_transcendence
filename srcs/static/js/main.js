@@ -2,6 +2,9 @@ import { isAuthenticated } from "./user/isAuthenticated.js";
 import { renderPage } from "./user/historyManager.js";
 import { isGamePage } from "./game/HistoryManager.js";
 import { renderPageGame } from "./game/HistoryManager.js";
+import { clearAllBrickStates } from "./game/brickout/manage.js";
+import { clearAllGameStates } from "./game/brickout/listenerBtn.js";
+import { clearAllpongStates } from "./game/pong/reset.js";
 
 document
   .querySelector("[data-profile-icon]")
@@ -17,6 +20,8 @@ document
 document
   .querySelector("[data-home-icon]")
   .addEventListener("click", async () => {
+	clearAllBrickStates();
+	clearAllpongStates();
     renderPage("home");
   });
 
@@ -30,7 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		renderPageGame(hash.substring(1));
 	else if (hash === "" || hash === "#home")
 		renderPage("home");
-	else
+	else {
+    console.log(hash);
 		renderPage(hash.substring(1));
+  }
 });
 

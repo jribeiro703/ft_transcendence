@@ -1,7 +1,7 @@
 import pyotp
 from .models import User, FriendRequest
 from rest_framework import serializers, exceptions
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from .utils import send_activation_email
 from smtplib import SMTPException
 from secrets import token_urlsafe
@@ -19,7 +19,7 @@ class UserPrivateInfosSerializer(serializers.ModelSerializer):
 class UserPublicInfosSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('id', 'username', 'alias', 'avatar', 'is_online')
+		fields = ('id', 'username', 'alias', 'avatar', 'is_online', 'game_token')
 
 # ------------------------------REGISTER USER SERIALIZERS--------------------------------	
 
@@ -39,11 +39,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
 		user.set_password(password)
 		user.is_active = False
 		user.otp_secret = pyotp.random_base32()
-
 		# Generate and assign a game token
 		user.game_token = token_urlsafe(4)[:5]  # Generate a 5-character token
 		print(f"Generated game_token: {user.game_token}")  # Debug log
-
 		user.save()
 
 		try:
@@ -69,7 +67,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 # ------------------------------OTP VERIFICATION SERIALIZERS--------------------------------
-
 class OtpCodeSerializer(serializers.Serializer):
 	otp_code = serializers.CharField(required=True, write_only=True)
 
@@ -78,7 +75,11 @@ class OtpCodeSerializer(serializers.Serializer):
 		if user is None:
 			raise serializers.ValidationError({"message": "User not found."})
 		totp = pyotp.TOTP(user.otp_secret, interval=300)
-		if not totp.verify(value, for_time=datetime.now(timezone.utc)):
+
+		time_now = datetime.now(timezone.utc)
+		if (time_now - user.otp_timestamp) > timedelta(seconds=300):
+			raise exceptions.NotAuthenticated({"message": "The time to validate the OTP code has expired."})
+		if not totp.verify(value, for_time=user.otp_timestamp):
 			raise exceptions.NotAuthenticated({"message": "Invalid OTP code."})
 		return value
 
@@ -92,8 +93,8 @@ class UserSettingsSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = User
-		fields = ('id', 'is_online', 'is_42_user', 'username', 'alias', 'avatar', 'email', 'new_email', 'password', 'new_password', 'friends', 'new_friend')
-		read_only_fields = ('id', 'username', 'is_online', 'is_42_user', 'avatar', 'email', 'friends')
+		fields = ('id', 'is_online', 'is_42_user', 'username', 'game_token', 'alias', 'avatar', 'email', 'new_email', 'password', 'new_password', 'friends', 'new_friend')
+		read_only_fields = ('id', 'username', 'game_token', 'is_online', 'is_42_user', 'avatar', 'email', 'friends')
 		extra_kwargs = {'password': {'write_only': True}, 'new_password': {'write_only': True}, 'new_email': {'write_only': True}, 'new_friend': {'write_only': True}}
 
 	def update(self, instance, validated_data):
@@ -166,6 +167,3 @@ class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
 		fields = ['id', 'username']
-
-
-	

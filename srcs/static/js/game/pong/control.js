@@ -1,61 +1,53 @@
 import gameVar from "./var.js";
 import { keyDownHandler, keyUpHandler, startBallLive, startBall } from "./input.js";
 
-export function initControlLive()
+function removeAllTouchEvent()
 {
-	document.addEventListener("keydown", (e) => {
-        if (e.code === "Space")
-		{
-            startBallLive(e);
-        }
-    });
-
-    document.addEventListener("keydown", (e) => {
-        if (e.code === "ArrowUp" || e.code === "ArrowDown")
-		{
-            keyDownHandler(e);
-        }
-    });
-
-    document.addEventListener("keyup", (e) => {
-        if (e.code === "ArrowUp" || e.code === "ArrowDown")
-		{
-            keyUpHandler(e);
-        }
-    });
-}
-function removeEventListeners()
-{
+    document.removeEventListener("keydown", keyDownHandler);
+    document.removeEventListener("keydown", (e) => keyDownHandler(e, true));
+    document.removeEventListener("keydown", (e) => keyDownHandler(e, false));
+    document.removeEventListener("keyup", keyUpHandler);
+    document.removeEventListener("keyup", (e) => keyUpHandler(e, true));
+    document.removeEventListener("keyup", (e) => keyUpHandler(e, false));
+    document.removeEventListener("keydown", startBall);
+    document.removeEventListener("keydown", startBallLive);
+    
     if (gameVar.eventHandlers.keydown)
         document.removeEventListener("keydown", gameVar.eventHandlers.keydown);
-    if (gameVar.eventHandlers.keyup) 
+    if (gameVar.eventHandlers.keyup)
         document.removeEventListener("keyup", gameVar.eventHandlers.keyup);
-    if (gameVar.eventHandlers.startBall) 
+    if (gameVar.eventHandlers.startBall)
         document.removeEventListener("keydown", gameVar.eventHandlers.startBall);
+    
+    gameVar.eventHandlers = {
+        keydown: null,
+        keyup: null,
+        startBall: null
+    };
 }
 
-export function initControl(local)
+
+export function initControl()
 {
-    removeEventListeners();
-    gameVar.eventHandlers.startBall = (e) =>
-	{
-        if (e.code === "Space" || e.code === "Enter")
-            startBall(e);
-    };
-
-    gameVar.eventHandlers.keydown = (e) =>
-	{
-        if (e.code === "ArrowUp" || e.code === "ArrowDown" || 
-            e.code === "KeyW" || e.code === "KeyS")
-            keyDownHandler(e, local);
-    };
-
-    gameVar.eventHandlers.keyup = (e) =>
-	{
-        if (e.code === "ArrowUp" || e.code === "ArrowDown" || 
-            e.code === "KeyW" || e.code === "KeyS")
-            keyUpHandler(e, local);
-    };
+    removeAllTouchEvent();
+    if (gameVar.localGame)
+    {
+        gameVar.eventHandlers.startBall = startBall;
+        gameVar.eventHandlers.keydown = (e) => keyDownHandler(e, true);
+        gameVar.eventHandlers.keyup = (e) => keyUpHandler(e, true);
+    }
+    else if (gameVar.liveMatch)
+    {
+        gameVar.eventHandlers.startBall = startBallLive;
+        gameVar.eventHandlers.keydown = (e) => keyDownHandler(e, false);
+        gameVar.eventHandlers.keyup = (e) => keyUpHandler(e, false);
+    }
+    else
+    {
+        gameVar.eventHandlers.startBall = startBall;
+        gameVar.eventHandlers.keydown = (e) => keyDownHandler(e, false);
+        gameVar.eventHandlers.keyup = (e) => keyUpHandler(e, false);
+    }
 
     document.addEventListener("keydown", gameVar.eventHandlers.startBall);
     document.addEventListener("keydown", gameVar.eventHandlers.keydown);

@@ -1,5 +1,4 @@
 import brickVar from "./var.js";
-import { updateSettingB } from "./update.js"
 import { renderPageGame } from "../HistoryManager.js";
 import { updateLiveSettingB } from "./settings.js";
 
@@ -9,19 +8,16 @@ export function listenSaveBtnB(info)
 	{
 		if (info === 'live')
 		{
-			console.log("saveBtn render and update");
-			await renderPageGame('brickoutLobby', true);
+			renderPageGame('brickoutLobby', true);
 			updateLiveSettingB();
 		}
 		else if (info === 'local')
 		{
-			await renderPageGame("gameSelectionMulti", true);
-			updateSettingB();
+			renderPageGame("gameSelectionMulti", true);
 		}
 		else
 		{
-			await renderPageGame("gameSelectionSolo", true);
-			updateSettingB();
+			renderPageGame("gameSelectionSolo", true);
 		}
 	});
 }
