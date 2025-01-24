@@ -1,6 +1,7 @@
 import { PONG_CARD, showToast } from "./user/tools.js";
 import { isAuthenticated } from "./user/isAuthenticated.js";
 import { renderPageGame } from "./game/HistoryManager.js";
+import { renderPage } from "./user/historyManager.js";
 import { setupTournamentPage } from "./tournoi/tournamentForm.js";
 
 function createHomeContent() {
