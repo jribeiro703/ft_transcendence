@@ -63,11 +63,12 @@ export async function manageScore()
 
 export function checkScore()
 {
+	console.log("checkScore");
 	if ((gameVar.playerScore >= WIN_SCORE || gameVar.aiScore >= WIN_SCORE) && Math.abs(gameVar.playerScore - gameVar.aiScore) >= GAP_SCORE)
 	{
 		gameVar.matchOver = true;
 		gameVar.startTime = false;
-		if (!gameVar.tournament)
+		if (!gameVar.tournament && !gameVar.liveMatch)
 		{
 			gameVar.rematchBtn.style.display = 'block';
 			gameVar.quitGameBtn.style.display = 'block';
