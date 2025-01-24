@@ -66,7 +66,6 @@ export function sendPlayerData(socket, playerReady)
 
 export function sendGameData(socket, gameStart, currentServer, startTime, clientLeft)
 {
-	// console.log("send game data, client left ? ", clientLeft);
 	if (socket && socket.readyState == WebSocket.OPEN)
 	{
 		const data = 
@@ -149,27 +148,3 @@ export function sendRoomNameData(socket, roomName)
 	else
 		console.log("Error websocket");
 }
-// export function sendTournamentInfo(socket, name, creator)
-// {
-// 	if (socket && socket.readyState == WebSocket.OPEN)
-// 	{
-// 		const data =
-// 		{
-// 			type: 'tournament_info',
-// 			name: name,
-// 			creator: creator,
-// 		};
-// 		socket.send(JSON.stringify(data));
-// 	}
-// 	else
-// 		console.log("Error websocket");
-// }
-// export function askForTournamentList(socket)
-// {
-// 	if (socket && socket.readyState == WebSocket.OPEN)
-// 	{
-// 		socket.send(JSON.stringify({type: 'get_tournaments'}));
-// 	}
-// 	else
-// 		console.log("Error websocket");
-// }

@@ -22,6 +22,7 @@ import { clearAllpongStates } from "./pong/reset.js";
 import { showBrickoutRemote } from "./pong/gameViewMulti.js";
 import { showGameRoomB } from "./pong/gameView.js";
 import { changeTheme } from "../livechat/livechat.js";
+import { renderPage } from "../user/historyManager.js";
 
 const pongGamePages =
 {
@@ -175,7 +176,7 @@ window.addEventListener("popstate", async (event) =>
         }
         else
         {
-            renderPage(page, false, params);
+            renderPageGame(page, false, params);
         }
     }
 });
@@ -227,7 +228,7 @@ window.addEventListener("load", () =>
     {
         clearAllpongStates();
         clearAllBrickStates();
-        renderHomePage();
+        renderPage("home");
         return;
     } 
     else

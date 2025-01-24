@@ -8,7 +8,7 @@ import { updatePowerUpSelectionB as updatePowerUpSelectionBSecond } from "./seco
 import { displayNextLevel, displayFinish, displayLocalRematch } from "./display.js";
 import { listenFinishBtn, listenNextLevelBtn, listenLocalRematchBtn } from "./listenerBtn.js";
 import { chechOpponent, chechOpponentRemote } from "./score.js"
-import { handleNextLevelB, restartLevelB } from "./level.js";
+import { addImageB, handleNextLevelB, restartLevelB } from "./level.js";
 import { updateDifficultySelectionB } from "./update.js";
 import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
 import { resetBallB } from "./ball.js";
@@ -77,13 +77,15 @@ export function loseLives()
 		brickVar.lives--;
 		if(brickVar.lives === 0)
 		{
-			cancelAnimationFrame(brickVar.anim);
-			brickVar.finish = true;
+			brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
+			brickVar.loose = true;
 			brickVar.startTime = false;
-			brickVar.finishLevel = true;
-			saveScoreB();
-			chechOpponent();
-				// addBtnB();
+			if (!gameVar.localGame)
+				addImageB("/static/css/images/nooo.png");
+			if (gameVar.localGame)
+				chechOpponent();
+			else
+				addBtnB();
 		}
 		else
 			resetBallB();
@@ -131,7 +133,7 @@ export function addBtnB()
 	{
 		if (!gameVar.liveMatch)
 		{
-			if (!brickVar.finish)
+			if (brickVar.finishLevel)
 				displayNextLevel();
 			else
 				displayFinish();

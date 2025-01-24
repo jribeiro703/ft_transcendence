@@ -47,6 +47,7 @@ const brickVar = {
 	brickOffsetLeft: 25,
 	totalBrick: 0,
 	finishLevel: false,
+	loose: false,
 	gradient: null,
 
 	brick: [],
