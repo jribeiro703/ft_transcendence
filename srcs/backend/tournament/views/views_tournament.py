@@ -308,3 +308,41 @@ def delete_tournament(request, tournament_id):
 		tournament.delete()
 		return JsonResponse({'success': 'Tournament deleted'}, status=200)
 	return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+class UserOngoingTournamentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            # Query for the user's ongoing tournament
+            ongoing_tournament = Tournament.objects.filter(
+                created_by=request.user, status="open"
+            ).order_by("-created_at").first()
+
+            if not ongoing_tournament:
+                return Response({"message": "No ongoing tournament found."}, status=404)
+
+            matches = TournamentMatch.objects.filter(tournament=ongoing_tournament).order_by('position')
+            matches_info = [
+                {
+                    'match_id': match.match.id,
+                    'position': match.position,
+                    'player1': match.player1_name,
+                    'player2': match.player2_name,
+                    'score_one': match.match.score_one,
+                    'score_two': match.match.score_two,
+                } for match in matches
+            ]
+
+            data = {
+                "id": ongoing_tournament.id,
+                "created_by": ongoing_tournament.created_by.username,
+                "status": ongoing_tournament.status,
+                "player_count": ongoing_tournament.player_count,
+                "current_match": ongoing_tournament.current_match,
+                "matches": matches_info,
+            }
+            return Response(data, status=200)
+        except Exception as e:
+            logger.error(f"Error fetching ongoing tournament: {e}")
+            return Response({"error": "Failed to fetch ongoing tournament."}, status=500)

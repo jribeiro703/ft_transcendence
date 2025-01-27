@@ -12,14 +12,13 @@ export async function displayTournamentLayout(tournamentId) {
         const response = await fetchAuthData(`/tournament/${tournamentId}/`, "GET");
         if (response.status === 200 && response.data) {
             box.innerHTML = createTournamentLayoutHTML();
-
-            renderBracket(response.data.matches);
+            console.log("...Tournament layout created...");
+            renderBracket(response.data.matches, response.data.current_match);
 
             const playNextMatchButton = document.getElementById('play-next-match');
             playNextMatchButton.disabled = false;
             console.log("...playNextMatchButton disabled...");
             
-
             // TODO: BUG: What if the button is pressed 4th time? The tournament finishes in 3 matches
             document.getElementById('play-next-match').addEventListener('click', () => {
                 playNextMatchButton.disabled = true;
@@ -49,16 +48,35 @@ export async function displayTournamentLayout(tournamentId) {
     }
 }
 
-function renderBracket(matches) {
+function renderBracket(matches, currentMatchId) {
     const bracketContainer = document.getElementById('tournament-bracket');
-    bracketContainer.innerHTML = matches.map(match => `
-        <div class="matchup">
-            <div class="player">${match.player1 || 'TBD'}</div>
-            <div class="vs">vs</div>
-            <div class="player">${match.player2 || 'TBD'}</div>
-            <div class="scores">${match.score_player1 || 0} - ${match.score_player2 || 0}</div>
-        </div>
-    `).join('');
+    console.log("matches", matches);
+    console.log("currentMatchId", currentMatchId);
+    bracketContainer.innerHTML = matches.map(match => {
+        // Determine if the match is the current one
+        const isCurrentMatch = match.match_id === currentMatchId;
+        console.log("match_id", match.match_id);
+        console.log("isCurrentMatch", isCurrentMatch);
+            
+        // Determine if the match has a winner
+        const winnerExists = match.score_one > 0 || match.score_two > 0;
+
+        return `
+            <div class="matchup ${isCurrentMatch ? 'highlight-current' : ''}" data-match-id="${match.match_id}">
+                <div class="player ${winnerExists && match.score_one > match.score_two ? 'winner' : ''}">
+                    ${match.player1 || 'TBD'}
+                </div>
+                <div class="vs">vs</div>
+                <div class="player ${winnerExists && match.score_two > match.score_one ? 'winner' : ''}">
+                    ${match.player2 || 'TBD'}
+                </div>
+                <div class="scores">
+                    ${match.score_one || 0} - ${match.score_two || 0}
+                </div>
+            </div>
+        `;
+    })
+    .join('');
 }
 
 async function launchNextMatch(tournamentId, data) {
