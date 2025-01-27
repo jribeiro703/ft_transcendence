@@ -2,7 +2,7 @@ from django.urls import path
 
 from . import views
 
-from .views.views_tournament import CreateTournamentView, TournamentDetailView
+from .views.views_tournament import CreateTournamentView, TournamentDetailView, UserOngoingTournamentView
 
 
 urlpatterns = [
@@ -12,4 +12,5 @@ urlpatterns = [
     path("delete/<int:tournament_id>/", views.delete_tournament, name="tournament-delete"),
     path("list/", views.tournament_list, name="tournament-list"),
     path("tokenvalidate", views.validate_game_token, name="validate-game-token"),
+    path("ongoing/", UserOngoingTournamentView.as_view(), name="user-ongoing-tournament"),
 ]

@@ -14,11 +14,26 @@ export async function setupTournamentPage() {
     //const randomName = await generateTournamentName();
     //console.log("[setupTournamentPage] Generated tournament name:", randomName);
 
-    // Render the tournament setup form
-    box.innerHTML = createTournamentFormHTML("tournament");
+    try {
+        // Fetch ongoing tournament
+        const response = await fetchAuthData("/tournament/ongoing/", "GET");
 
-    // Load the new tournament setup functionality
-    loadTournamentSetup();
+        if (response.status === 200 && response.data) {
+            console.log("[setupTournamentPage] Found ongoing tournament:", response.data);
+            // Redirect to the tournament layout
+            await displayTournamentLayout(response.data.id);
+        } else {
+            console.log("[setupTournamentPage] No ongoing tournament found. Loading setup form...");
+            // Render the tournament setup form
+            box.innerHTML = createTournamentFormHTML("tournament");
+            loadTournamentSetup();
+        }
+    } catch (error) {
+        console.error("[setupTournamentPage] Error fetching ongoing tournament:", error);
+        // Fallback to setup form
+        box.innerHTML = createTournamentFormHTML("tournament");
+        loadTournamentSetup();
+    }
 }
 
 export async function loadTournamentSetup() {

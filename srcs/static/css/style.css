@@ -884,3 +884,21 @@ color: var(--text-color);;
     min-height: 300px; /* Adjust the height as needed */
   }
 }
+
+
+.matchup {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.matchup.highlight-current {
+border: 2px solid red;
+}
+
+.player.winner {
+  font-weight: bold;
+  color: #28a745;
+}
