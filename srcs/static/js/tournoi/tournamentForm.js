@@ -161,11 +161,17 @@ export async function loadTournamentSetup() {
                     playerGuest.style.display = 'none';
                     playerUserHidden.value = playerSelect.value;
                     playerGuestHidden.value = '';
-                    tokenContainer.style.display = 'block';
+                    tokenContainer.style.display = playerSelect.value ? 'block' : 'none';
                     if (playerSelect.value) {
                         validationSuccess.style.display = validateButton.disabled ? 'block' : 'none';
                     }
                 }
+                // Reset Token Input and Validation States (Add these lines here)
+                tokenInput.value = ''; // Clear token input
+                validationSuccess.style.display = 'none'; // Hide success state
+                tokenWarning.style.display = 'none'; // Hide warning
+                validateButton.disabled = true; // Disable validation button
+
                 validateUniquePlayers(); 
                 updateCreateTournamentButton();
             });
@@ -241,6 +247,9 @@ export async function loadTournamentSetup() {
                 const guestInput = parent.querySelector('.player-guest');
                 const validationSuccess = parent.querySelector('.validation-success');
 
+                const tokenWarning = parent.querySelector('.token-warning'); // New addition
+                const tokenInput = parent.querySelector('.game-token'); // New addition
+                const validateButton = parent.querySelector('.validate-token');
                 if (!playerUserHidden || !tokenContainer || !guestInput || !validationSuccess) {
                     console.warn("Missing child elements in parent:", parent);
                     return; // Exit if any child element is missing
@@ -258,6 +267,10 @@ export async function loadTournamentSetup() {
                     guestInput.style.display = 'block';
                     validationSuccess.style.display = 'none';
                 }
+                tokenInput.value = ''; // Clear token input
+                validationSuccess.style.display = 'none'; // Hide success state
+                tokenWarning.style.display = 'none'; // Hide warning
+                validateButton.disabled = true; // Disable validation button
                 validateUniquePlayers();
                 updateCreateTournamentButton();
             });
