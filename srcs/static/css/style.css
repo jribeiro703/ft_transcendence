@@ -20,6 +20,10 @@ body {
   backdrop-filter: blur(12px);
 }
 
+label {
+  color: var(--text-color);
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -173,6 +177,10 @@ p1 {
 
 .neon-blue {
   transition: box-shadow 0.4s ease-in-out;
+}
+
+heightTournamentBtn {
+  height: 70px !important;
 }
 
 .neon-blue:hover {
