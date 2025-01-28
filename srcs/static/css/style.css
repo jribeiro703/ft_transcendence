@@ -902,3 +902,11 @@ border: 2px solid red;
   font-weight: bold;
   color: #28a745;
 }
+
+.player.winner {
+  font-weight: bold;
+  color: #28a745;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}

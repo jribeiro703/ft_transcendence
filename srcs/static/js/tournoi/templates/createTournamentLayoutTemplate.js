@@ -9,15 +9,10 @@ export function createTournamentLayoutHTML() {
             <!-- Dynamic content for matches will be inserted here -->
           </div>
           <hr>
-          <div id="next-match" class="matchup">
-            <div id="player-l" class="current">Semi finalist 1</div>
-            <div class="vs">vs</div>
-            <div id="player-r" class="current">Semi finalist 2</div>
-          </div>
           <button
             id="play-next-match"
             class="btn btn-primary w-100 mt-3"
-          >Play Next Match</button>
+          >Play This Match</button>
         </div>
 
         <!-- Game Section -->
