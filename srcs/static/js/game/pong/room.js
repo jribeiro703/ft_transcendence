@@ -138,7 +138,7 @@ export function finishPLayerWaitBrick(waitingInterval)
 export function checkWaiting()
 {
     const currentUrl = window.location.hash;
-    if (gameVar.private && gameVar.inter && currentUrl !== "#playPongRemote")
+    if (gameVar.private && currentUrl !== "#playPongRemote")
     {
         // cancelInvitation(gameVar.deleteRoom);
         if (gameVar.gameSocket && gameVar.gameSocket.readyState === WebSocket.OPEN)
@@ -148,11 +148,6 @@ export function checkWaiting()
                 type: "room_deleted",
                 room_name: gameVar.deleteRoom
             }));
-        }
-
-        if (gameVar.deleteRoom && delPrivateRoom(gameVar.deleteRoom))
-        {
-            console.log("Private room deleted locally");
             return true;
         }
     }
@@ -170,8 +165,10 @@ export function waitingPlayer()
                 waitPlayerPong();
             else if (gameVar.game === "brickout")
                 waitPlayerBrick();
+
             if (checkWaiting())
-                clearInterval(waitingInterval);
+                clearInterval(waitingInterval)
+            console.log("1");
         }
         else
         {
@@ -391,6 +388,7 @@ export function delPrivateRoom(name)
 
     if (roomIndex !== -1)
     {
+        console.log("delprivaterorom");
         gameVar.rooms.splice(roomIndex, 1);
         updateRoomList();
         delRooms();
