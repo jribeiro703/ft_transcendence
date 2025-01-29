@@ -36,7 +36,7 @@ async function renderHomePage() {
     },
     {
       id: "btn-Tournament",
-      handler: () => setupTournamentPage(),
+      handler: () => renderPage("tournament"),
     },
   ];
 
