@@ -37,6 +37,7 @@ const pongGamePages =
     gameSelectionMulti: showGameSelectionMultiView,
 
     playPongLocal: showGameView,
+    playTournamentLocal: showGameView,
     playBrickoutLocal: showGameBrickLocalView,
 
     pongLobby: initLobbyPongView,
@@ -79,6 +80,7 @@ export function isGameplayPage(page)
     "#playPongRemoteSecondP",
     "#playBrickoutRemote",
     "#playBrickoutRemoteSecondP",
+    "#playTournamentLocal",
     ].includes(page);
 }
 
@@ -99,6 +101,15 @@ export function isGamePage(page)
     "#playPongRemoteSecondP",
     "#playBrickoutRemote",
     "#playBrickoutRemoteSecondP",
+    "#playTournamentLocal",
+    ].includes(page);
+}
+
+export function isTournamentPage(page)
+{
+    return [
+    "#playTournamentLocal",
+    "#tournament",
     ].includes(page);
 }
 

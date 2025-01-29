@@ -1,9 +1,9 @@
-// tournoi/tournamnetLayout.js
+// tournoi/tournamentLayout.js
 
 import gameVar from "../game/pong/var.js";
 import { createTournamentLayoutHTML } from './templates/createTournamentLayoutTemplate.js';
 import { fetchAuthData } from "../user/fetchData.js";
-import { renderPageGame } from "../game/HistoryManager.js";
+import { isTournamentPage, renderPageGame } from "../game/HistoryManager.js";
 import { clearPongVar } from '../game/pong/reset.js';
 
 let currentMatchId = null;
@@ -17,19 +17,28 @@ export async function displayTournamentLayout(tournamentId) {
         if (response.status === 200 && response.data) {
             box.innerHTML = createTournamentLayoutHTML();
             currentMatchId = response.data.current_match;
+            
             renderBracket(response.data.matches, response.data.current_match);
+            
             playNextMatchButton = document.getElementById('play-next-match');
             playNextMatchButton.disabled = false;
             playNextMatchButton.style.border = "5px solid blue"; 
+            playNextMatchButton.textContent = "Play This Match";
 
             playNextMatchButton.addEventListener('click', () => {
-                playNextMatchButton.style.border = "5px solid red";
+                playNextMatchButton.disabled = true;
                 console.log("[DEBUG] playNextMatchButton.disabled set to:", playNextMatchButton.disabled);
+                playNextMatchButton.style.border = "5px solid red";
+                playNextMatchButton.textContent = "Starting match...";
 
-                console.log("[DEBUG] Launching next match...");
                 launchNextMatch(tournamentId, response.data);
-                checkIfMatchOver();
             });
+
+            document.getElementById("delete-tournament-btn").addEventListener('click', () => {
+                deleteTournament(tournamentId);
+            });
+
+            checkIfMatchOver(tournamentId);
         } else {
             console.warn("[displayTournamentLayout] Failed to load tournament layout. Status:", response.status);
         }
@@ -60,9 +69,9 @@ function renderBracket(matches, currentMatchId) {
                     ${match.score_one || 0} - ${match.score_two || 0}
                 </div>
             </div>
+
         `;
     }).join('');
-    console.log("[renderBracket] Bracket rendered");
 }
 
 async function launchNextMatch(tournamentId, data) {
@@ -101,7 +110,7 @@ async function launchNextMatch(tournamentId, data) {
 
                 announceWinner(data.winner);
             } else {
-                displayTournamentLayout(tournamentId);
+               // displayTournamentLayout(tournamentId);
             }
         } else {
             console.error("[launchNextMatch] Failed to launch match:", response.data);
@@ -113,24 +122,22 @@ async function launchNextMatch(tournamentId, data) {
 
 function launchGame(player1, player2) {
     console.log("[launchGame] Starting...");
-    console.log("[launchGame] Player 1:", player1);
-    console.log("[launchGame] Player 2:", player2);
 
     clearPongVar();
-    console.log("[launchGame] Cleared pong variables");
 
     gameVar.matchOver = false;
     gameVar.game = "pong";
     gameVar.localGame = true;
     gameVar.tournament = true;
+
     gameVar.userName = player1;
     gameVar.opponentName = player2;
-
-    renderPageGame("playPongLocal", true);
+    renderPageGame("playTournamentLocal", true);
 
     console.log("[DEBUG] playNextMatchButton fetched in launchGame:", playNextMatchButton);
 
     playNextMatchButton.disabled = true;
+    playNextMatchButton.textContent = "Game In Progress...";
     console.log("[DEBUG] playNextMatchButton.disabled set to true in launchGame:", playNextMatchButton.disabled);
 
     const intervalId = setInterval(() => {
@@ -138,19 +145,36 @@ function launchGame(player1, player2) {
         console.log("[DEBUG] playNextMatchButton.disabled:", playNextMatchButton.disabled);
         
         if (gameVar.matchOver) {
-            console.log("[DEBUG] Game is over!");
-
-            clearInterval(gameVar.checkGameOverInterval);
+            clearInterval(intervalId);
             playNextMatchButton.disabled = false;
             console.log("[DEBUG] playNextMatchButton re-enabled:", playNextMatchButton.disabled);
         }
     }, 1000);
 }
 
+export async function deleteTournament(tournamentId) {
+    try {  
+        const deleteTournament = await fetchAuthData(`/tournament/delete/${tournamentId}/`, "DELETE");
+        if (deleteTournament.status === 200) {
+            console.log("Tournament deleted successfully");
+        } else {
+            console.error("Failed to delete tournament:", deleteTournament.data);
+        }
+    } catch (error) {
+        console.error("Error deleting tournament:", error);
+    }
+}
 
-function checkIfMatchOver() {
+function checkIfMatchOver(tournamentId = null) {
+
     // Periodically check if the match is over
     const intervalId = setInterval(() => {
+        const currentPage = window.location.hash || '';
+        if (tournamentId && !isTournamentPage(currentPage))
+        {
+            deleteTournament(tournamentId);
+            clearInterval(intervalId);
+        }
         console.log("[checkIfMatchOver] Checking match state... gameVar.matchOver:", gameVar.matchOver);
 
         // Handle game start
@@ -159,13 +183,12 @@ function checkIfMatchOver() {
             if (playNextMatchButton) {
                 playNextMatchButton.style.border = "5px solid orange"; // Indicate game is in progress
                 playNextMatchButton.disabled = true; // Disable the button during the game
-                playNextMatchButton.innerHTML = "Game In Progress...";
+                playNextMatchButton.textContent = "Game In Progress...";
             }
         }
     
         if (gameVar.matchOver) {
             console.log("[checkIfMatchOver] Match is over! Re-enabling button.");
-            console.log("Match is over");
             console.log("gameVar.player1Score", gameVar.playerScore);
             console.log("gameVar.player2Score", gameVar.aiScore);
             gameVar.rematchBtn.style.display = 'none';
@@ -173,8 +196,16 @@ function checkIfMatchOver() {
             if (playNextMatchButton) {
                 playNextMatchButton.style.border = "5px solid green";
                 playNextMatchButton.disabled = false;
+                playNextMatchButton.textContent = "Play Next Match";
             }
-            clearInterval(intervalId);
+            clearInterval(intervalId); // Clear the interval
         }
     }, 1000);
+}
+
+function announceWinner(winner) {
+    const winnerSection = document.getElementById('winner-section');
+    if (winnerSection) {
+        winnerSection.innerHTML = `<h2 class="text-center">Winner: ${winner}</h2>`;
+    }
 }

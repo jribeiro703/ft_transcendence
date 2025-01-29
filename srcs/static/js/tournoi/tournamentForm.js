@@ -5,9 +5,11 @@ import { createTournamentLayoutHTML } from './templates/createTournamentLayoutTe
 import { createTournament } from './services/apiService.js'
 import { displayTournamentLayout } from './tournamentLayout.js';
 import { fetchAuthData, getCookie } from "../user/fetchData.js";
+import { renderPage } from '../user/historyManager.js';
 
 export async function setupTournamentPage() {
     console.log("[setupTournamentPage] Initializing tournament page setup");
+    // renderPage("tournament");
     const box = document.getElementById('mainContent');
 
     // Generate a random tournament name

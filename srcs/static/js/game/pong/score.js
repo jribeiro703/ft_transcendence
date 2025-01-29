@@ -148,7 +148,7 @@ export function drawScoreBoard()
 				ctx.fillText(gameVar.userName, leftX, y);
 				ctx.fillText(gameVar.opponentName, rightX, y);
 			}
-			if (gameVar.localGame)
+			else if (gameVar.localGame)
 			{
 				ctx.fillText(gameVar.userName, leftX, y);
 				ctx.fillText('Player 2', rightX, y);
