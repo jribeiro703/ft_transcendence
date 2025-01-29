@@ -133,7 +133,7 @@ export function addBtnB()
 	{
 		if (!gameVar.liveMatch)
 		{
-			if (brickVar.finishLevel)
+			if (brickVar.finishLevel && !brickVar.finish)
 				displayNextLevel();
 			else
 				displayFinish();
@@ -192,8 +192,8 @@ export function clearBrickVar()
     brickVar2.startTime = false;
 	brickVar.score = 0;
 	brickVar2.score = 0;
-	brickVar.lives = 2;
-	brickVar2.lives = 2
+	brickVar.lives = 5;
+	brickVar2.lives = 5;
 	brickVar.initGame = false;
 	brickVar2.initGame = false;
 	brickVar.playerIdx = 0;
@@ -218,8 +218,8 @@ export function clearAllBrickStates()
     brickVar2.startTime = false;
 	brickVar.score = 0;
 	brickVar2.score = 0;
-	brickVar.lives = 2;
-	brickVar2.lives = 2
+	brickVar.lives = 5;
+	brickVar2.lives = 5;
 	brickVar.initGame = false;
 	brickVar2.initGame = false;
 	brickVar.playerIdx = 0;

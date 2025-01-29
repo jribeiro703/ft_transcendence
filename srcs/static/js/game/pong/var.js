@@ -196,6 +196,8 @@ const gameVar = {
     leftRoom: false,
     newRoomName: null,
     waitingInterval: null,
+    deleteRoom: null,
+    inter: false,
 
     rooms: [
     {
