@@ -16,10 +16,9 @@ for(var c = 0; c < brickVar.brickColumnCount; c++)
 
 export function collisionDetectionB()
 {
-	let checkOpp = false;
 	for(var c = 0; c < brickVar.brickColumnCount; c++) 
 	{
-		for(var r = 0; r<brickVar.brickRowCount; r++)
+		for(var r = 0; r < brickVar.brickRowCount; r++)
 		{
 			var b = brickVar.brick[c][r];
 			if(b.status == 1)
@@ -30,7 +29,7 @@ export function collisionDetectionB()
 					b.status = 0;
 					brickVar.score++;
 					manageRemoteScore();
-					brickVar.totalBrick = 5;
+					brickVar.totalBrick = 10;
 					if(brickVar.score == brickVar.totalBrick)
 					{
 						if (brickVar.playerIdx === 2)

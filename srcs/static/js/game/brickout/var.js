@@ -38,11 +38,11 @@ const brickVar = {
 
 // -------------------------------------Bricks-----------------
 
-	brickRowCount: 16,
+	brickRowCount: 15,
 	brickColumnCount: 16,
 	brickWidth: 40,
 	brickHeight: 15,
-	brickPadding: 5,
+	brickPadding: 8,
 	brickOffsetTop: 30,
 	brickOffsetLeft: 25,
 	totalBrick: 0,
@@ -95,14 +95,14 @@ const brickVar = {
 	playerIdx: 0,
 
 	score: 0,
-	lives: 2,
+	lives: 5,
 
 	userName: null,
 	opponentName: null,
 	playerScore: 0,
 	opponentScore: 0,
-	playerLives: 2,
-	opponentLives: 2,
+	playerLives: 5,
+	opponentLives: 5,
 
 	anim: null,
 	startBtn: null,
