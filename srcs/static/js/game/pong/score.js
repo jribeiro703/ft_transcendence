@@ -5,7 +5,7 @@ import { fetchAuthData } from "../../user/fetchData.js";
 
 export async function sendScore()
 {
-	manageScore();
+	await manageScore();
     const body = {
         username_one: gameVar.userName,
         username_two: gameVar.opponentName,
@@ -29,10 +29,8 @@ export async function sendScore()
 
 export async function manageScore()
 {
-	if (gameVar.localGame)
-		gameVar.opponentName = 'player2';
 	if (gameVar.playerScore > gameVar.aiScore)
-		gameVar.winnner = gameVar.userName;
+		gameVar.winner = gameVar.userName;
 	else
 		gameVar.winner = gameVar.opponentName;
 
@@ -40,8 +38,7 @@ export async function manageScore()
 
 	const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${gameVar.winner}`);
 
-
-	gameVar.winner = nicknameResponse;
+	gameVar.winner = nicknameResponse.data.id;
 
 	if (gameVar.difficulty === 'easy')
 		gameVar.difficulty = 'EASY';
@@ -82,11 +79,16 @@ export function checkScore()
 		}
 		else
 		{
-			sendScore();
+			if (!gameVar.inter && gameVar.playerIdx === 1)
+			{
+				sendScore();
+				gameVar.inter = true;
+			}
 			gameVar.returnLobby.style.display = 'block';
 		}
 		gameVar.quitGameBtn.style.display = 'block';
 		listenBtn();
+		
 	}	
 }
 

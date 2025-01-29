@@ -223,7 +223,7 @@ window.addEventListener("load", () =>
         }
     }
     else if (currentHash === "playPong" || currentHash === "playBrickout" || currentHash === "playPongLocal"
-            || currentHash === "playBrickoutLocal" || currentHash === "playPongRemote" || currentHash === "playPongRemoteSecondp"
+            || currentHash === "playBrickoutLocal" || currentHash === "playPongRemote" || currentHash === "playPongRemoteSecondP"
             || currentHash === "playBrickoutRemote" || currentHash === "pongLobby" || currentHash === "brickoutLobby")
     {
         clearAllpongStates();
