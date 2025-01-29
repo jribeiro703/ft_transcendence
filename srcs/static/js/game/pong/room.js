@@ -148,6 +148,7 @@ export function checkWaiting()
                 type: "room_deleted",
                 room_name: gameVar.deleteRoom
             }));
+			cancelInvitation(gameVar.deleteRoom);
             return true;
         }
     }
