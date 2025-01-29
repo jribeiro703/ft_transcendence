@@ -63,7 +63,6 @@ export async function manageScore()
 
 export function checkScore()
 {
-	console.log("checkScore");
 	if ((gameVar.playerScore >= WIN_SCORE || gameVar.aiScore >= WIN_SCORE) && Math.abs(gameVar.playerScore - gameVar.aiScore) >= GAP_SCORE)
 	{
 		gameVar.matchOver = true;
