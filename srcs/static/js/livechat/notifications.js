@@ -43,9 +43,68 @@ async function checkPendingNotifications() {
 }
 
 // Function to cancel invitations containing the specified roomName
+// export async function cancelInvitation(roomName) {
+// 	try {
+// 		const notifications = document.querySelectorAll('.notification-item');
+// 		for (const notification of notifications) {
+// 			const room = notification.querySelector('.accept-game')?.dataset.room || notification.querySelector('.cancel-game')?.dataset.room;
+// 			if (room === roomName) {
+// 				const requestId = notification.querySelector('.accept-game')?.dataset.id || notification.querySelector('.cancel-game')?.dataset.id;
+// 				if (requestId) {
+// 					await fetchAuthData(`/user/game/deny/${requestId}/`, 'POST');
+// 					notification.remove();
+// 				}
+// 			}
+// 		}
+// 		// If no more requests, show empty message
+// 		if (document.querySelectorAll('.notification-item').length === 0) {
+// 			document.querySelector('.notification-list').innerHTML = 
+// 				'<div class="text-muted">No notifications</div>';
+// 			document.getElementById('notificationButton').classList.remove('has-notifications');
+// 		}
+// 	} catch (error) {
+// 		console.error('Error canceling game invitation:', error);
+// 		showToast('Failed to cancel game invitation', 'error');
+// 	}
+// }
+
+// Function to cancel invitations containing the specified roomName
 export async function cancelInvitation(roomName) {
 	try {
-		const notifications = document.querySelectorAll('.notification-item');
+		const userId = await getUserId();
+		const gameResponse = await fetchAuthData(`/user/game/${userId}/`, 'GET');
+		const gameInvitations = gameResponse.data;
+
+		const notificationListContainer = document.createElement('div');
+		notificationListContainer.style.display = 'none'; // Make the element invisible
+		document.body.appendChild(notificationListContainer);
+
+		// Handle received game invitations
+		if (gameInvitations.received_requests?.length > 0) {
+			gameInvitations.received_requests.forEach(async request => {
+				const notificationDiv = document.createElement('div');
+				notificationDiv.className = 'notification-item';
+				notificationDiv.innerHTML = `
+					<button class="btn btn-sm btn-success accept-game" data-id="${request.id}" data-room="${request.room}">Accept</button>
+					<button class="btn btn-sm btn-danger reject-game" data-id="${request.id}" data-room="${request.room}">Reject</button>
+				`;
+				notificationListContainer.appendChild(notificationDiv);
+			});
+		}
+
+		// Handle sent game invitations
+		if (gameInvitations.sent_requests?.length > 0) {
+			gameInvitations.sent_requests.forEach(request => {
+				const notificationDiv = document.createElement('div');
+				notificationDiv.className = 'notification-item';
+				notificationDiv.innerHTML = `
+					<button class="btn btn-sm btn-secondary cancel-game" data-id="${request.id}" data-room="${request.room}">Cancel</button>
+				`;
+				notificationListContainer.appendChild(notificationDiv);
+			});
+		}
+
+		const notifications = notificationListContainer.querySelectorAll('.notification-item');
 		for (const notification of notifications) {
 			const room = notification.querySelector('.accept-game')?.dataset.room || notification.querySelector('.cancel-game')?.dataset.room;
 			if (room === roomName) {
@@ -56,6 +115,10 @@ export async function cancelInvitation(roomName) {
 				}
 			}
 		}
+
+		// Clean up the invisible element
+		document.body.removeChild(notificationListContainer);
+
 		// If no more requests, show empty message
 		if (document.querySelectorAll('.notification-item').length === 0) {
 			document.querySelector('.notification-list').innerHTML = 
@@ -67,6 +130,7 @@ export async function cancelInvitation(roomName) {
 		showToast('Failed to cancel game invitation', 'error');
 	}
 }
+
 
 // Periodically check for pending notifications
 setInterval(checkPendingNotifications, 6000); // Check every 6 seconds
