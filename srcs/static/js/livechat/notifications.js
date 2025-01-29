@@ -3,6 +3,8 @@ import { joinPrivateRoom } from '../game/pong/room.js';
 import { showToast } from '../user/tools.js';
 import { renderPage } from '../user/historyManager.js';
 import { isAuth, logoutNotifs } from './socket.js';
+import { gameChatSocket } from './game.js';
+import gameVar from '../game/pong/var.js';
 
 // Update getUserId function to handle response structure
 export async function getUserId() {
