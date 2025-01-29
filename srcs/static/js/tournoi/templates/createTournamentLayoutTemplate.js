@@ -19,6 +19,10 @@ export function createTournamentLayoutHTML() {
         <div id="tournamentdiv" class="col-lg-9 col-md-8 d-flex align-items-center justify-content-center">
         </div>
 
+        <div id="delete-tournament" class="col-lg-3 col-md-4 bg-light rounded p-3">
+          <button id="delete-tournament-btn" class="btn btn-danger w-100">Delete Tournament</button>
+        </div>
+
         <div id="winner-section" class="col-lg-3 col-md-4 bg-light rounded p-3">
         </div>
       </div>

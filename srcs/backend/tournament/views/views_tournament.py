@@ -300,14 +300,22 @@ def tournament_list(request):
 		tournament_list.append(item)
 	return JsonResponse({'tournaments': tournament_list}, status=200)
 
+class DeleteTournamentView(APIView):
+    permission_classes = [IsAuthenticated]
 
-@login_required
-def delete_tournament(request, tournament_id):
-	tournament = Tournament.objects.get(id=tournament_id)
-	if tournament.created_by == request.user:
-		tournament.delete()
-		return JsonResponse({'success': 'Tournament deleted'}, status=200)
-	return JsonResponse({'error': 'Unauthorized'}, status=401)
+    def delete(self, request, tournament_id):
+        try:
+            tournament = Tournament.objects.get(id=tournament_id)
+            if tournament.created_by == request.user:
+                tournament.delete()
+                return Response({'success': 'Tournament deleted'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+        except Tournament.DoesNotExist:
+            return Response({'error': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            logger.error(f"Error deleting tournament: {e}")
+            return Response({'error': 'An error occurred while deleting the tournament.'}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserOngoingTournamentView(APIView):
     permission_classes = [IsAuthenticated]
