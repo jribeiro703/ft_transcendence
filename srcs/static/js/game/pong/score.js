@@ -63,7 +63,6 @@ export async function manageScore()
 
 export function checkScore()
 {
-	console.log("checkScore");
 	if ((gameVar.playerScore >= WIN_SCORE || gameVar.aiScore >= WIN_SCORE) && Math.abs(gameVar.playerScore - gameVar.aiScore) >= GAP_SCORE)
 	{
 		gameVar.matchOver = true;
@@ -144,6 +143,11 @@ export function drawScoreBoard()
 			const leftX = gameVar.scoreCanvW * 0.25;
 			const rightX = gameVar.scoreCanvW * 0.75;
 			const y = 35;
+			if (gameVar.tournament)
+			{
+				ctx.fillText(gameVar.userName, leftX, y);
+				ctx.fillText(gameVar.opponentName, rightX, y);
+			}
 			if (gameVar.localGame)
 			{
 				ctx.fillText(gameVar.userName, leftX, y);
