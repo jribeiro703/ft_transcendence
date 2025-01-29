@@ -8,6 +8,9 @@ import { initGame, initListenerB } from "../brickout/init.js";
 import { kickOut } from "./draw.js";
 import { clearPongVar } from "./reset.js";
 import { checkScore } from "./score.js";
+import { cancelInvitation } from "../../livechat/notifications.js";
+import { gameChatSocket } from "../../livechat/game.js";
+import { chechOpponent } from "../brickout/score.js";
 
 export async function createPrivateRoom()
 {
@@ -46,6 +49,7 @@ export function createNewRoom(joinRoomCallback)
         {
             const roomName = `privatePongRoom_${Math.floor(Math.random() * 10000)}`;
             gameVar.playerIdx = 1;
+            gameVar.deleteRoom = roomName;
             joinRoom(roomName);
             resolve(roomName);
         });
@@ -92,7 +96,10 @@ export function waitPlayerPong()
     if (!gameVar.private)
         sendSettingData(gameVar.lobbySocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
     else
+    {
         sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
+        gameVar.inter = true;
+    }
 }
 
 export function waitPlayerBrick()
@@ -111,6 +118,7 @@ export function finishPlayerWaitPong(waitingInterval)
 {
     gameVar.gameReady = true;
     clearInterval(waitingInterval);
+    gameVar.inter = false;
     sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
     sendScoreInfo(gameVar.gameSocket, 1, gameVar.userName, 0, 0);
     startLiveGame();
@@ -125,6 +133,32 @@ export function finishPLayerWaitBrick(waitingInterval)
     initGame();
 }
 
+
+
+export function checkWaiting()
+{
+    const currentUrl = window.location.hash;
+    if (gameVar.private && gameVar.inter && currentUrl !== "#playPongRemote")
+    {
+        // cancelInvitation(gameVar.deleteRoom);
+        if (gameVar.gameSocket && gameVar.gameSocket.readyState === WebSocket.OPEN)
+        {
+            gameVar.gameSocket.send(JSON.stringify(
+            {
+                type: "room_deleted",
+                room_name: gameVar.deleteRoom
+            }));
+        }
+
+        if (gameVar.deleteRoom && delPrivateRoom(gameVar.deleteRoom))
+        {
+            console.log("Private room deleted locally");
+            return true;
+        }
+    }
+    return false;
+}
+
 export function waitingPlayer()
 {
     const waitingInterval = setInterval(() =>
@@ -136,6 +170,8 @@ export function waitingPlayer()
                 waitPlayerPong();
             else if (gameVar.game === "brickout")
                 waitPlayerBrick();
+            if (checkWaiting())
+                clearInterval(waitingInterval);
         }
         else
         {
@@ -349,6 +385,20 @@ export function delRooms()
         gameVar.rooms.pop();
 }
 
+export function delPrivateRoom(name)
+{
+   const roomIndex = gameVar.rooms.findIndex((room) => room.name === name);
+
+    if (roomIndex !== -1)
+    {
+        gameVar.rooms.splice(roomIndex, 1);
+        updateRoomList();
+        delRooms();
+        return true;
+    }
+    return false; 
+}
+
 export function updateRoomInfo(index, difficulty, level)
 {
     const room = gameVar.rooms.find((room) => room.idx === index);
@@ -367,9 +417,10 @@ export function updateRoomList()
         gameVar.roomsContainer.innerHTML = "";
     gameVar.rooms.forEach((room) =>
     {
+
         if (room.idx === null || room.idx === undefined)
             return;
-
+        console.log("updaterl: room: ", room.name);
         gameVar.noRoomsMessage.style.display = "none";
         if (room.name.charAt(0) === "P")
         {
