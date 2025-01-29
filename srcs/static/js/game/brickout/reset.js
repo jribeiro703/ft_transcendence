@@ -1,4 +1,5 @@
 import { initPaddlesPosB } from "./init.js";
+import { clearAllBrickStates } from "./manage.js";
 import brickVar from "./var.js";
 
 export function resetPuB()
@@ -21,14 +22,15 @@ export function resetMatchB()
 	brickVar.score = 0;
 	brickVar.opponentScore = 0;
 	brickVar.playerScore = 0;
-	brickVar.opponentLives = 2;
-	brickVar.playerLives = 2;
-	brickVar.lives = 2;
+	brickVar.opponentLives = 5;
+	brickVar.playerLives = 5;
+	brickVar.lives = 5;
 	brickVar.gameStart = false;
 	brickVar.gameTime = 0;
 	brickVar.startTime = false;
 	brickVar.loose = false;
-	// brickVar.gameReady = false;
+	brickVar.initialize = false;
+	brickVar.loose = false;
 	resetPuB();
 	initPaddlesPosB();
 	if (brickVar.anim)
