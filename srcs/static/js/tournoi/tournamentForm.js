@@ -115,6 +115,23 @@ export async function loadTournamentSetup() {
             return [];
         }
     }
+    const usedNames = new Set();
+    
+    function generateRandomName() {
+        const names = [
+            "Champion", "Contender", "Ace", 
+            "Maverick", "Blaze", "Shadow", "Phoenix", "Viper", 
+            "Falcon", "Rogue", "Hunter", "Warrior", "Knight"
+        ];
+    
+        let randomName;
+        do {
+            randomName = names[Math.floor(Math.random() * names.length)];
+        } while (usedNames.has(randomName));
+    
+        usedNames.add(randomName);
+        return randomName;
+    }
 
     function updateFieldDependencies() {
         const playerGuestSwitches = document.querySelectorAll('.player-guest-switch');
@@ -148,12 +165,13 @@ export async function loadTournamentSetup() {
             switchElement.addEventListener('change', () => {
               console.log("Switch toggled. Validating unique players...");
                 if (switchElement.checked) {
+                    const randomName = generateRandomName();
                     playerSelect.style.display = 'none';
                     playerSelect.removeAttribute('required');
                     playerGuest.style.display = 'block';
-                    playerGuest.value = 'Guest';
+                    playerGuest.value = randomName;
                     playerUserHidden.value = '';
-                    playerGuestHidden.value = 'Guest';
+                    playerGuestHidden.value = randomName;
                     tokenContainer.style.display = 'none';
                     validationSuccess.style.display = 'none';
                     tokenWarning.style.display = 'none';
