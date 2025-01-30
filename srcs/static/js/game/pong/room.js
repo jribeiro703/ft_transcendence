@@ -98,7 +98,6 @@ export function waitPlayerPong()
     else
     {
         sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
-        gameVar.inter = true;
     }
 }
 
@@ -118,7 +117,6 @@ export function finishPlayerWaitPong(waitingInterval)
 {
     gameVar.gameReady = true;
     clearInterval(waitingInterval);
-    gameVar.inter = false;
     sendSettingData(gameVar.gameSocket, gameVar.gameReady, gameVar.difficulty, gameVar.currentLevel);
     sendScoreInfo(gameVar.gameSocket, 1, gameVar.userName, 0, 0);
     startLiveGame();

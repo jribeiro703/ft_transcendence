@@ -2,6 +2,7 @@ import gameVar from "../pong/var.js";
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 import { addBtnB } from "./manage.js";
+import { fetchAuthData } from "../../user/fetchData.js";
 
 function loadCustomFont()
 {
@@ -37,6 +38,7 @@ export function chechOpponentRemote()
 				clearInterval(waiting);
 				compareScoreRemote();
 				addBtnB();
+				// sendScoreB();
 			}
 		}
 		if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
@@ -423,3 +425,55 @@ export function saveScoreB()
 	brickVar.finalScore = brickVar.score + levelScore;
 }
 
+export async function sendScoreB()
+{
+	await manageScoreB();
+    const body = {
+        username_one: brickVar.userName,
+        username_two: brickVar.opponentName,
+        score_one : brickVar.playerScore,
+        score_two : brickVar.opponentScore,
+        time_played : brickVar.gameTime,
+        difficulty : brickVar.difficulty,
+        powerup : brickVar.powerUpEnable,
+        level : brickVar.currLevel,
+		winner: gameVar.winner,
+    }
+    const responseObject = await fetchAuthData("/game/create/", "POST", body);
+	console.log("score: responseObj: ", responseObject);
+
+    if (responseObject.status === 201) {
+        console.log("Game successfully");
+    } else {
+        console.log("Game failed");
+    }
+}
+
+async function manageScoreB()
+{
+	if (brickVar.playerScore > brickVar.opponentScore)
+		gameVar.winner = brickVar.userName;
+	else
+		gameVar.winner = brickVar.opponentName;
+
+
+	const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${gameVar.winner}`);
+
+	gameVar.winner = nicknameResponse.data.id;
+
+	if (gameVar.difficulty === 'easy')
+		gameVar.difficulty = 'EASY';
+	else if (gameVar.difficulty === 'medium')
+		gameVar.difficulty = 'MEDIUM';
+	else if (gameVar.difficulty === 'hard')
+		gameVar.difficulty = 'HARD';
+
+	if (gameVar.currentLevel === 'classicPong')
+		gameVar.currentLevel = 'CLASSIC';
+	else if (gameVar.currentLevel === 'tableTennis')
+		gameVar.currentLevel = 'TABLETENNIS';
+	else if (gameVar.currentLevel === 'football')
+		gameVar.currentLevel = 'FOOTBALL';
+	else if (gameVar.currentLevel === 'tennis')
+		gameVar.currentLevel = 'TENNIS';
+}

@@ -5,6 +5,9 @@ import { renderPageGame } from "./game/HistoryManager.js";
 import { clearAllBrickStates } from "./game/brickout/manage.js";
 import { clearAllGameStates } from "./game/brickout/listenerBtn.js";
 import { clearAllpongStates } from "./game/pong/reset.js";
+import gameVar from "./game/pong/var.js";
+
+window.gameVar = gameVar;
 
 document
   .querySelector("[data-profile-icon]")
