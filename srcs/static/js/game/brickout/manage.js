@@ -12,7 +12,6 @@ import { addImageB, handleNextLevelB, restartLevelB } from "./level.js";
 import { updateDifficultySelectionB } from "./update.js";
 import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
 import { resetBallB } from "./ball.js";
-import { saveScoreB } from "./score.js";
 import { renderPageGame } from "../HistoryManager.js";
 import { sendScoreInfoB } from "../pong/network.js";
 import { displayFinishLive } from "./display.js";
@@ -97,12 +96,10 @@ export function loseLivesRemote()
 	{
 		brickVar.playerLives--;
 		sendScoreInfoB(gameVar.gameSocket, 1, brickVar.playerScore, brickVar.playerLives);
-		if (!brickVar.playerLives)
+		if (brickVar.playerLives === 0)
 		{
-			brickVar.finish = true;
+			brickVar.loose = true;
 			brickVar.startTime = false;
-			brickVar.finishLevel = true;
-			saveScoreB();
 			chechOpponentRemote();
 		}
 		else
@@ -114,12 +111,10 @@ export function loseLivesRemote()
 	{
 		brickVar.opponentLives--;
 		sendScoreInfoB(gameVar.gameSocket, 2, brickVar.opponentScore,  brickVar.opponentLives);
-		if (brickVar.opponentLives <= 0)
+		if (brickVar.opponentLives === 0)
 		{
-			brickVar.finish = true;
-			brickVar.startTime = false;
-			brickVar.finishLevel = true;
-			saveScoreB();
+			brickVar.loose = true;
+			brickVar2.startTime = false;
 			chechOpponentRemote();
 		}
 		else

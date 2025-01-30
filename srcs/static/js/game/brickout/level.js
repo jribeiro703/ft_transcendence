@@ -18,12 +18,6 @@ export function youWinB()
 		levelDisplayB();
 		addBtnB();
 	}
-	else if (gameVar.liveMatch)
-	{
-		chechOpponentRemote();
-		if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
-			sendScoreB()
-	}
 	else if (gameVar.localGame)
 	{
 		chechOpponent();

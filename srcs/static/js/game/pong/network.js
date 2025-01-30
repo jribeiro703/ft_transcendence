@@ -147,3 +147,17 @@ export function sendRoomNameData(socket, roomName)
 	else
 		console.log("Error websocket");
 }
+
+
+export function sendScoreSubmit(socket, submit)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data =
+		{
+			type: 'send_score',
+			submit: submit,
+		};
+		socket.send(JSON.stringify(data));
+	}
+}

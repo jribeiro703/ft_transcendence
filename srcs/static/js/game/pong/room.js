@@ -167,7 +167,6 @@ export function waitingPlayer()
 
             if (checkWaiting())
                 clearInterval(waitingInterval)
-            console.log("1");
         }
         else
         {
@@ -220,7 +219,6 @@ export function checkPlayerIdx()
     }
     if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
     {
-        console.log("player 2");
         getUserInfosRemote();
         sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
         waitingForSettingLive();
@@ -341,6 +339,10 @@ export async function joinRoom(roomName)
                     brickVar.opponentLives = data.scoreB_info_data.lives;
                 }
             }
+            else if (data.type === 'send_score')
+            {
+                gameVar.scoreSubmit = data.send_score.sent;
+            }
         } catch (error) {
             console.error("error process message", error);
         }
@@ -417,7 +419,6 @@ export function updateRoomList()
 
         if (room.idx === null || room.idx === undefined)
             return;
-        console.log("updaterl: room: ", room.name);
         gameVar.noRoomsMessage.style.display = "none";
         if (room.name.charAt(0) === "P")
         {
