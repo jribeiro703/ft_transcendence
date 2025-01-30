@@ -1,15 +1,15 @@
 // tournoi/tournament.js
 
 async function loadTournament(tournamentId) {
-  const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
   const formData = new FormData();
   formData.append("tournamentId", tournamentId);
   const response = await fetch(`/tournament/info/`, {
     method: "POST",
     headers: {
-      "X-CSRFToken": csrfToken
+      "X-CSRFToken": csrfToken,
     },
-    body: formData
+    body: formData,
   });
 
   if (!response.ok) {
@@ -24,7 +24,7 @@ async function loadTournament(tournamentId) {
 
   // Get all player names in order
   const players = [];
-  data.matches.forEach(match => {
+  data.matches.forEach((match) => {
     players.push(match.player1);
     players.push(match.player2);
   });
@@ -42,9 +42,9 @@ async function loadTournament(tournamentId) {
     final = players.slice(4, 6);
   }
 
-  if (data.player_count === 8){
+  if (data.player_count === 8) {
     const quarterDivs = document.querySelectorAll(".quarter > .player");
-    for (let i = 0; i < quarters.length ; i++) {
+    for (let i = 0; i < quarters.length; i++) {
       quarterDivs[i].innerHTML = quarters[i];
     }
   } else if (data.player_count === 4) {
@@ -54,14 +54,14 @@ async function loadTournament(tournamentId) {
 
   const semiFinalDivs = document.querySelectorAll(".semi > .player");
   for (let i = 0; i < semiFinals.length; i++) {
-    if (semiFinals[i] !== 'TBD') {
+    if (semiFinals[i] !== "FINALIST") {
       semiFinalDivs[i].innerHTML = semiFinals[i];
     }
   }
 
   const finalDivs = document.querySelectorAll("#final > .player");
   for (let i = 0; i < final.length; i++) {
-    if (final[i] !== 'TBD') {
+    if (final[i] !== "FINALIST") {
       finalDivs[i].innerHTML = final[i];
     }
   }
@@ -75,7 +75,7 @@ async function loadTournament(tournamentId) {
   const playNextMatchButton = document.getElementById("play-next-match");
   playNextMatchButton.addEventListener("click", () => {
     console.log("Play next match");
-    showSection("/tournament/game/"+data.current_match.match_id+"/");
+    showSection("/tournament/game/" + data.current_match.match_id + "/");
   });
 }
 

@@ -26,8 +26,7 @@ export async function displayTournamentLayout(tournamentId) {
 
         playNextMatchButton.addEventListener("click", () => {
           playNextMatchButton.disabled = true;
-          playNextMatchButton.querySelector("span").textContent =
-            "Starting match...";
+          playNextMatchButton.querySelector("span").textContent = "finished";
           launchNextMatch(tournamentId, response.data);
         });
       } else {
@@ -76,11 +75,11 @@ function renderBracket(matches, currentMatchId) {
             <p class="m-0"> match: ${match.match_id} </p>
             <div class="matchup ${isCurrentMatch ? "highlight-current d-flex justify-content-center align-items-center flex-column gap-1" : "d-flex justify-content-center align-items-center flex-column gap-1"}" data-match-id="${match.match_id}">
                 <div class="player ${player1Winner ? "winner" : ""}">
-                    ${match.player1 || "TBD"} ${player1Winner ? "🏆" : ""}
+                    ${match.player1 || "FINALIST"} ${player1Winner ? "🏆" : ""}
                 </div>
                 <div class="vs">vs</div>
                 <div class="player ${player2Winner ? "winner" : ""}">
-                    ${match.player2 || "TBD"} ${player2Winner ? "🏆" : ""}
+                    ${match.player2 || "FINALIST"} ${player2Winner ? "🏆" : ""}
                 </div>
                 <div class="scores">
                     ${match.score_one || 0} - ${match.score_two || 0}
@@ -237,7 +236,7 @@ async function launchNextMatch(tournamentId, data) {
               () => {
                 playNextMatchButton.disabled = true;
                 playNextMatchButton.querySelector("span").textContent =
-                  "Starting match...";
+                  "finished";
                 launchNextMatch(tournamentId, data);
               },
               { once: true },

@@ -5,6 +5,8 @@ export function createTournamentFormHTML() {
 <div id="tournament-setup" class=" w-100 h-100 d-flex justify-content-center overflow-scroll" style="display: none;">
     <form id="tournament-setup-form" class="p-0 w-100 d-flex flex-column align-items-center gap-5 justify-content-center p-0">
 
+        <h2>Local 4 Players Tournament</h2>
+
         <div id="player-fields-container" class="align-item-center w-700 p-0"></div>
 
         <div id="player-field-template" class="style="display: none;">
