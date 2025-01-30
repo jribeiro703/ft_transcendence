@@ -14,7 +14,7 @@ export function displayPong() {
         <div class="button-container" style="margin-top: 50px">
             <button id="rematchBtn" class="primaryBtn w-40" style="display: none;"><span>Rematch</span></button>
             <button id="returnLobby" class="primaryBtn w-40" style="display: none;"><span>Return Lobby</span></button>
-            <button id="quitGameBtn" class="primaryBtn w-40" style="display: none;"><span>Quit Game</span></button>
+            <button id="quitGameBtn" class="primaryBtn w-40" style="display: none;"><span>Return Home</span></button>
         </div>
     </div>	
     `;

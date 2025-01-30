@@ -14,6 +14,8 @@ import { isGamePage, renderPageGame } from "../game/HistoryManager.js";
 import gameVar from "../game/pong/var.js";
 import { sendGameData } from "../game/pong/network.js";
 import { renderSelfProfilePage } from "./pages/profilePageTools.js";
+import { setupTournamentPage } from "../tournoi/tournamentForm.js";
+import { fetchAuthData } from "./fetchData.js";
 
 const authPages = {
 	auth: renderAuthPage,
@@ -32,6 +34,7 @@ const userPages = {
 
 const otherPages = {
 	leaderboard: renderLeaderBoardPage,
+	tournament: setupTournamentPage,
 }
 
 async function renderPage(page, updateHistory = true, params = '', logout = false) {

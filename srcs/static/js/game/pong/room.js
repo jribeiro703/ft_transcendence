@@ -8,6 +8,9 @@ import { initGame, initListenerB } from "../brickout/init.js";
 import { kickOut } from "./draw.js";
 import { clearPongVar } from "./reset.js";
 import { checkScore } from "./score.js";
+import { cancelInvitation } from "../../livechat/notifications.js";
+import { gameChatSocket } from "../../livechat/game.js";
+import { chechOpponent } from "../brickout/score.js";
 
 export async function createPrivateRoom() {
   clearPongVar();
@@ -40,6 +43,7 @@ export function createNewRoom(joinRoomCallback) {
     return new Promise((resolve) => {
       const roomName = `privatePongRoom_${Math.floor(Math.random() * 10000)}`;
       gameVar.playerIdx = 1;
+      gameVar.deleteRoom = roomName;
       joinRoom(roomName);
       resolve(roomName);
     });
@@ -95,13 +99,14 @@ export function waitPlayerPong() {
       gameVar.difficulty,
       gameVar.currentLevel,
     );
-  else
+  else {
     sendSettingData(
       gameVar.gameSocket,
       gameVar.gameReady,
       gameVar.difficulty,
       gameVar.currentLevel,
     );
+  }
 }
 
 export function waitPlayerBrick() {
@@ -154,12 +159,35 @@ export function finishPLayerWaitBrick(waitingInterval) {
   initGame();
 }
 
+export function checkWaiting() {
+  const currentUrl = window.location.hash;
+  if (gameVar.private && currentUrl !== "#playPongRemote") {
+    // cancelInvitation(gameVar.deleteRoom);
+    if (
+      gameVar.gameSocket &&
+      gameVar.gameSocket.readyState === WebSocket.OPEN
+    ) {
+      gameVar.gameSocket.send(
+        JSON.stringify({
+          type: "room_deleted",
+          room_name: gameVar.deleteRoom,
+        }),
+      );
+      cancelInvitation(gameVar.deleteRoom);
+      return true;
+    }
+  }
+  return false;
+}
+
 export function waitingPlayer() {
   const waitingInterval = setInterval(() => {
     gameVar.waitingInterval = waitingInterval;
     if (!gameVar.playerReady) {
       if (gameVar.game === "pong") waitPlayerPong();
       else if (gameVar.game === "brickout") waitPlayerBrick();
+
+      if (checkWaiting()) clearInterval(waitingInterval);
     } else {
       if (gameVar.game === "pong") finishPlayerWaitPong(waitingInterval);
       else if (gameVar.game === "brickout")
@@ -195,7 +223,6 @@ export function checkPlayerIdx() {
     else waitingPlayer();
   }
   if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2) {
-    console.log("player 2");
     getUserInfosRemote();
     sendPlayerData(gameVar.gameSocket, gameVar.playerReady);
     waitingForSettingLive();
@@ -286,6 +313,8 @@ export async function joinRoom(roomName) {
           brickVar.opponentScore = data.scoreB_info_data.score;
           brickVar.opponentLives = data.scoreB_info_data.lives;
         }
+      } else if (data.type === "send_score") {
+        gameVar.scoreSubmit = data.send_score.sent;
       }
     } catch (error) {
       console.error("error process message", error);
@@ -324,6 +353,19 @@ export function delRooms() {
   while (gameVar.rooms.length > 0) gameVar.rooms.pop();
 }
 
+export function delPrivateRoom(name) {
+  const roomIndex = gameVar.rooms.findIndex((room) => room.name === name);
+
+  if (roomIndex !== -1) {
+    console.log("delprivaterorom");
+    gameVar.rooms.splice(roomIndex, 1);
+    updateRoomList();
+    delRooms();
+    return true;
+  }
+  return false;
+}
+
 export function updateRoomInfo(index, difficulty, level) {
   const room = gameVar.rooms.find((room) => room.idx === index);
 
@@ -338,7 +380,6 @@ export function updateRoomList() {
   if (!gameVar.private) gameVar.roomsContainer.innerHTML = "";
   gameVar.rooms.forEach((room) => {
     if (room.idx === null || room.idx === undefined) return;
-
     gameVar.noRoomsMessage.style.display = "none";
     if (room.name.charAt(0) === "P") {
       game = "Pong";

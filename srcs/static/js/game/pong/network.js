@@ -58,7 +58,6 @@ export function sendPlayerData(socket, playerReady)
 			playerReady: playerReady,
 		};
 		socket.send(JSON.stringify(data));
-		console.log("Player data sent:", data);
 	}
 	else
 		console.log("Error websocket");
@@ -147,4 +146,18 @@ export function sendRoomNameData(socket, roomName)
 	}
 	else
 		console.log("Error websocket");
+}
+
+
+export function sendScoreSubmit(socket, submit)
+{
+	if (socket && socket.readyState == WebSocket.OPEN)
+	{
+		const data =
+		{
+			type: 'send_score',
+			submit: submit,
+		};
+		socket.send(JSON.stringify(data));
+	}
 }

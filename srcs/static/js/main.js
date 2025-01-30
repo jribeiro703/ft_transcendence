@@ -5,6 +5,13 @@ import { renderPageGame } from "./game/HistoryManager.js";
 import { clearAllBrickStates } from "./game/brickout/manage.js";
 import { clearAllGameStates } from "./game/brickout/listenerBtn.js";
 import { clearAllpongStates } from "./game/pong/reset.js";
+import gameVar from "./game/pong/var.js";
+import brickVar from "./game/brickout/var.js";
+import brickVar2 from "./game/brickout/secondBrickout/var.js";
+
+window.gameVar = gameVar;
+window.brickVar = brickVar;
+window.brickVar2 = brickVar2;
 
 document
   .querySelector("[data-profile-icon]")

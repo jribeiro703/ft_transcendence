@@ -55,6 +55,7 @@ const gameVar = {
 
   scoreBoard: [],
   winner: null,
+  scoreSubmit: false,
 
   // ----------------------------Settings-------------------------
 
@@ -195,6 +196,60 @@ const gameVar = {
   leftRoom: false,
   newRoomName: null,
   waitingInterval: null,
+
+  rooms: [
+    {
+      idx: null,
+      name: null,
+      difficulty: null,
+      level: null,
+      players: 0,
+      status: null,
+      time: null,
+      visibility: null,
+    },
+  ],
+
+  roomName: null,
+  gameSocket: null,
+  lobbySocket: null,
+  private: false,
+
+  // -------------------Power Ups------------------------
+
+  powerUpSpeed: 3,
+
+  powerUpX1: null,
+  powerUpY1: null,
+
+  powerUpX2: null,
+  powerUpY2: null,
+
+  powerUp1Active: false,
+  powerUp2Active: false,
+
+  powerUp1OnScreen: false,
+  powerUp2OnScreen: false,
+
+  powerUpEnable: false,
+  powerUpDuration: 5000,
+
+  players: [
+    { idx: 1, ready: false },
+    { idx: 2, ready: false },
+  ],
+
+  // ---------------------------------Room--------------------------
+
+  createRoomNameInput: null,
+  noRoomsMessage: null,
+  roomsContainer: null,
+  refreshBtn: null,
+  leftRoom: false,
+  newRoomName: null,
+  waitingInterval: null,
+  deleteRoom: null,
+  inter: false,
 
   rooms: [
     {

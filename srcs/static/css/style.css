@@ -45,7 +45,7 @@ div {
 
 p {
   color: var(--text-color);
-  font-size: 30px;
+  font-size: 20px;
 }
 
 p1 {
@@ -916,3 +916,54 @@ color: var(--text-color);;
     min-height: 300px; /* Adjust the height as needed */
   }
 }
+
+/* .matchup { */
+/*   border: 1px solid #ccc; */
+/*   padding: 10px; */
+/*   margin-bottom: 10px; */
+/*   border-radius: 5px; */
+/*   background-color: #f9f9f9; */
+/* } */
+/**/
+/* .matchup.highlight-current { */
+/*   border: 2px solid red; */
+/* } */
+
+.w-196 {
+  width: 196px;
+}
+
+.player.winner {
+  font-weight: bold;
+  color: #28a745;
+}
+
+.player.winner {
+  font-weight: bold;
+  color: #28a745;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  opacity: 0;
+  transition:
+    opacity 1s ease-in-out,
+    transform 2s ease-in-out;
+}
+
