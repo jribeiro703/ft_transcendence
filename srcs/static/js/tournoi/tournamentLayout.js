@@ -20,18 +20,20 @@ export async function displayTournamentLayout(tournamentId) {
             renderBracket(response.data.matches, currentMatchId);
             
             playNextMatchButton = document.getElementById('play-next-match');
-            playNextMatchButton.disabled = false;
-            playNextMatchButton.style.border = "5px solid blue"; 
-            playNextMatchButton.textContent = "Play This Match";
+            if (!(response.data.status === "finished")) {
+                playNextMatchButton.disabled = false;
+                playNextMatchButton.style.border = "5px solid blue"; 
+                playNextMatchButton.textContent = "Play This Match";
 
-            playNextMatchButton.addEventListener('click', () => {
-                playNextMatchButton.disabled = true;
-                playNextMatchButton.style.border = "5px solid red";
-                playNextMatchButton.textContent = "Starting match...";
-
-                launchNextMatch(tournamentId, response.data);
-            });
-
+                playNextMatchButton.addEventListener('click', () => {
+                    playNextMatchButton.disabled = true;
+                    playNextMatchButton.style.border = "5px solid red";
+                    playNextMatchButton.textContent = "Starting match...";
+                    launchNextMatch(tournamentId, response.data);
+                });
+            } else {
+                console.log("Tournament finished");
+            }
             document.getElementById("delete-tournament-btn").addEventListener('click', () => {
                 deleteTournament(tournamentId);
             });
@@ -81,8 +83,6 @@ function renderBracket(matches, currentMatchId) {
 }
 
 async function launchNextMatch(tournamentId, data) {
-    console.log("[launchNextMatch] Starting...");
-
     if (!currentMatchId) {
         return console.error("[launchNextMatch] No match ID provided");
     }
@@ -114,8 +114,6 @@ async function launchNextMatch(tournamentId, data) {
                 score_two: gameVar.aiScore,
             };
 
-            console.log("[launchNextMatch] Payload:", payload);
-
             try {
                 const response = await fetchAuthData(`/tournament/next/${tournamentId}/`, "POST", payload);
                 if (response.status === 400) {
@@ -123,8 +121,6 @@ async function launchNextMatch(tournamentId, data) {
                     playNextMatchButton.textContent = "Tournement finished";
                 }
                 if (response.status === 200) {
-                    console.log("[launchNextMat|ch] Match score updated successfully");
-
                     playNextMatchButton.disabled = false;
                     playNextMatchButton.style.border = "5px solid blue";
                     playNextMatchButton.textContent = "Play Next Match";
@@ -165,13 +161,9 @@ async function launchNextMatch(tournamentId, data) {
                                             score_two: gameVar.aiScore,
                                         };
                                         currentMatchId = 0;
-                                        console.log("[launchNextMatch-final] Final Payload:", finalPayload);
-
                                         try {
                                             const finalResponse = await fetchAuthData(`/tournament/next/${tournamentId}/`, "POST", finalPayload);
-                                            console.log("finalResponse:", finalResponse.data);
                                             if (finalResponse.status === 200) {
-                                                console.log("[launchNextMatch-final] Final match score updated successfully");
                                                 playNextMatchButton.style.border = "5px solid green";
                                                 playNextMatchButton.textContent = "Tournament Finished";
                                                 playNextMatchButton.disabled = true;
@@ -179,10 +171,7 @@ async function launchNextMatch(tournamentId, data) {
                                                 const finalUpdatedResponse = await fetchAuthData(`/tournament/${tournamentId}/`, "GET");
                                                 if (finalUpdatedResponse.status === 200 && finalUpdatedResponse.data) {
                                                     const winner = finalResponse.data.winner;
-                                                    console.log(">>>>>>>>finalResponse.data.winner line 176:", winner);
 
-                                                    // Mark the tournament as finished
-                                                    
                                                     announceWinner(winner);
                                                 }
                                             } else {
@@ -196,6 +185,7 @@ async function launchNextMatch(tournamentId, data) {
                             }, { once: true });
                         }
                     } else {
+                        console.log("not a last match....", currentMatchId);
                         // Set up the event listener for the next match
                         playNextMatchButton.addEventListener('click', () => {
                             playNextMatchButton.disabled = true;
@@ -215,7 +205,6 @@ async function launchNextMatch(tournamentId, data) {
 }
 
 function launchGame(player1, player2) {
-    console.log("[launchGame] Starting...");
 
     clearPongVar();
 
@@ -233,8 +222,6 @@ function launchGame(player1, player2) {
 }
 
 function announceWinner(winner) {
-    console.log("[announceWinner] Function called with winner:", winner); // Add this line for debugging
-
     const winnerSection = document.getElementById('winner-section');
     if (winnerSection) {
         winnerSection.innerHTML = `
