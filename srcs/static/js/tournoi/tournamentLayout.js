@@ -5,6 +5,7 @@ import { createTournamentLayoutHTML } from './templates/createTournamentLayoutTe
 import { fetchAuthData } from "../user/fetchData.js";
 import { isTournamentPage, renderPageGame } from "../game/HistoryManager.js";
 import { clearPongVar } from '../game/pong/reset.js';
+import { renderPage } from "../user/historyManager.js";
 
 let currentMatchId = null;
 let playNextMatchButton = null;
@@ -97,6 +98,10 @@ async function launchNextMatch(tournamentId, data) {
 
     // Wait for the game to finish
     const intervalId = setInterval(async () => {
+/*         if (!isTournamentPage) {
+            deleteTournament(tournamentId);
+            clearInterval(intervalId);
+        } */
         if (gameVar.matchOver) {
             gameVar.rematchBtn.style.display = 'none';
             gameVar.quitGameBtn.style.display = 'none';
@@ -144,6 +149,10 @@ async function launchNextMatch(tournamentId, data) {
 
                                 // Wait for the final game to finish
                                 const finalIntervalId = setInterval(async () => {
+                                    if (!isTournamentPage) {
+                                        deleteTournament(tournamentId);
+                                        clearInterval(intervalId);
+                                    }
                                     if (gameVar.matchOver) {
                                         gameVar.rematchBtn.style.display = 'none';
                                         gameVar.quitGameBtn.style.display = 'none';
@@ -294,7 +303,9 @@ export async function deleteTournament(tournamentId) {
         const deleteTournament = await fetchAuthData(`/tournament/delete/${tournamentId}/`, "DELETE");
         if (deleteTournament.status === 200) {
             console.log("Tournament deleted successfully", tournamentId);
-            window.location.href = '/#home'; //TODO: ???
+            // window.location.href = '/#home'; //TODO: ???
+            // renderHomePage();
+            renderPage("home");
         } else {
             console.error("Failed to delete tournament:", deleteTournament.data);
         }
