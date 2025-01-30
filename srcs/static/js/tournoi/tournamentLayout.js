@@ -13,12 +13,11 @@ export async function displayTournamentLayout(tournamentId) {
     const box = document.getElementById('mainContent');
     try {
         const response = await fetchAuthData(`/tournament/${tournamentId}/`, "GET");
-
+        console.log(".... Response:", response.data);
         if (response.status === 200 && response.data) {
             box.innerHTML = createTournamentLayoutHTML();
             currentMatchId = response.data.current_match;
-            
-            renderBracket(response.data.matches, response.data.current_match);
+            renderBracket(response.data.matches, currentMatchId);
             
             playNextMatchButton = document.getElementById('play-next-match');
             playNextMatchButton.disabled = false;
@@ -27,10 +26,10 @@ export async function displayTournamentLayout(tournamentId) {
 
             playNextMatchButton.addEventListener('click', () => {
                 playNextMatchButton.disabled = true;
-                console.log("[DEBUG] playNextMatchButton.disabled set to:", playNextMatchButton.disabled);
                 playNextMatchButton.style.border = "5px solid red";
                 playNextMatchButton.textContent = "Starting match...";
 
+                console.log("....currentMatchId", currentMatchId);
                 launchNextMatch(tournamentId, response.data);
             });
 
@@ -38,13 +37,21 @@ export async function displayTournamentLayout(tournamentId) {
                 deleteTournament(tournamentId);
             });
 
-            checkIfMatchOver(tournamentId);
         } else {
             console.warn("[displayTournamentLayout] Failed to load tournament layout. Status:", response.status);
         }
     } catch (error) {
         console.error("[displayTournamentLayout] Error loading tournament layout:", error);
     }
+}
+
+function getNextMatchId(currentMatchId, matches) {
+    // Logic to get the next match ID based on the current match ID and matches array
+    const currentIndex = matches.findIndex(match => match.match_id === currentMatchId);
+    if (currentIndex !== -1 && currentIndex < matches.length - 1) {
+        return matches[currentIndex + 1].match_id;
+    }
+    return currentMatchId; // Return the same ID if no next match is found
 }
 
 function renderBracket(matches, currentMatchId) {
@@ -77,47 +84,72 @@ function renderBracket(matches, currentMatchId) {
 async function launchNextMatch(tournamentId, data) {
     console.log("[launchNextMatch] Starting...");
 
-    if (!data.current_match) {
+    if (!currentMatchId) {
         return console.error("[launchNextMatch] No match ID provided");
     }
 
-    const currentMatch = data.matches.find(match => match.match_id === data.current_match);
+    const currentMatch = data.matches.find(match => match.match_id === currentMatchId);
 
     if (!currentMatch) {
         return console.error("[launchNextMatch] Current match not found in matches array");
     }
 
-    const payload = {
-        matchId: data.current_match,
-        score_one: gameVar.playerScore,
-        score_two: gameVar.aiScore,
-    };
+    // Launch the game first
+    launchGame(currentMatch.player1, currentMatch.player2);
 
-    try {
-        const response = await fetchAuthData(`/tournament/next/${tournamentId}/`, "POST", payload);
+    // Wait for the game to finish
+    const intervalId = setInterval(async () => {
+        if (gameVar.matchOver) {
+            clearInterval(intervalId);
 
-        if (response.status === 200) {
-            console.log("[launchNextMatch] Match launched successfully");
-            currentMatchId = data.current_match;
-            console.log("[launchNextMatch] Updated currentMatchId:", currentMatchId);
+            // Update the match scores after the game is finished
+            const payload = {
+                matchId: currentMatchId,
+                score_one: gameVar.playerScore,
+                score_two: gameVar.aiScore,
+            };
 
-            launchGame(currentMatch.player1, currentMatch.player2);
+            console.log("[launchNextMatch] Payload:", payload);
 
-            if (gameVar.matchOver) {
-                playNextMatchButton.disabled = true;
-                playNextMatchButton.textContent = "Tournament Finished";
-                console.log("[launchNextMatch] Tournament finished");
+            try {
+                const response = await fetchAuthData(`/tournament/next/${tournamentId}/`, "POST", payload);
 
-                announceWinner(data.winner);
-            } else {
-               // displayTournamentLayout(tournamentId);
+                if (response.status === 200) {
+                    console.log("[launchNextMatch] Match score updated successfully");
+
+                    playNextMatchButton.disabled = false;
+                    playNextMatchButton.style.border = "5px solid blue";
+                    playNextMatchButton.textContent = "Play Next Match";
+
+                    // Update the match data and re-fetch the tournament data
+                    const updatedResponse = await fetchAuthData(`/tournament/${tournamentId}/`, "GET");
+                    if (updatedResponse.status === 200 && updatedResponse.data) {
+                        data = updatedResponse.data;
+                        currentMatchId = getNextMatchId(currentMatchId, data.matches);
+                        renderBracket(data.matches, currentMatchId);
+
+                        if (currentMatchId === data.matches[data.matches.length - 1].match_id) {
+                            playNextMatchButton.disabled = true;
+                            playNextMatchButton.textContent = "Tournament Finished";
+                            announceWinner(data.winner);
+                        }
+                    } else {
+                        // Set up the event listener for the next match
+                        playNextMatchButton.addEventListener('click', () => {
+                            playNextMatchButton.disabled = true;
+                            playNextMatchButton.style.border = "5px solid red";
+                            playNextMatchButton.textContent = "Starting match...";
+                            launchNextMatch(tournamentId, data);
+                        });
+                    }
+                } else {
+                    console.error("[launchNextMatch] Failed to update match score:", response.data);
+                }
+            } catch (error) {
+                console.error("[launchNextMatch] Error updating match score:", error);
             }
-        } else {
-            console.error("[launchNextMatch] Failed to launch match:", response.data);
         }
-    } catch (error) {
-        console.error("[launchNextMatch] Error launching match:", error);
-    }
+    }, 1000);
 }
 
 function launchGame(player1, player2) {
@@ -134,78 +166,27 @@ function launchGame(player1, player2) {
     gameVar.opponentName = player2;
     renderPageGame("playTournamentLocal", true);
 
-    console.log("[DEBUG] playNextMatchButton fetched in launchGame:", playNextMatchButton);
-
     playNextMatchButton.disabled = true;
     playNextMatchButton.textContent = "Game In Progress...";
-    console.log("[DEBUG] playNextMatchButton.disabled set to true in launchGame:", playNextMatchButton.disabled);
-
-    const intervalId = setInterval(() => {
-        console.log("[DEBUG] Checking game over state. gameVar.matchOver:", gameVar.matchOver);
-        console.log("[DEBUG] playNextMatchButton.disabled:", playNextMatchButton.disabled);
-        
-        if (gameVar.matchOver) {
-            clearInterval(intervalId);
-            playNextMatchButton.disabled = false;
-            console.log("[DEBUG] playNextMatchButton re-enabled:", playNextMatchButton.disabled);
-        }
-    }, 1000);
-}
-
-export async function deleteTournament(tournamentId) {
-    try {  
-        const deleteTournament = await fetchAuthData(`/tournament/delete/${tournamentId}/`, "DELETE");
-        if (deleteTournament.status === 200) {
-            console.log("Tournament deleted successfully");
-        } else {
-            console.error("Failed to delete tournament:", deleteTournament.data);
-        }
-    } catch (error) {
-        console.error("Error deleting tournament:", error);
-    }
-}
-
-function checkIfMatchOver(tournamentId = null) {
-
-    // Periodically check if the match is over
-    const intervalId = setInterval(() => {
-        const currentPage = window.location.hash || '';
-        if (tournamentId && !isTournamentPage(currentPage))
-        {
-            deleteTournament(tournamentId);
-            clearInterval(intervalId);
-        }
-        console.log("[checkIfMatchOver] Checking match state... gameVar.matchOver:", gameVar.matchOver);
-
-        // Handle game start
-        if (gameVar.gameStart) {
-            console.log("[checkIfMatchOver] Game has started! Updating button state.");
-            if (playNextMatchButton) {
-                playNextMatchButton.style.border = "5px solid orange"; // Indicate game is in progress
-                playNextMatchButton.disabled = true; // Disable the button during the game
-                playNextMatchButton.textContent = "Game In Progress...";
-            }
-        }
-    
-        if (gameVar.matchOver) {
-            console.log("[checkIfMatchOver] Match is over! Re-enabling button.");
-            console.log("gameVar.player1Score", gameVar.playerScore);
-            console.log("gameVar.player2Score", gameVar.aiScore);
-            gameVar.rematchBtn.style.display = 'none';
-            gameVar.quitGameBtn.style.display = 'none';
-            if (playNextMatchButton) {
-                playNextMatchButton.style.border = "5px solid green";
-                playNextMatchButton.disabled = false;
-                playNextMatchButton.textContent = "Play Next Match";
-            }
-            clearInterval(intervalId); // Clear the interval
-        }
-    }, 1000);
 }
 
 function announceWinner(winner) {
     const winnerSection = document.getElementById('winner-section');
     if (winnerSection) {
         winnerSection.innerHTML = `<h2 class="text-center">Winner: ${winner}</h2>`;
+    }
+}
+
+export async function deleteTournament(tournamentId) {
+    try {  
+        const deleteTournament = await fetchAuthData(`/tournament/delete/${tournamentId}/`, "DELETE");
+        if (deleteTournament.status === 200) {
+            console.log("Tournament deleted successfully", tournamentId);
+            window.location.href = '/#home'; //TODO: ???
+        } else {
+            console.error("Failed to delete tournament:", deleteTournament.data);
+        }
+    } catch (error) {
+        console.error("Error deleting tournament:", error);
     }
 }
