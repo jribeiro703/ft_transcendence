@@ -13,7 +13,6 @@ export async function displayTournamentLayout(tournamentId) {
     const box = document.getElementById('mainContent');
     try {
         const response = await fetchAuthData(`/tournament/${tournamentId}/`, "GET");
-        console.log(".... Response:", response.data);
         if (response.status === 200 && response.data) {
             box.innerHTML = createTournamentLayoutHTML();
             currentMatchId = response.data.current_match;
@@ -29,7 +28,6 @@ export async function displayTournamentLayout(tournamentId) {
                 playNextMatchButton.style.border = "5px solid red";
                 playNextMatchButton.textContent = "Starting match...";
 
-                console.log("....currentMatchId", currentMatchId);
                 launchNextMatch(tournamentId, response.data);
             });
 
@@ -116,12 +114,11 @@ async function launchNextMatch(tournamentId, data) {
             try {
                 const response = await fetchAuthData(`/tournament/next/${tournamentId}/`, "POST", payload);
                 if (response.status === 400) {
-                    console.log("line 119");
                     playNextMatchButton.disabled = true;
                     playNextMatchButton.textContent = "Tournement finished";
                 }
                 if (response.status === 200) {
-                    console.log("[launchNextMatch] Match score updated successfully");
+                    console.log("[launchNextMat|ch] Match score updated successfully");
 
                     playNextMatchButton.disabled = false;
                     playNextMatchButton.style.border = "5px solid blue";
@@ -136,8 +133,6 @@ async function launchNextMatch(tournamentId, data) {
 
                         // Check if the current match is the last match
                         if (currentMatchId === data.matches[data.matches.length - 1].match_id) {
-                            console.log("currentMatchId:", currentMatchId);
-                            console.log("matches len", data.matches[data.matches.length - 1].match_id);
                             playNextMatchButton.disabled = false;
                             playNextMatchButton.textContent = "Play Final Match";
                             
@@ -160,25 +155,25 @@ async function launchNextMatch(tournamentId, data) {
                                             score_one: gameVar.playerScore,
                                             score_two: gameVar.aiScore,
                                         };
-
-                                        console.log("[launchNextMatch] Final Payload:", finalPayload);
+                                        currentMatchId = 0;
+                                        console.log("[launchNextMatch-final] Final Payload:", finalPayload);
 
                                         try {
                                             const finalResponse = await fetchAuthData(`/tournament/next/${tournamentId}/`, "POST", finalPayload);
                                             console.log("finalResponse:", finalResponse.data);
                                             if (finalResponse.status === 200) {
-                                                console.log("[launchNextMatch] Final match score updated successfully");
-
+                                                console.log("[launchNextMatch-final] Final match score updated successfully");
+                                                playNextMatchButton.style.border = "5px solid green";
+                                                playNextMatchButton.textContent = "Tournament Finished";
+                                                playNextMatchButton.disabled = true;
                                                 // Fetch the updated tournament data to get the winner
                                                 const finalUpdatedResponse = await fetchAuthData(`/tournament/${tournamentId}/`, "GET");
                                                 if (finalUpdatedResponse.status === 200 && finalUpdatedResponse.data) {
-                                                    const winner = finalUpdatedResponse.data.winner;
-                                                    console.log(">>>>>>>>data.winner line 176:", winner);
+                                                    const winner = finalResponse.data.winner;
+                                                    console.log(">>>>>>>>finalResponse.data.winner line 176:", winner);
 
                                                     // Mark the tournament as finished
-                                                    playNextMatchButton.disabled = true;
-                                                    playNextMatchButton.style.border = "5px solid green";
-                                                    playNextMatchButton.textContent = "Tournament Finished";
+                                                    
                                                     announceWinner(winner);
                                                 }
                                             } else {
@@ -189,7 +184,7 @@ async function launchNextMatch(tournamentId, data) {
                                         }
                                     }
                                 }, 1000);
-                            });
+                            }, { once: true });
                         }
                     } else {
                         // Set up the event listener for the next match
@@ -198,7 +193,7 @@ async function launchNextMatch(tournamentId, data) {
                             playNextMatchButton.style.border = "5px solid red";
                             playNextMatchButton.textContent = "Starting match...";
                             launchNextMatch(tournamentId, data);
-                        });
+                        }, { once: true });
                     }
                 } else {
                     console.error("[launchNextMatch] Failed to update match score:", response.data);
@@ -229,9 +224,68 @@ function launchGame(player1, player2) {
 }
 
 function announceWinner(winner) {
+    console.log("[announceWinner] Function called with winner:", winner); // Add this line for debugging
+
     const winnerSection = document.getElementById('winner-section');
     if (winnerSection) {
-        winnerSection.innerHTML = `<h2 class="text-center">Winner: ${winner}</h2>`;
+        winnerSection.innerHTML = `
+            <div class="winner-announcement">
+                <h2 class="text-center">Winner: ${winner}</h2>
+            </div>
+        `;
+
+        // Add styles and animations
+        const winnerAnnouncement = document.querySelector('.winner-announcement');
+        winnerAnnouncement.style.position = 'fixed';
+        winnerAnnouncement.style.top = '50%';
+        winnerAnnouncement.style.left = '50%';
+        winnerAnnouncement.style.transform = 'translate(-50%, -50%)';
+        winnerAnnouncement.style.padding = '20px';
+        winnerAnnouncement.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        winnerAnnouncement.style.color = 'white';
+        winnerAnnouncement.style.borderRadius = '10px';
+        winnerAnnouncement.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+        winnerAnnouncement.style.textAlign = 'center';
+        winnerAnnouncement.style.fontSize = '2em';
+        winnerAnnouncement.style.zIndex = '1000';
+        winnerAnnouncement.style.opacity = '0';
+        winnerAnnouncement.style.transition = 'opacity 1s ease-in-out';
+
+        // Fade in the announcement
+        setTimeout(() => {
+            winnerAnnouncement.style.opacity = '1';
+        }, 100);
+
+        // Add a confetti effect
+        const confettiContainer = document.createElement('div');
+        confettiContainer.classList.add('confetti-container');
+        document.body.appendChild(confettiContainer);
+
+        for (let i = 0; i < 100; i++) {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.position = 'fixed';
+            confetti.style.top = `${Math.random() * 100}%`;
+            confetti.style.left = `${Math.random() * 100}%`;
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            confetti.style.opacity = '0';
+            confetti.style.transition = 'opacity 1s ease-in-out, transform 2s ease-in-out';
+            confettiContainer.appendChild(confetti);
+
+            setTimeout(() => {
+                confetti.style.opacity = '1';
+                confetti.style.transform = `translateY(${Math.random() * 200 - 100}px) translateX(${Math.random() * 200 - 100}px) rotate(${Math.random() * 360}deg)`;
+            }, 100);
+        }
+
+        // Remove confetti after animation
+        setTimeout(() => {
+            confettiContainer.remove();
+        }, 3000);
+    } else {
+        console.error("[announceWinner] Winner section not found"); // Add this line for debugging
     }
 }
 
