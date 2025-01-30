@@ -24,6 +24,16 @@ label {
   color: var(--text-color);
 }
 
+h1,
+h2,
+h3 {
+  color: var(--text-color);
+}
+
+div {
+  color: var(--text-color);
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -88,6 +98,14 @@ p1 {
     font-size 1.8s ease,
     top 1.5s ease;
   font-size: 1.5rem;
+}
+
+.w-220 {
+  width: 220px;
+}
+
+.w-700 {
+  width: 700px;
 }
 
 .navbar.expanded {

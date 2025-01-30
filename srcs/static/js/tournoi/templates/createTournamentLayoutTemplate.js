@@ -1,34 +1,29 @@
 export function createTournamentLayoutHTML() {
   return `
-    <div class="container-fluid px-4">
-      <div class="row">
-        <!-- Tournament Bracket Section -->
-        <div id="tournament-bracket-section" class="col-lg-3 col-md-4 bg-light rounded p-3">
+      <div class="row gap-5 d-flex justify-content-center align-items-center">
+
+        <div id="tournament-bracket-section" class="d-flex justify-content-center align-items-center gap-4 flex-column w-220">
           <h2 class="text-center">Tournament Bracket</h2>
-          <div id="tournament-bracket" class="bracket">
-            <!-- Dynamic content for matches will be inserted here -->
+          <div id="tournament-bracket" class="bracket d-flex justify-content-center align-items-center flex-column gap-2">
           </div>
-          <hr>
-          <div id="next-match" class="matchup">
+          <div id="next-match" class="matchup d-flex justify-content-center align-items-center flex-column gap-1">
             <div id="player-l" class="current">Semi finalist 1</div>
             <div class="vs">vs</div>
             <div id="player-r" class="current">Semi finalist 2</div>
           </div>
+
           <button
             id="play-next-match"
-            class="btn btn-primary w-100 mt-3"
-          >Play Next Match</button>
+            class="primaryBtn w-100"
+          ><span>Next Match</span></button>
+
         </div>
 
-        <!-- Game Section -->
         <div id="tournamentdiv" class="col-lg-9 col-md-8 d-flex align-items-center justify-content-center">
         </div>
 
-        <div id="winner-section" class="col-lg-3 col-md-4 bg-light rounded p-3">
+        <div id="winner-section" class="rounded">
         </div>
       </div>
-    </div>
-
-
   `;
 }
