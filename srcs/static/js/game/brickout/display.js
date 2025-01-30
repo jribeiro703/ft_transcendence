@@ -23,7 +23,6 @@ export function displayFinishLive()
     btn.id = "finish";
     btn.innerHTML = `
         <div class="button-container" style="margin-top: 50px">
-            <button id="returnLobbyBtn" class="primaryBtn w-40"><span>Return Lobby</span></button> 
             <button id="quitBtn" class="primaryBtn w-40"><span>Return Home</span></button>
         </div>
     `;

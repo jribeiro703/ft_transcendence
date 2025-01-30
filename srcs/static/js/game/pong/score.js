@@ -18,13 +18,9 @@ export async function sendScore()
 		winner: gameVar.winner,
     }
     const responseObject = await fetchAuthData("/game/create/", "POST", body);
-	console.log("score: responseObj: ", responseObject);
 
-    if (responseObject.status === 201) {
-        console.log("Game successfully");
-    } else {
-        console.log("Game failed");
-    }
+    if (responseObject.status === 201)
+        console.log("Sending game score successfully");
 }
 
 export async function manageScore()
@@ -34,7 +30,6 @@ export async function manageScore()
 	else
 		gameVar.winner = gameVar.opponentName;
 
-	console.log("win", gameVar.winner);
 
 	const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${gameVar.winner}`);
 
@@ -79,12 +74,7 @@ export function checkScore()
 		}
 		else
 		{
-			if (!gameVar.inter && gameVar.playerIdx === 1)
-			{
-				sendScore();
-				gameVar.inter = true;
-			}
-			gameVar.returnLobby.style.display = 'block';
+			gameVar.returnLobby.style.display = 'none';
 		}
 		gameVar.quitGameBtn.style.display = 'block';
 		listenBtn();

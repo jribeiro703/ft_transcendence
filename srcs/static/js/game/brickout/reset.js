@@ -30,7 +30,8 @@ export function resetMatchB()
 	brickVar.startTime = false;
 	brickVar.loose = false;
 	brickVar.initialize = false;
-	brickVar.loose = false;
+	brickVar.loose = false
+	brickVar.win = false;
 	resetPuB();
 	initPaddlesPosB();
 	if (brickVar.anim)
