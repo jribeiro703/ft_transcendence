@@ -5,7 +5,7 @@ export function createTournamentFormHTML() {
 <div id="tournament-setup" class=" w-100 h-100 d-flex justify-content-center overflow-scroll" style="display: none;">
     <form id="tournament-setup-form" class="p-0 w-100 d-flex flex-column align-items-center gap-5 justify-content-center p-0">
 
-        <div id="player-fields-container" class="align-item-center w-75 p-0"></div>
+        <div id="player-fields-container" class="align-item-center w-700 p-0"></div>
 
         <div id="player-field-template" class="style="display: none;">
           <div class="player-field-container p-0 justify-content-center ">
@@ -23,7 +23,7 @@ export function createTournamentFormHTML() {
             <div class="token-container gap-2" style="display: none; margin-top: 10px;">
               <input type="text"
                      class="form-control game-token"
-                     placeholder="Player Game Token">
+                     placeholder="Player Token (in user settings)">
               <button type="button" class="primaryBtn w-380 validate-token" disabled><span>Validate</span></button>
             </div>
             <div class="token-warning text-danger mt-2" style="display: none;">Invalid game token!</div>
