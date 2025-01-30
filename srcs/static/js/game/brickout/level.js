@@ -8,20 +8,16 @@ import { initializeCanvasBrick } from "../pong/canvas.js";
 import { initializeScoreCanvasBrickout } from "../pong/canvas.js";
 import { displayGameBrickView } from "../pong/display.js";
 import gameVar from "../pong/var.js";
-import { chechOpponent, chechOpponentRemote } from "./score.js";
+import { chechOpponent, chechOpponentRemote, sendScoreB } from "./score.js";
+import { resetMatchB } from "./reset.js";
 
 export function youWinB()
 {
-	if (!brickVar.finish)
-	{
-		brickVar.ctx.font = "35px Arial";
-    	brickVar.ctx.fillStyle = "#66a5e8";
-    	brickVar.ctx.fillText("Congratulations, you win !!", brickVar.canvasW / 2 - 200, brickVar.canvasH / 2);
-	}
 	if (!gameVar.liveMatch && !gameVar.localGame)
+	{
 		levelDisplayB();
-	else if (gameVar.liveMatch)
-		chechOpponentRemote();
+		addBtnB();
+	}
 	else if (gameVar.localGame)
 	{
 		chechOpponent();
@@ -50,16 +46,19 @@ export function checkLevelB(level)
 
 export function levelDisplayB()
 {
-	brickVar.ctx.font = "30px Arial";
+	brickVar.ctx.font = "bold 24px fontScore";
     brickVar.ctx.fillStyle = "white";
-
-	if (brickVar.currLevel == "classic")
-		brickVar.ctx.fillText("Next Level : The Castle", brickVar.canvasW / 2 - 180, brickVar.canvasH / 2 + 150);
-	if (brickVar.currLevel == "castle")
-		brickVar.ctx.fillText("Next Level : X ", brickVar.canvasW / 2 - 100, brickVar.canvasH / 2 + 150);
-	if (brickVar.currLevel == "x")
-		brickVar.ctx.fillText("Next Level : Space Invader", brickVar.canvasW / 2 - 200, brickVar.canvasH / 2 + 150);
-	if (brickVar.currLevel == "invader")
+	if (brickVar.currLevel !== "invader")
+	{
+		if (brickVar.currLevel == "classic")
+			brickVar.ctx.fillText("Next Level : The Castle", brickVar.canvasW / 2 - 180, 70);
+		if (brickVar.currLevel == "castle")
+			brickVar.ctx.fillText("Next Level : X ", brickVar.canvasW / 2 - 100, 70);
+		if (brickVar.currLevel == "x")
+			brickVar.ctx.fillText("Next Level : Space Invader", brickVar.canvasW / 2 - 200, 70);
+		addImageB("/static/css/images/mswin.png");
+	}
+	else if (brickVar.currLevel == "invader")
 	{
 		brickVar.finish = true;
 		brickVar.finalScore = 104 + 169 + 169 + 169;
@@ -121,6 +120,7 @@ export async function handleNextLevelB()
 	brickVar.gameStart = false;
 	brickVar.finishLevel = false;
 	brickVar.score = 0;
+	brickVar.lives = 5;
 	if (brickVar.currLevel == 'classic')
 		startGameB("castle");
 	else if (brickVar.currLevel == 'castle')
@@ -143,7 +143,7 @@ export async function restartLevelB()
 	brickVar.gameStart = false;
 	brickVar.finishLevel = false;
 	brickVar.score = 0;
-
+	brickVar.lives = 5;
 	if (brickVar.currLevel === 'classic')
 		startGameB('classic')
 	else if (brickVar.currLevel === 'castle')

@@ -42,6 +42,7 @@ const pongGamePages = {
   gameSelectionMulti: showGameSelectionMultiView,
 
   playPongLocal: showGameView,
+  playTournamentLocal: showGameView,
   playBrickoutLocal: showGameBrickLocalView,
 
   pongLobby: initLobbyPongView,
@@ -82,6 +83,7 @@ export function isGameplayPage(page) {
     "#playPongRemoteSecondP",
     "#playBrickoutRemote",
     "#playBrickoutRemoteSecondP",
+    "#playTournamentLocal",
   ].includes(page);
 }
 
@@ -101,7 +103,12 @@ export function isGamePage(page) {
     "#playPongRemoteSecondP",
     "#playBrickoutRemote",
     "#playBrickoutRemoteSecondP",
+    "#playTournamentLocal",
   ].includes(page);
+}
+
+export function isTournamentPage(page) {
+  return ["#playTournamentLocal", "#tournament"].includes(page);
 }
 
 export function isGamePageChat(page) {
@@ -223,8 +230,9 @@ window.addEventListener("load", () => {
     currentHash === "playPongLocal" ||
     currentHash === "playBrickoutLocal" ||
     currentHash === "playPongRemote" ||
-    currentHash === "playPongRemoteSecondp" ||
+    currentHash === "playPongRemoteSecondP" ||
     currentHash === "playBrickoutRemote" ||
+    currentHash === "playBrickoutRemoteSecondP" ||
     currentHash === "pongLobby" ||
     currentHash === "brickoutLobby"
   ) {

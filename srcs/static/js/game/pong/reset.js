@@ -1,13 +1,15 @@
 import gameVar from "./var.js";
+import { WIN_SCORE, GAP_SCORE } from "./const.js";
 import { initializeBall } from "./ball.js";
 import { aiServeBall } from "./ai.js";
 import { checkball } from "./check.js";
-import { sendGameData, sendScoreInfo } from "./network.js";
+import { sendGameData, sendScoreInfo, sendScoreSubmit } from "./network.js";
 import { checkScore } from "./score.js";
 import { updateDifficultySelection, updateLevelSelection } from "./update.js";
 import { resetPu, updatePowerUpSelection } from "./powerUp.js";
 import { renderPageGame } from "../HistoryManager.js";
 import { initPaddlesPos, removeEventListeners } from "./init.js";
+import { sendScore } from "./score.js";
 
 export function listenBtn()
 {
@@ -92,6 +94,7 @@ export function clearAllpongStates()
 	gameVar.tournament = false;
 	gameVar.currentServer = 'player';
 	gameVar.playerIdx = 0;
+	gameVar.scoreSubmit = false;
 }
 
 export function clearPongVar()
@@ -115,6 +118,7 @@ export function clearPongVar()
 	gameVar.tournament = false;
 	gameVar.currentServer = 'player';
 	gameVar.playerIdx = 0;
+	gameVar.scoreSubmit = false;
 }
 
 export function resetMatch()
@@ -129,6 +133,7 @@ export function resetMatch()
 	gameVar.finishGame = false;
 	gameVar.aiServe = false; 
 	gameVar.matchOver = false;
+	gameVar.scoreSubmit = false;
 	resetPu();
 	initPaddlesPos();
 	resetTimeFrame();
@@ -169,6 +174,12 @@ export function resetBall(winner)
 		if (gameVar.playerIdx === 2)
 			sendScoreInfo(gameVar.gameSocket, gameVar.playerIdx, gameVar.opponentName, gameVar.playerScore, gameVar.aiScore);
 		checkScore();
+		if (!gameVar.scoreSubmit && gameVar.playerIdx === 1)
+		{
+			sendScore();
+			gameVar.scoreSubmit = true;
+			sendScoreSubmit(gameVar.scoreSubmit);
+		}
 	}
 	else
 		checkScore();

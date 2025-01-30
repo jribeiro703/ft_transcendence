@@ -4,6 +4,7 @@ import { createCastlePattern, createInvaderPattern, createXPattern, createClassi
 import { sendScoreInfoB } from '../pong/network.js';
 import gameVar from '../pong/var.js';
 import brickVar2 from './secondBrickout/var.js';
+import { chechOpponentRemote } from './score.js';
 
 for(var c = 0; c < brickVar.brickColumnCount; c++)
 {
@@ -16,10 +17,9 @@ for(var c = 0; c < brickVar.brickColumnCount; c++)
 
 export function collisionDetectionB()
 {
-	let checkOpp = false;
 	for(var c = 0; c < brickVar.brickColumnCount; c++) 
 	{
-		for(var r = 0; r<brickVar.brickRowCount; r++)
+		for(var r = 0; r < brickVar.brickRowCount; r++)
 		{
 			var b = brickVar.brick[c][r];
 			if(b.status == 1)
@@ -30,32 +30,44 @@ export function collisionDetectionB()
 					b.status = 0;
 					brickVar.score++;
 					manageRemoteScore();
-					brickVar.totalBrick = 5;
-					if(brickVar.score == brickVar.totalBrick)
+					brickVar.totalBrick = 10;
+					if(brickVar.score === brickVar.totalBrick)
 					{
-						if (brickVar.playerIdx === 2)
-						{
-							brickVar2.finishLevel = true;
-						}
+						brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
+						if (gameVar.liveMatch)
+							manageRemoteWin();
 						else
 						{
 							brickVar.finishLevel = true;
+							if (!gameVar.localGame)
+							{
+								if (brickVar.currLevel === "invader")
+									brickVar.finish = true;
+							}
+							youWinB();
 						}
-						brickVar.finishLevel = true;
-						brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);
-						if (!gameVar.localGame && !gameVar.liveMatch)
-						{
-							if (brickVar.currLevel === "invader")
-								brickVar.finish = true;
-						}
-						youWinB();
-						
 					}
 				}
 			}
 		}
 	}
 }   
+
+export function manageRemoteWin()
+{
+	if (brickVar.playerIdx === 1 || gameVar.playerIdx === 1)
+	{
+		brickVar.finishLevel = true;
+	}
+	else if (brickVar.playerIdx === 2  || gameVar.playerIdx === 2)
+	{
+		brickVar2.finishLevel = true;
+	}
+	brickVar.win = true;
+	chechOpponentRemote();
+
+
+}
 
 export function manageRemoteScore()
 {

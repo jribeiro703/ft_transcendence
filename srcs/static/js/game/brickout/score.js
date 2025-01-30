@@ -2,6 +2,8 @@ import gameVar from "../pong/var.js";
 import brickVar from "./var.js";
 import brickVar2 from "./secondBrickout/var.js";
 import { addBtnB } from "./manage.js";
+import { fetchAuthData } from "../../user/fetchData.js";
+import { sendScoreSubmit } from "../pong/network.js";
 
 function loadCustomFont() {
   return new FontFace(
@@ -39,10 +41,15 @@ export function chechOpponentRemote() {
           );
         } else drawScoreBoardBRemote();
       }
-      if (brickVar.opponentLives === 0 && brickVar.playerLives === 0) {
+      if (brickVar.opponentLives === 0 || isP2Finish()) {
         clearInterval(waiting);
         compareScoreRemote();
         addBtnB();
+        if (!gameVar.scoreSubmit) {
+          sendScoreB();
+          gameVar.scoreSubmit = true;
+          sendScoreSubmit(gameVar.scoreSubmit);
+        }
       }
     }
     if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2) {
@@ -71,13 +78,26 @@ export function chechOpponentRemote() {
           );
         } else drawScoreBoardBRemote();
       }
-      if (brickVar.playerLives === 0 && brickVar.opponentLives === 0) {
+      if (brickVar.playerLives === 0 || isP1Finish()) {
         clearInterval(waiting);
         compareScoreRemote();
         addBtnB();
       }
     }
   }, 1000);
+}
+
+export function isP2Finish() {
+  if (brickVar.totalBrick === brickVar.opponentScore) {
+    brickVar.win = true;
+    return true;
+  } else return false;
+}
+export function isP1Finish() {
+  if (brickVar.totalBrick === brickVar.playerScore) {
+    brickVar.win = true;
+    return true;
+  } else return false;
 }
 
 export function chechOpponent() {
@@ -130,7 +150,10 @@ export function compareScoreRemote() {
       brickVar.ctx.font = "bold 24px fontScore";
       brickVar.ctx.fillStyle = "#66a5e8";
       brickVar.ctx.textAlign = "left";
-      if (brickVar.playerScore > brickVar.opponentScore) {
+      if (
+        brickVar.playerScore > brickVar.opponentScore ||
+        brickVar.playerLives > brickVar.opponentLives
+      ) {
         if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1)
           displayScoreP1Win(true);
         if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2) {
@@ -159,8 +182,33 @@ export function compareScoreRemote() {
             brickVar.canvasW / 4 + 380,
             brickVar.canvasH / 2 + 50,
           );
+          if (brickVar.opponentLives > 0) {
+            brickVar.ctx.fillText(
+              "You've still : ",
+              brickVar.canvasW / 4,
+              brickVar.canvasH / 2 + 100,
+            );
+            brickVar.ctx.fillText(
+              brickVar.opponentLives,
+              brickVar.canvasW / 4 + 200,
+              brickVar.canvasH / 2 + 100,
+            );
+            brickVar.ctx.fillText(
+              "lives !",
+              brickVar.canvasW / 4 + 230,
+              brickVar.canvasH / 2 + 100,
+            );
+          } else
+            brickVar.ctx.fillText(
+              "You've no more lives",
+              brickVar.canvasW / 4,
+              brickVar.canvasH / 2 + 100,
+            );
         }
-      } else if (brickVar.opponentScore > brickVar.playerScore) {
+      } else if (
+        brickVar.opponentScore > brickVar.playerScore ||
+        brickVar.opponentLives > brickVar.playerLives
+      ) {
         if (gameVar.playerIdx === 2 || brickVar.playerIdx === 2)
           displayScoreP1Win(false);
         if (gameVar.playerIdx === 1 || brickVar.playerIdx === 1) {
@@ -189,6 +237,28 @@ export function compareScoreRemote() {
             brickVar.canvasW / 4 + 380,
             brickVar.canvasH / 2 + 50,
           );
+          if (brickVar.playerLives > 0) {
+            brickVar.ctx.fillText(
+              "You've still : ",
+              brickVar.canvasW / 4,
+              brickVar.canvasH / 2 + 100,
+            );
+            brickVar.ctx.fillText(
+              brickVar.playerLives,
+              brickVar.canvasW / 4 + 200,
+              brickVar.canvasH / 2 + 100,
+            );
+            brickVar.ctx.fillText(
+              "lives !",
+              brickVar.canvasW / 4 + 230,
+              brickVar.canvasH / 2 + 100,
+            );
+          } else
+            brickVar.ctx.fillText(
+              "You've no more lives",
+              brickVar.canvasW / 4,
+              brickVar.canvasH / 2 + 100,
+            );
         }
       } else displayEqualScore();
     })
@@ -311,6 +381,17 @@ function displayScoreP1Win(player1) {
     brickVar.canvasW / 4,
     brickVar.canvasH / 2 + 50,
   );
+  brickVar.ctx.fillText(
+    "You've still : ",
+    brickVar.canvasW / 4,
+    brickVar.canvasH / 2 + 100,
+  );
+  brickVar.ctx.fillText(
+    "lives !",
+    brickVar.canvasW / 4 + 230,
+    brickVar.canvasH / 2 + 100,
+  );
+
   if (gameVar.liveMatch) {
     if (player1 === true) {
       brickVar.ctx.fillText(
@@ -323,6 +404,11 @@ function displayScoreP1Win(player1) {
         brickVar.canvasW / 4 + 380,
         brickVar.canvasH / 2 + 50,
       );
+      brickVar.ctx.fillText(
+        brickVar.playerLives,
+        brickVar.canvasW / 4 + 200,
+        brickVar.canvasH / 2 + 100,
+      );
     } else {
       brickVar.ctx.fillText(
         brickVar.opponentScore,
@@ -333,6 +419,11 @@ function displayScoreP1Win(player1) {
         brickVar.playerScore,
         brickVar.canvasW / 4 + 380,
         brickVar.canvasH / 2 + 50,
+      );
+      brickVar.ctx.fillText(
+        brickVar.opponentLives,
+        brickVar.canvasW / 4 + 200,
+        brickVar.canvasH / 2 + 100,
       );
     }
   } else {
@@ -577,11 +668,54 @@ export function drawScoreBoardB() {
     });
 }
 
-export function saveScoreB() {
-  var levelScore = 0;
-  if (brickVar.currLevel === "classic") levelScore = 0;
-  if (brickVar.currLevel === "castle") levelScore = 104;
-  else if (brickVar.currLevel === "x") levelScore = 104 + 169;
-  else if (brickVar.currLevel === "invader") levelScore = 104 + 169 + 169;
-  brickVar.finalScore = brickVar.score + levelScore;
+export async function sendScoreB() {
+  if ((await manageScoreB()) === false) {
+    return;
+  } else {
+    const body = {
+      username_one: gameVar.userName,
+      username_two: gameVar.opponentName,
+      score_one: brickVar.playerScore,
+      score_two: brickVar.opponentScore,
+      time_played: brickVar.gameTime,
+      difficulty: brickVar.difficulty,
+      powerup: brickVar.powerUpEnable,
+      level: brickVar.currLevel,
+      winner: gameVar.winner,
+    };
+    const responseObject = await fetchAuthData("/game/create/", "POST", body);
+
+    if (responseObject.status === 201)
+      console.log("Sending game score successfully");
+  }
+}
+
+async function manageScoreB() {
+  if (brickVar.playerScore > brickVar.opponentScore)
+    gameVar.winner = gameVar.userName;
+  else if (brickVar.playerScore < brickVar.opponentScore)
+    gameVar.winner = gameVar.opponentName;
+  else if (brickVar.playerScore === brickVar.opponentScore) {
+    if (brickVar.playerLives > brickVar.opponentLives)
+      gameVar.winner = gameVar.userName;
+    else if (brickVar.playerLives < brickVar.opponentLives)
+      gameVar.winner = gameVar.opponentName;
+    else {
+      return false;
+    }
+  }
+  const nicknameResponse = await fetchAuthData(
+    `/user/get-id/?nickname=${gameVar.winner}`,
+  );
+  gameVar.winner = nicknameResponse.data.id;
+
+  if (brickVar.difficulty === "easy") brickVar.difficulty = "EASY";
+  else if (brickVar.difficulty === "medium") brickVar.difficulty = "MEDIUM";
+  else if (brickVar.difficulty === "hard") brickVar.difficulty = "HARD";
+
+  if (brickVar.currLevel === "classic") brickVar.currLevel = "CLASSIC";
+  else if (brickVar.currLevel === "castle") brickVar.currLevel = "TABLETENNIS";
+  else if (brickVar.currLevel === "x") brickVar.currLevel = "FOOTBALL";
+  else if (brickVar.currLevel === "tennis") brickVar.currLevel = "TENNIS";
+  return true;
 }

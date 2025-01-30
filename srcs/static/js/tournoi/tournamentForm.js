@@ -5,20 +5,45 @@ import { createTournamentLayoutHTML } from "./templates/createTournamentLayoutTe
 import { createTournament } from "./services/apiService.js";
 import { displayTournamentLayout } from "./tournamentLayout.js";
 import { fetchAuthData, getCookie } from "../user/fetchData.js";
+import { renderPage } from "../user/historyManager.js";
 
 export async function setupTournamentPage() {
   console.log("[setupTournamentPage] Initializing tournament page setup");
+  // renderPage("tournament");
   const box = document.getElementById("mainContent");
 
   // Generate a random tournament name
   //const randomName = await generateTournamentName();
   //console.log("[setupTournamentPage] Generated tournament name:", randomName);
 
-  // Render the tournament setup form
-  box.innerHTML = createTournamentFormHTML("tournament");
+  try {
+    // Fetch ongoing tournament
+    const response = await fetchAuthData("/tournament/ongoing/", "GET");
 
-  // Load the new tournament setup functionality
-  loadTournamentSetup();
+    if (response.status === 200 && response.data) {
+      console.log(
+        "[setupTournamentPage] Found ongoing tournament:",
+        response.data,
+      );
+      // Redirect to the tournament layout
+      await displayTournamentLayout(response.data.id);
+    } else {
+      console.log(
+        "[setupTournamentPage] No ongoing tournament found. Loading setup form...",
+      );
+      // Render the tournament setup form
+      box.innerHTML = createTournamentFormHTML("tournament");
+      loadTournamentSetup();
+    }
+  } catch (error) {
+    console.error(
+      "[setupTournamentPage] Error fetching ongoing tournament:",
+      error,
+    );
+    // Fallback to setup form
+    box.innerHTML = createTournamentFormHTML("tournament");
+    loadTournamentSetup();
+  }
 }
 
 export async function loadTournamentSetup() {
@@ -30,7 +55,7 @@ export async function loadTournamentSetup() {
   const tournamentFormDiv = document.getElementById("tournament-setup");
   const createTournamentButton = document.getElementById("create-tournament");
 
-  tournamentFormDiv.style.display = "flex";
+  tournamentFormDiv.style.display = "block";
 
   const users = await fetchUsers(); // Fetch users from the endpoint
   updatePlayerFields(4);
@@ -104,6 +129,33 @@ export async function loadTournamentSetup() {
       return [];
     }
   }
+  const usedNames = new Set();
+
+  function generateRandomName() {
+    const names = [
+      "Champion",
+      "Contender",
+      "Ace",
+      "Maverick",
+      "Blaze",
+      "Shadow",
+      "Phoenix",
+      "Viper",
+      "Falcon",
+      "Rogue",
+      "Hunter",
+      "Warrior",
+      "Knight",
+    ];
+
+    let randomName;
+    do {
+      randomName = names[Math.floor(Math.random() * names.length)];
+    } while (usedNames.has(randomName));
+
+    usedNames.add(randomName);
+    return randomName;
+  }
 
   function updateFieldDependencies() {
     const playerGuestSwitches = document.querySelectorAll(
@@ -142,28 +194,35 @@ export async function loadTournamentSetup() {
       switchElement.addEventListener("change", () => {
         console.log("Switch toggled. Validating unique players...");
         if (switchElement.checked) {
+          const randomName = generateRandomName();
           playerSelect.style.display = "none";
           playerSelect.removeAttribute("required");
-          playerGuest.style.display = "flex";
-          playerGuest.value = "Guest";
+          playerGuest.style.display = "block";
+          playerGuest.value = randomName;
           playerUserHidden.value = "";
-          playerGuestHidden.value = "Guest";
+          playerGuestHidden.value = randomName;
           tokenContainer.style.display = "none";
           validationSuccess.style.display = "none";
           tokenWarning.style.display = "none";
         } else {
-          playerSelect.style.display = "flex";
+          playerSelect.style.display = "block";
           playerSelect.setAttribute("required", "required");
           playerGuest.style.display = "none";
           playerUserHidden.value = playerSelect.value;
           playerGuestHidden.value = "";
-          tokenContainer.style.display = "flex";
+          tokenContainer.style.display = playerSelect.value ? "block" : "none";
           if (playerSelect.value) {
             validationSuccess.style.display = validateButton.disabled
-              ? "flex"
+              ? "block"
               : "none";
           }
         }
+        // Reset Token Input and Validation States (Add these lines here)
+        tokenInput.value = ""; // Clear token input
+        validationSuccess.style.display = "none"; // Hide success state
+        tokenWarning.style.display = "none"; // Hide warning
+        validateButton.disabled = true; // Disable validation button
+
         validateUniquePlayers();
         updateCreateTournamentButton();
       });
@@ -216,20 +275,20 @@ export async function loadTournamentSetup() {
             console.log("Response body:", data);
             if (data.valid) {
               console.log("Token is valid");
-              validationSuccess.style.display = "flex";
+              validationSuccess.style.display = "block";
               tokenInput.disabled = true;
               validateButton.disabled = true;
               playerSelect.disabled = true;
               tokenWarning.style.display = "none";
             } else {
               console.log("Token is invalid");
-              tokenWarning.style.display = "flex";
+              tokenWarning.style.display = "block";
             }
             updateCreateTournamentButton();
           })
           .catch((error) => {
             console.error("Error validating token:", error);
-            tokenWarning.style.display = "flex";
+            tokenWarning.style.display = "block";
             updateCreateTournamentButton();
           });
       });
@@ -252,6 +311,9 @@ export async function loadTournamentSetup() {
         const guestInput = parent.querySelector(".player-guest");
         const validationSuccess = parent.querySelector(".validation-success");
 
+        const tokenWarning = parent.querySelector(".token-warning"); // New addition
+        const tokenInput = parent.querySelector(".game-token"); // New addition
+        const validateButton = parent.querySelector(".validate-token");
         if (
           !playerUserHidden ||
           !tokenContainer ||
@@ -265,14 +327,18 @@ export async function loadTournamentSetup() {
         playerUserHidden.value = field.value; // Update hidden input with selected player ID
 
         if (field.value) {
-          tokenContainer.style.display = "flex";
+          tokenContainer.style.display = "block";
           guestInput.style.display = "none";
           validationSuccess.style.display = "none";
         } else {
           tokenContainer.style.display = "none";
-          guestInput.style.display = "flex";
+          guestInput.style.display = "block";
           validationSuccess.style.display = "none";
         }
+        tokenInput.value = ""; // Clear token input
+        validationSuccess.style.display = "none"; // Hide success state
+        tokenWarning.style.display = "none"; // Hide warning
+        validateButton.disabled = true; // Disable validation button
         validateUniquePlayers();
         updateCreateTournamentButton();
       });
@@ -345,7 +411,7 @@ export async function loadTournamentSetup() {
         return true; // Skip guest players
       }
 
-      return validationSuccess.style.display === "flex";
+      return validationSuccess.style.display === "block";
     });
 
     createTournamentButton.disabled = !allValidated || !allPlayerFieldsValid;

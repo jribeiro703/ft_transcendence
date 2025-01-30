@@ -40,11 +40,11 @@ const brickVar2 = {
 
 // -------------------------------------Bricks-----------------
 
-	brickRowCount: 16,
+	brickRowCount: 15,
 	brickColumnCount: 16,
 	brickWidth: 40,
 	brickHeight: 15,
-	brickPadding: 5,
+	brickPadding: 8,
 	brickOffsetTop: 30,
 	brickOffsetLeft: 25,
 	totalBrick: 0,
@@ -92,7 +92,7 @@ const brickVar2 = {
 	initGame: false,
 	startBtn: null,
 	score: 0,
-	lives: 2,
+	lives: 5,
 	gameStart: false,
 	anim: null,
 	startBtn: null,

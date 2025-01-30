@@ -20,9 +20,9 @@ import { addImageB, handleNextLevelB, restartLevelB } from "./level.js";
 import { updateDifficultySelectionB } from "./update.js";
 import { updateDifficultySelectionSB } from "./secondBrickout/update.js";
 import { resetBallB } from "./ball.js";
-import { saveScoreB } from "./score.js";
 import { renderPageGame } from "../HistoryManager.js";
 import { sendScoreInfoB } from "../pong/network.js";
+import { displayFinishLive } from "./display.js";
 
 export function manageCollisionB() {
   if (
@@ -94,11 +94,9 @@ export function loseLivesRemote() {
       brickVar.playerScore,
       brickVar.playerLives,
     );
-    if (!brickVar.playerLives) {
-      brickVar.finish = true;
+    if (brickVar.playerLives === 0) {
+      brickVar.loose = true;
       brickVar.startTime = false;
-      brickVar.finishLevel = true;
-      saveScoreB();
       chechOpponentRemote();
     } else {
       resetBallB();
@@ -112,11 +110,9 @@ export function loseLivesRemote() {
       brickVar.opponentScore,
       brickVar.opponentLives,
     );
-    if (brickVar.opponentLives <= 0) {
-      brickVar.finish = true;
-      brickVar.startTime = false;
-      brickVar.finishLevel = true;
-      saveScoreB();
+    if (brickVar.opponentLives === 0) {
+      brickVar.loose = true;
+      brickVar2.startTime = false;
       chechOpponentRemote();
     } else resetBallB();
   }
@@ -125,9 +121,9 @@ export function loseLivesRemote() {
 export function addBtnB() {
   if (!gameVar.localGame) {
     if (!gameVar.liveMatch) {
-      if (brickVar.finishLevel) displayNextLevel();
+      if (brickVar.finishLevel && !brickVar.finish) displayNextLevel();
       else displayFinish();
-    } else displayFinish();
+    } else displayFinishLive();
   } else displayLocalRematch();
 }
 
@@ -168,8 +164,8 @@ export function clearBrickVar() {
   brickVar2.startTime = false;
   brickVar.score = 0;
   brickVar2.score = 0;
-  brickVar.lives = 2;
-  brickVar2.lives = 2;
+  brickVar.lives = 5;
+  brickVar2.lives = 5;
   brickVar.initGame = false;
   brickVar2.initGame = false;
   brickVar.playerIdx = 0;
@@ -193,8 +189,8 @@ export function clearAllBrickStates() {
   brickVar2.startTime = false;
   brickVar.score = 0;
   brickVar2.score = 0;
-  brickVar.lives = 2;
-  brickVar2.lives = 2;
+  brickVar.lives = 5;
+  brickVar2.lives = 5;
   brickVar.initGame = false;
   brickVar2.initGame = false;
   brickVar.playerIdx = 0;
@@ -218,4 +214,3 @@ function resetTimeFrame() {
     brickVar2.gameTimer = null;
   }
 }
-

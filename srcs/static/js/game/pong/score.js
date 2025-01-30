@@ -5,7 +5,7 @@ import { fetchAuthData } from "../../user/fetchData.js";
 
 export async function sendScore()
 {
-	manageScore();
+	await manageScore();
     const body = {
         username_one: gameVar.userName,
         username_two: gameVar.opponentName,
@@ -18,30 +18,22 @@ export async function sendScore()
 		winner: gameVar.winner,
     }
     const responseObject = await fetchAuthData("/game/create/", "POST", body);
-	console.log("score: responseObj: ", responseObject);
 
-    if (responseObject.status === 201) {
-        console.log("Game successfully");
-    } else {
-        console.log("Game failed");
-    }
+    if (responseObject.status === 201)
+        console.log("Sending game score successfully");
 }
 
 export async function manageScore()
 {
-	if (gameVar.localGame)
-		gameVar.opponentName = 'player2';
 	if (gameVar.playerScore > gameVar.aiScore)
-		gameVar.winnner = gameVar.userName;
+		gameVar.winner = gameVar.userName;
 	else
 		gameVar.winner = gameVar.opponentName;
 
-	console.log("win", gameVar.winner);
 
 	const nicknameResponse = await fetchAuthData(`/user/get-id/?nickname=${gameVar.winner}`);
 
-
-	gameVar.winner = nicknameResponse;
+	gameVar.winner = nicknameResponse.data.id;
 
 	if (gameVar.difficulty === 'easy')
 		gameVar.difficulty = 'EASY';
@@ -67,7 +59,7 @@ export function checkScore()
 	{
 		gameVar.matchOver = true;
 		gameVar.startTime = false;
-		if (!gameVar.tournament)
+		if (!gameVar.tournament && !gameVar.liveMatch)
 		{
 			gameVar.rematchBtn.style.display = 'block';
 			gameVar.quitGameBtn.style.display = 'block';
@@ -82,11 +74,11 @@ export function checkScore()
 		}
 		else
 		{
-			sendScore();
-			gameVar.returnLobby.style.display = 'block';
+			gameVar.returnLobby.style.display = 'none';
 		}
 		gameVar.quitGameBtn.style.display = 'block';
 		listenBtn();
+		
 	}	
 }
 
@@ -143,7 +135,12 @@ export function drawScoreBoard()
 			const leftX = gameVar.scoreCanvW * 0.25;
 			const rightX = gameVar.scoreCanvW * 0.75;
 			const y = 35;
-			if (gameVar.localGame)
+			if (gameVar.tournament)
+			{
+				ctx.fillText(gameVar.userName, leftX, y);
+				ctx.fillText(gameVar.opponentName, rightX, y);
+			}
+			else if (gameVar.localGame)
 			{
 				ctx.fillText(gameVar.userName, leftX, y);
 				ctx.fillText('Player 2', rightX, y);
