@@ -55,6 +55,7 @@ const gameVar = {
 
     scoreBoard: [],
     winner: null,
+    scoreSubmit: false,
 
     // ----------------------------Settings-------------------------
 
