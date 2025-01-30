@@ -6,9 +6,6 @@ export function createTournamentLayoutHTML() {
           <div id="tournament-bracket" class="bracket d-flex justify-content-center align-items-center flex-column gap-1">
           </div>
           <div id="next-match" class="matchup d-flex justify-content-center align-items-center flex-column gap-1">
-            <div id="player-l" class="current">Semi finalist 1</div>
-            <div class="vs">vs</div>
-            <div id="player-r" class="current">Semi finalist 2</div>
           </div>
 
           <button
