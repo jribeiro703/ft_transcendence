@@ -100,6 +100,8 @@ async function launchNextMatch(tournamentId, data) {
     // Wait for the game to finish
     const intervalId = setInterval(async () => {
         if (gameVar.matchOver) {
+            gameVar.rematchBtn.style.display = 'none';
+            gameVar.quitGameBtn.style.display = 'none';
             clearInterval(intervalId);
 
             // Update the match scores after the game is finished
@@ -113,7 +115,11 @@ async function launchNextMatch(tournamentId, data) {
 
             try {
                 const response = await fetchAuthData(`/tournament/next/${tournamentId}/`, "POST", payload);
-
+                if (response.status === 400) {
+                    console.log("line 119");
+                    playNextMatchButton.disabled = true;
+                    playNextMatchButton.textContent = "Tournement finished";
+                }
                 if (response.status === 200) {
                     console.log("[launchNextMatch] Match score updated successfully");
 
@@ -128,10 +134,62 @@ async function launchNextMatch(tournamentId, data) {
                         currentMatchId = getNextMatchId(currentMatchId, data.matches);
                         renderBracket(data.matches, currentMatchId);
 
+                        // Check if the current match is the last match
                         if (currentMatchId === data.matches[data.matches.length - 1].match_id) {
-                            playNextMatchButton.disabled = true;
-                            playNextMatchButton.textContent = "Tournament Finished";
-                            announceWinner(data.winner);
+                            console.log("currentMatchId:", currentMatchId);
+                            console.log("matches len", data.matches[data.matches.length - 1].match_id);
+                            playNextMatchButton.disabled = false;
+                            playNextMatchButton.textContent = "Play Final Match";
+                            
+                            playNextMatchButton.addEventListener('click', async () => {
+                                playNextMatchButton.disabled = true;
+                                playNextMatchButton.style.border = "5px solid red";
+                                playNextMatchButton.textContent = "Starting final match...";
+                                launchGame(currentMatch.player1, currentMatch.player2);
+
+                                // Wait for the final game to finish
+                                const finalIntervalId = setInterval(async () => {
+                                    if (gameVar.matchOver) {
+                                        gameVar.rematchBtn.style.display = 'none';
+                                        gameVar.quitGameBtn.style.display = 'none';
+                                        clearInterval(finalIntervalId);
+
+                                        // Update the final match scores after the game is finished
+                                        const finalPayload = {
+                                            matchId: currentMatchId,
+                                            score_one: gameVar.playerScore,
+                                            score_two: gameVar.aiScore,
+                                        };
+
+                                        console.log("[launchNextMatch] Final Payload:", finalPayload);
+
+                                        try {
+                                            const finalResponse = await fetchAuthData(`/tournament/next/${tournamentId}/`, "POST", finalPayload);
+                                            console.log("finalResponse:", finalResponse.data);
+                                            if (finalResponse.status === 200) {
+                                                console.log("[launchNextMatch] Final match score updated successfully");
+
+                                                // Fetch the updated tournament data to get the winner
+                                                const finalUpdatedResponse = await fetchAuthData(`/tournament/${tournamentId}/`, "GET");
+                                                if (finalUpdatedResponse.status === 200 && finalUpdatedResponse.data) {
+                                                    const winner = finalUpdatedResponse.data.winner;
+                                                    console.log(">>>>>>>>data.winner line 176:", winner);
+
+                                                    // Mark the tournament as finished
+                                                    playNextMatchButton.disabled = true;
+                                                    playNextMatchButton.style.border = "5px solid green";
+                                                    playNextMatchButton.textContent = "Tournament Finished";
+                                                    announceWinner(winner);
+                                                }
+                                            } else {
+                                                console.error("[launchNextMatch] Failed to update final match score:", finalResponse.data);
+                                            }
+                                        } catch (error) {
+                                            console.error("[launchNextMatch] Error updating final match score:", error);
+                                        }
+                                    }
+                                }, 1000);
+                            });
                         }
                     } else {
                         // Set up the event listener for the next match

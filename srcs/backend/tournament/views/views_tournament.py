@@ -255,7 +255,7 @@ def go_to_tournament_next_match(request, tournament_id):
 				tournament.winner = winner
 				tournament.current_match = 0
 				tournament.save()
-				return JsonResponse({'success': 'Tournament finished'}, status=200)
+				return JsonResponse({'success': 'Tournament finished', 'winner': winner}, status=200)
 			else:
 				tournament.current_match += 1
 				tournament.save()
