@@ -47,7 +47,7 @@ export function listenFinishBtn()
 		returnLobbyBtn.addEventListener('click', () =>
 		{
 			resetLiveMatch();
-			resetMatchB();
+			resetMatchFirst();
 			clearBtnB();
 			renderPageGame("brickoutLobby", true);
 		});
@@ -66,6 +66,7 @@ export function listenFinishBtn()
 		quitBtn.addEventListener('click', () => 
 		{
 			resetMatchFirst();
+			resetLiveMatch();
 			renderPageGame("home", true);
 		});
 	}
