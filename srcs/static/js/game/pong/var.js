@@ -87,6 +87,7 @@ const gameVar = {
     currentServer: "player",
     playerReady: false,
     userName: null,
+    tournamentName: null,
     userAvatar: null,
     opponentName: null,
     opponentAvatar: null,
