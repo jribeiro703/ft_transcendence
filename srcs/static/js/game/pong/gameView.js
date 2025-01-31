@@ -12,10 +12,19 @@ import { displayGameView, displayGameBrickView } from "./display.js";
 import { initializeCanvasBrick, initializeCanvasPong, initializeScoreCanvas2P } from "./canvas.js";
 import { getUserInfos } from "../getUser.js";
 import brickVar from "../brickout/var.js";
+import { isTournamentPage } from "../HistoryManager.js";
+
 
 export async function showGameView()
 {
-	getUserInfos();
+	if (!gameVar.tournament)
+		getUserInfos();
+	else
+	{
+		gameVar.userName = "Player 1";
+		gameVar.opponentName = "player 2";
+	}
+
 	displayGameView();
 	updateCanvasColor();
 

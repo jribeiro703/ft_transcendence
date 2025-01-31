@@ -71,15 +71,15 @@ function renderBracket(matches, currentMatchId) {
       const player1Winner = match.score_one > match.score_two;
       const player2Winner = match.score_two > match.score_one;
 
-      return `
-            <p class="m-0"> match: ${match.match_id} </p>
-            <div class="matchup ${isCurrentMatch ? "highlight-current d-flex justify-content-center align-items-center flex-column gap-1" : "d-flex justify-content-center align-items-center flex-column gap-1"}" data-match-id="${match.match_id}">
-                <div class="player ${player1Winner ? "winner" : ""}">
-                    ${match.player1 || "FINALIST"} ${player1Winner ? "🏆" : ""}
+        return `
+            <p> match.match_id: ${match.match_id} </p>
+            <div class="matchup ${isCurrentMatch ? 'highlight-current' : ''}" data-match-id="${match.match_id}">
+                <div class="player ${player1Winner ? 'winner' : ''}">
+                    ${match.player1 || 'TBD'} (Player 1) ${player1Winner ? '🏆' : ''}
                 </div>
                 <div class="vs">vs</div>
-                <div class="player ${player2Winner ? "winner" : ""}">
-                    ${match.player2 || "FINALIST"} ${player2Winner ? "🏆" : ""}
+                <div class="player ${player2Winner ? 'winner' : ''}">
+                    ${match.player2 || 'TBD'} (Player 2) ${player2Winner ? '🏆' : ''}
                 </div>
                 <div class="scores">
                     ${match.score_one || 0} - ${match.score_two || 0}
