@@ -5,6 +5,7 @@ import { renderPageGame } from "./game/HistoryManager.js";
 import { clearAllBrickStates } from "./game/brickout/manage.js";
 import { clearAllGameStates } from "./game/brickout/listenerBtn.js";
 import { clearAllpongStates } from "./game/pong/reset.js";
+import { sendGameData } from "./game/pong/network.js";
 import gameVar from "./game/pong/var.js";
 import brickVar from "./game/brickout/var.js";
 import brickVar2 from "./game/brickout/secondBrickout/var.js";
@@ -24,13 +25,17 @@ document
     }
   });
 
-document
-  .querySelector("[data-home-icon]")
-  .addEventListener("click", async () => {
-	clearAllBrickStates();
+document.querySelector("[data-home-icon]").addEventListener("click", async () =>
+{
+    if (gameVar.gameSocket && gameVar.playerReady)
+	{
+		gameVar.clientLeft = true;
+		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
+	}
+    clearAllBrickStates();
 	clearAllpongStates();
     renderPage("home");
-  });
+});
 
 
 // Execute as soon as the structure of the initial page is ready for interaction

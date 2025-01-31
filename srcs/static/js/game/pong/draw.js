@@ -110,7 +110,6 @@ export function kickOut()
 	delRooms();
 	if (gameVar.returnLobby && gameVar.quitGameBtn)
 	{
-		gameVar.returnLobby.style.display = 'block';
 		gameVar.quitGameBtn.style.display = 'block';
 		listenBtn();
 	}

@@ -22,16 +22,6 @@ export function listenBtn()
 			renderPageGame('playPong', true);
 		});
 	}
-	else
-	{
-		gameVar.returnLobby.addEventListener('click', () =>
-		{
-			resetLiveMatch();
-			clearBtn();
-			renderPageGame('pongLobby', true);
-		});
-	}
-
 	gameVar.quitGameBtn.addEventListener('click', () => 
 	{
 		clearAllpongStates();

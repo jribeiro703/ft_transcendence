@@ -43,7 +43,6 @@ export function initLobbyPongView()
 	gameVar.playerReady = false;
 	clearInterval(gameVar.waitingInterval);
 	resetLiveMatch();
-	// getUserInfosRemote();
 	showLobbyView();
 	initEventListenerRoom();
 	roomNetwork();
