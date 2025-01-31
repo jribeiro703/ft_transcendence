@@ -26,7 +26,7 @@ export function collisionDetectionB()
 					brickVar2.dy = -brickVar2.dy;
 					b.status = 0;
 					brickVar2.score++;
-					brickVar2.totalBrick = 10;
+					// brickVar2.totalBrick = 10;
 					if(brickVar2.score == brickVar2.totalBrick)
 					{
 						brickVar2.finishLevel = true;

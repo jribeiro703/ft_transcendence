@@ -30,7 +30,7 @@ export function collisionDetectionB()
 					b.status = 0;
 					brickVar.score++;
 					manageRemoteScore();
-					brickVar.totalBrick = 10;
+					// brickVar.totalBrick = 10;
 					if(brickVar.score === brickVar.totalBrick)
 					{
 						brickVar.ctx.clearRect(0, 0, brickVar.canvasW, brickVar.canvasH);

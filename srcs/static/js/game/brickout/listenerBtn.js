@@ -84,8 +84,8 @@ export function clearAllGameStates() {
   brickVar2.startTime = false;
   brickVar.score = 0;
   brickVar2.score = 0;
-  brickVar.lives = 2;
-  brickVar2.lives = 2;
+  brickVar.lives = 5;
+  brickVar2.lives = 5;
 }
 
 export function listenLocalRematchBtn() {

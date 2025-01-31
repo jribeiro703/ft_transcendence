@@ -9,10 +9,7 @@ import { sendGameData } from "./game/pong/network.js";
 import gameVar from "./game/pong/var.js";
 import brickVar from "./game/brickout/var.js";
 import brickVar2 from "./game/brickout/secondBrickout/var.js";
-
-window.gameVar = gameVar;
-window.brickVar = brickVar;
-window.brickVar2 = brickVar2;
+import { preventNavTouch } from "./game/pong/start.js";
 
 document
   .querySelector("[data-profile-icon]")
@@ -40,7 +37,7 @@ document.querySelector("[data-home-icon]").addEventListener("click", async () =>
 
 // Execute as soon as the structure of the initial page is ready for interaction
 document.addEventListener('DOMContentLoaded', () => {
-
+	preventNavTouch();
 	// listen for hash change to call right page render and push the state in history
 	const hash = window.location.hash
 	if (isGameplayPage(hash))
