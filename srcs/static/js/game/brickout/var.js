@@ -92,38 +92,28 @@ const brickVar = {
 	startBtn: null,
 	gameStart: false,
 	gameReady: false,
-
 	playerIdx: 0,
-
 	score: 0,
 	lives: 5,
-
 	userName: null,
 	opponentName: null,
 	playerScore: 0,
 	opponentScore: 0,
 	playerLives: 5,
 	opponentLives: 5,
-
 	anim: null,
 	startBtn: null,
-
 	finish: false,
 	finalScore: 0,
-
 	gameTime: 0,
 	gameTimer: null,
 	startTime: false,
-
 	checkPu: false,
 	checkDiff: false,
 	checkLevel: false,
-
 	currLevel: null,
 	difficulty: null,
-
 	settingChanged: false,
-
 
 	// -------------------------------------Button---------------------------
 
