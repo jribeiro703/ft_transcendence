@@ -67,11 +67,11 @@ function renderBracket(matches, currentMatchId) {
             <p> match.match_id: ${match.match_id} </p>
             <div class="matchup ${isCurrentMatch ? 'highlight-current' : ''}" data-match-id="${match.match_id}">
                 <div class="player ${player1Winner ? 'winner' : ''}">
-                    ${match.player1 || 'TBD'} ${player1Winner ? '🏆' : ''}
+                    ${match.player1 || 'TBD'} (Player 1) ${player1Winner ? '🏆' : ''}
                 </div>
                 <div class="vs">vs</div>
                 <div class="player ${player2Winner ? 'winner' : ''}">
-                    ${match.player2 || 'TBD'} ${player2Winner ? '🏆' : ''}
+                    ${match.player2 || 'TBD'} (Player 2) ${player2Winner ? '🏆' : ''}
                 </div>
                 <div class="scores">
                     ${match.score_one || 0} - ${match.score_two || 0}
