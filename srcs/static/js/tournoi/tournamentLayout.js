@@ -72,7 +72,6 @@ function renderBracket(matches, currentMatchId) {
       const player2Winner = match.score_two > match.score_one;
 
         return `
-            <p> match.match_id: ${match.match_id} </p>
             <div class="matchup ${isCurrentMatch ? 'highlight-current' : ''}" data-match-id="${match.match_id}">
                 <div class="player ${player1Winner ? 'winner' : ''}">
                     ${match.player1 || 'TBD'} (Player 1) ${player1Winner ? '🏆' : ''}
