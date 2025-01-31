@@ -253,12 +253,12 @@ function displayScoreP1Win(player1)
 	brickVar.ctx.fillText("Congratulations ! You've defeat your opponent...", brickVar.canvasW / 4 - 100, (brickVar.canvasH / 2) - 100);
 	brickVar.ctx.fillText("Your score : ", brickVar.canvasW / 4, brickVar.canvasH / 2);
 	brickVar.ctx.fillText("Your opponent has score : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 50);
-	brickVar.ctx.fillText("You've still : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 100);
-	brickVar.ctx.fillText("lives !", brickVar.canvasW / 4 + 230, brickVar.canvasH / 2 + 100);
-
 
 	if (gameVar.liveMatch)
 	{
+		brickVar.ctx.fillText("You've still : ", brickVar.canvasW / 4, brickVar.canvasH / 2 + 100);
+		brickVar.ctx.fillText("lives !", brickVar.canvasW / 4 + 230, brickVar.canvasH / 2 + 100);
+
 		if (player1 === true)
 		{
 			brickVar.ctx.fillText(brickVar.playerScore, brickVar.canvasW / 4 + 200, brickVar.canvasH / 2)

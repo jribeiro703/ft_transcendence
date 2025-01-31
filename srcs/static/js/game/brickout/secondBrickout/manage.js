@@ -1,7 +1,6 @@
 import gameVar from "../../pong/var.js";
 import brickVar2 from "./var.js";
 import { resetBallB } from "./ball.js";
-import { saveScoreB } from "./score.js";
 import { handleNextLevelB, restartLevelB } from "./level.js";
 import { displayFinish, displayNextLevel } from "./display.js";
 import { listenFinishBtn, listenNextLevelBtn} from "./listenBtn.js";
@@ -54,7 +53,6 @@ export function loseLives()
 		brickVar2.finish = true;
 		brickVar2.finishLevel = true;
 		brickVar2.startTime = false;
-		saveScoreB();
 		chechOpponent();
 		if (!gameVar.localGame)
 			addBtnB();

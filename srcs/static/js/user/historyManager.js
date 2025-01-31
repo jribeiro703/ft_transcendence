@@ -39,8 +39,9 @@ const otherPages = {
 
 async function renderPage(page, updateHistory = true, params = '', logout = false) {
 	
-	if (gameVar.gameSocket)
+	if (gameVar.gameSocket && gameVar.playerReady)
 	{
+		console.log("render Page client Left !!! ");
 		gameVar.clientLeft = true;
 		sendGameData(gameVar.gameSocket, gameVar.gameStart, gameVar.currentServer, gameVar.startTime, gameVar.clientLeft);
 	}

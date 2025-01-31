@@ -44,9 +44,7 @@ export function drawB()
 			updatePowerUpB();
 		}
 		else
-		{
 			handleBallB();
-		}
 		manageMoveB();
 		updateBallPositionB();
 		if (brickVar2.anim)

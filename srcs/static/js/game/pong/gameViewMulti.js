@@ -39,8 +39,6 @@ export function showLobbyView()
 
 export async function showPongRemote(room = null)
 {
-	updateDifficultySelection('medium', true);
-	updateLevelSelection('classicPong', true);
 	displayGameView();
 	await initializeCanvasPong();
 	initControl();
