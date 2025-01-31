@@ -6,11 +6,11 @@ function createAuthContent() {
 
   box.innerHTML = `
 			<div id="defaultView"
-				 class="d-flex flex-column justify-content-center align-items-center gap-4 h-100">
-			  <img class="img-fluid neon-white main-img" src="${PONG_CARD}" alt="Pong Game">
-			<button id="btn-Login" class="primaryBtn"><span>Login</span></button>
-			<button id="btn-Register" class="primaryBtn"><span>Register</span></button>
-			<button id="btn-Login42" class="primaryBtn"><span>42 Login</span></button>
+				 class="d-flex flex-column justify-content-center align-items-center gap-4 h-100 w-100">
+			  <img class="img-fluid neon-main-image main-img" src="${PONG_CARD}" alt="Pong Game">
+			<button id="btn-Login" class="primaryBtn w-380"><span>Login</span></button>
+			<button id="btn-Register" class="primaryBtn w-380"><span>Register</span></button>
+			<button id="btn-Login42" class="primaryBtn w-380"><span>42 Login</span></button>
 			</div>
 	`;
 }

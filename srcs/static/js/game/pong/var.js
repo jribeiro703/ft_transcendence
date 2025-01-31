@@ -1,257 +1,307 @@
 import { PADDLE_POSY } from "./const.js";
+import { waitingPlayer } from "./room.js";
 
 const gameVar = {
   // ----------------------------Canvas-------------------------
 
-    canvasW: 840,
-    canvasH: 420,
-    scoreCanvW: 420,
-    scoreCanvH: 100,
-    scoreCtx: null,
+  canvasW: 840,
+  canvasH: 420,
+  scoreCanvW: 420,
+  scoreCanvH: 100,
+  scoreCtx: null,
 
-    gameTime: 0,
-    gameTimer: null,
-    showPrediction: false,
-    // ---------------------------Paddle------------------------
+  gameTime: 0,
+  gameTimer: null,
+  showPrediction: false,
+  // ---------------------------Paddle------------------------
 
-    playerPaddleHeight: 75,
-    playerPaddleWidth: 12,
-    player2PaddleHeight: 75,
-    player2PaddleWidth: 12,
+  playerPaddleHeight: 75,
+  playerPaddleWidth: 12,
+  player2PaddleHeight: 75,
+  player2PaddleWidth: 12,
 
-    aiPaddleHeight: 75,
-    aiPaddleWidth: 12,
+  aiPaddleHeight: 75,
+  aiPaddleWidth: 12,
 
-    playerPaddleY: PADDLE_POSY,
-    player2PaddleY: PADDLE_POSY,
+  playerPaddleY: PADDLE_POSY,
+  player2PaddleY: PADDLE_POSY,
 
-    aiPaddleY: PADDLE_POSY,
+  aiPaddleY: PADDLE_POSY,
 
-    // ---------------------------------Control----------------------
+  // ---------------------------------Control----------------------
 
-    playerUpPressed: false,
-    playerDownPressed: false,
+  playerUpPressed: false,
+  playerDownPressed: false,
 
-    player2UpPressed: false,
-    player2DownPressed: false,
+  player2UpPressed: false,
+  player2DownPressed: false,
 
-    eventHandlers:
-    {
-        keydown: null,
-        keyup: null,
-        startBall: null,
-    },
+  eventHandlers: {
+    keydown: null,
+    keyup: null,
+    startBall: null,
+  },
 
-    // ---------------------------------Score------------------------
+  // ---------------------------------Score------------------------
 
-    playerScore: 0,
-    player2Score: 0,
-    aiScore: 0,
-    serveCount: 0,
+  playerScore: 0,
+  player2Score: 0,
+  aiScore: 0,
+  serveCount: 0,
 
-    playerScoreElement: null,
-    player2ScoreElement: null,
-    aiScoreElement: null,
+  playerScoreElement: null,
+  player2ScoreElement: null,
+  aiScoreElement: null,
 
-    scoreBoard: [],
-    winner: null,
-    scoreSubmit: false,
+  scoreBoard: [],
+  winner: null,
+  scoreSubmit: false,
 
-    // ----------------------------Settings-------------------------
+  // ----------------------------Settings-------------------------
 
-    settingsChanged: false,
+  settingsChanged: false,
 
-    liveSettingChanged: false,
+  liveSettingChanged: false,
 
-    powerUpSelection: null,
-    checkPu: false,
-    checkDiff: false,
-    checkLevel: false,
-    speedPuActive: false,
-    difficulty: null,
-    easy: null,
-    medium: null,
-    hard: null,
+  powerUpSelection: null,
+  checkPu: false,
+  checkDiff: false,
+  checkLevel: false,
+  speedPuActive: false,
+  difficulty: null,
+  easy: null,
+  medium: null,
+  hard: null,
 
-    pongUrl: null,
-    brickUrl: null,
-    tableTennis: null,
-    footLevel: null,
-    tennisLevel: null,
+  pongUrl: null,
+  brickUrl: null,
+  tableTennis: null,
+  footLevel: null,
+  tennisLevel: null,
 
-    saveSetting: false,
+  saveSetting: false,
 
-    // -------------------------------Player Data---------------------------
+  // -------------------------------Player Data---------------------------
 
-    playerIdx: null,
-    currentServer: "player",
-    playerReady: false,
-    userName: null,
-    userAvatar: null,
-    opponentName: null,
-    opponentAvatar: null,
+  playerIdx: null,
+  currentServer: "player",
+  playerReady: false,
+  userName: null,
+  userAvatar: null,
+  opponentName: null,
+  opponentAvatar: null,
 
-    // ---------------------------------Game Data-------------------------
+  // ---------------------------------Game Data-------------------------
 
-    gameReady: false,
-    gameStart: false,
-    matchOver: false,
-    liveMatch: false,
-    animationFrame: null,
-    finishGame: false,
-    localGame: false,
-    tennisTable: false,
-    football: false,
-    tennis: false,
+  gameReady: false,
+  gameStart: false,
+  matchOver: false,
+  liveMatch: false,
+  animationFrame: null,
+  finishGame: false,
+  localGame: false,
+  tennisTable: false,
+  football: false,
+  tennis: false,
 
-    mycanvas: null,
-    canvasColor: null,
+  mycanvas: null,
+  canvasColor: null,
 
-    game: null,
-    startTime: false,
-    clientLeft: false,
-    tournament: false,
-    currTournament: null,
-    tournamentSocket: null,
-    roomTour1: null,
+  game: null,
+  startTime: false,
+  clientLeft: false,
+  tournament: false,
+  currTournament: null,
+  tournamentSocket: null,
+  roomTour1: null,
 
-    tournamentArray: null,
-    currentTheme: null,
+  tournamentArray: null,
+  currentTheme: null,
 
-    // --------------------------------------AI-----------------------------
+  // --------------------------------------AI-----------------------------
 
-    aiServe: false,
-    matchAI: false,
-    aiLevel: 8,
-    targetY: 0,
+  aiServe: false,
+  matchAI: false,
+  aiLevel: 8,
+  targetY: 0,
 
-    aiMoveInterval: null,
+  aiMoveInterval: null,
 
-    // --------------------------------Ball Data----------------------------
+  // --------------------------------Ball Data----------------------------
 
-    ballRadius: 8,
+  ballRadius: 8,
+  x: null,
+  y: null,
+  dx: null,
+  dy: null,
+  ctx: null,
+  init_dx: null,
+  init_dy: null,
+
+  previousBallState: {
     x: null,
     y: null,
     dx: null,
     dy: null,
-    ctx: null,
-    init_dx: null,
-    init_dy: null,
+    initDx: null,
+    initDy: null,
+  },
 
-    previousBallState:
+  // ------------------------------View---------------------------
+
+  defaultView: null,
+  gameView: null,
+  settingView: null,
+  roomView: null,
+
+  // ------------------------------Button---------------------------
+
+  gamerView: null,
+  startGameBtn: null,
+  quickGameBtn: null,
+  playsoloGameBtn: null,
+  playmultiGameBtn: null,
+
+  btnPowerUp: null,
+  withPowerUp: null,
+  withoutPowerUp: null,
+  settingBtn: null,
+  settingBtn1: null,
+  settingBtn2: null,
+  playBtn: null,
+  playBtn2: null,
+  playBtn3: null,
+  playBtn4: null,
+
+  saveBtn: null,
+
+  createRoomBtn: null,
+
+  tournamentGameBtn: null,
+  rematchBtn: null,
+  quitGameBtn: null,
+  returnLobby: null,
+
+  players: [
+    { idx: 1, ready: false },
+    { idx: 2, ready: false },
+  ],
+
+  // ---------------------------------Room--------------------------
+
+  createRoomNameInput: null,
+  noRoomsMessage: null,
+  roomsContainer: null,
+  refreshBtn: null,
+  leftRoom: false,
+  newRoomName: null,
+  waitingInterval: null,
+
+  rooms: [
     {
-        x: null,
-        y: null,
-        dx: null,
-        dy: null,
-        initDx: null,
-        initDy: null,
+      idx: null,
+      name: null,
+      difficulty: null,
+      level: null,
+      players: 0,
+      status: null,
+      time: null,
+      visibility: null,
     },
+  ],
 
-    // ------------------------------View---------------------------
+  roomName: null,
+  gameSocket: null,
+  lobbySocket: null,
+  private: false,
 
-    defaultView: null,
-    gameView: null,
-    settingView: null,
-    roomView: null,
+  // -------------------Power Ups------------------------
 
-    // ------------------------------Button---------------------------
+  powerUpSpeed: 3,
 
-    gamerView: null,
-    startGameBtn: null,
-    quickGameBtn: null,
-    playsoloGameBtn: null,
-    playmultiGameBtn: null,
+  powerUpX1: null,
+  powerUpY1: null,
 
-    btnPowerUp: null,
-    withPowerUp: null,
-    withoutPowerUp: null,
-    settingBtn: null,
-    settingBtn1: null,
-    settingBtn2: null,
-    playBtn: null,
-    playBtn2: null,
-    playBtn3: null,
-    playBtn4: null,
+  powerUpX2: null,
+  powerUpY2: null,
 
-    saveBtn: null,
+  powerUp1Active: false,
+  powerUp2Active: false,
 
-    createRoomBtn: null,
+  powerUp1OnScreen: false,
+  powerUp2OnScreen: false,
 
-    tournamentGameBtn: null,
-    rematchBtn: null,
-    quitGameBtn: null,
-    returnLobby: null,
+  powerUpEnable: false,
+  powerUpDuration: 5000,
 
-    players: [
-        { idx: 1, ready: false },
-        { idx: 2, ready: false },
-    ],
+  players: [
+    { idx: 1, ready: false },
+    { idx: 2, ready: false },
+  ],
 
-    // ---------------------------------Room--------------------------
+  // ---------------------------------Room--------------------------
 
-    createRoomNameInput: null,
-    noRoomsMessage: null,
-    roomsContainer: null,
-    refreshBtn: null,
-    leftRoom: false,
-    newRoomName: null,
-    waitingInterval: null,
-    deleteRoom: null,
-    inter: false,
+  createRoomNameInput: null,
+  noRoomsMessage: null,
+  roomsContainer: null,
+  refreshBtn: null,
+  leftRoom: false,
+  newRoomName: null,
+  waitingInterval: null,
+  deleteRoom: null,
+  inter: false,
 
-    rooms: [
+  rooms: [
     {
-        idx: null,
-        name: null,
-        difficulty: null,
-        level: null,
-        players: 0,
-        status: null,
-        time: null,
-        visibility: null,
+      idx: null,
+      name: null,
+      difficulty: null,
+      level: null,
+      players: 0,
+      status: null,
+      time: null,
+      visibility: null,
     },
-    ],
+  ],
 
-    roomName: null,
-    gameSocket: null,
-    lobbySocket: null,
-    private: false,
+  roomName: null,
+  gameSocket: null,
+  lobbySocket: null,
+  private: false,
 
-    // -------------------Power Ups------------------------
+  // -------------------Power Ups------------------------
 
-    powerUpSpeed: 3,
+  powerUpSpeed: 3,
 
-    powerUpX1: null,
-    powerUpY1: null,
+  powerUpX1: null,
+  powerUpY1: null,
 
-    powerUpX2: null,
-    powerUpY2: null,
+  powerUpX2: null,
+  powerUpY2: null,
 
-    powerUp1Active: false,
-    powerUp2Active: false,
+  powerUp1Active: false,
+  powerUp2Active: false,
 
-    powerUp1OnScreen: false,
-    powerUp2OnScreen: false,
+  powerUp1OnScreen: false,
+  powerUp2OnScreen: false,
 
-    powerUpEnable: false,
-    powerUpDuration: 5000,
+  powerUpEnable: false,
+  powerUpDuration: 5000,
 
-    powerUps: [
+  powerUps: [
     { type: "speed", image: "static/css/images/fast.png" },
     { type: "slow", image: "static/css/images/slow.png" },
     { type: "sizeP", image: "static/css/images/paddleSp.png" },
     { type: "sizeM", image: "static/css/images/paddleSm.png" },
     { type: "invincible", image: "static/css/images/shield.png" },
-    ],
-    currentPowerUp1: null,
-    currentPowerUp2: null,
+  ],
+  currentPowerUp1: null,
+  currentPowerUp2: null,
 
-    // ------------------------------------Level---------------------
+  // ------------------------------------Level---------------------
 
-    level: [{ type: "easy" }, { type: "medium" }, { type: "hard" }],
-    currentLevel: null,
+  level: [{ type: "easy" }, { type: "medium" }, { type: "hard" }],
+  currentLevel: null,
 };
 
 export default gameVar;
-

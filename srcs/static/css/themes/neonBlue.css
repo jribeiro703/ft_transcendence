@@ -1,19 +1,15 @@
-.yabing {
-  --my-black: #000000;
-  --my-white: #fccb2b;
-  --my-gray: #ffff00;
-  --my-blue: #ffff00;
-  --my-dark-blue: #ffff00;
-  --my-dark-gray: #ffff00;
-  --my-gradient: linear-gradient(
-    to right,
-    #0a1014 0%,
-    #0f1520 15%,
-    #141b2a 30%,
-    #1a2a35 50%,
-    #141b2a 70%,
-    #0f1520 85%,
-    #0a1014 100%
+.neonBlue {
+  --my-black: #000b1e;
+  --my-white: #80ffff;
+  --my-gray: #00ffff;
+  --my-blue: #6c93cb;
+  --my-dark-blue: #001f54;
+  --my-dark-gray: #4cc9f0;
+  --my-gradient: radial-gradient(
+    circle at center,
+    #000b1e 0%,
+    #001f54 50%,
+    #000b30 100%
   );
 
   --background-color: var(--my-gradient);

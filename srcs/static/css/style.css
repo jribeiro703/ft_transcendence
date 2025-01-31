@@ -9,7 +9,7 @@
 @import url("_icons.css");
 
 body {
-  background: var(--background-color);
+  background: var(--background-color-body);
   width: 100%;
   height: 100vh;
   margin: 0;
@@ -18,6 +18,20 @@ body {
   background-size: 200% 200%;
   animation: gradient 120s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   backdrop-filter: blur(12px);
+}
+
+label {
+  color: var(--text-color);
+}
+
+h1,
+h2,
+h3 {
+  color: var(--text-color);
+}
+
+div {
+  color: var(--text-color);
 }
 
 @keyframes gradient {
@@ -31,7 +45,7 @@ body {
 
 p {
   color: var(--text-color);
-  font-size: 30px;
+  font-size: 20px;
 }
 
 p1 {
@@ -60,6 +74,16 @@ p1 {
   display: none;
 }
 
+/* ---------------------- vh ---------------------- */
+
+.vh-10 {
+  height: 10vh;
+}
+
+.vh-80 {
+  height: 80vh;
+}
+
 /* ---------------------- Nav Bar ---------------------- */
 
 #me {
@@ -76,6 +100,14 @@ p1 {
   font-size: 1.5rem;
 }
 
+.w-220 {
+  width: 220px;
+}
+
+.w-700 {
+  width: 700px;
+}
+
 .navbar.expanded {
   height: 150px;
 }
@@ -89,7 +121,6 @@ p1 {
 .navbar-parent {
   position: relative;
   display: flex;
-  height: 100px;
 }
 
 .navbar {
@@ -164,6 +195,10 @@ p1 {
 
 .neon-blue {
   transition: box-shadow 0.4s ease-in-out;
+}
+
+heightTournamentBtn {
+  height: 70px !important;
 }
 
 .neon-blue:hover {
@@ -275,7 +310,6 @@ p1 {
 /* -------------------------- Game Selection ---------------------- */
 
 .container-game {
-  background: var(--background-color);
   border-radius: 10px;
   align-items: center;
   height: 100vh;
@@ -291,7 +325,6 @@ p1 {
   min-width: 600px;
   width: 100%;
   padding: 10px;
-  background: var(--background-color);
 }
 
 .game-row-online {
@@ -302,7 +335,6 @@ p1 {
   min-width: 400px;
   width: 100%;
   padding: 10px;
-  background: var(--background-color);
 }
 
 .game-column {
@@ -884,3 +916,54 @@ color: var(--text-color);;
     min-height: 300px; /* Adjust the height as needed */
   }
 }
+
+/* .matchup { */
+/*   border: 1px solid #ccc; */
+/*   padding: 10px; */
+/*   margin-bottom: 10px; */
+/*   border-radius: 5px; */
+/*   background-color: #f9f9f9; */
+/* } */
+/**/
+/* .matchup.highlight-current { */
+/*   border: 2px solid red; */
+/* } */
+
+.w-196 {
+  width: 196px;
+}
+
+.player.winner {
+  font-weight: bold;
+  color: #28a745;
+}
+
+.player.winner {
+  font-weight: bold;
+  color: #28a745;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  opacity: 0;
+  transition:
+    opacity 1s ease-in-out,
+    transform 2s ease-in-out;
+}
+
