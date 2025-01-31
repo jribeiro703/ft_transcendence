@@ -99,7 +99,6 @@ const brickVar2 = {
 	currLevel: null,
 	finish: false,
 	finalScore: 0,
-
 	difficulty: null,
 	classic: false,
 	castle: false,

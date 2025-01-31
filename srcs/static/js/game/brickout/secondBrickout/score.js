@@ -12,19 +12,6 @@ function loadCustomFont()
 
 export function youWinB()
 {
-	if (!brickVar2.finish)
-	{
-		loadCustomFont().load().then(function(font) 
-		{
-			brickVar2.ctx.font = 'bold 24px fontScore';
-			brickVar2.ctx.fillStyle = "#66a5e8";
-			brickVar2.ctx.fillText("Congratulations, you win !!", brickVar2.canvasW / 2 - 200, brickVar2.canvasH / 2);
-
-		}).catch(function(error)
-		{
-			console.error("Error on font load", error);
-		});	
-	}
 	if (!gameVar.liveMatch && !gameVar.localGame)
 		levelDisplayB();
 	else if (gameVar.liveMatch)
@@ -38,31 +25,7 @@ export function youWinB()
 	else
 		addBtnB();
 }
-// export function youWinB()
-// {
-// 	if (!brickVar2.finish)
-// 	{
-// 		brickVar2.ctx.font = "35px Arial";
-//     	brickVar2.ctx.fillStyle = "red";
-//     	brickVar2.ctx.fillText("Congratulations, you win !!", brickVar2.canvasW / 2 - 200, brickVar2.canvasH / 2);
-// 	}
-// 	levelDisplayB();
-// 	addBtnB();
-// }
 
-export function saveScoreB()
-{
-	var levelScore = 0;
-	if (brickVar2.currLevel === 'classic')
-		levelScore = 0;
-	if (brickVar2.currLevel === 'castle')
-		levelScore = 104;
-	else if (brickVar2.currLevel === 'x')
-		levelScore = 104 + 169;
-	else if (brickVar2.currLevel === 'invader')
-		levelScore = 104 + 169 + 169;
-	brickVar2.finalScore = brickVar2.score + levelScore;
-}
 
 export function drawScoreBoardB()
 {

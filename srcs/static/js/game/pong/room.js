@@ -131,14 +131,11 @@ export function finishPLayerWaitBrick(waitingInterval)
     initGame();
 }
 
-
-
 export function checkWaiting()
 {
     const currentUrl = window.location.hash;
     if (gameVar.private && currentUrl !== "#playPongRemote")
     {
-        // cancelInvitation(gameVar.deleteRoom);
         if (gameVar.gameSocket && gameVar.gameSocket.readyState === WebSocket.OPEN)
         {
             gameVar.gameSocket.send(JSON.stringify(
@@ -261,6 +258,7 @@ export async function joinRoom(roomName)
             }
             else if (data.type == "client_left")
             {
+                console.log("received client left");
                 gameVar.clientLeft = true;
                 if (gameSocket && gameSocket.readyState === WebSocket.OPEN)
                     {
