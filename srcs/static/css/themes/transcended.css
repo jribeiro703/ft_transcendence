@@ -1,23 +1,13 @@
-.yabing {
-  --my-black: #000000;
-  --my-white: #fccb2b;
-  --my-gray: #ffff00;
-  --my-blue: #ffff00;
-  --my-dark-blue: #ffff00;
-  --my-dark-gray: #ffff00;
-  --my-gradient: linear-gradient(
-    to right,
-    #0a1014 0%,
-    #0f1520 15%,
-    #141b2a 30%,
-    #1a2a35 50%,
-    #141b2a 70%,
-    #0f1520 85%,
-    #0a1014 100%
-  );
+.transcended {
+  --my-black: #ff71ce;
+  --my-white: #01ffff;
+  --my-gray: #b967ff;
+  --my-blue: #ff71ce;
+  --my-dark-gray: #b967ff;
+  --my-gradient: linear-gradient(45deg, #170b2b 0%, #2b0548 50%, #170b2b 100%);
 
-  --background-color: var(--my-gradient);
   --background-color-body: var(--my-gradient);
+  --background-color: var(--my-gradient);
   --text-color: var(--my-dark-gray);
   --highlight-color: var(--my-gray);
   --icon-color: var(--my-white);
@@ -37,18 +27,16 @@
   --text-color-selected: var(--my-blue);
 
   /* chat */
-  --chat-msg: var(--my-white);
+  --chat-msg: var(--my-blue);
   --chat-border: var(--my-dark-gray);
-  --chat-bg: var(--my-gradient);
+  --chat-bg: var(--background-color-body);
   --placeholder-color: var(--my-white);
-
   /* box */
   --box-shadow: 0px 0px 7px var(--my-white);
   --box-shadow-images: 0px 0px 7px var(--my-white);
   --box-shadow-inset: inset 0px 0px 3px var(--my-white);
   --box-shadow-highlight: 0px 0px 3px var(--my-white);
   --box-shadow-highlight-inset: inset 0px 0px 1px var(--my-white);
-
   /* chat neon */
   --box-shadow-neonChat1: 0 0 0px var(--my-white), 0 0 2px var(--my-white),
     0 0 4px var(--my-white), 0 0 6px var(--my-white);

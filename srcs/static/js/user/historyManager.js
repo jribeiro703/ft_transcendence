@@ -14,6 +14,8 @@ import { isGamePage, renderPageGame } from "../game/HistoryManager.js";
 import gameVar from "../game/pong/var.js";
 import { sendGameData } from "../game/pong/network.js";
 import { renderSelfProfilePage } from "./pages/profilePageTools.js";
+import { setupTournamentPage } from "../tournoi/tournamentForm.js";
+import { fetchAuthData } from "./fetchData.js";
 
 const authPages = {
 	auth: renderAuthPage,
@@ -32,6 +34,7 @@ const userPages = {
 
 const otherPages = {
 	leaderboard: renderLeaderBoardPage,
+	tournament: setupTournamentPage,
 }
 
 async function renderPage(page, updateHistory = true, params = '', logout = false) {
@@ -71,7 +74,7 @@ async function renderPage(page, updateHistory = true, params = '', logout = fals
 // listen to precedent or next page event but don't push state to history
 window.addEventListener('popstate', (event) => {
 	
-	console.log("event state:", event.state);
+	// console.log("event state:", event.state);
 	if (event.state) {
 		if (isGamePage("#" + event.state.page))
 			renderPageGame(event.state.page, false);

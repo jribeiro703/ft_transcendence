@@ -44,6 +44,9 @@ export function resetLiveMatch()
 {
 	resetTimeFrame();
 	initPaddlesPos();
+	updateDifficultySelection('medium', true);
+	updateLevelSelection('classicPong', true);
+	updatePowerUpSelection(false, true);
 	gameVar.startTime = false;
 	gameVar.gameTime = 0;
 	gameVar.gameStart = false;

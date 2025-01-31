@@ -432,12 +432,16 @@ button:disabled {
 
 /* specials width */
 
-w-89 {
+.w-89 {
   width: 89px !important;
 }
 
-w-285 {
+.w-285 {
   width: 285px !important;
+}
+
+.w-380 {
+  width: 380px !important;
 }
 
 .w-170 {

@@ -1,13 +1,11 @@
 import gameVar from "./var.js";
 
-export function displayPong()
-{
-    const mainContent = document.getElementById("mainContent");
-    if (!mainContent)
-        console.log("error on mainContent");
-    mainContent.innerHTML = "";
-    const insertTo = document.createElement("div");
-    insertTo.innerHTML = `
+export function displayPong() {
+  const mainContent = document.getElementById("mainContent");
+  if (!mainContent) console.log("error on mainContent");
+  mainContent.innerHTML = "";
+  const insertTo = document.createElement("div");
+  insertTo.innerHTML = `
     <div id="gameView" style="display: block;">
         <div id="scoreboard">
             <canvas id="scoreCanvas"></canvas>
@@ -20,31 +18,29 @@ export function displayPong()
         </div>
     </div>	
     `;
-    mainContent.appendChild(insertTo);
+  mainContent.appendChild(insertTo);
 }
 
-export function displayGameBrickView()
-{
-    const mainContent = document.getElementById("mainContent");
-    mainContent.innerHTML = "";
-    const insertTo = document.createElement("div");
-    insertTo.id = "brickoutContainer";
-    insertTo.innerHTML = `
+export function displayGameBrickView() {
+  const mainContent = document.getElementById("mainContent");
+  mainContent.innerHTML = "";
+  const insertTo = document.createElement("div");
+  insertTo.id = "brickoutContainer";
+  insertTo.innerHTML = `
     <div id="scoreboard">
         <canvas id="scoreCanvas"></canvas>
     </div>
         <canvas id="brickoutCanvas"></canvas>
     `;
-    mainContent.appendChild(insertTo);
+  mainContent.appendChild(insertTo);
 }
 
-export function displayGameBrick2pView()
-{
-    const mainContent = document.getElementById("mainContent");
-    mainContent.innerHTML = "";
-    const insertTo = document.createElement("div");
-    insertTo.id = "brickout2pContainer";
-    insertTo.innerHTML = `
+export function displayGameBrick2pView() {
+  const mainContent = document.getElementById("mainContent");
+  mainContent.innerHTML = "";
+  const insertTo = document.createElement("div");
+  insertTo.id = "brickout2pContainer";
+  insertTo.innerHTML = `
     <div id="scoreboard">
         <canvas id="scoreCanvas"></canvas>
     </div>
@@ -53,21 +49,20 @@ export function displayGameBrick2pView()
         <canvas id="brickoutCanvas2"></canvas>
     </div>
     `;
-    mainContent.appendChild(insertTo);
+  mainContent.appendChild(insertTo);
 }
 
-export function displayGameSelectionSolo()
-{
-    const maincontent = document.getElementById("mainContent");
-    maincontent.innerHTML = "";
-    const gameSelection = document.createElement("div");
-    const brickUrl = "/static/css/images/brickout.png";
-    const blackPongUrl = "/static/css/images/classicPong.png";
+export function displayGameSelectionSolo() {
+  const maincontent = document.getElementById("mainContent");
+  maincontent.innerHTML = "";
+  const gameSelection = document.createElement("div");
+  const brickUrl = "/static/css/images/brickout.png";
+  const blackPongUrl = "/static/css/images/classicPong.png";
 
-    gameSelection.style.width = "100%";
-    gameSelection.style.flex = "1 0 0";
+  gameSelection.style.width = "100%";
+  gameSelection.style.flex = "1 0 0";
 
-    gameSelection.innerHTML = `
+  gameSelection.innerHTML = `
     <div id="settingView" class="d-flex gap-3 container-game justify-content-center no-scrollbar flex-row align-items-center w-100">
         <div id="localPlay" class="w-60">
             <div class="game-row gap-3">
@@ -107,22 +102,19 @@ export function displayGameSelectionSolo()
     </div>
     </div>`;
 
-    maincontent.appendChild(gameSelection);
+  maincontent.appendChild(gameSelection);
 }
 
-export function displayGameSelectionMulti()
-{
-    const maincontent = document.getElementById("mainContent");
-    maincontent.innerHTML = "";
-    const gameSelection = document.createElement("div");
-    const pongUrl = "/static/css/images/classicPong.png";
-    const brickUrl = "/static/css/images/brickout.png";
-    if (!gameVar.pongUrl)
-        gameVar.pongUrl = pongUrl;
-    if (!gameVar.brickUrl)
-        gameVar.brickUrl = brickUrl;
-    gameSelection.style.width = "100%";
-    gameSelection.innerHTML = `
+export function displayGameSelectionMulti() {
+  const maincontent = document.getElementById("mainContent");
+  maincontent.innerHTML = "";
+  const gameSelection = document.createElement("div");
+  const pongUrl = "/static/css/images/classicPong.png";
+  const brickUrl = "/static/css/images/brickout.png";
+  if (!gameVar.pongUrl) gameVar.pongUrl = pongUrl;
+  if (!gameVar.brickUrl) gameVar.brickUrl = brickUrl;
+  gameSelection.style.width = "100%";
+  gameSelection.innerHTML = `
     <div id="settingView" class="d-flex gap-3 container-game justify-content-center no-scrollbar flex-row align-items-center w-100">
     <div id="localPlay" class="w-60">
         <h1>Local</h1>
@@ -177,21 +169,17 @@ export function displayGameSelectionMulti()
         </div>
     </div>
     </div>`;
-    maincontent.appendChild(gameSelection);
+  maincontent.appendChild(gameSelection);
 }
 
-export function displayGameView()
-{
-    if (!gameVar.tournament)
-    {
-        displayPong();
-    }
-    else
-    {
-        const mainContent = document.getElementById("tournamentdiv");
-        mainContent.innerHTML = ``;
-        const gameView = document.createElement("div");
-        gameView.innerHTML = `
+export function displayGameView() {
+  if (!gameVar.tournament) {
+    displayPong();
+  } else {
+    const mainContent = document.getElementById("tournamentdiv");
+    mainContent.innerHTML = ``;
+    const gameView = document.createElement("div");
+    gameView.innerHTML = `
             <div id="gameView" style="display: block;">
                 <div id="scoreboard">
                     <canvas id="scoreCanvas"></canvas>
@@ -204,16 +192,15 @@ export function displayGameView()
                 </div>
             </div>
             `;
-        mainContent.appendChild(gameView);
-    }
+    mainContent.appendChild(gameView);
+  }
 }
 
-export function displayCanvas()
-{
-    const mainContent = document.getElementById("mainContent");
-    mainContent.innerHTML = "";
-    const insertTo = document.createElement("div");
-    insertTo.innerHTML = `
+export function displayCanvas() {
+  const mainContent = document.getElementById("mainContent");
+  mainContent.innerHTML = "";
+  const insertTo = document.createElement("div");
+  insertTo.innerHTML = `
     <div id="gameView" style="display: none;" class="h-100">
         <div id="scoreboard">
             <canvas id="scoreCanvas"></canvas>
@@ -226,31 +213,28 @@ export function displayCanvas()
         </div>
     </div>	
     `;
-    mainContent.appendChild(insertTo);
+  mainContent.appendChild(insertTo);
 }
 
-export function displaySetting(difficulty, powerUp, level)
-{
-    const settingContain = document.getElementById("settings-column");
-    if (!settingContain)
-        console.log("error on setting-column");
-    settingContain.innerHTML = "";
-    const settingItem = document.createElement("div");
-    settingItem.innerHTML = `
+export function displaySetting(difficulty, powerUp, level) {
+  const settingContain = document.getElementById("settings-column");
+  if (!settingContain) console.log("error on setting-column");
+  settingContain.innerHTML = "";
+  const settingItem = document.createElement("div");
+  settingItem.innerHTML = `
     <p>Difficulty: <span id="difficultyChoice">${difficulty}</span></p>
     <p>Power-Up: <span id="powerupChoice">${powerUp}</span></p>
     <p>Level: <span id="levelSelected">${level}</span></p>`;
-    settingContain.appendChild(settingItem);
+  settingContain.appendChild(settingItem);
 }
 
-export function displayLobbyView(level)
-{
-    const mainContent = document.getElementById("mainContent");
-    mainContent.innerHTML = "";
-    const roomView = document.createElement("div");
-    roomView.style.width = "100%";
+export function displayLobbyView(level) {
+  const mainContent = document.getElementById("mainContent");
+  mainContent.innerHTML = "";
+  const roomView = document.createElement("div");
+  roomView.style.width = "100%";
 
-    roomView.innerHTML = `
+  roomView.innerHTML = `
     <div id="roomView" style="display: none;" class="h-100 d-flex justify-content-center">
         <div class="container-room gap-5">
             <div class="server-list overflow-auto w-50 min-h-200px d-flex align-items-center justify-content-center flex-column">
@@ -280,7 +264,5 @@ export function displayLobbyView(level)
         </div>
     </div>
     `;
-    mainContent.appendChild(roomView);
+  mainContent.appendChild(roomView);
 }
-
-

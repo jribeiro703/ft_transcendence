@@ -1,3 +1,0 @@
-- refacto le css pour mettre des classes et des variable a la place des couleurs
-
-- faire le livechat dynamique

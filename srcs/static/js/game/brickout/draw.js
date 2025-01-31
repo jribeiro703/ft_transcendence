@@ -6,6 +6,7 @@ import { manageCollisionB, manageMoveB } from './manage.js';
 import { collectPowerUpB, drawPowerUpB, updatePowerUpB } from './powerUp.js';
 import { drawScoreBoardB, drawScoreBoardBRemote } from "./score.js";
 import { kickOut } from "../pong/draw.js";
+import brickVar2 from "./secondBrickout/var.js";
 
 function baseDrawB()
 {
